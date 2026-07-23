@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AXIOM — Human Performance · Research Peptides · For Research Use Only</title>
+<meta name="description" content="Clinical-grade research peptides for performance, recovery and longevity science. Third-party HPLC verified, ≥98% purity. For laboratory research use only." />
+<meta name="theme-color" content="#000000" />
+<meta name="robots" content="index,follow" />
+<link rel="canonical" href="https://axiompeptides.example/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000000'/%3E%3Cg stroke='%23ffffff' stroke-width='6' stroke-linecap='round' fill='none'%3E%3Cpolyline points='24,74 38,26 52,74'/%3E%3Ccircle cx='70' cy='52' r='16'/%3E%3C/g%3E%3C/svg%3E" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="AXIOM — Human Performance" />
+<meta property="og:title" content="AXIOM — Human Performance · Research Peptides" />
+<meta property="og:description" content="Clinical-grade research peptides — third-party HPLC verified, ≥98% purity. For research use only." />
+<meta property="og:url" content="https://axiompeptides.example/" />
+<meta property="og:image" content="og.svg" />
+<meta property="og:image:type" content="image/svg+xml" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AXIOM — Human Performance · Research Peptides" />
+<meta name="twitter:description" content="Clinical-grade research peptides — third-party HPLC verified, ≥98% purity. For research use only." />
+<meta name="twitter:image" content="og.svg" />
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"AXIOM — Human Performance",
+  "description":"Clinical-grade research peptides for laboratory research use only.",
+  "url":"https://axiompeptides.example/",
+  "logo":"https://axiompeptides.example/og.svg",
+  "address":{"@type":"PostalAddress","addressLocality":"Jakarta","addressCountry":"ID"},
+  "contactPoint":{"@type":"ContactPoint","contactType":"sales","availableLanguage":["en","id"]}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+<!-- Three.js r0.143.0 — DNA helix hero -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.143.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.143.0/examples/jsm/"
+  }
+}
+</script>
+
+<style>
+:root{
+  --bg:#000000;
+  --ink:#ffffff;
+  --muted:#9a9a9a;
+  --muted-2:#6a6a6a;
+  --line:rgba(255,255,255,.13);
+  --line-2:rgba(255,255,255,.24);
+  --line-soft:rgba(255,255,255,.07);
+  --maxw:1280px;
+  --pad:34px;
+  --display:"Jost","Century Gothic",system-ui,sans-serif;
+  --sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Inter",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;
+  font-feature-settings:"tnum" 1,"cv05" 1;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+a{color:inherit;text-decoration:none}
+::selection{background:#fff;color:#000}
+img{max-width:100%;display:block}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ---------- Micro labels ---------- */
+.kicker{font-family:var(--sans);font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;font-weight:500;color:var(--muted)}
+.eyebrow{font-family:var(--sans);font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:var(--muted)}
+.rule{height:1px;background:var(--line);width:100%}
+
+/* ---------- Three.js canvas ---------- */
+#scene{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block}
+#sceneWrap{position:fixed;inset:0;z-index:0;transition:opacity .2s linear}
+.scene-scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,#000 0%,#000 32%,rgba(0,0,0,.78) 50%,rgba(0,0,0,.28) 68%,rgba(0,0,0,0) 82%);}
+@media(max-width:680px){.scene-scrim{background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.72) 55%,#000 100%)}}
+.page{position:relative;z-index:2}
+
+/* ---------- Ribbon ---------- */
+.ribbon{
+  position:relative;z-index:5;background:#000;color:var(--muted);
+  border-bottom:1px solid var(--line);
+  font-family:var(--sans);font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+  text-align:center;padding:9px 12px;font-weight:500;
+}
+.ribbon b{color:var(--ink);font-weight:600}
+
+/* ---------- Nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:76px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .brand-logo{height:26px;width:auto;display:block}
+@media(max-width:680px){.brand .brand-logo{height:22px}}
+.brand .bw{display:flex;flex-direction:column;gap:5px;line-height:1}
+.brand .wm{font-family:var(--display);font-weight:400;font-size:21px;letter-spacing:.44em;color:var(--ink);padding-left:2px}
+.brand .wmsub{font-family:var(--sans);font-weight:500;font-size:7px;letter-spacing:.42em;color:var(--muted);padding-left:3px}
+.nav-links{display:flex;gap:32px;align-items:center;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.nav-links a{transition:color .22s;position:relative}
+.nav-links a:not(.btn):hover{color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:26px}
+.navcart{position:relative;background:none;border:none;color:var(--muted);cursor:pointer;font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;transition:color .2s;padding:6px 0}
+.navcart:hover{color:var(--ink)}
+.navcart .cartbadge{color:var(--ink)}
+.cartbadge[hidden]{display:none}
+.nav-toggle{display:none;background:none;border:1px solid var(--line-2);color:var(--ink);width:44px;height:44px;cursor:pointer;font-size:20px;place-items:center}
+
+/* ---------- Buttons / links ---------- */
+.btn{
+  font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  padding:15px 26px;border:1px solid var(--line-2);background:transparent;color:var(--ink);
+  cursor:pointer;transition:.24s;display:inline-flex;align-items:center;gap:10px;white-space:nowrap;
+}
+.btn:hover{background:var(--ink);color:#000;border-color:var(--ink)}
+.btn-solid{background:var(--ink);border-color:var(--ink);color:#000}
+.btn-solid:hover{background:#000;color:var(--ink);border-color:var(--line-2)}
+.tlink{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:9px;position:relative;padding-bottom:6px}
+.tlink::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--line-2);transition:background .24s}
+.tlink:hover::after{background:var(--ink)}
+.tlink .ar{transition:transform .24s}
+.tlink:hover .ar{transform:translateX(4px)}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 90px}
+.hero-in{max-width:900px}
+.hero-mark{margin-bottom:40px}
+.hero-mark img{width:min(520px,86vw);height:auto;display:block;margin-left:-8px}
+.hero h1{font-family:var(--display);font-weight:300;font-size:clamp(34px,5.4vw,72px);line-height:1.02;letter-spacing:-.01em;color:var(--ink);margin-top:8px}
+.hero h1 em{font-style:normal;color:var(--muted)}
+.hero .lead{max-width:540px;margin-top:30px;color:var(--muted);font-size:16px;line-height:1.75;font-weight:300}
+.hero-cta{display:flex;gap:34px;align-items:center;margin-top:44px;flex-wrap:wrap}
+.hero-meta{position:absolute;left:0;right:0;bottom:42px}
+.hero-meta .wrap{display:flex;gap:0;flex-wrap:wrap;border-top:1px solid var(--line)}
+.hero-meta .m{flex:1;min-width:150px;padding:18px 26px 0 0;border-right:1px solid var(--line-soft)}
+.hero-meta .m:last-child{border-right:none}
+.hero-meta .m .k{font-family:var(--sans);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.hero-meta .m .v{font-family:var(--display);font-weight:400;font-size:19px;color:var(--ink);margin-top:8px;letter-spacing:.01em}
+.scroll-hint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:6;font-family:var(--sans);font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2);display:flex;flex-direction:column;align-items:center;gap:9px;transition:opacity .3s;pointer-events:none}
+.scroll-hint .bar{width:1px;height:34px;background:linear-gradient(180deg,var(--line-2),transparent);animation:hintpulse 2.4s ease-in-out infinite}
+@keyframes hintpulse{0%,100%{opacity:.35;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ---------- Manifesto (over helix) ---------- */
+.manifesto{position:relative;z-index:2}
+.stmt{min-height:100vh;display:flex;align-items:center}
+.stmt .wrap{width:100%}
+.stmt .idx{font-family:var(--sans);font-size:10px;letter-spacing:.3em;color:var(--muted-2);text-transform:uppercase;font-weight:500;margin-bottom:26px}
+.stmt h2{font-family:var(--display);font-weight:300;font-size:clamp(30px,5vw,64px);line-height:1.08;letter-spacing:-.01em;max-width:900px}
+.stmt h2 em{font-style:normal;color:var(--muted)}
+.stmt p{max-width:480px;margin-top:26px;color:var(--muted);font-size:15px;line-height:1.75;font-weight:300}
+
+/* ---------- Solid content backdrop below helix ---------- */
+.content{position:relative;z-index:3;background:var(--bg);border-top:1px solid var(--line)}
+
+/* ---------- Section scaffold ---------- */
+.section{padding:110px 0}
+.sec-head{display:grid;grid-template-columns:220px 1fr;gap:40px;margin-bottom:64px;align-items:start}
+.sec-head .lead-col .no{font-family:var(--sans);font-size:11px;letter-spacing:.28em;color:var(--muted);font-weight:500}
+.sec-head .lead-col .kicker{margin-top:16px;display:block}
+.sec-head h2{font-family:var(--display);font-weight:300;font-size:clamp(28px,4vw,46px);line-height:1.06;letter-spacing:-.01em}
+.sec-head p{color:var(--muted);margin-top:18px;font-size:15px;max-width:560px;font-weight:300;line-height:1.75}
+@media(max-width:760px){.sec-head{grid-template-columns:1fr;gap:20px;margin-bottom:44px}}
+
+/* ---------- Controls ---------- */
+.controls{display:flex;gap:24px;align-items:flex-end;flex-wrap:wrap;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.search{position:relative;flex:1;min-width:260px;max-width:460px}
+.search input{width:100%;padding:12px 12px 12px 26px;background:transparent;border:none;border-bottom:1px solid var(--line-2);color:var(--ink);font-family:var(--sans);font-size:14px;font-weight:300;outline:none;transition:.2s}
+.search input::placeholder{color:var(--muted-2)}
+.search input:focus{border-color:var(--ink)}
+.search i{position:absolute;left:0;top:50%;transform:translateY(-50%);color:var(--muted-2);font-size:16px}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:9px 14px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);transition:.18s;white-space:nowrap}
+.chip:hover{border-color:var(--line-2);color:var(--ink)}
+.chip.active{background:var(--ink);color:#000;border-color:var(--ink)}
+
+.toolbar2{display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:space-between;margin:24px 0 40px}
+.tool-group{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.sel{position:relative}
+.sel select{appearance:none;font-family:var(--sans);font-weight:500;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:transparent;border:none;border-bottom:1px solid var(--line-2);padding:8px 26px 8px 2px;cursor:pointer;outline:none}
+.sel select option{background:#0a0a0a;color:#fff;text-transform:none;letter-spacing:0}
+.sel select:focus{color:var(--ink);border-color:var(--ink)}
+.sel::after{content:"↓";position:absolute;right:6px;top:50%;transform:translateY(-50%);color:var(--muted-2);pointer-events:none;font-size:11px}
+.range{display:flex;align-items:center;gap:12px}
+.range label{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap;font-weight:500}
+.range input[type=range]{accent-color:#fff;width:140px;background:transparent}
+.range .val{font-family:var(--sans);font-size:12px;font-weight:400;color:var(--ink);white-space:nowrap;min-width:110px;font-variant-numeric:tabular-nums}
+.rcount{font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.rcount b{color:var(--ink);font-weight:600}
+
+/* ---------- Category blocks ---------- */
+.cat{margin-bottom:0;scroll-margin-top:100px;border-top:1px solid var(--line)}
+.cat.hidden{display:none}
+.cat-head{display:grid;grid-template-columns:70px 1fr auto;gap:24px;align-items:baseline;padding:40px 0 26px}
+.cat-no{font-family:var(--display);font-size:22px;font-weight:300;color:var(--muted);line-height:1;letter-spacing:.02em}
+.cat-icon{display:none}
+.cat-titles h3{font-family:var(--display);font-size:24px;font-weight:400;letter-spacing:-.005em;line-height:1.1}
+.cat-titles p{color:var(--muted);font-size:13.5px;margin-top:10px;max-width:620px;font-weight:300;line-height:1.7}
+.cat-count{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap;font-weight:500}
+
+/* ---------- Compound rows (Swiss price list) ---------- */
+.pgrid{display:flex;flex-direction:column;border-top:1px solid var(--line-soft)}
+.pcard{
+  display:grid;grid-template-columns:44px 1fr 130px 150px 84px;gap:20px;align-items:center;
+  padding:18px 4px;border-bottom:1px solid var(--line-soft);transition:background .16s;position:relative;
+}
+.pcard:hover{background:rgba(255,255,255,.02)}
+.pcard-head{display:flex;flex-direction:column;gap:2px}
+.pcard-idx{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.pcard-cat{display:none}
+.pcard-main{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.pcard-name{font-family:var(--display);font-weight:400;font-size:20px;letter-spacing:-.005em;line-height:1.15;color:var(--ink)}
+.pcard-dose{font-family:var(--sans);font-size:10.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.pcard-foot{display:contents}
+.pcard-price{font-family:var(--sans);font-weight:400;font-size:15px;color:var(--ink);white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;grid-column:4}
+.pcard-price .cur{color:var(--muted-2);font-size:11px;margin-right:4px}
+.pcard-price.na{font-size:10px;font-weight:500;color:var(--muted-2);letter-spacing:.14em;text-transform:uppercase}
+.pcard-actions{display:flex;gap:8px;justify-content:flex-end;grid-column:5}
+.pcard.hidden{display:none}
+/* place the dose column visually */
+.pcard-main{grid-column:2}
+.pcard-head{grid-column:1}
+.ref-btn,.add-btn{width:38px;height:38px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;display:inline-grid;place-items:center;font-size:15px;transition:.16s}
+.ref-btn:hover{border-color:var(--line-2);color:var(--ink)}
+.add-btn:hover{border-color:var(--ink);color:var(--ink)}
+.add-btn.added{background:var(--ink);border-color:var(--ink);color:#000}
+.empty{text-align:center;color:var(--muted);padding:70px;font-family:var(--display);font-weight:300;font-size:20px;display:none}
+
+/* ---------- Standards / features ---------- */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.feat{padding:40px 34px 46px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .2s}
+.feat:hover{background:rgba(255,255,255,.02)}
+.feat .ic{font-family:var(--sans);font-size:11px;letter-spacing:.2em;color:var(--muted-2);font-weight:500;margin-bottom:24px}
+.feat h4{font-family:var(--display);font-size:19px;font-weight:400;margin-bottom:12px;letter-spacing:-.005em}
+.feat p{color:var(--muted);font-size:13.5px;font-weight:300;line-height:1.7}
+
+/* ---------- CoA specimen ---------- */
+.coa-wrap{margin-top:56px}
+.coa{position:relative;border:1px solid var(--line);overflow:hidden}
+.coa::after{content:"SPECIMEN";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:300;font-size:clamp(54px,11vw,120px);color:rgba(255,255,255,.03);transform:rotate(-16deg);pointer-events:none;letter-spacing:.14em}
+.coa-h{display:flex;align-items:center;gap:16px;padding:24px 28px;border-bottom:1px solid var(--line)}
+.coa-h .mark{width:40px;height:40px;border:1px solid var(--line-2);display:grid;place-items:center;font-family:var(--display);font-weight:400;font-size:18px;letter-spacing:.04em}
+.coa-h h4{font-family:var(--display);font-weight:400;font-size:17px;letter-spacing:.01em}
+.coa-h p{font-family:var(--sans);font-size:10px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-top:4px;font-weight:500}
+.coa-h .pass{margin-left:auto;font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);border:1px solid var(--line-2);padding:8px 14px}
+.coa-grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.coa-cell{padding:22px 28px;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.coa-cell .k{font-family:var(--sans);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.coa-cell .v{font-family:var(--display);font-weight:400;font-size:18px;margin-top:8px;color:var(--ink)}
+.coa-cell .v.red{color:var(--ink)}
+.coa-foot{padding:18px 28px;font-family:var(--sans);font-size:11px;color:var(--muted);position:relative;z-index:1;font-weight:300}
+@media(max-width:680px){.coa-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- FAQ ---------- */
+.faq{border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{display:flex;align-items:center;gap:22px;padding:26px 4px;cursor:pointer;font-family:var(--display);font-weight:400;font-size:18px;list-style:none;letter-spacing:-.005em}
+.faq-q::-webkit-details-marker{display:none}
+.faq-q .qi{margin-left:auto;color:var(--muted);transition:transform .3s,color .3s;font-size:20px;flex-shrink:0;font-family:var(--sans);font-weight:300}
+details[open] .faq-q .qi{transform:rotate(45deg);color:var(--ink)}
+.faq-q .num{font-family:var(--sans);font-size:11px;color:var(--muted-2);font-weight:500;letter-spacing:.1em}
+.faq-a{padding:0 4px 30px 60px;color:var(--muted);font-size:14px;line-height:1.8;font-weight:300;max-width:760px}
+.faq-a b{color:var(--ink);font-weight:500}
+@media(max-width:560px){.faq-a{padding-left:4px}}
+
+/* ---------- Process ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);counter-reset:s}
+.step{padding:36px 28px 44px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-family:var(--display);font-size:15px;font-weight:400;color:var(--muted);display:block;margin-bottom:34px;letter-spacing:.1em}
+.step h4{font-family:var(--display);font-size:17px;font-weight:400;margin-bottom:10px;letter-spacing:-.005em}
+.step p{color:var(--muted);font-size:13px;font-weight:300;line-height:1.7}
+
+/* ---------- CTA ---------- */
+.cta{border:1px solid var(--line);padding:80px 40px;text-align:center}
+.cta .kicker{color:var(--muted)}
+.cta h2{font-family:var(--display);font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.04;letter-spacing:-.01em;margin-top:18px}
+.cta p{color:var(--muted);max-width:520px;margin:20px auto 40px;font-weight:300;line-height:1.75}
+.cta-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;align-items:center}
+
+/* ---------- Compliance ---------- */
+.comp-card{display:grid;gap:0;border-top:1px solid var(--line)}
+.comp-lead{font-size:16px;line-height:1.8;color:var(--muted);font-weight:300;padding:44px 0;max-width:820px}
+.comp-lead b{color:var(--ink);font-weight:500}
+.comp-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.comp-tile{padding:34px 28px 40px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.comp-tile .ic{font-family:var(--sans);font-size:10px;letter-spacing:.2em;color:var(--muted-2);font-weight:500}
+.comp-tile h4{font-family:var(--display);font-weight:400;font-size:17px;margin:16px 0 10px;color:var(--ink)}
+.comp-tile p{font-size:13px;color:var(--muted);line-height:1.7;font-weight:300}
+.comp-strong{display:flex;gap:16px;align-items:flex-start;border:1px solid var(--line-2);padding:26px 28px;margin-top:36px}
+.comp-strong .mk{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:600;white-space:nowrap;padding-top:2px}
+.comp-strong p{font-size:14px;color:var(--muted);line-height:1.75;font-weight:300}
+.comp-strong b{color:var(--ink);font-weight:500}
+@media(max-width:760px){.comp-grid{grid-template-columns:1fr}}
+
+/* ---------- Footer ---------- */
+footer{position:relative;z-index:3;background:var(--bg);border-top:1px solid var(--line);padding:80px 0 44px}
+.foot-grid{display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:48px;margin-bottom:56px}
+.foot-brand img{width:220px;height:auto;margin-bottom:22px;margin-left:-3px}
+.foot-brand p{max-width:340px;color:var(--muted);font-size:13.5px;font-weight:300;line-height:1.75}
+.foot-grid h5{font-family:var(--sans);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2);margin-bottom:20px;font-weight:500}
+.foot-grid a,.foot-grid p.fl{display:block;color:var(--muted);font-size:13px;margin-bottom:12px;transition:color .2s;font-weight:300}
+.foot-grid a:hover{color:var(--ink)}
+.disclaimer{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:11.5px;line-height:1.85;font-weight:300;max-width:960px}
+.disclaimer b{color:var(--ink);letter-spacing:.02em;font-weight:500}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:30px;color:var(--muted-2);font-family:var(--sans);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+
+/* ---------- Quote drawer ---------- */
+.quote-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;transform:translateY(120%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.quote-bar.show{transform:none}
+.quote-inner{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.quote-card{background:#050505;border:1px solid var(--line-2);border-bottom:none;overflow:hidden}
+@media(min-width:680px){.quote-card{margin-bottom:0}}
+.quote-top{display:flex;align-items:center;gap:18px;padding:20px 26px;cursor:pointer}
+.quote-top .qc{width:36px;height:36px;border:1px solid var(--line-2);display:grid;place-items:center;font-family:var(--display);font-weight:400;font-size:15px;flex-shrink:0}
+.quote-top .ql{font-family:var(--sans);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted)}
+.quote-top .qt{margin-left:auto;font-family:var(--sans);font-weight:400;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.quote-top .qt small{display:block;font-size:9px;color:var(--muted-2);letter-spacing:.2em;text-transform:uppercase;text-align:right;font-weight:500;margin-top:3px}
+.quote-top .qcaret{color:var(--muted);transition:transform .3s;font-size:16px}
+.quote-bar.open .qcaret{transform:rotate(180deg)}
+.quote-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.quote-bar.open .quote-body{max-height:60vh;overflow:auto}
+.quote-items{padding:6px 26px 10px}
+.qrow{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line-soft)}
+.qrow .qn{font-size:14px;font-weight:400}
+.qrow .qn small{color:var(--muted);font-family:var(--sans);font-size:11px;margin-left:8px;letter-spacing:.06em}
+.qrow .qp{margin-left:auto;font-family:var(--sans);font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.qty{display:flex;align-items:center;gap:10px;border:1px solid var(--line);padding:4px}
+.qty button{width:26px;height:26px;border:none;background:transparent;color:var(--ink);cursor:pointer;font-size:15px;line-height:1}
+.qty button:hover{background:rgba(255,255,255,.08)}
+.qty span{font-family:var(--sans);font-size:12.5px;min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
+.qremove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;display:grid;place-items:center}
+.qremove:hover{color:var(--ink)}
+.quote-actions{display:flex;gap:12px;flex-wrap:wrap;padding:18px 26px 24px;border-top:1px solid var(--line-soft)}
+.quote-actions .btn{flex:1;justify-content:center;min-width:150px}
+.quote-actions .btn.ghost{border-color:var(--line);color:var(--muted)}
+.quote-actions .btn.ghost:hover{background:rgba(255,255,255,.06);color:var(--ink);border-color:var(--line-2)}
+
+/* ---------- Reference drawer ---------- */
+.drawer-ov{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.drawer-ov.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,94vw);z-index:71;background:#050505;border-left:1px solid var(--line-2);transform:translateX(100%);transition:transform .36s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+.drawer.show{transform:none}
+.drawer-h{position:relative;padding:32px 28px 28px;border-bottom:1px solid var(--line)}
+.drawer-h .accent{display:none}
+.drawer-h .cls{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.drawer-h h3{font-family:var(--display);font-weight:400;font-size:28px;letter-spacing:-.005em;margin-top:12px;line-height:1.05}
+.drawer-h .doses{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.drawer-h .doses span{font-family:var(--sans);font-size:10.5px;letter-spacing:.06em;border:1px solid var(--line-2);padding:5px 11px;color:var(--muted)}
+.drawer-close{position:absolute;top:24px;right:24px;width:38px;height:38px;border:1px solid var(--line-2);background:transparent;color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:18px}
+.drawer-close:hover{background:rgba(255,255,255,.08)}
+.drawer-b{padding:28px;overflow:auto;flex:1}
+.dr-block{margin-bottom:28px}
+.dr-block .k{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px;display:flex;align-items:center;gap:9px;font-weight:500}
+.dr-block .k i{color:var(--muted);font-size:14px}
+.dr-block p{font-size:14px;color:var(--muted);line-height:1.75;font-weight:300}
+.dr-block.half p{font-family:var(--sans);font-weight:400;color:var(--ink)}
+.dr-note{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);padding:16px 18px;font-size:12px;line-height:1.7;color:var(--muted);font-weight:300}
+.dr-note i{color:var(--muted);font-size:17px;flex-shrink:0;margin-top:1px}
+.dr-note b{color:var(--ink);font-weight:500}
+
+/* ---------- Gate ---------- */
+.gate{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.9);backdrop-filter:blur(10px);display:grid;place-items:center;padding:24px;opacity:0;animation:fadein .4s forwards}
+.gate[hidden]{display:none}
+@keyframes fadein{to{opacity:1}}
+.gate-card{max-width:500px;background:#050505;border:1px solid var(--line-2);padding:44px 40px;text-align:center}
+.gate-card .mk{width:56px;height:56px;border:1px solid var(--line-2);display:grid;place-items:center;font-size:26px;margin:0 auto 24px;color:var(--ink)}
+.gate-card h3{font-family:var(--display);font-weight:400;font-size:24px;letter-spacing:-.005em}
+.gate-card p{color:var(--muted);font-size:13.5px;line-height:1.75;margin-top:16px;font-weight:300}
+.gate-card p b{color:var(--ink);font-weight:500}
+.gate-card .small{font-size:11px;color:var(--muted-2);margin-top:18px;font-weight:300}
+.gate-actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.gate-actions .btn{flex:1;justify-content:center;min-width:140px}
+.gate-actions .btn.decline{border-color:var(--line);color:var(--muted)}
+.gate-actions .btn.decline:hover{background:rgba(255,255,255,.06);color:var(--ink)}
+
+/* ---------- Reveal ---------- */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;transform:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .scroll-hint .bar{animation:none}
+  .stagger>*{opacity:1!important;transform:none!important;transition:none!important}
+  .rule-draw{transform:none!important;transition:none!important}
+  #preloader img,#preloader .pl-line::after,#preloader .pl-cap{animation:none!important;opacity:1!important;transform:none!important}
+  #cursor,#cursorDot{display:none!important}
+}
+
+/* ---------- Staggered reveal children ---------- */
+.stagger>*{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--i,0)*65ms)}
+.stagger.in>*{opacity:1;transform:none}
+/* Hairline draw-in */
+.rule-draw{transform:scaleX(0);transform-origin:left;transition:transform .95s cubic-bezier(.65,0,.35,1)}
+.rule-draw.in{transform:scaleX(1)}
+
+/* ---------- Intro preloader ---------- */
+#preloader{position:fixed;inset:0;z-index:120;background:#000;display:grid;place-items:center;transition:opacity .8s ease,visibility .8s}
+#preloader.done{opacity:0;visibility:hidden;pointer-events:none}
+#preloader .pl-in{display:flex;flex-direction:column;align-items:center;gap:24px}
+#preloader img{width:min(300px,62vw);height:auto;opacity:0;transform:translateY(10px);animation:plLogo 1s cubic-bezier(.16,1,.3,1) .12s forwards}
+#preloader .pl-line{width:190px;max-width:52vw;height:1px;background:var(--line);position:relative;overflow:hidden}
+#preloader .pl-line::after{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;animation:plLine 1.05s cubic-bezier(.65,0,.35,1) .18s forwards}
+#preloader .pl-cap{font-family:var(--sans);font-size:9px;letter-spacing:.42em;text-transform:uppercase;color:var(--muted-2);font-weight:500;opacity:0;animation:plCap .7s ease .55s forwards}
+@keyframes plLogo{to{opacity:1;transform:none}}
+@keyframes plLine{to{transform:scaleX(1)}}
+@keyframes plCap{to{opacity:1}}
+
+/* ---------- Custom cursor ---------- */
+#cursorRing,#cursorDot{position:fixed;top:0;left:0;z-index:200;pointer-events:none;border-radius:50%;mix-blend-mode:difference;will-change:transform;opacity:0;transition:opacity .3s ease}
+#cursorRing{width:32px;height:32px;border:1px solid #fff;margin:-16px 0 0 -16px;transition:width .22s ease,height .22s ease,margin .22s ease,background .22s ease,opacity .3s ease}
+#cursorDot{width:5px;height:5px;background:#fff;margin:-2.5px 0 0 -2.5px}
+body.cursor-on #cursorRing,body.cursor-on #cursorDot{opacity:1}
+body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input,body.cursor-on select,body.cursor-on summary,body.cursor-on label,body.cursor-on .tlink,body.cursor-on .pcard{cursor:none}
+#cursorRing.hover{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(255,255,255,.14)}
+@media(pointer:coarse){#cursorRing,#cursorDot{display:none}}
+
+/* ---------- Scroll progress + nav hide ---------- */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ink);z-index:60;transition:width .12s linear;pointer-events:none}
+nav{transition:transform .45s cubic-bezier(.16,1,.3,1),background .3s}
+nav.nav-hidden{transform:translateY(-100%)}
+
+/* ---------- Integrity / vial section ---------- */
+.integrity{padding:120px 0}
+.integrity .grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.vial-stage{position:relative;aspect-ratio:3/4;width:100%;max-width:440px;margin:0 auto}
+.vial-stage canvas{width:100%;height:100%;display:block}
+.integrity .co-head .no{font-family:var(--sans);font-size:11px;letter-spacing:.28em;color:var(--muted);font-weight:500}
+.integrity .co-head .eyebrow{margin-top:14px}
+.integrity .co-head h2{font-family:var(--display);font-weight:300;font-size:clamp(28px,4vw,44px);line-height:1.08;letter-spacing:-.01em;margin-top:18px}
+.integrity .co-head h2 em{font-style:normal;color:var(--muted)}
+.integrity .callouts{margin-top:38px}
+.integrity .co{padding:22px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:34px 1fr;gap:18px}
+.integrity .co:last-child{border-bottom:1px solid var(--line)}
+.integrity .co .idx{font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:var(--muted-2);font-weight:400;font-variant-numeric:tabular-nums;padding-top:5px}
+.integrity .co h4{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:-.005em}
+.integrity .co p{color:var(--muted);font-size:13.5px;line-height:1.7;font-weight:300;margin-top:7px;max-width:400px}
+@media(max-width:820px){.integrity .grid{grid-template-columns:1fr;gap:44px}.vial-stage{max-width:280px}}
+
+/* ---------- Responsive ---------- */
+@media(max-width:960px){
+  .feat-grid,.comp-grid{grid-template-columns:repeat(2,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:680px){
+  :root{--pad:22px}
+  .nav-links{display:none}
+  .nav-toggle{display:grid}
+  .nav-links.open{display:flex;position:absolute;top:76px;left:0;right:0;flex-direction:column;background:#000;padding:26px 22px;gap:22px;border-bottom:1px solid var(--line)}
+  .nav-right{gap:18px}
+  .feat-grid,.steps,.comp-grid,.foot-grid{grid-template-columns:1fr}
+  .controls{flex-direction:column;align-items:stretch}
+  .search{max-width:none}
+  .hero-cta{gap:22px}
+  .hero-meta{position:static;margin-top:54px}
+  .cat-head{grid-template-columns:1fr;gap:10px}
+  .cat-count{order:-1}
+  /* stack compound rows */
+  .pcard{grid-template-columns:1fr auto;gap:8px 16px;padding:20px 2px}
+  .pcard-head{grid-column:1;grid-row:1}
+  .pcard-main{grid-column:1;grid-row:2}
+  .pcard-price{grid-column:1;grid-row:3;text-align:left;margin-top:4px}
+  .pcard-actions{grid-column:2;grid-row:1/4;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Intro preloader ===== -->
+<div id="preloader" aria-hidden="true">
+  <div class="pl-in">
+    <img src="assets/axiom-logo-white.png" alt="" width="663" height="172" />
+    <div class="pl-line"></div>
+    <div class="pl-cap">Human Performance</div>
+  </div>
+</div>
+
+<!-- ===== Custom cursor + scroll progress ===== -->
+<div id="progress"></div>
+<div id="cursorRing"></div>
+<div id="cursorDot"></div>
+
+<!-- ===== Three.js DNA helix hero ===== -->
+<div id="sceneWrap"><canvas id="scene"></canvas><div class="scene-scrim"></div></div>
+<div class="scroll-hint" id="scrollHint"><span>Scroll</span><span class="bar"></span></div>
+
+<div class="page">
+
+<div class="ribbon">For <b>Research &amp; Laboratory Use Only</b> · Not for human or veterinary consumption · Prices in IDR</div>
+
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand" aria-label="AXIOM — Human Performance">
+      <img class="brand-logo" src="assets/axiom-wordmark-white.png" alt="AXIOM" width="659" height="126" />
+    </a>
+    <div class="nav-right">
+      <div class="nav-links" id="navLinks">
+        <a href="#catalogue">Catalogue</a>
+        <a href="#quality">Standards</a>
+        <a href="#faq">FAQ</a>
+        <a href="#process">Order</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="navcart" id="navCart" aria-label="Open cart">Cart&nbsp;(<span class="cartbadge" id="navCartCount" hidden>0</span><span id="cartZero">0</span>)</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><i class="ph ph-list"></i></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero" id="top">
+  <div class="wrap hero-in">
+    <div class="hero-mark">
+      <img src="assets/axiom-logo-white.png" alt="AXIOM — Human Performance" width="663" height="172" />
+    </div>
+    <h1>Research peptides,<br><em>measured to the decimal.</em></h1>
+    <p class="lead">A clinical-grade catalogue for performance, recovery and longevity science — every lot independently assayed, documented, and dispatched cold-chain.</p>
+    <div class="hero-cta">
+      <a href="#catalogue" class="tlink">Browse the Catalogue <span class="ar">→</span></a>
+      <a href="#quality" class="tlink">Our Standards <span class="ar">→</span></a>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div class="wrap stagger reveal">
+      <div class="m"><div class="k">Purity</div><div class="v">≥ 98%</div></div>
+      <div class="m"><div class="k">Verification</div><div class="v">HPLC / MS</div></div>
+      <div class="m"><div class="k">Compounds</div><div class="v" id="metaCount">49</div></div>
+      <div class="m"><div class="k">Classification</div><div class="v">Research Use Only</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MANIFESTO (over helix) ===== -->
+<div class="manifesto">
+  <section class="stmt">
+    <div class="wrap reveal">
+      <div class="idx">01 — Principle</div>
+      <h2>Precision is not a claim.<br><em>It is a certificate.</em></h2>
+      <p>Every batch clears independent HPLC and mass-spectrometry analysis before it is allowed near a research bench. Identity, mass and purity — documented, traceable, and shipped with the vial.</p>
+    </div>
+  </section>
+  <section class="stmt">
+    <div class="wrap reveal">
+      <div class="idx">02 — Standard</div>
+      <h2>One neutral standard,<br><em>held without exception.</em></h2>
+      <p>Lyophilised under inert conditions, sealed, and dispatched temperature-controlled. No embellishment, no shortcuts — only the molecule, preserved exactly as specified.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== SOLID CONTENT ===== -->
+<div class="content">
+
+<!-- ===== INTEGRITY / VIAL ===== -->
+<section class="section integrity" id="integrity">
+  <div class="wrap">
+    <div class="grid">
+      <div class="vial-stage reveal">
+        <canvas id="vial"></canvas>
+      </div>
+      <div class="co-body">
+        <div class="co-head reveal">
+          <div class="no">01 / Integrity</div>
+          <span class="eyebrow">Anatomy of a Lot</span>
+          <h2>Every vial is<br><em>the same promise.</em></h2>
+        </div>
+        <div class="callouts stagger reveal">
+          <div class="co"><span class="idx">01</span><div><h4>Lyophilised cake</h4><p>Freeze-dried under controlled vacuum for a stable, uniform cake — reconstituted only at the bench, exactly as your protocol specifies.</p></div></div>
+          <div class="co"><span class="idx">02</span><div><h4>Sealed under inert gas</h4><p>Crimp-sealed in an inert atmosphere to protect the peptide from oxidation and moisture through storage and transit.</p></div></div>
+          <div class="co"><span class="idx">03</span><div><h4>Lot-stamped &amp; traceable</h4><p>Each unit carries its lot identifier, tying the vial in your hand back to its Certificate of Analysis.</p></div></div>
+          <div class="co"><span class="idx">04</span><div><h4>≥ 98% assayed</h4><p>No lot is released until independent HPLC and mass spectrometry confirm identity, mass and a minimum of 98% purity.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CATALOGUE ===== -->
+<section class="section" id="catalogue">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="lead-col">
+        <div class="no">02 / Catalogue</div>
+        <span class="kicker">Price List</span>
+      </div>
+      <div>
+        <h2>The Catalogue</h2>
+        <p>Search by compound or filter by research pathway. All listings are sold strictly for in-vitro and laboratory research.</p>
+      </div>
+    </div>
+
+    <div class="controls reveal">
+      <div class="search">
+        <i class="ph ph-magnifying-glass"></i>
+        <input type="text" id="search" placeholder="Search compounds — BPC-157, Retatrutide, GHK-Cu…" />
+      </div>
+      <div class="filters" id="filters">
+        <button class="chip active" data-cat="all">All</button>
+      </div>
+    </div>
+
+    <div class="toolbar2 reveal">
+      <div class="tool-group">
+        <div class="sel">
+          <select id="sort" aria-label="Sort compounds">
+            <option value="featured">Sort — Featured</option>
+            <option value="price-asc">Price — Low to High</option>
+            <option value="price-desc">Price — High to Low</option>
+            <option value="name">Name — A to Z</option>
+          </select>
+        </div>
+        <div class="range">
+          <label for="price">Max</label>
+          <input type="range" id="price" min="1000000" max="3400000" step="100000" value="3400000" />
+          <span class="val" id="priceVal">Rp 3.400.000</span>
+        </div>
+      </div>
+      <div class="rcount" id="rcount">Showing <b>49</b> of 49 compounds</div>
+    </div>
+
+    <div id="catList"></div>
+    <div class="empty" id="empty">No compounds match your search.</div>
+  </div>
+</section>
+
+<!-- ===== QUALITY ===== -->
+<section class="section" id="quality" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="lead-col">
+        <div class="no">03 / Standards</div>
+        <span class="kicker">Verification</span>
+      </div>
+      <div>
+        <h2>Verified to the decimal</h2>
+        <p>Every batch clears independent analysis before it reaches a research bench.</p>
+      </div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat reveal"><div class="ic">01</div><h4>HPLC &amp; MS Tested</h4><p>Each lot is analysed by high-performance liquid chromatography and mass spectrometry to confirm identity and ≥98% purity.</p></div>
+      <div class="feat reveal"><div class="ic">02</div><h4>Certificate of Analysis</h4><p>A downloadable CoA accompanies every lot — purity, mass and batch traceability fully documented.</p></div>
+      <div class="feat reveal"><div class="ic">03</div><h4>Cold-Chain Logistics</h4><p>Lyophilised peptides are stored and dispatched temperature-controlled to preserve molecular integrity in transit.</p></div>
+      <div class="feat reveal"><div class="ic">04</div><h4>Lyophilised &amp; Sealed</h4><p>Freeze-dried and sealed under inert conditions for maximum shelf stability and reconstitution consistency.</p></div>
+      <div class="feat reveal"><div class="ic">05</div><h4>Discreet Packaging</h4><p>Neutral, protective packaging with tamper-evident seals and batch labelling on every unit.</p></div>
+      <div class="feat reveal"><div class="ic">06</div><h4>Research Support</h4><p>Direct line to our team for handling, reconstitution and storage guidance — strictly for research contexts.</p></div>
+    </div>
+    <div class="coa-wrap reveal">
+      <div class="coa">
+        <div class="coa-h">
+          <span class="mark">A</span>
+          <div>
+            <h4>Certificate of Analysis</h4>
+            <p>Specimen · Issued per lot</p>
+          </div>
+          <span class="pass">Pass</span>
+        </div>
+        <div class="coa-grid">
+          <div class="coa-cell"><div class="k">Compound</div><div class="v">BPC-157</div></div>
+          <div class="coa-cell"><div class="k">Lot No.</div><div class="v">AX-2406-1157</div></div>
+          <div class="coa-cell"><div class="k">Purity (HPLC)</div><div class="v red">99.2%</div></div>
+          <div class="coa-cell"><div class="k">Molecular Mass</div><div class="v">1419.5 Da</div></div>
+          <div class="coa-cell"><div class="k">Method</div><div class="v">HPLC / MS</div></div>
+          <div class="coa-cell"><div class="k">Appearance</div><div class="v">White lyophilate</div></div>
+        </div>
+        <div class="coa-foot">A representative CoA accompanies every lot. Figures shown are specimen values for illustration only.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="lead-col">
+        <div class="no">04 / Reference</div>
+        <span class="kicker">Essentials</span>
+      </div>
+      <div>
+        <h2>Research FAQ</h2>
+        <p>Handling, logistics and compliance — the essentials before you order.</p>
+      </div>
+    </div>
+    <div class="faq">
+      <details class="faq-item reveal"><summary class="faq-q"><span class="num">01</span> How should peptides be stored?<span class="qi">+</span></summary><div class="faq-a">Lyophilised (freeze-dried) peptides are stable at −20 °C and tolerate short transit at ambient temperature. Once reconstituted, store at 2–8 °C and use within the window noted on the CoA. Protect from light and repeated freeze–thaw cycles.</div></details>
+      <details class="faq-item reveal"><summary class="faq-q"><span class="num">02</span> How are compounds reconstituted?<span class="qi">+</span></summary><div class="faq-a">For in-vitro work, reconstitute with bacteriostatic or sterile water added slowly down the vial wall — do not shake. Swirl gently until fully dissolved. Reconstitution volume depends on your protocol's target concentration; our team can advise on request.</div></details>
+      <details class="faq-item reveal"><summary class="faq-q"><span class="num">03</span> What purity standard do you guarantee?<span class="qi">+</span></summary><div class="faq-a">Every lot is independently analysed by HPLC and mass spectrometry to confirm identity and a minimum of 98% purity (most lots exceed 99%). A Certificate of Analysis accompanies each lot.</div></details>
+      <details class="faq-item reveal"><summary class="faq-q"><span class="num">04</span> How does shipping &amp; cold-chain work?<span class="qi">+</span></summary><div class="faq-a">Orders are dispatched in protective, temperature-managed packaging with tamper-evident seals. Domestic delivery within Indonesia typically arrives in 2–4 working days; international timelines are quoted per destination.</div></details>
+      <details class="faq-item reveal"><summary class="faq-q"><span class="num">05</span> What payment methods are accepted?<span class="qi">+</span></summary><div class="faq-a">Bank transfer and major e-wallets in IDR. After you send your compound list we return an itemised quote; payment is settled before dispatch. Prices are indicative and confirmed at quotation.</div></details>
+      <details class="faq-item reveal"><summary class="faq-q"><span class="num">06</span> Are these products for human use?<span class="qi">+</span></summary><div class="faq-a"><b>No.</b> All compounds are sold strictly for in-vitro laboratory and research use. They are not drugs, supplements, food or cosmetics, and are not intended for human or veterinary consumption, diagnostic, or therapeutic use. By ordering you confirm you are a qualified researcher or institution.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROCESS ===== -->
+<section class="section" id="process" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="lead-col">
+        <div class="no">05 / Order</div>
+        <span class="kicker">How to Order</span>
+      </div>
+      <div>
+        <h2>From enquiry to bench</h2>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><h4>Select Compounds</h4><p>Browse the catalogue and note the compounds and doses your protocol requires.</p></div>
+      <div class="step reveal"><h4>Request a Quote</h4><p>Send your list via the form or WhatsApp. We confirm stock and current IDR pricing.</p></div>
+      <div class="step reveal"><h4>Confirm &amp; Pay</h4><p>Review your itemised quote, acknowledge research-use terms, and settle securely.</p></div>
+      <div class="step reveal"><h4>Cold-Chain Delivery</h4><p>Your order ships temperature-controlled with CoA documentation included.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div class="kicker">Request a Quote</div>
+      <h2>Build your research order</h2>
+      <p>Tell us which compounds and quantities you need. Quotes are returned within 24 hours with live stock and pricing.</p>
+      <div class="cta-row">
+        <a href="https://wa.me/18038573396?text=Hello%20AXIOM%2C%20I%27d%20like%20a%20research%20peptide%20quote." target="_blank" rel="noopener" class="btn btn-solid"><i class="ph-fill ph-whatsapp-logo"></i> WhatsApp Us</a>
+        <a href="mailto:research@axiompeptides.example?subject=Research%20Quote%20Request" class="tlink">Email Enquiry <span class="ar">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPLIANCE ===== -->
+<section class="section" id="compliance" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="lead-col">
+        <div class="no">06 / Notice</div>
+        <span class="kicker">Compliance &amp; Safety</span>
+      </div>
+      <div>
+        <h2>Important notice</h2>
+      </div>
+    </div>
+    <div class="comp-card">
+      <p class="comp-lead reveal">Many compounds listed here are <b>experimental, lack long-term human safety data, or are strictly regulated</b>. This catalogue is published for qualified researchers and institutions. <b>We do not provide usage, dosing, administration, or cycling guidance of any kind</b> — those decisions require a licensed medical professional with knowledge of your specific situation.</p>
+      <div class="comp-grid">
+        <div class="comp-tile reveal"><div class="ic">Research Use Only</div><h4>In-vitro only</h4><p>Products are intended exclusively for in-vitro laboratory and scientific research — not for human or veterinary consumption, diagnosis, or treatment.</p></div>
+        <div class="comp-tile reveal"><div class="ic">Consult a Physician</div><h4>Seek advice</h4><p>Always consult a qualified physician before considering any peptide, hormone, or research chemical. Self-administration carries serious health risks.</p></div>
+        <div class="comp-tile reveal"><div class="ic">Know Your Law</div><h4>Compliance</h4><p>Several items (e.g. androgens, melanocortin agonists) are controlled or regulated in many jurisdictions. Buyers are responsible for legal compliance.</p></div>
+      </div>
+      <div class="comp-strong reveal"><span class="mk">No medical advice</span><p>Nothing on this site constitutes medical advice or a recommendation to use any compound. The per-compound reference panels describe scientific mechanism, pharmacokinetics and laboratory handling only — they intentionally contain no human dosing, routes, frequencies, cycles, or stacks.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/axiom-logo-white.png" alt="AXIOM — Human Performance" width="663" height="172" />
+        <p>Clinical-grade research peptides for performance, recovery and longevity science. Independently tested, documented, and dispatched with care.</p>
+      </div>
+      <div>
+        <h5>Catalogue</h5>
+        <a href="#catalogue">Metabolic &amp; Weight</a>
+        <a href="#catalogue">Tissue Repair</a>
+        <a href="#catalogue">Growth Factors</a>
+        <a href="#catalogue">Neuropeptides</a>
+        <a href="#catalogue">Hormonal Research</a>
+        <a href="#catalogue">Longevity &amp; Cosmetic</a>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <a href="https://wa.me/18038573396" target="_blank" rel="noopener">WhatsApp Order Line</a>
+        <a href="mailto:research@axiompeptides.example">research@axiompeptides.example</a>
+        <p class="fl">Mon–Sat · 09:00–18:00 WIB</p>
+        <p class="fl">Jakarta, Indonesia</p>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <b>Research Use Only.</b> All products listed on this site are intended exclusively for in-vitro laboratory research and development. They are <b>not</b> drugs, food, cosmetics, or supplements, and are <b>not</b> intended for human or animal consumption, diagnostic, or therapeutic use. By purchasing, the buyer affirms they are a qualified researcher or institution and accepts full responsibility for safe, legal, and compliant handling. Prices are indicative, quoted in Indonesian Rupiah (IDR), and subject to change without notice.
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yr"></span> AXIOM — Human Performance</span>
+      <span>Science · Precision · For Research Use Only</span>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /content -->
+</div><!-- /page -->
+
+<!-- ===== REFERENCE DRAWER ===== -->
+<div class="drawer-ov" id="drawerOv"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Compound research information">
+  <div class="drawer-h">
+    <span class="accent"></span>
+    <button class="drawer-close" id="drawerClose" aria-label="Close"><i class="ph-bold ph-x"></i></button>
+    <div class="cls" id="drCls">—</div>
+    <h3 id="drName">—</h3>
+    <div class="doses" id="drDoses"></div>
+  </div>
+  <div class="drawer-b">
+    <div class="dr-block"><div class="k"><i class="ph-bold ph-atom"></i> Studied for</div><p id="drMech">—</p></div>
+    <div class="dr-block half"><div class="k"><i class="ph-bold ph-timer"></i> Approx. half-life</div><p id="drHalf">—</p></div>
+    <div class="dr-block"><div class="k"><i class="ph-bold ph-snowflake"></i> Storage &amp; reconstitution</div><p id="drHandling">—</p></div>
+    <div class="dr-note"><i class="ph-fill ph-info"></i><p><b>Research context only.</b> This panel intentionally provides no human dosing, administration routes, frequencies, cycles, or stacking guidance. Consult a licensed physician before any use.</p></div>
+  </div>
+</aside>
+
+<!-- ===== ACKNOWLEDGEMENT GATE ===== -->
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" hidden>
+  <div class="gate-card">
+    <div class="mk"><i class="ph ph-flask"></i></div>
+    <h3 id="gateTitle">Research Use Only</h3>
+    <p>The products in this catalogue are sold strictly for <b>in-vitro laboratory and research use</b> — not for human or veterinary consumption. By entering you confirm that you are <b>18 or older</b> and a qualified researcher or institutional buyer, and that you accept the research-use and compliance terms.</p>
+    <div class="gate-actions">
+      <button class="btn btn-solid" id="gateAccept">I Confirm — Enter</button>
+      <a class="btn decline" href="https://www.google.com" id="gateDecline">Leave</a>
+    </div>
+    <div class="small">This site does not provide medical advice, dosing, or usage guidance.</div>
+  </div>
+</div>
+
+<!-- ===== QUOTE DRAWER ===== -->
+<div class="quote-bar" id="quoteBar">
+  <div class="quote-inner">
+    <div class="quote-card">
+      <div class="quote-top" id="quoteTop">
+        <span class="qc" id="qCount">0</span>
+        <span class="ql">Your Cart</span>
+        <span class="qt"><span id="qTotal">Rp 0</span><small>Estimated total</small></span>
+        <i class="ph ph-caret-up qcaret"></i>
+      </div>
+      <div class="quote-body">
+        <div class="quote-items" id="qItems"></div>
+        <div class="quote-actions">
+          <a class="btn btn-solid" id="qWhatsApp" href="#" target="_blank" rel="noopener"><i class="ph-fill ph-whatsapp-logo"></i> Checkout via WhatsApp</a>
+          <button class="btn ghost" id="qCopy"><i class="ph ph-copy"></i> Copy list</button>
+          <button class="btn ghost" id="qClear"><i class="ph ph-trash"></i> Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DNA HELIX HERO (Three.js r0.143.0) ===== -->
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js';
+import { CopyShader } from 'three/addons/shaders/CopyShader.js';
+
+/* ---- Fixed parameters (monochrome Swiss recolor) ---- */
+const bgColor      = '#000000';
+const flameColor   = '#3a3a3a';
+const flameColor2  = '#8f8f8f';
+const flameAmt     = 0.2;
+const atmoColor    = '#b9b9b9';
+const atmoCount    = 780;
+const atmoSize     = 24;
+const atmoSpeed    = 0.4;
+const colorLow     = '#5c5c5c';
+const colorHigh    = '#ffffff';
+const opacity      = 2;
+const pointSize    = 4;
+const brightness   = 1.15;
+const twist        = 0.65;
+const waveAmt      = 0.7;
+const dnaFloat     = 0.95;
+const spin         = 0.18;
+const scale        = 0.63;
+const scrollClimb  = 9.5;
+const scrollTwist  = 0.9;
+const scrollDolly  = 0;
+const scrollSpin   = 1.8;
+const parallax     = 1;
+const pointerRadius   = 2.2;
+const pointerStrength = 0.2;
+
+function hexToVec3(hex){ const n=parseInt(hex.slice(1),16); return new THREE.Vector3(((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255); }
+const Lerp=(a,b,t)=>a+(b-a)*t;
+
+const canvas = document.getElementById('scene');
+const sceneWrap = document.getElementById('sceneWrap');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const LAYERS = { NONE:0, TORUS_SCENE:1, BLOOM_SCENE:2, ENTIRE_SCENE:3 };
+
+const renderer = new THREE.WebGL1Renderer({ canvas, antialias:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+scene.fog = new THREE.Fog(0x000000, 0, 15);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 400);
+camera.position.set(0, 0, 8.67);
+camera.layers.enable(LAYERS.TORUS_SCENE);
+camera.layers.enable(LAYERS.BLOOM_SCENE);
+camera.layers.enable(LAYERS.ENTIRE_SCENE);
+
+/* ---- Shared GLSL ---- */
+const SNOISE = `
+vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+float snoise(vec3 v){
+  const vec2 C = vec2(1.0/6.0, 1.0/3.0); const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+  vec3 i = floor(v + dot(v, C.yyy)); vec3 x0 = v - i + dot(i, C.xxx);
+  vec3 g = step(x0.yzx, x0.xyz); vec3 l = 1.0 - g;
+  vec3 i1 = min(g.xyz, l.zxy); vec3 i2 = max(g.xyz, l.zxy);
+  vec3 x1 = x0 - i1 + 1.0 * C.xxx; vec3 x2 = x0 - i2 + 2.0 * C.xxx; vec3 x3 = x0 - 1.0 + 3.0 * C.xxx;
+  i = mod(i, 289.0);
+  vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+  float n_ = 1.0/7.0; vec3 ns = n_ * D.wyz - D.xzx;
+  vec4 j = p - 49.0 * floor(p * ns.z *ns.z);
+  vec4 x_ = floor(j * ns.z); vec4 y_ = floor(j - 7.0 * x_);
+  vec4 x = x_ *ns.x + ns.yyyy; vec4 y = y_ *ns.x + ns.yyyy; vec4 h = 1.0 - abs(x) - abs(y);
+  vec4 b0 = vec4(x.xy, y.xy); vec4 b1 = vec4(x.zw, y.zw);
+  vec4 s0 = floor(b0)*2.0 + 1.0; vec4 s1 = floor(b1)*2.0 + 1.0; vec4 sh = -step(h, vec4(0.0));
+  vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy; vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+  vec3 p0 = vec3(a0.xy,h.x); vec3 p1 = vec3(a0.zw,h.y); vec3 p2 = vec3(a1.xy,h.z); vec3 p3 = vec3(a1.zw,h.w);
+  vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+  vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0); m = m * m;
+  return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+}
+float random(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 45.164))) * 43758.5453); }
+`;
+
+/* ---- Helix points ---- */
+const helixMat = new THREE.ShaderMaterial({
+  transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+  uniforms:{
+    uTime:{value:0}, uAppear:{value:0},
+    uColLow:{value:hexToVec3(colorLow)}, uColHigh:{value:hexToVec3(colorHigh)},
+    uOpacity:{value:opacity}, uSize:{value:pointSize}, uBrightness:{value:brightness},
+    uTwist:{value:twist}, uWaveAmt:{value:waveAmt}, uFloat:{value:dnaFloat}, uScale:{value:scale},
+    uCursor:{value:new THREE.Vector3()}, uRepelRadius:{value:pointerRadius}, uRepelStrength:{value:pointerStrength}, uActivity:{value:0}
+  },
+  vertexShader:`
+uniform float uTime; uniform float uSize; uniform float uTwist; uniform float uWaveAmt; uniform float uScale; uniform float uFloat;
+uniform vec3 uColLow; uniform vec3 uColHigh;
+uniform vec3 uCursor; uniform float uRepelRadius; uniform float uRepelStrength; uniform float uActivity;
+varying float vFade; varying vec3 vColor;
+${SNOISE}
+void main() {
+  float stretchedY = position.y * 7.0 - 8.0;
+  float rnd1 = random(position);
+  float rnd2 = random(position + vec3(1.0));
+  float rnd3 = random(position + vec3(2.0));
+  float t = stretchedY + sin(uTime * 0.8 + rnd1 * 6.28318) * uFloat;
+  float twist = t * uTwist;
+  float dnaRadius = 1.0;
+  float strandThickness = 0.35;
+  vec3 dnaPos;
+  if (rnd1 < 0.40) {
+    vec3 core = vec3(dnaRadius * cos(twist), t, dnaRadius * sin(twist));
+    vec3 offset = vec3(rnd1 - 0.2, rnd2 - 0.5, rnd3 - 0.5) * 2.0 * strandThickness;
+    dnaPos = core + offset;
+  } else if (rnd1 < 0.80) {
+    vec3 core = vec3(dnaRadius * cos(twist + 3.14159), t, dnaRadius * sin(twist + 3.14159));
+    vec3 offset = vec3(rnd1 - 0.6, rnd2 - 0.5, rnd3 - 0.5) * 2.0 * strandThickness;
+    dnaPos = core + offset;
+  } else {
+    float rungT = (rnd1 - 0.80) * 5.0;
+    float discreteT = floor(t * 2.5) / 2.5;
+    float discreteTwist = discreteT * uTwist;
+    vec3 p1 = vec3(dnaRadius * cos(discreteTwist), discreteT, dnaRadius * sin(discreteTwist));
+    vec3 p2 = vec3(dnaRadius * cos(discreteTwist + 3.14159), discreteT, dnaRadius * sin(discreteTwist + 3.14159));
+    vec3 core = mix(p1, p2, rungT);
+    vec3 offset = vec3(rnd1 - 0.9, rnd2 - 0.5, rnd3 - 0.5) * 2.0 * 0.10;
+    dnaPos = core + offset;
+  }
+  dnaPos.x += snoise(vec3(0.0, t * 0.2, uTime * 0.2)) * uWaveAmt;
+  dnaPos.z += snoise(vec3(t * 0.2, 0.0, uTime * 0.2)) * uWaveAmt;
+  vec3 finalPos = (dnaPos - vec3(0.0, -8.0, 0.0)) * uScale;
+  vec4 modelPosition = modelMatrix * vec4(finalPos, 1.0);
+  vec3 toP = modelPosition.xyz - uCursor;
+  float cd = length(toP);
+  float fall = smoothstep(uRepelRadius, 0.0, cd);
+  modelPosition.xyz += normalize(toP + vec3(0.0001)) * fall * uRepelStrength * uActivity;
+  vec4 mvPosition = viewMatrix * modelPosition;
+  float colMix = smoothstep(-20.0, 12.0, t);
+  vColor = mix(uColLow, uColHigh, clamp(colMix, 0.0, 1.0));
+  vFade = 1.0;
+  gl_PointSize = uSize * (10.0 / -mvPosition.z);
+  gl_PointSize = max(gl_PointSize, 1.5);
+  gl_Position = projectionMatrix * mvPosition;
+}`,
+  fragmentShader:`
+uniform float uOpacity; uniform float uBrightness; uniform float uAppear;
+varying float vFade; varying vec3 vColor;
+void main() {
+  vec2 xy = gl_PointCoord - 0.5;
+  float ll = length(xy);
+  if (ll > 0.5) discard;
+  float a = smoothstep(0.5, 0.1, ll);
+  gl_FragColor = vec4(vColor * uBrightness, vFade * a * uOpacity * uAppear);
+}`
+});
+
+const helixGeo = new THREE.SphereGeometry(4.2, 200, 600);
+const points = new THREE.Points(helixGeo, helixMat);
+points.frustumCulled = false;
+points.layers.enable(LAYERS.ENTIRE_SCENE);
+const group = new THREE.Group();
+group.add(points);
+scene.add(group);
+
+/* ---- Ambient motes ---- */
+const atmoGeo = new THREE.BufferGeometry();
+const aPos = new Float32Array(atmoCount*3), aSize = new Float32Array(atmoCount), aSeed = new Float32Array(atmoCount);
+for(let i=0;i<atmoCount;i++){
+  aPos[i*3]=Math.random()*2-1; aPos[i*3+1]=Math.random()*2-1; aPos[i*3+2]=Math.random()*2-1;
+  aSize[i]=atmoSize*(0.4+Math.random()); aSeed[i]=Math.random();
+}
+atmoGeo.setAttribute('position', new THREE.BufferAttribute(aPos,3));
+atmoGeo.setAttribute('size', new THREE.BufferAttribute(aSize,1));
+atmoGeo.setAttribute('seed', new THREE.BufferAttribute(aSeed,1));
+const atmoMat = new THREE.ShaderMaterial({
+  transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, depthTest:false,
+  uniforms:{ uTime:{value:0}, uColor:{value:hexToVec3(atmoColor)}, uRes:{value:new THREE.Vector2(window.innerWidth*window.devicePixelRatio, window.innerHeight*window.devicePixelRatio)} },
+  vertexShader:`
+attribute float size; attribute float seed; uniform float uTime; uniform vec2 uRes;
+varying float vA;
+vec3 warp(vec3 p, float t){ float c=0.9,a=1.9,b=0.02,s=0.05; p*=2.;
+  p.x+=c*sin(s*t+a*p.y)+t*b; p.y+=c*cos(s*t+a*p.x); p.y+=c*sin(s*t+a*p.z)+t*b;
+  p.z+=c*cos(s*t+a*p.y); p.z+=c*sin(s*t+a*p.x)+t*b; p.x+=c*cos(s*t+a*p.z);
+  return cos(p+vec3(1,2,4)); }
+void main(){
+  vec3 v = position*4.0 + warp(position, uTime)*1.2;
+  vec4 mv = modelViewMatrix * vec4(v, 1.0);
+  float r = length(v); float farF = 1.0 - smoothstep(5.0, 6.5, r); float nearF = smoothstep(0.0, 0.5, -mv.z);
+  vA = farF * nearF;
+  gl_PointSize = size * uRes.y / 900.0 / -mv.z; gl_PointSize = max(gl_PointSize, 1.0);
+  gl_Position = projectionMatrix * mv;
+}`,
+  fragmentShader:`
+uniform vec3 uColor; varying float vA;
+void main(){ vec2 p = gl_PointCoord - 0.5; float l = length(p); if (l > 0.5) discard;
+  float tex = smoothstep(0.5, 0.0, l); gl_FragColor = vec4(uColor * tex, tex * vA * 0.6); }`
+});
+const atmo = new THREE.Points(atmoGeo, atmoMat);
+atmo.frustumCulled = false;
+atmo.layers.enable(LAYERS.ENTIRE_SCENE);
+scene.add(atmo);
+
+/* ---- Composers ---- */
+const renderScene = new RenderPass(scene, camera);
+
+const torusComposer = new EffectComposer(renderer);
+torusComposer.renderToScreen = false;
+torusComposer.addPass(renderScene);
+torusComposer.addPass(new ShaderPass(GammaCorrectionShader));
+torusComposer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.22, 0.2, 0));
+torusComposer.addPass(new ShaderPass(CopyShader));
+
+const bloomComposer = new EffectComposer(renderer);
+bloomComposer.renderToScreen = false;
+bloomComposer.addPass(renderScene);
+bloomComposer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.6, 0.6, 0));
+bloomComposer.addPass(new ShaderPass(GammaCorrectionShader));
+
+const FinalShader = {
+  uniforms:{
+    iTime:{value:0}, tDiffuse:{value:null}, torusTexture:{value:null}, bloomTexture:{value:null}, haloTexture:{value:null},
+    uBg:{value:hexToVec3(bgColor)}, uFlameA:{value:hexToVec3(flameColor)}, uFlameB:{value:hexToVec3(flameColor2)}, uFlameAmt:{value:flameAmt}
+  },
+  vertexShader:`varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }`,
+  fragmentShader:`
+uniform float iTime; uniform sampler2D tDiffuse; uniform sampler2D bloomTexture; uniform sampler2D torusTexture; uniform sampler2D haloTexture;
+uniform vec3 uBg; uniform vec3 uFlameA; uniform vec3 uFlameB; uniform float uFlameAmt;
+varying vec2 vUv;
+vec3 warp3d(vec3 pos, float t){ float curv=.8,a=1.9,b=0.7; pos*=2.;
+  pos.x+=curv*sin(t+a*pos.y)+t*b; pos.y+=curv*cos(t+a*pos.x);
+  pos.y+=curv*sin(t+a*pos.z)+t*b; pos.z+=curv*cos(t+a*pos.y);
+  pos.z+=curv*sin(t+a*pos.x)+t*b; pos.x+=curv*cos(t+a*pos.z);
+  return 0.5+0.5*cos(pos.xyz+vec3(1,2,4)); }
+void main(){
+  vec2 uv = 2.*vUv - 1.;
+  vec3 w = pow(warp3d(vec3(uv.x, sin(uv.y), uv.y), iTime*1.5), vec3(1.5));
+  vec3 flame = 1.5*uFlameA*w.x; flame*=w.y; flame += uFlameB*w.z;
+  flame *= smoothstep(0.25, 1., abs(uv.y));
+  float md = smoothstep(-0.7, 1., -uv.y*uv.x); flame *= md*md;
+  vec3 bg = uBg * (1.0 - 0.4 * length(uv));
+  vec3 halo = texture2D(haloTexture, vUv).xyz;
+  gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(bloomTexture, vUv).xyz + texture2D(torusTexture, vUv).xyz + texture2D(tDiffuse, vUv).xyz + halo, 1.);
+}`
+};
+const finalPass = new ShaderPass(FinalShader);
+finalPass.uniforms.bloomTexture.value = bloomComposer.renderTarget1.texture;
+finalPass.uniforms.torusTexture.value = torusComposer.renderTarget1.texture;
+
+const finalComposer = new EffectComposer(renderer);
+finalComposer.addPass(renderScene);
+finalComposer.addPass(finalPass);
+
+/* ---- Interaction / scroll state ---- */
+let scrollTarget=0, scrollSmooth=0, scrollCurrent=0;
+let mouseTarget={x:0,y:0}, mouse={x:0,y:0};
+const POINTER = { active:false, lastMove:0, world:new THREE.Vector3(), activity:0 };
+let spinPhase=0, lastT=performance.now()/1000, startT=performance.now()/1000;
+const _plane = new THREE.Plane(new THREE.Vector3(0,0,1), 0);
+const _ray = new THREE.Raycaster();
+const _hit = new THREE.Vector3();
+
+function climbHeight(){ return window.innerHeight * 3; }
+function readScroll(){ scrollTarget = Math.max(0, Math.min(1, window.scrollY / climbHeight())); }
+
+addEventListener('scroll', readScroll, {passive:true});
+addEventListener('mousemove', e=>{
+  mouseTarget.x = (e.clientX/window.innerWidth)*2 - 1;
+  mouseTarget.y = -((e.clientY/window.innerHeight)*2 - 1);
+  POINTER.active = true; POINTER.lastMove = performance.now()/1000;
+});
+addEventListener('mouseout', ()=>{ POINTER.active = false; });
+
+function updateScene(scroll, mx, my){
+  const now = performance.now()/1000;
+  const dt = Math.min(now - lastT, 0.05); lastT = now;
+  helixMat.uniforms.uTime.value = now;
+  atmoMat.uniforms.uTime.value = now * atmoSpeed * 8.0;
+  finalPass.uniforms.iTime.value = now;
+
+  camera.position.set(mx*parallax, my*parallax, 8.67 - scroll*scrollDolly);
+  camera.lookAt(0,0,0);
+  const heroOffsetX = (window.innerWidth/window.innerHeight > 1) ? 2.2 : 0.9;
+  group.position.x = heroOffsetX;
+  group.position.y = -scroll*scrollClimb;
+  helixMat.uniforms.uTwist.value = twist * (1 + scroll*scrollTwist);
+  spinPhase += dt * (spin + scroll*scrollSpin);
+  group.rotation.y = spinPhase;
+  atmo.position.copy(camera.position);
+
+  const elapsed = now - startT;
+  helixMat.uniforms.uAppear.value = Math.max(0, Math.min((elapsed - 0.2)/1.4, 1));
+
+  // pointer world point on z=0 plane
+  _ray.setFromCamera({x:mouse.x, y:mouse.y}, camera);
+  if(_ray.ray.intersectPlane(_plane, _hit)){
+    POINTER.world.lerp(_hit, 0.12);
+  }
+  const idle = now - POINTER.lastMove;
+  const targetAct = (POINTER.active && idle < 3) ? 1 : 0;
+  POINTER.activity += (targetAct - POINTER.activity) * 0.06;
+  helixMat.uniforms.uCursor.value.copy(POINTER.world);
+  helixMat.uniforms.uActivity.value = POINTER.activity;
+}
+
+function renderComposers(){
+  camera.layers.set(LAYERS.TORUS_SCENE); torusComposer.render();
+  camera.layers.set(LAYERS.BLOOM_SCENE); bloomComposer.render();
+  camera.layers.set(LAYERS.ENTIRE_SCENE); finalComposer.render();
+}
+
+function updateFade(){
+  const vh = window.innerHeight;
+  // fully visible over the first ~2.2 screens, fade out by 3 screens
+  const y = window.scrollY;
+  let op = 1 - (y - vh*2.1)/(vh*0.8);
+  op = Math.max(0, Math.min(1, op));
+  sceneWrap.style.opacity = op.toFixed(3);
+  const hint = document.getElementById('scrollHint');
+  if(hint) hint.style.opacity = (y < vh*0.5) ? '1' : '0';
+}
+
+function loop(){
+  requestAnimationFrame(loop);
+  scrollSmooth  = Lerp(scrollSmooth, scrollTarget, 0.10);
+  scrollCurrent = Lerp(scrollCurrent, scrollSmooth, 0.06);
+  mouse.x = Lerp(mouse.x, mouseTarget.x, 0.06);
+  mouse.y = Lerp(mouse.y, mouseTarget.y, 0.06);
+  updateScene(scrollCurrent, mouse.x, mouse.y);
+  renderComposers();
+  updateFade();
+}
+
+function resize(){
+  const w=window.innerWidth, h=window.innerHeight;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(w,h);
+  camera.aspect = w/h; camera.updateProjectionMatrix();
+  [torusComposer,bloomComposer,finalComposer].forEach(c=>{ c.setPixelRatio(Math.min(window.devicePixelRatio,2)); c.setSize(w,h); });
+  atmoMat.uniforms.uRes.value.set(w*window.devicePixelRatio, h*window.devicePixelRatio);
+}
+addEventListener('resize', resize);
+
+/* ---- Debug handle (house convention) ---- */
+window.__axiom = {
+  snap(v){
+    scrollTarget=scrollSmooth=scrollCurrent=v;
+    startT = performance.now()/1000 - 2.0; // force appeared
+    updateScene(v, mouse.x, mouse.y);
+    helixMat.uniforms.uAppear.value = 1;
+    renderComposers();
+  },
+  frame(){ updateScene(scrollCurrent, mouse.x, mouse.y); renderComposers(); },
+  points, group, helixMat, camera
+};
+
+readScroll();
+if(reduceMotion){
+  // static appeared frame, no scroll scrub
+  startT = performance.now()/1000 - 2.0;
+  updateScene(0, 0, 0);
+  helixMat.uniforms.uAppear.value = 1;
+  renderComposers();
+  updateFade();
+} else {
+  loop();
+}
+</script>
+
+<!-- ===== Procedural 3D vial — "Anatomy of a Lot" (Three.js r0.143.0) ===== -->
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+const canvas = document.getElementById('vial');
+if (canvas) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const renderer = new THREE.WebGL1Renderer({ canvas, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 1);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 3/4, 0.1, 100);
+  camera.position.set(0, 0.2, 9.0);
+  camera.lookAt(0, 0.1, 0);
+
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1,1), 0.34, 0.5, 0.3);
+  composer.addPass(bloom);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  /* Fresnel line-art glass shell — white rim, transparent core, additive (helix language) */
+  const fresnelMat = new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, side:THREE.DoubleSide,
+    uniforms:{ uColor:{value:new THREE.Color(0xffffff)}, uPower:{value:2.35}, uBright:{value:1.3} },
+    vertexShader:`
+      varying vec3 vN; varying vec3 vView;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position,1.0);
+        vN = normalize(normalMatrix * normal);
+        vView = normalize(-mv.xyz);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader:`
+      uniform vec3 uColor; uniform float uPower; uniform float uBright;
+      varying vec3 vN; varying vec3 vView;
+      void main(){
+        float f = pow(1.0 - abs(dot(normalize(vN), normalize(vView))), uPower);
+        gl_FragColor = vec4(uColor * uBright, f);
+      }`
+  });
+
+  /* Vial profile (LatheGeometry): base -> body -> shoulder -> neck -> crimp lip */
+  const P = [
+    [0.00, -1.85],[0.94, -1.85],[0.96, -1.78],[0.96, 0.62],[0.90, 1.02],
+    [0.52, 1.30],[0.50, 1.52],[0.60, 1.56],[0.60, 1.74],[0.50, 1.80],[0.00, 1.80]
+  ].map(p=>new THREE.Vector2(p[0], p[1]));
+  const glass = new THREE.Mesh(new THREE.LatheGeometry(P, 96), fresnelMat);
+  group.add(glass);
+
+  /* Crimp cap + stopper as thin edge-lit rings */
+  const capMat = fresnelMat.clone(); capMat.uniforms.uBright.value = 1.5;
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.30, 72, 1, true), capMat);
+  cap.position.y = 1.60; group.add(cap);
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.045, 10, 60), capMat);
+  collar.rotation.x = Math.PI/2; collar.position.y = 1.30; group.add(collar);
+
+  /* Lyophilised cake — additive point cloud settled at the base (same family as helix motes) */
+  const N = 190;
+  const pos = new Float32Array(N*3), sz = new Float32Array(N);
+  for (let i=0;i<N;i++){
+    const r = 0.72 * Math.sqrt(Math.random());
+    const a = Math.random()*Math.PI*2;
+    const h = -1.74 + Math.pow(Math.random(),2.0) * 0.34;     // shallow cake, dense low
+    pos[i*3]=Math.cos(a)*r; pos[i*3+1]=h; pos[i*3+2]=Math.sin(a)*r;
+    sz[i]=1.1 + Math.random()*1.7;
+  }
+  const cakeGeo = new THREE.BufferGeometry();
+  cakeGeo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  cakeGeo.setAttribute('size', new THREE.BufferAttribute(sz,1));
+  const cakeMat = new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    uniforms:{ uColor:{value:new THREE.Color(0xffffff)}, uT:{value:0} },
+    vertexShader:`
+      attribute float size; uniform float uT; varying float vF;
+      void main(){
+        vec3 p = position;
+        p.y += sin(uT*0.8 + position.x*4.0)*0.02;
+        vec4 mv = modelViewMatrix * vec4(p,1.0);
+        vF = 0.5 + 0.5*sin(uT + position.z*6.0);
+        gl_PointSize = size * (300.0 / -mv.z);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader:`
+      uniform vec3 uColor; varying float vF;
+      void main(){ vec2 d = gl_PointCoord-0.5; float l=length(d); if(l>0.5) discard;
+        float a = smoothstep(0.5,0.05,l); gl_FragColor = vec4(uColor, a*(0.12+0.18*vF)); }`
+  });
+  group.add(new THREE.Points(cakeGeo, cakeMat));
+
+  group.rotation.z = 0.06;
+  group.position.y = 0.12;
+  let baseTilt = 0.5, targetTilt = 0.5, spin = 0, running = false, hidden = false;
+
+  function size(){
+    const r = canvas.getBoundingClientRect();
+    const w = Math.max(1, r.width), h = Math.max(1, r.height);
+    const dpr = Math.min(window.devicePixelRatio,2);
+    renderer.setPixelRatio(dpr); renderer.setSize(w, h, false);
+    composer.setPixelRatio(dpr); composer.setSize(w, h);
+    bloom.resolution.set(w, h);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+  }
+  size(); addEventListener('resize', size);
+
+  canvas.parentElement.addEventListener('mousemove', e=>{
+    const r = canvas.getBoundingClientRect();
+    targetTilt = 0.5 + ((e.clientX - r.left)/r.width - 0.5) * 0.9;
+  });
+  canvas.parentElement.addEventListener('mouseleave', ()=>{ targetTilt = 0.5; });
+
+  function draw(dt){
+    spin += dt * 0.28;
+    baseTilt += (targetTilt - baseTilt) * 0.05;
+    group.rotation.y = spin + baseTilt;
+    cakeMat.uniforms.uT.value += dt;
+    composer.render();
+  }
+
+  let last = performance.now();
+  function loop(now){
+    if (!running) return;
+    const dt = Math.min((now-last)/1000, 0.05); last = now;
+    draw(dt);
+    requestAnimationFrame(loop);
+  }
+  function start(){ if(running||hidden) return; running = true; last = performance.now(); requestAnimationFrame(loop); }
+  function stop(){ running = false; }
+
+  document.addEventListener('visibilitychange', ()=>{ hidden = document.hidden; if(hidden) stop(); else if(inView) start(); });
+
+  let inView = false;
+  const io = new IntersectionObserver(es=>es.forEach(en=>{
+    inView = en.isIntersecting;
+    if(reduce){ size(); draw(0); return; }
+    if(inView) start(); else stop();
+  }), {threshold:0.05});
+  io.observe(canvas);
+
+  // initial paint so the canvas is never blank before it scrolls into view
+  size(); group.rotation.y = 0.5; draw(0);
+
+  window.__vial = {
+    snap(angle){ size(); spin = angle; baseTilt = 0; targetTilt = 0; group.rotation.y = angle; cakeMat.uniforms.uT.value = angle; composer.render(); },
+    frame(){ draw(0); },
+    get running(){ return running; }, group
+  };
+}
+</script>
+
+<!-- ===== Catalogue / cart / drawer / gate logic ===== -->
+<script src="data.js"></script>
+<script>
+const fmt = n => n == null ? "N/A" : new Intl.NumberFormat("id-ID").format(n);
+const CAT = window.CATALOG;
+
+/* Filter chips */
+const filters=document.getElementById("filters");
+CAT.forEach(c=>{
+  const b=document.createElement("button");
+  b.className="chip";b.dataset.cat=c.id;
+  b.textContent=c.name.split(" & ")[0].split(",")[0];
+  filters.appendChild(b);
+});
+
+/* Item registry (for quote builder) */
+const ITEMS={};
+const TOTAL=CAT.reduce((n,c)=>n+c.items.length,0);
+const PRICES=CAT.flatMap(c=>c.items.map(i=>i.price)).filter(p=>p!=null);
+const PMIN=Math.min(...PRICES),PMAX=Math.max(...PRICES);
+
+/* Catalogue */
+const list=document.getElementById("catList");
+CAT.forEach(c=>{
+  const short=c.name.split(" & ")[0].split(",")[0];
+  const cards=c.items.map((it,i)=>{
+    const id=`${c.id}-${i}`;
+    ITEMS[id]={id,name:it.name,dose:it.dose,price:it.price,cat:c.id};
+    const priceHtml=it.price==null?'<span class="pcard-price na">On request</span>':`<span class="pcard-price"><span class="cur">Rp</span>${fmt(it.price)}</span>`;
+    return `
+    <article class="pcard" data-id="${id}" data-name="${(it.name+' '+it.dose).toLowerCase()}" data-idx="${i}" data-price="${it.price==null?'':it.price}">
+      <div class="pcard-head">
+        <span class="pcard-idx">${String(i+1).padStart(2,'0')}</span>
+      </div>
+      <div class="pcard-main">
+        <h4 class="pcard-name">${it.name}</h4>
+        ${it.dose?`<span class="pcard-dose">${it.dose}</span>`:''}
+      </div>
+      ${priceHtml}
+      <div class="pcard-actions">
+        <button class="ref-btn" data-ref="${it.name}" aria-label="Research info" title="Research info"><i class="ph ph-info"></i></button>
+        ${it.price==null?'':`<button class="add-btn" data-add="${id}" aria-label="Add to cart" title="Add to cart"><i class="ph ph-plus"></i></button>`}
+      </div>
+    </article>`;}).join("");
+  const block=document.createElement("div");
+  block.className="cat reveal";block.dataset.cat=c.id;block.id="cat-"+c.id;
+  block.innerHTML=`
+    <div class="cat-head">
+      <div class="cat-no">${c.no}</div>
+      <div class="cat-titles"><h3>${c.name}</h3><p>${c.blurb}</p></div>
+      <div class="cat-count">${c.items.length} compounds</div>
+    </div>
+    <div class="pgrid">${cards}</div>`;
+  list.appendChild(block);
+});
+
+/* Search + filter + sort + price-range */
+const search=document.getElementById("search"),empty=document.getElementById("empty");
+const sortSel=document.getElementById("sort"),priceInp=document.getElementById("price"),priceVal=document.getElementById("priceVal"),rcount=document.getElementById("rcount");
+let activeCat="all";
+priceInp.min=PMIN;priceInp.max=PMAX;priceInp.value=PMAX;
+function sortRows(){
+  const mode=sortSel.value;
+  document.querySelectorAll(".cat .pgrid").forEach(grid=>{
+    const cards=[...grid.querySelectorAll(".pcard")];
+    cards.sort((a,b)=>{
+      const pa=a.dataset.price===""?Infinity:+a.dataset.price, pb=b.dataset.price===""?Infinity:+b.dataset.price;
+      if(mode==="price-asc")return pa-pb;
+      if(mode==="price-desc")return (pb===Infinity?-1:pa===Infinity?1:pb-pa);
+      if(mode==="name")return a.querySelector(".pcard-name").textContent.localeCompare(b.querySelector(".pcard-name").textContent);
+      return (+a.dataset.idx)-(+b.dataset.idx);
+    });
+    cards.forEach(c=>grid.appendChild(c));
+  });
+}
+function apply(){
+  const q=search.value.trim().toLowerCase();const maxP=+priceInp.value;let any=false,shown=0;
+  priceVal.textContent="Rp "+fmt(maxP);
+  document.querySelectorAll(".cat").forEach(cat=>{
+    const catMatch=activeCat==="all"||cat.dataset.cat===activeCat;let vis=0;
+    cat.querySelectorAll(".pcard").forEach(card=>{
+      const price=card.dataset.price===""?null:+card.dataset.price;
+      const priceOk = price==null || maxP>=PMAX || price<=maxP;
+      const m=catMatch&&(!q||card.dataset.name.includes(q))&&priceOk;
+      card.classList.toggle("hidden",!m);if(m){vis++;shown++;}
+    });
+    const show=catMatch&&vis>0;cat.classList.toggle("hidden",!show);if(show)any=true;
+  });
+  empty.style.display=any?"none":"block";
+  rcount.innerHTML=`Showing <b>${shown}</b> of ${TOTAL} compounds`;
+}
+search.addEventListener("input",apply);
+sortSel.addEventListener("change",()=>{sortRows();apply();});
+priceInp.addEventListener("input",apply);
+filters.addEventListener("click",e=>{
+  const b=e.target.closest(".chip");if(!b)return;
+  filters.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+  b.classList.add("active");activeCat=b.dataset.cat;apply();
+});
+apply();
+
+/* ---- Quote builder ---- */
+const quote=new Map();
+const qBar=document.getElementById("quoteBar"),qItems=document.getElementById("qItems"),qCount=document.getElementById("qCount"),qTotal=document.getElementById("qTotal");
+const WA_NUMBER="18038573396";
+function renderQuote(){
+  const entries=[...quote.values()];
+  qCount.textContent=entries.reduce((n,e)=>n+e.qty,0);
+  const total=entries.reduce((n,e)=>n+e.price*e.qty,0);
+  qTotal.textContent="Rp "+fmt(total);
+  qItems.innerHTML=entries.map(e=>`
+    <div class="qrow">
+      <div class="qn">${e.name}${e.dose?`<small>${e.dose}</small>`:''}</div>
+      <div class="qty"><button data-dec="${e.id}">–</button><span>${e.qty}</span><button data-inc="${e.id}">+</button></div>
+      <div class="qp">Rp ${fmt(e.price*e.qty)}</div>
+      <button class="qremove" data-rm="${e.id}" aria-label="Remove"><i class="ph ph-x"></i></button>
+    </div>`).join("");
+  qBar.classList.toggle("show",entries.length>0);
+  if(entries.length===0)qBar.classList.remove("open");
+  const badge=document.getElementById("navCartCount"),zero=document.getElementById("cartZero");
+  const tq=entries.reduce((n,e)=>n+e.qty,0);
+  if(badge){badge.textContent=tq;badge.hidden=tq===0;}
+  if(zero){zero.hidden=tq!==0;}
+  let msg="Hello AXIOM, I'd like to order the following research compounds:\n";
+  entries.forEach((e,i)=>{msg+=`${i+1}. ${e.name}${e.dose?' '+e.dose:''} — ${e.qty}× — Rp ${fmt(e.price*e.qty)}\n`;});
+  msg+=`\nEstimated total: Rp ${fmt(total)}`;
+  document.getElementById("qWhatsApp").href=`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+  qBar._msg=msg;
+  document.querySelectorAll(".add-btn").forEach(b=>b.classList.toggle("added",quote.has(b.dataset.add)));
+}
+function addItem(id){
+  const it=ITEMS[id];if(!it||it.price==null)return;
+  if(quote.has(id))quote.get(id).qty++;else quote.set(id,{...it,qty:1});
+  renderQuote();
+}
+list.addEventListener("click",e=>{const b=e.target.closest("[data-add]");if(b)addItem(b.dataset.add);});
+qItems.addEventListener("click",e=>{
+  const inc=e.target.closest("[data-inc]"),dec=e.target.closest("[data-dec]"),rm=e.target.closest("[data-rm]");
+  if(inc){quote.get(inc.dataset.inc).qty++;renderQuote();}
+  if(dec){const it=quote.get(dec.dataset.dec);if(--it.qty<=0)quote.delete(dec.dataset.dec);renderQuote();}
+  if(rm){quote.delete(rm.dataset.rm);renderQuote();}
+});
+document.getElementById("quoteTop").addEventListener("click",()=>qBar.classList.toggle("open"));
+document.getElementById("navCart").addEventListener("click",()=>{
+  if(quote.size){qBar.classList.add("show","open");}
+  else document.getElementById("catalogue").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("qClear").addEventListener("click",()=>{quote.clear();renderQuote();});
+document.getElementById("qCopy").addEventListener("click",e=>{
+  navigator.clipboard?.writeText(qBar._msg||"");
+  const t=e.currentTarget;const old=t.innerHTML;t.innerHTML='<i class="ph ph-check"></i> Copied';setTimeout(()=>t.innerHTML=old,1500);
+});
+renderQuote();
+
+/* Mobile nav */
+const navToggle=document.getElementById("navToggle"),navLinks=document.getElementById("navLinks");
+navToggle.addEventListener("click",()=>navLinks.classList.toggle("open"));
+navLinks.addEventListener("click",e=>{if(e.target.tagName==="A")navLinks.classList.remove("open")});
+
+/* Year + hero compound count */
+document.getElementById("yr").textContent=new Date().getFullYear();
+const mc=document.getElementById("metaCount");if(mc)mc.textContent=TOTAL;
+
+/* Reveal (with auto-stagger indices) */
+document.querySelectorAll(".stagger").forEach(s=>[...s.children].forEach((c,i)=>c.style.setProperty("--i",i)));
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:.12});
+document.querySelectorAll(".reveal, .rule-draw").forEach(el=>io.observe(el));
+
+/* ---- Reference drawer ---- */
+const NAME2DOSES={};
+CAT.forEach(c=>c.items.forEach(it=>{
+  (NAME2DOSES[it.name]=NAME2DOSES[it.name]||[]).push(it.dose||"—");
+}));
+const REF=window.REFERENCE||{},HANDLING=window.REF_HANDLING||"";
+const drawer=document.getElementById("drawer"),drawerOv=document.getElementById("drawerOv");
+function openRef(name){
+  const r=REF[name];if(!r)return;
+  document.getElementById("drCls").textContent=r.cls||"Research compound";
+  document.getElementById("drName").textContent=name;
+  document.getElementById("drMech").textContent=r.mech||"—";
+  document.getElementById("drHalf").textContent=r.half||"—";
+  document.getElementById("drHandling").textContent=HANDLING;
+  const doses=[...new Set(NAME2DOSES[name]||[])].filter(d=>d&&d!=="—");
+  document.getElementById("drDoses").innerHTML=doses.map(d=>`<span>${d}</span>`).join("");
+  drawer.classList.add("show");drawerOv.classList.add("show");drawer.setAttribute("aria-hidden","false");
+}
+function closeRef(){drawer.classList.remove("show");drawerOv.classList.remove("show");drawer.setAttribute("aria-hidden","true");}
+list.addEventListener("click",e=>{const b=e.target.closest("[data-ref]");if(b)openRef(b.dataset.ref);});
+drawerOv.addEventListener("click",closeRef);
+document.getElementById("drawerClose").addEventListener("click",closeRef);
+addEventListener("keydown",e=>{if(e.key==="Escape")closeRef();});
+
+/* ---- Acknowledgement gate ---- */
+(function(){
+  const gate=document.getElementById("gate");if(!gate)return;
+  let ack=false;try{ack=localStorage.getItem("axiom_ack")==="1";}catch(e){}
+  if(ack)return;
+  gate.hidden=false;document.documentElement.style.overflow="hidden";
+  function enter(){
+    gate.hidden=true;document.documentElement.style.overflow="";
+    try{localStorage.setItem("axiom_ack","1");}catch(e){}
+  }
+  document.getElementById("gateAccept").addEventListener("click",enter);
+})();
+
+/* ===== Motion & craft polish ===== */
+(function(){
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const coarse = matchMedia("(pointer: coarse)").matches;
+
+  /* ---- Intro preloader (once per session) ---- */
+  (function(){
+    const pl = document.getElementById("preloader"); if(!pl) return;
+    let seen=false; try{ seen = sessionStorage.getItem("axiom_intro")==="1"; }catch(e){}
+    if(reduce || seen){ pl.classList.add("done"); return; }
+    try{ sessionStorage.setItem("axiom_intro","1"); }catch(e){}
+    setTimeout(()=>pl.classList.add("done"), 1650);
+  })();
+
+  /* ---- Custom cursor (fine pointers only) ---- */
+  if(!coarse && !reduce){
+    const ring=document.getElementById("cursorRing"), dot=document.getElementById("cursorDot");
+    let rx=innerWidth/2, ry=innerHeight/2, dx=rx, dy=ry, tx=rx, ty=ry, on=false;
+    const hoverSel="a,button,input,select,textarea,summary,label,.tlink,.chip,.pcard,[data-add],[data-ref],.faq-q";
+    addEventListener("mousemove",e=>{
+      tx=e.clientX; ty=e.clientY;
+      if(!on){ on=true; document.body.classList.add("cursor-on"); }
+      const t=e.target.closest?.(hoverSel);
+      ring.classList.toggle("hover", !!t);
+    });
+    addEventListener("mouseleave",()=>{ on=false; document.body.classList.remove("cursor-on"); });
+    addEventListener("mousedown",()=>ring.style.transform=(ring.style.transform||"")); // noop keeps GPU layer warm
+    (function tick(){
+      dx+=(tx-dx)*0.35; dy+=(ty-dy)*0.35;       // dot: snappy
+      rx+=(tx-rx)*0.16; ry+=(ty-ry)*0.16;       // ring: trailing
+      dot.style.transform=`translate(${dx}px,${dy}px)`;
+      ring.style.transform=`translate(${rx}px,${ry}px)`;
+      requestAnimationFrame(tick);
+    })();
+  }
+
+  /* ---- Magnetic hover (fine pointers only) ---- */
+  if(!coarse && !reduce){
+    const strength=0.32;
+    document.querySelectorAll(".tlink, nav .navcart, .btn, .gate-actions a, .gate-actions button").forEach(el=>{
+      el.addEventListener("mousemove",e=>{
+        const r=el.getBoundingClientRect();
+        const mx=e.clientX-(r.left+r.width/2), my=e.clientY-(r.top+r.height/2);
+        el.style.transform=`translate(${mx*strength}px,${my*strength}px)`;
+      });
+      el.addEventListener("mouseleave",()=>{ el.style.transform=""; el.style.transition="transform .4s cubic-bezier(.16,1,.3,1)"; setTimeout(()=>el.style.transition="",400); });
+    });
+  }
+
+  /* ---- Scroll progress bar + hide-on-scroll nav ---- */
+  const bar=document.getElementById("progress"), nav=document.getElementById("nav");
+  let lastY=scrollY, ticking=false;
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(()=>{
+      const y=scrollY, h=document.documentElement.scrollHeight-innerHeight;
+      if(bar) bar.style.width=(h>0 ? (y/h*100) : 0)+"%";
+      if(nav){
+        if(y>lastY && y>240) nav.classList.add("nav-hidden");
+        else nav.classList.remove("nav-hidden");
+      }
+      lastY=y; ticking=false;
+    });
+  }
+  addEventListener("scroll", onScroll, {passive:true}); onScroll();
+})();
+</script>
+</body>
+</html>

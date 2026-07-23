@@ -1,0 +1,3666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIOM — Brand Identity Manual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&family=Inter+Tight:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --onyx: #0A0A0A;
+    --bone: #F5F5F3;
+    --titanium: #8D8D8D;
+    --platinum: #C8C8C6;
+    --warm-metal: #C4A882;
+    --deep-charcoal: #1A1A1A;
+    --mid-grey: #3A3A3A;
+    --light-grey: #E8E8E6;
+    --page-max: 1440px;
+    --gutter: 80px;
+    --col: calc((100% - 160px) / 12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bone);
+    color: var(--onyx);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ─── UTILITY ─────────────────────────────────── */
+  .dark { background: var(--onyx); color: var(--bone); }
+  .mid  { background: var(--deep-charcoal); color: var(--bone); }
+  .light { background: var(--bone); color: var(--onyx); }
+  .grey-bg { background: #EFEFED; color: var(--onyx); }
+
+  .container {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  .label {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    display: block;
+    margin-bottom: 32px;
+  }
+  .label--light { color: var(--platinum); }
+
+  .rule {
+    width: 32px;
+    height: 1px;
+    background: currentColor;
+    display: block;
+    margin-bottom: 40px;
+    opacity: 0.4;
+  }
+
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1px;
+  }
+
+  .col-1  { grid-column: span 1; }
+  .col-2  { grid-column: span 2; }
+  .col-3  { grid-column: span 3; }
+  .col-4  { grid-column: span 4; }
+  .col-5  { grid-column: span 5; }
+  .col-6  { grid-column: span 6; }
+  .col-7  { grid-column: span 7; }
+  .col-8  { grid-column: span 8; }
+  .col-9  { grid-column: span 9; }
+  .col-10 { grid-column: span 10; }
+  .col-12 { grid-column: span 12; }
+
+  /* ─── NAVIGATION ──────────────────────────────── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(245,245,243,0.07);
+    padding: 0 var(--gutter);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .site-nav__logo {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.34em;
+    color: var(--bone);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .site-nav__links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .site-nav__links a {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .site-nav__links a:hover { color: var(--bone); }
+
+  /* ─── COVER ───────────────────────────────────── */
+  .cover {
+    min-height: 100vh;
+    background: var(--onyx);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: var(--gutter);
+    position: relative;
+    overflow: hidden;
+  }
+  .cover__bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,245,243,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,245,243,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+  .cover__corner-mark {
+    position: absolute;
+    top: 56px;
+    right: var(--gutter);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    text-align: right;
+    line-height: 2;
+  }
+  .cover__wordmark {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 60px;
+  }
+  .cover__logo-img {
+    width: min(560px, 80vw);
+    height: auto;
+    display: block;
+    filter: invert(1);
+    mix-blend-mode: screen;
+  }
+  .cover__tagline {
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--platinum);
+    margin-bottom: 80px;
+    position: relative;
+    z-index: 1;
+  }
+  .cover__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(245,245,243,0.1);
+    padding-top: 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .cover__meta-title {
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    line-height: 2;
+  }
+  .cover__meta-title span {
+    display: block;
+    color: var(--bone);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    margin-bottom: 4px;
+  }
+  .cover__version {
+    text-align: right;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    line-height: 2;
+  }
+
+  /* ─── SECTION COVERS ──────────────────────────── */
+  .section-cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--gutter);
+    position: relative;
+    overflow: hidden;
+  }
+  .section-cover--dark { background: var(--onyx); color: var(--bone); }
+  .section-cover--light { background: var(--bone); color: var(--onyx); }
+  .section-cover--grey { background: #111111; color: var(--bone); }
+
+  .section-cover__number {
+    position: absolute;
+    top: var(--gutter);
+    right: var(--gutter);
+    font-size: 120px;
+    font-weight: 100;
+    letter-spacing: -0.04em;
+    opacity: 0.06;
+    line-height: 1;
+    user-select: none;
+  }
+  .section-cover__chapter {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 24px;
+  }
+  .section-cover__title {
+    font-size: clamp(48px, 8vw, 120px);
+    font-weight: 100;
+    letter-spacing: -0.02em;
+    line-height: 0.92;
+    margin-bottom: 48px;
+  }
+  .section-cover__desc {
+    max-width: 480px;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.8;
+    opacity: 0.6;
+    margin-bottom: 64px;
+  }
+  .section-cover__rule {
+    width: 100%;
+    height: 1px;
+    opacity: 0.15;
+    background: currentColor;
+  }
+
+  /* ─── CONTENT PAGES ───────────────────────────── */
+  .page {
+    padding: 100px var(--gutter);
+    border-bottom: 1px solid var(--light-grey);
+  }
+  .page--dark {
+    padding: 100px var(--gutter);
+    background: var(--onyx);
+    color: var(--bone);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page--mid {
+    padding: 100px var(--gutter);
+    background: #111;
+    color: var(--bone);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .page--grey {
+    padding: 100px var(--gutter);
+    background: #EFEFED;
+    color: var(--onyx);
+    border-bottom: 1px solid #D8D8D6;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 80px;
+  }
+  .page-header__left { max-width: 560px; }
+  .page-title {
+    font-size: clamp(32px, 4vw, 64px);
+    font-weight: 100;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .page-subtitle {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--titanium);
+    max-width: 440px;
+  }
+  .page-subtitle--light { color: var(--platinum); }
+  .page-num {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-top: 8px;
+  }
+
+  /* ─── TWO-COL LAYOUT ──────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .four-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  /* ─── CARD ────────────────────────────────────── */
+  .card {
+    padding: 40px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .card--light {
+    padding: 40px;
+    border: 1px solid var(--light-grey);
+  }
+  .card__label {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 20px;
+  }
+  .card__label--onyx { color: var(--mid-grey); }
+  .card__title {
+    font-size: 22px;
+    font-weight: 200;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  .card__body {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.85;
+    opacity: 0.7;
+  }
+
+  /* ─── TYPOGRAPHY SPECIMENS ────────────────────── */
+  .type-specimen {
+    padding: 48px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .type-specimen--light {
+    border-bottom-color: var(--light-grey);
+  }
+  .type-specimen__meta {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 16px;
+  }
+  .ts-display {
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 100;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+  .ts-h1 {
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 200;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
+  .ts-h2 {
+    font-size: clamp(22px, 2.5vw, 36px);
+    font-weight: 200;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .ts-h3 {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+  .ts-subhead {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    line-height: 1.6;
+  }
+  .ts-body {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    max-width: 640px;
+  }
+  .ts-caption {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    color: var(--titanium);
+  }
+
+  /* ─── COLOR SWATCHES ──────────────────────────── */
+  .swatch-row {
+    display: flex;
+    gap: 1px;
+    margin-bottom: 1px;
+  }
+  .swatch {
+    flex: 1;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    min-height: 200px;
+  }
+  .swatch__name {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .swatch__hex {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
+  }
+  .swatch__values {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    margin-top: 4px;
+    line-height: 1.8;
+  }
+
+  /* ─── LOGO DEMO ───────────────────────────────── */
+  .logo-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+  }
+  .logo-box--dark { background: var(--onyx); }
+  .logo-box--light { background: var(--bone); }
+  .logo-box--grey  { background: var(--titanium); }
+  .logo-box--warm  { background: #E8E0D6; }
+
+  .axiom-wordmark {
+    font-size: clamp(28px, 5vw, 64px);
+    font-weight: 100;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .axiom-tagline-text {
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 14px;
+    opacity: 0.7;
+  }
+
+  /* ─── CLEARSPACE DIAGRAM ──────────────────────── */
+  .clearspace-box {
+    position: relative;
+    display: inline-block;
+    padding: 60px;
+    border: 1px dashed rgba(255,255,255,0.2);
+  }
+  .clearspace-measure {
+    position: absolute;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--warm-metal);
+  }
+  .clearspace-measure--top    { top: 6px; left: 50%; transform: translateX(-50%); }
+  .clearspace-measure--bottom { bottom: 6px; left: 50%; transform: translateX(-50%); }
+  .clearspace-measure--left   { left: 6px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+  .clearspace-measure--right  { right: 6px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+
+  /* ─── DO / DON'T ──────────────────────────────── */
+  .do-dont-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .do-box, .dont-box {
+    padding: 40px;
+    position: relative;
+  }
+  .do-box { border-top: 2px solid #4A7C59; }
+  .dont-box { border-top: 2px solid #8B3A3A; }
+  .do-box::before {
+    content: 'DO';
+    position: absolute;
+    top: -1px; right: 20px;
+    font-size: 9px; letter-spacing: 0.22em;
+    color: #4A7C59; font-weight: 500;
+  }
+  .dont-box::before {
+    content: 'DON\'T';
+    position: absolute;
+    top: -1px; right: 20px;
+    font-size: 9px; letter-spacing: 0.22em;
+    color: #8B3A3A; font-weight: 500;
+  }
+  .do-box__label, .dont-box__label {
+    font-size: 11px; font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    opacity: 0.75;
+  }
+
+  /* ─── QUOTE BLOCK ─────────────────────────────── */
+  .pull-quote {
+    padding: 80px var(--gutter);
+    background: var(--onyx);
+    color: var(--bone);
+    text-align: center;
+  }
+  .pull-quote__text {
+    font-size: clamp(22px, 3.5vw, 48px);
+    font-weight: 100;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    max-width: 900px;
+    margin: 0 auto 32px;
+  }
+  .pull-quote__attr {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--titanium);
+  }
+
+  /* ─── TABLE OF CONTENTS ───────────────────────── */
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(245,245,243,0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s;
+  }
+  .toc-item:hover { opacity: 0.6; }
+  .toc-item:nth-child(odd) { padding-right: 48px; border-right: 1px solid rgba(245,245,243,0.08); }
+  .toc-item:nth-child(even) { padding-left: 48px; }
+  .toc-item__num {
+    font-size: 9px; font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+  .toc-item__title {
+    font-size: 13px; font-weight: 300;
+    letter-spacing: 0.04em;
+    flex: 1;
+  }
+  .toc-item__page {
+    font-size: 10px; font-weight: 300;
+    color: var(--titanium);
+    margin-left: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ─── PERSONA CARD ────────────────────────────── */
+  .persona {
+    padding: 48px;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+  .persona__code {
+    position: absolute;
+    top: 24px; right: 24px;
+    font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--titanium);
+  }
+  .persona__name {
+    font-size: 28px; font-weight: 100;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .persona__role {
+    font-size: 11px; font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 32px;
+  }
+  .persona__stat {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .persona__stat-item { text-align: center; }
+  .persona__stat-value {
+    font-size: 22px; font-weight: 100;
+    letter-spacing: -0.01em;
+    display: block;
+  }
+  .persona__stat-label {
+    font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--titanium);
+  }
+  .persona__text {
+    font-size: 13px; font-weight: 300;
+    line-height: 1.85; opacity: 0.7;
+  }
+
+  /* ─── PACKAGING MOCKUP ────────────────────────── */
+  .pack-mockup {
+    background: var(--onyx);
+    aspect-ratio: 3/4;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 36px;
+    position: relative;
+    border: 1px solid #1A1A1A;
+  }
+  .pack-mockup__product {
+    font-size: 22px; font-weight: 100;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-bottom: 8px;
+  }
+  .pack-mockup__brand {
+    font-size: 8px; font-weight: 300;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 24px;
+  }
+  .pack-mockup__dose {
+    font-size: 36px; font-weight: 100;
+    letter-spacing: -0.02em;
+    color: var(--bone);
+    border-top: 1px solid rgba(245,245,243,0.15);
+    padding-top: 20px;
+    margin-bottom: 4px;
+  }
+  .pack-mockup__dose-label {
+    font-size: 9px; font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 16px;
+  }
+  .pack-mockup__research {
+    font-size: 8px; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245,245,243,0.3);
+  }
+  .pack-mockup__corner {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-size: 7px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    opacity: 0.5;
+  }
+
+  /* ─── DIGITAL UI MOCKUP ───────────────────────── */
+  .ui-frame {
+    background: #111;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid #222;
+  }
+  .ui-frame__bar {
+    background: #0D0D0D;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #1A1A1A;
+  }
+  .ui-frame__dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #2A2A2A;
+  }
+  .ui-frame__url {
+    font-size: 9px; letter-spacing: 0.1em;
+    color: var(--titanium);
+    flex: 1; text-align: center;
+  }
+  .ui-frame__content { padding: 32px; }
+
+  .ui-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 48px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #1A1A1A;
+  }
+  .ui-nav__logo {
+    font-size: 14px; font-weight: 100;
+    letter-spacing: 0.3em;
+    color: var(--bone);
+  }
+  .ui-nav__links {
+    display: flex; gap: 28px; list-style: none;
+  }
+  .ui-nav__links li {
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--titanium);
+  }
+
+  .ui-hero-text {
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: 100;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--bone);
+    margin-bottom: 20px;
+  }
+  .ui-hero-sub {
+    font-size: 12px; font-weight: 300;
+    letter-spacing: 0.04em;
+    color: var(--titanium);
+    max-width: 400px;
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+  .ui-btn {
+    display: inline-block;
+    font-size: 9px; font-weight: 400;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: 1px solid rgba(245,245,243,0.2);
+    color: var(--bone);
+    margin-right: 12px;
+  }
+  .ui-btn--fill {
+    background: var(--bone);
+    color: var(--onyx);
+    border-color: var(--bone);
+  }
+
+  .ui-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #1A1A1A;
+    margin-top: 40px;
+  }
+  .ui-stat {
+    background: #111;
+    padding: 20px;
+  }
+  .ui-stat__value {
+    font-size: 24px; font-weight: 100;
+    letter-spacing: -0.02em;
+    color: var(--bone);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .ui-stat__label {
+    font-size: 8px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--titanium);
+  }
+
+  /* ─── BRAND EXTENSION CARDS ───────────────────── */
+  .extension-card {
+    padding: 48px 40px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.3s;
+  }
+  .extension-card:hover { border-color: rgba(255,255,255,0.15); }
+  .extension-card__code {
+    font-size: 8px; letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--warm-metal);
+    margin-bottom: 20px;
+  }
+  .extension-card__name {
+    font-size: 20px; font-weight: 100;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-bottom: 12px;
+  }
+  .extension-card__desc {
+    font-size: 12px; font-weight: 300;
+    line-height: 1.8;
+    color: var(--titanium);
+    margin-bottom: 28px;
+  }
+  .extension-card__tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tag {
+    font-size: 8px; letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--titanium);
+  }
+
+  /* ─── PHOTO DIRECTION ─────────────────────────── */
+  .photo-rule {
+    aspect-ratio: 16/10;
+    display: flex;
+    align-items: flex-end;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .photo-rule__caption {
+    font-size: 10px; font-weight: 300;
+    letter-spacing: 0.14em;
+    color: var(--bone);
+    opacity: 0.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── SPACING SCALE ───────────────────────────── */
+  .spacing-demo {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    padding: 40px 0;
+  }
+  .spacing-bar {
+    background: var(--bone);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 8px;
+  }
+  .spacing-bar__label {
+    font-size: 8px; letter-spacing: 0.14em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    color: var(--titanium);
+    white-space: nowrap;
+  }
+
+  /* ─── ENVIRONMENTAL DIAGRAM ───────────────────── */
+  .env-diagram {
+    background: var(--onyx);
+    aspect-ratio: 16/9;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 1px;
+    position: relative;
+  }
+  .env-cell {
+    background: rgba(255,255,255,0.03);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .env-cell__label {
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 4px;
+  }
+  .env-cell__title {
+    font-size: 14px; font-weight: 200;
+    letter-spacing: 0.06em;
+    color: var(--bone);
+  }
+
+  /* ─── ICON SYSTEM ─────────────────────────────── */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1px;
+  }
+  .icon-cell {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .icon-cell svg {
+    width: 24px; height: 24px;
+    stroke: var(--bone);
+    fill: none;
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .icon-cell__name {
+    font-size: 7px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    text-align: center;
+  }
+
+  /* ─── HAMBURGER NAV ──────────────────────────── */
+  .site-nav__hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: -8px;
+  }
+  .site-nav__hamburger span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--platinum);
+    transition: all 0.25s ease;
+  }
+  .site-nav__hamburger.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .site-nav__hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .site-nav__hamburger.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* ─── VOICE TOGGLE ────────────────────────────── */
+  .voice-toggle-bar {
+    display: inline-flex;
+    gap: 0;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .voice-tab {
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    background: none;
+    border: none;
+    color: var(--titanium);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .voice-tab.active {
+    background: var(--bone);
+    color: var(--onyx);
+  }
+  .voice-panel { display: none; }
+  .voice-panel.active { display: block; }
+  .voice-example {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+    margin-bottom: 2px;
+  }
+  .voice-example__context {
+    padding: 24px;
+    background: #0D0D0D;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.04);
+  }
+  .voice-example__context-label {
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 6px;
+  }
+  .voice-example__context-title {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--bone);
+  }
+  .voice-example__copy {
+    padding: 24px 32px;
+    background: #0D0D0D;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--bone);
+    font-style: italic;
+  }
+  .voice-example--out .voice-example__copy {
+    color: rgba(245,245,243,0.4);
+    text-decoration: line-through;
+    text-decoration-color: rgba(139,58,58,0.5);
+  }
+  .voice-example__verdict {
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 8px;
+    font-style: normal;
+    display: block;
+  }
+  .voice-example--in .voice-example__verdict { color: #4A7C59; }
+  .voice-example--out .voice-example__verdict { color: #8B3A3A; }
+
+  /* ─── MOTION SYSTEM ───────────────────────────── */
+  .motion-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin-bottom: 48px;
+  }
+  .motion-cell {
+    padding: 32px 24px;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .motion-cell__label {
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+  }
+  .motion-cell__value {
+    font-size: 28px;
+    font-weight: 100;
+    letter-spacing: -0.02em;
+    color: var(--bone);
+  }
+  .motion-cell__desc {
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--titanium);
+  }
+  .motion-bar {
+    height: 1px;
+    background: rgba(196,168,130,0.4);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .motion-bar__fill {
+    position: absolute;
+    left: -100%;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background: var(--warm-metal);
+    transition: none;
+  }
+  .motion-bar.demo-running .motion-bar__fill {
+    left: 0;
+    transition: left var(--dur, 240ms) var(--ease, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+  .easing-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .easing-row__name { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bone); }
+  .easing-row__value { font-size: 11px; font-weight: 300; color: var(--titanium); font-family: monospace; }
+  .easing-row__use { font-size: 9px; letter-spacing: 0.12em; color: var(--warm-metal); }
+
+  /* ─── WAYFINDING SYSTEM ───────────────────────── */
+  .wayfinding-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+  }
+  .wayfinding-cell {
+    background: #111;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .wayfinding-cell__number {
+    font-size: 48px;
+    font-weight: 100;
+    letter-spacing: -0.04em;
+    color: var(--bone);
+    line-height: 1;
+  }
+  .wayfinding-cell__label {
+    font-size: 8px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--warm-metal);
+  }
+  .wayfinding-cell__name {
+    font-size: 14px;
+    font-weight: 200;
+    color: var(--bone);
+    letter-spacing: 0.06em;
+  }
+  .wayfinding-cell__desc {
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--titanium);
+  }
+  .floor-plan {
+    background: var(--onyx);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 48px;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 80px);
+    gap: 1px;
+  }
+  .fp-cell {
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8px;
+  }
+  .fp-cell__num { font-size: 7px; letter-spacing: 0.18em; color: var(--warm-metal); }
+  .fp-cell__name { font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--titanium); margin-top: 2px; }
+  .fp-cell--entry { grid-column: span 2; background: rgba(255,255,255,0.02); }
+  .fp-cell--large { grid-column: span 2; background: rgba(255,255,255,0.015); }
+
+  /* ─── PHOTO FRAME ─────────────────────────────── */
+  .photo-frame {
+    position: relative;
+    overflow: hidden;
+    background: #111;
+  }
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(20%) brightness(0.9);
+    transition: filter 0.4s;
+  }
+  .photo-frame:hover img { filter: grayscale(0%) brightness(0.95); }
+  .photo-frame__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.7) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .photo-frame__caption {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    right: 24px;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,245,243,0.7);
+    z-index: 1;
+  }
+
+  /* ─── BRAND-IN-USE ────────────────────────────── */
+  .biu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin-bottom: 1px;
+  }
+  .biu-mockup {
+    aspect-ratio: 4/3;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .biu-mockup--tall { aspect-ratio: 3/4; }
+  .biu-mockup__label {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,245,243,0.5);
+    z-index: 2;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────── */
+  .site-footer {
+    background: var(--onyx);
+    color: var(--bone);
+    padding: 80px var(--gutter) 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+  }
+  .footer-brand-name {
+    font-size: 24px; font-weight: 100;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-brand-sub {
+    font-size: 9px; letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 24px;
+  }
+  .footer-copy {
+    font-size: 12px; font-weight: 300;
+    line-height: 1.75; color: var(--titanium);
+    max-width: 300px;
+  }
+  .footer-col-title {
+    font-size: 9px; letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--titanium);
+    margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li {
+    font-size: 12px; font-weight: 300;
+    color: var(--platinum);
+    margin-bottom: 10px;
+  }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-bottom-text {
+    font-size: 9px; letter-spacing: 0.16em;
+    color: var(--titanium);
+  }
+
+  /* ─── PRINT ───────────────────────────────────── */
+  @media print {
+    .site-nav { display: none; }
+    .section-cover { page-break-after: always; }
+    body { padding-top: 0; }
+  }
+
+  /* Push content below fixed nav */
+  .nav-spacer { height: 56px; }
+
+  /* ─── RESPONSIVE ──────────────────────────────── */
+  @media (max-width: 1024px) {
+    :root { --gutter: 40px; }
+    .two-col { grid-template-columns: 1fr 1fr; }
+    .three-col { grid-template-columns: 1fr 1fr; }
+    .four-col { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    :root { --gutter: 20px; }
+
+    /* ── Nav ─────────────────────────────────── */
+    .site-nav { padding: 0 20px; }
+    .site-nav__hamburger { display: flex; }
+    .site-nav__links {
+      display: none;
+      position: fixed;
+      top: 56px; left: 0; right: 0;
+      background: rgba(10,10,10,0.97);
+      backdrop-filter: blur(16px);
+      flex-direction: column;
+      padding: 16px 0 24px;
+      z-index: 99;
+      border-bottom: 1px solid rgba(245,245,243,0.06);
+    }
+    .site-nav__links.is-open { display: flex; }
+    .site-nav__links li { border-bottom: 1px solid rgba(245,245,243,0.04); }
+    .site-nav__links a { padding: 14px 24px; display: block; font-size: 10px; letter-spacing: 0.2em; }
+
+    /* ── Cover ───────────────────────────────── */
+    .cover { padding: 80px 20px 48px; }
+    .cover__corner-mark { display: none; }
+    .cover__wordmark { margin-bottom: 32px; }
+    .cover__logo-img { width: min(320px, 88vw); }
+    .cover__tagline { margin-bottom: 48px; }
+    .cover__meta { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .cover__version { text-align: left; }
+
+    /* ── Section covers ──────────────────────── */
+    .section-cover { min-height: 60vh; padding: 80px 20px 48px; }
+    .section-cover__number { font-size: 72px; top: 24px; right: 20px; }
+    .section-cover__title { margin-bottom: 32px; }
+    .section-cover__desc { margin-bottom: 40px; }
+
+    /* ── Content pages ───────────────────────── */
+    .page, .page--dark, .page--mid, .page--grey { padding: 64px 20px; overflow-x: hidden; }
+
+    /* ── Voice examples ─────────────────────── */
+    .voice-example { grid-template-columns: 1fr; }
+    .voice-example__context { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    /* ── Motion + wayfinding grids ──────────── */
+    .motion-grid { grid-template-columns: 1fr 1fr; }
+    .wayfinding-grid { grid-template-columns: 1fr; }
+    .floor-plan { display: none; }
+    .easing-row { grid-template-columns: 1fr; gap: 8px; }
+    /* ── Named grid layouts ──────────────────── */
+    .two-col, .three-col, .four-col { grid-template-columns: 1fr; gap: 32px; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .toc-item:nth-child(odd) { padding-right: 0; border-right: none; }
+    .toc-item:nth-child(even) { padding-left: 0; }
+    .do-dont-grid { grid-template-columns: 1fr; }
+    .icon-grid {
+      grid-template-columns: repeat(4, 1fr);
+      margin-left: calc(-1 * var(--gutter));
+      margin-right: calc(-1 * var(--gutter));
+      width: calc(100% + 2 * var(--gutter));
+    }
+    .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+    .page-header { flex-direction: column; gap: 24px; }
+
+    /* ── Inline grids → 1 column ─────────────── */
+    /* Catches all display:grid inline styles with multiple columns */
+    [style*="grid-template-columns:1fr 1fr"],
+    [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+    [style*="grid-template-columns:1fr 1fr 1fr"],
+    [style*="grid-template-columns: 1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+    [style*="grid-template-columns:1fr 1fr 1fr 1fr"],
+    [style*="grid-template-columns: 1fr 1fr 1fr 1fr"] { grid-template-columns: 1fr !important; }
+    [style*="grid-template-columns:2fr 1fr"],
+    [style*="grid-template-columns: 2fr 1fr"] { grid-template-columns: 1fr !important; }
+    [style*="grid-template-columns:3fr 2fr"],
+    [style*="grid-template-columns: 3fr 2fr"] { grid-template-columns: 1fr !important; }
+    [style*="grid-template-columns:repeat(2"],
+    [style*="grid-template-columns: repeat(2"] { grid-template-columns: 1fr !important; }
+    [style*="grid-template-columns:repeat(3"],
+    [style*="grid-template-columns: repeat(3"] { grid-template-columns: 1fr !important; }
+    /* keep repeat(4) as-is — used by icon grid which needs 4 cols */
+
+    /* ── Inline flex layouts ─────────────────── */
+    /* Swatch rows wrap on mobile */
+    .swatch-row { flex-wrap: wrap; }
+    .swatch { min-width: calc(50% - 1px); min-height: 120px; aspect-ratio: auto; }
+
+    /* Pull quote */
+    .pull-quote { min-height: auto; padding: 64px 20px; }
+
+    /* ── UI frame: horizontal scroll ─────────── */
+    .ui-frame { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .ui-frame__content { min-width: 600px; }
+
+    /* ── Logo section boxes ──────────────────── */
+    .logo-box { padding: 48px 24px; }
+
+    /* ── Misc ───────────────────────────────── */
+    .container { padding: 0 20px; }
+    .section-cover__rule { margin-top: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════════════ -->
+<nav class="site-nav">
+  <a class="site-nav__logo" href="#cover">AXIOM — Brand Guidelines</a>
+  <button class="site-nav__hamburger" aria-label="Menu" onclick="this.classList.toggle('is-open');document.querySelector('.site-nav__links').classList.toggle('is-open')">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="site-nav__links">
+    <li><a href="#brand-foundation">Foundation</a></li>
+    <li><a href="#personality">Personality</a></li>
+    <li><a href="#logo">Logo</a></li>
+    <li><a href="#typography">Typography</a></li>
+    <li><a href="#color">Color</a></li>
+    <li><a href="#graphic">Graphic Language</a></li>
+    <li><a href="#product">Product</a></li>
+    <li><a href="#clinic">Clinic</a></li>
+    <li><a href="#digital">Digital</a></li>
+    <li><a href="#extensions">Extensions</a></li>
+    <li><a href="#brand-in-use">In Use</a></li>
+  </ul>
+</nav>
+<div class="nav-spacer"></div>
+
+<!-- ═══════════════════════════════════════════════
+     COVER
+════════════════════════════════════════════════ -->
+<section class="cover" id="cover">
+  <div class="cover__bg-grid"></div>
+  <div class="cover__corner-mark">
+    Brand Identity Manual<br>
+    Version 1.0<br>
+    Confidential
+  </div>
+
+  <div class="cover__wordmark">
+    <img src="logo.png" alt="AXIOM Human Performance" class="cover__logo-img"/>
+  </div>
+
+  <div class="cover__tagline">Human Performance</div>
+
+  <div class="cover__meta">
+    <div class="cover__meta-title">
+      <span>Brand Identity Manual</span>
+      Official Brand Guidelines &amp; Design System<br>
+      Confidential — For Internal &amp; Partner Use
+    </div>
+    <div class="cover__version">
+      Version 1.0<br>
+      June 2026<br>
+      <br>
+      AXIOM Human Performance<br>
+      All rights reserved
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════════════ -->
+<section class="page--dark" id="toc">
+  <div class="container">
+    <div class="page-header">
+      <div class="page-header__left">
+        <span class="label label--light">Contents</span>
+        <h2 class="page-title" style="color:var(--bone)">Brand<br>Guidelines</h2>
+      </div>
+      <div class="page-num" style="color:var(--titanium)">Index</div>
+    </div>
+
+    <div class="toc-grid">
+      <a class="toc-item" href="#brand-foundation">
+        <span class="toc-item__num">01</span>
+        <span class="toc-item__title">Brand Foundation</span>
+        <span class="toc-item__page">Vision · Mission · Values</span>
+      </a>
+      <a class="toc-item" href="#personality">
+        <span class="toc-item__num">02</span>
+        <span class="toc-item__title">Brand Personality</span>
+        <span class="toc-item__page">Voice · Tone · Messaging</span>
+      </a>
+      <a class="toc-item" href="#logo">
+        <span class="toc-item__num">03</span>
+        <span class="toc-item__title">Logo Guidelines</span>
+        <span class="toc-item__page">Usage · Lockups · Clearspace</span>
+      </a>
+      <a class="toc-item" href="#typography">
+        <span class="toc-item__num">04</span>
+        <span class="toc-item__title">Typography System</span>
+        <span class="toc-item__page">Typefaces · Scale · Hierarchy</span>
+      </a>
+      <a class="toc-item" href="#color">
+        <span class="toc-item__num">05</span>
+        <span class="toc-item__title">Color System</span>
+        <span class="toc-item__page">Palette · Values · Application</span>
+      </a>
+      <a class="toc-item" href="#graphic">
+        <span class="toc-item__num">06</span>
+        <span class="toc-item__title">Graphic Language</span>
+        <span class="toc-item__page">Grid · Photography · Icons</span>
+      </a>
+      <a class="toc-item" href="#product">
+        <span class="toc-item__num">07</span>
+        <span class="toc-item__title">Product Identity</span>
+        <span class="toc-item__page">Packaging · Labels · Vials</span>
+      </a>
+      <a class="toc-item" href="#clinic">
+        <span class="toc-item__num">08</span>
+        <span class="toc-item__title">Clinic Identity</span>
+        <span class="toc-item__page">Signage · Interior · Staff</span>
+      </a>
+      <a class="toc-item" href="#digital">
+        <span class="toc-item__num">09</span>
+        <span class="toc-item__title">Digital Identity</span>
+        <span class="toc-item__page">Web · Mobile · UI System</span>
+      </a>
+      <a class="toc-item" href="#marketing">
+        <span class="toc-item__num">10</span>
+        <span class="toc-item__title">Marketing Assets</span>
+        <span class="toc-item__page">Stationery · Print · Events</span>
+      </a>
+      <a class="toc-item" href="#environmental">
+        <span class="toc-item__num">11</span>
+        <span class="toc-item__title">Environmental</span>
+        <span class="toc-item__page">Clinic · Retail · Wayfinding</span>
+      </a>
+      <a class="toc-item" href="#photography">
+        <span class="toc-item__num">12</span>
+        <span class="toc-item__title">Photography Direction</span>
+        <span class="toc-item__page">Athletes · Labs · Architecture</span>
+      </a>
+      <a class="toc-item" href="#applications">
+        <span class="toc-item__num">13</span>
+        <span class="toc-item__title">Brand Applications</span>
+        <span class="toc-item__page">Apparel · Equipment · Merch</span>
+      </a>
+      <a class="toc-item" href="#extensions">
+        <span class="toc-item__num">14</span>
+        <span class="toc-item__title">Future Extensions</span>
+        <span class="toc-item__page">Labs · Clinics · Diagnostics</span>
+      </a>
+      <a class="toc-item" href="#brand-in-use">
+        <span class="toc-item__num">15</span>
+        <span class="toc-item__title">Brand In Use</span>
+        <span class="toc-item__page">Social · Email · Space · Digital</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     01 · BRAND FOUNDATION
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="brand-foundation">
+  <div class="section-cover__number">01</div>
+  <div class="section-cover__chapter">Chapter One</div>
+  <h2 class="section-cover__title">Brand<br>Foundation</h2>
+  <p class="section-cover__desc">The axioms of our existence — the non-negotiable truths that define why AXIOM exists, what it stands for, and where it is going. Every design decision, every word, every product traces back to this bedrock.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<!-- Vision & Mission -->
+<section class="page--dark">
+  <div class="container">
+    <div class="page-header">
+      <div class="page-header__left">
+        <span class="label label--light">01.1</span>
+        <h3 class="page-title" style="color:var(--bone)">Vision &amp;<br>Mission</h3>
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card__label">Brand Vision</div>
+          <div class="card__title" style="color:var(--bone)">To redefine the ceiling of human performance for every serious individual on earth.</div>
+          <div class="card__body">We envision a world in which the highest standards of precision medicine, longevity science, and performance optimisation are not reserved for elite athletes or those with unlimited means — but are accessible, rigorous, and elegantly delivered to any person who demands the most of themselves.</div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card__label">Mission</div>
+          <div class="card__title" style="color:var(--bone)">To deliver pharmaceutical-grade science through a product and clinic experience that respects the intelligence of our clients.</div>
+          <div class="card__body">AXIOM exists to bridge the gap between cutting-edge performance biology and real-world application — providing peptide therapies, longevity diagnostics, and recovery protocols to a clientele who measure results, not promises.</div>
+        </div>
+        <div style="margin-top:1px;" class="card">
+          <div class="card__label">Purpose</div>
+          <div class="card__title" style="color:var(--bone)">Precision at the intersection of science and the human body.</div>
+          <div class="card__body">Every AXIOM product and service exists because the science is sound, the result is measurable, and the experience is worthy of the person receiving it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Core Values -->
+<section class="page--mid">
+  <div class="container">
+    <span class="label label--light">01.2</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:64px;">Core Values</h3>
+    <div class="four-col">
+      <div class="card">
+        <div class="card__label">I</div>
+        <div class="card__title" style="color:var(--bone)">Precision</div>
+        <div class="card__body">We do not approximate. Every dosage, every claim, every design element is exact. Precision is not a feature — it is our operating system.</div>
+      </div>
+      <div class="card">
+        <div class="card__label">II</div>
+        <div class="card__title" style="color:var(--bone)">Integrity</div>
+        <div class="card__body">We publish our certificates of analysis. We never overstate outcomes. The science either holds or we do not sell the product. No exceptions.</div>
+      </div>
+      <div class="card">
+        <div class="card__label">III</div>
+        <div class="card__title" style="color:var(--bone)">Restraint</div>
+        <div class="card__body">Less, perfected. We resist the impulse to decorate, to shout, to claim more than is true. Every element we remove strengthens what remains.</div>
+      </div>
+      <div class="card">
+        <div class="card__label">IV</div>
+        <div class="card__title" style="color:var(--bone)">Longevity</div>
+        <div class="card__body">We think in decades. Our protocols, our materials, our relationships — all built to compound in value over time, not to spike and fade.</div>
+      </div>
+    </div>
+    <div class="four-col" style="margin-top:1px;">
+      <div class="card">
+        <div class="card__label">V</div>
+        <div class="card__title" style="color:var(--bone)">Confidence</div>
+        <div class="card__body">Clinical confidence is earned, never assumed. We speak from evidence, we design from first principles, we never hedge what we know to be true.</div>
+      </div>
+      <div class="card">
+        <div class="card__label">VI</div>
+        <div class="card__title" style="color:var(--bone)">Privacy</div>
+        <div class="card__body">Our clients' data, results, and identities are treated with the same discretion as a top private clinic. No marketing. No social proof without consent.</div>
+      </div>
+      <div class="card">
+        <div class="card__label">VII</div>
+        <div class="card__title" style="color:var(--bone)">Craft</div>
+        <div class="card__body">From the finish of a glass vial to the typography of a patient report — craft is non-negotiable. The details are not cosmetic; they are the product.</div>
+      </div>
+      <div class="card">
+        <div class="card__label">VIII</div>
+        <div class="card__title" style="color:var(--bone)">Access</div>
+        <div class="card__body">World-class performance science should not require a team of PhDs to access. We translate complexity into clarity without dumbing it down.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Brand Promise & Positioning -->
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">01.3 — Brand Promise &amp; Positioning</span>
+    <div class="two-col" style="margin-top:48px;">
+      <div>
+        <h3 class="page-title" style="color:var(--bone);font-size:36px;margin-bottom:32px;">Brand Promise</h3>
+        <p style="font-size:22px;font-weight:100;line-height:1.5;color:var(--bone);letter-spacing:-0.01em;margin-bottom:32px;">"The science is real. The results are measurable. The experience is one you deserve."</p>
+        <p style="font-size:13px;font-weight:300;line-height:1.85;color:var(--titanium);">AXIOM promises not merely a product, but a relationship — one between rigorous science and the individual who refuses to leave performance to chance. We promise pharmaceutical precision, clinical honesty, and a brand experience worthy of the investment.</p>
+      </div>
+      <div>
+        <h3 class="page-title" style="color:var(--bone);font-size:36px;margin-bottom:32px;">Market Position</h3>
+        <div style="margin-bottom:24px;padding:28px;border:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:12px;">Positioned Above</div>
+          <div style="font-size:13px;font-weight:300;color:var(--titanium);line-height:1.8;">Supplement companies, sports nutrition brands, biohacking companies, generic pharmaceutical distributors, wellness gimmick brands</div>
+        </div>
+        <div style="padding:28px;border:1px solid rgba(196,168,130,0.3);background:rgba(196,168,130,0.04);">
+          <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:12px;">Peer Category</div>
+          <div style="font-size:13px;font-weight:300;color:var(--titanium);line-height:1.8;">Top private longevity clinics, precision medicine platforms, elite performance institutes, premium biotech consultancies</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Brand Story -->
+<section class="page">
+  <div class="container">
+    <span class="label">01.4 — Brand Story</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title" style="font-size:clamp(28px,3.5vw,52px);">The Name<br>Behind the Mark</h3>
+      </div>
+      <div>
+        <p style="font-size:15px;font-weight:300;line-height:1.9;margin-bottom:28px;">An axiom is a statement so fundamentally true that it requires no proof — a self-evident principle upon which all further reasoning depends.</p>
+        <p style="font-size:15px;font-weight:300;line-height:1.9;margin-bottom:28px;">We chose this name deliberately. Not because we believe in grand declarations, but because we believe in the irreducible facts of human biology: that the body responds to the right signal, that recovery precedes performance, that longevity is engineered — not hoped for.</p>
+        <p style="font-size:15px;font-weight:300;line-height:1.9;margin-bottom:28px;">AXIOM was founded by practitioners — clinicians, athletes, and scientists who found themselves frustrated by a market that chose noise over signal, marketing over medicine, aesthetics over evidence.</p>
+        <p style="font-size:15px;font-weight:300;line-height:1.9;">We built the brand we wanted to exist — one that treats its clients as the highly intelligent, performance-driven individuals they are.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Competitive Landscape -->
+<section class="page--grey">
+  <div class="container">
+    <span class="label">01.5 — Competitive Landscape</span>
+    <h3 class="page-title" style="margin-bottom:64px;">Where AXIOM Sits</h3>
+    <div class="three-col">
+      <div class="card--light" style="border-top:2px solid var(--onyx);">
+        <div class="card__label card__label--onyx">Category Below</div>
+        <div class="card__title">Supplement &amp; Sports Nutrition</div>
+        <div class="card__body">Brands that speak loudly, promise fast results, rely on celebrity endorsement, and prioritise marketing over clinical evidence. Loud. Aggressive. Temporary.</div>
+      </div>
+      <div class="card--light" style="border-top:2px solid var(--warm-metal);">
+        <div class="card__label" style="color:var(--warm-metal);">AXIOM Territory</div>
+        <div class="card__title">Precision Performance Medicine</div>
+        <div class="card__body">Swiss precision. Evidence-based protocols. Pharmaceutical manufacturing standards. Clinical confidence. Architectural brand presence. Long-term thinking. This is where we exist exclusively.</div>
+      </div>
+      <div class="card--light" style="border-top:2px solid #6A8EA0;">
+        <div class="card__label" style="color:#6A8EA0;">Peer Reference</div>
+        <div class="card__title">Luxury Longevity &amp; Diagnostics</div>
+        <div class="card__body">Platforms like Oura, WHOOP, premium longevity clinics. Shared values around data, measurement, and restraint — we occupy the higher-touch, clinical end of this spectrum.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Unique Value Proposition -->
+<section class="pull-quote">
+  <p class="pull-quote__text">"Where other performance brands compete on claims, AXIOM competes on evidence. Where others design for aspiration, we design for precision."</p>
+  <span class="pull-quote__attr">Unique Value Proposition — AXIOM Human Performance</span>
+</section>
+
+<!-- Customer Personas -->
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">01.6 — Customer Personas</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:64px;">The AXIOM<br>Client</h3>
+    <div class="three-col">
+      <div class="persona">
+        <div class="persona__code">Persona A</div>
+        <div class="persona__name" style="color:var(--bone);">Marcus</div>
+        <div class="persona__role">Elite Amateur Athlete, 38</div>
+        <div class="persona__stat">
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">14h</span>
+            <span class="persona__stat-label">Training / week</span>
+          </div>
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">$800k</span>
+            <span class="persona__stat-label">Annual income</span>
+          </div>
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">Top 1%</span>
+            <span class="persona__stat-label">Age-group rank</span>
+          </div>
+        </div>
+        <p class="persona__text">Invested deeply in performance data. Owns an Oura ring and WHOOP. Has a nutritional plan but is seeking an evidence-based protocol for recovery optimisation and injury resilience. Values clinical truth over hype. Will research everything before buying.</p>
+      </div>
+      <div class="persona">
+        <div class="persona__code">Persona B</div>
+        <div class="persona__name" style="color:var(--bone);">Dr. Lena</div>
+        <div class="persona__role">Medical Professional, 44</div>
+        <div class="persona__stat">
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">M.D.</span>
+            <span class="persona__stat-label">Qualification</span>
+          </div>
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">$1.4M</span>
+            <span class="persona__stat-label">Annual income</span>
+          </div>
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">2× / yr</span>
+            <span class="persona__stat-label">Clinic visits</span>
+          </div>
+        </div>
+        <p class="persona__text">Knows the science intimately. Expects pharmaceutical-grade manufacturing and published COAs. Refers patients. Potentially a clinic partner. The brand experience must match her professional standards — or she leaves immediately.</p>
+      </div>
+      <div class="persona">
+        <div class="persona__code">Persona C</div>
+        <div class="persona__name" style="color:var(--bone);">Alex</div>
+        <div class="persona__role">Founder / Executive, 46</div>
+        <div class="persona__stat">
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">$5M+</span>
+            <span class="persona__stat-label">Net worth</span>
+          </div>
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">4h</span>
+            <span class="persona__stat-label">Sleep avg</span>
+          </div>
+          <div class="persona__stat-item">
+            <span class="persona__stat-value" style="color:var(--bone)">Longevity</span>
+            <span class="persona__stat-label">Primary focus</span>
+          </div>
+        </div>
+        <p class="persona__text">Performance is a business requirement. Spends on the best — Porsche, Leica, bespoke suits. Wants longevity protocols, cognitive enhancement, and a clinic experience that respects his time. Discretion is non-negotiable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Brand Architecture -->
+<section class="page">
+  <div class="container">
+    <span class="label">01.7 — Brand Architecture</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title">A Monolithic<br>Master Brand</h3>
+        <p style="font-size:14px;font-weight:300;line-height:1.85;color:var(--titanium);max-width:400px;">AXIOM operates as a monolithic master brand — all products, clinics, and sub-lines carry the primary AXIOM identity. Sub-lines use a disciplined descriptor format: AXIOM + Descriptor.</p>
+      </div>
+      <div>
+        <div style="display:flex;flex-direction:column;gap:1px;">
+          <div style="padding:24px 32px;background:var(--onyx);color:var(--bone);display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:14px;font-weight:200;letter-spacing:0.1em;">AXIOM</span>
+            <span style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);">Master Brand</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+            <div style="padding:20px 24px;background:#111;color:var(--bone);">
+              <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Product Line</div>
+              <div style="font-size:13px;font-weight:200;letter-spacing:0.08em;">AXIOM Peptides</div>
+            </div>
+            <div style="padding:20px 24px;background:#111;color:var(--bone);">
+              <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Clinic Network</div>
+              <div style="font-size:13px;font-weight:200;letter-spacing:0.08em;">AXIOM Clinics</div>
+            </div>
+            <div style="padding:20px 24px;background:#111;color:var(--bone);">
+              <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Research Division</div>
+              <div style="font-size:13px;font-weight:200;letter-spacing:0.08em;">AXIOM Labs</div>
+            </div>
+            <div style="padding:20px 24px;background:#111;color:var(--bone);">
+              <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Diagnostics</div>
+              <div style="font-size:13px;font-weight:200;letter-spacing:0.08em;">AXIOM Diagnostics</div>
+            </div>
+            <div style="padding:20px 24px;background:#111;color:var(--bone);">
+              <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Premium Tier</div>
+              <div style="font-size:13px;font-weight:200;letter-spacing:0.08em;">AXIOM Elite</div>
+            </div>
+            <div style="padding:20px 24px;background:#111;color:var(--bone);">
+              <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Recovery</div>
+              <div style="font-size:13px;font-weight:200;letter-spacing:0.08em;">AXIOM Recovery</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     02 · BRAND PERSONALITY
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--light" id="personality">
+  <div class="section-cover__number" style="color:var(--onyx);">02</div>
+  <div class="section-cover__chapter" style="color:var(--titanium);">Chapter Two</div>
+  <h2 class="section-cover__title" style="color:var(--onyx);">Brand<br>Personality</h2>
+  <p class="section-cover__desc" style="color:var(--mid-grey);">How AXIOM speaks, writes, and presents itself across every communication.</p>
+  <div class="section-cover__rule" style="background:var(--onyx);"></div>
+</section>
+
+<section class="page">
+  <div class="container">
+    <span class="label">02.1 — Tone of Voice</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title">How AXIOM<br>Speaks</h3>
+        <p style="font-size:14px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:40px;">Our voice is the voice of a senior clinician who is also a world-class designer. Precise without being cold. Authoritative without condescension. Restrained without being minimal to the point of absence.</p>
+        <div style="display:flex;flex-direction:column;gap:1px;">
+          <div style="display:flex;gap:20px;padding:20px;background:var(--onyx);color:var(--bone);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;width:90px;flex-shrink:0;padding-top:4px;color:var(--titanium);">Precise</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">We use exact numbers and clinical terminology. "Approximately 5mg" becomes "5.0mg." "A few weeks" becomes "18–24 days."</div>
+          </div>
+          <div style="display:flex;gap:20px;padding:20px;background:var(--onyx);color:var(--bone);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;width:90px;flex-shrink:0;padding-top:4px;color:var(--titanium);">Direct</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">We do not bury the point. We lead with the most important information. The sentence earns its space or it is cut.</div>
+          </div>
+          <div style="display:flex;gap:20px;padding:20px;background:var(--onyx);color:var(--bone);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;width:90px;flex-shrink:0;padding-top:4px;color:var(--titanium);">Measured</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">We do not use exclamation marks. We never claim "revolutionary" or "breakthrough." We state facts and let the client reach their own conclusions.</div>
+          </div>
+          <div style="display:flex;gap:20px;padding:20px;background:var(--onyx);color:var(--bone);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;width:90px;flex-shrink:0;padding-top:4px;color:var(--titanium);">Confident</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">We do not hedge unnecessarily. Clinical confidence is earned through the work and expressed through the copy.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="padding:48px;background:var(--onyx);color:var(--bone);margin-bottom:1px;">
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Personality in Three Words</div>
+          <div style="font-size:40px;font-weight:100;letter-spacing:0.04em;line-height:1.6;">Precise.<br>Restrained.<br>Confident.</div>
+        </div>
+        <div style="padding:32px;background:#EFEFED;">
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:16px;">Brand Vocabulary</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Precision</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Clinical</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Protocol</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Optimise</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Validated</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Pharmaceutical</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Longevity</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Recovery</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Diagnostic</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Compound</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Rigour</span>
+            <span style="font-size:10px;padding:6px 12px;border:1px solid var(--onyx);letter-spacing:0.12em;">Measurable</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">02.2 — Writing Do's &amp; Don'ts</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:64px;">Copy Standards</h3>
+    <div class="do-dont-grid">
+      <div class="do-box" style="background:#0D0D0D;"><div class="do-box__label">Write "BPC-157 demonstrates statistically significant improvements in tendon repair at 250mcg twice daily."</div></div>
+      <div class="dont-box" style="background:#0D0D0D;"><div class="dont-box__label">Write "Our AMAZING peptide SUPERCHARGES your recovery and heals tendons FAST!!!"</div></div>
+      <div class="do-box" style="background:#0D0D0D;"><div class="do-box__label">Write "A 12-week protocol. Measurable outcomes from week four."</div></div>
+      <div class="dont-box" style="background:#0D0D0D;"><div class="dont-box__label">Write "Results in as little as 2–3 days (individual results may vary)."</div></div>
+      <div class="do-box" style="background:#0D0D0D;"><div class="do-box__label">Use: "longevity," "optimise," "protocol," "clinical," "pharmaceutical-grade."</div></div>
+      <div class="dont-box" style="background:#0D0D0D;"><div class="dont-box__label">Use: "hack," "biohack," "supercharge," "game-changer," "next-level," "boost."</div></div>
+      <div class="do-box" style="background:#0D0D0D;"><div class="do-box__label">Cite peer-reviewed studies with DOI references in technical communications.</div></div>
+      <div class="dont-box" style="background:#0D0D0D;"><div class="dont-box__label">Write "studies show" without specifying the study, journal, or sample size.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Voice in Practice -->
+<section class="page">
+  <div class="container">
+    <span class="label">02.3 — Voice in Practice</span>
+    <div class="page-header" style="margin-bottom:40px;">
+      <div class="page-header__left">
+        <h3 class="page-title">The Voice,<br>Applied</h3>
+        <p class="page-subtitle">Five real-world scenarios. Toggle between how AXIOM writes and how it does not.</p>
+      </div>
+    </div>
+    <div class="voice-toggle-bar">
+      <button class="voice-tab active" onclick="setVoiceTab('in')">In Voice</button>
+      <button class="voice-tab" onclick="setVoiceTab('out')">Out of Voice</button>
+    </div>
+    <div class="voice-panel active" id="voice-in">
+      <div class="voice-example voice-example--in">
+        <div class="voice-example__context"><div class="voice-example__context-label">Product Description</div><div class="voice-example__context-title">BPC-157</div></div>
+        <div class="voice-example__copy">BPC-157 is a synthetic pentadecapeptide derived from a gastric protein. At 250mcg administered twice daily, peer-reviewed trials demonstrate measurable improvement in tendon-to-bone healing rates within 18–24 days. No additives. No fillers. 98.4% minimum purity, certificate of analysis supplied.<span class="voice-example__verdict">Precise · Clinical · Evidence-cited</span></div>
+      </div>
+      <div class="voice-example voice-example--in">
+        <div class="voice-example__context"><div class="voice-example__context-label">Email Subject Line</div><div class="voice-example__context-title">Protocol Update</div></div>
+        <div class="voice-example__copy">Week 8 of 12 — BPC-157 protocol: biomarker update available<span class="voice-example__verdict">Sentence case · Factual · No clickbait</span></div>
+      </div>
+      <div class="voice-example voice-example--in">
+        <div class="voice-example__context"><div class="voice-example__context-label">Error State</div><div class="voice-example__context-title">Form Validation</div></div>
+        <div class="voice-example__copy">Your date of birth does not match our records. Please contact your clinician directly at the number on your membership card.<span class="voice-example__verdict">Calm · Actionable · No apology-spam</span></div>
+      </div>
+      <div class="voice-example voice-example--in">
+        <div class="voice-example__context"><div class="voice-example__context-label">Social Caption</div><div class="voice-example__context-title">Instagram</div></div>
+        <div class="voice-example__copy">Recovery is not rest. It is a protocol.<span class="voice-example__verdict">Brief · Declarative · No hashtag clusters</span></div>
+      </div>
+      <div class="voice-example voice-example--in">
+        <div class="voice-example__context"><div class="voice-example__context-label">Consent Form</div><div class="voice-example__context-title">Clinical Language</div></div>
+        <div class="voice-example__copy">By proceeding you confirm that the clinical information provided is accurate to the best of your knowledge and that you understand the protocol's mechanism, dosage schedule, and contra-indications as outlined in the attached summary.<span class="voice-example__verdict">Legal-grade · No ambiguity · Respects intelligence</span></div>
+      </div>
+    </div>
+    <div class="voice-panel" id="voice-out">
+      <div class="voice-example voice-example--out">
+        <div class="voice-example__context"><div class="voice-example__context-label">Product Description</div><div class="voice-example__context-title">BPC-157</div></div>
+        <div class="voice-example__copy">Our AMAZING BPC-157 is the #1 peptide for SUPERCHARGING your recovery! Feel the difference in just days! 🔥🔥🔥 Used by top athletes worldwide!!<span class="voice-example__verdict">Exclamatory · Unsubstantiated · Never</span></div>
+      </div>
+      <div class="voice-example voice-example--out">
+        <div class="voice-example__context"><div class="voice-example__context-label">Email Subject Line</div><div class="voice-example__context-title">Protocol Update</div></div>
+        <div class="voice-example__copy">🚨 Don't miss your results — big news inside!!!<span class="voice-example__verdict">Emoji-led · Alarm-tone · Never</span></div>
+      </div>
+      <div class="voice-example voice-example--out">
+        <div class="voice-example__context"><div class="voice-example__context-label">Error State</div><div class="voice-example__context-title">Form Validation</div></div>
+        <div class="voice-example__copy">Oops! Something went wrong 😅 We're SO sorry about this! Please try again and if it still doesn't work, maybe check your details?<span class="voice-example__verdict">Infantilising · Vague · Never</span></div>
+      </div>
+      <div class="voice-example voice-example--out">
+        <div class="voice-example__context"><div class="voice-example__context-label">Social Caption</div><div class="voice-example__context-title">Instagram</div></div>
+        <div class="voice-example__copy">Ready to LEVEL UP your recovery game? 💪 We've got the ULTIMATE solution for serious athletes! Drop a 🔥 if you're ready to go NEXT LEVEL! #gains #biohacking #peptides #recovery #performance<span class="voice-example__verdict">Hashtag-heavy · Aggressive · Never</span></div>
+      </div>
+      <div class="voice-example voice-example--out">
+        <div class="voice-example__context"><div class="voice-example__context-label">Consent Form</div><div class="voice-example__context-title">Clinical Language</div></div>
+        <div class="voice-example__copy">I agree to stuff lol. (Results may vary. We're not responsible for anything that happens. You're doing this at your own risk btw.)<span class="voice-example__verdict">Legally negligent · Disrespectful · Never</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     03 · LOGO GUIDELINES
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="logo">
+  <div class="section-cover__number">03</div>
+  <div class="section-cover__chapter">Chapter Three</div>
+  <h2 class="section-cover__title">Logo<br>Guidelines</h2>
+  <p class="section-cover__desc">The AXIOM mark is a precision instrument. These guidelines define every permitted usage, configuration, and context — and every situation where the mark must never appear.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">03.1 — Logo Variations</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:64px;">Lockup System</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-bottom:1px;">
+      <div class="logo-box logo-box--dark" style="flex-direction:column;border:1px solid #1A1A1A;min-height:220px;">
+        <img src="logo.png" alt="AXIOM" style="width:200px;height:auto;display:block;filter:invert(1);"/>
+        <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;margin-top:20px;color:var(--titanium);">Primary — Dark Background</div>
+      </div>
+      <div class="logo-box logo-box--light" style="flex-direction:column;border:1px solid var(--light-grey);min-height:220px;">
+        <img src="logo.png" alt="AXIOM" style="width:200px;height:auto;display:block;"/>
+        <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;margin-top:20px;color:var(--titanium);">Reversed — Light Background</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+      <div class="logo-box logo-box--dark" style="flex-direction:column;border:1px solid #1A1A1A;min-height:160px;">
+        <img src="logo.png" alt="AXIOM" style="width:160px;height:auto;display:block;filter:invert(1);"/>
+        <div style="position:absolute;bottom:16px;right:20px;font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);">Full Lockup</div>
+      </div>
+      <div class="logo-box logo-box--dark" style="flex-direction:column;border:1px solid #1A1A1A;min-height:160px;">
+        <div style="font-size:48px;font-weight:100;letter-spacing:0.28em;color:var(--bone);">A</div>
+        <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;margin-top:12px;color:var(--titanium);">Monogram — Restricted Use</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--mid">
+  <div class="container">
+    <span class="label label--light">03.2 — Clearspace &amp; Minimum Size</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title" style="color:var(--bone);font-size:36px;margin-bottom:32px;">Clear Space</h3>
+        <p style="font-size:13px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:40px;">The clearspace equals the cap-height of the "X" in the wordmark on all four sides. No element — text, image, graphic, or edge — may intrude into this zone.</p>
+        <div style="display:inline-block;padding:64px;border:1px dashed rgba(196,168,130,0.4);position:relative;">
+          <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);white-space:nowrap;">1× X-height</div>
+          <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);white-space:nowrap;">1× X-height</div>
+          <div style="position:absolute;left:4px;top:50%;transform:translateY(-50%) rotate(-90deg);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);white-space:nowrap;">1×</div>
+          <div style="position:absolute;right:4px;top:50%;transform:translateY(-50%) rotate(90deg);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);white-space:nowrap;">1×</div>
+          <img src="logo.png" alt="AXIOM" style="width:100px;height:auto;display:block;filter:invert(1);"/>
+        </div>
+      </div>
+      <div>
+        <h3 class="page-title" style="color:var(--bone);font-size:36px;margin-bottom:32px;">Improper Usage</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+          <div style="padding:24px;background:#0D0D0D;border-top:2px solid #8B3A3A;">
+            <div style="font-size:18px;font-weight:100;letter-spacing:0.28em;color:var(--bone);margin-bottom:16px;transform:scaleX(1.4);transform-origin:left;display:inline-block;">AXIOM</div>
+            <div style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8B3A3A;">Do not stretch</div>
+          </div>
+          <div style="padding:24px;background:#0D0D0D;border-top:2px solid #8B3A3A;">
+            <div style="font-size:18px;font-weight:800;letter-spacing:0.06em;color:var(--bone);margin-bottom:16px;">AXIOM</div>
+            <div style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8B3A3A;">Do not use bold weight</div>
+          </div>
+          <div style="padding:24px;background:#0D0D0D;border-top:2px solid #8B3A3A;">
+            <div style="font-size:18px;font-weight:100;letter-spacing:0.28em;background:linear-gradient(90deg,#C4A882,#8D8D8D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px;">AXIOM</div>
+            <div style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8B3A3A;">Do not add gradients</div>
+          </div>
+          <div style="padding:24px;background:#0D0D0D;border-top:2px solid #8B3A3A;">
+            <div style="font-size:18px;font-weight:100;letter-spacing:0.28em;color:#6060FF;margin-bottom:16px;">AXIOM</div>
+            <div style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#8B3A3A;">Do not use off-brand colours</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     04 · TYPOGRAPHY SYSTEM
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--light" id="typography">
+  <div class="section-cover__number" style="color:var(--onyx);">04</div>
+  <div class="section-cover__chapter" style="color:var(--titanium);">Chapter Four</div>
+  <h2 class="section-cover__title" style="color:var(--onyx);">Typography<br>System</h2>
+  <p class="section-cover__desc" style="color:var(--mid-grey);">Swiss International Style principles — rigorous hierarchy, generous tracking, and disciplined restraint.</p>
+  <div class="section-cover__rule" style="background:var(--onyx);"></div>
+</section>
+
+<section class="page">
+  <div class="container">
+    <span class="label">04.1 — Primary Typeface</span>
+    <div class="two-col" style="align-items:start;">
+      <div>
+        <h3 class="page-title">Inter</h3>
+        <p style="font-size:13px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:32px;">Designed by Rasmus Andersson. A variable typeface optimised for screen legibility while maintaining Swiss International Style characteristics — neutral, precise, and timeless. The primary typeface for all AXIOM communications.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:baseline;gap:24px;padding:16px;background:var(--onyx);color:var(--bone);"><span style="font-weight:100;font-size:18px;">Thin 100</span><span style="font-size:9px;letter-spacing:0.16em;color:var(--titanium);">Packaging labels, fine print</span></div>
+          <div style="display:flex;align-items:baseline;gap:24px;padding:16px;background:var(--onyx);color:var(--bone);"><span style="font-weight:200;font-size:18px;">ExtraLight 200</span><span style="font-size:9px;letter-spacing:0.16em;color:var(--titanium);">Display headings</span></div>
+          <div style="display:flex;align-items:baseline;gap:24px;padding:16px;background:var(--onyx);color:var(--bone);"><span style="font-weight:300;font-size:18px;">Light 300</span><span style="font-size:9px;letter-spacing:0.16em;color:var(--titanium);">Body text, descriptions</span></div>
+          <div style="display:flex;align-items:baseline;gap:24px;padding:16px;background:var(--onyx);color:var(--bone);"><span style="font-weight:400;font-size:18px;">Regular 400</span><span style="font-size:9px;letter-spacing:0.16em;color:var(--titanium);">Labels, subheadings</span></div>
+          <div style="display:flex;align-items:baseline;gap:24px;padding:16px;background:var(--onyx);color:var(--bone);"><span style="font-weight:500;font-size:18px;">Medium 500</span><span style="font-size:9px;letter-spacing:0.16em;color:var(--titanium);">CTAs, emphasis</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:clamp(80px,14vw,180px);font-weight:100;letter-spacing:-0.03em;line-height:0.85;color:var(--onyx);">Aa</div>
+        <div style="margin-top:32px;font-size:11px;font-weight:300;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+        <div style="margin-top:6px;font-size:11px;font-weight:300;letter-spacing:0.16em;color:var(--titanium);">abcdefghijklmnopqrstuvwxyz</div>
+        <div style="margin-top:6px;font-size:11px;font-weight:300;letter-spacing:0.12em;color:var(--titanium);">0123456789 .,;:—–/()[]%@</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">04.2 — Type Scale</span>
+    <div class="type-specimen">
+      <div class="type-specimen__meta">Display — 96px · Weight 100 · Tracking −0.02em · Leading 0.92</div>
+      <div class="ts-display" style="color:var(--bone);">Science. Precision.<br>Peak Performance.</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-specimen__meta">Heading 1 — 56px · Weight 200 · Tracking −0.015em · Leading 1.05</div>
+      <div class="ts-h1" style="color:var(--bone);">The Body Is a Precision Instrument</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-specimen__meta">Heading 2 — 36px · Weight 200 · Tracking −0.01em · Leading 1.15</div>
+      <div class="ts-h2" style="color:var(--bone);">BPC-157 Peptide Protocol — 12 Week</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-specimen__meta">Subheading — 11px · Weight 400 · Tracking 0.28em · All Caps</div>
+      <div class="ts-subhead" style="color:var(--bone);">Pharmaceutical Grade · Clinically Validated · Precisely Dosed</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-specimen__meta">Body — 15px · Weight 300 · Tracking 0 · Leading 1.85</div>
+      <div class="ts-body" style="color:var(--bone);">BPC-157 is a partial sequence of body protection compound derived from human gastric juice. Extensive research demonstrates its role in accelerating healing of tendons, ligaments, and muscle tissue through upregulation of growth hormone receptors and promotion of angiogenesis.</div>
+    </div>
+    <div class="type-specimen" style="border-bottom:none;">
+      <div class="type-specimen__meta">Caption — 11px · Weight 300 · Tracking 0.04em · Leading 1.7</div>
+      <div class="ts-caption">Batch No. AX-2026-0142 · Manufactured June 2026 · Certificate of Analysis available on request · For research use only</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     05 · COLOR SYSTEM
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="color">
+  <div class="section-cover__number">05</div>
+  <div class="section-cover__chapter">Chapter Five</div>
+  <h2 class="section-cover__title">Color<br>System</h2>
+  <p class="section-cover__desc">Three primary tones carry the entire identity. Color is not decorative; it is structural. Restraint is the point.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<section class="page--dark" style="padding-bottom:0;">
+  <div class="container">
+    <span class="label label--light">05.1 — Primary Palette</span>
+  </div>
+  <div style="display:flex;gap:1px;margin-top:40px;">
+    <div style="flex:2;min-height:320px;background:#0A0A0A;padding:48px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid #1A1A1A;">
+      <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Primary</div>
+      <div style="font-size:28px;font-weight:100;letter-spacing:0.06em;color:var(--bone);margin-bottom:16px;">Onyx</div>
+      <div style="font-size:10px;font-weight:300;letter-spacing:0.08em;color:var(--titanium);line-height:2.2;">HEX #0A0A0A · RGB 10, 10, 10<br>CMYK 0, 0, 0, 96 · Pantone Black 6 C</div>
+    </div>
+    <div style="flex:2;min-height:320px;background:#F5F5F3;padding:48px;display:flex;flex-direction:column;justify-content:flex-end;">
+      <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Primary</div>
+      <div style="font-size:28px;font-weight:100;letter-spacing:0.06em;color:var(--onyx);margin-bottom:16px;">Bone</div>
+      <div style="font-size:10px;font-weight:300;letter-spacing:0.08em;color:var(--titanium);line-height:2.2;">HEX #F5F5F3 · RGB 245, 245, 243<br>CMYK 0, 0, 1, 4 · Pantone 9183 C</div>
+    </div>
+    <div style="flex:1.5;min-height:320px;background:#8D8D8D;padding:48px;display:flex;flex-direction:column;justify-content:flex-end;">
+      <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(245,245,243,0.5);margin-bottom:8px;">Secondary</div>
+      <div style="font-size:28px;font-weight:100;letter-spacing:0.06em;color:var(--bone);margin-bottom:16px;">Titanium</div>
+      <div style="font-size:10px;font-weight:300;letter-spacing:0.08em;color:rgba(245,245,243,0.6);line-height:2.2;">HEX #8D8D8D · RGB 141, 141, 141<br>CMYK 0, 0, 0, 45 · Cool Gray 7 C</div>
+    </div>
+    <div style="flex:1;min-height:320px;background:#C4A882;padding:48px;display:flex;flex-direction:column;justify-content:flex-end;">
+      <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(245,245,243,0.5);margin-bottom:8px;">Accent — Sparingly</div>
+      <div style="font-size:28px;font-weight:100;letter-spacing:0.06em;color:var(--bone);margin-bottom:16px;">Warm Metal</div>
+      <div style="font-size:10px;font-weight:300;letter-spacing:0.08em;color:rgba(245,245,243,0.6);line-height:2.2;">HEX #C4A882 · RGB 196, 168, 130<br>CMYK 0, 14, 34, 23 · Pantone 7502 C</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:1px;margin-top:1px;margin-bottom:0;">
+    <div style="flex:1;height:48px;background:#0A0A0A;"></div>
+    <div style="flex:1;height:48px;background:#1A1A1A;"></div>
+    <div style="flex:1;height:48px;background:#2A2A2A;"></div>
+    <div style="flex:1;height:48px;background:#3A3A3A;"></div>
+    <div style="flex:1;height:48px;background:#555;"></div>
+    <div style="flex:1;height:48px;background:#6E6E6E;"></div>
+    <div style="flex:1;height:48px;background:#8D8D8D;"></div>
+    <div style="flex:1;height:48px;background:#ADADAD;"></div>
+    <div style="flex:1;height:48px;background:#C8C8C6;"></div>
+    <div style="flex:1;height:48px;background:#E0E0DE;"></div>
+    <div style="flex:1;height:48px;background:#EFEFED;"></div>
+    <div style="flex:1;height:48px;background:#F5F5F3;"></div>
+  </div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">05.2 — Accessibility &amp; Contrast</span>
+    <div class="two-col">
+      <div>
+        <div style="display:flex;flex-direction:column;gap:1px;">
+          <div style="display:flex;justify-content:space-between;padding:18px 24px;background:var(--onyx);border:1px solid #1A1A1A;">
+            <span style="font-size:13px;font-weight:300;color:var(--bone);">Bone on Onyx</span>
+            <span style="font-size:9px;letter-spacing:0.14em;padding:4px 10px;border:1px solid #4A7C59;color:#4A7C59;">21:1 — AAA</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:18px 24px;background:var(--bone);">
+            <span style="font-size:13px;font-weight:300;color:var(--onyx);">Onyx on Bone</span>
+            <span style="font-size:9px;letter-spacing:0.14em;padding:4px 10px;border:1px solid #4A7C59;color:#4A7C59;">21:1 — AAA</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:18px 24px;background:var(--onyx);">
+            <span style="font-size:13px;font-weight:300;color:var(--titanium);">Titanium on Onyx</span>
+            <span style="font-size:9px;letter-spacing:0.14em;padding:4px 10px;border:1px solid #B8A060;color:#B8A060;">5.8:1 — AA</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:18px 24px;background:var(--bone);">
+            <span style="font-size:13px;font-weight:300;color:var(--titanium);">Titanium on Bone</span>
+            <span style="font-size:9px;letter-spacing:0.14em;padding:4px 10px;border:1px solid #B8A060;color:#B8A060;">3.8:1 — AA Large</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="padding:40px;background:#111;height:100%;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Color Usage Rules</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;">
+            <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.1);">Onyx and Bone form 90%+ of all compositions</li>
+            <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.1);">Titanium: secondary text and structural borders only</li>
+            <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.1);">Warm Metal: premium moments only — max 5% of any layout</li>
+            <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.1);">No non-palette colours without written approval</li>
+            <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.1);">Never use colour to convey critical information alone (accessibility)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     06 · GRAPHIC LANGUAGE
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--light" id="graphic">
+  <div class="section-cover__number" style="color:var(--onyx);">06</div>
+  <div class="section-cover__chapter" style="color:var(--titanium);">Chapter Six</div>
+  <h2 class="section-cover__title" style="color:var(--onyx);">Graphic<br>Language</h2>
+  <p class="section-cover__desc" style="color:var(--mid-grey);">Whitespace is not empty — it is the material from which the AXIOM aesthetic is constructed. Every compositional decision begins with what is removed.</p>
+  <div class="section-cover__rule" style="background:var(--onyx);"></div>
+</section>
+
+<section class="page">
+  <div class="container">
+    <span class="label">06.1 — Whitespace Principles</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title">Space as<br>Substance</h3>
+        <p style="font-size:14px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:40px;">The AXIOM aesthetic is defined by extraordinary generosity of space. Every layout breathes. Every element has room to exist without competing for attention. Whitespace is not a failure to fill — it is the expression of confidence.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="padding:24px 28px;border-left:2px solid var(--onyx);">
+            <div style="font-size:11px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;">Rule 1</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">Minimum 80px vertical spacing between content sections. Never less.</div>
+          </div>
+          <div style="padding:24px 28px;border-left:2px solid var(--onyx);">
+            <div style="font-size:11px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;">Rule 2</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">Text columns never wider than 640px for body copy. Reading comfort is structural.</div>
+          </div>
+          <div style="padding:24px 28px;border-left:2px solid var(--onyx);">
+            <div style="font-size:11px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;">Rule 3</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">When in doubt, remove one element. The remaining elements become more powerful.</div>
+          </div>
+          <div style="padding:24px 28px;border-left:2px solid var(--onyx);">
+            <div style="font-size:11px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px;">Rule 4</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.75;">All spacing is a multiple of 8px — 8, 16, 24, 32, 48, 64, 80, 96, 128px.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="background:var(--onyx);aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;position:relative;">
+          <div style="width:1px;height:60%;background:rgba(245,245,243,0.1);position:absolute;left:20%;"></div>
+          <div style="width:1px;height:60%;background:rgba(245,245,243,0.1);position:absolute;right:20%;"></div>
+          <div style="height:1px;width:60%;background:rgba(245,245,243,0.1);position:absolute;top:20%;"></div>
+          <div style="height:1px;width:60%;background:rgba(245,245,243,0.1);position:absolute;bottom:20%;"></div>
+          <div style="text-align:center;padding:40px;display:flex;align-items:center;justify-content:center;">
+            <img src="logo.png" alt="AXIOM" style="width:120px;height:auto;display:block;filter:invert(1);"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--grey">
+  <div class="container">
+    <span class="label">06.2 — Grid System</span>
+    <h3 class="page-title" style="margin-bottom:48px;">12-Column Grid</h3>
+    <div style="position:relative;padding:40px 0;">
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:8px;height:200px;">
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+        <div style="background:rgba(10,10,10,0.06);"></div>
+      </div>
+      <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(12,1fr);gap:8px;pointer-events:none;">
+        <div style="grid-column:1/4;background:rgba(196,168,130,0.15);height:200px;margin-top:40px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--warm-metal);">3 Col</span>
+        </div>
+        <div style="grid-column:4/10;background:rgba(10,10,10,0.08);height:200px;margin-top:40px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);">6 Col — Body</span>
+        </div>
+        <div style="grid-column:10/13;background:rgba(196,168,130,0.15);height:200px;margin-top:40px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--warm-metal);">3 Col</span>
+        </div>
+      </div>
+    </div>
+    <div class="three-col" style="margin-top:48px;">
+      <div>
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:12px;">Gutter Width</div>
+        <div style="font-size:22px;font-weight:100;">8–16px</div>
+        <div style="font-size:12px;font-weight:300;color:var(--titanium);margin-top:4px;">Column gap</div>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:12px;">Outer Margin</div>
+        <div style="font-size:22px;font-weight:100;">80px</div>
+        <div style="font-size:12px;font-weight:300;color:var(--titanium);margin-top:4px;">Desktop minimum</div>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:12px;">Max Container</div>
+        <div style="font-size:22px;font-weight:100;">1440px</div>
+        <div style="font-size:12px;font-weight:300;color:var(--titanium);margin-top:4px;">Page-level max-width</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">06.3 — Photography Direction</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">Visual Language</h3>
+    <div class="two-col">
+      <div>
+        <div style="display:flex;flex-direction:column;gap:1px;">
+          <div style="background:#0D0D0D;padding:32px;border-top:2px solid var(--warm-metal);">
+            <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:12px;">Always Use</div>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(196,168,130,0.3);">Single-light source, directional and controlled</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(196,168,130,0.3);">Monochromatic or near-neutral backgrounds</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(196,168,130,0.3);">Deep focus on material texture — glass, metal, concrete, linen</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(196,168,130,0.3);">Athletes at rest, in concentration, post-effort</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(196,168,130,0.3);">Architectural spaces — clinical, minimal, precisely lit</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(196,168,130,0.3);">Negative space as a compositional element, not a failure</li>
+            </ul>
+          </div>
+          <div style="background:#0D0D0D;padding:32px;border-top:2px solid #8B3A3A;">
+            <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#8B3A3A;margin-bottom:12px;">Never Use</div>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(139,58,58,0.4);">Stock photography or obvious stock-aesthetic compositions</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(139,58,58,0.4);">Flexing athletes, veins, grimaces, or aggressive poses</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(139,58,58,0.4);">HDR processing, heavy saturation, or colour grading</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(139,58,58,0.4);">Group shots with obvious diversity-quota positioning</li>
+              <li style="font-size:13px;font-weight:300;line-height:1.7;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(139,58,58,0.4);">Supplement-lifestyle aesthetics (gym selfies, shaker bottles)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+        <div style="background:#111;aspect-ratio:1;display:flex;align-items:flex-end;padding:16px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1A1A1A 0%,#0A0A0A 100%);"></div>
+          <div style="position:absolute;top:20px;left:20px;width:60%;height:1px;background:rgba(255,255,255,0.06);"></div>
+          <div style="position:absolute;top:40px;left:20px;width:40%;height:1px;background:rgba(255,255,255,0.04);"></div>
+          <span style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);position:relative;z-index:1;">Laboratory — Still Life</span>
+        </div>
+        <div style="background:#0F0F0F;aspect-ratio:1;display:flex;align-items:flex-end;padding:16px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;bottom:0;left:0;right:0;background:radial-gradient(ellipse at 30% 50%,rgba(255,255,255,0.04) 0%,transparent 70%);"></div>
+          <span style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);position:relative;z-index:1;">Athlete — Controlled Light</span>
+        </div>
+        <div style="background:#121212;aspect-ratio:1;display:flex;align-items:flex-end;padding:16px;">
+          <span style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);">Architecture — Clinical Space</span>
+        </div>
+        <div style="background:#0D0D0D;aspect-ratio:1;display:flex;align-items:flex-end;padding:16px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(196,168,130,0.04) 0%,transparent 50%);"></div>
+          <span style="font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);position:relative;z-index:1;">Material — Texture &amp; Surface</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">06.4 — Icon System</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">Line Icon Library</h3>
+    <p style="font-size:13px;font-weight:300;line-height:1.85;color:var(--titanium);max-width:600px;margin-bottom:48px;">Icons are used minimally. When required, they follow a precise geometric construction: 1px stroke weight, round caps, no fill, 24×24px base size. They are functional, never decorative.</p>
+    <div class="icon-grid">
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><path d="M9 6c0 0 3 1.5 3 6s-3 6-3 6"/><path d="M15 6c0 0-3 1.5-3 6s3 6 3 6"/></svg>
+        <span class="icon-cell__name">Peptide</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><path d="M3 3l18 18M3 21L21 3"/></svg>
+        <span class="icon-cell__name">Close / X</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span class="icon-cell__name">Vitals</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span class="icon-cell__name">Duration</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span class="icon-cell__name">Clinic</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        <span class="icon-cell__name">Protocol</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span class="icon-cell__name">Recovery</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="icon-cell__name">Elite</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span class="icon-cell__name">Subscription</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <span class="icon-cell__name">Report</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span class="icon-cell__name">Validated</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        <span class="icon-cell__name">Signal</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span class="icon-cell__name">Laboratory</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span class="icon-cell__name">Global</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="icon-cell__name">Members</span>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="icon-cell__name">Certified</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     07 · PRODUCT IDENTITY
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="product">
+  <div class="section-cover__number">07</div>
+  <div class="section-cover__chapter">Chapter Seven</div>
+  <h2 class="section-cover__title">Product<br>Identity</h2>
+  <p class="section-cover__desc">Packaging as precision instrument. Every surface, edge, and label is an expression of the same rigour as the product inside. The box is part of the protocol.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">07.1 — Peptide Packaging</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:64px;">Primary Product Line</h3>
+    <div class="four-col">
+      <div class="pack-mockup">
+        <div class="pack-mockup__corner">Pharmaceutical Grade</div>
+        <div class="pack-mockup__brand">AXIOM — Human Performance</div>
+        <div class="pack-mockup__product">BPC-157</div>
+        <div class="pack-mockup__dose">5.0 mg</div>
+        <div class="pack-mockup__dose-label">Lyophilised Peptide</div>
+        <div class="pack-mockup__research">For research use only</div>
+      </div>
+      <div class="pack-mockup">
+        <div class="pack-mockup__corner">Pharmaceutical Grade</div>
+        <div class="pack-mockup__brand">AXIOM — Human Performance</div>
+        <div class="pack-mockup__product">TB-500</div>
+        <div class="pack-mockup__dose">10.0 mg</div>
+        <div class="pack-mockup__dose-label">Lyophilised Peptide</div>
+        <div class="pack-mockup__research">For research use only</div>
+      </div>
+      <div class="pack-mockup">
+        <div class="pack-mockup__corner">Pharmaceutical Grade</div>
+        <div class="pack-mockup__brand">AXIOM — Human Performance</div>
+        <div class="pack-mockup__product">GHK-Cu</div>
+        <div class="pack-mockup__dose">50.0 mg</div>
+        <div class="pack-mockup__dose-label">Lyophilised Peptide</div>
+        <div class="pack-mockup__research">For research use only</div>
+      </div>
+      <div class="pack-mockup">
+        <div class="pack-mockup__corner">Pharmaceutical Grade</div>
+        <div class="pack-mockup__brand">AXIOM — Human Performance</div>
+        <div class="pack-mockup__product">Ipamorelin</div>
+        <div class="pack-mockup__dose">2.0 mg</div>
+        <div class="pack-mockup__dose-label">Lyophilised Peptide</div>
+        <div class="pack-mockup__research">For research use only</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--mid">
+  <div class="container">
+    <span class="label label--light">07.2 — Label &amp; Packaging Specifications</span>
+    <div class="three-col">
+      <div>
+        <h4 style="font-size:16px;font-weight:200;letter-spacing:0.06em;color:var(--bone);margin-bottom:24px;">Vial Label</h4>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Material</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Matte black polypropylene, water-resistant</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Ink</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Cold-foil bone white letterpress print</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Finish</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Soft-touch matte lamination</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Security</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Holographic tamper-evident seal</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:16px;font-weight:200;letter-spacing:0.06em;color:var(--bone);margin-bottom:24px;">Outer Box</h4>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Board Weight</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">400gsm solid board, black throughout</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Printing</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Blind emboss wordmark on lid</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Interior</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Moulded black EVA foam insert</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Closure</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Magnetic ribbon pull, no adhesive</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:16px;font-weight:200;letter-spacing:0.06em;color:var(--bone);margin-bottom:24px;">QR &amp; Batch System</h4>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Batch Number Format</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">AX-YYYY-NNNN (e.g. AX-2026-0142)</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">QR Placement</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Bottom of outer box, 18×18mm minimum</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">QR Destination</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Live COA PDF, manufacture date, batch report</div>
+          </div>
+          <div style="padding:14px;background:#0D0D0D;border:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">COA Includes</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">HPLC purity %, residual solvent, sterility, manufacturer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     08 · CLINIC IDENTITY
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--light" id="clinic">
+  <div class="section-cover__number" style="color:var(--onyx);">08</div>
+  <div class="section-cover__chapter" style="color:var(--titanium);">Chapter Eight</div>
+  <h2 class="section-cover__title" style="color:var(--onyx);">Clinic<br>Identity</h2>
+  <p class="section-cover__desc" style="color:var(--mid-grey);">The AXIOM clinic is not a medical facility — it is a precision performance environment. Every surface, light source, and material is a deliberate extension of the brand.</p>
+  <div class="section-cover__rule" style="background:var(--onyx);"></div>
+</section>
+
+<section class="page">
+  <div class="container">
+    <span class="label">08.1 — Clinic Design Language</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title">Environmental<br>Standards</h3>
+        <p style="font-size:14px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:40px;">Every AXIOM clinic shares a common material and spatial language. The environment must communicate precision, calm, and clinical confidence before a single word is spoken.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="padding:20px 24px;border-left:2px solid var(--onyx);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Walls</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.7;">Poured micro-cement in Bone White #F5F5F3 or raw concrete plaster in Titanium</div>
+          </div>
+          <div style="padding:20px 24px;border-left:2px solid var(--onyx);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Floors</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.7;">Honed Bianco Carrara marble or matte black basalt tile — no pattern, no grout lines wider than 3mm</div>
+          </div>
+          <div style="padding:20px 24px;border-left:2px solid var(--onyx);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Lighting</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.7;">2700K–3000K warm white. Recessed linear slots, no decorative fixtures. No fluorescent.</div>
+          </div>
+          <div style="padding:20px 24px;border-left:2px solid var(--onyx);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Furniture</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.7;">Bespoke — no off-the-shelf medical furniture. Black powder-coated steel, natural linen, burnished leather.</div>
+          </div>
+          <div style="padding:20px 24px;border-left:2px solid var(--onyx);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;">Scent</div>
+            <div style="font-size:13px;font-weight:300;line-height:1.7;">Proprietary AXIOM ambient scent — cedar, mineral, clean linen. Never clinical antiseptic.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;flex-direction:column;gap:1px;">
+          <div style="background:var(--onyx);padding:32px;display:flex;flex-direction:column;gap:16px;">
+            <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);">Clinic Zones</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+              <div style="background:#0D0D0D;padding:20px;">
+                <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Arrival</div>
+                <div style="font-size:12px;font-weight:300;color:var(--bone);">Reception &amp; Concierge</div>
+              </div>
+              <div style="background:#0D0D0D;padding:20px;">
+                <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Assessment</div>
+                <div style="font-size:12px;font-weight:300;color:var(--bone);">Consultation Suite</div>
+              </div>
+              <div style="background:#0D0D0D;padding:20px;">
+                <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Treatment</div>
+                <div style="font-size:12px;font-weight:300;color:var(--bone);">Protocol Rooms ×4</div>
+              </div>
+              <div style="background:#0D0D0D;padding:20px;">
+                <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Recovery</div>
+                <div style="font-size:12px;font-weight:300;color:var(--bone);">Lounge &amp; IV Bay</div>
+              </div>
+              <div style="background:#0D0D0D;padding:20px;">
+                <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Testing</div>
+                <div style="font-size:12px;font-weight:300;color:var(--bone);">Diagnostic Laboratory</div>
+              </div>
+              <div style="background:#0D0D0D;padding:20px;">
+                <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Retail</div>
+                <div style="font-size:12px;font-weight:300;color:var(--bone);">Product Dispensary</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--onyx);padding:32px;">
+            <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:16px;">Staff Standards</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="font-size:12px;font-weight:300;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(255,255,255,0.1);">Uniforms: black or bone white — clinic-specific lab coat, custom tag</div>
+              <div style="font-size:12px;font-weight:300;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(255,255,255,0.1);">Name badges: matte black card, bone letterpress, magnetic back</div>
+              <div style="font-size:12px;font-weight:300;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(255,255,255,0.1);">Communication: measured, precise, never salesy</div>
+              <div style="font-size:12px;font-weight:300;color:var(--platinum);padding-left:14px;border-left:1px solid rgba(255,255,255,0.1);">Membership cards: brushed black metal, engraved name</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     09 · DIGITAL IDENTITY
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="digital">
+  <div class="section-cover__number">09</div>
+  <div class="section-cover__chapter">Chapter Nine</div>
+  <h2 class="section-cover__title">Digital<br>Identity</h2>
+  <p class="section-cover__desc">The digital experience translates the brand's physical precision into pixels. Every interaction is considered, deliberate, and worthy of the client's attention.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">09.1 — Website Design System</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">Desktop Interface</h3>
+    <div class="ui-frame">
+      <div class="ui-frame__bar">
+        <div class="ui-frame__dot"></div>
+        <div class="ui-frame__dot"></div>
+        <div class="ui-frame__dot"></div>
+        <div class="ui-frame__url">axiomperformance.com</div>
+      </div>
+      <div class="ui-frame__content">
+        <div class="ui-nav">
+          <img src="logo.png" alt="AXIOM" style="width:64px;height:auto;display:block;filter:invert(1);"/>
+          <ul class="ui-nav__links">
+            <li>Peptides</li>
+            <li>Protocols</li>
+            <li>Clinic</li>
+            <li>Longevity</li>
+            <li>Research</li>
+          </ul>
+          <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);">Sign In</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;min-height:260px;">
+          <div>
+            <div style="font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Performance Peptides</div>
+            <div class="ui-hero-text">The science<br>is irrefutable.</div>
+            <div class="ui-hero-sub">Pharmaceutical-grade peptide protocols, designed with the precision of a clinical trial and the discretion of a private clinic.</div>
+            <div>
+              <span class="ui-btn ui-btn--fill">View Protocols</span>
+              <span class="ui-btn">Book Consultation</span>
+            </div>
+          </div>
+          <div style="background:#0D0D0D;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;position:relative;">
+            <div style="text-align:center;">
+              <div style="font-size:40px;font-weight:100;letter-spacing:0.28em;color:var(--bone);">BPC-157</div>
+              <div style="font-size:8px;letter-spacing:0.32em;text-transform:uppercase;color:var(--titanium);margin-top:8px;">5.0 mg Lyophilised</div>
+            </div>
+          </div>
+        </div>
+        <div class="ui-stats">
+          <div class="ui-stat"><span class="ui-stat__value">98.4%</span><span class="ui-stat__label">Avg. Purity</span></div>
+          <div class="ui-stat"><span class="ui-stat__value">2,400+</span><span class="ui-stat__label">Clients</span></div>
+          <div class="ui-stat"><span class="ui-stat__value">14</span><span class="ui-stat__label">Peptides</span></div>
+          <div class="ui-stat"><span class="ui-stat__value">24h</span><span class="ui-stat__label">Medical Support</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--mid">
+  <div class="container">
+    <span class="label label--light">09.2 — UI Component System</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">Core Components</h3>
+    <div class="three-col">
+      <div>
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Buttons</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <button style="background:var(--bone);color:var(--onyx);border:none;padding:14px 28px;font-size:9px;letter-spacing:0.26em;text-transform:uppercase;font-family:inherit;cursor:pointer;">Primary Action</button>
+          <button style="background:transparent;color:var(--bone);border:1px solid rgba(245,245,243,0.3);padding:14px 28px;font-size:9px;letter-spacing:0.26em;text-transform:uppercase;font-family:inherit;cursor:pointer;">Secondary Action</button>
+          <button style="background:transparent;color:var(--titanium);border:none;padding:14px 0;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;font-family:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:4px;">Tertiary Link →</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Form Elements</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:12px;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Full Name</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);">Marcus Webb</div>
+          </div>
+          <div style="border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:12px;">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);margin-bottom:8px;">Email Address</div>
+            <div style="font-size:13px;font-weight:300;color:var(--titanium);">Enter email address</div>
+          </div>
+          <div style="border:1px solid rgba(196,168,130,0.4);padding:12px;background:rgba(196,168,130,0.04);">
+            <div style="font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:8px;">Select Protocol</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);">BPC-157 — Recovery ↓</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Notification States</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:14px 18px;border-left:2px solid #4A7C59;background:rgba(74,124,89,0.06);">
+            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#4A7C59;margin-bottom:4px;">Protocol Active</div>
+            <div style="font-size:11px;font-weight:300;color:var(--platinum);">BPC-157 — Week 4 of 12</div>
+          </div>
+          <div style="padding:14px 18px;border-left:2px solid var(--warm-metal);background:rgba(196,168,130,0.04);">
+            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:4px;">Refill Due</div>
+            <div style="font-size:11px;font-weight:300;color:var(--platinum);">Order by June 28 to avoid gap</div>
+          </div>
+          <div style="padding:14px 18px;border-left:2px solid var(--titanium);background:rgba(141,141,141,0.06);">
+            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);margin-bottom:4px;">COA Updated</div>
+            <div style="font-size:11px;font-weight:300;color:var(--platinum);">Batch AX-2026-0142 — 98.6% purity</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">09.3 — Email &amp; Digital Communications</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title" style="color:var(--bone);font-size:36px;">Email Design</h3>
+        <p style="font-size:13px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:32px;">Email templates follow the same visual discipline as the primary design system. No promotional aesthetics. No distracting imagery. Signal-to-noise ratio is everything.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="padding:14px;background:#111;border-left:2px solid rgba(255,255,255,0.1);">
+            <div style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);margin-bottom:4px;">Max Width</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">600px — single column</div>
+          </div>
+          <div style="padding:14px;background:#111;border-left:2px solid rgba(255,255,255,0.1);">
+            <div style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);margin-bottom:4px;">Background</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Onyx #0A0A0A</div>
+          </div>
+          <div style="padding:14px;background:#111;border-left:2px solid rgba(255,255,255,0.1);">
+            <div style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);margin-bottom:4px;">Subject Line Style</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">Sentence case, factual, no clickbait</div>
+          </div>
+          <div style="padding:14px;background:#111;border-left:2px solid rgba(255,255,255,0.1);">
+            <div style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);margin-bottom:4px;">Preheader</div>
+            <div style="font-size:12px;font-weight:300;color:var(--bone);">First sentence of body — informational</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="background:#0D0D0D;border:1px solid #1A1A1A;overflow:hidden;max-width:400px;">
+          <div style="padding:24px 32px;border-bottom:1px solid #1A1A1A;display:flex;justify-content:space-between;align-items:center;">
+            <img src="logo.png" alt="AXIOM" style="width:72px;height:auto;display:block;filter:invert(1);"/>
+          </div>
+          <div style="padding:32px;">
+            <div style="font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:16px;">Protocol Update — BPC-157</div>
+            <div style="font-size:20px;font-weight:100;color:var(--bone);margin-bottom:16px;line-height:1.3;">Week 8 of 12.<br>Results on track.</div>
+            <div style="font-size:11px;font-weight:300;line-height:1.8;color:var(--titanium);margin-bottom:24px;">Your BPC-157 protocol is progressing as expected. Biomarker data from your most recent assessment confirms upregulation of growth hormone receptors consistent with the protocol timeline.</div>
+            <div style="display:inline-block;padding:12px 24px;background:var(--bone);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--onyx);">View Full Report</div>
+          </div>
+          <div style="padding:16px 32px;border-top:1px solid #1A1A1A;">
+            <div style="font-size:8px;letter-spacing:0.14em;color:var(--titanium);">AXIOM Human Performance · Confidential</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Motion Principles -->
+<section class="page--dark" id="motion">
+  <div class="container">
+    <span class="label label--light">09.4 — Motion &amp; Animation</span>
+    <div class="page-header" style="margin-bottom:64px;">
+      <div class="page-header__left">
+        <h3 class="page-title" style="color:var(--bone);">Motion<br>Principles</h3>
+        <p class="page-subtitle page-subtitle--light">AXIOM motion is precise and unhurried. No bounce. No overshooting. Animation is information — it communicates state, not personality.</p>
+      </div>
+    </div>
+    <div class="motion-grid">
+      <div class="motion-cell">
+        <div class="motion-cell__label">Fast Transition</div>
+        <div class="motion-cell__value">120ms</div>
+        <div class="motion-cell__desc">Hover states. Toggle switches. Button press feedback. Anything requiring immediate response.</div>
+        <div class="motion-bar" onclick="demoBar(this, 120, 'cubic-bezier(0.4,0,0.2,1)')" style="--dur:120ms;--ease:cubic-bezier(0.4,0,0.2,1)"><div class="motion-bar__fill"></div></div>
+      </div>
+      <div class="motion-cell">
+        <div class="motion-cell__label">Base Transition</div>
+        <div class="motion-cell__value">240ms</div>
+        <div class="motion-cell__desc">Panel opens. Navigation reveals. Modal entrance. The default for most UI transitions.</div>
+        <div class="motion-bar" onclick="demoBar(this, 240, 'cubic-bezier(0.22,1,0.36,1)')" style="--dur:240ms;--ease:cubic-bezier(0.22,1,0.36,1)"><div class="motion-bar__fill"></div></div>
+      </div>
+      <div class="motion-cell">
+        <div class="motion-cell__label">Slow Transition</div>
+        <div class="motion-cell__value">480ms</div>
+        <div class="motion-cell__desc">Page-level fades. Section entrance animations. Hero elements that arrive with weight.</div>
+        <div class="motion-bar" onclick="demoBar(this, 480, 'cubic-bezier(0.22,1,0.36,1)')" style="--dur:480ms;--ease:cubic-bezier(0.22,1,0.36,1)"><div class="motion-bar__fill"></div></div>
+      </div>
+      <div class="motion-cell">
+        <div class="motion-cell__label">Loading State</div>
+        <div class="motion-cell__value">1200ms</div>
+        <div class="motion-cell__desc">Progress indicators. Data fetch states. Sustained animations that loop until resolution.</div>
+        <div class="motion-bar" onclick="demoBar(this, 1200, 'linear')" style="--dur:1200ms;--ease:linear"><div class="motion-bar__fill"></div></div>
+      </div>
+    </div>
+    <div style="margin-bottom:64px;">
+      <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:24px;">Easing Curves — click bar to demo</div>
+      <div class="easing-row">
+        <div class="easing-row__name">Expo Out</div>
+        <div class="easing-row__value">cubic-bezier(0.22, 1, 0.36, 1)</div>
+        <div class="easing-row__use">Entrances · Reveals · Default</div>
+      </div>
+      <div class="easing-row">
+        <div class="easing-row__name">Ease</div>
+        <div class="easing-row__value">cubic-bezier(0.4, 0, 0.2, 1)</div>
+        <div class="easing-row__use">Micro-interactions · Hover states</div>
+      </div>
+      <div class="easing-row">
+        <div class="easing-row__name">Ease In</div>
+        <div class="easing-row__value">cubic-bezier(0.4, 0, 1, 1)</div>
+        <div class="easing-row__use">Exits · Dismissals only</div>
+      </div>
+      <div class="easing-row">
+        <div class="easing-row__name">Linear</div>
+        <div class="easing-row__value">linear</div>
+        <div class="easing-row__use">Progress bars · Loading loops</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;">
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:16px;">Never</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(139,58,58,0.4);">Spring physics with visible bounce</li>
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(139,58,58,0.4);">Transitions exceeding 600ms (unless loading)</li>
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(139,58,58,0.4);">Looping decorative animations</li>
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(139,58,58,0.4);">Parallax on typography</li>
+        </ul>
+      </div>
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:16px;">Always</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(74,124,89,0.4);">Respect prefers-reduced-motion</li>
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(74,124,89,0.4);">Ease out on entrance, ease in on exit</li>
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(74,124,89,0.4);">Animate transform/opacity only</li>
+          <li style="font-size:12px;font-weight:300;color:var(--titanium);padding-left:12px;border-left:1px solid rgba(74,124,89,0.4);">GPU-composited properties first</li>
+        </ul>
+      </div>
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:16px;">Stagger Rule</div>
+        <p style="font-size:12px;font-weight:300;color:var(--titanium);line-height:1.8;">When animating list items or cards, stagger by 40ms per item. Maximum stagger offset: 240ms total (6 items). Beyond that, collapse to simultaneous.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     10 · MARKETING ASSETS
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--light" id="marketing">
+  <div class="section-cover__number" style="color:var(--onyx);">10</div>
+  <div class="section-cover__chapter" style="color:var(--titanium);">Chapter Ten</div>
+  <h2 class="section-cover__title" style="color:var(--onyx);">Marketing<br>Assets</h2>
+  <p class="section-cover__desc" style="color:var(--mid-grey);">Every printed and digital marketing asset carries the same typographic rigour, material quality, and compositional restraint as the primary brand identity.</p>
+  <div class="section-cover__rule" style="background:var(--onyx);"></div>
+</section>
+
+<section class="page">
+  <div class="container">
+    <span class="label">10.1 — Stationery System</span>
+    <div class="three-col">
+      <div>
+        <div style="background:var(--bone);border:1px solid var(--light-grey);aspect-ratio:85/55;display:flex;flex-direction:column;justify-content:space-between;padding:20px;margin-bottom:12px;">
+          <img src="logo.png" alt="AXIOM" style="width:90px;height:auto;display:block;"/>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+            <div>
+              <div style="font-size:7px;font-weight:400;letter-spacing:0.18em;color:var(--titanium);">DR LENA HARTMANN</div>
+              <div style="font-size:7px;font-weight:300;color:var(--titanium);">Performance Medicine</div>
+            </div>
+            <div style="text-align:right;font-size:7px;font-weight:300;color:var(--titanium);">lena@axiomperformance.com<br>+1 212 555 0142</div>
+          </div>
+        </div>
+        <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);">Business Card — 85×55mm</div>
+        <div style="font-size:11px;font-weight:300;color:var(--mid-grey);margin-top:6px;">400gsm Invercote · Bone white · Letterpress black · Soft-touch matte</div>
+      </div>
+      <div>
+        <div style="background:var(--bone);border:1px solid var(--light-grey);aspect-ratio:210/297;display:flex;flex-direction:column;justify-content:space-between;padding:24px;margin-bottom:12px;min-height:200px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <img src="logo.png" alt="AXIOM" style="width:72px;height:auto;display:block;"/>
+            <div style="width:20px;height:1px;background:var(--light-grey);margin-top:6px;"></div>
+          </div>
+          <div style="font-size:7px;font-weight:300;color:var(--titanium);line-height:1.8;">
+            AXIOM Human Performance<br>
+            123 Performance Avenue<br>
+            New York, NY 10001<br>
+            axiomperformance.com
+          </div>
+        </div>
+        <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);">Letterhead — A4 / US Letter</div>
+        <div style="font-size:11px;font-weight:300;color:var(--mid-grey);margin-top:6px;">120gsm Conqueror Wove · Blind emboss logo · Watermark-grade security paper</div>
+      </div>
+      <div>
+        <div style="background:var(--onyx);aspect-ratio:210/99;display:flex;flex-direction:column;justify-content:space-between;padding:24px;margin-bottom:12px;border:1px solid #1A1A1A;">
+          <img src="logo.png" alt="AXIOM" style="width:40px;height:auto;display:block;filter:invert(1);"/>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+            <div style="font-size:7px;font-weight:300;color:var(--titanium);line-height:1.8;">Human Performance<br>Membership Card</div>
+            <div style="font-size:10px;font-weight:100;letter-spacing:0.1em;color:var(--bone);">AXIOM ELITE</div>
+          </div>
+        </div>
+        <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--titanium);">Membership Card — Metal</div>
+        <div style="font-size:11px;font-weight:300;color:var(--mid-grey);margin-top:6px;">Brushed black stainless · Laser engraved · Member number + name</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--grey">
+  <div class="container">
+    <span class="label">10.2 — Marketing Collateral</span>
+    <h3 class="page-title" style="margin-bottom:64px;">Print &amp; Event Materials</h3>
+    <div class="four-col">
+      <div class="card--light">
+        <div class="card__label card__label--onyx">Brochure</div>
+        <div class="card__title">Protocol Guide</div>
+        <div class="card__body">A5 · 16pp · Saddle stitched · 150gsm silk interior · 350gsm silk cover · Matte laminate · Spot UV wordmark</div>
+      </div>
+      <div class="card--light">
+        <div class="card__label card__label--onyx">Presentation Deck</div>
+        <div class="card__title">Investor Deck</div>
+        <div class="card__body">16:9 widescreen · Dark theme · Inter typeface · Max 1 chart per slide · No bullet points — narrative only</div>
+      </div>
+      <div class="card--light">
+        <div class="card__label card__label--onyx">Event</div>
+        <div class="card__title">Conference Booth</div>
+        <div class="card__body">3×3m black fabric backdrop · Illuminated AXIOM wordmark · Single product display table · No hanging banners</div>
+      </div>
+      <div class="card--light">
+        <div class="card__label card__label--onyx">Welcome Kit</div>
+        <div class="card__title">Luxury Onboarding</div>
+        <div class="card__body">Black matte rigid box · Ribbon closure · Branded insert card · Protocol booklet · Membership card · Sample vial</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     11 · ENVIRONMENTAL BRANDING
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="environmental">
+  <div class="section-cover__number">11</div>
+  <div class="section-cover__chapter">Chapter Eleven</div>
+  <h2 class="section-cover__title">Environmental<br>Branding</h2>
+  <p class="section-cover__desc">The physical space is the brand in three dimensions. Every spatial decision — material, scale, proportion, light — communicates AXIOM's values more powerfully than any advertisement.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">11.1 — Exterior &amp; Signage</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title" style="color:var(--bone);">Exterior<br>Presence</h3>
+        <p style="font-size:14px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:40px;">The AXIOM exterior is an architectural statement. No banners. No promotional graphics. The building itself must be worthy of the mark placed on it.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="padding:20px;background:#111;border-left:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Primary Sign</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);line-height:1.7;">Precision-cut 316 stainless steel, brushed · Back-lit 2700K LED halo effect · 600mm letter height minimum on facade · 3mm projection from wall</div>
+          </div>
+          <div style="padding:20px;background:#111;border-left:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Secondary (Door/Entry)</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);line-height:1.7;">Frosted glass etching · Wordmark only, no tagline · 120mm letter height · Centred on door panel</div>
+          </div>
+          <div style="padding:20px;background:#111;border-left:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:6px;">Window Treatment</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);line-height:1.7;">Maximum 20% of glazing obscured. Interior visible from street. Privacy via height, not coverage.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="background:var(--onyx);aspect-ratio:4/3;display:flex;flex-direction:column;justify-content:space-between;padding:40px;border:1px solid #1A1A1A;position:relative;overflow:hidden;">
+          <div style="position:absolute;bottom:0;left:0;right:0;height:60%;background:rgba(255,255,255,0.01);border-top:1px solid rgba(255,255,255,0.04);"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.4) 100%);"></div>
+          <div style="position:relative;z-index:1;">
+            <img src="logo.png" alt="AXIOM" style="width:160px;height:auto;display:block;filter:invert(1);"/>
+          </div>
+          <div style="position:relative;z-index:1;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);">Longevity</div>
+              <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);">Recovery</div>
+              <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);">Optimisation</div>
+              <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);">Performance</div>
+              <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);">Precision Medicine</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);margin-top:12px;">Facade Concept — Stainless on Black Granite</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Interior Wayfinding -->
+<section class="page--mid">
+  <div class="container">
+    <span class="label label--light">11.2 — Interior Wayfinding</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:64px;">Navigating<br>the Space</h3>
+    <div class="wayfinding-grid" style="margin-bottom:2px;">
+      <div class="wayfinding-cell">
+        <div class="wayfinding-cell__label">Room Plate</div>
+        <div class="wayfinding-cell__number">01</div>
+        <div class="wayfinding-cell__name">Consultation</div>
+        <div class="wayfinding-cell__desc">Brushed 316 stainless. 200×60mm. Room number in Inter Light 48px. Room name in Inter ExtraLight 12px, tracking 0.28em. Flush-mount to wall at 1500mm centre height.</div>
+      </div>
+      <div class="wayfinding-cell">
+        <div class="wayfinding-cell__label">Zone Marker</div>
+        <div class="wayfinding-cell__number">A</div>
+        <div class="wayfinding-cell__name">Assessment Wing</div>
+        <div class="wayfinding-cell__desc">Single letter designation. Floor-applied directional tape: 2mm Onyx vinyl, 60mm wide. No adhesive footprints. No fluorescent borders. Typography is the only wayfinding device.</div>
+      </div>
+      <div class="wayfinding-cell">
+        <div class="wayfinding-cell__label">Hanging Blade</div>
+        <div class="wayfinding-cell__number">→</div>
+        <div class="wayfinding-cell__name">Directional</div>
+        <div class="wayfinding-cell__desc">Suspended 200×400mm blades in brushed stainless. Arrow: 3mm machined groove, not printed. Text: Inter Thin 10px, uppercase, 0.32em tracking. Single destination per blade only.</div>
+      </div>
+    </div>
+    <div class="floor-plan" style="margin-bottom:48px;">
+      <div class="fp-cell fp-cell--entry"><div class="fp-cell__num">—</div><div class="fp-cell__name">Entry / Reception</div></div>
+      <div class="fp-cell fp-cell--large"><div class="fp-cell__num">01</div><div class="fp-cell__name">Consultation A</div></div>
+      <div class="fp-cell"><div class="fp-cell__num">05</div><div class="fp-cell__name">Lab</div></div>
+      <div class="fp-cell"><div class="fp-cell__num">02</div><div class="fp-cell__name">Consultation B</div></div>
+      <div class="fp-cell fp-cell--large"><div class="fp-cell__num">03</div><div class="fp-cell__name">IV Bay</div></div>
+      <div class="fp-cell"><div class="fp-cell__num">06</div><div class="fp-cell__name">Dispensary</div></div>
+      <div class="fp-cell"><div class="fp-cell__num">04</div><div class="fp-cell__name">Recovery</div></div>
+      <div class="fp-cell fp-cell--large"><div class="fp-cell__num">07</div><div class="fp-cell__name">Diagnostic Suite</div></div>
+      <div class="fp-cell"><div class="fp-cell__num">—</div><div class="fp-cell__name">Staff</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Material Hierarchy</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:32px;height:32px;background:rgba(196,168,130,0.2);border:1px solid rgba(196,168,130,0.4);flex-shrink:0;"></div>
+            <div style="font-size:12px;font-weight:300;color:var(--platinum);">Stainless steel — primary wayfinding (room plates, blades)</div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:32px;height:32px;background:rgba(245,245,243,0.05);border:1px solid rgba(245,245,243,0.1);flex-shrink:0;"></div>
+            <div style="font-size:12px;font-weight:300;color:var(--platinum);">Frosted glass — privacy panels, room ID at consultation doors</div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:32px;height:32px;background:rgba(10,10,10,0.8);border:1px solid rgba(255,255,255,0.06);flex-shrink:0;"></div>
+            <div style="font-size:12px;font-weight:300;color:var(--platinum);">Vinyl decal — floor tape, secondary direction, 2mm only</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--titanium);margin-bottom:20px;">Typography Spec</div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div>
+            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:6px;">Room Number</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);">Inter Thin (100) · 48px · Tracking −0.02em</div>
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:6px;">Room Name</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);">Inter ExtraLight (200) · 12px · Tracking 0.28em · Uppercase</div>
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:6px;">Directional Arrow</div>
+            <div style="font-size:13px;font-weight:300;color:var(--bone);">Machined groove — never printed. 3mm depth minimum.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Interior Atmosphere -->
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">11.3 — Interior Atmosphere</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">The Physical<br>Experience</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;margin-bottom:2px;">
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:16px;">Walls</div>
+        <div style="font-size:13px;font-weight:300;color:var(--bone);line-height:1.8;">Poured micro-cement, 3–5mm textured finish. Colour: warm neutral, equivalent to RAL 7044. No paint. No wallpaper. No feature walls.</div>
+      </div>
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:16px;">Floors</div>
+        <div style="font-size:13px;font-weight:300;color:var(--bone);line-height:1.8;">Honed Bianco Carrara marble or dark basalt, 600×600mm minimum tile. Joints: 1.5mm grey grout only. No patterns, no borders.</div>
+      </div>
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:16px;">Lighting</div>
+        <div style="font-size:13px;font-weight:300;color:var(--bone);line-height:1.8;">2700–3000K warm white throughout. No cool fluorescent. Recessed only. Treatment rooms: adjustable 2700–4000K for clinical work. CRI 95+ mandatory.</div>
+      </div>
+      <div style="padding:32px;background:#111;">
+        <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:16px;">Scent</div>
+        <div style="font-size:13px;font-weight:300;color:var(--bone);line-height:1.8;">Proprietary AXIOM ambient blend. Cedar, white mineral, trace vetiver. Diffused at 0.3 bar. Applied in reception and corridor only — never in treatment rooms.</div>
+      </div>
+    </div>
+    <div style="background:rgba(196,168,130,0.06);border:1px solid rgba(196,168,130,0.15);padding:32px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;">
+      <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);white-space:nowrap;">Design Rule</div>
+      <p style="font-size:14px;font-weight:100;color:var(--bone);line-height:1.7;letter-spacing:-0.005em;">If the interior would not be photographed for an architectural review without modification, it is not ready. Every AXIOM clinic interior is a photographic subject first, a functional space second.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     12 · PHOTOGRAPHY DIRECTION
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="photography" style="position:relative;">
+  <div style="position:absolute;inset:0;overflow:hidden;z-index:0;">
+    <img src="https://images.unsplash.com/mwZfep5-G9M?w=1600&q=70&auto=format&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover;opacity:0.35;filter:grayscale(40%);"/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,0.9) 0%,rgba(10,10,10,0.4) 100%);"></div>
+  </div>
+  <div class="section-cover__number" style="position:relative;z-index:1;">12</div>
+  <div class="section-cover__chapter" style="position:relative;z-index:1;">Chapter Twelve</div>
+  <h2 class="section-cover__title" style="position:relative;z-index:1;">Photography<br>Direction</h2>
+  <p class="section-cover__desc" style="position:relative;z-index:1;">AXIOM photography is editorial, controlled, and never aspirational in the traditional sense. We photograph truth, precisely lit.</p>
+  <div class="section-cover__rule" style="position:relative;z-index:1;"></div>
+</section>
+
+<section class="page">
+  <div class="container">
+    <span class="label">12.1 — Photography Principles</span>
+    <div class="three-col">
+      <div>
+        <div class="photo-frame" style="aspect-ratio:3/4;margin-bottom:16px;">
+          <img src="https://images.unsplash.com/Wy9ZjpVUMHY?w=800&q=80&auto=format&fit=crop" alt="Athlete at rest after training" loading="lazy"/>
+          <div class="photo-frame__overlay"></div>
+          <div class="photo-frame__caption">Elite Athlete — At Rest</div>
+        </div>
+        <div style="font-size:11px;font-weight:400;letter-spacing:0.12em;margin-bottom:8px;">Athletes</div>
+        <p style="font-size:12px;font-weight:300;line-height:1.75;color:var(--titanium);">Elite performers photographed in recovery, in concentration, in the moment after peak effort — not during it. Calm confidence, not aggression. Sweat and exhaustion are honest; grimacing is performance.</p>
+      </div>
+      <div>
+        <div class="photo-frame" style="aspect-ratio:3/4;margin-bottom:16px;">
+          <img src="https://images.unsplash.com/uyXNXIhisrU?w=800&q=80&auto=format&fit=crop" alt="Clinical laboratory" loading="lazy"/>
+          <div class="photo-frame__overlay"></div>
+          <div class="photo-frame__caption">Laboratory — Clinical Still Life</div>
+        </div>
+        <div style="font-size:11px;font-weight:400;letter-spacing:0.12em;margin-bottom:8px;">Product &amp; Laboratory</div>
+        <p style="font-size:12px;font-weight:300;line-height:1.75;color:var(--titanium);">Product photography is clinical still life. Controlled raking light. Clean backgrounds. A single vial is a complete composition. No props, no lifestyle context.</p>
+      </div>
+      <div>
+        <div class="photo-frame" style="aspect-ratio:3/4;margin-bottom:16px;">
+          <img src="https://images.unsplash.com/Nmr7gGlfOXg?w=800&q=80&auto=format&fit=crop" alt="Concrete hallway with dramatic light" loading="lazy"/>
+          <div class="photo-frame__overlay"></div>
+          <div class="photo-frame__caption">Clinic Interior — Architectural</div>
+        </div>
+        <div style="font-size:11px;font-weight:400;letter-spacing:0.12em;margin-bottom:8px;">Architecture &amp; Space</div>
+        <p style="font-size:12px;font-weight:300;line-height:1.75;color:var(--titanium);">Architectural photography treats the clinic as a subject of precision craft. Long exposures. Perfect geometry. Human presence is implied, not explicit — a lab coat, a chair, a door ajar.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:64px;padding:48px;background:var(--onyx);color:var(--bone);">
+      <span class="label label--light" style="margin-bottom:24px;">Technical Standards</span>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;">
+        <div>
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:10px;">Format</div>
+          <div style="font-size:13px;font-weight:300;line-height:1.7;">RAW capture minimum. Tif delivery for print. sRGB for digital.</div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:10px;">Resolution</div>
+          <div style="font-size:13px;font-weight:300;line-height:1.7;">300 DPI for print. 2560px min longest edge for digital.</div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:10px;">Colour Grade</div>
+          <div style="font-size:13px;font-weight:300;line-height:1.7;">Near-neutral. Desaturated. Warm tone only. No cool grades.</div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:10px;">Retouching</div>
+          <div style="font-size:13px;font-weight:300;line-height:1.7;">Technical corrections only. No skin smoothing or body modification.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     13 · BRAND APPLICATIONS
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="applications">
+  <div class="section-cover__number">13</div>
+  <div class="section-cover__chapter">Chapter Thirteen</div>
+  <h2 class="section-cover__title">Brand<br>Applications</h2>
+  <p class="section-cover__desc">Every physical touchpoint beyond packaging and clinic — apparel, equipment, accessories — must uphold the same standard of material quality and typographic restraint.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">13.1 — Merchandise &amp; Apparel</span>
+    <div class="three-col">
+      <div class="card">
+        <div class="card__label">Training Apparel</div>
+        <div class="card__title" style="color:var(--bone);">Performance Wear</div>
+        <div class="card__body">Heavyweight cotton or technical performance fabric. Onyx black only. AXIOM wordmark on chest — white, 40mm wide. No large graphics. No slogans. Made to outlast trends.</div>
+        <div style="margin-top:24px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag">T-Shirt</span>
+          <span class="tag">Training Shorts</span>
+          <span class="tag">Quarter-Zip</span>
+          <span class="tag">Cap</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__label">Accessories</div>
+        <div class="card__title" style="color:var(--bone);">Precision Objects</div>
+        <div class="card__body">A notebook (black Moleskine-style, debossed logo). A water bottle (matte black stainless, engraved). A laptop sleeve (black neoprene, wordmark only). Objects that function and last.</div>
+        <div style="margin-top:24px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag">Notebook</span>
+          <span class="tag">Water Bottle</span>
+          <span class="tag">Laptop Sleeve</span>
+          <span class="tag">Phone Case</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__label">Medical &amp; Clinical</div>
+        <div class="card__title" style="color:var(--bone);">Clinical Objects</div>
+        <div class="card__body">Protocol tracking cards, patient report folders (black folio, AXIOM embossed spine), consultation tablet cases, medical bag for home protocol users.</div>
+        <div style="margin-top:24px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag">Protocol Folder</span>
+          <span class="tag">Prescription Card</span>
+          <span class="tag">Tablet Case</span>
+          <span class="tag">Medical Bag</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2px;padding:48px;background:#111;">
+      <span class="label label--light">Press Kit &amp; Investor Deck</span>
+      <div class="two-col" style="margin-top:32px;">
+        <div>
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:16px;">Press Kit Contents</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Brand identity assets (SVG, PNG, PDF — all approved versions)</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Product photography (10 hero shots, white and dark background)</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Clinic photography (exterior, reception, consultation room)</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Company background (2-page PDF, no hyperbole)</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Science brief (peer-reviewed references, mechanism summaries)</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--titanium);margin-bottom:16px;">Investor Deck Standards</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Maximum 20 slides for Series A pitch</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Dark theme — matches primary brand aesthetic</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">One financial metric per slide — no dashboard dumps</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Photography over illustration — real products, real spaces</li>
+            <li style="font-size:13px;font-weight:300;color:var(--platinum);padding-left:16px;border-left:1px solid rgba(255,255,255,0.08);">Every claim referenced to source data, inline</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     14 · FUTURE BRAND EXTENSIONS
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--light" id="extensions">
+  <div class="section-cover__number" style="color:var(--onyx);">14</div>
+  <div class="section-cover__chapter" style="color:var(--titanium);">Chapter Fourteen</div>
+  <h2 class="section-cover__title" style="color:var(--onyx);">Future<br>Extensions</h2>
+  <p class="section-cover__desc" style="color:var(--mid-grey);">The AXIOM identity is architected for scale. Sub-brands extend the master mark with a single disciplined descriptor — never competing, always compounding the authority of the core.</p>
+  <div class="section-cover__rule" style="background:var(--onyx);"></div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">14.1 — Extension Architecture</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:64px;">The AXIOM<br>Universe</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-bottom:1px;">
+      <div class="extension-card">
+        <div class="extension-card__code">AX-01 · Launched</div>
+        <div class="extension-card__name">AXIOM Peptides</div>
+        <div class="extension-card__desc">The founding product line. Pharmaceutical-grade lyophilised peptides, each backed by published peer-reviewed research. The reference standard for peptide quality.</div>
+        <div class="extension-card__tags"><span class="tag">BPC-157</span><span class="tag">TB-500</span><span class="tag">GHK-Cu</span><span class="tag">Ipamorelin</span><span class="tag">Sermorelin</span></div>
+      </div>
+      <div class="extension-card">
+        <div class="extension-card__code">AX-02 · Active</div>
+        <div class="extension-card__name">AXIOM Clinics</div>
+        <div class="extension-card__desc">Physical precision performance clinics. Consultation, diagnostics, IV protocols, and supervised peptide administration. The clinical face of the brand — where science meets the individual.</div>
+        <div class="extension-card__tags"><span class="tag">Consultation</span><span class="tag">Diagnostics</span><span class="tag">IV Protocols</span><span class="tag">Recovery</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;margin-bottom:1px;">
+      <div class="extension-card">
+        <div class="extension-card__code">AX-03 · Pipeline</div>
+        <div class="extension-card__name">AXIOM Recovery</div>
+        <div class="extension-card__desc">A dedicated recovery programme — cold exposure, compression, photobiomodulation, and targeted peptide protocols. For the athlete whose limiting factor is recovery.</div>
+        <div class="extension-card__tags"><span class="tag">Cold</span><span class="tag">Red Light</span><span class="tag">Compression</span></div>
+      </div>
+      <div class="extension-card">
+        <div class="extension-card__code">AX-04 · Pipeline</div>
+        <div class="extension-card__name">AXIOM Longevity</div>
+        <div class="extension-card__desc">Long-form longevity programming for the 40–65 cohort. Comprehensive biomarker testing, senolytic protocols, NAD+ optimisation, and a 10-year performance trajectory plan.</div>
+        <div class="extension-card__tags"><span class="tag">Biomarkers</span><span class="tag">NAD+</span><span class="tag">Senolytics</span></div>
+      </div>
+      <div class="extension-card">
+        <div class="extension-card__code">AX-05 · Pipeline</div>
+        <div class="extension-card__name">AXIOM Labs</div>
+        <div class="extension-card__desc">The research and manufacturing arm. Publishes research, produces custom compounding runs for clinic partners, and maintains the scientific credibility that underpins all product lines.</div>
+        <div class="extension-card__tags"><span class="tag">Research</span><span class="tag">Manufacturing</span><span class="tag">COA</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;">
+      <div class="extension-card">
+        <div class="extension-card__code">AX-06 · Pipeline</div>
+        <div class="extension-card__name">AXIOM Diagnostics</div>
+        <div class="extension-card__desc">A diagnostic platform — blood panels, continuous monitoring, genetic analysis, and longitudinal data tracking. The evidence base from which protocols are designed and refined.</div>
+        <div class="extension-card__tags"><span class="tag">Blood Panels</span><span class="tag">CGM</span><span class="tag">Genomics</span></div>
+      </div>
+      <div class="extension-card">
+        <div class="extension-card__code">AX-07 · Future</div>
+        <div class="extension-card__name">AXIOM Elite</div>
+        <div class="extension-card__desc">The concierge tier. A fully bespoke service for individuals who require private clinical management, 24/7 physician access, and protocol design personalised to their physiology and performance demands.</div>
+        <div class="extension-card__tags"><span class="tag">Concierge</span><span class="tag">24/7</span><span class="tag">Bespoke</span></div>
+      </div>
+      <div class="extension-card">
+        <div class="extension-card__code">AX-08 · Future</div>
+        <div class="extension-card__name">AXIOM Research</div>
+        <div class="extension-card__desc">A grant and publication programme supporting independent clinical research in peptide science, longevity medicine, and performance biology. The brand's long-term scientific credibility investment.</div>
+        <div class="extension-card__tags"><span class="tag">Grants</span><span class="tag">Publications</span><span class="tag">Trials</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Extension Naming Rules -->
+<section class="page--mid">
+  <div class="container">
+    <span class="label label--light">14.2 — Extension Naming Rules</span>
+    <div class="two-col">
+      <div>
+        <h3 class="page-title" style="color:var(--bone);font-size:36px;">How Sub-Brands<br>Are Named</h3>
+        <p style="font-size:14px;font-weight:300;line-height:1.85;color:var(--titanium);">Every extension uses the format AXIOM + [single descriptor word]. The descriptor is always a noun — never an adjective. It describes what the extension does, not how it feels. The master wordmark does not change.</p>
+      </div>
+      <div>
+        <div style="display:flex;flex-direction:column;gap:1px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+            <div style="padding:24px;background:#111;">
+              <div style="font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:8px;">Correct Format</div>
+              <div style="font-size:18px;font-weight:100;letter-spacing:0.12em;color:var(--bone);">AXIOM Recovery</div>
+            </div>
+            <div style="padding:24px;background:#111;">
+              <div style="font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:#8B3A3A;margin-bottom:8px;">Incorrect</div>
+              <div style="font-size:18px;font-weight:100;letter-spacing:0.12em;color:rgba(245,245,243,0.4);text-decoration:line-through;">AXIOM High Performance Recovery</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;">
+            <div style="padding:24px;background:#111;">
+              <div style="font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:8px;">Correct Format</div>
+              <div style="font-size:18px;font-weight:100;letter-spacing:0.12em;color:var(--bone);">AXIOM Diagnostics</div>
+            </div>
+            <div style="padding:24px;background:#111;">
+              <div style="font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:#8B3A3A;margin-bottom:8px;">Incorrect</div>
+              <div style="font-size:18px;font-weight:100;letter-spacing:0.12em;color:rgba(245,245,243,0.4);text-decoration:line-through;">AXIOM Precision Bio-Testing Lab</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1px;padding:24px;background:rgba(196,168,130,0.08);border:1px solid rgba(196,168,130,0.2);">
+          <div style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:12px;">Typography Rule for Sub-Brand Names</div>
+          <div style="font-size:12px;font-weight:300;color:var(--platinum);line-height:1.75;">When typeset, "AXIOM" is set in Weight 100 with 0.28em tracking. The descriptor is set in the same weight and size, same tracking, with a single character space separating them. No hyphen. No separator. One name.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     15 · BRAND IN USE
+════════════════════════════════════════════════ -->
+<section class="section-cover section-cover--dark" id="brand-in-use">
+  <div class="section-cover__number">15</div>
+  <div class="section-cover__chapter">Chapter Fifteen</div>
+  <h2 class="section-cover__title">Brand<br>In Use</h2>
+  <p class="section-cover__desc">The system assembled. Real contexts — social media, email, clinic environments, product moments — showing how every chapter in this document converges into a single, coherent world.</p>
+  <div class="section-cover__rule"></div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">15.1 — Digital Touchpoints</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">The Brand<br>Online</h3>
+    <div class="biu-grid" style="margin-bottom:2px;">
+      <!-- Instagram post mockup -->
+      <div style="background:#111;padding:1px;">
+        <div style="background:#0D0D0D;border:1px solid #1A1A1A;">
+          <div style="padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #1A1A1A;">
+            <div style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(196,168,130,0.4);display:flex;align-items:center;justify-content:center;">
+              <img src="logo.png" alt="" style="width:18px;height:auto;filter:invert(1);"/>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:400;letter-spacing:0.08em;color:var(--bone);">axiomperformance</div>
+              <div style="font-size:9px;color:var(--titanium);">Human Performance</div>
+            </div>
+            <div style="margin-left:auto;font-size:9px;color:var(--titanium);">···</div>
+          </div>
+          <div class="photo-frame" style="aspect-ratio:1/1;">
+            <img src="https://images.unsplash.com/JizhZBRBKWg?w=800&q=80&auto=format&fit=crop" alt="Concrete architecture" loading="lazy"/>
+            <div class="photo-frame__overlay" style="background:linear-gradient(to top,rgba(10,10,10,0.5) 0%,transparent 60%);"></div>
+          </div>
+          <div style="padding:20px;">
+            <div style="font-size:12px;font-weight:300;color:var(--bone);line-height:1.75;margin-bottom:10px;"><span style="font-weight:400;">axiomperformance</span> Recovery is not rest. It is a protocol.</div>
+            <div style="font-size:10px;color:var(--titanium);">2 hours ago</div>
+          </div>
+        </div>
+        <div style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);padding:16px 20px;">Instagram — Single-image post · No filter · No hashtags</div>
+      </div>
+      <!-- Email dark mode -->
+      <div style="background:#111;padding:1px;">
+        <div style="background:#0A0A0A;border:1px solid #1A1A1A;max-width:100%;overflow:hidden;">
+          <div style="padding:20px 28px;border-bottom:1px solid #1A1A1A;display:flex;justify-content:space-between;align-items:center;">
+            <img src="logo.png" alt="AXIOM" style="width:72px;height:auto;display:block;filter:invert(1);"/>
+            <div style="font-size:9px;letter-spacing:0.14em;color:var(--titanium);">Secure · Confidential</div>
+          </div>
+          <div style="padding:32px 28px;">
+            <div style="font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:20px;">Protocol Update — Week 4 of 12</div>
+            <div style="font-size:20px;font-weight:100;color:var(--bone);margin-bottom:16px;line-height:1.3;">TB-500 cycle progressing within expected parameters.</div>
+            <div style="font-size:12px;font-weight:300;line-height:1.85;color:var(--titanium);margin-bottom:24px;">Your inflammatory markers are down 18% from baseline. Recovery window shortening as anticipated. Your next biomarker draw is scheduled in 14 days — no action required from you.</div>
+            <div style="border-top:1px solid #1A1A1A;padding-top:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;">
+              <div style="padding:16px;background:#111;text-align:center;">
+                <div style="font-size:18px;font-weight:100;color:var(--bone);">−18%</div>
+                <div style="font-size:8px;letter-spacing:0.14em;color:var(--titanium);text-transform:uppercase;margin-top:4px;">Inflammation</div>
+              </div>
+              <div style="padding:16px;background:#111;text-align:center;">
+                <div style="font-size:18px;font-weight:100;color:var(--bone);">4/12</div>
+                <div style="font-size:8px;letter-spacing:0.14em;color:var(--titanium);text-transform:uppercase;margin-top:4px;">Week</div>
+              </div>
+              <div style="padding:16px;background:#111;text-align:center;">
+                <div style="font-size:18px;font-weight:100;color:var(--bone);">On Track</div>
+                <div style="font-size:8px;letter-spacing:0.14em;color:var(--titanium);text-transform:uppercase;margin-top:4px;">Status</div>
+              </div>
+            </div>
+            <div style="margin-top:20px;display:inline-block;padding:12px 24px;background:var(--bone);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--onyx);">View Full Report</div>
+          </div>
+        </div>
+        <div style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--titanium);padding:16px 20px;">Transactional email — Dark mode · 600px max · Single CTA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page--mid">
+  <div class="container">
+    <span class="label label--light">15.2 — Physical Touchpoints</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">The Brand<br>In Space</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;margin-bottom:2px;">
+      <!-- Clinic entry -->
+      <div>
+        <div class="photo-frame" style="aspect-ratio:3/4;margin-bottom:16px;">
+          <img src="https://images.unsplash.com/raMejfP1E4o?w=800&q=80&auto=format&fit=crop" alt="Dark minimalist interior" loading="lazy"/>
+          <div class="photo-frame__overlay"></div>
+          <div style="position:absolute;top:20px;left:20px;z-index:2;">
+            <img src="logo.png" alt="AXIOM" style="width:60px;height:auto;display:block;filter:invert(1);opacity:0.9;"/>
+          </div>
+          <div class="photo-frame__caption">Clinic Entry — Stainless on dark concrete</div>
+        </div>
+        <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);">Exterior Signage in Context</div>
+      </div>
+      <!-- Product in hand -->
+      <div>
+        <div class="photo-frame" style="aspect-ratio:3/4;margin-bottom:16px;">
+          <img src="https://images.unsplash.com/V_R98FQdqD8?w=800&q=80&auto=format&fit=crop" alt="Dark architectural interior" loading="lazy"/>
+          <div class="photo-frame__overlay"></div>
+          <div class="photo-frame__caption">Treatment Room — 2700K warm light</div>
+        </div>
+        <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);">Clinic Interior Atmosphere</div>
+      </div>
+      <!-- Architecture -->
+      <div>
+        <div class="photo-frame" style="aspect-ratio:3/4;margin-bottom:16px;">
+          <img src="https://images.unsplash.com/HzJd0GAdukc?w=800&q=80&auto=format&fit=crop" alt="Concrete building interior" loading="lazy"/>
+          <div class="photo-frame__overlay"></div>
+          <div class="photo-frame__caption">Architectural Space — Precision geometry</div>
+        </div>
+        <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--titanium);">Space as Brand Expression</div>
+      </div>
+    </div>
+    <div style="padding:48px;background:rgba(196,168,130,0.05);border:1px solid rgba(196,168,130,0.1);">
+      <div style="font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--warm-metal);margin-bottom:20px;">The Standard</div>
+      <p style="font-size:16px;font-weight:100;color:var(--bone);line-height:1.75;letter-spacing:-0.005em;max-width:700px;">Every physical interaction with AXIOM — the texture of a business card, the scent of a reception, the weight of a door handle — should communicate the same thing: that this organisation takes precision seriously at every scale.</p>
+    </div>
+  </div>
+</section>
+
+<section class="page--dark">
+  <div class="container">
+    <span class="label label--light">15.3 — Brand Misuse: Digital</span>
+    <h3 class="page-title" style="color:var(--bone);margin-bottom:48px;">What AXIOM<br>Does Not Do Online</h3>
+    <div class="do-dont-grid">
+      <div class="do-box" style="background:#0D0D0D;"><div class="do-box__label">Use the logo as a profile image on a clean black background, centred, no border or glow.</div></div>
+      <div class="dont-box" style="background:#0D0D0D;"><div class="dont-box__label">Apply a coloured gradient ring, Spotify green border, or any platform-native decoration around the logo.</div></div>
+      <div class="do-box" style="background:#0D0D0D;"><div class="do-box__label">Post a single image per social post. One idea, one image, one caption. No carousels of generic motivational quotes.</div></div>
+      <div class="dont-box" style="background:#0D0D0D;"><div class="dont-box__label">Use stock imagery of smiling people in a clinic, or photos with visible watermarks, colour casts, or warm Instagram filters.</div></div>
+      <div class="do-box" style="background:#0D0D0D;"><div class="do-box__label">Caption style: short, declarative, sentence case. "Recovery is not rest. It is a protocol." No emojis.</div></div>
+      <div class="dont-box" style="background:#0D0D0D;"><div class="dont-box__label">Caption with hashtag clusters (#gains #performance #peptides #longevity #biohacking #results) or calls to action ("Drop a 🔥 below").</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CLOSING STATEMENT
+════════════════════════════════════════════════ -->
+<section class="pull-quote" style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <div style="font-size:9px;letter-spacing:0.32em;text-transform:uppercase;color:var(--titanium);margin-bottom:48px;">AXIOM Human Performance · Brand Guidelines V1.0</div>
+  <p class="pull-quote__text">"Every decision in this document exists to protect a single idea: that precision is not a feature, it is a philosophy — and that philosophy must remain visible in everything we make."</p>
+  <span class="pull-quote__attr" style="margin-top:24px;">AXIOM Design Direction · June 2026</span>
+  <div style="width:32px;height:1px;background:rgba(245,245,243,0.15);margin-top:64px;"></div>
+  <img src="logo.png" alt="AXIOM" style="margin-top:40px;width:200px;height:auto;display:block;filter:invert(1);"/>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <img src="logo.png" alt="AXIOM Human Performance" style="width:100px;height:auto;display:block;margin-bottom:24px;filter:invert(1);"/>
+      <p class="footer-copy">This document is the official AXIOM Brand Identity Manual. It is confidential and intended for internal use, authorised agency partners, and vendor suppliers only. Unauthorised reproduction or distribution is prohibited.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Chapters</div>
+      <ul class="footer-links">
+        <li>01 — Brand Foundation</li>
+        <li>02 — Brand Personality</li>
+        <li>03 — Logo Guidelines</li>
+        <li>04 — Typography System</li>
+        <li>05 — Color System</li>
+        <li>06 — Graphic Language</li>
+        <li>07 — Product Identity</li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">&nbsp;</div>
+      <ul class="footer-links">
+        <li>08 — Clinic Identity</li>
+        <li>09 — Digital Identity</li>
+        <li>10 — Marketing Assets</li>
+        <li>11 — Environmental</li>
+        <li>12 — Photography</li>
+        <li>13 — Applications</li>
+        <li>14 — Extensions</li>
+        <li>15 — Brand In Use</li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Document</div>
+      <ul class="footer-links">
+        <li>Version 1.0</li>
+        <li>June 2026</li>
+        <li>Confidential</li>
+        <li>&nbsp;</li>
+        <li>Design Direction</li>
+        <li>AXIOM Creative</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-bottom-text">© 2026 AXIOM Human Performance. All rights reserved.</span>
+    <span class="footer-bottom-text">Science. Precision. Peak Human Performance.</span>
+  </div>
+</footer>
+
+<script>
+  // Voice toggle
+  function setVoiceTab(tab) {
+    document.querySelectorAll('.voice-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.voice-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelector('[onclick="setVoiceTab(\'' + tab + '\')"]').classList.add('active');
+    document.getElementById('voice-' + tab).classList.add('active');
+  }
+
+  // Motion bar demo
+  function demoBar(bar, dur, ease) {
+    var fill = bar.querySelector('.motion-bar__fill');
+    bar.classList.remove('demo-running');
+    fill.style.transition = 'none';
+    fill.style.left = '-100%';
+    bar.style.setProperty('--dur', dur + 'ms');
+    bar.style.setProperty('--ease', ease);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        bar.classList.add('demo-running');
+        setTimeout(function() { bar.classList.remove('demo-running'); }, dur + 100);
+      });
+    });
+  }
+
+  // Close mobile nav when a link is clicked
+  document.querySelectorAll('.site-nav__links a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      document.querySelector('.site-nav__links').classList.remove('is-open');
+      document.querySelector('.site-nav__hamburger').classList.remove('is-open');
+    });
+  });
+</script>
+</body>
+</html>

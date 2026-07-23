@@ -1,0 +1,308 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AXIOM · Go-to-Market Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070605;--ink:#F2EDE5;--muted:#9C9488;--muted-2:#6A635A;--line:rgba(242,237,229,.12);--line-2:rgba(242,237,229,.22);--line-soft:rgba(242,237,229,.06);--accent:#C88A4E;--accent-bright:#E7B173;--accent-deep:#7C4C24;--accent-soft:rgba(200,138,78,.14);--accent-line:rgba(200,138,78,.34);--ok:#8FA37E;--maxw:1080px;--pad:34px;--display:"Jost","Century Gothic",system-ui,sans-serif;--sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.tab,.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+a{color:var(--accent-bright);text-decoration:none}
+header.mast{padding:70px 0 34px;border-bottom:1px solid var(--line);position:relative;background:radial-gradient(58% 58% at 76% 24%,rgba(200,138,78,.16),transparent 60%),radial-gradient(46% 40% at 56% 82%,rgba(124,76,36,.20),transparent 60%)}
+.kick{font-family:var(--sans);font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+.wm{font-family:var(--display);font-weight:400;letter-spacing:.42em;font-size:32px;margin:14px 0 2px;text-indent:.42em}
+.mast h1{font-family:var(--display);font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.04;letter-spacing:-.01em;margin:16px 0 0;max-width:18ch}
+.mast h1 em{font-style:normal;color:var(--muted)}
+.mast .lead{color:var(--muted);font-size:15.5px;max-width:64ch;margin:18px 0 0}
+.docmeta{display:flex;flex-wrap:wrap;gap:26px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line-soft)}
+.docmeta .m .k{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2)}
+.docmeta .m .v{font-family:var(--display);font-size:15px;margin-top:3px}
+nav.toc{border-bottom:1px solid var(--line);padding:18px 0}
+nav.toc .wrap{display:flex;flex-wrap:wrap;gap:6px 20px}
+nav.toc a{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+nav.toc a b{color:var(--accent);margin-right:6px}
+section.sec{padding:64px 0;border-bottom:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:96px 1fr;gap:26px;margin-bottom:30px}
+.sec-head .idx{font-family:var(--display);font-weight:400;color:var(--accent);font-size:15px}
+.sec-head .kk{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);font-weight:500;display:block;margin-top:8px}
+.sec-head h2{font-family:var(--display);font-weight:300;font-size:clamp(24px,3.4vw,38px);line-height:1.06;letter-spacing:-.01em;margin:0}
+.sec-head h2 em{font-style:normal;color:var(--muted)}
+.sec-head .lead{color:var(--muted);font-size:15px;max-width:60ch;margin:12px 0 0}
+.body-col{max-width:72ch}
+.body-col p{color:var(--muted);margin:0 0 14px}
+.body-col p strong,.body-col li strong{color:var(--ink);font-weight:500}
+h3.sub{font-family:var(--display);font-weight:400;font-size:18px;color:var(--ink);margin:30px 0 10px;letter-spacing:-.005em}
+.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:28px 0 12px}
+ul.clean{list-style:none;padding:0;margin:0 0 14px}
+ul.clean li{position:relative;padding:0 0 10px 20px;color:var(--muted);font-size:14px}
+ul.clean li:before{content:"";position:absolute;left:0;top:9px;width:6px;height:1px;background:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:14px 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.card .role{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.card h4{font-family:var(--display);font-weight:400;font-size:16px;margin:0 0 8px}
+.card p{font-size:13px;color:var(--muted);margin:0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin:16px 0}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:13px;font-variant-numeric:tabular-nums}
+caption{text-align:left;padding:16px 18px 0;font-family:var(--display);font-size:16px;color:var(--ink)}
+th{text-align:left;font-weight:500;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);padding:12px 16px 8px;border-bottom:1px solid var(--line)}
+td{padding:11px 16px;border-bottom:1px solid var(--line-soft);color:var(--muted);vertical-align:top}
+td.name{color:var(--ink)}
+.num{text-align:right}
+tbody tr:last-child td{border-bottom:none}
+.script{border:1px solid var(--line);border-left:2px solid var(--accent-line);border-radius:12px;padding:16px 20px;margin:12px 0;background:rgba(200,138,78,.04)}
+.script .lbl{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.script p{color:var(--ink);font-size:13.5px;margin:0 0 8px;line-height:1.65}
+.script p.you{color:var(--ink)}
+.script p.note{color:var(--muted-2);font-size:11.5px;font-style:italic;margin:6px 0 0}
+.pill{display:inline-block;border:1px solid var(--accent-line);border-radius:999px;padding:2px 10px;font-size:10px;letter-spacing:.1em;color:var(--accent-bright);margin:0 6px 6px 0}
+.ruo{border:1px solid var(--accent-line);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:12px;color:var(--muted);line-height:1.65}
+.ruo b{color:var(--accent-bright);text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:500;display:block;margin-bottom:4px}
+footer{padding:40px 0 70px;color:var(--muted-2);font-size:11.5px;line-height:1.7}
+@media(max-width:720px){.sec-head{grid-template-columns:1fr;gap:10px}}
+</style></head><body>
+<header class="mast"><div class="wrap">
+  <div class="kick">Go-to-Market &middot; from the board strategy &middot; Jakarta</div>
+  <div class="wm">AXIOM</div>
+  <h1>Brand, sales and the <em>long-run</em> operating rhythm.</h1>
+  <p class="lead">The eight-part strategy the whole house runs on &mdash; positioning, brand and marketing, sales, funnel architecture, targets and cadence, closing scripts, the content engine and the operating rhythm. Built on one idea: documented, not promised.</p>
+  <div class="docmeta">
+    <div class="m"><div class="k">Document</div><div class="v">GTM Strategy</div></div>
+    <div class="m"><div class="k">Version</div><div class="v tab">1.0</div></div>
+    <div class="m"><div class="k">Sections</div><div class="v tab">8</div></div>
+    <div class="m"><div class="k">Market</div><div class="v">Indonesia · IDR</div></div>
+  </div>
+</div></header>
+<nav class="toc"><div class="wrap">
+<a href="#s01"><b>01</b>Positioning</a><a href="#s02"><b>02</b>Brand &amp; Marketing</a><a href="#s03"><b>03</b>Sales</a><a href="#s04"><b>04</b>Funnels</a><a href="#s05"><b>05</b>Targets &amp; Cadence</a><a href="#s06"><b>06</b>Closing Scripts</a><a href="#s07"><b>07</b>Content Engine</a><a href="#s08"><b>08</b>Operating Rhythm</a>
+</div></nav>
+<main>
+<section class="sec" id="s01">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">01<span class="kk">Positioning · Godin</span></div>
+      <div><h2>Documented, <em>not promised.</em></h2><p class="lead">One sentence the whole house defends. Own the ground where verification is the product, and open on the smallest market that already believes it.</p></div></div>
+    <div class="body-col">
+<p><strong>Positioning statement.</strong> AXIOM is the considered, clinical-grade house for human performance and longevity in Indonesia. We bring research-grade peptides, clinical red-light therapy, recovery, wellness and apparel under one standard of verification and documentation. For people who train for decades, not weeks.</p>
+<p><strong>The one line.</strong> Documented, not promised. Every other message is downstream of it.</p>
+<div class="eyebrow">The category reframe</div>
+<p>The peptide market in Indonesia sells on noise — neon graphics, unverifiable purity, no paperwork, no cold-chain, no person to call. AXIOM does not out-shout it; we change the axis of the decision from <strong>how loud</strong> to <strong>how documented</strong>. The competitor sells a vial. We sell a Certificate of Analysis that happens to arrive with a vial.</p>
+<div class="eyebrow">Smallest viable market — open here</div>
+<div class="cards">
+<div class="card"><div class="role">Primary</div><h4>The Decade Athlete</h4><p>Serious professional, 30&ndash;50, wary of hype, thinks in decades. Wants recovery and longevity tools with real specifications behind them.</p></div>
+<div class="card"><div class="role">Primary</div><h4>The Clinic Buyer</h4><p>Recovery / wellness studio sourcing clinical-grade hardware with verified wavelengths and reliable restock.</p></div>
+<div class="card"><div class="role">Secondary</div><h4>The Researcher</h4><p>Lab buyer who reads the CoA first and buys by lot. High trust, high reorder, low persuasion cost.</p></div>
+<div class="card"><div class="role">Secondary</div><h4>The Identity Wearer</h4><p>Came for the aesthetic, stays for the standard. Top of the funnel, lowest ticket.</p></div>
+</div>
+<p>We win the first two tribes completely before widening. A market that already distrusts hype does not need to be convinced of restraint &mdash; it needs to be found.</p>
+<div class="eyebrow">Positioning pillars</div>
+<ul class="clean">
+<li><strong>Verification over claims</strong> &mdash; nothing carries the mark until it is tested, documented and sourced right.</li>
+<li><strong>Restraint</strong> &mdash; we state what we can prove and stop. The discipline is the credibility.</li>
+<li><strong>The long run</strong> &mdash; built for the decade-over-decade game, not the next wave of attention.</li>
+<li><strong>Direct</strong> &mdash; a real line to a real person, before and after the order.</li>
+</ul>
+<div class="eyebrow">Perceptual map</div>
+<p>Two axes decide the category: <strong>hype &harr; documented</strong> and <strong>transactional &harr; relationship</strong>. Every loud reseller clusters in hype/transactional. AXIOM stands alone in documented/relationship &mdash; the CoA is the documentation, WhatsApp and reorder support are the relationship. That quadrant is empty in Jakarta, and it is defensible because it is expensive to fake.</p>
+</div>
+  </div>
+</section><section class="sec" id="s02">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">02<span class="kk">Brand &amp; Marketing</span></div>
+      <div><h2>Become the default <em>documented source.</em></h2><p class="lead">The twelve-month brand objective, the message architecture per persona, and how the identity itself does the selling.</p></div></div>
+    <div class="body-col">
+<p><strong>Objective.</strong> In twelve months, be the first name the smallest-viable-market reaches for when it wants a documented source &mdash; measured by inbound share, reorder rate and unprompted referral, not by reach.</p>
+<div class="eyebrow">Brand architecture</div>
+<p>One master brand, five pillars, one standard. Everything ships as <strong>AXIOM &middot; Pillar</strong> &mdash; Peptide Science, Therapy &amp; Recovery, Wellness, Longevity, Apparel. Pillars never get their own logos or palettes. The mark on the apparel is the same mark on the lab label; that repetition is the point.</p>
+<div class="eyebrow">Message architecture &mdash; per persona</div>
+<div class="tablewrap"><table>
+<caption>Pain &rarr; promise &rarr; proof &rarr; call to action</caption>
+<thead><tr><th>Persona</th><th>Pain</th><th>Promise</th><th>Proof</th><th>Call to action</th></tr></thead>
+<tbody>
+<tr><td class="name">Researcher</td><td>Can&rsquo;t trust identity or purity of material</td><td>Verified, documented material by lot</td><td>HPLC/MS &ge; 98%, CoA per lot, cold-chain</td><td>Request the CoA</td></tr>
+<tr><td class="name">Decade Athlete</td><td>Hype and neon marketing, nothing built to last</td><td>A calm, clinical system for the long game</td><td>One standard across every product</td><td>Explore the range</td></tr>
+<tr><td class="name">Clinic Buyer</td><td>Novelty LEDs, unreliable specs and restock</td><td>Clinical-grade hardware, spec-honest</td><td>True 660 + 850 nm, verified irradiance</td><td>Talk to the team</td></tr>
+<tr><td class="name">Identity Wearer</td><td>Loud logos that stand for nothing</td><td>Quiet identity, a real standard behind it</td><td>Same mark, lab to label</td><td>Wear the standard</td></tr>
+</tbody></table></div>
+<div class="eyebrow">Channel mix</div>
+<div class="cards">
+<div class="card"><div class="role">Primary · convert</div><h4>WhatsApp commerce</h4><p>Itemised quotes with live stock, human close, reorder prompts. The revenue channel.</p></div>
+<div class="card"><div class="role">Primary · attract</div><h4>Instagram</h4><p>Proof-led feed and reels &mdash; CoA posts, lab macro, recovery scenes. The top of funnel.</p></div>
+<div class="card"><div class="role">Own · qualify</div><h4>Site + gate</h4><p>Acknowledgement gate, catalogue, standards page. Converts intent into a WhatsApp quote.</p></div>
+<div class="card"><div class="role">Outbound · B2B</div><h4>Clinic accounts</h4><p>Direct outreach and demo for recovery studios &mdash; the high-ticket, recurring tier.</p></div>
+</div>
+<p><strong>Budget posture.</strong> Roughly 75% organic-weighted at launch &mdash; the brand&rsquo;s credibility compounds through documentation, not paid reach. Paid is used to accelerate proven organic angles, never to buy trust the proof has not earned.</p>
+<div class="eyebrow">The identity sells</div>
+<p>The brand experience is the marketing: a Certificate of Analysis in every box, cold-chain dispatch with temperature logging, a person on WhatsApp before and after the order, and packaging that states compound, lot and purity plainly. Each touchpoint is a proof point the competitor cannot cheaply copy.</p>
+<div class="ruo"><b>Compliance is the moat</b>Wherever peptides appear, copy states plainly that material is Research Use Only, intended exclusively for in-vitro laboratory research &mdash; never for human or veterinary use. We describe mechanism and handling only, never dosing. The restraint is not a limit on the marketing; it is the marketing.</div>
+</div>
+  </div>
+</section><section class="sec" id="s03">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">03<span class="kk">Sales &middot; Kennedy + Hormozi</span></div>
+      <div><h2>Compete on <em>certainty,</em> not price.</h2><p class="lead">Direct-response selling built around a documentation offer no loud reseller can match, closed by a person over WhatsApp.</p></div></div>
+    <div class="body-col">
+<p><strong>The motion.</strong> AXIOM sells direct, quote-to-close, over WhatsApp. Content and the site create intent; a person converts it with an itemised quote, live stock and a documentation offer; the relationship is retained with reorder prompts and a fresh CoA each time.</p>
+<div class="eyebrow">Three sales motions</div>
+<ul class="clean">
+<li><strong>Inbound WhatsApp</strong> &mdash; demand created by content and the catalogue, closed by quote. The default engine.</li>
+<li><strong>Outbound B2B</strong> &mdash; clinic and studio prospecting for the device and recurring-supply tier. High ticket, high retention.</li>
+<li><strong>Reorder &amp; retention</strong> &mdash; documented buyers are prompted for the same lot with a new CoA. The cheapest revenue in the business.</li>
+</ul>
+<div class="eyebrow">The offer &mdash; assembled, per pillar</div>
+<p>Each pillar leads with a documentation-first offer. The value is not a discount; it is certainty, assembled from parts a reseller does not carry.</p>
+<div class="tablewrap"><table>
+<caption>Lead offer by pillar</caption>
+<thead><tr><th>Pillar</th><th>The assembled value</th><th>Risk reversal</th></tr></thead>
+<tbody>
+<tr><td class="name">Peptide Science</td><td>Research-grade material, CoA per lot, HPLC/MS &ge; 98%, cold-chain dispatch, BAC water and research kit in the box, free regular shipping, a person on WhatsApp</td><td>CoA in every box, or your money back</td></tr>
+<tr><td class="name">Therapy &amp; Recovery</td><td>Spec-honest hardware, verified 660 + 850 nm irradiance, insured tracked shipping, clinic supply commitment</td><td>30-day return window on consumer devices</td></tr>
+<tr><td class="name">Wellness &amp; Longevity</td><td>Documented sourcing, identity-tested SKUs, member reorder price</td><td>Documentation on request, no-question first reorder</td></tr>
+</tbody></table></div>
+<div class="eyebrow">Pricing posture</div>
+<p>Prices are held at a <strong>53% gross margin</strong> (cost basis = supplier lot + Rp 600.000, rounded to the nearest Rp 100.000). We do not chase the lowest number in the market &mdash; a lower price on undocumented material is a different product. The quote always names the proof, then the price.</p>
+<div class="eyebrow">Objection framework</div>
+<ul class="clean">
+<li><strong>Price</strong> &rarr; reframe to documentation and support; the money-back documentation promise removes the downside.</li>
+<li><strong>Trust</strong> &rarr; send a representative CoA; let the paperwork answer.</li>
+<li><strong>Stock</strong> &rarr; reserve the lot; name the honest count remaining.</li>
+<li><strong>Timing</strong> &rarr; hold the quote and the price for a stated window; make waiting safe, not urgent-by-trick.</li>
+</ul>
+</div>
+  </div>
+</section><section class="sec" id="s04">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">04<span class="kk">Funnels &middot; Brunson</span></div>
+      <div><h2>One funnel per <em>tribe,</em> one ladder for the house.</h2><p class="lead">Four persona funnels feeding a single value ladder from apparel to B2B accounts.</p></div></div>
+    <div class="body-col">
+<div class="tablewrap"><table>
+<caption>Persona funnels</caption>
+<thead><tr><th>Persona</th><th>Traffic</th><th>Capture</th><th>Nurture</th><th>Offer &amp; close</th></tr></thead>
+<tbody>
+<tr><td class="name">Researcher</td><td>Search, referral, catalogue</td><td>CoA-request / lot-alert opt-in</td><td>Lot availability + CoA on release</td><td>WhatsApp quote by lot &rarr; reorder</td></tr>
+<tr><td class="name">Decade Athlete</td><td>Instagram proof content</td><td>Standards page + range guide</td><td>Education (mechanism, not dosing)</td><td>Content-to-catalogue &rarr; quote</td></tr>
+<tr><td class="name">Clinic Buyer</td><td>Outbound + referral</td><td>Consultation request</td><td>Spec sheet + device demo</td><td>Account terms &rarr; recurring supply</td></tr>
+<tr><td class="name">Identity Wearer</td><td>Instagram, word of mouth</td><td>Apparel e-commerce</td><td>Brand story, the standard</td><td>Direct checkout &rarr; ascend to wellness</td></tr>
+</tbody></table></div>
+<div class="eyebrow">The value ladder</div>
+<ul class="clean">
+<li><strong>Entry</strong> &mdash; Apparel and Wellness (Rp 350.000&ndash;950.000). Low risk, first proof of the standard, top of the house.</li>
+<li><strong>Core</strong> &mdash; Peptide Science and Therapy &amp; Recovery. The documented purchase; where trust converts to margin.</li>
+<li><strong>Account</strong> &mdash; Clinic and researcher recurring supply. High ticket, contracted restock, the compounding tier.</li>
+</ul>
+<p>Every funnel hands the buyer to the same WhatsApp close and the same reorder loop. A first apparel buyer and a first CoA request are both one message away from the person who runs the account.</p>
+<div class="eyebrow">Funnel metrics that matter</div>
+<ul class="clean">
+<li>Content &rarr; quote request rate (attract efficiency)</li>
+<li>Quote &rarr; close rate, target 32%</li>
+<li>First order &rarr; reorder rate within 90 days</li>
+<li>Entry &rarr; core ascension rate (ladder health)</li>
+</ul>
+</div>
+  </div>
+</section><section class="sec" id="s05">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">05<span class="kk">Targets &amp; Cadence &middot; Cardone</span></div>
+      <div><h2>The number, then the <em>daily math.</em></h2><p class="lead">A twelve-month target worked backward into activity you can count every day.</p></div></div>
+    <div class="body-col">
+<p><strong>The number.</strong> Rp 4.800.000.000 in the base case &mdash; roughly <span class="tab">Rp 400.000.000</span> per month at run-rate. Everything below is that number divided into activity, then multiplied for coverage.</p>
+<div class="tablewrap"><table>
+<caption>Backward math &mdash; base case</caption>
+<thead><tr><th>Driver</th><th class="num">Value</th><th>Basis</th></tr></thead>
+<tbody>
+<tr><td class="name">Monthly revenue target</td><td class="num">Rp 400.000.000</td><td>Rp 4,8 M / 12</td></tr>
+<tr><td class="name">Blended order value</td><td class="num">Rp 1.100.000</td><td>Across all pillars, entry to core</td></tr>
+<tr><td class="name">Paid orders / month</td><td class="num">360</td><td>Target / blended order value</td></tr>
+<tr><td class="name">Paid orders / working day</td><td class="num">14</td><td>~26 working days</td></tr>
+<tr><td class="name">Quote-to-close rate</td><td class="num">32%</td><td>WhatsApp + B2B blended</td></tr>
+<tr><td class="name">Qualified quotes / day</td><td class="num">44</td><td>Orders / close rate</td></tr>
+</tbody></table></div>
+<div class="eyebrow">Daily activity &mdash; logged, measured, never skipped</div>
+<div class="cards">
+<div class="card"><div class="role">Quote</div><h4>44 out</h4><p>Itemised quotes with live stock and IDR pricing across WhatsApp and B2B.</p></div>
+<div class="card"><div class="role">Follow up</div><h4>60 touches</h4><p>Open quotes and warm leads, on a defined follow-up ladder.</p></div>
+<div class="card"><div class="role">Reorder</div><h4>20 prompts</h4><p>Documented buyers due for the same lot with a fresh CoA.</p></div>
+</div>
+<div class="eyebrow">Cadence rhythm</div>
+<ul class="clean">
+<li><strong>Daily</strong> &mdash; hit the quote / follow-up / reorder counts; log every one.</li>
+<li><strong>Weekly</strong> &mdash; review close rate, pipeline coverage (target 3&times; the weekly number), stockouts.</li>
+<li><strong>Monthly</strong> &mdash; revenue vs target by pillar, reorder rate, CAC by channel; adjust the mix.</li>
+</ul>
+<p>Ten times the outreach, the follow-up and the reorder discipline &mdash; the claims stay flat and factual. Volume is applied to the pipeline, never to the promise.</p>
+</div>
+  </div>
+</section><section class="sec" id="s06">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">06<span class="kk">Closing Scripts &middot; Belfort</span></div>
+      <div><h2>The words that <em>close,</em> on brand.</h2><p class="lead">WhatsApp scripts for greeting, quote, the three objections, reserve, reorder and close.</p></div></div>
+    <div class="body-col"><p>Warm, proof-led, plain-spoken. Contractions are allowed on WhatsApp. The line always names the proof before the price, and never provides dosing, routes, frequency or any medical guidance.</p><div class="eyebrow">Straight line &mdash; three certainties to build</div><ul class="clean"><li><strong>The material</strong> &mdash; the CoA, HPLC/MS &ge; 98%, cold-chain.</li><li><strong>The house</strong> &mdash; documentation, insured shipping, a person who answers.</li><li><strong>You</strong> &mdash; a documented track record the buyer can verify.</li></ul><div class="script"><div class="lbl">Greeting</div><p class="you">Hi &mdash; thanks for reaching out to AXIOM. Happy to help. Tell me what you&rsquo;re looking to source and I&rsquo;ll send an itemised quote with live stock and IDR pricing.</p></div><div class="script"><div class="lbl">Quote delivery</div><p class="you">Here&rsquo;s your quote. Everything&rsquo;s HPLC/MS verified to &ge; 98% with a Certificate of Analysis in the box, shipped cold-chain, with BAC water and a research kit included.</p><p class="you">Reply here and I&rsquo;ll get it moving.</p></div><div class="script"><div class="lbl">Price objection</div><p class="you">I hear you on price. What you&rsquo;re paying for is documentation &mdash; a CoA per lot, verified purity, cold-chain, and a real person before and after the order.</p><p class="you">If the paperwork ever doesn&rsquo;t match, it&rsquo;s on us. Want me to hold your lot at this price?</p></div><div class="script"><div class="lbl">Trust objection</div><p class="you">Fair question. Every lot ships with its Certificate of Analysis &mdash; HPLC and mass spectrometry, &ge; 98%.</p><p class="you">I can send a representative CoA now so you can see exactly what you&rsquo;re getting.</p></div><div class="script"><div class="lbl">Stock / reserve</div><p class="you">That lot&rsquo;s moving &mdash; I&rsquo;ve got a limited count left at this price. Want me to reserve yours while you decide? No pressure either way.</p></div><div class="script"><div class="lbl">Reorder prompt</div><p class="you">Your last documented order was GHK-Cu, back in the spring. Want me to prep the same again with a fresh CoA? I can have it dispatched today.</p></div><div class="script"><div class="lbl">Close</div><p class="you">Great &mdash; I&rsquo;ll confirm the order and CoA, and it moves to dispatch cold-chain, insured and tracked. Thanks for choosing AXIOM.</p></div><div class="ruo"><b>Script compliance</b>No script states or implies a human dose, route, frequency, repeat schedule or therapeutic benefit. Peptides are Research Use Only, in-vitro. Where a buyer asks for usage guidance, the reply is that AXIOM provides material and documentation only, and does not advise on use.</div></div>
+  </div>
+</section><section class="sec" id="s07">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">07<span class="kk">Content Engine &middot; Vaynerchuk</span></div>
+      <div><h2>Document, <em>don&rsquo;t promise.</em></h2><p class="lead">A proof-led content system that turns the daily work of verification into the top of the funnel.</p></div></div>
+    <div class="body-col">
+<p><strong>Principle.</strong> The content is the proof. We do not make claims we would have to walk back; we document the standard &mdash; the CoA, the trace, the cold-chain, the recovery scene &mdash; and let the documentation attract the tribe that already distrusts hype.</p>
+<div class="eyebrow">Content pillars</div>
+<div class="cards">
+<div class="card"><div class="role">Proof</div><h4>Every lot, documented</h4><p>CoA posts, HPLC traces, purity figures. The signature format.</p></div>
+<div class="card"><div class="role">Craft</div><h4>Lab macro</h4><p>Vials, lyophilate, cold-chain, the mark on the label. The house at work.</p></div>
+<div class="card"><div class="role">Long run</div><h4>Recovery scenes</h4><p>Warm, calm, decade-minded. The athlete who plays the long game.</p></div>
+<div class="card"><div class="role">Educate</div><h4>Mechanism, not dosing</h4><p>What a compound is studied for in vitro &mdash; never how to use it.</p></div>
+</div>
+<div class="eyebrow">Cadence &mdash; daily proof, weekly teardown</div>
+<div class="tablewrap"><table>
+<caption>Weekly content rhythm</caption>
+<thead><tr><th>Slot</th><th>Format</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td class="name">Daily</td><td>Proof post / story &mdash; a CoA, a lot, a scene</td><td>Compound trust; stay documented</td></tr>
+<tr><td class="name">3&times; / week</td><td>Reel &mdash; lab macro or recovery</td><td>Reach the smallest viable market</td></tr>
+<tr><td class="name">Weekly</td><td>Teardown &mdash; one standard explained</td><td>Depth; convert distrust to trust</td></tr>
+<tr><td class="name">Weekly</td><td>WhatsApp broadcast &mdash; lot alerts</td><td>Direct-to-buyer, reorder pull</td></tr>
+</tbody></table></div>
+<div class="eyebrow">Repurposing model</div>
+<ul class="clean">
+<li>One weekly teardown becomes the pillar; cut it into daily proof posts, story frames and a broadcast.</li>
+<li>Every CoA released is content by default &mdash; the work already exists, the post is free.</li>
+<li>Caption voice is proof-led (a number, a method, a document), no superlatives, no exclamation.</li>
+</ul>
+<div class="ruo"><b>Content compliance</b>Content describes scientific mechanism, laboratory handling and documentation only. No dosing, administration, frequency or therapeutic claim appears in any post or caption. The peptide bio and any peptide-adjacent post carry the Research Use Only, in-vitro line.</div>
+</div>
+  </div>
+</section><section class="sec" id="s08">
+  <div class="wrap">
+    <div class="sec-head"><div class="idx">08<span class="kk">Operating Rhythm &middot; Robbins</span></div>
+      <div><h2>A cadence built to <em>last a decade.</em></h2><p class="lead">The founder&rsquo;s daily, weekly, monthly and quarterly rhythm &mdash; energy and decisions engineered like the product.</p></div></div>
+    <div class="body-col">
+<div class="tablewrap"><table>
+<caption>Operating cadence</caption>
+<thead><tr><th>Rhythm</th><th>Ritual</th><th>Output</th></tr></thead>
+<tbody>
+<tr><td class="name">Daily</td><td>Morning priming and a three-item focus; sales block for quotes and follow-ups; end-of-day log of the counts</td><td>The 44 / 60 / 20 hit and recorded</td></tr>
+<tr><td class="name">Weekly</td><td>Numbers review &mdash; close rate, pipeline coverage, stockouts, content shipped</td><td>One adjustment for the coming week</td></tr>
+<tr><td class="name">Monthly</td><td>Business review &mdash; revenue vs target by pillar, reorder rate, CAC and margin</td><td>Mix and offer adjustments; hiring / stock calls</td></tr>
+<tr><td class="name">Quarterly</td><td>Standard review &mdash; compliance posture, supplier and cold-chain audit, brand consistency</td><td>Ratified changes; the standard holds or improves</td></tr>
+</tbody></table></div>
+<div class="eyebrow">Decision routine</div>
+<ul class="clean">
+<li><strong>Reversible</strong> decisions are made fast and logged; the day is not spent deliberating what can be undone.</li>
+<li><strong>Irreversible</strong> decisions &mdash; a supplier, a compliance line, a price architecture &mdash; go through the standard: proof first, then sign-off, then ship.</li>
+<li><strong>Compliance-adjacent</strong> calls default to caution: when unsure, say less and route it to review.</li>
+</ul>
+<div class="eyebrow">Energy as a system</div>
+<p>The brand is built for the decade game; the founder&rsquo;s rhythm has to be too. Protected sales blocks, a fixed weekly review, and a real recovery practice keep the operator documented and steady &mdash; the same standard applied to the person that the CoA applies to the lot.</p>
+<div class="eyebrow">As the house scales</div>
+<ul class="clean">
+<li>The daily log becomes a shared dashboard; the counts stay the same.</li>
+<li>The weekly review adds the first ops hire; the monthly review adds content and B2B owners.</li>
+<li>Sign-off matrix: the brand owner approves identity and voice; compliance approves every peptide-adjacent surface; either can block release.</li>
+</ul>
+</div>
+  </div>
+</section>
+</main>
+<footer><div class="wrap">
+  <p>Peptides referenced in this strategy are Research Use Only, intended exclusively for in-vitro laboratory research &mdash; not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Devices, wellness and apparel are consumer products. Prices in Indonesian Rupiah. Strategy derived from the AXIOM advisory-board pass; figures indicative and subject to review.</p>
+</div></footer>
+</body></html>
