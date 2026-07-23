@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150" fill="none" role="img" aria-label="AXIOM — Human Performance">
+  <g stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- A (chevron) -->
+    <polyline points="20,104 51,16 82,104"/>
+    <!-- X -->
+    <line x1="124" y1="16" x2="186" y2="104"/>
+    <line x1="186" y1="16" x2="124" y2="104"/>
+    <!-- I -->
+    <line x1="228" y1="16" x2="228" y2="104"/>
+    <!-- O -->
+    <circle cx="312" cy="60" r="44"/>
+    <!-- M -->
+    <polyline points="392,104 392,16 434,74 476,16 476,104"/>
+  </g>
+  <text x="270" y="138" text-anchor="middle" font-family="Jost, 'Century Gothic', system-ui, sans-serif"
+        font-size="15" font-weight="400" letter-spacing="9" fill="#8f8f8f">HUMAN PERFORMANCE</text>
+</svg>

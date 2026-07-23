@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AXIOM — Company Profile · Human Performance &amp; Longevity</title>
+<meta name="description" content="AXIOM is a human-performance and longevity house based in Jakarta, Indonesia — research-grade peptides, clinical red-light therapy, recovery, wellness and apparel under one verified standard. Documented, not promised." />
+<meta name="theme-color" content="#070605" />
+<meta name="robots" content="index,follow" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="AXIOM — Human Performance &amp; Longevity" />
+<meta property="og:title" content="AXIOM — Company Profile" />
+<meta property="og:description" content="The considered house for human performance and longevity. Verified, documented, sourced right — one standard across every product." />
+<meta property="og:url" content="https://axiomperformance.example/company-profile/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23070605'/%3E%3Cg stroke='%23C88A4E' stroke-width='6' stroke-linecap='round' fill='none'%3E%3Cpolyline points='24,74 38,26 52,74'/%3E%3Ccircle cx='70' cy='52' r='16'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#070605;
+  --bg-2:#0d0b09;
+  --ink:#F2EDE5;
+  --muted:#9c9488;
+  --muted-2:#6a635a;
+  --line:rgba(242,237,229,.12);
+  --line-2:rgba(242,237,229,.22);
+  --line-soft:rgba(242,237,229,.06);
+  --accent:#C88A4E;
+  --accent-bright:#E7B173;
+  --accent-deep:#7C4C24;
+  --accent-soft:rgba(200,138,78,.14);
+  --accent-line:rgba(200,138,78,.34);
+  --accent-grad:linear-gradient(120deg,#E7B173 0%,#C88A4E 46%,#9A5F2C 100%);
+  --maxw:1180px;
+  --pad:34px;
+  --display:"Jost","Century Gothic",system-ui,sans-serif;
+  --sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-weight:300;
+  line-height:1.6;
+  letter-spacing:.01em;
+  font-feature-settings:"tnum" 1,"lnum" 1;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.num{font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum" 1,"lnum" 1}
+
+/* Typographic system */
+h1,h2,h3,h4{font-family:var(--display);font-weight:300;line-height:1.08;letter-spacing:-.01em}
+.kicker{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.eyebrow{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+p.lead{font-size:clamp(17px,2.1vw,20px);color:var(--ink);opacity:.92;font-weight:300;max-width:62ch}
+p.body{color:var(--muted);max-width:64ch}
+p.body strong{color:var(--ink);font-weight:400}
+a{color:inherit;text-decoration:none}
+
+/* Header / nav */
+header.top{
+  position:sticky;top:0;z-index:40;
+  background:rgba(7,6,5,.82);
+  backdrop-filter:blur(14px) saturate(120%);
+  border-bottom:1px solid var(--line-soft);
+}
+.top-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brandmark{display:flex;align-items:center;gap:0}
+.brandmark svg{height:22px;width:auto;display:block}
+.top nav{display:flex;gap:30px}
+.top nav a{
+  font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  transition:color .3s var(--ease);
+}
+.top nav a:hover{color:var(--ink)}
+@media(max-width:820px){.top nav{display:none}}
+
+/* Hero */
+.hero{position:relative;padding:118px 0 96px;border-bottom:1px solid var(--line)}
+.hero-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(60% 80% at 78% 8%,rgba(200,138,78,.14),transparent 60%),
+    radial-gradient(50% 60% at 8% 100%,rgba(124,76,36,.10),transparent 62%);
+  opacity:.9;
+}
+.hero .wrap{position:relative}
+.hero .mark-lg{width:min(340px,64vw);margin-bottom:44px}
+.hero .mark-lg svg{width:100%;height:auto;display:block}
+.hero h1{
+  font-size:clamp(38px,6.4vw,78px);
+  font-weight:300;
+  letter-spacing:-.02em;
+  max-width:16ch;
+  margin-bottom:26px;
+}
+.hero h1 em{font-style:normal;color:var(--accent-bright)}
+.hero .sub{font-size:clamp(15px,2vw,19px);color:var(--muted);max-width:52ch;margin-bottom:40px}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px 30px;padding-top:26px;border-top:1px solid var(--line)}
+.meta-row span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2)}
+.meta-row b{color:var(--muted);font-weight:400}
+
+/* Section shell */
+section{padding:88px 0;border-bottom:1px solid var(--line)}
+.sec-head{margin-bottom:52px;max-width:70ch}
+.sec-head .kicker{display:block;margin-bottom:18px}
+.sec-head h2{font-size:clamp(26px,3.6vw,40px);margin-bottom:20px}
+
+/* At a glance */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.stat{background:var(--bg);padding:30px 26px}
+.stat .v{font-family:var(--display);font-size:clamp(26px,3.6vw,40px);font-weight:300;line-height:1;letter-spacing:-.01em;color:var(--ink)}
+.stat .v .u{font-size:.5em;color:var(--accent);margin-left:2px;letter-spacing:0}
+.stat .l{margin-top:12px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
+@media(max-width:820px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* Statement grid (mission/vision) */
+.statements{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.statement{background:var(--bg);padding:40px 36px}
+.statement .eyebrow{display:block;margin-bottom:18px}
+.statement p{font-family:var(--display);font-size:clamp(18px,2.3vw,23px);font-weight:300;line-height:1.32;color:var(--ink);letter-spacing:-.005em}
+@media(max-width:720px){.statements{grid-template-columns:1fr}}
+
+/* Values */
+.values{display:grid;grid-template-columns:repeat(4,1fr);gap:34px}
+.value .no{font-family:var(--display);font-size:14px;color:var(--accent);letter-spacing:.1em;margin-bottom:16px}
+.value h3{font-size:20px;margin-bottom:12px}
+.value p{font-size:14px;color:var(--muted);line-height:1.55}
+@media(max-width:900px){.values{grid-template-columns:repeat(2,1fr);gap:34px 30px}}
+@media(max-width:520px){.values{grid-template-columns:1fr}}
+
+/* Pillars */
+.pillars{border-top:1px solid var(--line)}
+.pillar{
+  display:grid;grid-template-columns:64px 1fr auto;align-items:baseline;gap:26px;
+  padding:30px 4px;border-bottom:1px solid var(--line);
+  transition:background .4s var(--ease);
+}
+.pillar:hover{background:var(--bg-2)}
+.pillar .pno{font-family:var(--display);font-size:15px;color:var(--accent);letter-spacing:.1em}
+.pillar .pbody h3{font-size:clamp(20px,2.6vw,26px);margin-bottom:8px}
+.pillar .pbody p{font-size:14px;color:var(--muted);max-width:60ch}
+.pillar .ptag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap}
+@media(max-width:720px){
+  .pillar{grid-template-columns:44px 1fr;gap:8px 18px}
+  .pillar .ptag{grid-column:2;margin-top:6px}
+}
+
+/* Products */
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.cat{background:var(--bg);padding:28px 26px}
+.cat .cno{font-size:11px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.cat h4{font-size:17px;margin:12px 0 10px;font-weight:400;font-family:var(--display)}
+.cat p{font-size:13px;color:var(--muted);line-height:1.55}
+@media(max-width:820px){.cats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.cats{grid-template-columns:1fr}}
+.prod-lines{display:grid;grid-template-columns:repeat(2,1fr);gap:30px;margin-top:40px}
+.prod-line{border:1px solid var(--line);padding:30px 28px}
+.prod-line h4{font-family:var(--display);font-size:20px;font-weight:300;margin-bottom:12px}
+.prod-line p{font-size:14px;color:var(--muted);line-height:1.55}
+.prod-line .row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line-soft);font-size:14px}
+.prod-line .row:first-of-type{margin-top:16px}
+.prod-line .row .nm{color:var(--ink);font-weight:300}
+.prod-line .row .pr{color:var(--muted);letter-spacing:.02em}
+@media(max-width:720px){.prod-lines{grid-template-columns:1fr}}
+
+/* Standard */
+.standard{display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+.std i{display:block;font-size:22px;color:var(--accent);margin-bottom:16px;font-style:normal}
+.std h3{font-size:18px;margin-bottom:10px}
+.std p{font-size:14px;color:var(--muted);line-height:1.55}
+@media(max-width:820px){.standard{grid-template-columns:1fr;gap:30px}}
+
+/* Audiences */
+.aud{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.aud .a{background:var(--bg);padding:30px 24px}
+.aud .a h4{font-family:var(--display);font-size:18px;font-weight:300;margin-bottom:10px}
+.aud .a p{font-size:13px;color:var(--muted);line-height:1.5}
+@media(max-width:820px){.aud{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.aud{grid-template-columns:1fr}}
+
+/* The mark / identity */
+.identity{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.swatches{display:flex;gap:0;border:1px solid var(--line);margin:18px 0 26px}
+.sw{flex:1;height:74px;position:relative}
+.sw span{position:absolute;left:10px;bottom:9px;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.type-spec{border-top:1px solid var(--line);padding-top:20px}
+.type-spec .big{font-family:var(--display);font-weight:300;font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.01em}
+.type-spec .note{font-size:13px;color:var(--muted);margin-top:14px}
+@media(max-width:820px){.identity{grid-template-columns:1fr;gap:40px}}
+
+/* Compliance */
+.compliance{background:var(--bg-2);border:1px solid var(--line);padding:40px 38px}
+.compliance .kicker{display:block;margin-bottom:18px}
+.compliance .ruo{font-family:var(--display);font-size:clamp(18px,2.3vw,22px);font-weight:300;line-height:1.4;color:var(--ink);max-width:70ch;margin-bottom:22px}
+.compliance p.fine{font-size:13px;color:var(--muted-2);line-height:1.6;max-width:80ch}
+
+/* Contact / footer */
+footer{padding:80px 0 60px}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid var(--line)}
+.foot-grid h4{font-family:var(--display);font-size:24px;font-weight:300;margin-bottom:16px}
+.foot-grid .kicker{display:block;margin-bottom:16px}
+.foot-grid p,.foot-grid a{font-size:14px;color:var(--muted);line-height:1.8;display:block}
+.foot-grid a:hover{color:var(--accent-bright)}
+.foot-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;padding-top:26px}
+.foot-bottom p{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+@media(max-width:820px){.foot-grid{grid-template-columns:1fr;gap:34px}}
+
+.rule-accent{height:1px;background:var(--accent-grad);opacity:.5;border:0;margin:0}
+
+/* Print */
+@media print{
+  :root{--bg:#F2EDE5;--bg-2:#efe9df;--ink:#141210;--muted:#4b463f;--muted-2:#6a635a;--line:rgba(20,18,16,.16);--line-soft:rgba(20,18,16,.08);--accent:#7C4C24;--accent-bright:#7C4C24}
+  body{background:#F2EDE5;color:#141210}
+  header.top,.hero-glow{display:none}
+  section,.hero{padding:34px 0;break-inside:avoid}
+  .pillar:hover,.pillar{background:none}
+  a{color:inherit}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brandmark" href="#top" aria-label="AXIOM">
+      <svg viewBox="0 0 520 150" role="img" aria-label="AXIOM">
+        <g stroke="#F2EDE5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+          <polyline points="20,104 51,16 82,104"/>
+          <line x1="124" y1="16" x2="186" y2="104"/><line x1="186" y1="16" x2="124" y2="104"/>
+          <line x1="228" y1="16" x2="228" y2="104"/>
+          <circle cx="312" cy="60" r="44"/>
+          <polyline points="392,104 392,16 434,74 476,16 476,104"/>
+        </g>
+      </svg>
+    </a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#pillars">Pillars</a>
+      <a href="#products">Products</a>
+      <a href="#standard">The Standard</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero" style="border-top:0">
+  <div class="hero-glow"></div>
+  <div class="wrap">
+    <div class="mark-lg" aria-hidden="true">
+      <svg viewBox="0 0 520 150" role="img" aria-label="AXIOM — Human Performance">
+        <g stroke="#F2EDE5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+          <polyline points="20,104 51,16 82,104"/>
+          <line x1="124" y1="16" x2="186" y2="104"/><line x1="186" y1="16" x2="124" y2="104"/>
+          <line x1="228" y1="16" x2="228" y2="104"/>
+          <circle cx="312" cy="60" r="44"/>
+          <polyline points="392,104 392,16 434,74 476,16 476,104"/>
+        </g>
+        <text x="270" y="140" text-anchor="middle" font-family="Jost, 'Century Gothic', system-ui, sans-serif"
+              font-size="15" font-weight="400" letter-spacing="9" fill="#C88A4E">HUMAN PERFORMANCE</text>
+      </svg>
+    </div>
+    <p class="kicker" style="margin-bottom:22px">Company Profile</p>
+    <h1>Human performance, engineered for the <em>long run.</em></h1>
+    <p class="sub">The considered house for human performance and longevity — research-grade peptides, clinical red-light therapy, recovery, wellness and apparel, brought under one verified standard.</p>
+    <div class="meta-row">
+      <span><b>Jakarta, Indonesia</b></span>
+      <span>Human Performance &amp; Longevity</span>
+      <span>EN&nbsp;/&nbsp;ID</span>
+      <span>Prices in IDR</span>
+    </div>
+  </div>
+</section>
+
+<!-- At a glance -->
+<section id="glance">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">At a Glance</span>
+      <h2>One master mark. One standard.</h2>
+      <p class="body">AXIOM is a <strong>branded house</strong> — not a house of brands. Every product ships as “AXIOM · Pillar,” held to a single, verifiable standard of quality and documentation.</p>
+    </div>
+    <div class="stats num">
+      <div class="stat"><div class="v">Jakarta</div><div class="l">Headquarters · ID</div></div>
+      <div class="stat"><div class="v">&ge;&nbsp;98<span class="u">%</span></div><div class="l">Peptide purity · HPLC / MS</div></div>
+      <div class="stat"><div class="v">05</div><div class="l">Product pillars</div></div>
+      <div class="stat"><div class="v">57</div><div class="l">Products across the range</div></div>
+    </div>
+    <div class="stats num" style="border-top:0;margin-top:1px">
+      <div class="stat"><div class="v">Per&nbsp;lot</div><div class="l">Certificate of Analysis</div></div>
+      <div class="stat"><div class="v">Cold&nbsp;-&nbsp;chain</div><div class="l">Temperature-logged transit</div></div>
+      <div class="stat"><div class="v">EN&nbsp;/&nbsp;ID</div><div class="l">Bilingual, direct support</div></div>
+      <div class="stat"><div class="v">RUO</div><div class="l">Peptides · in-vitro research</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Who We Are</span>
+      <h2>Documented, not promised.</h2>
+    </div>
+    <p class="lead" style="margin-bottom:30px">An axiom is a statement so fundamentally true that it requires no proof — a self-evident principle upon which all further reasoning depends.</p>
+    <p class="body" style="margin-bottom:22px">AXIOM was founded by practitioners — clinicians, athletes, and scientists who found themselves frustrated by a market that chose noise over signal, marketing over medicine, aesthetics over evidence. We built the brand we wanted to exist: one that treats its clients as the highly intelligent, performance-driven individuals they are.</p>
+    <p class="body">We bring research-grade peptides, clinical red-light therapy, recovery, wellness and apparel under one standard — <strong>verified, documented, sourced right</strong>. Our audience is not chasing the next wave of attention. They train for decades, not weeks, and they measure results rather than accept promises. So we state what we can prove, and we stop there. The restraint is the credibility.</p>
+  </div>
+</section>
+
+<!-- Mission / Vision -->
+<section id="mission">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">What Drives Us</span>
+      <h2>Precision at the intersection of science and the human body.</h2>
+    </div>
+    <div class="statements">
+      <div class="statement">
+        <span class="eyebrow">Mission</span>
+        <p>To make verified, research-grade performance and longevity tools available to people who train for decades, not weeks — held to one standard.</p>
+      </div>
+      <div class="statement">
+        <span class="eyebrow">Vision</span>
+        <p>To redefine the ceiling of human performance for every serious individual on earth.</p>
+      </div>
+      <div class="statement">
+        <span class="eyebrow">Purpose</span>
+        <p>Precision at the intersection of science and the human body — where evidence, not aspiration, is the design brief.</p>
+      </div>
+      <div class="statement">
+        <span class="eyebrow">Promise</span>
+        <p>The science is real. The results are measurable. The experience is one you deserve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section id="values">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Values</span>
+      <h2>Four principles, held without exception.</h2>
+    </div>
+    <div class="values">
+      <div class="value">
+        <div class="no num">01</div>
+        <h3>Verification over claims</h3>
+        <p>Nothing carries the mark until it is tested, documented and sourced right. We compete on evidence, not adjectives.</p>
+      </div>
+      <div class="value">
+        <div class="no num">02</div>
+        <h3>Restraint</h3>
+        <p>We state what we can prove and stop. Less, perfected. The discipline is the credibility.</p>
+      </div>
+      <div class="value">
+        <div class="no num">03</div>
+        <h3>The long run</h3>
+        <p>We think in decades. Built for the long game, not the next wave of attention.</p>
+      </div>
+      <div class="value">
+        <div class="no num">04</div>
+        <h3>Direct</h3>
+        <p>A real line to a real person, before and after the order. Privacy respected; intelligence assumed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pillars -->
+<section id="pillars">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">The Five Pillars</span>
+      <h2>One system for the long game.</h2>
+      <p class="body">Five product lines, one master brand. If it carries the AXIOM mark, it has earned it.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pno num">01</div>
+        <div class="pbody"><h3>Peptide Science</h3><p>Research-grade peptides across metabolic, repair, growth and neuro pathways — every lot HPLC/MS-verified to ≥ 98% purity, with a Certificate of Analysis. Research Use Only, in-vitro.</p></div>
+        <div class="ptag">Research use only</div>
+      </div>
+      <div class="pillar">
+        <div class="pno num">02</div>
+        <div class="pbody"><h3>Therapy &amp; Recovery</h3><p>Clinical red-light therapy at true 660 + 850 nm with verified irradiance — masks, panels and compression systems. Clinical-grade hardware, not novelty LEDs.</p></div>
+        <div class="ptag">Consumer device</div>
+      </div>
+      <div class="pillar">
+        <div class="pno num">03</div>
+        <div class="pbody"><h3>Wellness</h3><p>Antioxidants, NAD⁺ and cellular-energy support — considered formulations for the daily foundation of performance and recovery.</p></div>
+        <div class="ptag">Consumer product</div>
+      </div>
+      <div class="pillar">
+        <div class="pno num">04</div>
+        <div class="pbody"><h3>Longevity</h3><p>Cellular-ageing, senescence and copper-peptide compounds studied for the decade-over-decade game — the science of staying in it.</p></div>
+        <div class="ptag">Research / cellular</div>
+      </div>
+      <div class="pillar">
+        <div class="pno num">05</div>
+        <div class="pbody"><h3>Apparel</h3><p>Neutral, precise performance wear and everyday carry. The same mark, carried from the lab to the label.</p></div>
+        <div class="ptag">Identity</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products -->
+<section id="products">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">The Range</span>
+      <h2>A documented catalogue across six research categories, therapy hardware and apparel.</h2>
+      <p class="body">Peptides are organised by research pathway and priced by lot and purity; every compound carries a neutral scientific reference — class, mechanism studied, approximate half-life — and <strong>no dosing or usage guidance</strong>. Prices are indicative and quoted in Indonesian Rupiah.</p>
+    </div>
+    <div class="cats">
+      <div class="cat"><div class="cno num">01</div><h4>Metabolic &amp; Weight Management</h4><p>Incretin mimetics and cellular-energy compounds — Tirzepatide, Retatrutide, MOTS-c, NAD⁺, Tesamorelin.</p></div>
+      <div class="cat"><div class="cno num">02</div><h4>Tissue Repair &amp; Regeneration</h4><p>Cytoprotective and regenerative peptides — BPC-157, TB-500, KPV, ARA-290, LL-37.</p></div>
+      <div class="cat"><div class="cno num">03</div><h4>Growth Factors &amp; Recovery</h4><p>Secretagogues and growth-factor analogues — CJC / Ipamorelin, IGF-1 LR3, Thymosin Alpha-1.</p></div>
+      <div class="cat"><div class="cno num">04</div><h4>Neuropeptides &amp; Cognitive</h4><p>Neuroactive and nootropic peptides — Semax, Selank, Cerebrolysin, DSIP, Pinealon.</p></div>
+      <div class="cat"><div class="cno num">05</div><h4>Reproductive &amp; Hormonal</h4><p>Gonadotropins and hormonal-axis modulators — HCG, Kisspeptin-10, PT-141, Oxytocin.</p></div>
+      <div class="cat"><div class="cno num">06</div><h4>Longevity &amp; Cellular</h4><p>Copper peptides, antioxidants and senescence-pathway compounds — Epitalon, GHK-Cu, Glutathione.</p></div>
+    </div>
+
+    <div class="prod-lines num">
+      <div class="prod-line">
+        <h4>Therapy &amp; Recovery</h4>
+        <p>Clinical red-light hardware at true 660 + 850 nm, verified irradiance per batch.</p>
+        <div class="row"><span class="nm">Red Light Leg Compression System</span><span class="pr">Rp&nbsp;6.500.000</span></div>
+        <div class="row"><span class="nm">Red Light Therapy Mat · full-body</span><span class="pr">Rp&nbsp;5.900.000</span></div>
+        <div class="row"><span class="nm">Red Light Therapy Mask</span><span class="pr">Rp&nbsp;2.400.000</span></div>
+      </div>
+      <div class="prod-line">
+        <h4>Apparel &amp; Everyday Carry</h4>
+        <p>Neutral, precise performance wear — the same standard, worn.</p>
+        <div class="row"><span class="nm">Oversized Training Hoodie</span><span class="pr">Rp&nbsp;950.000</span></div>
+        <div class="row"><span class="nm">Performance Tee</span><span class="pr">Rp&nbsp;450.000</span></div>
+        <div class="row"><span class="nm">Logo Cap · Steel Bottle · Duffel</span><span class="pr">from Rp&nbsp;350.000</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The Standard -->
+<section id="standard">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">The AXIOM Standard</span>
+      <h2>We don’t sell a vial. We sell the certificate that arrives with it.</h2>
+      <p class="body">The standard is the product. Each of these is a proof point, not a promise — the reason the mark is worth carrying.</p>
+    </div>
+    <div class="standard">
+      <div class="std"><i>✔</i><h3>Certificate of Analysis, per lot</h3><p>Every peptide lot is numbered, traceable and shipped with its own CoA. Documentation in the box, or your money back.</p></div>
+      <div class="std"><i>◇</i><h3>HPLC / MS ≥ 98%</h3><p>Identity and purity confirmed by high-performance liquid chromatography and mass spectrometry. Most lots exceed 99%.</p></div>
+      <div class="std"><i>❄</i><h3>Cold-chain, logged</h3><p>Stored at −20 °C, moved at 2–8 °C in insured, temperature-logged, tamper-evident packaging.</p></div>
+      <div class="std"><i>◎</i><h3>Verified irradiance</h3><p>Therapy devices deliver true 660 + 850 nm with measured irradiance — clinical-grade hardware, checked per batch.</p></div>
+      <div class="std"><i>◈</i><h3>Independent verification</h3><p>Material is routed through a third-party verification pipeline before it is ever offered. Vetted synthesis partners; redundant sourcing.</p></div>
+      <div class="std"><i>☎</i><h3>A real person</h3><p>Direct, bilingual support on a real line — before the order and after it. Quote to close, human throughout.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Audiences -->
+<section id="audiences">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Who We Serve</span>
+      <h2>A serious audience, underserved by a loud category.</h2>
+      <p class="body">In a market that sells on neon and unverifiable claims, AXIOM occupies the quiet, documented quadrant — for the buyers who distrust the noise.</p>
+    </div>
+    <div class="aud">
+      <div class="a"><h4>The Decade Athlete</h4><p>A serious performer, 30–50, wary of hype and thinking in decades. Proof: one standard across every product.</p></div>
+      <div class="a"><h4>The Clinic &amp; Studio</h4><p>Recovery and wellness practices sourcing clinical hardware. Proof: true 660 + 850 nm, verified irradiance.</p></div>
+      <div class="a"><h4>The Researcher</h4><p>A lab buyer who reads the CoA first and buys by lot. Proof: HPLC/MS ≥ 98%, cold-chain, documentation per lot.</p></div>
+      <div class="a"><h4>The Identity Wearer</h4><p>Apparel-first, drawn to the mark and what it stands for. Proof: the same standard, from lab to label.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Identity -->
+<section id="identity">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">The Mark</span>
+      <h2>Precise. Restrained. Confident.</h2>
+      <p class="body">The identity is the discipline made visible — a monochrome system where a single warm metal is earned emphasis, never decoration.</p>
+    </div>
+    <div class="identity">
+      <div>
+        <span class="eyebrow" style="display:block;margin-bottom:6px">Palette</span>
+        <div class="swatches">
+          <div class="sw" style="background:#070605"><span style="color:#F2EDE5">Onyx</span></div>
+          <div class="sw" style="background:#F2EDE5"><span style="color:#141210">Bone</span></div>
+          <div class="sw" style="background:#8D8D8D"><span style="color:#141210">Titanium</span></div>
+          <div class="sw" style="background:#C88A4E"><span style="color:#141210">Bronze</span></div>
+        </div>
+        <p class="body" style="font-size:13px">Warm near-black canvas, bone ink, and a bronze accent used at no more than a fraction of any surface. No pure black or white, no cool blue — restraint by construction.</p>
+      </div>
+      <div>
+        <span class="eyebrow" style="display:block;margin-bottom:14px">Typography</span>
+        <div class="type-spec">
+          <div class="big">Science.<br>Precision.<br>Peak&nbsp;Performance.</div>
+          <p class="note"><strong style="color:var(--ink);font-weight:400">Jost</strong> carries the display voice in sentence case; <strong style="color:var(--ink);font-weight:400">Inter</strong> sets body and wide-tracked uppercase micro-labels. Tabular numerals on every figure. The wordmark is thin, wide-tracked and always all-caps, with clearspace of one cap-height around the mark.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Compliance -->
+<section id="compliance">
+  <div class="wrap">
+    <div class="compliance">
+      <span class="kicker">Research Use Only</span>
+      <p class="ruo">Peptides listed by AXIOM are intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</p>
+      <p class="fine">Peptides are not drugs, food, cosmetics, or supplements. By purchasing, the buyer affirms they are a qualified researcher or institution and accepts full responsibility for safe, legal and compliant handling. Several compounds are controlled or regulated in some jurisdictions; buyers are solely responsible for compliance, and AXIOM makes no representation of legality in any territory. Therapy devices and apparel are consumer products. Prices are indicative, quoted in Indonesian Rupiah (IDR), and subject to change without notice.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contact / footer -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <span class="kicker">Contact</span>
+        <h4>Talk to a real person.</h4>
+        <p>Ordering is direct and quote-based — a bilingual line, a documented quote, a lot with its Certificate of Analysis.</p>
+      </div>
+      <div>
+        <span class="eyebrow">Reach us</span>
+        <a href="https://wa.me/628128573396">WhatsApp · +62 812 857 3396</a>
+        <a href="mailto:hello@axiomperformance.example">hello@axiomperformance.example</a>
+        <p>Mon–Sat · 09:00–18:00 WIB</p>
+      </div>
+      <div>
+        <span class="eyebrow">Based in</span>
+        <p>Jakarta, Indonesia</p>
+        <p>English / Bahasa Indonesia</p>
+        <p>Prices in IDR · cold-chain across Indonesia</p>
+      </div>
+    </div>
+    <hr class="rule-accent" style="margin:26px 0" />
+    <div class="foot-bottom">
+      <p>AXIOM · Human Performance &amp; Longevity</p>
+      <p>Performance · Recovery · Longevity</p>
+      <p>Documented, not promised.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
