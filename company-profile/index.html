@@ -87,7 +87,7 @@ header.top{
 }
 .top-in{display:flex;align-items:center;justify-content:space-between;height:66px}
 .brandmark{display:flex;align-items:center;gap:0}
-.brandmark svg{height:22px;width:auto;display:block}
+.brandmark img{height:19px;width:auto;display:block}
 .top nav{display:flex;gap:30px}
 .top nav a{
   font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
@@ -107,7 +107,7 @@ header.top{
 }
 .hero .wrap{position:relative}
 .hero .mark-lg{width:min(340px,64vw);margin-bottom:44px}
-.hero .mark-lg svg{width:100%;height:auto;display:block}
+.hero .mark-lg img{width:100%;height:auto;display:block}
 .hero h1{
   font-size:clamp(38px,6.4vw,78px);
   font-weight:300;
@@ -245,16 +245,8 @@ footer{padding:80px 0 60px}
 
 <header class="top">
   <div class="wrap top-in">
-    <a class="brandmark" href="#top" aria-label="AXIOM">
-      <svg viewBox="0 0 520 150" role="img" aria-label="AXIOM">
-        <g stroke="#F2EDE5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none">
-          <polyline points="20,104 51,16 82,104"/>
-          <line x1="124" y1="16" x2="186" y2="104"/><line x1="186" y1="16" x2="124" y2="104"/>
-          <line x1="228" y1="16" x2="228" y2="104"/>
-          <circle cx="312" cy="60" r="44"/>
-          <polyline points="392,104 392,16 434,74 476,16 476,104"/>
-        </g>
-      </svg>
+    <a class="brandmark" href="#top" aria-label="AXIOM — Human Performance & Longevity">
+      <img src="assets/axiom-wordmark-white.png" alt="AXIOM" width="659" height="126" />
     </a>
     <nav>
       <a href="#about">About</a>
@@ -270,18 +262,8 @@ footer{padding:80px 0 60px}
 <section class="hero" style="border-top:0">
   <div class="hero-glow"></div>
   <div class="wrap">
-    <div class="mark-lg" aria-hidden="true">
-      <svg viewBox="0 0 520 150" role="img" aria-label="AXIOM — Human Performance">
-        <g stroke="#F2EDE5" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
-          <polyline points="20,104 51,16 82,104"/>
-          <line x1="124" y1="16" x2="186" y2="104"/><line x1="186" y1="16" x2="124" y2="104"/>
-          <line x1="228" y1="16" x2="228" y2="104"/>
-          <circle cx="312" cy="60" r="44"/>
-          <polyline points="392,104 392,16 434,74 476,16 476,104"/>
-        </g>
-        <text x="270" y="140" text-anchor="middle" font-family="Jost, 'Century Gothic', system-ui, sans-serif"
-              font-size="15" font-weight="400" letter-spacing="9" fill="#C88A4E">HUMAN PERFORMANCE</text>
-      </svg>
+    <div class="mark-lg">
+      <img src="assets/axiom-logo-white.png" alt="AXIOM — Human Performance" width="663" height="172" />
     </div>
     <p class="kicker" style="margin-bottom:22px">Company Profile</p>
     <h1>Human performance, engineered for the <em>long run.</em></h1>
