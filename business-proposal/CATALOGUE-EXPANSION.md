@@ -148,10 +148,10 @@ still name a cartridge for a pen the list no longer identifies as one.
 `AOD-9604` was also moved to the head of category 01, restoring the alphabetical
 ordering the rest of the catalogue follows.
 
-## Eight manually set prices
+## Nine manually set prices
 
-Eight lots are priced off-formula by instruction, not by the 48% rule — three
-above target and five below:
+Nine lots are priced off-formula by instruction, not by the 48% rule — three
+above target and six below:
 
 | Lot | Cost basis | Formula would give | Set to | Realised GM | vs 48% |
 |---|---:|---:|---:|---:|---:|
@@ -163,10 +163,11 @@ above target and five below:
 | BPC-157 + TB-500 (Wolverine) 20 mg | 1,850,000 | 3,600,000 | **2,500,000** | **26.0%** | −22.0 |
 | TB-500 10 mg | 1,350,000 | 2,600,000 | **1,700,000** | **20.6%** | −27.4 |
 | BPC-157 10 mg | 1,250,000 | 2,400,000 | **1,500,000** | **16.7%** | −31.3 |
+| Melanotan II 10 mg | 1,350,000 | 2,600,000 | **1,700,000** | **20.6%** | −27.4 |
 
-The other 73 lots remain on formula at 47.4%–48.7%, mean 48.09%. Blended across
-all 81 lots the catalogue runs **48.1%** — the five cuts now almost exactly
-cancel the three uplifts.
+The other 72 lots remain on formula at 47.4%–48.7%, mean 48.09%. Blended across
+all 81 lots the catalogue runs **47.9%** — the six cuts now slightly outweigh
+the three uplifts, and the catalogue has dipped just below its own target.
 
 The **catalogue floor drops to Rp 1,500,000** (BPC-157 10 mg), from Rp 1,900,000.
 
@@ -179,6 +180,7 @@ small in absolute terms:
 |---|---:|---:|---:|---:|
 | BPC-157 10 mg | 1,500,000 | 1,250,000 | **250,000** | 16.7% |
 | TB-500 10 mg | 1,700,000 | 1,350,000 | **350,000** | 20.6% |
+| Melanotan II 10 mg | 1,700,000 | 1,350,000 | **350,000** | 20.6% |
 | Wolverine 20 mg | 2,500,000 | 1,850,000 | 650,000 | 26.0% |
 | Tesamorelin 10 mg | 2,300,000 | 1,700,000 | 600,000 | 26.1% |
 | Tesamorelin 20 mg | 3,300,000 | 2,200,000 | 1,100,000 | 33.3% |
@@ -224,9 +226,15 @@ Both were flagged as structurally uncompetitive; both have been cut manually.
 | Tesamorelin 10 mg | 330,000/mg | +171% | **230,000/mg** | **+89%** |
 | Tesamorelin 20 mg | 210,000/mg | +72% | **165,000/mg** | **+35%** |
 | Wolverine 20 mg | 180,000/mg | +48% | **125,000/mg** | **+2.6%** |
+| Melanotan II 10 mg | 260,000/mg | +89% | **170,000/mg** | **+23.6%** |
 
-Against the competitor's 32 mg BPC+TB pen at Rp 121,875/mg, **Wolverine is now
-effectively at parity** — the cut fully closed that gap. Tesamorelin did not:
+**All three lines the comparison flagged as structurally uncompetitive have now
+been cut.** Wolverine reached parity against the competitor's 32 mg BPC+TB pen
+at Rp 121,875/mg. Melanotan II closed most of its gap but is held back by lot
+size, not price: the competitor sells 20 mg, AXIOM 10 mg. **A 20 mg Melanotan II
+lot at the competitor's own Rp 2,750,000 would carry a Rp 2,100,000 cost basis —
+23.6% GM**, the same margin the 10 mg lot now earns, so parity there costs
+nothing further and is worth adding. Tesamorelin did not close:
 reaching Rp 121,875/mg on the 20 mg lot would mean listing at Rp 2,437,500
 against a Rp 2,200,000 cost basis, **9.7% GM**, so that one still needs
 re-sourcing rather than pricing.

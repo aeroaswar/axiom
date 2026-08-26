@@ -54,7 +54,7 @@ power actually sits.
 | **Retatrutide** *(pen vs pen)* | 32 mg | 159,375 | 40 mg | 162,500 | **+2%** |
 | BPC-157 + TB-500 *(manually cut)* | 32 mg | 121,875 | 20 mg | 125,000 | **+2.6%** |
 | **Tesamorelin** *(manually cut)* | 32 mg | 121,875 | 20 mg | 165,000 | **+35%** |
-| **Melanotan II** | 20 mg | 137,500 | 10 mg | 260,000 | **+89%** |
+| Melanotan II *(manually cut)* | 20 mg | 137,500 | 10 mg | 170,000 | **+23.6%** |
 
 Somatropin sits on a different unit and lands the same way: their 100 IU pen is
 Rp 55,000/IU against AXIOM's Rp 80,556/IU (36 IU) and Rp 82,500/IU (40 IU) —
@@ -94,7 +94,10 @@ reaches the competitor on those three from this cost base.
    margin. Parity would need 9.7% margin, so re-sourcing remains the only real
    fix.
 2. **Add larger formats where cost is already fine** — a 60 mg Tirzepatide and a
-   32 mg MOTS-c would both land clearly under the competitor at full margin.
+   32 mg MOTS-c would both land clearly under the competitor at full margin. A
+   20 mg Melanotan II would reach outright parity at Rp 2,750,000 on a
+   Rp 2,100,000 cost basis — 23.6% GM, identical to what the 10 mg lot now
+   earns, so it closes the last gap for free.
 3. **Semaglutide is the obvious catalogue gap.** The supplier sheet does not
    carry it either, so it needs a source before it can be priced.
 4. **GHK-Cu and NAD+ are now priced to the competitor, not to cost.** Both sit
