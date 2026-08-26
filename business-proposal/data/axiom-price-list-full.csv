@@ -1,0 +1,88 @@
+category_no,category,compound,lot,lot_value,lot_unit,price_idr,price_per_unit_idr,supplier_lot_idr,cost_basis_idr,gross_margin_pct,status
+01,GLP-1s & Weight Loss,Cagrilintide,10 mg,10.0,mg,3000000,300000,800000,1400000,53.3,existing
+01,GLP-1s & Weight Loss,Retatrutide,5 mg,5.0,mg,2700000,540000,650000,1250000,53.7,existing
+01,GLP-1s & Weight Loss,Retatrutide,10 mg,10.0,mg,3100000,310000,850000,1450000,53.2,existing
+01,GLP-1s & Weight Loss,Retatrutide,15 mg,15.0,mg,3500000,233333,1050000,1650000,52.9,existing
+01,GLP-1s & Weight Loss,Retatrutide,20 mg,20.0,mg,3900000,195000,1250000,1850000,52.6,existing
+01,GLP-1s & Weight Loss,Retatrutide,30 mg,30.0,mg,5100000,170000,1800000,2400000,52.9,existing
+01,GLP-1s & Weight Loss,Retatrutide,60 mg,60.0,mg,8300000,138333,3300000,3900000,53.0,existing
+01,GLP-1s & Weight Loss,Retatrutide Pen,10 mg,10.0,mg,4000000,400000,1300000,1900000,52.5,new
+01,GLP-1s & Weight Loss,Retatrutide Pen,20 mg,20.0,mg,5100000,255000,1800000,2400000,52.9,new
+01,GLP-1s & Weight Loss,Retatrutide Pen,30 mg,30.0,mg,6000000,200000,2200000,2800000,53.3,new
+01,GLP-1s & Weight Loss,Retatrutide Pen,40 mg,40.0,mg,7200000,180000,2800000,3400000,52.8,new
+01,GLP-1s & Weight Loss,Retatrutide Pen,60 mg,60.0,mg,9100000,151667,3700000,4300000,52.7,new
+01,GLP-1s & Weight Loss,Retatrutide Cartridge Refill,10 mg,10.0,mg,3300000,330000,950000,1550000,53.0,new
+01,GLP-1s & Weight Loss,Retatrutide Cartridge Refill,20 mg,20.0,mg,4300000,215000,1400000,2000000,53.5,new
+01,GLP-1s & Weight Loss,Tirzepatide,10 mg,10.0,mg,2400000,240000,550000,1150000,52.1,existing
+01,GLP-1s & Weight Loss,Tirzepatide,30 mg,30.0,mg,3800000,126667,1200000,1800000,52.6,existing
+01,GLP-1s & Weight Loss,Tirzepatide,40 mg,40.0,mg,4500000,112500,1500000,2100000,53.3,existing
+01,GLP-1s & Weight Loss,AOD-9604,5 mg,5.0,mg,3000000,600000,800000,1400000,53.3,new
+02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,10 mg,10.0,mg,3000000,300000,800000,1400000,53.3,existing
+02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,20 mg,20.0,mg,4300000,215000,1400000,2000000,53.5,existing
+02,GH Secretagogues,CJC-1295 (With DAC),5 mg,5.0,mg,3200000,640000,900000,1500000,53.1,new
+02,GH Secretagogues,HGH 191AA (Somatropin),36 IU,36.0,IU,3200000,88889,900000,1500000,53.1,existing
+02,GH Secretagogues,HGH 191AA (Somatropin),40 IU,40.0,IU,3600000,90000,1100000,1700000,52.8,existing
+02,GH Secretagogues,IGF-1 LR3,1 mg,1.0,mg,4100000,4100000,1350000,1950000,52.4,new
+02,GH Secretagogues,Ipamorelin,10 mg,10.0,mg,2800000,280000,700000,1300000,53.6,existing
+02,GH Secretagogues,Ipamorelin + Tesamorelin,18 mg,18.0,mg,5000000,277778,1750000,2350000,53.0,existing
+02,GH Secretagogues,Sermorelin,10 mg,10.0,mg,3400000,340000,1000000,1600000,52.9,new
+02,GH Secretagogues,Tesamorelin,10 mg,10.0,mg,3600000,360000,1100000,1700000,52.8,existing
+02,GH Secretagogues,Tesamorelin,20 mg,20.0,mg,4700000,235000,1600000,2200000,53.2,existing
+03,Healing & Repair,AHK-Cu,100 mg,100.0,mg,2800000,28000,700000,1300000,53.6,new
+03,Healing & Repair,ARA-290,10 mg,10.0,mg,3100000,310000,850000,1450000,53.2,new
+03,Healing & Repair,ARA-290,50 mg,50.0,mg,4600000,92000,1550000,2150000,53.3,new
+03,Healing & Repair,BPC-157,10 mg,10.0,mg,2700000,270000,650000,1250000,53.7,existing
+03,Healing & Repair,BPC-157 + TB-500 (Wolverine),20 mg,20.0,mg,3900000,195000,1250000,1850000,52.6,existing
+03,Healing & Repair,GHK-Cu,50 mg,50.0,mg,2100000,42000,370000,970000,53.8,existing
+03,Healing & Repair,GHK-Cu,100 mg,100.0,mg,2300000,23000,500000,1100000,52.2,existing
+03,Healing & Repair,KPV,10 mg,10.0,mg,2600000,260000,600000,1200000,53.8,existing
+03,Healing & Repair,KLOW (BPC+TB+GHK+KPV),80 mg,80.0,mg,4400000,55000,1450000,2050000,53.4,existing
+03,Healing & Repair,LL-37,5 mg,5.0,mg,3000000,600000,800000,1400000,53.3,existing
+03,Healing & Repair,Peg MGF,2 mg,2.0,mg,3100000,1550000,850000,1450000,53.2,existing
+03,Healing & Repair,SNAP-8,10 mg,10.0,mg,2800000,280000,700000,1300000,53.6,new
+03,Healing & Repair,TB-500,10 mg,10.0,mg,2900000,290000,750000,1350000,53.4,existing
+04,Brain Health & Nootropics,Adamax,10 mg,10.0,mg,3100000,310000,850000,1450000,53.2,existing
+04,Brain Health & Nootropics,Cerebrolysin,80 mg,80.0,mg,3000000,37500,800000,1400000,53.3,existing
+04,Brain Health & Nootropics,Dihexa,10 mg,10.0,mg,3800000,380000,1200000,1800000,52.6,new
+04,Brain Health & Nootropics,Pinealon,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,existing
+04,Brain Health & Nootropics,Selank,10 mg,10.0,mg,2300000,230000,500000,1100000,52.2,existing
+04,Brain Health & Nootropics,Semax,10 mg,10.0,mg,2300000,230000,500000,1100000,52.2,existing
+04,Brain Health & Nootropics,Selank + Semax,20 mg,20.0,mg,3200000,160000,900000,1500000,53.1,existing
+04,Brain Health & Nootropics,VIP (Vasoactive Intestinal Peptide),10 mg,10.0,mg,3600000,360000,1100000,1700000,52.8,new
+05,Energy & Endurance,5-Amino-1MQ,50 mg,50.0,mg,3200000,64000,900000,1500000,53.1,existing
+05,Energy & Endurance,AICAR,50 mg,50.0,mg,3000000,60000,800000,1400000,53.3,existing
+05,Energy & Endurance,L-Carnitine (Injectable),5000 mg,5000.0,mg,3000000,600,800000,1400000,53.3,existing
+05,Energy & Endurance,LC216 Lipo-B (Injectable),10 mL,10.0,mL,3000000,300000,800000,1400000,53.3,new
+05,Energy & Endurance,LC526 Fat Blaster (Injectable),10 mL,10.0,mL,3000000,300000,800000,1400000,53.3,new
+05,Energy & Endurance,MOTS-c,10 mg,10.0,mg,2400000,240000,550000,1150000,52.1,existing
+05,Energy & Endurance,MOTS-c,40 mg,40.0,mg,4300000,107500,1400000,2000000,53.5,existing
+05,Energy & Endurance,SLU-PP-332 (Injectable),5 mg,5.0,mg,2700000,540000,650000,1250000,53.7,existing
+06,Immunity,Thymalin,10 mg,10.0,mg,2800000,280000,700000,1300000,53.6,new
+06,Immunity,Thymosin Alpha-1,10 mg,10.0,mg,3600000,360000,1100000,1700000,52.8,existing
+07,Sexual Health,HCG,10000 IU,10000.0,IU,3000000,300,800000,1400000,53.3,existing
+07,Sexual Health,HMG,75 IU,75.0,IU,2700000,36000,650000,1250000,53.7,existing
+07,Sexual Health,Kisspeptin,10 mg,10.0,mg,3200000,320000,900000,1500000,53.1,existing
+07,Sexual Health,Melanotan II,10 mg,10.0,mg,2900000,290000,750000,1350000,53.4,new
+07,Sexual Health,Oxytocin Acetate,10 mg,10.0,mg,3000000,300000,800000,1400000,53.3,existing
+07,Sexual Health,PT-141,10 mg,10.0,mg,2600000,260000,600000,1200000,53.8,existing
+08,Longevity & Cellular Repair,DSIP,5 mg,5.0,mg,2100000,420000,400000,1000000,52.4,existing
+08,Longevity & Cellular Repair,DSIP,10 mg,10.0,mg,2600000,260000,600000,1200000,53.8,existing
+08,Longevity & Cellular Repair,Epithalon,50 mg,50.0,mg,3400000,68000,1000000,1600000,52.9,existing
+08,Longevity & Cellular Repair,FOXO4-DRI,10 mg,10.0,mg,5100000,510000,1800000,2400000,52.9,new
+08,Longevity & Cellular Repair,Glutathione,1500 mg,1500.0,mg,2600000,1733,600000,1200000,53.8,new
+08,Longevity & Cellular Repair,Humanin,10 mg,10.0,mg,4500000,450000,1500000,2100000,53.3,existing
+08,Longevity & Cellular Repair,NAD+,500 mg,500.0,mg,2600000,5200,600000,1200000,53.8,existing
+08,Longevity & Cellular Repair,NAD+,1000 mg,1000.0,mg,3000000,3000,800000,1400000,53.3,existing
+08,Longevity & Cellular Repair,SS-31,50 mg,50.0,mg,4500000,90000,1500000,2100000,53.3,existing
+09,Peptide Bioregulators,Bronchogen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Cardiogen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Cartalax,20 mg,20.0,mg,3800000,190000,1200000,1800000,52.6,new
+09,Peptide Bioregulators,Chonluten,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Cortagen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Crystagen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Livagen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Ovagen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Pancragen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Prostamax,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Testagen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
+09,Peptide Bioregulators,Vesugen,20 mg,20.0,mg,3600000,180000,1100000,1700000,52.8,new
