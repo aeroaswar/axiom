@@ -1,9 +1,12 @@
-# Catalogue expansion — 52 → 87 lots, sourced from the R-Peptides sheet
+# Catalogue rebuild — 81 lots at a 48% margin, sourced from the R-Peptides sheet
 
 Adds every research compound on the supplier price list that AXIOM did not
-already carry, priced with AXIOM's own formula.
+already carry, prices the catalogue at a 48% gross margin target, and drops the
+Retatrutide vial line.
 
-Output: `AXIOM-Price-List-Full.pdf` (2 pages, 87 lots),
+52 original lots − 6 deleted + 35 added = **81 lots**.
+
+Output: `AXIOM-Price-List-Full.pdf` (2 pages, 81 lots),
 `axiom-pricelist-print-full.html` (render source),
 `data/axiom-price-list-full.{csv,json}`.
 
@@ -30,13 +33,13 @@ rounding   = nearest Rp 100.000
 
 **The margin target is 48%, not the 53% the original catalogue used.** The
 divisor moved from 0.47 to 0.52; the fixed adder and the Rp 100,000 rounding
-grid are unchanged. Realised margin across all 87 lots runs **47.4%–48.9%,
+grid are unchanged. Realised margin across all 81 lots runs **47.4%–48.9%,
 mean 48.10%** — the spread is rounding, as before.
 
-Every lot reprices down: **−7.3% to −11.6%, mean −9.59%**. A one-of-each basket
-goes from Rp 310,600,000 to **Rp 280,900,000** (−9.56%) on Rp 145,770,000 of
-cost, so gross profit falls Rp 29,700,000. The catalogue floor drops from
-Rp 2,100,000 to **Rp 1,900,000**.
+Every lot reprices down: **−7.3% to −11.6%, mean −9.59%**. The catalogue floor
+drops from Rp 2,100,000 to **Rp 1,900,000**. A one-of-each basket across the
+final 81 lots is Rp 256,800,000 on Rp 133,270,000 of cost — Rp 123,530,000 gross
+profit at 48.1%.
 
 ## What was added — 35 lots
 
@@ -111,11 +114,21 @@ reprice what exists. At current listed prices the realised margins are now:
 | Ipamorelin 10 mg | 700,000 | 800,000 | 2,500,000 | **44.0%** | −4 pts |
 | HMG 75 IU | 650,000 | 700,000 | 2,400,000 | **45.8%** | −2 pts |
 
-Their listed prices in the 87-lot document are computed from the **old** costs,
+Their listed prices in the price list are computed from the **old** costs,
 because the task was to add what is missing rather than to reprice what exists.
 Repriced on current supplier cost at 48% they would be Humanin Rp 3,500,000,
 Ipamorelin Rp 2,700,000, HMG Rp 2,500,000. Say the word and they can be brought
 into line.
+
+## Retatrutide vials removed
+
+The six plain **Retatrutide vial** lots (5, 10, 15, 20, 30, 60 mg) have been
+deleted. **Retatrutide is now pen-only** — the five Retatrutide Pen lots and the
+two Cartridge Refill lots remain and are unaffected.
+
+This is worth being deliberate about: Retatrutide vials were the widest ladder in
+the catalogue and its single highest-value lot (60 mg). Anyone wanting Retatrutide
+now buys a pen or a refill, at a higher price per mg than the vials carried.
 
 ## One lot-size correction
 

@@ -1,5 +1,12 @@
 # Competitor Price Comparison — "BP" pen list vs AXIOM catalogue
 
+> **Status note.** This comparison was run against the original 52-lot catalogue
+> at the 53% margin basis. The catalogue has since moved to 48% (every lot
+> ~9.6% cheaper, which improves AXIOM's position on every line below) and the
+> **Retatrutide vial line has been discontinued**, so the Retatrutide row here no
+> longer has a catalogue counterpart — Retatrutide is pen-only. The findings on
+> Tesamorelin and BPC-157 + TB-500 being a supplier-cost problem are unaffected.
+
 Source: a competitor price list supplied as an image, 12 lines / **11 unique SKUs**
 (NAD+ 1000 mg is listed twice at the same price). Compared against
 `AXIOM-Price-List.pdf` (52 lots) and the −10% variant

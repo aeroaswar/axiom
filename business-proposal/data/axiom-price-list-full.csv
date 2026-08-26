@@ -1,11 +1,5 @@
 category_no,category,compound,lot,lot_value,lot_unit,price_idr,price_at_53pct_idr,change_pct,price_per_unit_idr,supplier_lot_idr,cost_basis_idr,gross_margin_pct,status
 01,GLP-1s & Weight Loss,Cagrilintide,10 mg,10.0,mg,2700000,3000000,-10.0,270000,800000,1400000,48.1,existing
-01,GLP-1s & Weight Loss,Retatrutide,5 mg,5.0,mg,2400000,2700000,-11.11,480000,650000,1250000,47.9,existing
-01,GLP-1s & Weight Loss,Retatrutide,10 mg,10.0,mg,2800000,3100000,-9.68,280000,850000,1450000,48.2,existing
-01,GLP-1s & Weight Loss,Retatrutide,15 mg,15.0,mg,3200000,3500000,-8.57,213333,1050000,1650000,48.4,existing
-01,GLP-1s & Weight Loss,Retatrutide,20 mg,20.0,mg,3600000,3900000,-7.69,180000,1250000,1850000,48.6,existing
-01,GLP-1s & Weight Loss,Retatrutide,30 mg,30.0,mg,4600000,5100000,-9.8,153333,1800000,2400000,47.8,existing
-01,GLP-1s & Weight Loss,Retatrutide,60 mg,60.0,mg,7500000,8300000,-9.64,125000,3300000,3900000,48.0,existing
 01,GLP-1s & Weight Loss,Retatrutide Pen,10 mg,10.0,mg,3700000,4000000,-7.5,370000,1300000,1900000,48.6,new
 01,GLP-1s & Weight Loss,Retatrutide Pen,20 mg,20.0,mg,4600000,5100000,-9.8,230000,1800000,2400000,47.8,new
 01,GLP-1s & Weight Loss,Retatrutide Pen,30 mg,30.0,mg,5400000,6000000,-10.0,180000,2200000,2800000,48.1,new
