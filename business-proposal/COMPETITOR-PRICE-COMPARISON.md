@@ -57,8 +57,10 @@ power actually sits.
 | Melanotan II *(manually cut)* | 20 mg | 137,500 | 10 mg | 170,000 | **+23.6%** |
 
 Somatropin sits on a different unit and lands the same way: their 100 IU pen is
-Rp 55,000/IU against AXIOM's Rp 80,556/IU (36 IU) and Rp 82,500/IU (40 IU) —
-**+46% to +50%**.
+Rp 55,000/IU against AXIOM's Rp 77,778/IU (36 IU) and Rp 75,000/IU (40 IU) —
+**+36% to +41%**, after both lots were manually cut from +46%/+50%. A 100 IU lot
+at their own Rp 5,500,000 would carry a Rp 3,350,000 cost basis, **39.1% GM**,
+and is the only route to parity on this line.
 
 Not comparable: the competitor carries **Semaglutide 6 mg**; AXIOM still has no
 Semaglutide, and it is the best-known name in the GLP-1 category.
@@ -73,7 +75,7 @@ per-mg plus the Rp 600,000 block, at 48%:
 | Tirzepatide | 60 mg | 5,500,000 | 7,000,000 | **−21%** |
 | MOTS-c | 32 mg | 3,300,000 | 3,500,000 | **−6%** |
 | Retatrutide | 32 mg | 5,500,000 | 5,100,000 | +8% |
-| Somatropin | 100 IU | 6,400,000 | 5,500,000 | +16% |
+| Somatropin | 100 IU | 6,400,000 | 5,500,000 | +16% *(39.1% GM at parity)* |
 | BPC-157 + TB-500 | 32 mg | 5,000,000 | 3,900,000 | **+28%** |
 | Melanotan II | 20 mg | 4,000,000 | 2,750,000 | **+45%** |
 | Tesamorelin | 32 mg | 6,100,000 | 3,900,000 | **+56%** |

@@ -14,8 +14,8 @@ category_no,category,compound,lot,lot_value,lot_unit,price_idr,pricing,formula_p
 02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,10 mg,10.0,mg,2700000,formula,2700000,3000000,270000,800000,1400000,48.1,existing
 02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,20 mg,20.0,mg,3800000,formula,3800000,4300000,190000,1400000,2000000,47.4,existing
 02,GH Secretagogues,CJC-1295 (With DAC),5 mg,5.0,mg,2900000,formula,2900000,3200000,580000,900000,1500000,48.3,new
-02,GH Secretagogues,HGH 191AA (Somatropin),36 IU,36.0,IU,2900000,formula,2900000,3200000,80556,900000,1500000,48.3,existing
-02,GH Secretagogues,HGH 191AA (Somatropin),40 IU,40.0,IU,3300000,formula,3300000,3600000,82500,1100000,1700000,48.5,existing
+02,GH Secretagogues,HGH 191AA (Somatropin),36 IU,36.0,IU,2800000,manual override,2900000,3200000,77778,900000,1500000,46.4,existing
+02,GH Secretagogues,HGH 191AA (Somatropin),40 IU,40.0,IU,3000000,manual override,3300000,3600000,75000,1100000,1700000,43.3,existing
 02,GH Secretagogues,IGF-1 LR3,1 mg,1.0,mg,3800000,formula,3800000,4100000,3800000,1350000,1950000,48.7,new
 02,GH Secretagogues,Ipamorelin,10 mg,10.0,mg,2500000,formula,2500000,2800000,250000,700000,1300000,48.0,existing
 02,GH Secretagogues,Ipamorelin + Tesamorelin,18 mg,18.0,mg,4500000,formula,4500000,5000000,250000,1750000,2350000,47.8,existing
