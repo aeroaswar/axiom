@@ -53,7 +53,7 @@ power actually sits.
 | CJC-1295 + Ipamorelin | 20 mg | 195,000 | 20 mg | 190,000 | −3% |
 | **Retatrutide** *(pen vs pen)* | 32 mg | 159,375 | 40 mg | 162,500 | **+2%** |
 | **BPC-157 + TB-500** | 32 mg | 121,875 | 20 mg | 180,000 | **+48%** |
-| **Tesamorelin** | 32 mg | 121,875 | 20 mg | 210,000 | **+72%** |
+| **Tesamorelin** *(manually cut)* | 32 mg | 121,875 | 20 mg | 165,000 | **+35%** |
 | **Melanotan II** | 20 mg | 137,500 | 10 mg | 260,000 | **+89%** |
 
 Somatropin sits on a different unit and lands the same way: their 100 IU pen is
@@ -88,7 +88,11 @@ reaches the competitor on those three from this cost base.
 ## What follows
 
 1. **Re-source Tesamorelin, Melanotan II and BPC-157 + TB-500.** These are the
-   only lines where AXIOM is structurally uncompetitive.
+   only lines where AXIOM is structurally uncompetitive. Tesamorelin has since
+   been cut manually to Rp 3,300,000 (20 mg) and Rp 2,300,000 (10 mg), closing
+   the per-mg gap from +72% to +35% at the cost of dropping to 33.3% and 26.1%
+   margin. Parity would need 9.7% margin, so re-sourcing remains the only real
+   fix.
 2. **Add larger formats where cost is already fine** — a 60 mg Tirzepatide and a
    32 mg MOTS-c would both land clearly under the competitor at full margin.
 3. **Semaglutide is the obvious catalogue gap.** The supplier sheet does not

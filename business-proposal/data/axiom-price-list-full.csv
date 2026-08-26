@@ -20,8 +20,8 @@ category_no,category,compound,lot,lot_value,lot_unit,price_idr,pricing,formula_p
 02,GH Secretagogues,Ipamorelin,10 mg,10.0,mg,2500000,formula,2500000,2800000,250000,700000,1300000,48.0,existing
 02,GH Secretagogues,Ipamorelin + Tesamorelin,18 mg,18.0,mg,4500000,formula,4500000,5000000,250000,1750000,2350000,47.8,existing
 02,GH Secretagogues,Sermorelin,10 mg,10.0,mg,3100000,formula,3100000,3400000,310000,1000000,1600000,48.4,new
-02,GH Secretagogues,Tesamorelin,10 mg,10.0,mg,3300000,formula,3300000,3600000,330000,1100000,1700000,48.5,existing
-02,GH Secretagogues,Tesamorelin,20 mg,20.0,mg,4200000,formula,4200000,4700000,210000,1600000,2200000,47.6,existing
+02,GH Secretagogues,Tesamorelin,10 mg,10.0,mg,2300000,manual override,3300000,3600000,230000,1100000,1700000,26.1,existing
+02,GH Secretagogues,Tesamorelin,20 mg,20.0,mg,3300000,manual override,4200000,4700000,165000,1600000,2200000,33.3,existing
 03,Healing & Repair,AHK-Cu,100 mg,100.0,mg,2500000,formula,2500000,2800000,25000,700000,1300000,48.0,new
 03,Healing & Repair,ARA-290,10 mg,10.0,mg,2800000,formula,2800000,3100000,280000,850000,1450000,48.2,new
 03,Healing & Repair,ARA-290,50 mg,50.0,mg,4100000,formula,4100000,4600000,82000,1550000,2150000,47.6,new

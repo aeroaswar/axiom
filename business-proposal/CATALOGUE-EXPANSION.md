@@ -148,21 +148,27 @@ still name a cartridge for a pen the list no longer identifies as one.
 `AOD-9604` was also moved to the head of category 01, restoring the alphabetical
 ordering the rest of the catalogue follows.
 
-## Three manually set prices
+## Five manually set prices
 
-**GHK-Cu and NAD+ 1000 mg are priced off-formula by instruction**, not by the
-48% rule:
+Five lots are priced off-formula by instruction, not by the 48% rule — three
+above target and two below:
 
-| Lot | Cost basis | Formula would give | Set to | Realised GM |
-|---|---:|---:|---:|---:|
-| GHK-Cu 50 mg | 970,000 | 1,900,000 | **2,600,000** | **62.7%** |
-| GHK-Cu 100 mg | 1,100,000 | 2,100,000 | **5,000,000** | **78.0%** |
-| NAD+ 1000 mg | 1,400,000 | 2,700,000 | **3,700,000** | **62.2%** |
+| Lot | Cost basis | Formula would give | Set to | Realised GM | vs 48% |
+|---|---:|---:|---:|---:|---:|
+| GHK-Cu 100 mg | 1,100,000 | 2,100,000 | **5,000,000** | **78.0%** | +30.0 |
+| GHK-Cu 50 mg | 970,000 | 1,900,000 | **2,600,000** | **62.7%** | +14.7 |
+| NAD+ 1000 mg | 1,400,000 | 2,700,000 | **3,700,000** | **62.2%** | +14.2 |
+| Tesamorelin 20 mg | 2,200,000 | 4,200,000 | **3,300,000** | **33.3%** | −14.7 |
+| Tesamorelin 10 mg | 1,700,000 | 3,300,000 | **2,300,000** | **26.1%** | −21.9 |
 
-The other 78 lots remain on formula at 47.4%–48.7%, mean 48.10%. Blended across
-all 81 lots the catalogue now runs **49.0%**.
+The other 76 lots remain on formula at 47.4%–48.7%, mean 48.10%. Blended across
+all 81 lots the catalogue runs **48.6%** — the Tesamorelin cuts roughly offset
+the GHK-Cu and NAD+ uplifts.
 
-All three are recorded in `data/axiom-price-list-full.csv` with a `pricing`
+**Tesamorelin 10 mg at 26.1% is now the thinnest lot in the catalogue**, and
+20 mg at 33.3% the second thinnest. Nothing else sits below 47.4%.
+
+All five are recorded in `data/axiom-price-list-full.csv` with a `pricing`
 column marking them `manual override`, alongside the `formula_price_idr` they
 would otherwise carry.
 
@@ -180,13 +186,29 @@ a 19.6% saving, narrower than before but still a real incentive.
 
 ### Effect against the competitor
 
-Both were the catalogue's strongest value lines against the "BP" pen list and
-both are now near parity:
+The overrides move in both directions against the "BP" pen list.
 
-| Lot | Competitor | AXIOM before | AXIOM now |
+**GHK-Cu and NAD+ gave up a price advantage for margin.** Both were the
+catalogue's strongest value lines and are now near parity:
+
+| Lot | Competitor | AXIOM on formula | AXIOM now |
 |---|---:|---:|---:|
 | GHK-Cu 50 mg | 2,750,000 | 1,900,000 (−31%) | 2,600,000 (**−5.5%**) |
 | NAD+ 1000 mg | 3,900,000 | 2,700,000 (−31%) | 3,700,000 (**−5.1%**) |
+
+**Tesamorelin bought back competitiveness with margin.** The competitor's 32 mg
+pen is Rp 121,875/mg:
+
+| Lot | On formula | vs comp | Now | vs comp |
+|---|---:|---:|---:|---:|
+| Tesamorelin 10 mg | 330,000/mg | +171% | **230,000/mg** | **+89%** |
+| Tesamorelin 20 mg | 210,000/mg | +72% | **165,000/mg** | **+35%** |
+
+Still not parity. Reaching Rp 121,875/mg on the 20 mg lot would mean listing at
+Rp 2,437,500 against a Rp 2,200,000 cost basis — **9.7% GM** — so the gap cannot
+be closed from this cost base by pricing alone. The re-sourcing note below still
+stands. The 10 mg → 20 mg ladder survives the cut: 28% cheaper per mg, down from
+36%.
 
 ## One lot-size correction
 
