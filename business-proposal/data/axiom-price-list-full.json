@@ -499,14 +499,14 @@
     "lot": "80 mg",
     "lot_value": 80.0,
     "lot_unit": "mg",
-    "price_idr": 3900000,
-    "pricing": "formula",
+    "price_idr": 5800000,
+    "pricing": "manual override",
     "formula_price_idr": 3900000,
     "price_at_53pct_idr": 4400000,
-    "price_per_unit_idr": 48750,
+    "price_per_unit_idr": 72500,
     "supplier_lot_idr": 1450000,
     "cost_basis_idr": 2050000,
-    "gross_margin_pct": 47.4,
+    "gross_margin_pct": 64.7,
     "status": "existing"
   },
   {

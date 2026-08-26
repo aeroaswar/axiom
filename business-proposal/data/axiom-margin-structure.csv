@@ -28,7 +28,7 @@ category_no,category,compound,lot,supplier_cost_idr,pen_cost_idr,base_price_idr,
 03,Healing & Repair,GHK-Cu,50 mg,370000,600000,970000,2600000,1630000,62.7,168.0,23.1,manual override
 03,Healing & Repair,GHK-Cu,100 mg,500000,600000,1100000,5000000,3900000,78.0,354.5,12.0,manual override
 03,Healing & Repair,KPV,10 mg,600000,600000,1200000,2300000,1100000,47.8,91.7,26.1,formula
-03,Healing & Repair,KLOW (BPC+TB+GHK+KPV),80 mg,1450000,600000,2050000,3900000,1850000,47.4,90.2,15.4,formula
+03,Healing & Repair,KLOW (BPC+TB+GHK+KPV),80 mg,1450000,600000,2050000,5800000,3750000,64.7,182.9,10.3,manual override
 03,Healing & Repair,LL-37,5 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
 03,Healing & Repair,Peg MGF,2 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
 03,Healing & Repair,SNAP-8,10 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
