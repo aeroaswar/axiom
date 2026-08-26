@@ -31,28 +31,6 @@ Per-lot data: `data/axiom-margin-structure.csv`.
 
 Markup on base price: 91.6%.
 
-## The pen is the largest single lever
-
-The pen is the second-biggest cost line in the catalogue and it is **identical on
-every lot** — the same Rp 600.000 whether the vial inside costs Rp 370.000 or
-Rp 4.300.000. The supplier sells six of them. Swapping it moves the base price on
-all 81 lots at once, with no change to a single selling price.
-
-| Pen option | Unit cost | Base price, all 81 | Margin | GM | vs today |
-|---|---:|---:|---:|---:|---:|
-| Cartridge for pen | 25.000 | 86.695.000 | 168.605.000 | 66.0% | +46.575.000 |
-| Disposable pen | 400.000 | 117.070.000 | 138.230.000 | 54.1% | +16.200.000 |
-| Reusable V2 — current | 600.000 | 133.270.000 | 122.030.000 | 47.8% | — current |
-| Reusable V1 | 750.000 | 145.420.000 | 109.880.000 | 43.0% | -12.150.000 |
-| Convipen | 900.000 | 157.570.000 | 97.730.000 | 38.3% | -24.300.000 |
-| Gensupen2 | 1.000.000 | 165.670.000 | 89.630.000 | 35.1% | -32.400.000 |
-
-**A disposable pen at Rp 400.000 adds Rp 16.200.000 of margin and takes the
-catalogue from 47.8% to 54.1%** — without touching a price. The
-Reusable V2 currently in use is the second-dearest option on the sheet after the
-two premium pens. Whether every vial needs a *reusable* pen is a product question,
-not a pricing one, and it is worth Rp 200.000 a unit.
-
 ## The pen falls hardest on the cheap lots
 
 | Lot | Supplier | Base price | Selling | Margin | % | Pen as % of price |
