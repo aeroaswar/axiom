@@ -52,7 +52,7 @@ power actually sits.
 | NAD+ | 1000 mg | 3,900 | 1000 mg | 3,700 | −5% |
 | CJC-1295 + Ipamorelin | 20 mg | 195,000 | 20 mg | 190,000 | −3% |
 | **Retatrutide** *(pen vs pen)* | 32 mg | 159,375 | 40 mg | 162,500 | **+2%** |
-| **BPC-157 + TB-500** | 32 mg | 121,875 | 20 mg | 180,000 | **+48%** |
+| BPC-157 + TB-500 *(manually cut)* | 32 mg | 121,875 | 20 mg | 125,000 | **+2.6%** |
 | **Tesamorelin** *(manually cut)* | 32 mg | 121,875 | 20 mg | 165,000 | **+35%** |
 | **Melanotan II** | 20 mg | 137,500 | 10 mg | 260,000 | **+89%** |
 

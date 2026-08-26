@@ -148,10 +148,10 @@ still name a cartridge for a pen the list no longer identifies as one.
 `AOD-9604` was also moved to the head of category 01, restoring the alphabetical
 ordering the rest of the catalogue follows.
 
-## Five manually set prices
+## Eight manually set prices
 
-Five lots are priced off-formula by instruction, not by the 48% rule — three
-above target and two below:
+Eight lots are priced off-formula by instruction, not by the 48% rule — three
+above target and five below:
 
 | Lot | Cost basis | Formula would give | Set to | Realised GM | vs 48% |
 |---|---:|---:|---:|---:|---:|
@@ -160,15 +160,35 @@ above target and two below:
 | NAD+ 1000 mg | 1,400,000 | 2,700,000 | **3,700,000** | **62.2%** | +14.2 |
 | Tesamorelin 20 mg | 2,200,000 | 4,200,000 | **3,300,000** | **33.3%** | −14.7 |
 | Tesamorelin 10 mg | 1,700,000 | 3,300,000 | **2,300,000** | **26.1%** | −21.9 |
+| BPC-157 + TB-500 (Wolverine) 20 mg | 1,850,000 | 3,600,000 | **2,500,000** | **26.0%** | −22.0 |
+| TB-500 10 mg | 1,350,000 | 2,600,000 | **1,700,000** | **20.6%** | −27.4 |
+| BPC-157 10 mg | 1,250,000 | 2,400,000 | **1,500,000** | **16.7%** | −31.3 |
 
-The other 76 lots remain on formula at 47.4%–48.7%, mean 48.10%. Blended across
-all 81 lots the catalogue runs **48.6%** — the Tesamorelin cuts roughly offset
-the GHK-Cu and NAD+ uplifts.
+The other 73 lots remain on formula at 47.4%–48.7%, mean 48.09%. Blended across
+all 81 lots the catalogue runs **48.1%** — the five cuts now almost exactly
+cancel the three uplifts.
 
-**Tesamorelin 10 mg at 26.1% is now the thinnest lot in the catalogue**, and
-20 mg at 33.3% the second thinnest. Nothing else sits below 47.4%.
+The **catalogue floor drops to Rp 1,500,000** (BPC-157 10 mg), from Rp 1,900,000.
 
-All five are recorded in `data/axiom-price-list-full.csv` with a `pricing`
+### The thin end of the catalogue
+
+Five lots now sit far below target, and gross profit per unit on the lowest is
+small in absolute terms:
+
+| Lot | Price | Cost basis | Gross profit | GM |
+|---|---:|---:|---:|---:|
+| BPC-157 10 mg | 1,500,000 | 1,250,000 | **250,000** | 16.7% |
+| TB-500 10 mg | 1,700,000 | 1,350,000 | **350,000** | 20.6% |
+| Wolverine 20 mg | 2,500,000 | 1,850,000 | 650,000 | 26.0% |
+| Tesamorelin 10 mg | 2,300,000 | 1,700,000 | 600,000 | 26.1% |
+| Tesamorelin 20 mg | 3,300,000 | 2,200,000 | 1,100,000 | 33.3% |
+
+Nothing else in the catalogue is below 47.4%. Note that the Rp 600,000 fixed
+adder is already inside each cost basis, so these margins are after kit and
+handling — but on BPC-157 the entire gross profit is Rp 250,000 per unit, which
+leaves no room for a return, a re-ship, or a supplier price rise.
+
+All eight are recorded in `data/axiom-price-list-full.csv` with a `pricing`
 column marking them `manual override`, alongside the `formula_price_idr` they
 would otherwise carry.
 
@@ -196,19 +216,25 @@ catalogue's strongest value lines and are now near parity:
 | GHK-Cu 50 mg | 2,750,000 | 1,900,000 (−31%) | 2,600,000 (**−5.5%**) |
 | NAD+ 1000 mg | 3,900,000 | 2,700,000 (−31%) | 3,700,000 (**−5.1%**) |
 
-**Tesamorelin bought back competitiveness with margin.** The competitor's 32 mg
-pen is Rp 121,875/mg:
+**Tesamorelin and the BPC/TB lines bought back competitiveness with margin.**
+Both were flagged as structurally uncompetitive; both have been cut manually.
 
 | Lot | On formula | vs comp | Now | vs comp |
 |---|---:|---:|---:|---:|
 | Tesamorelin 10 mg | 330,000/mg | +171% | **230,000/mg** | **+89%** |
 | Tesamorelin 20 mg | 210,000/mg | +72% | **165,000/mg** | **+35%** |
+| Wolverine 20 mg | 180,000/mg | +48% | **125,000/mg** | **+2.6%** |
 
-Still not parity. Reaching Rp 121,875/mg on the 20 mg lot would mean listing at
-Rp 2,437,500 against a Rp 2,200,000 cost basis — **9.7% GM** — so the gap cannot
-be closed from this cost base by pricing alone. The re-sourcing note below still
-stands. The 10 mg → 20 mg ladder survives the cut: 28% cheaper per mg, down from
-36%.
+Against the competitor's 32 mg BPC+TB pen at Rp 121,875/mg, **Wolverine is now
+effectively at parity** — the cut fully closed that gap. Tesamorelin did not:
+reaching Rp 121,875/mg on the 20 mg lot would mean listing at Rp 2,437,500
+against a Rp 2,200,000 cost basis, **9.7% GM**, so that one still needs
+re-sourcing rather than pricing.
+
+The ladders survive both cuts. Tesamorelin 10 → 20 mg is 28% cheaper per mg
+(was 36%). The Wolverine blend still undercuts its components: BPC-157
+Rp 1,500,000 + TB-500 Rp 1,700,000 = Rp 3,200,000 against Rp 2,500,000 for the
+blend, a **21.9%** saving (was 28%).
 
 ## One lot-size correction
 
