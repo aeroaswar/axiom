@@ -1145,14 +1145,14 @@
     "lot": "1000 mg",
     "lot_value": 1000.0,
     "lot_unit": "mg",
-    "price_idr": 2700000,
-    "pricing": "formula",
+    "price_idr": 3700000,
+    "pricing": "manual override",
     "formula_price_idr": 2700000,
     "price_at_53pct_idr": 3000000,
-    "price_per_unit_idr": 2700,
+    "price_per_unit_idr": 3700,
     "supplier_lot_idr": 800000,
     "cost_basis_idr": 1400000,
-    "gross_margin_pct": 48.1,
+    "gross_margin_pct": 62.2,
     "status": "existing"
   },
   {

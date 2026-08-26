@@ -148,33 +148,45 @@ still name a cartridge for a pen the list no longer identifies as one.
 `AOD-9604` was also moved to the head of category 01, restoring the alphabetical
 ordering the rest of the catalogue follows.
 
-## Two manually set prices
+## Three manually set prices
 
-**GHK-Cu is priced off-formula by instruction**, not by the 48% rule:
+**GHK-Cu and NAD+ 1000 mg are priced off-formula by instruction**, not by the
+48% rule:
 
 | Lot | Cost basis | Formula would give | Set to | Realised GM |
 |---|---:|---:|---:|---:|
 | GHK-Cu 50 mg | 970,000 | 1,900,000 | **2,600,000** | **62.7%** |
 | GHK-Cu 100 mg | 1,100,000 | 2,100,000 | **5,000,000** | **78.0%** |
+| NAD+ 1000 mg | 1,400,000 | 2,700,000 | **3,700,000** | **62.2%** |
 
-The other 79 lots remain on formula at 47.4%–48.7%, mean 48.10%. Blended across
-all 81 lots the catalogue now runs 48.8%.
+The other 78 lots remain on formula at 47.4%–48.7%, mean 48.10%. Blended across
+all 81 lots the catalogue now runs **49.0%**.
 
-Two consequences worth being deliberate about.
-
-**The volume ladder is gone.** GHK-Cu 100 mg used to be 45% cheaper per mg than
-the 50 mg (Rp 21,000 vs Rp 38,000). At the new prices it is Rp 50,000/mg against
-Rp 52,000/mg — a **3.8%** saving for double the material. There is now almost no
-reason for a buyer to step up to the larger lot.
-
-**It closes most of the gap to the competitor.** The "BP" list prices GHK-Cu
-50 mg at Rp 2,750,000. AXIOM was 31% below that; at Rp 2,600,000 it is 5.5%
-below. GHK-Cu was the catalogue's strongest value line against that competitor
-and is now roughly at parity.
-
-Both prices are recorded in `data/axiom-price-list-full.csv` with a `pricing`
+All three are recorded in `data/axiom-price-list-full.csv` with a `pricing`
 column marking them `manual override`, alongside the `formula_price_idr` they
 would otherwise carry.
+
+### Effect on the volume ladders
+
+| Ladder | Per-mg saving on the big lot — before | after |
+|---|---:|---:|
+| GHK-Cu 50 → 100 mg | 45% | **3.8%** |
+| NAD+ 500 → 1000 mg | 41% | **19.6%** |
+
+GHK-Cu 100 mg is now Rp 50,000/mg against Rp 52,000/mg for the 50 mg — double
+the material for a 3.8% per-mg saving, so there is almost no reason for a buyer
+to step up. **NAD+ keeps a working ladder**: Rp 3,700/mg against Rp 4,600/mg,
+a 19.6% saving, narrower than before but still a real incentive.
+
+### Effect against the competitor
+
+Both were the catalogue's strongest value lines against the "BP" pen list and
+both are now near parity:
+
+| Lot | Competitor | AXIOM before | AXIOM now |
+|---|---:|---:|---:|
+| GHK-Cu 50 mg | 2,750,000 | 1,900,000 (−31%) | 2,600,000 (**−5.5%**) |
+| NAD+ 1000 mg | 3,900,000 | 2,700,000 (−31%) | 3,700,000 (**−5.1%**) |
 
 ## One lot-size correction
 
