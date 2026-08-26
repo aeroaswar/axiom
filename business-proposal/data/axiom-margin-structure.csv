@@ -23,8 +23,8 @@ category_no,category,compound,lot,supplier_cost_idr,pen_cost_idr,base_price_idr,
 03,Healing & Repair,AHK-Cu,100 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
 03,Healing & Repair,ARA-290,10 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
 03,Healing & Repair,ARA-290,50 mg,1550000,600000,2150000,4100000,1950000,47.6,90.7,14.6,formula
-03,Healing & Repair,BPC-157,10 mg,650000,600000,1250000,1500000,250000,16.7,20.0,40.0,manual override
-03,Healing & Repair,BPC-157 + TB-500 (Wolverine),20 mg,1250000,600000,1850000,2500000,650000,26.0,35.1,24.0,manual override
+03,Healing & Repair,BPC-157,10 mg,650000,600000,1250000,1600000,350000,21.9,28.0,37.5,manual override
+03,Healing & Repair,BPC-157 + TB-500 (Wolverine),20 mg,1250000,600000,1850000,2900000,1050000,36.2,56.8,20.7,manual override
 03,Healing & Repair,GHK-Cu,50 mg,370000,600000,970000,2600000,1630000,62.7,168.0,23.1,manual override
 03,Healing & Repair,GHK-Cu,100 mg,500000,600000,1100000,5000000,3900000,78.0,354.5,12.0,manual override
 03,Healing & Repair,KPV,10 mg,600000,600000,1200000,2300000,1100000,47.8,91.7,26.1,formula
@@ -32,7 +32,7 @@ category_no,category,compound,lot,supplier_cost_idr,pen_cost_idr,base_price_idr,
 03,Healing & Repair,LL-37,5 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
 03,Healing & Repair,Peg MGF,2 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
 03,Healing & Repair,SNAP-8,10 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
-03,Healing & Repair,TB-500,10 mg,750000,600000,1350000,1700000,350000,20.6,25.9,35.3,manual override
+03,Healing & Repair,TB-500,10 mg,750000,600000,1350000,1800000,450000,25.0,33.3,33.3,manual override
 04,Brain Health & Nootropics,Adamax,10 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
 04,Brain Health & Nootropics,Cerebrolysin,80 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
 04,Brain Health & Nootropics,Dihexa,10 mg,1200000,600000,1800000,3500000,1700000,48.6,94.4,17.1,formula

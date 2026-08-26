@@ -23,8 +23,8 @@ category_no,category,compound,lot,lot_value,lot_unit,price_idr,pricing,formula_p
 03,Healing & Repair,AHK-Cu,100 mg,100.0,mg,2500000,formula,2500000,2800000,25000,700000,1300000,48.0,new
 03,Healing & Repair,ARA-290,10 mg,10.0,mg,2800000,formula,2800000,3100000,280000,850000,1450000,48.2,new
 03,Healing & Repair,ARA-290,50 mg,50.0,mg,4100000,formula,4100000,4600000,82000,1550000,2150000,47.6,new
-03,Healing & Repair,BPC-157,10 mg,10.0,mg,1500000,manual override,2400000,2700000,150000,650000,1250000,16.7,existing
-03,Healing & Repair,BPC-157 + TB-500 (Wolverine),20 mg,20.0,mg,2500000,manual override,3600000,3900000,125000,1250000,1850000,26.0,existing
+03,Healing & Repair,BPC-157,10 mg,10.0,mg,1600000,manual override,2400000,2700000,160000,650000,1250000,21.9,existing
+03,Healing & Repair,BPC-157 + TB-500 (Wolverine),20 mg,20.0,mg,2900000,manual override,3600000,3900000,145000,1250000,1850000,36.2,existing
 03,Healing & Repair,GHK-Cu,50 mg,50.0,mg,2600000,manual override,1900000,2100000,52000,370000,970000,62.7,existing
 03,Healing & Repair,GHK-Cu,100 mg,100.0,mg,5000000,manual override,2100000,2300000,50000,500000,1100000,78.0,existing
 03,Healing & Repair,KPV,10 mg,10.0,mg,2300000,formula,2300000,2600000,230000,600000,1200000,47.8,existing
@@ -32,7 +32,7 @@ category_no,category,compound,lot,lot_value,lot_unit,price_idr,pricing,formula_p
 03,Healing & Repair,LL-37,5 mg,5.0,mg,2700000,formula,2700000,3000000,540000,800000,1400000,48.1,existing
 03,Healing & Repair,Peg MGF,2 mg,2.0,mg,2800000,formula,2800000,3100000,1400000,850000,1450000,48.2,existing
 03,Healing & Repair,SNAP-8,10 mg,10.0,mg,2500000,formula,2500000,2800000,250000,700000,1300000,48.0,new
-03,Healing & Repair,TB-500,10 mg,10.0,mg,1700000,manual override,2600000,2900000,170000,750000,1350000,20.6,existing
+03,Healing & Repair,TB-500,10 mg,10.0,mg,1800000,manual override,2600000,2900000,180000,750000,1350000,25.0,existing
 04,Brain Health & Nootropics,Adamax,10 mg,10.0,mg,2800000,formula,2800000,3100000,280000,850000,1450000,48.2,existing
 04,Brain Health & Nootropics,Cerebrolysin,80 mg,80.0,mg,2700000,formula,2700000,3000000,33750,800000,1400000,48.1,existing
 04,Brain Health & Nootropics,Dihexa,10 mg,10.0,mg,3500000,formula,3500000,3800000,350000,1200000,1800000,48.6,new
