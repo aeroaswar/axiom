@@ -148,6 +148,34 @@ still name a cartridge for a pen the list no longer identifies as one.
 `AOD-9604` was also moved to the head of category 01, restoring the alphabetical
 ordering the rest of the catalogue follows.
 
+## Two manually set prices
+
+**GHK-Cu is priced off-formula by instruction**, not by the 48% rule:
+
+| Lot | Cost basis | Formula would give | Set to | Realised GM |
+|---|---:|---:|---:|---:|
+| GHK-Cu 50 mg | 970,000 | 1,900,000 | **2,600,000** | **62.7%** |
+| GHK-Cu 100 mg | 1,100,000 | 2,100,000 | **5,000,000** | **78.0%** |
+
+The other 79 lots remain on formula at 47.4%–48.7%, mean 48.10%. Blended across
+all 81 lots the catalogue now runs 48.8%.
+
+Two consequences worth being deliberate about.
+
+**The volume ladder is gone.** GHK-Cu 100 mg used to be 45% cheaper per mg than
+the 50 mg (Rp 21,000 vs Rp 38,000). At the new prices it is Rp 50,000/mg against
+Rp 52,000/mg — a **3.8%** saving for double the material. There is now almost no
+reason for a buyer to step up to the larger lot.
+
+**It closes most of the gap to the competitor.** The "BP" list prices GHK-Cu
+50 mg at Rp 2,750,000. AXIOM was 31% below that; at Rp 2,600,000 it is 5.5%
+below. GHK-Cu was the catalogue's strongest value line against that competitor
+and is now roughly at parity.
+
+Both prices are recorded in `data/axiom-price-list-full.csv` with a `pricing`
+column marking them `manual override`, alongside the `formula_price_idr` they
+would otherwise carry.
+
 ## One lot-size correction
 
 AXIOM listed **Cerebrolysin at 60 mg**. R-Peptides sells it at **80 mg** for
