@@ -39,7 +39,7 @@ category_no,category,compound,lot,lot_value,lot_unit,price_idr,pricing,formula_p
 04,Brain Health & Nootropics,Pinealon,20 mg,20.0,mg,3300000,formula,3300000,3600000,165000,1100000,1700000,48.5,existing
 04,Brain Health & Nootropics,Selank,10 mg,10.0,mg,2100000,formula,2100000,2300000,210000,500000,1100000,47.6,existing
 04,Brain Health & Nootropics,Semax,10 mg,10.0,mg,2100000,formula,2100000,2300000,210000,500000,1100000,47.6,existing
-04,Brain Health & Nootropics,Selank + Semax,20 mg,20.0,mg,2900000,formula,2900000,3200000,145000,900000,1500000,48.3,existing
+04,Brain Health & Nootropics,Selank + Semax,20 mg,20.0,mg,3900000,manual override,2900000,3200000,195000,900000,1500000,61.5,existing
 04,Brain Health & Nootropics,VIP (Vasoactive Intestinal Peptide),10 mg,10.0,mg,3300000,formula,3300000,3600000,330000,1100000,1700000,48.5,new
 05,Energy & Endurance,5-Amino-1MQ,50 mg,50.0,mg,2900000,formula,2900000,3200000,58000,900000,1500000,48.3,existing
 05,Energy & Endurance,AICAR,50 mg,50.0,mg,2700000,formula,2700000,3000000,54000,800000,1400000,48.1,existing
