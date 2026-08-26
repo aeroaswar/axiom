@@ -1,126 +1,100 @@
-# Competitor Price Comparison — "BP" pen list vs AXIOM catalogue
+# Competitor Price Comparison — "BP" pen list vs the AXIOM catalogue
 
-> **Status note.** This comparison was run against the original 52-lot catalogue
-> at the 53% margin basis. The catalogue has since moved to 48% (every lot
-> ~9.6% cheaper, which improves AXIOM's position on every line below) and the
-> **Retatrutide vial line has been discontinued** and replaced by relabelled pen
-> lots at pen pricing, so the Retatrutide row here no longer has a like-for-like
-> catalogue counterpart. The findings on
-> Tesamorelin and BPC-157 + TB-500 being a supplier-cost problem are unaffected.
+Run against the current catalogue: **81 lots, 48% margin target, three manual
+overrides** (`AXIOM-Price-List-Full.pdf`). Competitor list transcribed from a
+supplied image, re-checked against a higher-resolution scan — **12 lines,
+11 unique SKUs** (NAD+ 1000 mg appears twice at the same price).
 
-Source: a competitor price list supplied as an image, 12 lines / **11 unique SKUs**
-(NAD+ 1000 mg is listed twice at the same price). Compared against
-`AXIOM-Price-List.pdf` (52 lots) and the −10% variant
-(`AXIOM-Price-List-minus10.pdf`).
+## The format caveat has narrowed
 
-## Read this first — it is not like-for-like
+Every competitor line is a **PEN**. AXIOM sells lyophilised vials with BAC water
+and a kit — except Retatrutide, which is now pen-sourced itself, so that one line
+is a **true pen-vs-pen comparison**. Everywhere else a pen still carries device
+cost a vial does not, and the gaps below overstate AXIOM's disadvantage
+accordingly.
 
-Every competitor line ends in **PEN**. Those are pre-filled pen devices. AXIOM
-sells **lyophilised vials** that ship with BAC water and a research kit. A pen
-carries device cost and a convenience premium a vial does not, so a raw price
-gap overstates AXIOM's disadvantage and understates it on the lines where AXIOM
-is already more expensive.
+## The competitor list
 
-The two lists also barely overlap: 11 competitor SKUs against AXIOM's 52, with
-only **three exact lot-size matches**.
-
-## The competitor list as transcribed
-
-| Compound | Lot | Price | Per mg |
+| Compound | Lot | Price | Per unit |
 |---|---:|---:|---:|
-| BP Semaglutide | 6 mg | 3,150,000 | 525,000 |
+| BP Semaglutide | 6 mg | 3,150,000 | 525,000/mg |
 | BP Somatropin HGH | 100 IU | 5,500,000 | 55,000/IU |
-| BP Tirzepatide | 60 mg | 7,000,000 | 116,667 |
-| BP Retatrutide | 32 mg | 5,100,000 | 159,375 |
-| BP BPC 157 + TB500 | 32 mg | 3,900,000 | 121,875 |
-| BP GHK-CU | 50 mg | 2,750,000 | 55,000 |
-| BP CJC 1295 + Ipamorelin | 20 mg | 3,900,000 | 195,000 |
-| BP Tesamorelin | 32 mg | 3,900,000 | 121,875 |
-| BP Mots-C | 32 mg | 3,500,000 | 109,375 |
-| BP Melanotan II | 20 mg | 2,750,000 | 137,500 |
-| BP NAD+ | 1000 mg | 3,900,000 | 3,900 |
-| BP NAD+ *(duplicate line)* | 1000 mg | 3,900,000 | 3,900 |
+| BP Tirzepatide | 60 mg | 7,000,000 | 116,667/mg |
+| BP Retatrutide | 32 mg | 5,100,000 | 159,375/mg |
+| BP BPC 157 + TB500 | 32 mg | 3,900,000 | 121,875/mg |
+| BP GHK-CU | 50 mg | 2,750,000 | 55,000/mg |
+| BP CJC 1295 + Ipamorelin | 20 mg | 3,900,000 | 195,000/mg |
+| BP Tesamorelin | 32 mg | 3,900,000 | 121,875/mg |
+| BP Mots-C | 32 mg | 3,500,000 | 109,375/mg |
+| BP Melanotan II | 20 mg | 2,750,000 | 137,500/mg |
+| BP NAD+ *(listed twice)* | 1000 mg | 3,900,000 | 3,900/mg |
 
-## Exact lot-size matches — the only clean comparisons
+## Exact lot matches
 
-| Compound | Lot | Competitor | AXIOM | vs comp | AXIOM −10% | vs comp |
-|---|---:|---:|---:|---:|---:|---:|
-| GHK-Cu | 50 mg | 2,750,000 | 2,100,000 | **−24%** | 1,900,000 | **−31%** |
-| CJC-1295 + Ipamorelin | 20 mg | 3,900,000 | 4,300,000 | **+10%** | 3,850,000 | **−1%** |
-| NAD+ | 1000 mg | 3,900,000 | 3,000,000 | **−23%** | 2,700,000 | **−31%** |
+| Compound | Lot | Competitor | AXIOM | Gap | AXIOM GM |
+|---|---:|---:|---:|---:|---:|
+| GHK-Cu | 50 mg | 2,750,000 | 2,600,000 | **−5.5%** | 62.7% |
+| CJC-1295 + Ipamorelin | 20 mg | 3,900,000 | 3,800,000 | **−2.6%** | 47.4% |
+| NAD+ | 1000 mg | 3,900,000 | 3,700,000 | **−5.1%** | 62.2% |
 
-AXIOM wins two of three outright today. The −10% cut flips the third.
+AXIOM undercuts all three — but only just. GHK-Cu and NAD+ were 31% below before
+their manual overrides; both are now a rounding error under the competitor,
+while earning 62% margin rather than 48%. Those two lines are where the pricing
+power actually sits.
 
-## Everything else, normalised to price per mg
+## Normalised per unit
 
-| Compound | Comp lot | Comp/mg | AXIOM lot | AXIOM/mg | vs comp | −10%/mg | vs comp |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Tirzepatide | 60 mg | 116,667 | 40 mg | 112,500 | −4% | 101,250 | −13% |
-| Retatrutide | 32 mg | 159,375 | 30 mg | 170,000 | +7% | 153,333 | −4% |
-| MOTS-c | 32 mg | 109,375 | 40 mg | 107,500 | −2% | 96,250 | −12% |
-| GHK-Cu | 50 mg | 55,000 | 50 mg | 42,000 | −24% | 38,000 | −31% |
-| NAD+ | 1000 mg | 3,900 | 1000 mg | 3,000 | −23% | 2,700 | −31% |
-| CJC-1295 + Ipamorelin | 20 mg | 195,000 | 20 mg | 215,000 | +10% | 192,500 | −1% |
-| **BPC-157 + TB-500** | 32 mg | 121,875 | 20 mg | 195,000 | **+60%** | 175,000 | **+44%** |
-| **Tesamorelin** | 32 mg | 121,875 | 20 mg | 235,000 | **+93%** | 212,500 | **+74%** |
+| Compound | Comp lot | Comp/mg | AXIOM lot | AXIOM/mg | Gap |
+|---|---:|---:|---:|---:|---:|
+| Tirzepatide | 60 mg | 116,667 | 40 mg | 100,000 | **−14%** |
+| MOTS-c | 32 mg | 109,375 | 40 mg | 95,000 | **−13%** |
+| GHK-Cu | 50 mg | 55,000 | 50 mg | 52,000 | −5% |
+| NAD+ | 1000 mg | 3,900 | 1000 mg | 3,700 | −5% |
+| CJC-1295 + Ipamorelin | 20 mg | 195,000 | 20 mg | 190,000 | −3% |
+| **Retatrutide** *(pen vs pen)* | 32 mg | 159,375 | 40 mg | 162,500 | **+2%** |
+| **BPC-157 + TB-500** | 32 mg | 121,875 | 20 mg | 180,000 | **+48%** |
+| **Tesamorelin** | 32 mg | 121,875 | 20 mg | 210,000 | **+72%** |
+| **Melanotan II** | 20 mg | 137,500 | 10 mg | 260,000 | **+89%** |
 
-Somatropin is on a different unit basis but lands the same way: the competitor's
-100 IU pen is Rp 55,000/IU against AXIOM's Rp 88,889/IU (36 IU) and Rp 90,000/IU
-(40 IU) — **AXIOM +62% to +64%**.
+Somatropin sits on a different unit and lands the same way: their 100 IU pen is
+Rp 55,000/IU against AXIOM's Rp 80,556/IU (36 IU) and Rp 82,500/IU (40 IU) —
+**+46% to +50%**.
 
-Not comparable at all: the competitor carries **Semaglutide 6 mg** and
-**Melanotan II 20 mg**; AXIOM carries neither.
+Not comparable: the competitor carries **Semaglutide 6 mg**; AXIOM still has no
+Semaglutide, and it is the best-known name in the GLP-1 category.
 
-## Where AXIOM actually stands
+## Which gaps are lot size and which are cost
 
-**Broadly competitive, with two genuine outliers.** On six of eight comparable
-lines AXIOM is within ±10% per mg or clearly ahead. The −10% list puts AXIOM at
-or below the competitor on every line except two.
-
-Those two are **Tesamorelin (+93%)** and **BPC-157 + TB-500 (+60%)**, and the
-−10% cut does not fix them — it leaves them +74% and +44%.
-
-## The two outliers are a cost problem, not a pricing problem
-
-Matching the competitor's per-mg on AXIOM's own 20 mg lot would mean:
-
-| Compound | Lot | Price needed | Cost basis | Resulting GM |
-|---|---:|---:|---:|---:|
-| Tesamorelin | 20 mg | 2,437,500 | 2,200,000 | **9.7%** |
-| BPC-157 + TB-500 | 20 mg | 2,437,500 | 1,850,000 | **24.1%** |
-| CJC-1295 + Ipamorelin | 20 mg | 3,900,000 | 2,000,000 | 48.7% |
-| Retatrutide | 30 mg | 4,781,250 | 2,400,000 | 49.8% |
-
-CJC and Retatrutide can be matched at a normal margin. Tesamorelin cannot be
-matched at all without going to single-digit margin.
-
-Nor is lot size the explanation. Building a 32 mg lot from AXIOM's own supplier
-per-mg plus the Rp 600k fixed block gives:
+Rebuilding each line at the competitor's lot size, from AXIOM's own supplier
+per-mg plus the Rp 600,000 block, at 48%:
 
 | Compound | Lot | AXIOM would list | Competitor | Gap |
 |---|---:|---:|---:|---:|
-| Tirzepatide | 60 mg | 6,100,000 | 7,000,000 | **−13%** |
-| Retatrutide | 32 mg | 5,400,000 | 5,100,000 | +6% |
-| BPC-157 + TB-500 | 32 mg | 5,500,000 | 3,900,000 | **+41%** |
-| Tesamorelin | 32 mg | 6,700,000 | 3,900,000 | **+72%** |
+| Tirzepatide | 60 mg | 5,500,000 | 7,000,000 | **−21%** |
+| MOTS-c | 32 mg | 3,300,000 | 3,500,000 | **−6%** |
+| Retatrutide | 32 mg | 5,500,000 | 5,100,000 | +8% |
+| Somatropin | 100 IU | 6,400,000 | 5,500,000 | +16% |
+| BPC-157 + TB-500 | 32 mg | 5,000,000 | 3,900,000 | **+28%** |
+| Melanotan II | 20 mg | 4,000,000 | 2,750,000 | **+45%** |
+| Tesamorelin | 32 mg | 6,100,000 | 3,900,000 | **+56%** |
 
-At matched lot size AXIOM would *beat* the competitor on Tirzepatide and land
-close on Retatrutide — but would still be +41% and +72% on the two outliers.
-**AXIOM's supplier cost on Tesamorelin and BPC-157 + TB-500 is the problem, not
-its markup or its vial size.**
+**Lot size alone explains Tirzepatide and MOTS-c** — offer the larger format and
+AXIOM is comfortably cheaper. Retatrutide and Somatropin come close.
 
-## What follows from this
+**Tesamorelin, Melanotan II and BPC-157 + TB-500 stay expensive even at matched
+lot size.** That is supplier cost, not markup and not format. No pricing change
+reaches the competitor on those three from this cost base.
 
-1. **Re-source Tesamorelin and BPC-157 + TB-500 before repricing them.** No
-   pricing change reaches the competitor from this cost base.
-2. **Lot size is a real lever on the rest.** The competitor's 32 mg / 60 mg /
-   100 IU formats spread the fixed Rp 1.28M block over more material. Adding a
-   32 mg tier where AXIOM stops at 20 mg improves per-mg optics at unchanged
-   margin.
-3. **Two catalogue gaps:** Semaglutide and Melanotan II. Semaglutide in
-   particular is the best-known name in the GLP-1 category and AXIOM has no entry.
-4. **Lead with the lines that win.** GHK-Cu, NAD+, Tirzepatide and MOTS-c are at
-   or better than the competitor today, before any discount.
-5. The competitor's list has a **duplicated NAD+ line** and no visible RUO
-   statement in the supplied crop — worth noting if it is ever used as a
-   reference document.
+## What follows
+
+1. **Re-source Tesamorelin, Melanotan II and BPC-157 + TB-500.** These are the
+   only lines where AXIOM is structurally uncompetitive.
+2. **Add larger formats where cost is already fine** — a 60 mg Tirzepatide and a
+   32 mg MOTS-c would both land clearly under the competitor at full margin.
+3. **Semaglutide is the obvious catalogue gap.** The supplier sheet does not
+   carry it either, so it needs a source before it can be priced.
+4. **GHK-Cu and NAD+ are now priced to the competitor, not to cost.** Both sit
+   ~5% under at 62% margin. That is the whole pricing headroom in the catalogue
+   being used; there is little left on those two lines.
+5. The competitor's list still carries a **duplicated NAD+ line** and shows no
+   RUO statement in the supplied crop.
