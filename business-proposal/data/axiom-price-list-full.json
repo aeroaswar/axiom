@@ -2,6 +2,22 @@
   {
     "category_no": "01",
     "category": "GLP-1s & Weight Loss",
+    "compound": "AOD-9604",
+    "lot": "5 mg",
+    "lot_value": 5.0,
+    "lot_unit": "mg",
+    "price_idr": 2700000,
+    "price_at_53pct_idr": 3000000,
+    "change_pct": -10.0,
+    "price_per_unit_idr": 540000,
+    "supplier_lot_idr": 800000,
+    "cost_basis_idr": 1400000,
+    "gross_margin_pct": 48.1,
+    "status": "new"
+  },
+  {
+    "category_no": "01",
+    "category": "GLP-1s & Weight Loss",
     "compound": "Cagrilintide",
     "lot": "10 mg",
     "lot_value": 10.0,
@@ -18,7 +34,7 @@
   {
     "category_no": "01",
     "category": "GLP-1s & Weight Loss",
-    "compound": "Retatrutide Pen",
+    "compound": "Retatrutide",
     "lot": "10 mg",
     "lot_value": 10.0,
     "lot_unit": "mg",
@@ -34,7 +50,7 @@
   {
     "category_no": "01",
     "category": "GLP-1s & Weight Loss",
-    "compound": "Retatrutide Pen",
+    "compound": "Retatrutide",
     "lot": "20 mg",
     "lot_value": 20.0,
     "lot_unit": "mg",
@@ -50,7 +66,7 @@
   {
     "category_no": "01",
     "category": "GLP-1s & Weight Loss",
-    "compound": "Retatrutide Pen",
+    "compound": "Retatrutide",
     "lot": "30 mg",
     "lot_value": 30.0,
     "lot_unit": "mg",
@@ -66,7 +82,7 @@
   {
     "category_no": "01",
     "category": "GLP-1s & Weight Loss",
-    "compound": "Retatrutide Pen",
+    "compound": "Retatrutide",
     "lot": "40 mg",
     "lot_value": 40.0,
     "lot_unit": "mg",
@@ -82,7 +98,7 @@
   {
     "category_no": "01",
     "category": "GLP-1s & Weight Loss",
-    "compound": "Retatrutide Pen",
+    "compound": "Retatrutide",
     "lot": "60 mg",
     "lot_value": 60.0,
     "lot_unit": "mg",
@@ -174,22 +190,6 @@
     "cost_basis_idr": 2100000,
     "gross_margin_pct": 47.5,
     "status": "existing"
-  },
-  {
-    "category_no": "01",
-    "category": "GLP-1s & Weight Loss",
-    "compound": "AOD-9604",
-    "lot": "5 mg",
-    "lot_value": 5.0,
-    "lot_unit": "mg",
-    "price_idr": 2700000,
-    "price_at_53pct_idr": 3000000,
-    "change_pct": -10.0,
-    "price_per_unit_idr": 540000,
-    "supplier_lot_idr": 800000,
-    "cost_basis_idr": 1400000,
-    "gross_margin_pct": 48.1,
-    "status": "new"
   },
   {
     "category_no": "02",

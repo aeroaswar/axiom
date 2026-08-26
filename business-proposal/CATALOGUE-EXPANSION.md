@@ -120,15 +120,33 @@ Repriced on current supplier cost at 48% they would be Humanin Rp 3,500,000,
 Ipamorelin Rp 2,700,000, HMG Rp 2,500,000. Say the word and they can be brought
 into line.
 
-## Retatrutide vials removed
+## Retatrutide restructured
 
-The six plain **Retatrutide vial** lots (5, 10, 15, 20, 30, 60 mg) have been
-deleted. **Retatrutide is now pen-only** — the five Retatrutide Pen lots and the
-two Cartridge Refill lots remain and are unaffected.
+The six original **Retatrutide vial** lots (5, 10, 15, 20, 30, 60 mg) were
+deleted. The five pen lots were then **relabelled from "Retatrutide Pen" to plain
+"Retatrutide", with prices unchanged** — they still carry the pen supplier cost
+of Rp 1,300,000–3,700,000 and price out at Rp 3,700,000–8,300,000.
 
-This is worth being deliberate about: Retatrutide vials were the widest ladder in
-the catalogue and its single highest-value lot (60 mg). Anyone wanting Retatrutide
-now buys a pen or a refill, at a higher price per mg than the vials carried.
+The line therefore reads as ordinary Retatrutide but is priced as pens. Net
+effect on the customer-facing document:
+
+| Lot | Was (vial) | Now | Change |
+|---|---:|---:|---:|
+| 5 mg | 2,400,000 | *discontinued* | — |
+| 10 mg | 2,800,000 | 3,700,000 | **+32%** |
+| 15 mg | 3,200,000 | *discontinued* | — |
+| 20 mg | 3,600,000 | 4,600,000 | **+28%** |
+| 30 mg | 4,600,000 | 5,400,000 | **+17%** |
+| 40 mg | — | 6,500,000 | *new lot* |
+| 60 mg | 7,500,000 | 8,300,000 | **+11%** |
+
+Retatrutide now starts at Rp 3,700,000 rather than Rp 2,400,000, and its cheapest
+per-mg rung is Rp 138,333/mg at 60 mg (against Rp 125,000/mg on the old 60 mg
+vial). The two **Retatrutide Cartridge Refill** lots are unchanged — note they
+still name a cartridge for a pen the list no longer identifies as one.
+
+`AOD-9604` was also moved to the head of category 01, restoring the alphabetical
+ordering the rest of the catalogue follows.
 
 ## One lot-size correction
 
