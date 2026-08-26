@@ -1,7 +1,7 @@
 category_no,category,compound,lot,supplier_cost_idr,pen_cost_idr,base_price_idr,selling_price_idr,margin_idr,margin_pct,markup_pct,pen_share_of_price_pct,pricing
 01,GLP-1s & Weight Loss,AOD-9604,5 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
 01,GLP-1s & Weight Loss,Cagrilintide,10 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
-01,GLP-1s & Weight Loss,Retatrutide,10 mg,1300000,600000,1900000,2000000,100000,5.0,5.3,30.0,manual override
+01,GLP-1s & Weight Loss,Retatrutide,10 mg,1300000,600000,1900000,2700000,800000,29.6,42.1,22.2,manual override
 01,GLP-1s & Weight Loss,Retatrutide,20 mg,1800000,600000,2400000,3600000,1200000,33.3,50.0,16.7,manual override
 01,GLP-1s & Weight Loss,Retatrutide,30 mg,2200000,600000,2800000,4900000,2100000,42.9,75.0,12.2,manual override
 01,GLP-1s & Weight Loss,Retatrutide,40 mg,2800000,600000,3400000,6400000,3000000,46.9,88.2,9.4,manual override
