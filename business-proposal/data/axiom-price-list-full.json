@@ -941,14 +941,14 @@
     "lot": "10 mg",
     "lot_value": 10.0,
     "lot_unit": "mg",
-    "price_idr": 1700000,
+    "price_idr": 1900000,
     "pricing": "manual override",
     "formula_price_idr": 2600000,
     "price_at_53pct_idr": 2900000,
-    "price_per_unit_idr": 170000,
+    "price_per_unit_idr": 190000,
     "supplier_lot_idr": 750000,
     "cost_basis_idr": 1350000,
-    "gross_margin_pct": 20.6,
+    "gross_margin_pct": 28.9,
     "status": "new"
   },
   {
