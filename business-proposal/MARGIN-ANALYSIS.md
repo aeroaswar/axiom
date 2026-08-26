@@ -1,5 +1,13 @@
 # Margin analysis — cost basis vs list price, all 81 lots
 
+> **Superseded by `MARGIN-STRUCTURE.md`.** This file describes the Rp 600.000
+> adder as BAC water, kit and cold-chain handling. It is not — it is the **pen**
+> (R-Peptides Reusable Injection Pen V2, Rp 600.000, matched to the rupiah). The
+> supplier ships vials only. Because the pen is a bought good, the margins here
+> are true gross margins, not the contribution margins this file calls them, and
+> the "excluding fulfilment it would read 66.8%" note is wrong. The arithmetic is
+> otherwise correct.
+
 Computed from `data/axiom-price-list-full.csv`.
 Cost basis = supplier lot + Rp 600.000. Price = cost basis ÷ 0.52, rounded to
 Rp 100.000, with nine manual overrides.

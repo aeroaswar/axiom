@@ -1,5 +1,11 @@
 # Catalogue rebuild — 81 lots at a 48% margin, sourced from the R-Peptides sheet
 
+> **Note on the Rp 600.000.** Throughout this file it is described as covering
+> BAC water, the research kit and cold-chain handling. It is actually the **pen** —
+> R-Peptides' Reusable Injection Pen V2 at exactly Rp 600.000. The supplier ships
+> vials only. Every figure below is unaffected; only the label is. See
+> `MARGIN-STRUCTURE.md`.
+
 Adds every research compound on the supplier price list that AXIOM did not
 already carry, prices the catalogue at a 48% gross margin target, and drops the
 Retatrutide vial line.
