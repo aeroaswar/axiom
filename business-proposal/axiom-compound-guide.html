@@ -15,7 +15,7 @@ a{color:var(--accent-bright);text-decoration:none}
 a:focus-visible{outline:1px solid var(--accent-line);outline-offset:3px}
 header.mast{padding:64px 0 30px;border-bottom:1px solid var(--line);position:relative;background:radial-gradient(60% 60% at 74% 26%,rgba(200,138,78,.16),transparent 60%),radial-gradient(46% 40% at 58% 78%,rgba(124,76,36,.20),transparent 60%)}
 .kick{font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
-.wm{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:400;letter-spacing:.42em;font-size:34px;margin:14px 0 4px;text-indent:.42em}
+.wm{display:block;width:min(340px,62vw);height:auto;color:var(--ink);margin:16px 0 8px}
 .sub{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;font-size:clamp(26px,4vw,40px);line-height:1.05;letter-spacing:-.01em;margin:14px 0 0;max-width:18ch;text-wrap:balance}
 .sub em{font-style:normal;color:var(--muted)}
 .lead{color:var(--muted);font-size:15px;line-height:1.7;max-width:62ch;margin:16px 0 0}
@@ -97,7 +97,7 @@ footer .ruo{color:var(--muted);max-width:80ch}
 <body>
 <header class="mast"><div class="wrap">
   <div class="kick">Peptide Science · Jakarta</div>
-  <div class="wm">AXIOM</div>
+  <svg class="wm" viewBox="0 0 582 70" aria-label="AXIOM" role="img"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg>
   <div class="sub">Compound <em>guide.</em></div>
   <p class="lead">The companion to the AXIOM price list. Every compound in the catalogue, pathway by pathway: what it is, how it works, what the research actually shows, and the research context it belongs to. Evidence is graded on every card. No pricing here &mdash; that lives in the price list.</p>
   <div class="ruoflag">Research Use Only<br>In-vitro laboratory use<br>Not for human or veterinary use</div>
