@@ -32,10 +32,10 @@ table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 th{text-align:left;font-family:"Inter";font-weight:500;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);padding:9px 10px 8px;border-bottom:1px solid var(--line)}
 td{padding:9px 10px;border-bottom:1px solid var(--line-soft);font-size:13px;color:var(--muted)}
 td.name{color:var(--ink)}
-.num{text-align:right}
+.num{text-align:right;white-space:nowrap}
 td.sale{color:var(--accent-bright);font-weight:400}
 td.gm{color:var(--muted-2);font-size:12px}
-th.num{text-align:right}
+th.num{text-align:right;white-space:nowrap}
 tbody tr:last-child td{border-bottom:none}
 .meta{display:flex;flex-wrap:wrap;gap:22px;margin:36px 0 0;padding:20px 0;border-top:1px solid var(--line)}
 .meta .m{font-size:12px;color:var(--muted)}
@@ -56,127 +56,10 @@ footer .ruo{color:var(--muted);max-width:80ch}
     <div class="f"><div class="k">Price</div><div class="v tab">Cost basis &divide; 0.47</div></div>
     <div class="f"><div class="k">Gross margin</div><div class="v tab">53% target</div></div>
     <div class="f"><div class="k">Rounding</div><div class="v tab">Nearest Rp 100.000</div></div>
-    <div class="f"><div class="k">Catalogue</div><div class="v tab">52 lots · 8 pathways</div></div>
+    <div class="f"><div class="k">Catalogue</div><div class="v tab" id="plCount">— lots · — pathways</div></div>
   </div>
 </div></header>
-<main><div class="wrap"><div class="grid">
-      <section class="cat">
-        <div class="cat-h"><span class="ix">01</span><h3>GLP-1s & Weight Loss</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">Cagrilintide</td><td>10 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Retatrutide</td><td>5 mg</td><td class="num">Rp 1.250.000</td><td class="num sale">Rp 2.700.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">Retatrutide</td><td>10 mg</td><td class="num">Rp 1.450.000</td><td class="num sale">Rp 3.100.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Retatrutide</td><td>15 mg</td><td class="num">Rp 1.650.000</td><td class="num sale">Rp 3.500.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Retatrutide</td><td>20 mg</td><td class="num">Rp 1.850.000</td><td class="num sale">Rp 3.900.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Retatrutide</td><td>30 mg</td><td class="num">Rp 2.400.000</td><td class="num sale">Rp 5.100.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Retatrutide</td><td>60 mg</td><td class="num">Rp 3.900.000</td><td class="num sale">Rp 8.300.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Tirzepatide</td><td>10 mg</td><td class="num">Rp 1.150.000</td><td class="num sale">Rp 2.400.000</td><td class="num gm">52%</td></tr>
-            <tr><td class="name">Tirzepatide</td><td>30 mg</td><td class="num">Rp 1.800.000</td><td class="num sale">Rp 3.800.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Tirzepatide</td><td>40 mg</td><td class="num">Rp 2.100.000</td><td class="num sale">Rp 4.500.000</td><td class="num gm">53%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-      <section class="cat">
-        <div class="cat-h"><span class="ix">02</span><h3>GH Secretagogues</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">CJC-1295 (No DAC) + Ipamorelin</td><td>10 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">CJC-1295 (No DAC) + Ipamorelin</td><td>20 mg</td><td class="num">Rp 2.000.000</td><td class="num sale">Rp 4.300.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">HGH 191AA (Somatropin)</td><td>36 IU</td><td class="num">Rp 1.500.000</td><td class="num sale">Rp 3.200.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">HGH 191AA (Somatropin)</td><td>40 IU</td><td class="num">Rp 1.700.000</td><td class="num sale">Rp 3.600.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Ipamorelin</td><td>10 mg</td><td class="num">Rp 1.300.000</td><td class="num sale">Rp 2.800.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">Ipamorelin + Tesamorelin</td><td>18 mg</td><td class="num">Rp 2.350.000</td><td class="num sale">Rp 5.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Tesamorelin</td><td>10 mg</td><td class="num">Rp 1.700.000</td><td class="num sale">Rp 3.600.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Tesamorelin</td><td>20 mg</td><td class="num">Rp 2.200.000</td><td class="num sale">Rp 4.700.000</td><td class="num gm">53%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-      <section class="cat">
-        <div class="cat-h"><span class="ix">03</span><h3>Healing & Repair</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">BPC-157</td><td>10 mg</td><td class="num">Rp 1.250.000</td><td class="num sale">Rp 2.700.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">BPC-157 + TB-500 (Wolverine)</td><td>20 mg</td><td class="num">Rp 1.850.000</td><td class="num sale">Rp 3.900.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">GHK-Cu</td><td>50 mg</td><td class="num">Rp 970.000</td><td class="num sale">Rp 2.100.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">GHK-Cu</td><td>100 mg</td><td class="num">Rp 1.100.000</td><td class="num sale">Rp 2.300.000</td><td class="num gm">52%</td></tr>
-            <tr><td class="name">KPV</td><td>10 mg</td><td class="num">Rp 1.200.000</td><td class="num sale">Rp 2.600.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">KLOW (BPC-157+TB-500+GHK-Cu+KPV)</td><td>80 mg</td><td class="num">Rp 2.050.000</td><td class="num sale">Rp 4.400.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">LL-37</td><td>5 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Peg MGF</td><td>2 mg</td><td class="num">Rp 1.450.000</td><td class="num sale">Rp 3.100.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">TB-500</td><td>10 mg</td><td class="num">Rp 1.350.000</td><td class="num sale">Rp 2.900.000</td><td class="num gm">53%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-      <section class="cat">
-        <div class="cat-h"><span class="ix">04</span><h3>Brain Health & Nootropics</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">Adamax</td><td>10 mg</td><td class="num">Rp 1.450.000</td><td class="num sale">Rp 3.100.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Cerebrolysin</td><td>60 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Pinealon</td><td>20 mg</td><td class="num">Rp 1.700.000</td><td class="num sale">Rp 3.600.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Selank</td><td>10 mg</td><td class="num">Rp 1.100.000</td><td class="num sale">Rp 2.300.000</td><td class="num gm">52%</td></tr>
-            <tr><td class="name">Semax</td><td>10 mg</td><td class="num">Rp 1.100.000</td><td class="num sale">Rp 2.300.000</td><td class="num gm">52%</td></tr>
-            <tr><td class="name">Selank + Semax</td><td>20 mg</td><td class="num">Rp 1.500.000</td><td class="num sale">Rp 3.200.000</td><td class="num gm">53%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-      <section class="cat">
-        <div class="cat-h"><span class="ix">05</span><h3>Energy & Endurance</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">5-Amino-1MQ</td><td>50 mg</td><td class="num">Rp 1.500.000</td><td class="num sale">Rp 3.200.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">AICAR</td><td>50 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">L-Carnitine (Injectable)</td><td>5000 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">MOTS-c</td><td>10 mg</td><td class="num">Rp 1.150.000</td><td class="num sale">Rp 2.400.000</td><td class="num gm">52%</td></tr>
-            <tr><td class="name">MOTS-c</td><td>40 mg</td><td class="num">Rp 2.000.000</td><td class="num sale">Rp 4.300.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">SLU-PP-332 (Injectable)</td><td>5 mg</td><td class="num">Rp 1.250.000</td><td class="num sale">Rp 2.700.000</td><td class="num gm">54%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-      <section class="cat">
-        <div class="cat-h"><span class="ix">06</span><h3>Immunity</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">Thymosin Alpha-1</td><td>10 mg</td><td class="num">Rp 1.700.000</td><td class="num sale">Rp 3.600.000</td><td class="num gm">53%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-      <section class="cat">
-        <div class="cat-h"><span class="ix">07</span><h3>Sexual Health</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">HCG</td><td>10000 IU</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">HMG</td><td>75 IU</td><td class="num">Rp 1.250.000</td><td class="num sale">Rp 2.700.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">Kisspeptin</td><td>10 mg</td><td class="num">Rp 1.500.000</td><td class="num sale">Rp 3.200.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Oxytocin Acetate</td><td>10 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">PT-141</td><td>10 mg</td><td class="num">Rp 1.200.000</td><td class="num sale">Rp 2.600.000</td><td class="num gm">54%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-      <section class="cat">
-        <div class="cat-h"><span class="ix">08</span><h3>Longevity & Cellular Repair</h3></div>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead>
-          <tbody>
-            <tr><td class="name">DSIP</td><td>5 mg</td><td class="num">Rp 1.000.000</td><td class="num sale">Rp 2.100.000</td><td class="num gm">52%</td></tr>
-            <tr><td class="name">DSIP</td><td>10 mg</td><td class="num">Rp 1.200.000</td><td class="num sale">Rp 2.600.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">Epithalon</td><td>50 mg</td><td class="num">Rp 1.600.000</td><td class="num sale">Rp 3.400.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">Humanin</td><td>10 mg</td><td class="num">Rp 2.100.000</td><td class="num sale">Rp 4.500.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">NAD+</td><td>500 mg</td><td class="num">Rp 1.200.000</td><td class="num sale">Rp 2.600.000</td><td class="num gm">54%</td></tr>
-            <tr><td class="name">NAD+</td><td>1000 mg</td><td class="num">Rp 1.400.000</td><td class="num sale">Rp 3.000.000</td><td class="num gm">53%</td></tr>
-            <tr><td class="name">SS-31</td><td>50 mg</td><td class="num">Rp 2.100.000</td><td class="num sale">Rp 4.500.000</td><td class="num gm">53%</td></tr>
-          </tbody>
-        </table></div>
-      </section>
-</div>
+<main><div class="wrap"><div class="grid" id="plGrid"></div>
   <div class="meta">
     <div class="m"><strong>Every order includes</strong> — BAC water and a research kit (alcohol swabs, syringes) with each shipment.</div>
     <div class="m"><strong>Cold-chain</strong> — research material held at &minus;20 &deg;C and moved at 2&ndash;8 &deg;C, insured and tracked, CoA in the box.</div>
@@ -187,4 +70,43 @@ footer .ruo{color:var(--muted);max-width:80ch}
   <span class="badge">Compliance</span>
   <p class="ruo">Research Use Only. Peptides listed here are intended exclusively for in-vitro laboratory research &mdash; not drugs, food, cosmetics, or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. By purchasing, the buyer affirms they are a qualified researcher or institution and accepts full responsibility for safe, legal, and compliant handling. Several compounds are controlled or regulated in many jurisdictions; buyers are solely responsible for confirming the laws that apply to them. Prices are indicative, quoted in Indonesian Rupiah, and subject to change.</p>
 </div></footer>
+<script src="../shared/catalog.js"></script>
+<script src="axiom-costs.js"></script>
+<script>
+/* Rendered from shared/catalog.js (roster + prices) and axiom-costs.js (internal
+   cost basis) — edit those files, not this page. Consumer categories are skipped. */
+(function(){
+"use strict";
+var fmt=function(n){return "Rp "+new Intl.NumberFormat("id-ID").format(n);};
+var COSTS=window.AXIOM_COSTS||{};
+var groups={};
+window.AXIOM_DATA.pathways.forEach(function(p){groups[p.no]={no:p.no,name:p.name,rows:[]};});
+window.AXIOM_DATA.categories.forEach(function(c){
+  if(c.consumer)return;
+  c.items.forEach(function(it){var g=groups[it.pathwayNo];if(g)g.rows.push(it);});
+});
+var total=0,used=0;
+var html=Object.keys(groups).sort().map(function(no){
+  var g=groups[no];if(!g.rows.length)return "";
+  used++;total+=g.rows.length;
+  g.rows.sort(function(a,b){return (a.printName||a.name).localeCompare(b.printName||b.name)||(a.price-b.price);});
+  return '<section class="cat">'
+    +'<div class="cat-h"><span class="ix">'+g.no+'</span><h3>'+g.name+'</h3></div>'
+    +'<div class="tablewrap"><table>'
+    +'<thead><tr><th>Compound</th><th>Lot</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">GM</th></tr></thead><tbody>'
+    +g.rows.map(function(it){
+      var cost=COSTS[it.sku];
+      var gm=(cost!=null&&it.price)?Math.round((1-cost/it.price)*100)+"%":"\u2014";
+      return '<tr><td class="name">'+(it.printName||it.name)+'</td><td>'+it.dose+'</td>'
+        +'<td class="num">'+(cost!=null?fmt(cost):"\u2014")+'</td>'
+        +'<td class="num sale">'+fmt(it.price)+'</td>'
+        +'<td class="num gm">'+gm+'</td></tr>';
+    }).join("")
+    +'</tbody></table></div></section>';
+}).join("");
+document.getElementById("plGrid").innerHTML=html;
+var pc=document.getElementById("plCount");
+if(pc)pc.textContent=total+" lots \u00b7 "+used+" pathways";
+})();
+</script>
 </body></html>
