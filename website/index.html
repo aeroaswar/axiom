@@ -260,6 +260,29 @@ nav{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:
 .coa-foot{padding:18px 28px;font-family:var(--sans);font-size:11px;color:var(--muted);position:relative;z-index:1;font-weight:300}
 @media(max-width:680px){.coa-grid{grid-template-columns:repeat(2,1fr)}}
 
+/* ---------- Verify (lot verification) ---------- */
+.vf-form{display:flex;gap:14px;align-items:stretch}
+.vf-form .search{flex:1}
+.vf-chips{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.vf-chips-k{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:500;margin-right:4px}
+.coa.live::after{content:none}
+.coa-h .pass.warn{color:#D9A05B;border-color:rgba(217,160,91,.4)}
+.coa-h .pass.err{color:#C96A5A;border-color:rgba(201,106,90,.4)}
+.vf-actions{display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:24px}
+.vf-none{border:1px solid var(--line);padding:34px 30px;margin-top:40px;max-width:560px}
+.vf-none h4{font-family:var(--display);font-weight:400;font-size:19px;margin-bottom:10px}
+.vf-none p{color:var(--muted);font-size:13.5px;line-height:1.7;margin-bottom:16px}
+@media print{
+  nav,.ribbon,#sceneWrap,#progress,.quote-bar,#scrollHint,.gate,footer,.vf-form,.vf-chips,.vf-actions,.vf-none .tlink,#preloader{display:none!important}
+  body{background:#F2EDE5;color:#070605}
+  .view[data-view="verify"] .page-head .crumb{display:none}
+  .view[data-view="verify"] h1,.view[data-view="verify"] .coa-h h4,.view[data-view="verify"] .coa-cell .v,.view[data-view="verify"] .vf-none h4{color:#070605}
+  .view[data-view="verify"] .page-head p,.view[data-view="verify"] .coa-h p,.view[data-view="verify"] .coa-cell .k,.view[data-view="verify"] .coa-foot,.view[data-view="verify"] .vf-none p{color:rgba(7,6,5,.62)}
+  .view[data-view="verify"] .coa,.view[data-view="verify"] .coa-h,.view[data-view="verify"] .vf-none{border-color:rgba(7,6,5,.25)}
+  .view[data-view="verify"] .coa-cell{border-color:rgba(7,6,5,.12)}
+  .view[data-view="verify"] .coa-cell .v.red,.view[data-view="verify"] .coa-h .pass{color:#7C4C24;border-color:rgba(124,76,36,.5)}
+}
+
 /* ---------- FAQ ---------- */
 .faq{border-top:1px solid var(--line)}
 .faq-item{border-bottom:1px solid var(--line)}
@@ -392,7 +415,6 @@ footer{position:relative;z-index:3;background:var(--bg);border-top:1px solid var
   .stagger>*{opacity:1!important;transform:none!important;transition:none!important}
   .rule-draw{transform:none!important;transition:none!important}
   #preloader img,#preloader .pl-line::after,#preloader .pl-cap{animation:none!important;opacity:1!important;transform:none!important}
-  #cursor,#cursorDot{display:none!important}
 }
 
 /* ---------- Staggered reveal children ---------- */
@@ -413,15 +435,6 @@ footer{position:relative;z-index:3;background:var(--bg);border-top:1px solid var
 @keyframes plLogo{to{opacity:1;transform:none}}
 @keyframes plLine{to{transform:scaleX(1)}}
 @keyframes plCap{to{opacity:1}}
-
-/* ---------- Custom cursor ---------- */
-#cursorRing,#cursorDot{position:fixed;top:0;left:0;z-index:200;pointer-events:none;border-radius:50%;mix-blend-mode:difference;will-change:transform;opacity:0;transition:opacity .3s ease}
-#cursorRing{width:32px;height:32px;border:1px solid #fff;margin:-16px 0 0 -16px;transition:width .22s ease,height .22s ease,margin .22s ease,background .22s ease,opacity .3s ease}
-#cursorDot{width:5px;height:5px;background:var(--accent-bright);margin:-2.5px 0 0 -2.5px}
-body.cursor-on #cursorRing,body.cursor-on #cursorDot{opacity:1}
-body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input,body.cursor-on select,body.cursor-on summary,body.cursor-on label,body.cursor-on .tlink,body.cursor-on .pcard{cursor:none}
-#cursorRing.hover{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(255,255,255,.14)}
-@media(pointer:coarse){#cursorRing,#cursorDot{display:none}}
 
 /* ---------- Scroll progress + nav hide ---------- */
 #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ink);z-index:60;transition:width .12s linear;pointer-events:none}
@@ -657,9 +670,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 <div class="scroll-hint" id="scrollHint"><span>Scroll</span><span class="bar"></span></div>
 
 <div id="progress"></div>
-<div id="cursorRing"></div>
-<div id="cursorDot"></div>
-
 <div class="ribbon"><span data-t="ribbon">AXIOM · <b>Human Performance &amp; Longevity</b> · Peptide science · Therapy &amp; recovery · Wellness · Prices in IDR</span></div>
 
 <nav id="nav">
@@ -672,6 +682,7 @@ nav.nav-hidden{transform:translateY(-100%)}
         <a href="#home" data-t="nav.home">Home</a>
         <a href="#products" data-t="nav.products">Products</a>
         <a href="#standards" data-t="nav.standards">Standards</a>
+        <a href="#verify" data-t="nav.verify">Verify</a>
         <a href="#contact" data-t="nav.contact">Contact</a>
       </div>
       <div class="lang-toggle" id="langToggle" role="group" aria-label="Language">
@@ -705,7 +716,7 @@ nav.nav-hidden{transform:translateY(-100%)}
     <div class="wrap stagger reveal">
       <div class="m"><div class="k" data-t="meta.focus">Focus</div><div class="v">Longevity</div></div>
       <div class="m"><div class="k" data-t="meta.purity">Peptide purity</div><div class="v">≥ 98%</div></div>
-      <div class="m"><div class="k" data-t="meta.catalogue">Catalogue</div><div class="v" id="metaCount">57</div></div>
+      <div class="m"><div class="k" data-t="meta.catalogue">Catalogue</div><div class="v" id="metaCount">87</div></div>
       <div class="m"><div class="k" data-t="meta.pillars">Pillars</div><div class="v">05</div></div>
     </div>
   </div>
@@ -831,29 +842,29 @@ nav.nav-hidden{transform:translateY(-100%)}
         <div class="pcard-top"><span class="pcard-tag">Tissue Repair</span><span class="pcard-idx">02·01</span></div>
         <h4 class="pcard-name">BPC-157</h4>
         <span class="pcard-dose">10 mg · Pen</span>
-        <div class="pcard-go"><span class="pcard-price"><span class="cur">Rp</span>1.600.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
+        <div class="pcard-go"><span class="pcard-price" data-sku-price="bpc-157-10mg"><span class="cur">Rp</span>1.600.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
       </a>
       <a class="pcard linked" href="#products/cat-redlight">
-        <div class="pcard-top"><span class="pcard-tag">Red Light Therapy</span><span class="pcard-idx">07·03</span></div>
+        <div class="pcard-top"><span class="pcard-tag">Red Light Therapy</span><span class="pcard-idx">08·03</span></div>
         <h4 class="pcard-name">Red Light Therapy Mask</h4>
         <span class="pcard-dose">Face · LED array</span>
-        <div class="pcard-go"><span class="pcard-price"><span class="cur">Rp</span>2.400.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
+        <div class="pcard-go"><span class="pcard-price" data-sku-price="redlight-therapy-mask"><span class="cur">Rp</span>2.400.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
       </a>
       <a class="pcard linked" href="#products/cat-metabolic">
-        <div class="pcard-top"><span class="pcard-tag">Wellness</span><span class="pcard-idx">01·12</span></div>
+        <div class="pcard-top"><span class="pcard-tag">Wellness</span><span class="pcard-idx">01·15</span></div>
         <h4 class="pcard-name">NAD⁺</h4>
         <span class="pcard-dose">500 mg · Pen</span>
-        <div class="pcard-go"><span class="pcard-price"><span class="cur">Rp</span>1.600.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
+        <div class="pcard-go"><span class="pcard-price" data-sku-price="nad-500mg"><span class="cur">Rp</span>2.300.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
       </a>
       <a class="pcard linked" href="#products/cat-longevity">
         <div class="pcard-top"><span class="pcard-tag">Longevity</span><span class="pcard-idx">06·02</span></div>
         <h4 class="pcard-name">GHK-Cu</h4>
         <span class="pcard-dose">50 mg · Pen</span>
-        <div class="pcard-go"><span class="pcard-price"><span class="cur">Rp</span>1.200.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
+        <div class="pcard-go"><span class="pcard-price" data-sku-price="ghk-cu-50mg"><span class="cur">Rp</span>2.600.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
       </a>
     </div>
     <div class="featured-foot reveal">
-      <a href="#products" class="btn"><span data-t="feat.btn">Browse the Full Range — 57 Products</span></a>
+      <a href="#products" class="btn"><span data-t="feat.btn">Browse the Full Range</span> (<span id="featCount">87</span>)</a>
     </div>
   </div>
 </section>
@@ -874,7 +885,7 @@ nav.nav-hidden{transform:translateY(-100%)}
     <div class="feat-grid">
       <div class="feat reveal"><div class="ic">01</div><h4>HPLC &amp; MS Tested</h4><p>Every peptide lot is analysed by high-performance liquid chromatography and mass spectrometry to confirm identity and ≥98% purity.</p></div>
       <div class="feat reveal"><div class="ic">02</div><h4>Clinical-Grade Devices</h4><p>Therapy hardware is specified to clinical red/near-infrared wavelengths (660 + 850 nm) with verified irradiance — not novelty LEDs.</p></div>
-      <div class="feat reveal"><div class="ic">03</div><h4>Certificate of Analysis</h4><p>A downloadable CoA accompanies every peptide lot — purity, mass and batch traceability fully documented.</p></div>
+      <div class="feat reveal"><div class="ic">03</div><h4>Certificate of Analysis</h4><p>A downloadable CoA accompanies every peptide lot — purity, mass and batch traceability fully documented.</p><a class="tlink" href="#verify">Verify a lot <span class="ar">→</span></a></div>
     </div>
     <div class="featured-foot reveal">
       <a href="#standards" class="tlink">Read Our Standards &amp; Compliance <span class="ar">→</span></a>
@@ -890,7 +901,7 @@ nav.nav-hidden{transform:translateY(-100%)}
       <h2 data-t="cta.h">Build your order</h2>
       <p>Tell us which peptides, devices or wellness items you need. Quotes are returned within 24 hours with live stock and pricing.</p>
       <div class="cta-row">
-        <a href="https://wa.me/18038573396?text=Hello%20AXIOM%2C%20I%27d%20like%20a%20quote." target="_blank" rel="noopener" class="btn btn-solid"><i class="ph-fill ph-whatsapp-logo"></i> <span data-t="cta.wa">WhatsApp Us</span></a>
+        <a href="https://wa.me/628128573396?text=Hello%20AXIOM%2C%20I%27d%20like%20a%20quote." target="_blank" rel="noopener" class="btn btn-solid"><i class="ph-fill ph-whatsapp-logo"></i> <span data-t="cta.wa">WhatsApp Us</span></a>
         <a href="#contact" class="tlink">Order Process &amp; FAQ <span class="ar">→</span></a>
       </div>
     </div>
@@ -937,11 +948,11 @@ nav.nav-hidden{transform:translateY(-100%)}
         </div>
         <div class="range">
           <label for="price">Max</label>
-          <input type="range" id="price" min="1000000" max="6500000" step="100000" value="6500000" />
-          <span class="val" id="priceVal">Rp 6.500.000</span>
+          <input type="range" id="price" min="1000000" max="8500000" step="100000" value="8500000" />
+          <span class="val" id="priceVal">Rp 8.500.000</span>
         </div>
       </div>
-      <div class="rcount" id="rcount">Showing <b>57</b> of 57 items</div>
+      <div class="rcount" id="rcount">Showing <b>87</b> of 87 items</div>
     </div>
 
     <div id="catList"></div>
@@ -968,7 +979,7 @@ nav.nav-hidden{transform:translateY(-100%)}
   <div class="wrap">
     <div class="feat-grid">
       <div class="feat reveal"><div class="ic">01</div><h4>HPLC &amp; MS Tested</h4><p>Every peptide lot is analysed by high-performance liquid chromatography and mass spectrometry to confirm identity and ≥98% purity.</p></div>
-      <div class="feat reveal"><div class="ic">02</div><h4>Certificate of Analysis</h4><p>A downloadable CoA accompanies every peptide lot — purity, mass and batch traceability fully documented.</p></div>
+      <div class="feat reveal"><div class="ic">02</div><h4>Certificate of Analysis</h4><p>A downloadable CoA accompanies every peptide lot — purity, mass and batch traceability fully documented.</p><a class="tlink" href="#verify">Verify a lot <span class="ar">→</span></a></div>
       <div class="feat reveal"><div class="ic">03</div><h4>Clinical-Grade Devices</h4><p>Therapy hardware is specified to clinical red/near-infrared wavelengths (660 + 850 nm) with verified irradiance — not novelty LEDs.</p></div>
       <div class="feat reveal"><div class="ic">04</div><h4>Cold-Chain Logistics</h4><p>Lyophilised peptides are stored and dispatched temperature-controlled to preserve molecular integrity in transit.</p></div>
       <div class="feat reveal"><div class="ic">05</div><h4>Discreet Packaging</h4><p>Neutral, protective packaging with tamper-evident seals and batch labelling on every unit.</p></div>
@@ -994,6 +1005,9 @@ nav.nav-hidden{transform:translateY(-100%)}
         </div>
         <div class="coa-foot">A representative CoA accompanies every lot. Figures shown are specimen values for illustration only.</div>
       </div>
+      <div class="coa-verify-link reveal" style="margin-top:22px">
+        <a class="tlink" href="#verify/AX-2406-1157">Verify this lot on the record <span class="ar">→</span></a>
+      </div>
     </div>
   </div>
 </section>
@@ -1014,7 +1028,7 @@ nav.nav-hidden{transform:translateY(-100%)}
       <div class="comp-grid">
         <div class="comp-tile reveal"><div class="ic">Peptides · RUO</div><h4>In-vitro only</h4><p>Peptides are intended exclusively for in-vitro laboratory and scientific research — not for human or veterinary consumption, diagnosis, or treatment.</p></div>
         <div class="comp-tile reveal"><div class="ic">Consult a Physician</div><h4>Seek advice</h4><p>Always consult a qualified physician before considering any peptide, hormone, or research chemical. Self-administration carries serious health risks.</p></div>
-        <div class="comp-tile reveal"><div class="ic">Know Your Law</div><h4>Compliance</h4><p>Several items (e.g. androgens, melanocortin agonists) are controlled or regulated in many jurisdictions. Buyers are responsible for legal compliance.</p></div>
+        <div class="comp-tile reveal"><div class="ic">Know Your Law</div><h4>Compliance</h4><p>Several items (e.g. certain melanocortin agonists) are controlled or regulated in many jurisdictions. Buyers are responsible for legal compliance.</p></div>
       </div>
       <div class="comp-strong reveal"><span class="mk">No medical advice</span><p>Nothing on this site constitutes medical advice or a recommendation to use any compound. The per-compound reference panels describe scientific mechanism, pharmacokinetics and laboratory handling only — they intentionally contain no human dosing, routes, frequencies, cycles, or stacks.</p></div>
     </div>
@@ -1116,9 +1130,74 @@ nav.nav-hidden{transform:translateY(-100%)}
       </div>
       <div class="form-ok" id="formOk" role="status">
         <h4 data-t="enq.okH">Opening WhatsApp…</h4>
-        <p data-t="enq.okP">If nothing opened, your browser may have blocked it — use the email link above, or message us directly at +1 803 857 3396.</p>
+        <p data-t="enq.okP">If nothing opened, your browser may have blocked it — use the email link above, or message us directly at +62 812 857 3396.</p>
       </div>
     </form>
+  </div>
+</section>
+</div>
+</main>
+
+<!-- ===== VIEW: VERIFY ===== -->
+<main class="view" data-view="verify">
+<div class="page">
+<header class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="#home">Home</a><span class="sep">/</span><span class="here">Verify</span></div>
+    <span class="kicker">Documented, Not Promised</span>
+    <h1 data-t="ph.ver">Every lot,<br><em>on the record.</em></h1>
+    <p data-t="vf.lead">Enter the lot number printed on your vial to see its analysis record — compound, purity, method and testing date.</p>
+  </div>
+</header>
+
+<section class="section" id="verify-lookup" style="padding-top:64px">
+  <div class="wrap">
+    <form class="controls reveal vf-form" id="vfForm" novalidate>
+      <div class="search">
+        <i class="ph ph-magnifying-glass"></i>
+        <input type="text" id="vfInput" placeholder="AX-2508-RT10" autocomplete="off" spellcheck="false" aria-label="Lot number" />
+      </div>
+      <button type="submit" class="btn btn-solid"><span data-t="vf.check">Verify</span></button>
+    </form>
+    <div class="vf-chips reveal">
+      <span class="vf-chips-k" data-t="vf.try">Try a sample lot</span>
+      <button class="chip" type="button" data-lot="AX-2508-RT10">AX-2508-RT10</button>
+      <button class="chip" type="button" data-lot="AX-2406-1157">AX-2406-1157</button>
+      <button class="chip" type="button" data-lot="AX-2405-KPV10">AX-2405-KPV10</button>
+    </div>
+
+    <div class="coa-wrap" id="vfResult" hidden>
+      <div class="coa live">
+        <div class="coa-h">
+          <span class="mark">A</span>
+          <div>
+            <h4 data-t="vf.coaH">Certificate of Analysis</h4>
+            <p data-t="vf.coaSub">Lot verification record</p>
+          </div>
+          <span class="pass" id="vfStatus">Verified</span>
+        </div>
+        <div class="coa-grid">
+          <div class="coa-cell"><div class="k" data-t="vf.compound">Compound</div><div class="v" id="vfCompound">—</div></div>
+          <div class="coa-cell"><div class="k" data-t="vf.lot">Lot No.</div><div class="v" id="vfLot">—</div></div>
+          <div class="coa-cell"><div class="k" data-t="vf.purity">Purity (HPLC)</div><div class="v red" id="vfPurity">—</div></div>
+          <div class="coa-cell"><div class="k" data-t="vf.method">Method</div><div class="v" id="vfMethod">—</div></div>
+          <div class="coa-cell"><div class="k" data-t="vf.tested">Tested</div><div class="v" id="vfTested">—</div></div>
+          <div class="coa-cell"><div class="k" data-t="vf.lab">Laboratory</div><div class="v" id="vfLab">—</div></div>
+        </div>
+        <div class="coa-foot" data-t="vf.foot">Research Use Only — peptides are intended exclusively for in-vitro laboratory research, not for human or veterinary use. Sample record: figures shown are specimens until live lot data is connected.</div>
+      </div>
+      <div class="vf-actions">
+        <a class="btn btn-solid" id="vfCoaLink" href="#" target="_blank" rel="noopener" hidden><i class="ph ph-file-arrow-down"></i> <span data-t="vf.download">Download CoA (PDF)</span></a>
+        <a class="tlink" id="vfRequest" href="#" target="_blank" rel="noopener"><span data-t="vf.request">Request the full CoA</span> <span class="ar">→</span></a>
+        <a class="tlink" id="vfProduct" href="#products"><span data-t="vf.product">View this product</span> <span class="ar">→</span></a>
+      </div>
+    </div>
+
+    <div class="vf-none reveal" id="vfNone" hidden>
+      <h4 data-t="vf.noneH">Lot not found</h4>
+      <p data-t="vf.noneP">Check the number against the label on your vial. If it still doesn't resolve, send us a photo of the label and we'll trace it.</p>
+      <a class="tlink" id="vfNoneWa" href="#" target="_blank" rel="noopener"><span data-t="vf.noneWa">Send it on WhatsApp</span> <span class="ar">→</span></a>
+    </div>
   </div>
 </section>
 </div>
@@ -1137,11 +1216,12 @@ nav.nav-hidden{transform:translateY(-100%)}
         <a href="#products/cat-redlight">Therapy &amp; Recovery</a>
         <a href="#products/cat-apparel">Apparel</a>
         <a href="#standards">Standards</a>
+        <a href="#verify">Verify a Lot</a>
         <a href="#contact">Contact &amp; FAQ</a>
       </div>
       <div>
         <h5 data-t="foot.contact">Contact</h5>
-        <a href="https://wa.me/18038573396" target="_blank" rel="noopener">WhatsApp Order Line</a>
+        <a href="https://wa.me/628128573396" target="_blank" rel="noopener">WhatsApp Order Line</a>
         <a href="mailto:hello@axiomperformance.example">hello@axiomperformance.example</a>
         <p class="fl">Mon–Sat · 09:00–18:00 WIB</p>
         <p class="fl">Jakarta, Indonesia</p>
@@ -1173,6 +1253,7 @@ nav.nav-hidden{transform:translateY(-100%)}
       <div class="pd-ref" id="pdRef" hidden>
         <div class="k"><i class="ph-bold ph-atom"></i> <span data-t="pd.studied">Studied for</span></div>
         <p id="pdRefText">—</p>
+        <a class="tlink" href="#verify" style="margin-top:10px;display:inline-flex"><span data-t="pd.verify">Verify a lot</span> <span class="ar">→</span></a>
       </div>
       <div class="pd-buy">
         <span class="pd-price" id="pdPrice">—</span>
@@ -1509,144 +1590,12 @@ window.__axiom = {
 };
 </script>
 
-<script>
-/* Research peptide catalogue — transcribed from the source price list. Prices in IDR. For research use only. */
-window.CATALOG = [
-  {
-    id: "metabolic",
-    no: "01",
-    name: "Metabolic & Weight Management",
-    icon: "scales",
-    blurb: "Metabolic regulators, incretin mimetics and cellular-energy compounds for research into weight, glucose handling and longevity pathways.",
-    items: [
-      { name: "MOTS-c", dose: "40 mg", content: "Pen", price: 2800000 },
-      { name: "Tesamorelin", dose: "10 mg", content: "Pen", price: 2300000 },
-      { name: "Tesamorelin", dose: "20 mg", content: "Pen", price: 3100000 },
-      { name: "Tirzepatide", dose: "10 mg", content: "Pen", price: 1500000 },
-      { name: "Tirzepatide", dose: "30 mg", content: "Pen", price: 2500000 },
-      { name: "Retatrutide", dose: "5 mg", content: "Pen", price: 1600000 },
-      { name: "Retatrutide", dose: "10 mg", content: "Pen", price: 1900000 },
-      { name: "Retatrutide", dose: "15 mg", content: "Pen", price: 2200000 },
-      { name: "Retatrutide", dose: "20 mg", content: "Pen", price: 2600000 },
-      { name: "Retatrutide", dose: "30 mg", content: "Pen", price: 3400000 },
-      { name: "Retatrutide", dose: "60 mg", content: "Pen", price: 5700000 },
-      { name: "NAD+", dose: "500 mg", content: "Pen", price: 1600000 },
-      { name: "NAD+", dose: "1000 mg", content: "Pen", price: 1900000 },
-      { name: "SLU-PP-332", dose: "5 mg", content: "Pen", price: 1900000 },
-      { name: "5-Amino-1MQ", dose: "5 mg", content: "Pen", price: 1600000 },
-      { name: "5-Amino-1MQ", dose: "50 mg", content: "Pen", price: 2000000 }
-    ]
-  },
-  {
-    id: "tissue",
-    no: "02",
-    name: "Tissue Repair & Regeneration",
-    icon: "first-aid",
-    blurb: "Cytoprotective and regenerative peptides studied for soft-tissue, gut and recovery research models.",
-    items: [
-      { name: "BPC-157", dose: "10 mg", content: "Pen", price: 1600000 },
-      { name: "TB-500", dose: "10 mg", content: "Pen", price: 1800000 },
-      { name: "KPV", dose: "10 mg", content: "Pen", price: 1600000 },
-      { name: "Wolverine Blend", dose: "20 mg", content: "Pen", price: 2600000 },
-      { name: "KLOW Blend", dose: "80 mg", content: "Pen", price: 2900000 },
-      { name: "ARA-290", dose: "10 mg", content: "Pen", price: 1900000 },
-      { name: "Cartalax", dose: "20 mg", content: "Pen", price: 2500000 },
-      { name: "PEG-MGF", dose: "2 mg", content: "Pen", price: 1900000 },
-      { name: "LL-37", dose: "5 mg", content: "Pen", price: 1900000 }
-    ]
-  },
-  {
-    id: "growth",
-    no: "03",
-    name: "Growth Factors & Recovery",
-    icon: "pulse",
-    blurb: "Secretagogues and growth-factor analogues for research into recovery, repair and somatotropic pathways.",
-    items: [
-      { name: "CJC No DAC + Ipamorelin", dose: "10 mg", content: "Pen", price: 1900000 },
-      { name: "CJC No DAC + Ipamorelin", dose: "20 mg", content: "Pen", price: 2800000 },
-      { name: "IGF-1 LR3", dose: "1 mg", content: "Pen", price: 2700000 },
-      { name: "HGH", dose: "36 IU", content: "Pen", price: 2000000 },
-      { name: "Thymosin Alpha-1", dose: "10 mg", content: "Pen", price: 2300000 }
-    ]
-  },
-  {
-    id: "neuro",
-    no: "04",
-    name: "Neuropeptides & Cognitive Research",
-    icon: "brain",
-    blurb: "Neuroactive and nootropic peptides studied for cognition, neuroprotection and sleep-architecture research.",
-    items: [
-      { name: "Cerebrolysin", dose: "60 mg", content: "Pen", price: 2500000 },
-      { name: "DSIP", dose: "10 mg", content: "Pen", price: 1600000 },
-      { name: "DSIP", dose: "5 mg", content: "Pen", price: 1200000 },
-      { name: "Selank", dose: "10 mg", content: "Pen", price: 1400000 },
-      { name: "Semax", dose: "10 mg", content: "Pen", price: 1400000 },
-      { name: "Adamax", dose: "10 mg", content: "Pen", price: 1900000 },
-      { name: "Pinealon", dose: "20 mg", content: "Pen", price: 2300000 }
-    ]
-  },
-  {
-    id: "reproductive",
-    no: "05",
-    name: "Reproductive & Hormonal Research",
-    icon: "gender-intersex",
-    blurb: "Gonadotropins and hormonal-axis modulators for endocrine and reproductive research models.",
-    items: [
-      { name: "HCG", dose: "10000 IU", content: "Pen", price: 1900000 },
-      { name: "HMG", dose: "75 IU", content: "Pen", price: 1600000 },
-      { name: "Kisspeptin-10", dose: "10 mg", content: "10 mg", price: 2000000 },
-      { name: "PT-141", dose: "10 mg", content: "Pen", price: 1600000 },
-      { name: "Oxytocin Acetate", dose: "10 mg", content: "10 mg", price: 1900000 },
-      { name: "Testosterone Enanthate", dose: "300 mg", content: "300 mg", price: 1600000 }
-    ]
-  },
-  {
-    id: "longevity",
-    no: "06",
-    name: "Longevity, Cellular & Cosmetic Research",
-    icon: "sparkle",
-    blurb: "Copper peptides, antioxidants and senescence-pathway compounds for longevity and dermal-research applications.",
-    items: [
-      { name: "Epitalon", dose: "", content: "Pen", price: 2200000 },
-      { name: "GHK-Cu", dose: "50 mg", content: "Pen", price: 1200000 },
-      { name: "GHK-Cu", dose: "100 mg", content: "Pen", price: 1400000 },
-      { name: "AHK-Cu", dose: "100 mg", content: "Pen", price: 1700000 },
-      { name: "Glutathione", dose: "1500 mg", content: "Pen", price: 1600000 },
-      { name: "Melanotan 2", dose: "10 mg", content: "Pen", price: 1800000 }
-    ]
-  },
-  {
-    id: "redlight",
-    no: "07",
-    name: "Red Light Therapy & Recovery",
-    icon: "sun",
-    unit: "devices",
-    consumer: true,
-    blurb: "Photobiomodulation and recovery hardware — clinical-wavelength red and near-infrared light for circulation, skin and post-training recovery. Consumer devices, not research chemicals.",
-    items: [
-      { name: "Red Light Leg Compression System", dose: "660 + 850 nm · Pair", content: "Device", price: 6500000, img: "assets/products/leg-compression.webp" },
-      { name: "Red Light Therapy Mat", dose: "Full-body · 660 + 850 nm", content: "Device", price: 5900000, img: "assets/products/therapy-mat.webp" },
-      { name: "Red Light Therapy Mask", dose: "Face · LED array", content: "Device", price: 2400000, img: "assets/products/therapy-mask.webp" }
-    ]
-  },
-  {
-    id: "apparel",
-    no: "08",
-    name: "Apparel & Merch",
-    icon: "t-shirt",
-    unit: "products",
-    consumer: true,
-    blurb: "AXIOM training apparel and accessories — the same neutral, precise identity, off the lab and into the field.",
-    items: [
-      { name: "Performance Tee", dose: "Dry-knit · Unisex", content: "Apparel", price: 450000 },
-      { name: "Oversized Training Hoodie", dose: "Heavyweight · Unisex", content: "Apparel", price: 950000 },
-      { name: "Logo Cap", dose: "Adjustable", content: "Accessory", price: 350000 },
-      { name: "Steel Water Bottle", dose: "750 ml · Insulated", content: "Accessory", price: 400000 },
-      { name: "Gym Duffel", dose: "45 L", content: "Accessory", price: 850000 }
-    ]
-  }
-];
+<script src="../shared/catalog.js"></script>
+<script src="../shared/lots.js"></script>
 
+<script>
+/* Catalogue, prices and contacts live in shared/catalog.js — the single
+   source of truth shared with the price-list documents. */
 /* ------------------------------------------------------------------ *
  * Neutral research reference — scientific context only.
  * Deliberately contains NO human dosing, routes, frequencies,
@@ -1687,12 +1636,40 @@ window.REFERENCE = {
   "Kisspeptin-10":{cls:"Kisspeptin decapeptide",mech:"Fragment studied for GnRH-axis regulation in reproductive research.",half:"Very short"},
   "PT-141":{cls:"Melanocortin agonist (Bremelanotide)",mech:"Melanocortin-receptor agonist studied for MC4R signalling in research models.",half:"≈2–3 hours"},
   "Oxytocin Acetate":{cls:"Nonapeptide hormone",mech:"Studied for oxytocin-receptor signalling in behavioural and smooth-muscle research.",half:"Short (minutes)"},
-  "Testosterone Enanthate":{cls:"Androgen ester ⚠ controlled",mech:"Esterified androgen studied in endocrine research. A regulated anabolic-androgenic steroid in most jurisdictions — handle and supply per local law.",half:"Long-acting ester"},
   "Epitalon":{cls:"Khavinson tetrapeptide",mech:"Synthetic Ala-Glu-Asp-Gly peptide modelled on epithalamin, studied for telomerase/pineal-regulation in longevity research.",half:"Short"},
   "GHK-Cu":{cls:"Copper tripeptide",mech:"Gly-His-Lys:Cu studied for tissue-remodelling, antioxidant and dermal-research signalling.",half:"Short"},
   "AHK-Cu":{cls:"Copper tripeptide",mech:"Ala-His-Lys:Cu studied in hair-follicle and dermal research.",half:"Short"},
   "Glutathione":{cls:"Tripeptide antioxidant",mech:"Endogenous Glu-Cys-Gly antioxidant studied for redox and detoxification research.",half:"Short"},
-  "Melanotan 2":{cls:"α-MSH analogue ⚠ regulated",mech:"Synthetic melanocortin agonist studied for melanocortin-pathway/pigmentation research. Regulated in many jurisdictions.",half:"≈1–2 hours"}
+  "Cagrilintide":{cls:"Amylin analogue",mech:"Long-acting amylin-receptor agonist studied for satiety and energy-balance pathways in metabolic research.",half:"≈7–8 days"},
+  "AOD-9604":{cls:"hGH fragment 176-191",mech:"Modified C-terminal growth-hormone fragment studied for lipolytic-pathway research without somatotropic signalling.",half:"Short"},
+  "CJC-1295 (With DAC)":{cls:"GHRH analogue (DAC)",mech:"Drug-affinity-complex GHRH analogue studied for sustained GH-axis signalling; DAC extends persistence.",half:"≈6–8 days"},
+  "Sermorelin":{cls:"GHRH(1-29) analogue",mech:"Shortest active GHRH fragment studied for physiologic, pulsatile GH-release research.",half:"≈10–20 minutes"},
+  "Thymalin":{cls:"Thymic peptide complex",mech:"Thymus-derived polypeptide preparation studied for immunoregulation research.",half:"Short"},
+  "Dihexa":{cls:"Angiotensin IV analogue",mech:"Hexapeptide studied for HGF/c-Met-linked synaptogenesis and cognition research.",half:"Extended (oral-stable analogue)"},
+  "VIP":{cls:"Vasoactive intestinal peptide",mech:"Endogenous 28-residue peptide studied for VPAC-receptor signalling in immune, pulmonary and circadian research.",half:"≈1–2 minutes"},
+  "LC216 Lipo-B":{cls:"Lipotropic blend",mech:"Methionine–inositol–choline plus B-vitamin blend studied in lipid-metabolism research.",half:"Mixture (varies)"},
+  "LC526 Fat Blaster":{cls:"Lipotropic blend",mech:"Combined lipotropic and carnitine blend studied in fat-metabolism research.",half:"Mixture (varies)"},
+  "SNAP-8":{cls:"Acetyl octapeptide-3",mech:"SNAP-25 mimetic studied in topical dermal research for neurotransmitter-release modulation.",half:"Short (topical research)"},
+  "FOXO4-DRI":{cls:"D-retro-inverso peptide",mech:"FOXO4-p53 interference peptide studied in senolytic (senescent-cell clearance) research.",half:"Extended (D-amino acids)"},
+  "Melanotan II":{cls:"α-MSH analogue ⚠ regulated",mech:"Synthetic melanocortin agonist studied for melanocortin-pathway/pigmentation research. Regulated in many jurisdictions.",half:"≈1–2 hours"},
+  "Bronchogen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in bronchial-epithelium bioregulation research.",half:"Short"},
+  "Cardiogen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in cardiac-tissue bioregulation research.",half:"Short"},
+  "Chonluten":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in lung and gastric-mucosa bioregulation research.",half:"Short"},
+  "Cortagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in cortical/nervous-tissue bioregulation research.",half:"Short"},
+  "Crystagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in immune-system bioregulation research.",half:"Short"},
+  "Livagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in hepatic-tissue bioregulation research.",half:"Short"},
+  "Ovagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in ovarian and hepatic bioregulation research.",half:"Short"},
+  "Pancragen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in pancreatic bioregulation research.",half:"Short"},
+  "Prostamax":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in prostate-tissue bioregulation research.",half:"Short"},
+  "Testagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in testicular/endocrine bioregulation research.",half:"Short"},
+  "Vesugen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in vascular-wall bioregulation research.",half:"Short"},
+  "Ipamorelin":{cls:"GH secretagogue",mech:"Selective ghrelin-receptor pentapeptide studied for pulsatile GH-axis research.",half:"≈2 hours"},
+  "Ipamorelin + Tesamorelin":{cls:"Secretagogue + GHRH blend",mech:"Combined research blend studied for GH-axis signalling — see the individual component entries.",half:"Mixed"},
+  "Selank + Semax":{cls:"Neuropeptide blend",mech:"Combined research blend studied in anxiolytic and nootropic contexts — see the individual component entries.",half:"Mixed"},
+  "AICAR":{cls:"AMPK activator",mech:"Nucleoside analogue studied as an exercise-mimetic in cellular-energy and metabolic research.",half:"Short"},
+  "L-Carnitine":{cls:"Amino-acid derivative",mech:"Endogenous compound studied for mitochondrial fatty-acid transport in metabolic research.",half:"Short (route-dependent)"},
+  "Humanin":{cls:"Mitochondrial-derived peptide",mech:"Studied for cytoprotective signalling in cellular-stress and longevity research.",half:"Short"},
+  "SS-31":{cls:"Mitochondria-targeted tetrapeptide",mech:"Cardiolipin-binding peptide (elamipretide) studied for mitochondrial-function research.",half:"≈3–4 hours"}
 };
 
 </script>
@@ -1716,9 +1693,21 @@ const yr=document.getElementById("yr");if(yr)yr.textContent=new Date().getFullYe
 /* ---- Catalogue count (hero meta), when data.js is present ---- */
 const mc=document.getElementById("metaCount");
 if(mc&&window.CATALOG)mc.textContent=window.CATALOG.reduce((n,c)=>n+c.items.length,0);
+const fcnt=document.getElementById("featCount");
+if(fcnt&&window.CATALOG)fcnt.textContent=window.CATALOG.reduce((n,c)=>n+c.items.length,0);
+
+/* ---- Static price labels sync to the shared catalogue (featured cards) ---- */
+if(window.AXIOM_DATA){
+  const bySku={};
+  window.AXIOM_DATA.categories.forEach(c=>c.items.forEach(it=>{bySku[it.sku]=it;}));
+  document.querySelectorAll("[data-sku-price]").forEach(el=>{
+    const it=bySku[el.dataset.skuPrice];
+    if(it&&it.price!=null)el.innerHTML=`<span class="cur">Rp</span>${new Intl.NumberFormat("id-ID").format(it.price)}`;
+  });
+}
 
 /* ---- Cart badge from persisted cart; on pages without the drawer, Cart goes to products ---- */
-window.AX_CART_KEY="axiom_cart_v1";
+window.AX_CART_KEY="axiom_cart_v2"; /* v2: entries keyed by sku (shared/catalog.js) */
 window.axReadCart=function(){try{return JSON.parse(localStorage.getItem(window.AX_CART_KEY))||{};}catch(e){return {};}};
 window.axBadge=function(){
   const entries=Object.values(window.axReadCart());
@@ -1747,42 +1736,6 @@ window.axReveal=el=>io.observe(el); // for content injected after this runs (cat
   try{sessionStorage.setItem("axiom_intro","1");}catch(e){}
   setTimeout(()=>pl.classList.add("done"),1650);
 })();
-
-/* ---- Custom cursor (fine pointers only) ---- */
-if(!coarse&&!reduce){
-  const ring=document.getElementById("cursorRing"),dot=document.getElementById("cursorDot");
-  if(ring&&dot){
-    let rx=innerWidth/2,ry=innerHeight/2,dx=rx,dy=ry,tx=rx,ty=ry,on=false;
-    const hoverSel="a,button,input,select,textarea,summary,label,.tlink,.chip,.pcard,[data-add],[data-ref],.faq-q";
-    addEventListener("mousemove",e=>{
-      tx=e.clientX;ty=e.clientY;
-      if(!on){on=true;document.body.classList.add("cursor-on");}
-      const t=e.target.closest?.(hoverSel);
-      ring.classList.toggle("hover",!!t);
-    });
-    addEventListener("mouseleave",()=>{on=false;document.body.classList.remove("cursor-on");});
-    (function tick(){
-      dx+=(tx-dx)*0.35;dy+=(ty-dy)*0.35;
-      rx+=(tx-rx)*0.16;ry+=(ty-ry)*0.16;
-      dot.style.transform=`translate(${dx}px,${dy}px)`;
-      ring.style.transform=`translate(${rx}px,${ry}px)`;
-      requestAnimationFrame(tick);
-    })();
-  }
-}
-
-/* ---- Magnetic hover (fine pointers only) ---- */
-if(!coarse&&!reduce){
-  const strength=0.32;
-  document.querySelectorAll(".tlink, nav .navcart, .btn, .gate-actions a, .gate-actions button").forEach(el=>{
-    el.addEventListener("mousemove",e=>{
-      const r=el.getBoundingClientRect();
-      const mx=e.clientX-(r.left+r.width/2),my=e.clientY-(r.top+r.height/2);
-      el.style.transform=`translate(${mx*strength}px,${my*strength}px)`;
-    });
-    el.addEventListener("mouseleave",()=>{el.style.transform="";el.style.transition="transform .4s cubic-bezier(.16,1,.3,1)";setTimeout(()=>el.style.transition="",400);});
-  });
-}
 
 /* ---- Scroll progress bar + hide-on-scroll nav ---- */
 const bar=document.getElementById("progress"),nav=document.getElementById("nav");
@@ -1830,8 +1783,8 @@ const list=document.getElementById("catList");
 CAT.forEach(c=>{
   const short=c.name.split(" & ")[0].split(",")[0];
   const cards=c.items.map((it,i)=>{
-    const id=`${c.id}-${i}`;
-    ITEMS[id]={id,name:it.name,dose:it.dose,price:it.price,cat:c.id,img:it.img||null,content:it.content||null,catName:c.name,catShort:short,catNo:c.no,catBlurb:c.blurb,unit:c.unit||'compounds',idx:i};
+    const id=it.sku||`${c.id}-${i}`;
+    ITEMS[id]={id,name:it.name,refKey:it.refKey||it.name,dose:it.dose,price:it.price,cat:c.id,img:it.img||null,content:it.content||null,catName:c.name,catShort:short,catNo:c.no,catBlurb:c.blurb,unit:c.unit||'compounds',idx:i};
     const priceHtml=it.price==null?'<span class="pcard-price na">On request</span>':`<span class="pcard-price"><span class="cur">Rp</span>${fmt(it.price)}</span>`;
     return `
     <article class="pcard${it.img?' has-media':''}" data-id="${id}" data-name="${(it.name+' '+it.dose).toLowerCase()}" data-idx="${i}" data-price="${it.price==null?'':it.price}" tabindex="0" role="button" aria-label="View ${it.name}">
@@ -1845,7 +1798,7 @@ CAT.forEach(c=>{
       <div class="pcard-foot">
         ${priceHtml}
         <div class="pcard-actions">
-          ${(window.REFERENCE&&window.REFERENCE[it.name])?`<button class="ref-btn" data-ref="${it.name}" aria-label="Research info" title="Research info"><i class="ph ph-info"></i></button>`:''}
+          ${(window.REFERENCE&&window.REFERENCE[it.refKey||it.name])?`<button class="ref-btn" data-ref="${it.refKey||it.name}" aria-label="Research info" title="Research info"><i class="ph ph-info"></i></button>`:''}
           ${it.price==null?'':`<button class="add-btn" data-add="${id}" aria-label="Add to cart" title="Add to cart"><i class="ph ph-plus"></i></button>`}
         </div>
       </div>
@@ -1910,8 +1863,15 @@ apply();
 
 /* ---- Quote builder (persisted across pages) ---- */
 const quote=new Map(Object.entries(window.axReadCart()));
+/* Reconcile persisted entries with the live catalogue: re-price by sku, drop retired items */
+[...quote.keys()].forEach(id=>{
+  const it=ITEMS[id];
+  if(!it||it.price==null){quote.delete(id);return;}
+  const e=quote.get(id);
+  e.name=it.name;e.dose=it.dose;e.price=it.price;
+});
 const qBar=document.getElementById("quoteBar"),qItems=document.getElementById("qItems"),qCount=document.getElementById("qCount"),qTotal=document.getElementById("qTotal");
-const WA_NUMBER="18038573396";
+const WA_NUMBER=(window.AXIOM_DATA&&window.AXIOM_DATA.brand&&window.AXIOM_DATA.brand.waNumber)||"628128573396";
 function saveCart(){
   try{localStorage.setItem(window.AX_CART_KEY,JSON.stringify(Object.fromEntries(quote)));}catch(e){}
 }
@@ -1988,12 +1948,12 @@ addEventListener("keydown",e=>{if(e.key==="Escape")closeRef();});
 /* ---- Product detail modal ---- */
 const pd=document.getElementById("pd"),pdOv=document.getElementById("pdOv");
 let pdReturnFocus=null;
-const CAT_ICON={metabolic:"scales",tissue:"first-aid-kit",growth:"pulse",neuro:"brain",reproductive:"gender-intersex",longevity:"sparkle",redlight:"sun",apparel:"t-shirt"};
+const CAT_ICON={metabolic:"scales",tissue:"first-aid-kit",growth:"pulse",neuro:"brain",reproductive:"gender-intersex",longevity:"sparkle",bioregulators:"atom",redlight:"sun",apparel:"t-shirt"};
 function specRows(it){
   const rows=[];
   if(it.dose) rows.push(["Specification",it.dose]);
   if(it.content) rows.push([it.cat==="apparel"?"Type":it.cat==="redlight"?"Format":"Presentation",it.content]);
-  if(REF[it.name]){ rows.push(["Purity","≥ 98% · HPLC/MS"]); rows.push(["Classification","Research use only"]); }
+  if(REF[it.refKey||it.name]){ rows.push(["Purity","≥ 98% · HPLC/MS"]); rows.push(["Classification","Research use only"]); }
   else if(it.cat==="redlight"){ rows.push(["Wavelengths","660 + 850 nm"]); rows.push(["Classification","Consumer device"]); }
   else if(it.cat==="apparel"){ rows.push(["Classification","Consumer product"]); }
   rows.push(["Category",it.catName]);
@@ -2008,7 +1968,7 @@ function openProduct(id){
   document.getElementById("pdCat").textContent=it.catName;
   document.getElementById("pdName").textContent=it.name;
   document.getElementById("pdDose").textContent=it.dose||"";
-  const r=REF[it.name];
+  const r=REF[it.refKey||it.name];
   document.getElementById("pdDesc").textContent = r ? r.mech : it.catBlurb;
   document.getElementById("pdSpecs").innerHTML=specRows(it).map(([k,v])=>`<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join("");
   const refBox=document.getElementById("pdRef");
@@ -2072,10 +2032,79 @@ addEventListener("keydown",e=>{
 
 </script>
 <script>
+/* AXIOM — lot verification (#verify and #verify/<lot> deep links) */
+(function(){
+"use strict";
+const LOTS=window.AXIOM_LOTS||{};
+const WA=(window.AXIOM_DATA&&window.AXIOM_DATA.brand&&window.AXIOM_DATA.brand.waNumber)||"628128573396";
+const form=document.getElementById("vfForm");if(!form)return;
+const input=document.getElementById("vfInput");
+const result=document.getElementById("vfResult"),none=document.getElementById("vfNone");
+const bySku={};
+(window.AXIOM_DATA?window.AXIOM_DATA.categories:[]).forEach(c=>c.items.forEach(it=>{bySku[it.sku]=it;}));
+const norm=s=>String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+const CODES={};Object.keys(LOTS).forEach(k=>{CODES[norm(k)]=k;});
+const STATUS={
+  en:{verified:"Verified",expired:"Expired",recalled:"Recalled"},
+  id:{verified:"Terverifikasi",expired:"Kedaluwarsa",recalled:"Ditarik"}
+};
+let current=null;
+function lang(){try{return localStorage.getItem("axiom_lang")||"en";}catch(e){return "en";}}
+function fmtDate(d){
+  if(!d)return "—";
+  try{return new Intl.DateTimeFormat(lang()==="id"?"id-ID":"en-GB",{day:"numeric",month:"short",year:"numeric"}).format(new Date(d+"T00:00:00"));}catch(e){return d;}
+}
+function render(code){
+  const key=CODES[norm(code)];
+  const rec=key?LOTS[key]:null;
+  if(!rec){
+    result.hidden=true;none.hidden=false;current=null;
+    const q=`Hello AXIOM, I'd like to verify a lot. The number on my label reads: ${String(code||"").trim().toUpperCase()}`;
+    document.getElementById("vfNoneWa").href=`https://wa.me/${WA}?text=${encodeURIComponent(q)}`;
+    return;
+  }
+  none.hidden=true;result.hidden=false;current=key;
+  document.getElementById("vfCompound").textContent=rec.compound+(rec.spec?" · "+rec.spec:"");
+  document.getElementById("vfLot").textContent=key;
+  document.getElementById("vfPurity").textContent=rec.purity!=null?rec.purity+"%":"—";
+  document.getElementById("vfMethod").textContent=rec.method||"—";
+  document.getElementById("vfTested").textContent=fmtDate(rec.testedOn);
+  document.getElementById("vfLab").textContent=rec.lab||"—";
+  const st=document.getElementById("vfStatus");
+  st.textContent=(STATUS[lang()]||STATUS.en)[rec.status]||rec.status;
+  st.className="pass"+(rec.status==="expired"?" warn":rec.status==="recalled"?" err":"");
+  const dl=document.getElementById("vfCoaLink");
+  if(rec.coaUrl){dl.hidden=false;dl.href=rec.coaUrl;}else dl.hidden=true;
+  document.getElementById("vfRequest").href=`https://wa.me/${WA}?text=${encodeURIComponent(`Hello AXIOM, please send the full Certificate of Analysis for lot ${key}.`)}`;
+  const pl=document.getElementById("vfProduct");
+  if(bySku[rec.sku]){pl.hidden=false;pl.setAttribute("href",`#products/p/${rec.sku}`);}else pl.hidden=true;
+}
+window.axVerifyLookup=function(code){
+  if(input)input.value=String(code||"").trim().toUpperCase();
+  render(code);
+};
+form.addEventListener("submit",e=>{
+  e.preventDefault();
+  const code=input.value.trim().toUpperCase();
+  if(!code)return;
+  render(code);
+  const key=CODES[norm(code)];
+  history.replaceState(null,"",key?"#verify/"+encodeURIComponent(key):"#verify");
+});
+document.querySelectorAll(".vf-chips [data-lot]").forEach(b=>b.addEventListener("click",()=>{
+  window.axVerifyLookup(b.dataset.lot);
+  history.replaceState(null,"","#verify/"+encodeURIComponent(b.dataset.lot));
+}));
+/* Re-render the open record when the interface language changes (after i18n saves it) */
+const lt=document.getElementById("langToggle");
+if(lt)lt.addEventListener("click",()=>{setTimeout(()=>{if(current)render(current);},0);});
+})();
+</script>
+<script>
 /* ===== i18n (interface language EN/ID) ===== */
 (function(){
 const ID={
- "nav.home":"Beranda","nav.products":"Produk","nav.standards":"Standar","nav.contact":"Kontak","nav.cart":"Keranjang",
+ "nav.home":"Beranda","nav.products":"Produk","nav.standards":"Standar","nav.verify":"Verifikasi","nav.contact":"Kontak","nav.cart":"Keranjang",
  "ribbon":'AXIOM · <b>Human Performance &amp; Longevity</b> · Ilmu peptida · Terapi &amp; pemulihan · Wellness · Harga dalam Rupiah',
  "hero.h":"Performa manusia,<br><em>dirancang untuk jangka panjang.</em>",
  "hero.lead":"Ilmu peptida, terapi red-light, pemulihan dan longevity — satu sistem terpadu untuk mereka yang berlatih untuk puluhan tahun, bukan minggu. Setiap protokol terverifikasi, setiap perangkat berkelas klinis.",
@@ -2085,7 +2114,7 @@ const ID={
  "man.2h":"Satu standar,<br><em>di setiap produk.</em>",
  "pil.h":"Satu sistem untuk jangka panjang",
  "pil.1":"Ilmu Peptida","pil.2":"Terapi &amp; Pemulihan","pil.3":"Wellness","pil.4":"Longevity","pil.5":"Apparel",
- "feat.h":"Satu dari tiap pilar","feat.btn":"Lihat Seluruh Rangkaian — 57 Produk",
+ "feat.h":"Satu dari tiap pilar","feat.btn":"Lihat Seluruh Rangkaian",
  "std.h":"Dipegang pada satu standar",
  "cta.kicker":"Minta Penawaran","cta.h":"Susun pesanan Anda","cta.wa":"WhatsApp Kami",
  "ph.prod":"Setiap produk,<br><em>satu standar.</em>","ph.std":"Dipegang pada <em>satu standar.</em>","ph.con":"Dari pertanyaan<br><em>hingga ke depan pintu.</em>",
@@ -2100,8 +2129,18 @@ const ID={
  "enq.note":"Mengirim akan membuka WhatsApp (atau aplikasi email) dengan semua terisi otomatis — tidak ada yang disimpan di situs ini. Pesanan peptida mengonfirmasi ketentuan penggunaan riset saat checkout.",
  "enq.send":"Kirim via WhatsApp","enq.email":"Kirim lewat email",
  "enq.errName":"Mohon isi nama Anda.","enq.errContact":"Mohon tinggalkan email atau nomor WhatsApp.",
- "enq.okH":"Membuka WhatsApp…","enq.okP":"Jika tidak ada yang terbuka, browser Anda mungkin memblokirnya — gunakan tautan email di atas, atau hubungi kami langsung di +1 803 857 3396.",
- "pd.studied":"Dipelajari untuk","pd.add":"Tambah ke keranjang","a11y.skip":"Lewati ke konten"
+ "enq.okH":"Membuka WhatsApp…","enq.okP":"Jika tidak ada yang terbuka, browser Anda mungkin memblokirnya — gunakan tautan email di atas, atau hubungi kami langsung di +62 812 857 3396.",
+ "pd.studied":"Dipelajari untuk","pd.add":"Tambah ke keranjang","pd.verify":"Verifikasi lot","a11y.skip":"Lewati ke konten",
+ "ph.ver":"Setiap lot,<br><em>tercatat resmi.</em>",
+ "vf.lead":"Masukkan nomor lot yang tercetak pada vial Anda untuk melihat catatan analisisnya — senyawa, kemurnian, metode dan tanggal pengujian.",
+ "vf.check":"Periksa","vf.try":"Coba lot contoh",
+ "vf.coaH":"Sertifikat Analisis","vf.coaSub":"Catatan verifikasi lot",
+ "vf.compound":"Senyawa","vf.lot":"Nomor Lot","vf.purity":"Kemurnian (HPLC)","vf.method":"Metode","vf.tested":"Diuji","vf.lab":"Laboratorium",
+ "vf.foot":"Hanya untuk riset — peptida ditujukan secara eksklusif untuk riset laboratorium in-vitro, bukan untuk manusia atau hewan. Catatan contoh: angka yang ditampilkan adalah spesimen hingga data lot aktual terhubung.",
+ "vf.download":"Unduh CoA (PDF)","vf.request":"Minta CoA lengkap","vf.product":"Lihat produk ini",
+ "vf.noneH":"Lot tidak ditemukan",
+ "vf.noneP":"Periksa kembali nomor pada label vial Anda. Jika masih belum ditemukan, kirimkan foto label dan kami akan menelusurinya.",
+ "vf.noneWa":"Kirim via WhatsApp"
 };
 const nodes=[...document.querySelectorAll("[data-t]")];
 nodes.forEach(el=>el._en=el.innerHTML);
@@ -2118,7 +2157,7 @@ document.getElementById("langToggle").addEventListener("click",e=>{const b=e.tar
 /* ===== Enquiry form ===== */
 (function(){
 const form=document.getElementById("enquiryForm"); if(!form)return;
-const WA="18038573396";
+const WA=(window.AXIOM_DATA&&window.AXIOM_DATA.brand&&window.AXIOM_DATA.brand.waNumber)||"628128573396";
 function cartLines(){
   try{const c=JSON.parse(localStorage.getItem(window.AX_CART_KEY)||"{}");
     return Object.values(c).map(e=>`${e.name}${e.dose?' '+e.dose:''} ×${e.qty}`);}catch(e){return [];}
@@ -2160,7 +2199,7 @@ form.addEventListener("submit",e=>{
 <script>
 /* ===== Hash router — one file, four views ===== */
 (function(){
-const VIEWS=["home","products","standards","contact"];
+const VIEWS=["home","products","standards","verify","contact"];
 function route(){
   const h=(location.hash||"#home").replace(/^#\/?/,"");
   const parts=h.split("/");
@@ -2169,6 +2208,9 @@ function route(){
   // product deep link: #products/p/<id>
   const isProduct = view==="products" && parts[1]==="p" && parts[2];
   if(isProduct){ anchor=null; }
+  // lot deep link: #verify/<lot code> (QR scheme for vial labels)
+  const isLot = view==="verify" && parts[1];
+  if(isLot){ anchor=null; }
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.dataset.view===view));
   document.querySelectorAll("#navLinks a").forEach(a=>{
     const t=(a.getAttribute("href")||"").replace(/^#\/?/,"").split("/")[0];
@@ -2180,7 +2222,8 @@ function route(){
   else{const w=document.getElementById("sceneWrap");if(w)w.style.display=view==="home"?"":"none";}
   if(isProduct){ if(window.axOpenProduct)window.axOpenProduct(parts[2]); }
   else{ if(window.axProductOpen&&window.axProductOpen())window.axCloseProduct(true);
-    if(anchor)requestAnimationFrame(()=>requestAnimationFrame(()=>{const el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:"instant",block:"start"});}));
+    if(isLot){ if(window.axVerifyLookup)window.axVerifyLookup(decodeURIComponent(parts[1])); window.scrollTo(0,0); }
+    else if(anchor)requestAnimationFrame(()=>requestAnimationFrame(()=>{const el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:"instant",block:"start"});}));
     else window.scrollTo(0,0);
   }
 }
