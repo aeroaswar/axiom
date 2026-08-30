@@ -1,0 +1,260 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AXIOM Compound Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070605;--ink:#F2EDE5;--muted:#9C9488;--muted-2:#6A635A;
+--line:rgba(242,237,229,.12);--line-soft:rgba(242,237,229,.06);
+--accent:#C88A4E;--accent-bright:#E7B173;--accent-deep:#7C4C24;
+--accent-line:rgba(200,138,78,.34);--maxw:1180px;--pad:34px;
+--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+ font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+a{color:var(--accent-bright);text-decoration:none}
+a:focus-visible{outline:1px solid var(--accent-line);outline-offset:3px}
+header.mast{padding:60px 0 26px;border-bottom:1px solid var(--line);position:relative;
+ background:radial-gradient(60% 60% at 74% 26%,rgba(200,138,78,.16),transparent 60%),
+ radial-gradient(46% 40% at 58% 78%,rgba(124,76,36,.20),transparent 60%)}
+.kick{font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+.wm{display:block;width:min(300px,56vw);height:auto;color:var(--ink);margin:16px 0 8px}
+.sub{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;
+ font-size:clamp(24px,3.6vw,36px);line-height:1.05;letter-spacing:-.01em;margin:12px 0 0;text-wrap:balance}
+.sub em{font-style:normal;color:var(--muted)}
+.lead{color:var(--muted);font-size:14.5px;line-height:1.7;max-width:60ch;margin:14px 0 0}
+.ruoflag{position:absolute;top:60px;right:var(--pad);border:1px solid var(--accent-line);
+ border-radius:8px;padding:9px 13px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--accent-bright);line-height:1.6;text-align:right}
+@media(max-width:760px){.ruoflag{position:static;display:inline-block;margin-top:16px;text-align:left}}
+.keys{display:flex;flex-wrap:wrap;gap:12px 22px;margin:22px 0 0;padding:15px 0 0;
+ border-top:1px solid var(--line-soft);align-items:center}
+.keys .lg{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.tier{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:2px 7px;
+ font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:var(--muted-2)}
+.tier.t1{color:var(--accent-bright);border-color:var(--accent-line)}
+.tier.t2{color:var(--accent);border-color:var(--accent-line)}
+main{padding:34px 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:26px 40px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.cat{break-inside:avoid}
+.cat-h{display:flex;align-items:baseline;gap:11px;padding-bottom:9px;
+ border-bottom:1px solid var(--accent-line);margin-bottom:4px}
+.cat-h .ix{font-family:"Jost","Century Gothic",system-ui,sans-serif;color:var(--accent);font-size:14px}
+.cat-h h3{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;
+ font-size:18px;margin:0;flex:1;letter-spacing:-.005em}
+.cat-h .ct{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2)}
+.row{padding:13px 0;border-bottom:1px solid var(--line-soft)}
+.row:last-child{border-bottom:none}
+.rw{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:5px}
+.rw .n{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:400;font-size:15.5px;color:var(--ink)}
+.b{margin:0;color:var(--accent-bright);font-size:13px;line-height:1.5;font-weight:300}
+.m{margin-top:5px;color:var(--muted-2);font-size:11.5px;font-variant-numeric:tabular-nums}
+footer{border-top:1px solid var(--line);margin-top:34px;padding:24px 0 56px;
+ color:var(--muted-2);font-size:11.5px;line-height:1.7}
+footer .ruo{color:var(--muted);max-width:80ch}
+.badge{display:inline-block;border:1px solid var(--accent-line);border-radius:5px;padding:3px 8px;
+ font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-bright);margin-bottom:10px}
+.more{color:var(--muted);margin:0 0 12px;font-size:12.5px}
+</style></head>
+<body>
+<header class="mast"><div class="wrap">
+  <div class="kick">Peptide Science &middot; Jakarta</div>
+  <svg class="wm" viewBox="0 0 582 70" aria-label="AXIOM" role="img"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg>
+  <div class="sub">Compound <em>brief.</em></div>
+  <p class="lead">Every compound in the AXIOM catalogue in one line each &mdash; what it does, how it is given, and how strong the evidence is. For mechanism, trial figures, safety and sources, see the full compound guide.</p>
+  <div class="ruoflag">Research Use Only<br>In-vitro laboratory use<br>Not for human or veterinary use</div>
+  <div class="keys">
+    <span class="lg"><span class="tier t1">Registration-grade</span>Approved medicine or completed Phase 3</span>
+    <span class="lg"><span class="tier t2">Human trials</span>Controlled human data; not FDA/EMA approved</span>
+    <span class="lg"><span class="tier ">Preclinical</span>Cell and animal models only</span>
+  </div>
+</div></header>
+<main><div class="wrap"><div class="grid">
+<section class="cat">
+  <div class="cat-h"><span class="ix">01</span><h3>GLP-1s &amp; Weight Loss</h3><span class="ct">3 compounds</span></div>
+  <div class="row"><div class="rw"><span class="n">Cagrilintide</span><span class="tier t2">Human trials</span></div>
+    <p class="b">Satiety through the amylin pathway &mdash; weight reduction without touching a GLP-1 receptor.</p>
+    <div class="m">Subcutaneous &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Retatrutide</span><span class="tier t2">Human trials</span></div>
+    <p class="b">The strongest weight-loss result yet recorded in clinical trials &mdash; nearly 29% of body weight.</p>
+    <div class="m">Subcutaneous &middot; 5 mg &middot; 10 mg &middot; 15 mg &middot; 20 mg &middot; 30 mg &middot; 60 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Tirzepatide</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">The approved benchmark of the class &mdash; about a fifth of body weight in registration trials.</p>
+    <div class="m">Subcutaneous &middot; 10 mg &middot; 30 mg &middot; 40 mg</div>
+  </div>
+</section>
+<section class="cat">
+  <div class="cat-h"><span class="ix">02</span><h3>GH Secretagogues</h3><span class="ct">5 compounds</span></div>
+  <div class="row"><div class="rw"><span class="n">CJC-1295 (No DAC) + Ipamorelin</span><span class="tier ">Preclinical</span></div>
+    <p class="b">A synchronised growth-hormone pulse driven from two receptors at once.</p>
+    <div class="m">Subcutaneous &middot; 10 mg &middot; 20 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">HGH 191AA (Somatropin)</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">Growth hormone itself &mdash; the reference molecule for the entire axis.</p>
+    <div class="m">Subcutaneous &middot; 36 IU &middot; 40 IU</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Ipamorelin</span><span class="tier ">Preclinical</span></div>
+    <p class="b">The cleanest pulse in the secretagogue class &mdash; GH without cortisol, prolactin or appetite signal.</p>
+    <div class="m">Subcutaneous &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Ipamorelin + Tesamorelin</span><span class="tier ">Preclinical</span></div>
+    <p class="b">The selective ghrelin pulse paired with the one GHRH analogue that carries registration-grade evidence.</p>
+    <div class="m">Subcutaneous &middot; 18 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Tesamorelin</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">The registration-grade GHRH analogue &mdash; documented visceral-fat reduction in Phase 3 trials.</p>
+    <div class="m">Subcutaneous &middot; 10 mg &middot; 20 mg</div>
+  </div>
+</section>
+<section class="cat">
+  <div class="cat-h"><span class="ix">03</span><h3>Healing &amp; Repair</h3><span class="ct">8 compounds</span></div>
+  <div class="row"><div class="rw"><span class="n">BPC-157</span><span class="tier ">Preclinical</span></div>
+    <p class="b">The most-studied repair peptide in the catalogue &mdash; soft tissue, tendon and gut lining in animal models.</p>
+    <div class="m">Subcutaneous (orally stable) &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">BPC-157 + TB-500 (Wolverine)</span><span class="tier ">Preclinical</span></div>
+    <p class="b">Angiogenesis and cell migration in one preparation &mdash; the two repair axes that don&rsquo;t overlap.</p>
+    <div class="m">Subcutaneous &middot; 20 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">GHK-Cu</span><span class="tier t2">Human trials</span></div>
+    <p class="b">Collagen remodelling with human trial data behind it.</p>
+    <div class="m">Topical or subcutaneous &middot; 50 mg &middot; 100 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">KPV</span><span class="tier ">Preclinical</span></div>
+    <p class="b">The anti-inflammatory signal of alpha-MSH, without its pigmentary activity.</p>
+    <div class="m">Subcutaneous, oral or topical &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">KLOW (BPC-157 + TB-500 + GHK-Cu + KPV)</span><span class="tier ">Preclinical</span></div>
+    <p class="b">Four repair mechanisms in a single preparation.</p>
+    <div class="m">Subcutaneous &middot; 80 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">LL-37</span><span class="tier t2">Human trials</span></div>
+    <p class="b">The body&rsquo;s own antimicrobial &mdash; wound closure where healing has stalled.</p>
+    <div class="m">Topical or local &middot; 5 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Peg MGF</span><span class="tier ">Preclinical</span></div>
+    <p class="b">The repair signal of loaded muscle, extended to a research-usable half-life.</p>
+    <div class="m">Subcutaneous &middot; 2 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">TB-500</span><span class="tier ">Preclinical</span></div>
+    <p class="b">Cell migration to the injury site &mdash; the actin-binding arm of repair research.</p>
+    <div class="m">Subcutaneous &middot; 10 mg</div>
+  </div>
+</section>
+<section class="cat">
+  <div class="cat-h"><span class="ix">04</span><h3>Brain Health &amp; Nootropics</h3><span class="ct">6 compounds</span></div>
+  <div class="row"><div class="rw"><span class="n">Adamax</span><span class="tier ">Preclinical</span></div>
+    <p class="b">A designed successor to Semax &mdash; with no published evidence of its own yet.</p>
+    <div class="m">Intranasal &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Cerebrolysin</span><span class="tier t2">Human trials</span></div>
+    <p class="b">The most clinically documented neurotrophic in the catalogue &mdash; stroke and dementia trial data.</p>
+    <div class="m">Intravenous or intramuscular &middot; 60 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Pinealon</span><span class="tier ">Preclinical</span></div>
+    <p class="b">A gene-level neuronal bioregulator hypothesis &mdash; cell and rodent data only.</p>
+    <div class="m">Subcutaneous or intranasal &middot; 20 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Selank</span><span class="tier t2">Human trials</span></div>
+    <p class="b">Anxiety reduction comparable to benzodiazepines in Russian trials &mdash; without the sedation.</p>
+    <div class="m">Intranasal &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Semax</span><span class="tier t2">Human trials</span></div>
+    <p class="b">Two decades of clinical use in stroke recovery and cognition.</p>
+    <div class="m">Intranasal (or subcutaneous) &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Selank + Semax</span><span class="tier t2">Human trials</span></div>
+    <p class="b">Calm and focus studied side by side &mdash; the two Russian regulatory peptides together.</p>
+    <div class="m">Intranasal &middot; 20 mg</div>
+  </div>
+</section>
+<section class="cat">
+  <div class="cat-h"><span class="ix">05</span><h3>Energy &amp; Endurance</h3><span class="ct">5 compounds</span></div>
+  <div class="row"><div class="rw"><span class="n">5-Amino-1MQ</span><span class="tier ">Preclinical</span></div>
+    <p class="b">An NAD+-preserving switch aimed specifically at fat tissue.</p>
+    <div class="m">Oral &middot; 50 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">AICAR</span><span class="tier ">Preclinical</span></div>
+    <p class="b">The original exercise mimetic &mdash; endurance gains in untrained mice.</p>
+    <div class="m">Intravenous or subcutaneous &middot; 50 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">L-Carnitine (Injectable)</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">A fat-oxidation shuttle, delivered at full systemic dose.</p>
+    <div class="m">Intravenous or intramuscular &middot; 5000 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">MOTS-c</span><span class="tier ">Preclinical</span></div>
+    <p class="b">A mitochondrial signal the body raises during exercise &mdash; and loses with age.</p>
+    <div class="m">Subcutaneous &middot; 10 mg &middot; 40 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">SLU-PP-332 (Injectable)</span><span class="tier ">Preclinical</span></div>
+    <p class="b">The newest exercise-mimetic axis &mdash; endurance biology through the ERR receptors.</p>
+    <div class="m">Subcutaneous &middot; 5 mg</div>
+  </div>
+</section>
+<section class="cat">
+  <div class="cat-h"><span class="ix">06</span><h3>Immunity</h3><span class="ct">1 compound</span></div>
+  <div class="row"><div class="rw"><span class="n">Thymosin Alpha-1</span><span class="tier t2">Human trials</span></div>
+    <p class="b">An immune-system modulator with controlled trial data in infection and sepsis.</p>
+    <div class="m">Subcutaneous &middot; 10 mg</div>
+  </div>
+</section>
+<section class="cat">
+  <div class="cat-h"><span class="ix">07</span><h3>Sexual Health</h3><span class="ct">5 compounds</span></div>
+  <div class="row"><div class="rw"><span class="n">HCG</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">An LH mimic &mdash; the standard tool for driving gonadal testosterone.</p>
+    <div class="m">Subcutaneous or intramuscular &middot; 10000 IU</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">HMG</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">Both gonadotropins in one preparation &mdash; the FSH complement to HCG.</p>
+    <div class="m">Subcutaneous or intramuscular &middot; 75 IU</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Kisspeptin</span><span class="tier t2">Human trials</span></div>
+    <p class="b">The master switch at the top of the reproductive axis.</p>
+    <div class="m">Subcutaneous, IV or intranasal &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Oxytocin Acetate</span><span class="tier t2">Human trials</span></div>
+    <p class="b">The bonding hormone &mdash; a large but contested social-behaviour literature.</p>
+    <div class="m">Intranasal, IV or intramuscular &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">PT-141</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">Sexual desire acted on centrally, in the brain &mdash; not through the vasculature.</p>
+    <div class="m">Subcutaneous (autoinjector) &middot; 10 mg</div>
+  </div>
+</section>
+<section class="cat">
+  <div class="cat-h"><span class="ix">08</span><h3>Longevity &amp; Cellular Repair</h3><span class="ct">5 compounds</span></div>
+  <div class="row"><div class="rw"><span class="n">DSIP</span><span class="tier t2">Human trials</span></div>
+    <p class="b">A sleep-pressure modulator &mdash; most active exactly when sleep is disturbed.</p>
+    <div class="m">Subcutaneous or intravenous &middot; 5 mg &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Epithalon</span><span class="tier ">Preclinical</span></div>
+    <p class="b">Telomerase activation &mdash; demonstrated in human cells, not yet in humans.</p>
+    <div class="m">Subcutaneous or intranasal &middot; 50 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">Humanin</span><span class="tier ">Preclinical</span></div>
+    <p class="b">A mitochondrial cytoprotectant that tracks with human longevity.</p>
+    <div class="m">Subcutaneous or intraperitoneal &middot; 10 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">NAD+</span><span class="tier t2">Human trials</span></div>
+    <p class="b">Refilling the coenzyme pool that halves between your 20s and 50s.</p>
+    <div class="m">Intravenous (or subcutaneous) &middot; 500 mg &middot; 1000 mg</div>
+  </div>
+  <div class="row"><div class="rw"><span class="n">SS-31</span><span class="tier t1">Registration-grade</span></div>
+    <p class="b">The registration-grade mitochondrial peptide &mdash; approved for a genetic energy disorder.</p>
+    <div class="m">Subcutaneous &middot; 50 mg</div>
+  </div>
+</section>
+</div></div></main>
+<footer><div class="wrap">
+  <p class="more">Full detail &mdash; mechanism, trial figures, safety signals, regulatory status, glossary and sources &mdash; is in the AXIOM Compound Guide. Pricing is published separately in the AXIOM Price List.</p>
+  <span class="badge">Compliance</span>
+  <p class="ruo">Research Use Only. Peptides listed here are intended exclusively for in-vitro laboratory research &mdash; not drugs, food, cosmetics, or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Evidence grades reflect the state of published research at the time of writing and are not claims of efficacy. Several compounds are controlled or regulated in many jurisdictions; buyers are solely responsible for confirming the laws that apply to them.</p>
+</div></footer>
+</body></html>
