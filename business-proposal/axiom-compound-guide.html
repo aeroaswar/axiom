@@ -1,0 +1,688 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AXIOM Compound Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070605;--ink:#F2EDE5;--muted:#9C9488;--muted-2:#6A635A;--line:rgba(242,237,229,.12);--line-2:rgba(242,237,229,.22);--line-soft:rgba(242,237,229,.06);--accent:#C88A4E;--accent-bright:#E7B173;--accent-deep:#7C4C24;--accent-soft:rgba(200,138,78,.14);--accent-line:rgba(200,138,78,.34);--maxw:1180px;--pad:34px;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.tab{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+a{color:var(--accent-bright);text-decoration:none}
+a:focus-visible{outline:1px solid var(--accent-line);outline-offset:3px}
+header.mast{padding:64px 0 30px;border-bottom:1px solid var(--line);position:relative;background:radial-gradient(60% 60% at 74% 26%,rgba(200,138,78,.16),transparent 60%),radial-gradient(46% 40% at 58% 78%,rgba(124,76,36,.20),transparent 60%)}
+.kick{font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+.wm{display:block;width:min(340px,62vw);height:auto;color:var(--ink);margin:16px 0 8px}
+.sub{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;font-size:clamp(26px,4vw,40px);line-height:1.05;letter-spacing:-.01em;margin:14px 0 0;max-width:18ch;text-wrap:balance}
+.sub em{font-style:normal;color:var(--muted)}
+.lead{color:var(--muted);font-size:15px;line-height:1.7;max-width:62ch;margin:16px 0 0}
+.ruoflag{position:absolute;top:64px;right:var(--pad);border:1px solid var(--accent-line);border-radius:8px;padding:10px 14px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright);line-height:1.6;text-align:right}
+@media(max-width:720px){.ruoflag{position:static;display:inline-block;margin-top:18px;text-align:left}}
+.formula{display:flex;flex-wrap:wrap;gap:18px;margin:26px 0 0;padding:16px 0;border-top:1px solid var(--line-soft)}
+.formula .f{border-left:2px solid var(--accent-line);padding-left:12px}
+.formula .k{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2)}
+.formula .v{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:400;font-size:16px;margin-top:4px}
+/* pathway index */
+.toc{padding:40px 0 8px}
+.toc-h{font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted-2);margin:0 0 14px}
+.toc a.row{display:flex;align-items:baseline;gap:14px;padding:11px 2px;border-bottom:1px solid var(--line-soft);color:var(--ink);transition:border-color 220ms var(--ease)}
+.toc a.row:hover{border-bottom-color:var(--accent-line)}
+.toc .ix{font-family:"Jost","Century Gothic",system-ui,sans-serif;color:var(--accent);font-size:14px;letter-spacing:.06em;min-width:26px}
+.toc .nm{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;font-size:17px;flex:1}
+.toc .ct{color:var(--muted-2);font-size:12px}
+.legend{display:flex;flex-wrap:wrap;gap:14px 22px;margin:22px 0 0;padding:16px 0 0;border-top:1px solid var(--line-soft);align-items:center}
+.legend .lg{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;line-height:1.5}
+/* sections */
+main{padding:26px 0 20px}
+.cat{padding:38px 0 6px}
+.cat-h{display:flex;align-items:baseline;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--accent-line);margin-bottom:14px}
+.cat-h .ix{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:400;color:var(--accent);font-size:15px;letter-spacing:.06em}
+.cat-h h3{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;font-size:22px;margin:0;flex:1;letter-spacing:-.005em}
+.cat-h .ct{color:var(--muted-2);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.cat-sum{color:var(--muted);font-size:14px;line-height:1.7;max-width:72ch;margin:0 0 22px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:860px){.cards{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:10px;padding:22px 22px 16px;display:flex;flex-direction:column;gap:14px;transition:border-color 220ms var(--ease)}
+.card:hover{border-color:var(--line-2)}
+.card-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.card-h h4{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:400;font-size:19px;margin:0;letter-spacing:.005em}
+.tier{border:1px solid var(--line);border-radius:5px;padding:3px 8px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:var(--muted-2)}
+.tier.t1{color:var(--accent-bright);border-color:var(--accent-line)}
+.tier.t2{color:var(--accent);border-color:var(--accent-line)}
+.benefit{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;font-size:16.5px;line-height:1.45;color:var(--accent-bright);margin:0;text-wrap:balance}
+.block{display:flex;flex-direction:column;gap:6px}
+.block .k{font-weight:500;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2)}
+.block p{margin:0;color:var(--muted);font-size:13px;line-height:1.65}
+.block ul{margin:0;padding:0 0 0 16px;color:var(--muted);font-size:13px;line-height:1.65;display:flex;flex-direction:column;gap:5px}
+.block li::marker{color:var(--accent-deep)}
+.block strong{color:var(--ink);font-weight:500}
+sup{line-height:0}
+sup a{color:var(--muted-2);font-size:10px}
+sup a:hover{color:var(--accent-bright)}
+.lots{display:flex;align-items:baseline;gap:12px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line-soft)}
+.lots .k{font-weight:500;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2)}
+.lots .v{color:var(--muted);font-size:12.5px}
+/* references */
+.refs{padding:44px 0 8px}
+.refs h3{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;font-size:22px;margin:0 0 4px}
+.refs .note{color:var(--muted-2);font-size:12px;line-height:1.7;max-width:72ch;margin:0 0 18px}
+.refs ol{margin:0;padding:0 0 0 22px;color:var(--muted);font-size:12px;line-height:1.8;columns:2;column-gap:34px}
+@media(max-width:860px){.refs ol{columns:1}}
+.refs li{break-inside:avoid;padding-left:4px}
+.refs a{overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:26px 0 60px;color:var(--muted-2);font-size:11.5px;line-height:1.7}
+footer .ruo{color:var(--muted);max-width:80ch}
+.badge{display:inline-block;border:1px solid var(--accent-line);border-radius:5px;padding:3px 8px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-bright);margin-bottom:10px}
+
+.spec{display:flex;flex-wrap:wrap;gap:10px 20px;margin:2px 0}
+.spec .s{display:flex;flex-direction:column;gap:3px;border-left:2px solid var(--accent-line);padding-left:11px}
+.spec .sk{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
+.spec .sv{font-size:12.5px;color:var(--ink);line-height:1.35}
+.status{display:flex;align-items:baseline;gap:12px;padding-top:10px}
+.status .k{font-weight:500;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap}
+.status .v{color:var(--muted);font-size:12.5px;line-height:1.4}
+.status .v.appr{color:var(--accent-bright)}
+.gloss{padding:44px 0 8px}
+.gloss h3{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:300;font-size:22px;margin:0 0 4px}
+.gloss .note{color:var(--muted-2);font-size:12px;line-height:1.7;max-width:72ch;margin:0 0 18px}
+.gloss dl{margin:0;columns:2;column-gap:40px}
+@media(max-width:860px){.gloss dl{columns:1}}
+.gloss dt{font-family:"Jost","Century Gothic",system-ui,sans-serif;font-weight:400;color:var(--ink);font-size:14px;letter-spacing:.01em;margin:0 0 4px;break-after:avoid}
+.gloss dd{margin:0 0 15px;padding:0;color:var(--muted);font-size:12.5px;line-height:1.6;break-inside:avoid}
+.gloss dd .acc{color:var(--accent)}
+</style></head>
+<body>
+<header class="mast"><div class="wrap">
+  <div class="kick">Peptide Science · Jakarta</div>
+  <svg class="wm" viewBox="0 0 582 70" aria-label="AXIOM" role="img"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg>
+  <div class="sub">Compound <em>guide.</em></div>
+  <p class="lead">The companion to the AXIOM price list. Every compound in the catalogue, pathway by pathway: what it is, how it works, what the research actually shows, and the research context it belongs to. Evidence is graded on every card. No pricing here &mdash; that lives in the price list.</p>
+  <div class="ruoflag">Research Use Only<br>In-vitro laboratory use<br>Not for human or veterinary use</div>
+  <div class="formula">
+    <div class="f"><div class="k">Coverage</div><div class="v tab">38 compounds &middot; 8 pathways</div></div>
+    <div class="f"><div class="k">Evidence</div><div class="v tab">Graded on every card</div></div>
+    <div class="f"><div class="k">Sources</div><div class="v tab">Trials &amp; peer review, cited</div></div>
+    <div class="f"><div class="k">Per card</div><div class="v tab">Mechanism &middot; evidence &middot; format &middot; safety &middot; status</div></div>
+    <div class="f"><div class="k">Guidance</div><div class="v tab">Context only &mdash; no dosing</div></div>
+  </div>
+</div></header>
+<nav class="toc"><div class="wrap">
+  <h2 class="toc-h">Pathways &mdash; ordered as the price list</h2>
+  <a class="row" href="#p1"><span class="ix">01</span><span class="nm">GLP-1s &amp; Weight Loss</span><span class="ct tab">3 compounds</span></a>
+  <a class="row" href="#p2"><span class="ix">02</span><span class="nm">GH Secretagogues</span><span class="ct tab">5 compounds</span></a>
+  <a class="row" href="#p3"><span class="ix">03</span><span class="nm">Healing &amp; Repair</span><span class="ct tab">8 compounds</span></a>
+  <a class="row" href="#p4"><span class="ix">04</span><span class="nm">Brain Health &amp; Nootropics</span><span class="ct tab">6 compounds</span></a>
+  <a class="row" href="#p5"><span class="ix">05</span><span class="nm">Energy &amp; Endurance</span><span class="ct tab">5 compounds</span></a>
+  <a class="row" href="#p6"><span class="ix">06</span><span class="nm">Immunity</span><span class="ct tab">1 compound</span></a>
+  <a class="row" href="#p7"><span class="ix">07</span><span class="nm">Sexual Health</span><span class="ct tab">5 compounds</span></a>
+  <a class="row" href="#p8"><span class="ix">08</span><span class="nm">Longevity &amp; Cellular Repair</span><span class="ct tab">5 compounds</span></a>
+  <a class="row" href="#glossary"><span class="ix">&mdash;</span><span class="nm">Glossary of terms</span><span class="ct tab">the biology, in brief</span></a>
+  <div class="legend">
+    <span class="lg"><span class="tier t1">Registration-grade</span> approved medicine or completed Phase 3</span>
+    <span class="lg"><span class="tier t2">Human trials</span> controlled human data, not (yet) approved</span>
+    <span class="lg"><span class="tier">Preclinical</span> cell and animal models only</span>
+  </div>
+</div></nav>
+<main><div class="wrap">
+<section class="cat" id="p1">
+  <div class="cat-h"><span class="ix">01</span><h3>GLP-1s &amp; Weight Loss</h3><span class="ct">Page 1 of the price list</span></div>
+  <p class="cat-sum">Incretin and amylin biology &mdash; the pathway with the strongest human evidence in the catalogue. One approved medicine, one Phase 3 molecule ahead of it in trial results, and one compound that reaches satiety through a different receptor entirely.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>Cagrilintide</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">Satiety through the amylin pathway &mdash; weight reduction without touching a GLP-1 receptor.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~180 h half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A long-acting analogue of amylin, the hormone co-secreted with insulin. It activates hindbrain amylin receptors (AMY1R/AMY3R) to raise satiety, slow gastric emptying and suppress post-prandial glucagon &mdash; a mechanistically distinct route from the incretin class.<sup><a href="#r5">5</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li><strong>11.8% mean weight reduction</strong> at 68 weeks as monotherapy in a late-stage trial of 3,417 participants; 31.6% lost &ge; 15% of body weight vs 4.7% on placebo.<sup><a href="#r4">4</a></sup></li>
+        <li>Paired with semaglutide (CagriSema), reductions deepen beyond either agent alone.</li>
+        <li>2025 mechanism work confirmed the effect runs through central amylin receptors &mdash; delete them and the weight loss disappears.<sup><a href="#r5">5</a></sup></li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Amylin-class tolerability &mdash; early nausea that eases with exposure; the long half-life gives steadier levels.</p></div><div class="block"><div class="k">Compared with</div><p>Unlike the GLP-1 agonists beside it, it works through amylin receptors, so it is studied as a complement to them rather than a substitute.</p></div><div class="block"><div class="k">Research context</div><p>The non-incretin satiety arm of weight-management research. Studied where GLP-1 pathways are already saturated, or where a complementary appetite mechanism is the question.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Phase 3 (CagriSema program); not yet approved</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Retatrutide</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">The strongest weight-loss result yet recorded in clinical trials &mdash; nearly 29% of body weight.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~6-day half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A single molecule agonising three receptors at once &mdash; GLP-1, GIP and glucagon. The first two suppress appetite and improve incretin signalling; the glucagon arm raises energy expenditure, which is what separates it from the dual agonists.<sup><a href="#r3">3</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Phase 2 obesity: <strong>24.2% mean weight loss</strong> at 48 weeks (top dose) vs 2.1% placebo.</li>
+        <li>Phase 3 TRIUMPH-4: up to <strong>28.7% mean weight reduction</strong> at 68 weeks, with meaningful relief of osteoarthritis knee pain.<sup><a href="#r1">1</a></sup></li>
+        <li>Liver fat reduced up to 82.4% in a Phase 2a MASLD trial.<sup><a href="#r2">2</a></sup></li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Dose-dependent gastrointestinal effects &mdash; nausea, vomiting, diarrhoea &mdash; the incretin-class signal, amplified at higher exposure.</p></div><div class="block"><div class="k">Compared with</div><p>Adds a third receptor (glucagon) to Tirzepatide&rsquo;s two, which is what drives the extra energy expenditure and the deeper trial results.</p></div><div class="block"><div class="k">Research context</div><p>The deepest metabolic signal of any incretin-class molecule. A 14-trial Phase 3 program (22,000+ participants) is running; not yet an approved medicine anywhere.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">5 mg &middot; 10 mg &middot; 15 mg &middot; 20 mg &middot; 30 mg &middot; 60 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Phase 3 ongoing (TRIUMPH); not yet approved</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Tirzepatide</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">The approved benchmark of the class &mdash; about a fifth of body weight in registration trials.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~5-day half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A 39-amino-acid dual agonist of the GIP and GLP-1 receptors &mdash; the first of the &ldquo;twincretin&rdquo; class. Co-activation suppresses appetite, slows gastric emptying and improves insulin sensitivity.<sup><a href="#r6">6</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>SURMOUNT-1: <strong>20.9% mean weight loss</strong> at 72 weeks (highest dose) vs 3.1% placebo.<sup><a href="#r7">7</a></sup></li>
+        <li>At three years: 22.9% reduction and a 94% lower rate of progression to type 2 diabetes.</li>
+        <li>Head-to-head (SURMOUNT-5): 20.2% vs semaglutide&rsquo;s 13.7% at 72 weeks.</li>
+        <li>FDA-approved as Mounjaro (diabetes) and Zepbound (weight management).</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Mild-to-moderate, dose-dependent nausea, vomiting and diarrhoea; the most thoroughly characterised safety profile in this pathway.</p></div><div class="block"><div class="k">Compared with</div><p>Two receptors to Retatrutide&rsquo;s three and Cagrilintide&rsquo;s amylin route &mdash; and, unlike either neighbour, an approved medicine.</p></div><div class="block"><div class="k">Research context</div><p>The registration-grade reference of the pathway &mdash; the molecule every newer incretin compound is read against.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg &middot; 30 mg &middot; 40 mg</span></div><div class="status"><span class="k">Status</span><span class="v appr">FDA-approved (Mounjaro, Zepbound)</span></div>
+    </article>
+  </div>
+</section>
+<section class="cat" id="p2">
+  <div class="cat-h"><span class="ix">02</span><h3>GH Secretagogues</h3><span class="ct">Page 2 of the price list</span></div>
+  <p class="cat-sum">The growth-hormone axis, approached two ways: replace the hormone directly, or stimulate the body&rsquo;s own pulsatile release through GHRH and ghrelin receptors. The blends exist because the two receptor routes are complementary, not redundant.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>CJC-1295 (No DAC) + Ipamorelin</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">A synchronised growth-hormone pulse driven from two receptors at once.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">CJC ~30 min &middot; ipamorelin ~2 h</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>CJC-1295 without DAC (Mod GRF 1-29) is a short-acting GHRH analogue; ipamorelin fires the ghrelin receptor. Together they produce a timed, pulsatile GH release that tracks the axis&rsquo;s natural dynamics rather than flattening them.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Each component class raises GH and IGF-1 in human pharmacology studies.</li>
+        <li>The combination itself has no controlled human trial &mdash; the pairing rests on mechanistic complementarity, not outcome data.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No controlled human trial of the combination; the component classes are generally well tolerated in short human studies.</p></div><div class="block"><div class="k">Compared with</div><p>A stimulate-your-own-pulse pair, versus HGH&rsquo;s direct replacement and tesamorelin&rsquo;s single-receptor GHRH route.</p></div><div class="block"><div class="k">Research context</div><p>The standard pairing in secretagogue research wherever pulsatile &mdash; rather than sustained &mdash; GH signalling is the model under study. See the ipamorelin card for the selective half of the pair.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg &middot; 20 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; no approved product</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>HGH 191AA (Somatropin)</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">Growth hormone itself &mdash; the reference molecule for the entire axis.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Short serum half-life; acts via IGF-1</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>Recombinant human growth hormone, 191 amino acids, sequence-identical to the pituitary hormone. Binds GH receptors &mdash; chiefly hepatic &mdash; driving IGF-1 production, lipolysis, and glucose and lipid handling.<sup><a href="#r8">8</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Decades of registration-grade trials behind FDA approvals: paediatric growth failure, adult GH deficiency, Turner syndrome, HIV-associated wasting.<sup><a href="#r8">8</a></sup></li>
+        <li>The most completely characterised molecule in this pathway, by a wide margin.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>At replacement doses, generally favourable; fluid retention, carpal-tunnel symptoms, joint pain and raised glucose appear dose-dependently and rise sharply at supraphysiologic doses.</p></div><div class="block"><div class="k">Compared with</div><p>The hormone itself, rather than a secretagogue that coaxes the body into releasing more of its own.</p></div><div class="block"><div class="k">Research context</div><p>Direct replacement &mdash; the ceiling against which every secretagogue below it is measured. Where the model needs the hormone itself rather than a stimulated pulse, this is the tool.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">36 IU &middot; 40 IU</span></div><div class="status"><span class="k">Status</span><span class="v appr">FDA-approved (multiple brands)</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Ipamorelin</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">The cleanest pulse in the secretagogue class &mdash; GH without cortisol, prolactin or appetite signal.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~2 h half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A pentapeptide agonist of the ghrelin receptor (GHS-R), and the most selective of its class: it releases GH in discrete pulses without the cortisol, prolactin or hunger side-signals of earlier GHRPs.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Human pharmacokinetic studies confirm clean, selective GH pulses.</li>
+        <li>No efficacy RCTs; a clinical program in post-operative ileus was discontinued, leaving selectivity &mdash; not outcomes &mdash; as its documented property.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Clean, selective GH pulses in human pharmacology studies, without the cortisol or prolactin rise of older GHRPs; no efficacy RCT.</p></div><div class="block"><div class="k">Compared with</div><p>The most selective agent of the ghrelin-receptor class &mdash; the &ldquo;clean&rdquo; half of the standard CJC pairing.</p></div><div class="block"><div class="k">Research context</div><p>Chosen wherever selectivity matters &mdash; isolating the GH pulse from confounding hormonal noise in axis research.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; ileus program discontinued</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Ipamorelin + Tesamorelin</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">The selective ghrelin pulse paired with the one GHRH analogue that carries registration-grade evidence.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Ipamorelin ~2 h &middot; tesamorelin minutes</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The same dual-receptor logic as CJC + ipamorelin, with tesamorelin &mdash; a clinically approved molecule &mdash; as the GHRH arm.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Tesamorelin alone holds Phase 3 data (visceral fat &minus;15%; see its card).</li>
+        <li>The combination itself is untested in controlled trials.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>The tesamorelin arm carries label-grade safety data; the combination itself is untested in controlled trials.</p></div><div class="block"><div class="k">Compared with</div><p>Same pulse-pair logic as the CJC blend, but with a clinically approved molecule (tesamorelin) as the GHRH arm.</p></div><div class="block"><div class="k">Research context</div><p>GH-axis research where the GHRH component should be the one with human trial evidence behind it.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">18 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only combination</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Tesamorelin</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">The registration-grade GHRH analogue &mdash; documented visceral-fat reduction in Phase 3 trials.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~8&ndash;38 min half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A 44-amino-acid GHRH analogue. Binds pituitary GHRH receptors, restoring pulsatile GH secretion and raising IGF-1; the downstream shift in adipose metabolism runs specifically against visceral fat.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Two Phase 3 trials (pooled n = 806): visceral adipose tissue reduced <strong>about 15%</strong> vs placebo over 26 weeks, with liver-fat reductions reported.</li>
+        <li>FDA-approved in 2010 as Egrifta for HIV-associated lipodystrophy &mdash; the trials were in that population; use beyond it is off-label territory.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Injection-site reactions, joint pain, fluid retention and a small upward drift in fasting glucose &mdash; documented across its Phase 3 trials.</p></div><div class="block"><div class="k">Compared with</div><p>The one GHRH analogue here with registration-grade human evidence behind it.</p></div><div class="block"><div class="k">Research context</div><p>Visceral-adiposity and GH-axis restoration models &mdash; the only GHRH analogue with human registration evidence.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg &middot; 20 mg</span></div><div class="status"><span class="k">Status</span><span class="v appr">FDA-approved (Egrifta) for HIV lipodystrophy</span></div>
+    </article>
+  </div>
+</section>
+<section class="cat" id="p3">
+  <div class="cat-h"><span class="ix">03</span><h3>Healing &amp; Repair</h3><span class="ct">Page 3 of the price list</span></div>
+  <p class="cat-sum">Tissue repair decomposed into four mechanisms &mdash; angiogenesis, cell migration, matrix remodelling, inflammation control &mdash; each with its own compound, plus the blends that combine them. Evidence here is mostly preclinical, with two human-tested exceptions.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>BPC-157</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">The most-studied repair peptide in the catalogue &mdash; soft tissue, tendon and gut lining in animal models.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous (orally stable)</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Rodent half-life ~15 min; effects outlast it</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A synthetic 15-amino-acid fragment of a gastric body-protection compound. Upregulates VEGF-driven angiogenesis and promotes fibroblast migration; raises growth-hormone-receptor expression in tendon cells.<sup><a href="#r10">10</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Accelerated healing of transected Achilles tendon, muscle, ligament and gut lesions across a large rodent literature.<sup><a href="#r9">9</a></sup></li>
+        <li>Consistent gut-protective effects in NSAID-damage models.</li>
+        <li>No completed human RCT &mdash; a 2025 systematic review found the clinical evidence gap unclosed; prohibited in professional sport.<sup><a href="#r11">11</a></sup></li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data &mdash; the record is rodent and anecdotal; prohibited in professional sport.</p></div><div class="block"><div class="k">Compared with</div><p>The angiogenic (VEGF) base of the repair blends, complementary to TB-500&rsquo;s cell-migration route.</p></div><div class="block"><div class="k">Research context</div><p>Soft-tissue, tendon and gut-lining injury models &mdash; the angiogenic arm of repair research, and the base layer of both repair blends.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; no completed human trial</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>BPC-157 + TB-500 (Wolverine)</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">Angiogenesis and cell migration in one preparation &mdash; the two repair axes that don&rsquo;t overlap.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Component half-lives (minutes to ~2 h)</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>BPC-157 supplies the vascular signal (VEGF, angiogenesis); TB-500 supplies the cellular one (actin-mediated migration to the injury site). The mechanisms are complementary, which is the blend&rsquo;s entire rationale.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Each component carries a deep rodent literature (see their cards).</li>
+        <li>The blend itself has no published study &mdash; it is a composition, not a compound.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data for either component or the blend.</p></div><div class="block"><div class="k">Compared with</div><p>Combines the two flagship repair mechanisms &mdash; angiogenesis and cell migration &mdash; that its single-agent cards cover separately.</p></div><div class="block"><div class="k">Research context</div><p>Combined soft-tissue repair models where both the vascular and the migratory mechanism are wanted in one protocol design.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">20 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only composition</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>GHK-Cu</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">Collagen remodelling with human trial data behind it.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Topical or subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Active at nanomolar levels</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A naturally occurring copper-binding tripeptide (glycyl-histidyl-lysine). At nanomolar concentrations it modulates collagen synthesis and breakdown, metalloproteinase activity, angiogenesis and antioxidant enzymes &mdash; a remodelling regulator rather than a blunt growth signal.<sup><a href="#r12">12</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Human topical trial: collagen increase in <strong>70% of volunteers</strong>, outperforming vitamin C and retinoic acid.<sup><a href="#r12">12</a></sup></li>
+        <li>2024 RCT (n = 60): 31% wrinkle reduction and 28% elasticity gain over 12 weeks vs placebo.</li>
+        <li>Animal wound models: faster closure, more vessel formation, higher antioxidant enzyme levels.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Topical use has a strong cosmetic-grade safety record; injectable use lacks long-term data and carries a theoretical copper-load risk.</p></div><div class="block"><div class="k">Compared with</div><p>The matrix-remodelling arm of the repair set &mdash; a regulator, not a blunt growth signal like the growth-factor cards.</p></div><div class="block"><div class="k">Research context</div><p>Skin-remodelling and wound-repair research. The evidence base is cosmetic-grade human data &mdash; real, but no drug approval behind it.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">50 mg &middot; 100 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Cosmetic ingredient; no drug approval</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>KPV</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">The anti-inflammatory signal of alpha-MSH, without its pigmentary activity.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous, oral or topical</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">No measured human pharmacokinetics</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The C-terminal tripeptide of alpha-MSH (lysine-proline-valine). It keeps the parent hormone&rsquo;s suppression of NF-&kappa;B-driven cytokines &mdash; TNF-&alpha;, IL-6 &mdash; while shedding the melanocortin pigmentary signalling.<sup><a href="#r13">13</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Significant anti-inflammatory effect in two murine colitis models: earlier recovery, reduced inflammatory infiltrates and MPO activity.<sup><a href="#r13">13</a></sup></li>
+        <li>Supporting in-vitro work on intestinal barrier protection under cytokine stress.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data; the evidence is murine colitis models.</p></div><div class="block"><div class="k">Compared with</div><p>The inflammation-control arm of the KLOW blend, distinct from the growth and migration signals around it.</p></div><div class="block"><div class="k">Research context</div><p>Gut-inflammation and barrier-integrity models; the inflammation-control arm of the KLOW blend.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>KLOW (BPC-157 + TB-500 + GHK-Cu + KPV)</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">Four repair mechanisms in a single preparation.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Four component half-lives</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The full decomposition of tissue repair, stacked: angiogenesis (BPC-157), cell migration (TB-500), matrix remodelling (GHK-Cu) and inflammation control (KPV). Each arm&rsquo;s mechanism is documented on its own card.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>No study of the four-way combination exists; the evidence is entirely the sum of its parts.</li>
+        <li>GHK-Cu is the only arm with human data.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human data for the combination; only the GHK-Cu arm has human evidence.</p></div><div class="block"><div class="k">Compared with</div><p>Stacks all four repair mechanisms at once &mdash; the broadest of the blends, and a composition rather than a studied compound.</p></div><div class="block"><div class="k">Research context</div><p>Broad-spectrum tissue-repair models where all four mechanisms are wanted simultaneously and component-level attribution is not the question.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">80 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only composition</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>LL-37</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">The body&rsquo;s own antimicrobial &mdash; wound closure where healing has stalled.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Topical or local</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Resistant to proteolytic breakdown</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The only cathelicidin encoded in the human genome: a 37-amino-acid peptide stored in neutrophil granules. Disrupts microbial membranes and biofilms while signalling re-epithelialisation, granulation and angiogenesis at the wound site.<sup><a href="#r14">14</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Topical LL-37 increased re-epithelialisation, granulation, collagen organisation and angiogenesis in wound models.<sup><a href="#r15">15</a></sup></li>
+        <li>An early-phase clinical trial in hard-to-heal ulcers reported complete closure in roughly 28% of the large-wound group versus 8% on placebo.</li>
+        <li>Broad activity against Gram-positive and Gram-negative pathogens, MRSA models included.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Cytotoxic to host cells at high concentrations; early-phase wound trials were tolerated.</p></div><div class="block"><div class="k">Compared with</div><p>The antimicrobial arm of repair &mdash; where healing meets innate immunity, unlike the purely regenerative cards.</p></div><div class="block"><div class="k">Research context</div><p>Infected and stalled wound models &mdash; the point where repair research meets innate immunity.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">5 mg</span></div><div class="status"><span class="k">Status</span><span class="v">No approval; early-phase trials only</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Peg MGF</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">The repair signal of loaded muscle, extended to a research-usable half-life.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">PEGylation extends half-life to ~24 h</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The pegylated E-domain of mechano growth factor &mdash; the IGF-1 splice variant muscle produces under mechanical load. Proposed to activate muscle satellite cells; PEGylation stretches the half-life from minutes to around 24 hours.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Satellite-cell activation in rodent and in-vitro work &mdash; largely from one research group; an independent laboratory failed to reproduce the myoblast effect.</li>
+        <li>Endogenous MGF is confirmed exercise-responsive in human muscle biopsies, but no injected-MGF human study exists.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data, and a documented replication gap in the efficacy work.</p></div><div class="block"><div class="k">Compared with</div><p>The muscle-repair signalling arm &mdash; the weakest-replicated card in this pathway.</p></div><div class="block"><div class="k">Research context</div><p>Muscle-repair signalling models. The weakest-replicated compound in this pathway &mdash; read it accordingly.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">2 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>TB-500</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">Cell migration to the injury site &mdash; the actin-binding arm of repair research.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~2 h half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A synthetic fragment of thymosin beta-4 covering its actin-binding segment. Sequesters G-actin and drives cell migration through ILK/Akt signalling &mdash; keratinocyte migration rises about 42% in scratch assays &mdash; with downstream angiogenesis.<sup><a href="#r16">16</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>A 2004 <em>Nature</em> study established the parent peptide&rsquo;s cardioprotection after infarction in mice.<sup><a href="#r16">16</a></sup></li>
+        <li>The parent reached human trials (RGN-352 cardiac; RGN-259 ophthalmic); TB-500 itself has no completed human data.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data of its own; the parent peptide reached human trials as RGN-352 and RGN-259.</p></div><div class="block"><div class="k">Compared with</div><p>The cell-migration arm, paired with BPC-157&rsquo;s angiogenesis in the Wolverine blend.</p></div><div class="block"><div class="k">Research context</div><p>The cell-migration mechanism across wound, cardiac and corneal repair models; the migratory half of the Wolverine blend.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; parent reached trials</span></div>
+    </article>
+  </div>
+</section>
+<section class="cat" id="p4">
+  <div class="cat-h"><span class="ix">04</span><h3>Brain Health &amp; Nootropics</h3><span class="ct">Page 4 of the price list</span></div>
+  <p class="cat-sum">Neurotrophic and regulatory peptides, most of them from the Russian clinical tradition &mdash; which means real human data for some, and honest gaps for others. The spread of evidence grades in this pathway is the widest in the catalogue.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>Adamax</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">A designed successor to Semax &mdash; with no published evidence of its own yet.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intranasal</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">No measured pharmacokinetics</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>Semax modified with an adamantane cage on the C-terminus &mdash; chemistry borrowed from CNS drugs like memantine &mdash; intended to extend half-life and central penetration. Its mechanism is inferred from the parent, not measured.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>No published study in any species, in vitro or in vivo. Every specific claim about it traces to manufacturer inference from Semax.</li>
+        <li>What is real is the parent molecule&rsquo;s record &mdash; see the Semax card.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No safety data in any species &mdash; every property is inferred from Semax.</p></div><div class="block"><div class="k">Compared with</div><p>A theoretical &ldquo;Semax-plus&rdquo; built for longer action; the parent (Semax) is the one with the real record.</p></div><div class="block"><div class="k">Research context</div><p>For researchers who want the derivative chemistry specifically. Stated plainly: this card carries the least evidence in the catalogue.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; no published studies</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Cerebrolysin</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">The most clinically documented neurotrophic in the catalogue &mdash; stroke and dementia trial data.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intravenous or intramuscular</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Peptide mixture; infused slowly</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A mixture of low-molecular-weight neurotrophic peptides that mimics endogenous growth factors and induces more of them &mdash; BDNF, NGF, IGF-1 and VEGF upregulation are documented.<sup><a href="#r17">17</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Meta-analysis of 14 RCTs in acute ischaemic stroke: significantly better neurological recovery (NIHSS +1.39), with no excess of serious adverse events.<sup><a href="#r18">18</a></sup></li>
+        <li>A 24-week multicentre RCT reported improved outcomes in vascular dementia; reviews suggest small benefits in Alzheimer&rsquo;s symptoms.</li>
+        <li>A prescription drug in dozens of countries; not FDA-approved.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Generally mild and transient &mdash; dizziness, injection-site reactions, transient temperature rise; rare anaphylaxis, as it is animal-tissue-derived, and infusion-rate-related cardiovascular effects.</p></div><div class="block"><div class="k">Compared with</div><p>The most thoroughly evidenced neurotrophic in this pathway, with meta-analysed trial data the others lack.</p></div><div class="block"><div class="k">Research context</div><p>Neurorecovery models &mdash; post-stroke and cognitive-decline research where a clinically characterised neurotrophic is required.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">60 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Prescription drug in dozens of countries; not FDA</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Pinealon</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">A gene-level neuronal bioregulator hypothesis &mdash; cell and rodent data only.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous or intranasal</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">No measured human pharmacokinetics</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The Khavinson tripeptide EDR (Glu-Asp-Arg). Hypothesised to cross into the neuronal nucleus and modulate gene expression directly, with antioxidant and anti-apoptotic signals reported in cell and rodent work.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>The entire evidence base is in-vitro and rodent, produced within one affiliated research network.</li>
+        <li>No completed human RCT and no independent Western replication.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data; the base is cell and rodent work from one network.</p></div><div class="block"><div class="k">Compared with</div><p>The neuronal counterpart to Epithalon in pathway 08 &mdash; same bioregulator program, different tissue target.</p></div><div class="block"><div class="k">Research context</div><p>Neuronal oxidative-stress models inside the peptide-bioregulator program; paired conceptually with Epithalon in pathway 08.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">20 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; single research network</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Selank</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">Anxiety reduction comparable to benzodiazepines in Russian trials &mdash; without the sedation.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intranasal</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Short half-life; multiple daily use</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A heptapeptide analogue of tuftsin, an immunoglobulin fragment. It does not bind GABA-A directly; instead it modulates GABAergic and serotonergic tone and raises BDNF expression.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Russian trials in generalised anxiety and asthenia reported anxiety reduction broadly comparable to benzodiazepine comparators, with a mild activating rather than sedating profile.</li>
+        <li>Approved in Russia (2009) for generalised anxiety disorder; not FDA or EMA recognised.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Well tolerated across its Russian clinical use; the common complaint is mild nasal irritation.</p></div><div class="block"><div class="k">Compared with</div><p>The anxiolytic half of the pair &mdash; calm without the sedation of a benzodiazepine or the activation of Semax.</p></div><div class="block"><div class="k">Research context</div><p>The anxiolytic arm of the Russian pair &mdash; anxiety-with-fatigue models where sedation is a confound to avoid.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Approved in Russia (2009); not FDA/EMA</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Semax</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">Two decades of clinical use in stroke recovery and cognition.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intranasal (or subcutaneous)</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~30 min for active metabolites</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>An ACTH-derived heptapeptide stripped of hormonal activity. Signals through melanocortin receptors, upregulating BDNF and NGF in hippocampus and cortex and suppressing inflammatory gene expression after ischaemia.<sup><a href="#r19">19</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>On Russia&rsquo;s essential-medicines list; more than twenty years of institutional use in stroke recovery, optic-nerve disease and cognitive impairment.<sup><a href="#r19">19</a></sup></li>
+        <li>A 2018 study of 110 post-stroke patients found plasma BDNF rose alongside motor and independence gains &mdash; open-label, so directional rather than definitive.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Well tolerated over two decades of Russian use; mild nasal irritation is the usual report.</p></div><div class="block"><div class="k">Compared with</div><p>The cognitive and neuroprotective half of the pair, alongside Selank&rsquo;s anxiolytic action.</p></div><div class="block"><div class="k">Research context</div><p>The cognitive and neuroprotective arm of the pair &mdash; stroke-recovery and attention models.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Russia essential-medicines list; not FDA/EMA</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Selank + Semax</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">Calm and focus studied side by side &mdash; the two Russian regulatory peptides together.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intranasal</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Short component half-lives</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>Complementary central actions: Selank&rsquo;s GABA/serotonin-modulated anxiolysis alongside Semax&rsquo;s BDNF/NGF-driven cognitive signal. Both converge on raised BDNF from different directions.</p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Each component is clinically documented in Russia (see their cards); the tier reflects the components.</li>
+        <li>The blend itself is a research composition without its own trial.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Each component is well tolerated in Russian use; the blend itself is a research composition.</p></div><div class="block"><div class="k">Compared with</div><p>Puts the anxiolytic (Selank) and nootropic (Semax) questions together rather than testing them apart.</p></div><div class="block"><div class="k">Research context</div><p>Models where the anxiolytic and nootropic questions are asked together rather than separately.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">20 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Components approved in Russia; blend research-only</span></div>
+    </article>
+  </div>
+</section>
+<section class="cat" id="p5">
+  <div class="cat-h"><span class="ix">05</span><h3>Energy &amp; Endurance</h3><span class="ct">Page 5 of the price list</span></div>
+  <p class="cat-sum">Metabolic switches &mdash; compounds that engage the pathways exercise normally triggers: AMPK, ERR, mitochondrial biogenesis, fat oxidation. The class is defined by rich rodent evidence and, so far, sparse human data. Several are WADA-prohibited exercise mimetics.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>5-Amino-1MQ</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">An NAD+-preserving switch aimed specifically at fat tissue.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Oral</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~4&ndash;7 h half-life (rodent)</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A small-molecule NNMT inhibitor (not a peptide). Blocking NNMT stops it consuming nicotinamide, preserving it for the NAD+ salvage pathway &mdash; and NNMT sits highest in adipose tissue, which gives the mechanism a fat-selective rationale.<sup><a href="#r20">20</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Diet-induced obese mice lost body weight and white fat with no change in food intake.<sup><a href="#r20">20</a></sup></li>
+        <li>A 2024 follow-up: fat-mass gain suppressed roughly 72% with lean mass unchanged, plus better glucose tolerance and less fatty liver.</li>
+        <li>No completed human trial; the mouse data is real and replicated, human translation is not established.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Very limited human safety data &mdash; the evidence is mouse studies.</p></div><div class="block"><div class="k">Compared with</div><p>An NAD+-preserving route to fat metabolism, distinct from AICAR&rsquo;s and SLU-PP-332&rsquo;s direct exercise-signal switches.</p></div><div class="block"><div class="k">Research context</div><p>Adipose-targeted NAD+ metabolism models.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">50 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; not approved</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>AICAR</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">The original exercise mimetic &mdash; endurance gains in untrained mice.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intravenous or subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~2&ndash;3 h half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>An AMP-mimetic nucleoside that directly activates AMPK, switching on the fasted-exercise transcriptional program: fat oxidation and mitochondrial biogenesis without the workout.<sup><a href="#r21">21</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>The landmark 2008 <em>Cell</em> study: <strong>+44% running endurance</strong> in sedentary mice with no training, via the AMPK-PPAR&delta; pathway.<sup><a href="#r21">21</a></sup></li>
+        <li>WADA-prohibited as a metabolic modulator &mdash; the first exercise mimetic to be banned.</li>
+        <li>No published human endurance data.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human endurance safety data; WADA-prohibited as a metabolic modulator.</p></div><div class="block"><div class="k">Compared with</div><p>The AMPK route to the exercise program, versus SLU-PP-332&rsquo;s ERR route to the same end.</p></div><div class="block"><div class="k">Research context</div><p>AMPK-pathway energetics models &mdash; the reference exercise mimetic, paired conceptually with SLU-PP-332&rsquo;s ERR route.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">50 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; WADA-prohibited</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>L-Carnitine (Injectable)</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">A fat-oxidation shuttle, delivered at full systemic dose.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intravenous or intramuscular</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~10&ndash;23 h half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A conditionally essential amino-acid derivative that carries long-chain fatty acids into mitochondria for beta-oxidation. The injectable route bypasses oral bioavailability of only 14&ndash;18%, delivering essentially the full dose systemically.<sup><a href="#r22">22</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Systematic reviews: improved high-intensity performance at 3&ndash;4 g pre-exercise or 2&ndash;2.72 g/day chronically; no effect at moderate intensity.<sup><a href="#r22">22</a></sup></li>
+        <li>A nine-month RCT found greater fat oxidation when combined with aerobic training.</li>
+        <li>The molecule is a long-established clinical agent; evidence for the performance use is graded modest.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No side effects attributable to carnitine in intravenous infusion studies; well tolerated.</p></div><div class="block"><div class="k">Compared with</div><p>A substrate shuttle rather than a signalling switch &mdash; it moves fat into mitochondria, it doesn&rsquo;t reprogram them.</p></div><div class="block"><div class="k">Research context</div><p>Fat-oxidation and recovery models where complete systemic delivery is the variable of interest.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">5000 mg</span></div><div class="status"><span class="k">Status</span><span class="v appr">Approved molecule (Carnitor)</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>MOTS-c</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">A mitochondrial signal the body raises during exercise &mdash; and loses with age.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~1&ndash;4 h half-life (rodent)</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A 16-amino-acid peptide encoded within mitochondrial 12S rRNA. Acting through AMPK and PGC-1&alpha;, it regulates glucose use and fat oxidation, translocating to the nucleus under metabolic stress.<sup><a href="#r23">23</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Exercise raises endogenous MOTS-c in human muscle and blood; levels decline with age.<sup><a href="#r23">23</a></sup></li>
+        <li>Restored insulin sensitivity in aged mice; 2025 work reported improved intrinsic muscle mitochondrial bioenergetics.</li>
+        <li>Exogenous human trials not completed.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data; endogenous exercise-response biology is well documented, exogenous dosing is not.</p></div><div class="block"><div class="k">Compared with</div><p>A mitochondrial exercise-signal, sharing its origin with Humanin in pathway 08.</p></div><div class="block"><div class="k">Research context</div><p>Mitochondrial &ldquo;exercise-signal&rdquo; models and metabolism-with-age research. Shares a mitochondrial origin with Humanin in pathway 08.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg &middot; 40 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>SLU-PP-332 (Injectable)</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">The newest exercise-mimetic axis &mdash; endurance biology through the ERR receptors.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">No measured human pharmacokinetics</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A small-molecule pan-agonist of the estrogen-related receptors ERR&alpha;/&beta;/&gamma;. It drives the endurance-exercise transcriptional program &mdash; mitochondrial biogenesis and fatty-acid-oxidation genes &mdash; and shifts muscle toward oxidative type IIa fibres.<sup><a href="#r24">24</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>A 2023 study reported increased treadmill endurance in mice, with reduced fat mass and improved insulin sensitivity in follow-ups.<sup><a href="#r24">24</a></sup></li>
+        <li>Mouse-only to date; WADA-classified as an exercise mimetic.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No human safety data; mouse studies reported no severe adverse events; WADA-classified exercise mimetic.</p></div><div class="block"><div class="k">Compared with</div><p>The ERR route to the endurance program, a different receptor family from AICAR&rsquo;s AMPK.</p></div><div class="block"><div class="k">Research context</div><p>The ERR arm of exercise-mimetic research &mdash; a distinct receptor route from AICAR&rsquo;s AMPK.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">5 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; mouse-only data</span></div>
+    </article>
+  </div>
+</section>
+<section class="cat" id="p6">
+  <div class="cat-h"><span class="ix">06</span><h3>Immunity</h3><span class="ct">Page 6 of the price list</span></div>
+  <p class="cat-sum">A single, well-evidenced entry &mdash; the immune-modulating thymic peptide approved as a medicine across dozens of countries.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>Thymosin Alpha-1</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">An immune-system modulator with controlled trial data in infection and sepsis.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~2 h half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A 28-amino-acid thymic peptide (thymalfasin). Stimulates T-cell maturation and interferon-&gamma; secretion, broadening both innate and adaptive immune responses.<sup><a href="#r25">25</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Approved in around 37 countries (as Zadaxin) &mdash; in China for hepatitis B and vaccine enhancement; not FDA-approved.</li>
+        <li>Sepsis meta-analysis: reduced mortality (RR 0.59); the TESTS trial (n = 1,106) is the strongest controlled evidence to date.<sup><a href="#r25">25</a></sup></li>
+        <li>Decades of clinical safety record.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>An excellent safety record &mdash; mild injection-site discomfort is the main report; no significant adverse reactions across 2,000+ treated patients.</p></div><div class="block"><div class="k">Compared with</div><p>The single immunity entry &mdash; an immune modulator rather than a repair or metabolic agent.</p></div><div class="block"><div class="k">Research context</div><p>Immune-restoration models &mdash; chronic viral infection, sepsis adjunct, and immunosenescence research.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Approved in ~37 countries (Zadaxin); not FDA</span></div>
+    </article>
+  </div>
+</section>
+<section class="cat" id="p7">
+  <div class="cat-h"><span class="ix">07</span><h3>Sexual Health</h3><span class="ct">Page 7 of the price list</span></div>
+  <p class="cat-sum">The hypothalamic-pituitary-gonadal axis approached at every level &mdash; upstream at the hypothalamus (kisspeptin), directly at the gonadal receptor (HCG, HMG), and centrally in the desire circuits of the brain (PT-141). Three registration-grade medicines sit in this pathway.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>HCG</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">An LH mimic &mdash; the standard tool for driving gonadal testosterone.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous or intramuscular</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Long half-life; sustained LH-like action</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A placental glycoprotein hormone that binds the shared LH/hCG receptor, mimicking luteinising hormone: Leydig-cell testosterone production in men, ovulation trigger in women.<sup><a href="#r26">26</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Standard of care in hypogonadotropic hypogonadism and assisted reproduction.<sup><a href="#r26">26</a></sup></li>
+        <li>Maintains intratesticular testosterone during exogenous-testosterone suppression &mdash; one of its most common clinical uses.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Well-established clinical agent; the main risk in stimulation settings is ovarian hyperstimulation, plus injection-site reactions.</p></div><div class="block"><div class="k">Compared with</div><p>Acts directly at the gonadal LH receptor, where Kisspeptin acts one level upstream at the hypothalamus.</p></div><div class="block"><div class="k">Research context</div><p>HPG-axis maintenance and fertility models &mdash; the direct-receptor route.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10000 IU</span></div><div class="status"><span class="k">Status</span><span class="v appr">Approved medicine</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>HMG</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">Both gonadotropins in one preparation &mdash; the FSH complement to HCG.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous or intramuscular</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~32 h half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>Human menopausal gonadotropin (menotropin) carries both FSH and LH activity: folliculogenesis in women, spermatogenesis induction in men.<sup><a href="#r27">27</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Registration-grade use in IVF ovarian stimulation, with efficacy comparable to recombinant FSH.<sup><a href="#r27">27</a></sup></li>
+        <li>Induces spermatogenesis in hypogonadotropic hypogonadism where testicular function is intact.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Ovarian hyperstimulation and multiple-pregnancy risk in stimulation settings; abdominal and injection-site effects.</p></div><div class="block"><div class="k">Compared with</div><p>Supplies both FSH and LH, where HCG supplies LH-like action alone.</p></div><div class="block"><div class="k">Research context</div><p>The FSH side of full-axis fertility research &mdash; the complement to HCG&rsquo;s LH-only action.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">75 IU</span></div><div class="status"><span class="k">Status</span><span class="v appr">Approved medicine (Menopur)</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Kisspeptin</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">The master switch at the top of the reproductive axis.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous, IV or intranasal</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~4&ndash;28 min half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A hypothalamic neuropeptide (KISS1 gene) that triggers GnRH neurons &mdash; sitting one level upstream of the pituitary, so it drives the body&rsquo;s own pulsatile LH rather than substituting for it.<sup><a href="#r28">28</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Human studies: dose-dependent LH rise and increased pulse frequency.<sup><a href="#r28">28</a></sup></li>
+        <li>Raised testosterone in hypotestosteronaemic men with type 2 diabetes in a proof-of-concept study.<sup><a href="#r29">29</a></sup></li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Human trials report gonadotropin stimulation without side effects or adverse events.</p></div><div class="block"><div class="k">Compared with</div><p>The upstream axis trigger &mdash; it drives the body&rsquo;s own LH pulse, where HCG substitutes for LH directly.</p></div><div class="block"><div class="k">Research context</div><p>Endogenous-axis stimulation research &mdash; the upstream alternative to HCG&rsquo;s direct receptor agonism.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Investigational; IVF-trigger studies</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Oxytocin Acetate</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">The bonding hormone &mdash; a large but contested social-behaviour literature.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intranasal, IV or intramuscular</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~10&ndash;15 min half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The endogenous nonapeptide hormone as its acetate salt. Signals through oxytocin receptors; its central roles in bonding, trust and sexual response are studied mostly via intranasal delivery.<sup><a href="#r30">30</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>A large intranasal literature on social cognition &mdash; results are mixed and reproducibility is actively debated.<sup><a href="#r30">30</a></sup></li>
+        <li>Small multi-week studies suggest signals in some psychiatric populations.</li>
+        <li>The molecule is separately an approved obstetric drug.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Intranasal use is generally tolerated in social-cognition studies; the molecule is separately an approved obstetric drug.</p></div><div class="block"><div class="k">Compared with</div><p>The softest evidence in this pathway, and the only entry whose primary study route is behavioural rather than endocrine.</p></div><div class="block"><div class="k">Research context</div><p>Social and affective-behaviour research. Read with the field&rsquo;s own caution &mdash; the softest evidence in this pathway outside its obstetric indication.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Approved obstetric drug; behavioural use investigational</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>PT-141</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">Sexual desire acted on centrally, in the brain &mdash; not through the vasculature.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous (autoinjector)</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Peak ~60 min after dosing</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>Bremelanotide, a melanocortin MC3R/MC4R agonist. It works in the hypothalamic desire circuits &mdash; a dopaminergic route &mdash; rather than on blood flow, which is what distinguishes it from PDE5 inhibitors.<sup><a href="#r31">31</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Two Phase 3 RCTs (over 1,200 women) supported FDA approval in 2019 (Vyleesi) for hypoactive sexual desire disorder in premenopausal women.<sup><a href="#r31">31</a></sup></li>
+        <li>Earlier trials documented erectile responses in men.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Nausea (common, especially the first dose), flushing, injection-site reactions and a transient blood-pressure rise; skin/gum hyperpigmentation with frequent repeated use.</p></div><div class="block"><div class="k">Compared with</div><p>Works centrally in the brain&rsquo;s desire circuits, unlike the vascular PDE5-inhibitor route to erectile response.</p></div><div class="block"><div class="k">Research context</div><p>Central (brain-side) sexual-desire research in both sexes.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v appr">FDA-approved (Vyleesi)</span></div>
+    </article>
+  </div>
+</section>
+<section class="cat" id="p8">
+  <div class="cat-h"><span class="ix">08</span><h3>Longevity &amp; Cellular Repair</h3><span class="ct">Page 8 of the price list</span></div>
+  <p class="cat-sum">Cellular-maintenance biology &mdash; sleep architecture, telomeres, mitochondrial signalling, the NAD+ pool. The evidence runs from one FDA-approved mitochondrial medicine down to in-vitro telomere work; each card says where its compound sits.</p>
+  <div class="cards">
+    <article class="card">
+      <div class="card-h"><h4>DSIP</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">A sleep-pressure modulator &mdash; most active exactly when sleep is disturbed.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous or intravenous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~15&ndash;25 min half-life; effects last hours</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>Delta sleep-inducing peptide, a nonapeptide named for the delta-wave EEG activity it increases. It behaves as a modulator of sleep pressure rather than a sedative.<sup><a href="#r32">32</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Small double-blind studies in insomniacs: better sleep efficiency and shorter onset latency &mdash; effects real but modest.<sup><a href="#r32">32</a></sup></li>
+        <li>Most active where sleep is already disrupted; minimal effect in healthy sleepers.<sup><a href="#r33">33</a></sup></li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>An excellent safety record across decades of research; mild drowsiness, brief post-injection nausea and injection-site irritation.</p></div><div class="block"><div class="k">Compared with</div><p>The sleep-architecture entry of the longevity set &mdash; a modulator, not a sedative.</p></div><div class="block"><div class="k">Research context</div><p>Sleep-architecture and recovery-under-stress models.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">5 mg &middot; 10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; no approval</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Epithalon</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">Telomerase activation &mdash; demonstrated in human cells, not yet in humans.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous or intranasal</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Short half-life</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The Khavinson tetrapeptide AEDG, a synthetic analogue of the pineal extract epithalamin. Proposed to activate telomerase and support pineal/circadian signalling.<sup><a href="#r34">34</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Telomerase activation and telomere elongation in human cell culture &mdash; independently replicated at Brunel University in 2025.<sup><a href="#r34">34</a></sup></li>
+        <li>Rodent lifespan data mixed and regimen-dependent; human evidence is only observational, and with the parent extract rather than the synthetic peptide.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>No controlled human safety trial of the synthetic peptide; the parent extract has long observational use.</p></div><div class="block"><div class="k">Compared with</div><p>The telomere-biology counterpart to Pinealon&rsquo;s neuronal work &mdash; same Khavinson program.</p></div><div class="block"><div class="k">Research context</div><p>Telomere-biology and pineal-aging models; the longevity counterpart to Pinealon&rsquo;s neuronal work.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">50 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>Humanin</h4><span class="tier">Preclinical</span></div>
+      <p class="benefit">A mitochondrial cytoprotectant that tracks with human longevity.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous or intraperitoneal</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">Wild-type ~30 min; analogues &gt; 4 h</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>A 24-amino-acid mitochondrial-derived peptide encoded in the 16S rRNA region, with neuroprotective and cytoprotective signalling. Its levels fall with age &mdash; but stay high in centenarians&rsquo; offspring and in negligible-senescence species.<sup><a href="#r35">35</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Overexpression extends lifespan in <em>C. elegans</em>, dependent on the daf-16/FOXO pathway.<sup><a href="#r35">35</a></sup></li>
+        <li>The potent analogue HNG improved metabolic healthspan and lowered inflammatory markers in middle-aged mice.</li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Limited human safety data; a theoretical caution that it may protect cancer cells (BAX interaction) and affect IGF-1 signalling.</p></div><div class="block"><div class="k">Compared with</div><p>Shares its mitochondrial-peptide origin with MOTS-c in pathway 05, on the cytoprotective rather than metabolic side.</p></div><div class="block"><div class="k">Research context</div><p>Mitochondrial longevity-signalling and healthspan models; shares its mitochondrial origin with MOTS-c in pathway 05.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">10 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Research-only; observational human data only</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>NAD+</h4><span class="tier t2">Human trials</span></div>
+      <p class="benefit">Refilling the coenzyme pool that halves between your 20s and 50s.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Intravenous (or subcutaneous)</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">The coenzyme itself</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>The coenzyme itself, for direct administration &mdash; central to energy production, DNA repair and sirtuin signalling. The rationale is restoring a pool that declines roughly 50% across mid-life.<sup><a href="#r37">37</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>Precursor trials (NR/NMN) reliably raise blood NAD+ and are well tolerated, though functional endpoints remain unclear.<sup><a href="#r37">37</a></sup></li>
+        <li>A pilot study characterised the plasma fate of a 6-hour IV NAD+ infusion; direct-infusion outcome data is still scarce.<sup><a href="#r36">36</a></sup></li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Direct IV infusion can cause nausea, cramping, chest tightness and flushing tied to infusion rate; precursors (NR, NMN) are well tolerated in trials.</p></div><div class="block"><div class="k">Compared with</div><p>The coenzyme delivered directly, versus the precursor supplements (NR, NMN) that raise it indirectly.</p></div><div class="block"><div class="k">Research context</div><p>Cellular-energetics and DNA-repair research. An honest read: robust biochemistry, thin human outcome data.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">500 mg &middot; 1000 mg</span></div><div class="status"><span class="k">Status</span><span class="v">Precursors trial-backed; direct infusion widely used, thin trial data</span></div>
+    </article>
+    <article class="card">
+      <div class="card-h"><h4>SS-31</h4><span class="tier t1">Registration-grade</span></div>
+      <p class="benefit">The registration-grade mitochondrial peptide &mdash; approved for a genetic energy disorder.</p><div class="spec"><div class="s"><span class="sk">Route</span><span class="sv">Subcutaneous</span></div><div class="s"><span class="sk">Acts over</span><span class="sv">~1&ndash;2 h plasma half-life; concentrates in mitochondria</span></div></div>
+      <div class="block"><div class="k">Mechanism</div><p>Elamipretide, a mitochondria-targeted tetrapeptide. It binds cardiolipin in the inner mitochondrial membrane, stabilising the cristae and electron transport chain and cutting pathogenic reactive-oxygen-species output.<sup><a href="#r38">38</a></sup></p></div>
+      <div class="block"><div class="k">What research shows</div><ul>
+        <li>In Barth syndrome (Phase 2/3 plus extension), long exposure improved the 6-minute walk test, symptom scores and cardiac stroke volume.<sup><a href="#r38">38</a></sup></li>
+        <li>Granted FDA accelerated approval (Forzinity) for Barth syndrome; trials continue in mitochondrial myopathy and Friedreich&rsquo;s ataxia.<sup><a href="#r39">39</a></sup></li>
+      </ul></div>
+      <div class="block"><div class="k">Safety signals</div><p>Injection-site reactions (under 5% of patients) and headache, generally mild and self-limiting; occasional nausea.</p></div><div class="block"><div class="k">Compared with</div><p>The one mitochondrial peptide here with a registration-grade evidence base.</p></div><div class="block"><div class="k">Research context</div><p>Bioenergetic-failure models &mdash; the one mitochondrial peptide here with a registration-grade evidence base.</p></div>
+      <div class="lots"><span class="k">Lots</span><span class="v tab">50 mg</span></div><div class="status"><span class="k">Status</span><span class="v appr">FDA accelerated approval (Forzinity) for Barth syndrome</span></div>
+    </article>
+  </div>
+</section>
+</div></main>
+<section class="gloss" id="glossary"><div class="wrap">
+  <h3>Glossary</h3>
+  <p class="note">The recurring biology, in plain terms &mdash; enough to read the cards above without a pharmacology background. Definitions describe the mechanism, not any compound&rsquo;s effect.</p>
+  <dl>
+    <dt>GLP-1</dt><dd>Glucagon-like peptide-1. An <span class="acc">incretin</span> gut hormone that raises insulin after eating and signals fullness. The target of the widely-used weight-loss drugs.</dd>
+    <dt>GIP</dt><dd>Glucose-dependent insulinotropic polypeptide. A second incretin hormone; agonising it alongside GLP-1 is what makes tirzepatide a &ldquo;dual&rdquo; agonist.</dd>
+    <dt>Glucagon receptor</dt><dd>The receptor for glucagon, a hormone that raises blood sugar and energy expenditure. Adding it to GLP-1 and GIP makes a &ldquo;triple&rdquo; agonist.</dd>
+    <dt>Incretin</dt><dd>A class of gut hormones released after eating that amplify insulin release. GLP-1 and GIP are the two main ones.</dd>
+    <dt>Amylin</dt><dd>A hormone co-released with insulin that promotes fullness and slows stomach emptying &mdash; a satiety pathway separate from the incretins.</dd>
+    <dt>GHRH</dt><dd>Growth-hormone-releasing hormone. The hypothalamic signal that tells the pituitary to release growth hormone; several compounds here are GHRH analogues.</dd>
+    <dt>Ghrelin receptor (GHS-R)</dt><dd>The receptor for ghrelin, the &ldquo;hunger hormone&rdquo;, which also triggers growth-hormone release. Ipamorelin acts here.</dd>
+    <dt>IGF-1</dt><dd>Insulin-like growth factor 1. The downstream mediator of most growth-hormone effects, produced chiefly by the liver.</dd>
+    <dt>HPG axis</dt><dd>The hypothalamic-pituitary-gonadal axis &mdash; the hormone chain (GnRH &rarr; LH/FSH &rarr; testosterone/oestrogen) that governs reproduction.</dd>
+    <dt>LH / FSH / GnRH</dt><dd>Luteinising hormone and follicle-stimulating hormone, the two pituitary gonadotropins, released in response to gonadotropin-releasing hormone from the hypothalamus.</dd>
+    <dt>Melanocortin receptors</dt><dd>A receptor family (MC1R&ndash;MC5R) involved in pigmentation, inflammation and, for MC3R/MC4R, sexual desire. Targeted by PT-141 and KPV.</dd>
+    <dt>AMPK</dt><dd>AMP-activated protein kinase &mdash; the cell&rsquo;s &ldquo;low-energy&rdquo; sensor. Activating it switches on fat-burning and mitochondrial genes, mimicking exercise.</dd>
+    <dt>ERR</dt><dd>Estrogen-related receptors (&alpha;/&beta;/&gamma;). Nuclear receptors that drive mitochondrial and endurance genes; the target of SLU-PP-332.</dd>
+    <dt>PGC-1&alpha;</dt><dd>The master regulator of mitochondrial biogenesis &mdash; the switch that builds more mitochondria in response to exercise signals.</dd>
+    <dt>VEGF</dt><dd>Vascular endothelial growth factor. Drives angiogenesis &mdash; the growth of new blood vessels &mdash; central to wound and tissue repair.</dd>
+    <dt>BDNF / NGF</dt><dd>Brain-derived and nerve growth factors. Neurotrophins that support neuron survival, growth and plasticity; several nootropic peptides raise them.</dd>
+    <dt>Telomerase</dt><dd>The enzyme that rebuilds telomeres, the protective caps on chromosomes that shorten with each cell division. A longevity research target.</dd>
+    <dt>Cardiolipin</dt><dd>A lipid unique to the inner mitochondrial membrane, essential to energy production. SS-31 binds and stabilises it.</dd>
+    <dt>NAD+</dt><dd>Nicotinamide adenine dinucleotide. A coenzyme central to energy production and DNA repair; its levels fall with age.</dd>
+    <dt>Satellite cells</dt><dd>Muscle stem cells that repair and grow muscle fibres after loading or injury. The proposed target of mechano growth factor.</dd>
+    <dt>RCT / Phase 2 / Phase 3</dt><dd>A randomised controlled trial is the gold standard for evidence. Phase 2 tests efficacy and dose; Phase 3 confirms it in large populations before approval.</dd>
+    <dt>Half-life</dt><dd>The time for half a dose to clear the bloodstream &mdash; a measure of how long a compound acts, not a dosing instruction.</dd>
+  </dl>
+</div></section>
+<section class="refs" id="refs"><div class="wrap">
+  <h3>References</h3>
+  <p class="note">Primary literature and manufacturer trial reports. Where a compound&rsquo;s evidence is preclinical or contested, the card says so rather than the citation implying more than the source supports. Peptide-vendor marketing pages are not cited as evidence.</p>
+  <ol>
+    <li id="r1">Eli Lilly. Retatrutide TRIUMPH-4 Phase 3 results. <a href="https://investor.lilly.com/news-releases/news-release-details/lillys-triple-agonist-retatrutide-delivered-weight-loss-average" target="_blank" rel="noopener">investor.lilly.com</a></li>
+    <li id="r2">Retatrutide for MASLD, randomized Phase 2a trial. <em>Nature Medicine</em> (2024). <a href="https://www.nature.com/articles/s41591-024-03018-2" target="_blank" rel="noopener">nature.com</a></li>
+    <li id="r3">Retatrutide GIP/GLP-1/glucagon agonist, Phase 2 in type 2 diabetes. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/37385280/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/37385280</a></li>
+    <li id="r4">Cagrilintide late-stage monotherapy weight-loss data (Novo Nordisk). <a href="https://www.patientcareonline.com/view/amylin-injectable-cagrilintide-demonstrates-weight-loss-of-11-8-in-late-stage-trial-novo-nordisk-update" target="_blank" rel="noopener">patientcareonline.com</a></li>
+    <li id="r5">Cagrilintide lowers bodyweight through brain amylin receptors 1 and 3. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12270663/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC12270663</a></li>
+    <li id="r6">Tirzepatide, dual GIP/GLP-1 receptor agonist. <em>StatPearls</em>, NCBI. <a href="https://www.ncbi.nlm.nih.gov/books/NBK585056/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/books/NBK585056</a></li>
+    <li id="r7">Tirzepatide SURMOUNT meta-analysis incl. SURMOUNT-2. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11445313/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC11445313</a></li>
+    <li id="r8">Somatropin drug record, NIH ClinicalInfo. <a href="https://clinicalinfo.hiv.gov/en/drugs/somatropin/health-professional" target="_blank" rel="noopener">clinicalinfo.hiv.gov</a></li>
+    <li id="r9">BPC-157 and tendon healing. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/21030672/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/21030672</a></li>
+    <li id="r10">BPC-157 in musculoskeletal soft-tissue healing. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/30915550/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/30915550</a></li>
+    <li id="r11">BPC-157 in orthopaedic sports medicine, systematic review (2025). <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/40756949/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/40756949</a></li>
+    <li id="r12">GHK peptide as a modulator of skin regeneration. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4508379/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC4508379</a></li>
+    <li id="r13">Melanocortin tripeptide KPV, anti-inflammatory in IBD models. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/18092346/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/18092346</a></li>
+    <li id="r14">Human cathelicidin LL-37 for polymicrobial infected wounds. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3699762/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC3699762</a></li>
+    <li id="r15">Wound-healing activities of human cathelicidin LL-37. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/17805349/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/17805349</a></li>
+    <li id="r16">TB-500 / thymosin beta-4, actin mechanism and cardiac repair. <em>Peptpedia summary of primary literature</em>. <a href="https://peptpedia.org/peptide/tb-500" target="_blank" rel="noopener">peptpedia.org/peptide/tb-500</a></li>
+    <li id="r17">Modulation of neurotrophic factors by Cerebrolysin. <em>Medicinal Research Reviews</em> (2023). <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/med.21960" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>
+    <li id="r18">Cerebrolysin for neurorecovery after acute ischaemic stroke, meta-analysis of 14 RCTs. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12465088/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC12465088</a></li>
+    <li id="r19">Semax &mdash; Cognitive Vitality research review, ADDF. <a href="https://www.alzdiscovery.org/uploads/cognitive_vitality_media/Semax-Cognitive-Vitality-For-Researchers.pdf" target="_blank" rel="noopener">alzdiscovery.org</a></li>
+    <li id="r20">5-Amino-1MQ NNMT inhibition and adipose metabolism (preclinical). <a href="https://superpower.com/guides/5-amino-1mq" target="_blank" rel="noopener">research summary</a></li>
+    <li id="r21">Narkar et al., AICAR and AMPK-PPAR&delta; endurance program (2008 <em>Cell</em>); AMPK/PPAR&delta; potentiation study. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4823600/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC4823600</a></li>
+    <li id="r22">L-carnitine and exercise performance, systematic review. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8704793/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC8704793</a></li>
+    <li id="r23">MOTS-c, mitochondrial-derived peptide for therapeutic exploitation. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9905433/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC9905433</a></li>
+    <li id="r24">SLU-PP-332 ERR&alpha;/&beta;/&gamma; exercise-mimetic metabolites analysis. <em>Drug Testing and Analysis</em> (2026). <a href="https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/10.1002/dta.70035" target="_blank" rel="noopener">onlinelibrary.wiley.com</a></li>
+    <li id="r25">Thymosin alpha-1 for sepsis, systematic review of RCTs. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5025565/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC5025565</a></li>
+    <li id="r26">Human chorionic gonadotropin, hormone and clinical uses. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5454971/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC5454971</a></li>
+    <li id="r27">Highly purified hMG (Menopur) in infertility. <em>Clinical Drug Investigation</em> (2018). <a href="https://link.springer.com/article/10.1007/s40261-018-0703-8" target="_blank" rel="noopener">link.springer.com</a></li>
+    <li id="r28">Kisspeptin-10 stimulates LH and increases pulse frequency in men. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/21632807/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/21632807</a></li>
+    <li id="r29">Kisspeptin-10 raises testosterone and LH in men with T2DM. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/23153270/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/23153270</a></li>
+    <li id="r30">Intranasal oxytocin research: lessons and future directions. <em>Molecular Psychiatry</em> (2020). <a href="https://www.nature.com/articles/s41380-020-00864-7" target="_blank" rel="noopener">nature.com</a></li>
+    <li id="r31">PT-141 (bremelanotide / Vyleesi) clinical overview and FDA approval. <a href="https://www.joinmidi.com/post/pt-141" target="_blank" rel="noopener">clinical summary</a></li>
+    <li id="r32">DSIP in chronic insomniac patients, double-blind study. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/1299794/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/1299794</a></li>
+    <li id="r33">Acute and delayed effects of DSIP on human sleep. <em>PubMed</em>. <a href="https://pubmed.ncbi.nlm.nih.gov/6895513/" target="_blank" rel="noopener">pubmed.ncbi.nlm.nih.gov/6895513</a></li>
+    <li id="r34">Epitalon, pineal tetrapeptide overview (incl. 2025 replication). <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11943447/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC11943447</a></li>
+    <li id="r35">Humanin regulates lifespan and healthspan. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7343442/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC7343442</a></li>
+    <li id="r36">Pilot study of 6-hour IV NAD+ infusion, plasma/urine metabolome. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6751327/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC6751327</a></li>
+    <li id="r37">Clinical evidence for targeting NAD therapeutically. <em>PMC</em>. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7558103/" target="_blank" rel="noopener">ncbi.nlm.nih.gov/PMC7558103</a></li>
+    <li id="r38">Elamipretide (SS-31) in Barth syndrome, Phase 2/3 randomized trial. <em>Genetics in Medicine</em> (2020). <a href="https://www.nature.com/articles/s41436-020-01006-8" target="_blank" rel="noopener">nature.com</a></li>
+    <li id="r39">Elamipretide (Forzinity) drug-development record, FARA. <a href="https://www.curefa.org/drug-development/elamipretide/" target="_blank" rel="noopener">curefa.org</a></li>
+  </ol>
+</div></section>
+<footer><div class="wrap">
+  <span class="badge">Compliance</span>
+  <p class="ruo">Research Use Only. Peptides listed here are intended exclusively for in-vitro laboratory research &mdash; not drugs, food, cosmetics, or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided; the &ldquo;research context&rdquo; on each card describes the models a compound is studied against, not a protocol. Several compounds are controlled or regulated in many jurisdictions; buyers are solely responsible for confirming the laws that apply to them. Evidence grades reflect the state of published research at the time of writing and are not claims of efficacy. Pricing is not shown here &mdash; it lives in the separate AXIOM price list. By purchasing, the buyer affirms they are a qualified researcher or institution and accepts full responsibility for safe, legal, and compliant handling.</p>
+</div></footer>
+</body></html>
