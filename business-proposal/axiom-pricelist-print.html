@@ -79,13 +79,13 @@ header.mast{position:relative;display:flex;justify-content:space-between;align-i
 .intro p{margin:0;max-width:63%}
 .intro .note{text-align:right;max-width:35%;color:var(--muted-2)}
 .grid{position:relative;column-count:2;column-gap:26px}
-.cat{break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 9px;display:inline-block;width:100%}
+.cat{break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 11px;display:inline-block;width:100%}
 .ch{display:flex;align-items:baseline;gap:9px;border-bottom:1px solid var(--accent-line);padding-bottom:6px;margin-bottom:3px}
 .ch .ix{font-family:var(--display);color:var(--accent);font-size:11px;letter-spacing:.05em;font-weight:400}
 .ch h3{font-family:var(--display);font-weight:400;font-size:11.5px;margin:0;letter-spacing:.01em;color:var(--ink)}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:6.8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);font-weight:500;padding:6px 5px 3px;border-bottom:1px solid var(--line)}
-td{padding:2.6px 5px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--muted)}
+th{text-align:left;font-size:6.8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);font-weight:500;padding:7px 5px 4px;border-bottom:1px solid var(--line)}
+td{padding:3.5px 5px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--muted)}
 td.c{color:var(--ink)}
 .q{text-align:left;color:var(--muted);white-space:nowrap;width:22%}
 th.q{text-align:left}
@@ -95,6 +95,11 @@ tbody tr:last-child td{border-bottom:none}
 .foot{position:relative;margin-top:6px;border-top:1px solid var(--line);padding-top:10px;display:flex;justify-content:space-between;gap:18px;font-size:7.4px;color:var(--muted);line-height:1.6}
 .foot .col b{color:var(--ink);text-transform:uppercase;letter-spacing:.14em;font-size:7px;display:block;margin-bottom:3px;font-weight:500}
 .foot .contact b{color:var(--accent-bright)}
+.page{page-break-after:always}
+.page:last-of-type{page-break-after:auto}
+header.cont{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px}
+header.cont .wm-t{font-family:var(--display);font-weight:300;letter-spacing:.42em;font-size:16px;text-indent:.42em;color:var(--ink)}
+header.cont .cont-t{font-family:var(--display);font-weight:300;font-size:12px;color:var(--muted);letter-spacing:.04em}
 .ruo-line{position:relative;margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft);font-size:7.4px;color:var(--muted-2);line-height:1.6;text-align:center;letter-spacing:.02em}
 </style></head><body>
 <div class="page">
@@ -110,7 +115,12 @@ tbody tr:last-child td{border-bottom:none}
       <div class="ruoflag">For research use only<br>In-vitro laboratory use<br>Not for human or veterinary use</div>
     </div>
   </header>
-  <div class="grid" id="plGrid"></div>
+  <div class="grid" id="plGrid1"></div>
+  <div class="ruo-line">Research Use Only. Intended exclusively for in-vitro laboratory research — not drugs, food, cosmetics, or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Buyers are solely responsible for confirming the laws that apply to them.</div>
+</div>
+<div class="page">
+  <header class="cont"><span class="wm-t">AXIOM</span><span class="cont-t">Price List &middot; continued</span></header>
+  <div class="grid" id="plGrid2"></div>
   <div class="ruo-line">Research Use Only. Intended exclusively for in-vitro laboratory research — not drugs, food, cosmetics, or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Buyers are solely responsible for confirming the laws that apply to them.</div>
 </div>
 <script src="../shared/catalog.js"></script>
@@ -126,8 +136,8 @@ window.AXIOM_DATA.categories.forEach(function(c){
   if(c.consumer)return;
   c.items.forEach(function(it){var g=groups[it.pathwayNo];if(g)g.rows.push(it);});
 });
-var html=Object.keys(groups).sort().map(function(no){
-  var g=groups[no];if(!g.rows.length)return "";
+function section(no){
+  var g=groups[no];if(!g||!g.rows.length)return "";
   g.rows.sort(function(a,b){return (a.printName||a.name).localeCompare(b.printName||b.name)||(a.price-b.price);});
   return '<section class="cat">'
     +'<div class="ch"><span class="ix">'+g.no+'</span><h3>'+g.name+'</h3></div>'
@@ -136,8 +146,11 @@ var html=Object.keys(groups).sort().map(function(no){
       return '<tr><td class="c">'+(it.printName||it.name)+'</td><td class="q">'+it.dose+'</td><td class="p">'+fmt(it.price)+'</td></tr>';
     }).join("")
     +'</tbody></table></section>';
-}).join("");
-document.getElementById("plGrid").innerHTML=html;
+}
+/* Page split mirrors AXIOM-Price-List-Full: pathways 01–04 on page 1, 05–09 continued. */
+var nos=Object.keys(groups).sort();
+document.getElementById("plGrid1").innerHTML=nos.filter(function(no){return no<="04";}).map(section).join("");
+document.getElementById("plGrid2").innerHTML=nos.filter(function(no){return no>="05";}).map(section).join("");
 var meta=document.getElementById("plMeta");
 if(meta&&window.AXIOM_DATA.meta)meta.textContent="Research catalogue \u00b7 IDR \u00b7 v"+window.AXIOM_DATA.meta.version;
 })();

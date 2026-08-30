@@ -19,8 +19,8 @@ window.AXIOM_LOTS = {
     lab: "Independent third-party laboratory",
     status: "verified", coaUrl: null
   },
-  "AX-2508-RT05": {
-    sku: "retatrutide-5mg", compound: "Retatrutide", spec: "5 mg",
+  "AX-2508-RT10": {
+    sku: "retatrutide-10mg", compound: "Retatrutide", spec: "10 mg",
     mfgOn: "2025-08-02", testedOn: "2025-08-12",
     purity: 99.1, method: "HPLC / MS",
     appearance: "White lyophilate",

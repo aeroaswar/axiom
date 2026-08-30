@@ -273,7 +273,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:
 .vf-none h4{font-family:var(--display);font-weight:400;font-size:19px;margin-bottom:10px}
 .vf-none p{color:var(--muted);font-size:13.5px;line-height:1.7;margin-bottom:16px}
 @media print{
-  nav,.ribbon,#sceneWrap,#progress,#cursorRing,#cursorDot,.quote-bar,#scrollHint,.gate,footer,.vf-form,.vf-chips,.vf-actions,.vf-none .tlink,#preloader{display:none!important}
+  nav,.ribbon,#sceneWrap,#progress,.quote-bar,#scrollHint,.gate,footer,.vf-form,.vf-chips,.vf-actions,.vf-none .tlink,#preloader{display:none!important}
   body{background:#F2EDE5;color:#070605}
   .view[data-view="verify"] .page-head .crumb{display:none}
   .view[data-view="verify"] h1,.view[data-view="verify"] .coa-h h4,.view[data-view="verify"] .coa-cell .v,.view[data-view="verify"] .vf-none h4{color:#070605}
@@ -415,7 +415,6 @@ footer{position:relative;z-index:3;background:var(--bg);border-top:1px solid var
   .stagger>*{opacity:1!important;transform:none!important;transition:none!important}
   .rule-draw{transform:none!important;transition:none!important}
   #preloader img,#preloader .pl-line::after,#preloader .pl-cap{animation:none!important;opacity:1!important;transform:none!important}
-  #cursor,#cursorDot{display:none!important}
 }
 
 /* ---------- Staggered reveal children ---------- */
@@ -436,15 +435,6 @@ footer{position:relative;z-index:3;background:var(--bg);border-top:1px solid var
 @keyframes plLogo{to{opacity:1;transform:none}}
 @keyframes plLine{to{transform:scaleX(1)}}
 @keyframes plCap{to{opacity:1}}
-
-/* ---------- Custom cursor ---------- */
-#cursorRing,#cursorDot{position:fixed;top:0;left:0;z-index:200;pointer-events:none;border-radius:50%;mix-blend-mode:difference;will-change:transform;opacity:0;transition:opacity .3s ease}
-#cursorRing{width:32px;height:32px;border:1px solid #fff;margin:-16px 0 0 -16px;transition:width .22s ease,height .22s ease,margin .22s ease,background .22s ease,opacity .3s ease}
-#cursorDot{width:5px;height:5px;background:var(--accent-bright);margin:-2.5px 0 0 -2.5px}
-body.cursor-on #cursorRing,body.cursor-on #cursorDot{opacity:1}
-body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input,body.cursor-on select,body.cursor-on summary,body.cursor-on label,body.cursor-on .tlink,body.cursor-on .pcard{cursor:none}
-#cursorRing.hover{width:56px;height:56px;margin:-28px 0 0 -28px;background:rgba(255,255,255,.14)}
-@media(pointer:coarse){#cursorRing,#cursorDot{display:none}}
 
 /* ---------- Scroll progress + nav hide ---------- */
 #progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ink);z-index:60;transition:width .12s linear;pointer-events:none}
@@ -680,9 +670,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 <div class="scroll-hint" id="scrollHint"><span>Scroll</span><span class="bar"></span></div>
 
 <div id="progress"></div>
-<div id="cursorRing"></div>
-<div id="cursorDot"></div>
-
 <div class="ribbon"><span data-t="ribbon">AXIOM · <b>Human Performance &amp; Longevity</b> · Peptide science · Therapy &amp; recovery · Wellness · Prices in IDR</span></div>
 
 <nav id="nav">
@@ -729,7 +716,7 @@ nav.nav-hidden{transform:translateY(-100%)}
     <div class="wrap stagger reveal">
       <div class="m"><div class="k" data-t="meta.focus">Focus</div><div class="v">Longevity</div></div>
       <div class="m"><div class="k" data-t="meta.purity">Peptide purity</div><div class="v">≥ 98%</div></div>
-      <div class="m"><div class="k" data-t="meta.catalogue">Catalogue</div><div class="v" id="metaCount">66</div></div>
+      <div class="m"><div class="k" data-t="meta.catalogue">Catalogue</div><div class="v" id="metaCount">87</div></div>
       <div class="m"><div class="k" data-t="meta.pillars">Pillars</div><div class="v">05</div></div>
     </div>
   </div>
@@ -855,10 +842,10 @@ nav.nav-hidden{transform:translateY(-100%)}
         <div class="pcard-top"><span class="pcard-tag">Tissue Repair</span><span class="pcard-idx">02·01</span></div>
         <h4 class="pcard-name">BPC-157</h4>
         <span class="pcard-dose">10 mg · Pen</span>
-        <div class="pcard-go"><span class="pcard-price" data-sku-price="bpc-157-10mg"><span class="cur">Rp</span>2.700.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
+        <div class="pcard-go"><span class="pcard-price" data-sku-price="bpc-157-10mg"><span class="cur">Rp</span>1.600.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
       </a>
       <a class="pcard linked" href="#products/cat-redlight">
-        <div class="pcard-top"><span class="pcard-tag">Red Light Therapy</span><span class="pcard-idx">07·03</span></div>
+        <div class="pcard-top"><span class="pcard-tag">Red Light Therapy</span><span class="pcard-idx">08·03</span></div>
         <h4 class="pcard-name">Red Light Therapy Mask</h4>
         <span class="pcard-dose">Face · LED array</span>
         <div class="pcard-go"><span class="pcard-price" data-sku-price="redlight-therapy-mask"><span class="cur">Rp</span>2.400.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
@@ -867,17 +854,17 @@ nav.nav-hidden{transform:translateY(-100%)}
         <div class="pcard-top"><span class="pcard-tag">Wellness</span><span class="pcard-idx">01·15</span></div>
         <h4 class="pcard-name">NAD⁺</h4>
         <span class="pcard-dose">500 mg · Pen</span>
-        <div class="pcard-go"><span class="pcard-price" data-sku-price="nad-500mg"><span class="cur">Rp</span>2.600.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
+        <div class="pcard-go"><span class="pcard-price" data-sku-price="nad-500mg"><span class="cur">Rp</span>2.300.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
       </a>
       <a class="pcard linked" href="#products/cat-longevity">
         <div class="pcard-top"><span class="pcard-tag">Longevity</span><span class="pcard-idx">06·02</span></div>
         <h4 class="pcard-name">GHK-Cu</h4>
         <span class="pcard-dose">50 mg · Pen</span>
-        <div class="pcard-go"><span class="pcard-price" data-sku-price="ghk-cu-50mg"><span class="cur">Rp</span>2.100.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
+        <div class="pcard-go"><span class="pcard-price" data-sku-price="ghk-cu-50mg"><span class="cur">Rp</span>2.600.000</span><span class="go">View <i class="ph ph-arrow-right"></i></span></div>
       </a>
     </div>
     <div class="featured-foot reveal">
-      <a href="#products" class="btn"><span data-t="feat.btn">Browse the Full Range</span> (<span id="featCount">66</span>)</a>
+      <a href="#products" class="btn"><span data-t="feat.btn">Browse the Full Range</span> (<span id="featCount">87</span>)</a>
     </div>
   </div>
 </section>
@@ -961,11 +948,11 @@ nav.nav-hidden{transform:translateY(-100%)}
         </div>
         <div class="range">
           <label for="price">Max</label>
-          <input type="range" id="price" min="1000000" max="8300000" step="100000" value="8300000" />
-          <span class="val" id="priceVal">Rp 8.300.000</span>
+          <input type="range" id="price" min="1000000" max="8500000" step="100000" value="8500000" />
+          <span class="val" id="priceVal">Rp 8.500.000</span>
         </div>
       </div>
-      <div class="rcount" id="rcount">Showing <b>66</b> of 66 items</div>
+      <div class="rcount" id="rcount">Showing <b>87</b> of 87 items</div>
     </div>
 
     <div id="catList"></div>
@@ -1168,13 +1155,13 @@ nav.nav-hidden{transform:translateY(-100%)}
     <form class="controls reveal vf-form" id="vfForm" novalidate>
       <div class="search">
         <i class="ph ph-magnifying-glass"></i>
-        <input type="text" id="vfInput" placeholder="AX-2508-RT05" autocomplete="off" spellcheck="false" aria-label="Lot number" />
+        <input type="text" id="vfInput" placeholder="AX-2508-RT10" autocomplete="off" spellcheck="false" aria-label="Lot number" />
       </div>
       <button type="submit" class="btn btn-solid"><span data-t="vf.check">Verify</span></button>
     </form>
     <div class="vf-chips reveal">
       <span class="vf-chips-k" data-t="vf.try">Try a sample lot</span>
-      <button class="chip" type="button" data-lot="AX-2508-RT05">AX-2508-RT05</button>
+      <button class="chip" type="button" data-lot="AX-2508-RT10">AX-2508-RT10</button>
       <button class="chip" type="button" data-lot="AX-2406-1157">AX-2406-1157</button>
       <button class="chip" type="button" data-lot="AX-2405-KPV10">AX-2405-KPV10</button>
     </div>
@@ -1654,6 +1641,28 @@ window.REFERENCE = {
   "AHK-Cu":{cls:"Copper tripeptide",mech:"Ala-His-Lys:Cu studied in hair-follicle and dermal research.",half:"Short"},
   "Glutathione":{cls:"Tripeptide antioxidant",mech:"Endogenous Glu-Cys-Gly antioxidant studied for redox and detoxification research.",half:"Short"},
   "Cagrilintide":{cls:"Amylin analogue",mech:"Long-acting amylin-receptor agonist studied for satiety and energy-balance pathways in metabolic research.",half:"≈7–8 days"},
+  "AOD-9604":{cls:"hGH fragment 176-191",mech:"Modified C-terminal growth-hormone fragment studied for lipolytic-pathway research without somatotropic signalling.",half:"Short"},
+  "CJC-1295 (With DAC)":{cls:"GHRH analogue (DAC)",mech:"Drug-affinity-complex GHRH analogue studied for sustained GH-axis signalling; DAC extends persistence.",half:"≈6–8 days"},
+  "Sermorelin":{cls:"GHRH(1-29) analogue",mech:"Shortest active GHRH fragment studied for physiologic, pulsatile GH-release research.",half:"≈10–20 minutes"},
+  "Thymalin":{cls:"Thymic peptide complex",mech:"Thymus-derived polypeptide preparation studied for immunoregulation research.",half:"Short"},
+  "Dihexa":{cls:"Angiotensin IV analogue",mech:"Hexapeptide studied for HGF/c-Met-linked synaptogenesis and cognition research.",half:"Extended (oral-stable analogue)"},
+  "VIP":{cls:"Vasoactive intestinal peptide",mech:"Endogenous 28-residue peptide studied for VPAC-receptor signalling in immune, pulmonary and circadian research.",half:"≈1–2 minutes"},
+  "LC216 Lipo-B":{cls:"Lipotropic blend",mech:"Methionine–inositol–choline plus B-vitamin blend studied in lipid-metabolism research.",half:"Mixture (varies)"},
+  "LC526 Fat Blaster":{cls:"Lipotropic blend",mech:"Combined lipotropic and carnitine blend studied in fat-metabolism research.",half:"Mixture (varies)"},
+  "SNAP-8":{cls:"Acetyl octapeptide-3",mech:"SNAP-25 mimetic studied in topical dermal research for neurotransmitter-release modulation.",half:"Short (topical research)"},
+  "FOXO4-DRI":{cls:"D-retro-inverso peptide",mech:"FOXO4-p53 interference peptide studied in senolytic (senescent-cell clearance) research.",half:"Extended (D-amino acids)"},
+  "Melanotan II":{cls:"α-MSH analogue ⚠ regulated",mech:"Synthetic melanocortin agonist studied for melanocortin-pathway/pigmentation research. Regulated in many jurisdictions.",half:"≈1–2 hours"},
+  "Bronchogen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in bronchial-epithelium bioregulation research.",half:"Short"},
+  "Cardiogen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in cardiac-tissue bioregulation research.",half:"Short"},
+  "Chonluten":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in lung and gastric-mucosa bioregulation research.",half:"Short"},
+  "Cortagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in cortical/nervous-tissue bioregulation research.",half:"Short"},
+  "Crystagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in immune-system bioregulation research.",half:"Short"},
+  "Livagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in hepatic-tissue bioregulation research.",half:"Short"},
+  "Ovagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in ovarian and hepatic bioregulation research.",half:"Short"},
+  "Pancragen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in pancreatic bioregulation research.",half:"Short"},
+  "Prostamax":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in prostate-tissue bioregulation research.",half:"Short"},
+  "Testagen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in testicular/endocrine bioregulation research.",half:"Short"},
+  "Vesugen":{cls:"Peptide bioregulator",mech:"Short Khavinson-class peptide studied in vascular-wall bioregulation research.",half:"Short"},
   "Ipamorelin":{cls:"GH secretagogue",mech:"Selective ghrelin-receptor pentapeptide studied for pulsatile GH-axis research.",half:"≈2 hours"},
   "Ipamorelin + Tesamorelin":{cls:"Secretagogue + GHRH blend",mech:"Combined research blend studied for GH-axis signalling — see the individual component entries.",half:"Mixed"},
   "Selank + Semax":{cls:"Neuropeptide blend",mech:"Combined research blend studied in anxiolytic and nootropic contexts — see the individual component entries.",half:"Mixed"},
@@ -1727,42 +1736,6 @@ window.axReveal=el=>io.observe(el); // for content injected after this runs (cat
   try{sessionStorage.setItem("axiom_intro","1");}catch(e){}
   setTimeout(()=>pl.classList.add("done"),1650);
 })();
-
-/* ---- Custom cursor (fine pointers only) ---- */
-if(!coarse&&!reduce){
-  const ring=document.getElementById("cursorRing"),dot=document.getElementById("cursorDot");
-  if(ring&&dot){
-    let rx=innerWidth/2,ry=innerHeight/2,dx=rx,dy=ry,tx=rx,ty=ry,on=false;
-    const hoverSel="a,button,input,select,textarea,summary,label,.tlink,.chip,.pcard,[data-add],[data-ref],.faq-q";
-    addEventListener("mousemove",e=>{
-      tx=e.clientX;ty=e.clientY;
-      if(!on){on=true;document.body.classList.add("cursor-on");}
-      const t=e.target.closest?.(hoverSel);
-      ring.classList.toggle("hover",!!t);
-    });
-    addEventListener("mouseleave",()=>{on=false;document.body.classList.remove("cursor-on");});
-    (function tick(){
-      dx+=(tx-dx)*0.35;dy+=(ty-dy)*0.35;
-      rx+=(tx-rx)*0.16;ry+=(ty-ry)*0.16;
-      dot.style.transform=`translate(${dx}px,${dy}px)`;
-      ring.style.transform=`translate(${rx}px,${ry}px)`;
-      requestAnimationFrame(tick);
-    })();
-  }
-}
-
-/* ---- Magnetic hover (fine pointers only) ---- */
-if(!coarse&&!reduce){
-  const strength=0.32;
-  document.querySelectorAll(".tlink, nav .navcart, .btn, .gate-actions a, .gate-actions button").forEach(el=>{
-    el.addEventListener("mousemove",e=>{
-      const r=el.getBoundingClientRect();
-      const mx=e.clientX-(r.left+r.width/2),my=e.clientY-(r.top+r.height/2);
-      el.style.transform=`translate(${mx*strength}px,${my*strength}px)`;
-    });
-    el.addEventListener("mouseleave",()=>{el.style.transform="";el.style.transition="transform .4s cubic-bezier(.16,1,.3,1)";setTimeout(()=>el.style.transition="",400);});
-  });
-}
 
 /* ---- Scroll progress bar + hide-on-scroll nav ---- */
 const bar=document.getElementById("progress"),nav=document.getElementById("nav");
@@ -1975,7 +1948,7 @@ addEventListener("keydown",e=>{if(e.key==="Escape")closeRef();});
 /* ---- Product detail modal ---- */
 const pd=document.getElementById("pd"),pdOv=document.getElementById("pdOv");
 let pdReturnFocus=null;
-const CAT_ICON={metabolic:"scales",tissue:"first-aid-kit",growth:"pulse",neuro:"brain",reproductive:"gender-intersex",longevity:"sparkle",redlight:"sun",apparel:"t-shirt"};
+const CAT_ICON={metabolic:"scales",tissue:"first-aid-kit",growth:"pulse",neuro:"brain",reproductive:"gender-intersex",longevity:"sparkle",bioregulators:"atom",redlight:"sun",apparel:"t-shirt"};
 function specRows(it){
   const rows=[];
   if(it.dose) rows.push(["Specification",it.dose]);
