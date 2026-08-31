@@ -470,11 +470,18 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     update();
   }
 
-  /* ---------------- Route ---------------- */
-  var slug = param("c");
-  var found = slug && window.COMPOUNDS.filter(function (x) { return x.slug === slug; })[0];
-  if (found) renderCompound(found);
-  else renderIndex();
+  /* ---------------- Route ----------------
+     Slug comes from ?c= on a hosted site, or from the hash when the page is
+     opened somewhere that cannot change the query string. */
+  function route() {
+    var slug = param("c") || decodeURIComponent(location.hash.replace(/^#/, ""));
+    var found = slug && window.COMPOUNDS.filter(function (x) { return x.slug === slug; })[0];
+    if (found) renderCompound(found);
+    else renderIndex();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener("hashchange", route);
+  route();
 })();
 </script>
 </body>
