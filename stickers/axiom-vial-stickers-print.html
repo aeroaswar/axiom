@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AXIOM — Vial Stickers 20 x 40 mm — Print Sheet</title>
+<title>AXIOM — Retatrutide Vial Stickers 20 x 40 mm — Print Sheet</title>
 <style>
 @font-face {
   font-family: 'Inter';
@@ -200,10 +200,10 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 
 <div class="bar">
   <div class="kick">AXIOM — Production Artwork</div>
-  <h1>Vial stickers — 20 &times; 40 mm</h1>
+  <h1>Retatrutide range — vial stickers 20 &times; 40 mm</h1>
   <dl>
-    <dt>Label</dt><dd>40 &times; 20 mm, 2 mm corner radius</dd>
-    <dt>Sheet</dt><dd>A4 portrait, 8 mm margin &middot; 4 &times; 12 = <span id="count">48</span> labels</dd>
+    <dt>Label</dt><dd>40 &times; 20 mm, 2 mm corner radius &middot; 10 / 20 / 30 / 40 / 60 mg, 8 each</dd>
+    <dt>Sheet</dt><dd>A4 portrait, 8 mm margin &middot; 4 &times; 12 slots &middot; <span id="count">40</span> labels placed</dd>
     <dt>Pitch</dt><dd>44 mm horizontal (4 mm gutter) &middot; 23 mm vertical (3 mm gutter)</dd>
     <dt>Output</dt><dd>Print &rarr; Destination &ldquo;Save as PDF&rdquo; &middot; scale 100% &middot; background graphics ON</dd>
   </dl>
@@ -221,25 +221,23 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 
 <script>
 /* ============================================================
-   LABEL DATA
-   `dose` is the pen-device click conversion. It is device- and
-   fill-volume-specific: it is NOT derived from the strength, and
-   is deliberately left null for SKUs where the conversion has not
-   been supplied. A null dose drops the DOSE field from the label.
-   `copies` is how many of that SKU to place on the sheet.
+   LABEL DATA — Retatrutide range
+   Sheet is 4 columns x 12 rows = 48 slots. `copies` in multiples
+   of 4 keeps each strength on whole rows, so a cut sheet stays
+   sorted. 8 each = 2 rows per strength, 40 labels, 2 rows spare.
+
+   `dose` is the pen-device click conversion. It depends on the
+   device and its reconstitution volume — it does NOT follow from
+   the strength — so it is only set where it has been supplied.
+   A null dose drops the DOSE row rather than printing it empty
+   or, worse, a guessed number. Fill these in and they appear.
    ============================================================ */
 const LABELS = [
-  { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:48 },
-
-  /* Remaining catalogue SKUs (archive/premium-hero/data.js). Set `copies`
-     and fill in `dose` to gang them onto the same sheet. */
-  { compound:"Retatrutide", qty:"5 mg",  dose:null, note:"HIGH PURITY", copies:0 },
-  { compound:"Retatrutide", qty:"10 mg", dose:null, note:"HIGH PURITY", copies:0 },
-  { compound:"Retatrutide", qty:"15 mg", dose:null, note:"HIGH PURITY", copies:0 },
-  { compound:"Retatrutide", qty:"20 mg", dose:null, note:"HIGH PURITY", copies:0 },
-  { compound:"Retatrutide", qty:"60 mg", dose:null, note:"HIGH PURITY", copies:0 },
-  { compound:"Tirzepatide", qty:"10 mg", dose:null, note:"HIGH PURITY", copies:0 },
-  { compound:"Tirzepatide", qty:"30 mg", dose:null, note:"HIGH PURITY", copies:0 },
+  { compound:"Retatrutide", qty:"10 mg", dose:null,               note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"20 mg", dose:null,               note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"40 mg", dose:null,               note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"60 mg", dose:null,               note:"HIGH PURITY", copies:8 },
 ];
 
 /* Inline AXIOM wordmark — vector, from business-proposal/assets/logo/axiom-wordmark-white.svg */
