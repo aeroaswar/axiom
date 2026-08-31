@@ -40,8 +40,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Any time of day", food: "With or without food", note: "The day matters more than the hour — pick one day a week and keep it. Many choose a day that stays predictable across travel and work." },
     perWeek: 1,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 2.5, unit: "mg" },
-    storage: "Refrigerate 2–8 °C. Protect from light. Do not freeze. Discard if the solution is cloudy or discoloured.",
+    pen: { qtyMg: 10, doseMg: 2.5 },
+    storage: "Refrigerate 2–8 °C. Do not freeze. Protect from light. Discard if the solution is cloudy or discoloured.",
     cautions: [
       "Contraindicated with personal or family history of medullary thyroid carcinoma or MEN 2.",
       "Gastrointestinal effects are the dose-limiting factor — escalate slowly.",
@@ -68,8 +68,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Any time of day", food: "With or without food", note: "Weekly in trial protocols, on a fixed day. Gastrointestinal effects are usually worst in the first 48 h after a dose, which is worth planning around." },
     perWeek: 1,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 2, unit: "mg" },
-    storage: "Lyophilised: store sealed at −20 °C, protected from light. Reconstituted: 2–8 °C, avoid freeze–thaw cycles.",
+    pen: { qtyMg: 10, doseMg: 2 },
+    storage: "Refrigerate 2–8 °C. Do not freeze — a freeze–thaw cycle degrades the peptide. Protect from light.",
     cautions: [
       "Investigational compound — the full human safety profile is not established.",
       "Gastrointestinal tolerability is dose-limiting in trial data.",
@@ -96,8 +96,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Before bed", food: "Fasted — 2 h after the last meal", note: "Growth-hormone release is pulsatile and largely nocturnal, so evening administration aligns with the body's own rhythm. Elevated glucose blunts the response." },
     perWeek: 7,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 2, unit: "mg" },
-    storage: "Lyophilised: 2–8 °C. Reconstitute with the supplied diluent and use promptly; do not freeze once reconstituted.",
+    pen: { qtyMg: 10, doseMg: 2 },
+    storage: "Refrigerate 2–8 °C and use promptly once in use. Do not freeze. Protect from light.",
     cautions: [
       "Contraindicated in active malignancy and during pregnancy.",
       "Monitor glucose — GH-axis stimulation can reduce insulin sensitivity.",
@@ -126,8 +126,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Morning and evening in study protocols", food: "Either", note: "Split dosing appears in animal protocols because the half-life is short. No human schedule is established." },
     perWeek: 7,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 0.25, unit: "mg" },
-    storage: "Lyophilised: sealed at −20 °C, protected from light. Reconstituted: 2–8 °C, use within weeks, no freeze–thaw.",
+    pen: { qtyMg: 10, doseMg: 0.25 },
+    storage: "Refrigerate 2–8 °C. Protect from light. Do not freeze. Discard 28 days after first use.",
     cautions: [
       "Long-term human safety data does not exist.",
       "Angiogenic activity is the mechanism of interest and also the basis of theoretical concern in the presence of malignancy.",
@@ -156,8 +156,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Any time of day", food: "Either", note: "Preclinical protocols front-load with two administrations a week, spaced three to four days apart, then reduce frequency." },
     perWeek: 2,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 2, unit: "mg" },
-    storage: "Lyophilised: −20 °C sealed. Reconstituted: 2–8 °C, protect from light, avoid repeated freeze–thaw.",
+    pen: { qtyMg: 10, doseMg: 2 },
+    storage: "Refrigerate 2–8 °C. Protect from light. Do not freeze or leave at room temperature between doses.",
     cautions: [
       "Prohibited at all times under the WADA code — relevant to any tested athlete.",
       "No human safety dataset.",
@@ -185,8 +185,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Before sleep", food: "Fasted — at least 2 h after eating", note: "Both components act on the GH axis, which is most responsive at night and is suppressed by circulating glucose and somatostatin tone. A carbohydrate-heavy meal beforehand blunts the pulse." },
     perWeek: 5,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 0.2, unit: "mg" },
-    storage: "Lyophilised: −20 °C. Reconstituted: 2–8 °C. Both components are light-sensitive.",
+    pen: { qtyMg: 10, doseMg: 0.2 },
+    storage: "Refrigerate 2–8 °C. Both components are light-sensitive — keep the pen in its carton. Do not freeze.",
     cautions: [
       "GH-axis stimulation can reduce insulin sensitivity.",
       "Prohibited under the WADA code.",
@@ -215,8 +215,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Morning", food: "Either", note: "Study protocols dose on alternate days rather than continuously. Morning administration is conventional in the metabolic literature but not established." },
     perWeek: 3,
-    recon: { vialMg: 10, bacMl: 1, doseMg: 5, unit: "mg" },
-    storage: "Lyophilised: −20 °C sealed, protected from light. Reconstituted: 2–8 °C.",
+    pen: { qtyMg: 10, doseMg: 5 },
+    storage: "Refrigerate 2–8 °C. Protect from light. Do not freeze.",
     cautions: [
       "No human safety dataset.",
       "Research use only."
@@ -245,8 +245,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Evening, on clean skin", food: "n/a — topical", note: "Applied to cleansed skin at night in the cosmetic studies, before heavier occlusive products. Copper peptides are photosensitive." },
     perWeek: 7,
-    recon: { vialMg: 50, bacMl: 5, doseMg: 2, unit: "mg" },
-    storage: "Lyophilised: −20 °C, protect from light — copper peptides are photosensitive. Reconstituted: 2–8 °C.",
+    pen: { qtyMg: 50, doseMg: 2 },
+    storage: "Refrigerate 2–8 °C and keep in the carton — copper peptides are photosensitive and discolour on light exposure. Do not freeze.",
     cautions: [
       "Copper accumulation is the principal concern with systemic use.",
       "Contraindicated in Wilson's disease and other copper-handling disorders.",
@@ -273,8 +273,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "45 minutes or more before", food: "Either; a heavy meal slows onset", note: "Episodic, not scheduled. The labelled ceiling is one dose in 24 h and eight in a month — that limit, not the timing, is the binding constraint." },
     perWeek: 2,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 1.75, unit: "mg" },
-    storage: "Lyophilised: −20 °C. Reconstituted: 2–8 °C, protect from light.",
+    pen: { qtyMg: 10, doseMg: 1.75 },
+    storage: "Refrigerate 2–8 °C. Protect from light. Do not freeze.",
     cautions: [
       "Nausea is the most common labelled adverse effect.",
       "Transient blood-pressure increase — contraindicated in uncontrolled hypertension or established cardiovascular disease.",
@@ -301,8 +301,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Any time of day", food: "Either", note: "The registered regimen is twice weekly, spaced three to four days apart, over a course of months." },
     perWeek: 2,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 1.6, unit: "mg" },
-    storage: "Lyophilised: 2–8 °C acceptable; −20 °C for long-term. Reconstituted: 2–8 °C, use promptly.",
+    pen: { qtyMg: 10, doseMg: 1.6 },
+    storage: "Refrigerate 2–8 °C. Do not freeze. Use within 28 days of first use.",
     cautions: [
       "Immunomodulatory — relevant in autoimmune disease and after transplantation.",
       "Approval status varies by country; confirm local regulatory position."
@@ -330,8 +330,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Morning and early afternoon", food: "Either", note: "Divided across the day given the very short half-life. It can be activating, so a late dose is usually avoided." },
     perWeek: 7,
-    recon: { vialMg: 10, bacMl: 2, doseMg: 0.3, unit: "mg" },
-    storage: "Lyophilised: −20 °C. Reconstituted: 2–8 °C, protect from light, short in-use window.",
+    pen: { qtyMg: 10, doseMg: 0.3 },
+    storage: "Refrigerate 2–8 °C. Protect from light. Short in-use window — do not leave at room temperature.",
     cautions: [
       "Regulatory status is jurisdiction-specific — unapproved in most Western markets.",
       "Long-term safety data is limited outside its registration setting."
@@ -357,8 +357,8 @@ window.COMPOUNDS = [
     ],
     timing: { when: "Evening", food: "Either", note: "Evening dosing in the source literature aligns with pineal melatonin rhythm. Given as a short course, then a long break — not continuously." },
     perWeek: 5,
-    recon: { vialMg: 10, bacMl: 1, doseMg: 5, unit: "mg" },
-    storage: "Lyophilised: −20 °C sealed. Reconstituted: 2–8 °C, short in-use window, protect from light.",
+    pen: { qtyMg: 10, doseMg: 5 },
+    storage: "Refrigerate 2–8 °C. Protect from light. Do not freeze.",
     cautions: [
       "The human evidence base is thin and largely single-source.",
       "Research use only."
@@ -367,7 +367,7 @@ window.COMPOUNDS = [
 ];
 
 /* Shared handling note — carried through from the AXIOM reference material. */
-window.HANDLING = "Supplied lyophilised (freeze-dried). Store sealed at −20 °C and protect from light. Reconstitute with sterile or bacteriostatic water added slowly down the vial wall — do not shake; swirl until dissolved. Refrigerate (2–8 °C) once reconstituted and avoid repeated freeze–thaw.";
+window.HANDLING = "Supplied as a ready-to-use pen — the bacteriostatic water is already included, so there is nothing to mix. Keep refrigerated at 2–8 °C, protect from light and do not freeze. Let the pen reach room temperature before use, and use within 28 days of first use.";
 
 window.EVIDENCE_META = {
   label:       { label: "Approved label",   tone: "solid",  blurb: "An approved product label exists. The regimen shown is the labelled one." },

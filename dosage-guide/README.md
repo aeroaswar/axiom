@@ -43,21 +43,20 @@ category and cadence.
 
 ### Dose & supply calculator
 
-Inputs: vial strength, diluent volume, dose, doses per week, vials on hand, and
-the date of reconstitution.
+Pens ship pre-mixed — the bacteriostatic water is already inside the stated
+quantity — so there is nothing to dilute and no draw volume to compute. The
+calculator works entirely in milligrams.
 
-Outputs: concentration, volume per dose, **units on a U-100 syringe**, doses per
-vial, how many days the supply lasts, and the date the reconstituted vial should
-be discarded.
+Inputs: quantity in the pen, dose, doses per week, and the date of first use.
 
-Vial strength ÷ diluent gives the concentration; dose ÷ concentration gives the
-volume; units are that volume on a U-100 syringe, where 100 units = 1 mL. It
-converts a volume and projects a supply — it does not decide what the dose should
-be. It flags three things:
+Outputs: **doses per pen**, milligrams in the pen, per dose, per week, how many
+days the pen lasts, and the date an opened pen should be discarded.
 
-- a draw over 100 units (more than one syringe) — use less diluent;
-- a draw under 2 units (hard to measure) — use more diluent;
-- a vial that outlasts its 28-day in-use window at the chosen frequency, which means product thrown away.
+It flags three things:
+
+- a dose larger than the pen holds;
+- a pen that outlasts its 28-day in-use window at the chosen frequency, naming the doses and milligrams that actually land inside the window, what gets discarded, and the pen size that would fit;
+- a remainder too small for another full dose.
 
 ## Evidence tiers
 
@@ -96,7 +95,7 @@ from the array.
   evidenceNote: "…",             // shown verbatim in the guide's banner
   protocol: [{ k: "Human dose", v: "Not established", n: "…" }],
   benefits: ["…"],
-  recon: { vialMg: 10, bacMl: 2, doseMg: 0.5, unit: "mg" },
+  pen: { qtyMg: 10, doseMg: 0.5 },
   storage: "…",
   cautions: ["…"]
 }

@@ -214,8 +214,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     daily: "Every day", weekly: "Fixed day each week",
     cycle: "Defined course, then a break", "as-needed": "Episodic — no fixed schedule"
   };
-  /* Reconstituted peptides in bacteriostatic water are conventionally
-     discarded 28 days after reconstitution, refrigerated. */
+  /* A pre-mixed pen kept refrigerated is conventionally discarded 28 days
+     after first use. */
   var BEYOND_USE_DAYS = 28;
 
   /* ---------------- Index ---------------- */
@@ -228,7 +228,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         "<h1>Cadence, timing<br>and provenance.</h1>" +
         "<p>Scan the card on any AXIOM compound to land on its guide: when to take it, " +
         "what the documented protocol is, what it is studied for, and a calculator that turns " +
-        "a vial into syringe units and a supply that lasts.</p>" +
+        "a pen into doses and tells you how far it goes.</p>" +
         '<div class="search"><input id="q" type="search" placeholder="Search compound, class or category" autocomplete="off" /></div>' +
       "</div>" +
       '<div id="list"></div>' +
@@ -331,16 +331,15 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       "<section><h2>Dose &amp; supply</h2>" +
         '<div class="calc">' +
           '<div class="fields">' +
-            '<div class="field"><label for="f-vial">Vial strength (mg)</label><input id="f-vial" type="number" inputmode="decimal" step="any" min="0" value="' + c.recon.vialMg + '"></div>' +
-            '<div class="field"><label for="f-bac">Diluent (mL)</label><input id="f-bac" type="number" inputmode="decimal" step="any" min="0" value="' + c.recon.bacMl + '"></div>' +
-            '<div class="field"><label for="f-dose">Dose (mg)</label><input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="' + c.recon.doseMg + '"></div>' +
+            '<div class="field"><label for="f-qty">Quantity (mg)</label><input id="f-qty" type="number" inputmode="decimal" step="any" min="0" value="' + c.pen.qtyMg + '"></div>' +
+            '<div class="field"><label for="f-dose">Dose (mg)</label><input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="' + c.pen.doseMg + '"></div>' +
             '<div class="field"><label for="f-week">Doses per week</label><input id="f-week" type="number" inputmode="numeric" step="1" min="0" max="21" value="' + c.perWeek + '"></div>' +
-            '<div class="field"><label for="f-vials">Vials on hand</label><input id="f-vials" type="number" inputmode="numeric" step="1" min="1" value="1"></div>' +
-            '<div class="field"><label for="f-date">Reconstituted on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
+            '<div class="field"><label for="f-date">First used on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
           "</div>" +
           '<div class="out" id="out"></div>' +
-          '<div class="calc-note">Units are read on a U-100 insulin syringe, where 100 units = 1 mL. ' +
-          "This converts a volume and projects a supply — it does not decide what the dose should be.</div>" +
+          '<div class="calc-note">Pens arrive pre-mixed — the bacteriostatic water is already in the stated ' +
+          "quantity, so there is nothing to dilute. This divides a pen into doses and projects how far it goes; " +
+          "it does not decide what the dose should be.</div>" +
         "</div>" +
         '<div id="sched-wrap"></div>' +
       "</section>" +
@@ -369,14 +368,14 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     wireCalc(c);
   }
 
-  /* ---------------- Dose, supply and schedule ---------------- */
+  /* ---------------- Dose, supply and schedule ----------------
+     Pens ship pre-mixed, so there is no diluent and no draw volume to
+     compute — everything here is milligrams and dose counts. */
   function wireCalc(c) {
     var f = {
-      vial: document.getElementById("f-vial"),
-      bac: document.getElementById("f-bac"),
+      qty: document.getElementById("f-qty"),
       dose: document.getElementById("f-dose"),
       week: document.getElementById("f-week"),
-      vials: document.getElementById("f-vials"),
       date: document.getElementById("f-date")
     };
     var out = document.getElementById("out");
@@ -390,63 +389,55 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     function addDays(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
 
     function update() {
-      var v = parseFloat(f.vial.value), b = parseFloat(f.bac.value), d = parseFloat(f.dose.value);
-      var perWeek = parseFloat(f.week.value), vials = parseFloat(f.vials.value) || 1;
+      var qty = parseFloat(f.qty.value), d = parseFloat(f.dose.value), perWeek = parseFloat(f.week.value);
 
-      if (!(v > 0) || !(b > 0) || !(d > 0)) {
-        out.innerHTML = '<div class="flag">Enter a vial strength, a diluent volume and a dose.</div>';
+      if (!(qty > 0) || !(d > 0)) {
+        out.innerHTML = '<div class="flag">Enter the quantity in the pen and a dose.</div>';
+        schedWrap.innerHTML = "";
+        return;
+      }
+      if (d > qty) {
+        out.innerHTML = '<div class="flag">A ' + fmt(d, 2) + " mg dose is more than the " + fmt(qty, 2) +
+          " mg in the pen. Check the figures.</div>";
         schedWrap.innerHTML = "";
         return;
       }
 
-      var conc = v / b;                  /* mg per mL */
-      var ml = d / conc;                 /* mL per dose */
-      var units = ml * 100;              /* U-100 syringe units */
-      var perVial = Math.floor(v / d);   /* whole doses from one vial */
-      var totalDoses = perVial * vials;
-      var days = perWeek > 0 ? totalDoses / perWeek * 7 : null;
+      var doses = Math.floor(qty / d);
+      var leftover = qty - doses * d;
+      var days = perWeek > 0 ? doses / perWeek * 7 : null;
 
-      /* Drawn volume = dose x diluent / vial strength. More diluent means a
-         lower concentration and a LARGER draw; less diluent, a smaller one. */
-      var flags = "";
-      if (units > 100) flags += '<div class="flag">That dose is ' + fmt(units, 1) +
-        " units — more than one full U-100 syringe. Use less diluent, for a higher concentration and a smaller draw.</div>";
-      else if (units < 2) flags += '<div class="flag">That dose is ' + fmt(units, 1) +
-        " units — under 2 units is hard to measure accurately. Use more diluent, for a lower concentration and a larger draw.</div>";
-
-      /* Beyond-use: a vial that outlasts its in-use window is product thrown away. */
-      var buLine = "—";
+      /* In-use window runs from first use; a pen that outlasts it is product
+         thrown away, and the remedy is a smaller pen, not a smaller dose. */
+      var buLine = "—", flags = "";
       if (f.date.value) {
         var parts = f.date.value.split("-");
-        var recon = new Date(+parts[0], +parts[1] - 1, +parts[2]);
-        if (!isNaN(recon.getTime())) {
-          var bu = addDays(recon, BEYOND_USE_DAYS);
+        var first = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+        if (!isNaN(first.getTime())) {
+          var bu = addDays(first, BEYOND_USE_DAYS);
           buLine = fmtDate(bu);
-          var vialDays = perWeek > 0 ? perVial / perWeek * 7 : null;
-          if (vialDays && vialDays > BEYOND_USE_DAYS) {
-            /* Diluent volume cannot fix this — the milligrams in the vial are
-               fixed. What fits the window is a smaller vial. */
+          if (days && days > BEYOND_USE_DAYS && perWeek > 0) {
             var usable = Math.floor(BEYOND_USE_DAYS / (7 / perWeek));
             var needMg = usable * d;
-            var wasteMg = v - needMg;
-            flags += '<div class="flag">This vial holds ' + perVial + " doses — about " +
-              Math.round(vialDays) + " days at this frequency, but a reconstituted vial keeps only " +
-              BEYOND_USE_DAYS + ". You would use about " + usable + " dose" + (usable === 1 ? "" : "s") +
-              " (" + fmt(needMg, 2) + " mg) by " + fmtDate(bu) + " and discard roughly " + fmt(wasteMg, 2) +
-              " mg. A vial nearer " + fmt(needMg, 2) + " mg suits this protocol — adding less diluent will not help, " +
-              "since it changes the draw volume, not the milligrams in the vial.</div>";
+            flags += '<div class="flag">This pen holds ' + doses + " doses — about " + Math.round(days) +
+              " days at this frequency, but an opened pen keeps only " + BEYOND_USE_DAYS +
+              ". You would use about " + usable + " dose" + (usable === 1 ? "" : "s") + " (" + fmt(needMg, 2) +
+              " mg) by " + fmtDate(bu) + " and discard roughly " + fmt(qty - needMg, 2) +
+              " mg. A pen nearer " + fmt(needMg, 2) + " mg suits this protocol.</div>";
           }
         }
       }
+      if (leftover > 0.0001) flags += '<div class="flag">' + fmt(leftover, 2) +
+        " mg is left over after " + doses + " full doses — not enough for another at this dose.</div>";
 
       out.innerHTML =
-        '<div class="out-hero"><div class="out-num tnum">' + fmt(units, 1) + "</div>" +
-        '<div class="out-unit">units on a U-100 syringe</div></div>' +
+        '<div class="out-hero"><div class="out-num tnum">' + doses + "</div>" +
+        '<div class="out-unit">doses per pen at ' + fmt(d, 2) + " mg</div></div>" +
         '<div class="out-grid">' +
-          '<div class="out-cell"><b class="tnum">' + fmt(conc, 2) + " mg/mL</b><span>Concentration</span></div>" +
-          '<div class="out-cell"><b class="tnum">' + fmt(ml, 3) + " mL</b><span>Per dose</span></div>" +
-          '<div class="out-cell"><b class="tnum">' + perVial + (vials > 1 ? " · " + totalDoses + " total" : "") + "</b><span>Doses per vial</span></div>" +
-          '<div class="out-cell"><b class="tnum">' + (days ? Math.round(days) + " days" : "—") + "</b><span>Supply lasts</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + fmt(qty, 2) + " mg</b><span>In the pen</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + fmt(d, 2) + " mg</b><span>Per dose</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + (perWeek > 0 ? fmt(d * perWeek, 2) + " mg" : "—") + "</b><span>Per week</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + (days ? Math.round(days) + " days" : "—") + "</b><span>Pen lasts</span></div>" +
           '<div class="out-cell"><b>' + buLine + "</b><span>Discard by</span></div>" +
         "</div>" + flags;
 
