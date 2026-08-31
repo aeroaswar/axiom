@@ -172,10 +172,19 @@ rows, so a cut sheet stays sorted. Set one SKU to `copies: 48` for a full single
 Note that 40 mg is not in the catalogue at `../archive/premium-hero/data.js`, which lists
 5 / 10 / 15 / 20 / 30 / 60 mg. It is included here because it was asked for.
 
-**`dose` is never inferred.** The click conversion is specific to the pen device and its fill
-volume — it does not follow from the strength. A SKU whose conversion has not been supplied
-carries `dose: null`, and band D is dropped entirely rather than printed empty. Do not
-back-calculate one.
+### The click conversion
+
+Every strength in the current range carries **`10 clicks = 1 mg`**. That is not a coincidence of
+the numbers and it is not derived from the mg figure — it holds because the whole range is
+reconstituted to the same concentration, so the mg delivered per click is constant and only the
+number of doses per pen changes with strength.
+
+**`dose` is therefore never inferred from `qty`.** If a strength is ever filled to a different
+concentration, its conversion changes and must be set here explicitly. Two models are possible
+and they disagree sharply — under a same-total-volume pen the 60 mg would read `10 clicks = 2 mg`
+and the 10 mg `10 clicks = 0.33 mg` — so the value always comes from whoever fills the pens,
+never from arithmetic on this end. A SKU whose conversion has not been supplied carries
+`dose: null`, and band D is dropped entirely rather than printed with a guess.
 
 ---
 
@@ -262,6 +271,7 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Corner radius | 7.559 px = 2 mm |
 | Sheet | 194 × 281 mm; pitch 43.995 × 22.994 mm |
 | Label count | 40 placed — 8 each of 10 / 20 / 30 / 40 / 60 mg, on rows 1-2 / 3-4 / 5-6 / 7-8 / 9-10 |
+| DOSE row | present on all 40 |
 | Overflowing bands | 0 at `--k: 1` for the shipped SKU |
 | Hairlines | both `rgb(200, 138, 78)`, identical width and height |
 | Proof page | no page errors, no horizontal overflow, 1:1 view measures 40 × 20 mm |

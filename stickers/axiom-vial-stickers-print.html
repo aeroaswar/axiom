@@ -226,18 +226,20 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
    of 4 keeps each strength on whole rows, so a cut sheet stays
    sorted. 8 each = 2 rows per strength, 40 labels, 2 rows spare.
 
-   `dose` is the pen-device click conversion. It depends on the
-   device and its reconstitution volume — it does NOT follow from
-   the strength — so it is only set where it has been supplied.
-   A null dose drops the DOSE row rather than printing it empty
-   or, worse, a guessed number. Fill these in and they appear.
+   `dose` is the pen-device click conversion. Every strength in
+   this range is reconstituted to the same concentration, so the
+   mg per click is identical across the range and only the number
+   of doses per pen differs. If a strength is ever filled to a
+   different concentration its conversion changes and must be set
+   here explicitly — it does not follow from the mg figure.
+   A null dose drops the DOSE row rather than printing a guess.
    ============================================================ */
 const LABELS = [
-  { compound:"Retatrutide", qty:"10 mg", dose:null,               note:"HIGH PURITY", copies:8 },
-  { compound:"Retatrutide", qty:"20 mg", dose:null,               note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"10 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"20 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
   { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
-  { compound:"Retatrutide", qty:"40 mg", dose:null,               note:"HIGH PURITY", copies:8 },
-  { compound:"Retatrutide", qty:"60 mg", dose:null,               note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"40 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"60 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
 ];
 
 /* Inline AXIOM wordmark — vector, from business-proposal/assets/logo/axiom-wordmark-white.svg */
