@@ -142,13 +142,12 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
   text-transform:uppercase; color:var(--accent);
 }
 
-/* --- hairline dividers — the core AXIOM texture ------------- */
-.lbl__rule{height:.2mm; flex:0 0 .2mm}
-.lbl__rule--top{
-  margin:1.1mm 0 1.3mm;
-  background:linear-gradient(90deg,var(--accent) 0%,var(--accent-line) 18%,var(--line-2) 46%,var(--line-2) 100%);
-}
-.lbl__rule--bot{ margin:1.2mm 0 .9mm; background:var(--line); }
+/* --- hairline dividers — the core AXIOM texture -------------
+   Both rules are solid bronze at full strength, so they read the
+   same on every label; no gradient, no grey. */
+.lbl__rule{height:.2mm; flex:0 0 .2mm; background:var(--accent)}
+.lbl__rule--top{ margin:1.1mm 0 1.3mm }
+.lbl__rule--bot{ margin:1.2mm 0 .9mm }
 
 /* --- band B — compound, the hero --------------------------- */
 .lbl__compound{
