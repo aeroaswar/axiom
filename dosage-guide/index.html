@@ -42,8 +42,8 @@ a{color:inherit;text-decoration:none}
   border-bottom:1px solid var(--line-soft);
 }
 .bar-in{display:flex;align-items:center;gap:14px;height:54px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
-.mark{display:flex;align-items:center;gap:9px;font-family:var(--display);letter-spacing:.26em;font-size:12px;font-weight:400;text-transform:uppercase}
-.mark svg{width:19px;height:19px;flex:none}
+.mark{display:flex;align-items:center}
+.mark img{width:96px;height:auto;display:block}
 .bar .back{margin-left:auto;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 13px;transition:.2s}
 .bar .back:hover{color:var(--ink);border-color:var(--line-2)}
 
@@ -152,10 +152,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
 
 <div class="bar">
   <div class="bar-in">
-    <a class="mark" href="index.html">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="#C88A4E" stroke-width="7" stroke-linecap="round" fill="none"><polyline points="24,74 38,26 52,74"/><circle cx="70" cy="52" r="16"/></g></svg>
-      AXIOM
-    </a>
+    <a class="mark" href="index.html" aria-label="AXIOM — compound guide"><img src="assets/axiom-wordmark-white.svg" alt="AXIOM" /></a>
     <a class="back" id="back" href="index.html" hidden>All compounds</a>
   </div>
 </div>

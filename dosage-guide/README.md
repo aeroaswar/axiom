@@ -8,13 +8,15 @@ A scannable card that ships with a compound, and the guide it resolves to.
 | `index.html` | The scan destination. Mobile-first compound guide: cadence, protocol, reconstitution calculator, studied benefits, storage, cautions. |
 | `compounds.js` | The data behind both. One entry per compound. |
 | `qr.js` | Self-contained QR encoder. No CDN, no network — the card generates its own code. |
+| `assets/axiom-wordmark-white.svg` | The AXIOM wordmark, copied from `business-proposal/assets/logo/`. Used on the card front and in the guide's top bar. |
 
 Open either file directly in a browser; there is no build step.
 
 ## The card
 
-**Front** — compound, class, cadence and route badges, and the QR under a
-`SCAN FOR PROTOCOL` cue. A footer strip carries half-life, evidence tier and lot.
+**Front** — the AXIOM wordmark, then compound, class, cadence and route badges,
+and the QR under a `SCAN FOR PROTOCOL` cue. A footer strip carries half-life,
+evidence tier and lot.
 
 **Back** — route, half-life and both storage temperatures; a seven-day cadence
 strip; the headline protocol line; and the guide URL in plain text, so the card
@@ -93,7 +95,7 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - Codeword construction, data placement, format-info BCH and Reed–Solomon syndromes verified against an independent implementation.
 - Mask selection matches independent penalty scoring across all eight masks.
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
-- All twelve cards were rendered to print PDFs, rasterised at 300 and 600 dpi, and decoded back to the exact expected URL.
+- All twelve cards were rendered to print PDFs, rasterised at 300 and 600 dpi, and decoded back to the exact expected URL — with the wordmark confirmed present in each.
 
 ## Scope
 

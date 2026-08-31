@@ -36,8 +36,8 @@ a{color:inherit}
   border-bottom:1px solid var(--line);padding:16px 22px;
 }
 .panel-in{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end}
-.mark{display:flex;align-items:center;gap:9px;font-family:var(--display);letter-spacing:.26em;font-size:12px;text-transform:uppercase;padding-bottom:9px}
-.mark svg{width:19px;height:19px}
+.mark{display:flex;align-items:center;padding-bottom:10px}
+.mark img{width:104px;height:auto;display:block}
 .ctl{display:flex;flex-direction:column;gap:6px;min-width:0}
 .ctl label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
 .ctl select,.ctl input{
@@ -98,9 +98,8 @@ a{color:inherit}
 
 /* --- Front --- */
 .f-top{display:flex;align-items:flex-start;justify-content:space-between;gap:3mm}
-.wordmark{display:flex;align-items:center;gap:1.5mm}
-.wordmark svg{width:3.6mm;height:3.6mm;flex:none}
-.wordmark span{font-family:var(--display);font-weight:400;font-size:2.7mm;letter-spacing:.62mm;text-transform:uppercase}
+.wordmark{display:flex;align-items:center}
+.wordmark img{width:21mm;height:auto;display:block}
 .f-cat{font-size:1.75mm;letter-spacing:.5mm;text-transform:uppercase;color:var(--accent);text-align:right;padding-top:.6mm}
 
 .f-body{display:flex;gap:4mm;flex:1;align-items:center;padding-top:2mm}
@@ -180,10 +179,7 @@ a{color:inherit}
 
 <div class="panel">
   <div class="panel-in">
-    <div class="mark">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="#C88A4E" stroke-width="7" stroke-linecap="round" fill="none"><polyline points="24,74 38,26 52,74"/><circle cx="70" cy="52" r="16"/></g></svg>
-      AXIOM
-    </div>
+    <div class="mark"><img src="assets/axiom-wordmark-white.svg" alt="AXIOM" /></div>
 
     <div class="ctl">
       <label for="c-compound">Compound</label>
@@ -266,14 +262,14 @@ a{color:inherit}
     return "";
   }
 
-  var LOGO = '<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="#C88A4E" stroke-width="7" stroke-linecap="round" fill="none"><polyline points="24,74 38,26 52,74"/><circle cx="70" cy="52" r="16"/></g></svg>';
+  var LOGO = '<img src="assets/axiom-wordmark-white.svg" alt="AXIOM" />';
 
   function front(c, url) {
     var qr = QR.svg(url, { ecl: els.ecl.value, quiet: 2, dark: "#070605", light: "none" });
     var ev = window.EVIDENCE_META[c.evidence];
     return '<div class="card-in">' +
       '<div class="f-top">' +
-        '<div class="wordmark">' + LOGO + "<span>Axiom</span></div>" +
+        '<div class="wordmark">' + LOGO + "</div>" +
         '<div class="f-cat">' + esc(c.category) + "</div>" +
       "</div>" +
       '<div class="f-body">' +
