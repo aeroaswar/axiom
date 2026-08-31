@@ -12,6 +12,11 @@ repository, where the work had accumulated across several unmerged topic branche
   `claude/axiom-brand-book-0puows`.
 - `business-proposal/` — business proposal, GTM strategy, and pricing materials.
   Migrated from `claude/axiom-business-proposal-p57t1y`.
+- `stickers/` — production artwork for the 20 × 40 mm vial sticker: `index.html` is the
+  design proof (enlarged view, actual size, corner-radius options, spec table) and
+  `axiom-vial-stickers-print.html` is the A4 gang sheet, 4 × 12 = 48 labels, ready to
+  print to PDF. Data-driven, so the rest of the peptide catalogue drops in without
+  redrawing.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.
