@@ -423,9 +423,19 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           var bu = addDays(recon, BEYOND_USE_DAYS);
           buLine = fmtDate(bu);
           var vialDays = perWeek > 0 ? perVial / perWeek * 7 : null;
-          if (vialDays && vialDays > BEYOND_USE_DAYS) flags += '<div class="flag">One vial holds ' + perVial +
-            " doses — about " + Math.round(vialDays) + " days at this frequency, past the " + BEYOND_USE_DAYS +
-            "-day in-use window. Reconstitute a smaller volume, or expect to discard the remainder on " + fmtDate(bu) + ".</div>";
+          if (vialDays && vialDays > BEYOND_USE_DAYS) {
+            /* Diluent volume cannot fix this — the milligrams in the vial are
+               fixed. What fits the window is a smaller vial. */
+            var usable = Math.floor(BEYOND_USE_DAYS / (7 / perWeek));
+            var needMg = usable * d;
+            var wasteMg = v - needMg;
+            flags += '<div class="flag">This vial holds ' + perVial + " doses — about " +
+              Math.round(vialDays) + " days at this frequency, but a reconstituted vial keeps only " +
+              BEYOND_USE_DAYS + ". You would use about " + usable + " dose" + (usable === 1 ? "" : "s") +
+              " (" + fmt(needMg, 2) + " mg) by " + fmtDate(bu) + " and discard roughly " + fmt(wasteMg, 2) +
+              " mg. A vial nearer " + fmt(needMg, 2) + " mg suits this protocol — adding less diluent will not help, " +
+              "since it changes the draw volume, not the milligrams in the vial.</div>";
+          }
         }
       }
 
