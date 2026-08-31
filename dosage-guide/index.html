@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>AXIOM — Compound Guide</title>
+<meta name="description" content="AXIOM compound guide — administration cadence, documented protocols, reconstitution and studied benefits, with the evidence tier stated for every figure." />
+<meta name="theme-color" content="#070605" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23070605'/%3E%3Cg stroke='%23C88A4E' stroke-width='6' stroke-linecap='round' fill='none'%3E%3Cpolyline points='24,74 38,26 52,74'/%3E%3Ccircle cx='70' cy='52' r='16'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#070605; --ink:#F2EDE5; --muted:#9c9488; --muted-2:#6a635a;
+  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
+  --accent:#C88A4E; --accent-bright:#E7B173; --accent-deep:#7C4C24;
+  --accent-soft:rgba(200,138,78,.14); --accent-line:rgba(200,138,78,.34);
+  --panel:#0d0b09; --panel-2:#131010;
+  --display:"Jost","Century Gothic",system-ui,sans-serif;
+  --sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --pad:20px; --maxw:680px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
+  -webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1;
+  padding-bottom:64px;
+}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:#0a0704}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.tnum{font-variant-numeric:tabular-nums}
+.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;font-weight:500;color:var(--muted-2)}
+
+/* ---------- Top bar ---------- */
+.bar{
+  position:sticky;top:0;z-index:20;background:rgba(7,6,5,.86);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line-soft);
+}
+.bar-in{display:flex;align-items:center;gap:14px;height:54px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.mark{display:flex;align-items:center;gap:9px;font-family:var(--display);letter-spacing:.26em;font-size:12px;font-weight:400;text-transform:uppercase}
+.mark svg{width:19px;height:19px;flex:none}
+.bar .back{margin-left:auto;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 13px;transition:.2s}
+.bar .back:hover{color:var(--ink);border-color:var(--line-2)}
+
+/* ---------- Hero ---------- */
+.hero{padding:34px 0 26px;border-bottom:1px solid var(--line-soft)}
+.cat{display:inline-block;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+h1{font-family:var(--display);font-weight:300;font-size:clamp(32px,8.5vw,46px);line-height:1.05;letter-spacing:-.015em}
+.cls{color:var(--muted);font-size:14.5px;margin-top:12px;max-width:46ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.chip{font-size:11px;letter-spacing:.06em;padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.chip b{color:var(--ink);font-weight:500}
+
+/* ---------- Evidence banner ---------- */
+.ev{margin-top:22px;border:1px solid var(--line);border-left:2px solid var(--tone,var(--accent));border-radius:3px;background:var(--panel);padding:15px 17px}
+.ev-top{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.ev-dot{width:7px;height:7px;border-radius:50%;background:var(--tone,var(--accent));flex:none}
+.ev-label{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--tone,var(--accent))}
+.ev p{font-size:13.5px;color:var(--muted);line-height:1.62}
+.tone-solid{--tone:#7FA87F}
+.tone-mid{--tone:#C88A4E}
+.tone-open{--tone:#9c9488}
+
+/* ---------- Sections ---------- */
+section{padding:36px 0;border-bottom:1px solid var(--line-soft)}
+h2{font-family:var(--display);font-weight:400;font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:22px;display:flex;align-items:center;gap:12px}
+h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
+
+/* ---------- Cadence ---------- */
+.cad-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.cad-word{font-family:var(--display);font-weight:300;font-size:38px;letter-spacing:.02em;text-transform:uppercase;line-height:1;
+  background:linear-gradient(120deg,#E7B173,#C88A4E 55%,#9A5F2C);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cad-sub{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.day{aspect-ratio:1;border:1px solid var(--line);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:var(--panel)}
+.day span{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+.day i{width:5px;height:5px;border-radius:50%;background:var(--line-2);font-style:normal}
+.day.on{border-color:var(--accent-line);background:var(--accent-soft)}
+.day.on span{color:var(--accent-bright)}
+.day.on i{background:var(--accent-bright);box-shadow:0 0 9px rgba(231,177,115,.65)}
+.cad-note{font-size:13.5px;color:var(--muted);line-height:1.65}
+
+/* ---------- Protocol rows ---------- */
+.rows{border-top:1px solid var(--line-soft)}
+.row{padding:15px 0;border-bottom:1px solid var(--line-soft)}
+.row-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.row-k{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);flex:none}
+.row-v{font-family:var(--display);font-size:17px;font-weight:400;text-align:right;letter-spacing:.005em}
+.row-v.none{color:var(--muted);font-style:italic;font-family:var(--sans);font-size:15px}
+.row-n{font-size:12.5px;color:var(--muted-2);margin-top:6px;line-height:1.6}
+
+/* ---------- Calculator ---------- */
+.calc{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:20px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
+.field input{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:3px;color:var(--ink);
+  font-family:var(--display);font-size:17px;padding:11px 12px;width:100%;
+  font-variant-numeric:tabular-nums;-moz-appearance:textfield;
+}
+.field input:focus{outline:none;border-color:var(--accent-line);background:#171310}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.out{margin-top:20px;padding-top:20px;border-top:1px solid var(--line-soft)}
+.out-hero{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.out-num{font-family:var(--display);font-weight:300;font-size:46px;line-height:1;color:var(--accent-bright);font-variant-numeric:tabular-nums}
+.out-unit{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.out-cell{border-top:1px solid var(--line-soft);padding-top:10px}
+.out-cell b{display:block;font-family:var(--display);font-size:16px;font-weight:400;font-variant-numeric:tabular-nums}
+.out-cell span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)}
+.calc-note{font-size:12px;color:var(--muted-2);margin-top:16px;line-height:1.6}
+.calc-warn{color:var(--accent);font-size:13px;margin-top:14px}
+
+/* ---------- Lists ---------- */
+ul.bul{list-style:none;display:flex;flex-direction:column;gap:13px}
+ul.bul li{position:relative;padding-left:22px;font-size:14.5px;color:#d8d1c6;line-height:1.62}
+ul.bul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
+ul.warn li::before{border-color:var(--muted-2);border-radius:0}
+p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
+
+/* ---------- Scope footer ---------- */
+.scope{padding:30px 0 10px}
+.scope p{font-size:12px;color:var(--muted-2);line-height:1.7}
+.scope p + p{margin-top:11px}
+.scope strong{color:var(--muted);font-weight:500}
+
+/* ---------- Index view ---------- */
+.idx-hero{padding:44px 0 30px}
+.idx-hero h1{font-size:clamp(30px,7.5vw,42px)}
+.idx-hero p{color:var(--muted);font-size:15px;margin-top:14px;max-width:44ch}
+.grp{padding:26px 0;border-bottom:1px solid var(--line-soft)}
+.grp h3{font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);transition:.18s}
+.item:last-child{border-bottom:none}
+.item:hover{padding-left:6px}
+.item-main{flex:1;min-width:0}
+.item-name{font-family:var(--display);font-size:18px;font-weight:400}
+.item-cls{font-size:12px;color:var(--muted-2);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item-cad{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 10px;flex:none}
+.arrow{color:var(--muted-2);flex:none}
+
+@media (min-width:560px){ :root{--pad:28px} .fields{grid-template-columns:repeat(3,1fr)} }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <a class="mark" href="index.html">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="#C88A4E" stroke-width="7" stroke-linecap="round" fill="none"><polyline points="24,74 38,26 52,74"/><circle cx="70" cy="52" r="16"/></g></svg>
+      AXIOM
+    </a>
+    <a class="back" id="back" href="index.html" hidden>All compounds</a>
+  </div>
+</div>
+
+<main id="app" class="wrap"></main>
+
+<script src="compounds.js"></script>
+<script>
+(function () {
+  "use strict";
+  var app = document.getElementById("app");
+  var back = document.getElementById("back");
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function param(name) {
+    var m = new RegExp("[?&]" + name + "=([^&#]*)").exec(location.search);
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+
+  var DAYS = ["M", "T", "W", "T", "F", "S", "S"];
+  var CAD_WORD = { daily: "Daily", weekly: "Weekly", cycle: "Cyclical", "as-needed": "As needed" };
+  var CAD_SUB = {
+    daily: "Every day", weekly: "Fixed day each week",
+    cycle: "Defined course, then a break", "as-needed": "Episodic — no fixed schedule"
+  };
+
+  /* ---------------- Index ---------------- */
+  function renderIndex() {
+    back.hidden = true;
+    document.title = "AXIOM — Compound Guide";
+    var groups = {};
+    window.COMPOUNDS.forEach(function (c) {
+      (groups[c.category] = groups[c.category] || []).push(c);
+    });
+    var html = '<div class="idx-hero">' +
+      '<div class="cat">Compound guide</div>' +
+      '<h1>Cadence, protocol<br>and provenance.</h1>' +
+      '<p>Scan the card on any AXIOM compound to land directly on its guide. Every dosing figure carries the evidence tier it came from — and where no human protocol exists, this guide says so.</p>' +
+      '</div>';
+    Object.keys(groups).forEach(function (cat) {
+      html += '<div class="grp"><h3>' + esc(cat) + '</h3>';
+      groups[cat].forEach(function (c) {
+        html += '<a class="item" href="?c=' + encodeURIComponent(c.slug) + '">' +
+          '<div class="item-main"><div class="item-name">' + esc(c.name) + '</div>' +
+          '<div class="item-cls">' + esc(c.cls) + '</div></div>' +
+          '<div class="item-cad">' + esc(CAD_WORD[c.cadence] || c.cadence) + '</div>' +
+          '<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
+          '</a>';
+      });
+      html += "</div>";
+    });
+    html += '<div class="scope"><p><strong>Scope.</strong> This guide is reference material for compounds supplied for research use. ' +
+      'It is not medical advice, not a prescription, and not a recommendation to administer anything to a person. ' +
+      'Where a compound has an approved label, the labelled regimen is reproduced and named as such; where it does not, ' +
+      'no dose is presented.</p></div>';
+    app.innerHTML = html;
+  }
+
+  /* ---------------- Compound ---------------- */
+  function renderCompound(c) {
+    back.hidden = false;
+    document.title = "AXIOM — " + c.name;
+    var ev = window.EVIDENCE_META[c.evidence] || window.EVIDENCE_META.preclinical;
+
+    var week = c.days.map(function (on, i) {
+      return '<div class="day' + (on ? " on" : "") + '"><span>' + DAYS[i] + "</span><i></i></div>";
+    }).join("");
+
+    var rows = c.protocol.map(function (r) {
+      var none = /not established|^none$/i.test(r.v);
+      return '<div class="row"><div class="row-top">' +
+        '<div class="row-k">' + esc(r.k) + "</div>" +
+        '<div class="row-v' + (none ? " none" : "") + '">' + esc(r.v) + "</div></div>" +
+        '<div class="row-n">' + esc(r.n) + "</div></div>";
+    }).join("");
+
+    var benefits = c.benefits.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("");
+    var cautions = c.cautions.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("");
+
+    app.innerHTML =
+      '<div class="hero">' +
+        '<div class="cat">' + esc(c.category) + "</div>" +
+        "<h1>" + esc(c.name) + "</h1>" +
+        '<div class="cls">' + esc(c.cls) + "</div>" +
+        '<div class="meta">' +
+          '<div class="chip">Route <b>' + esc(c.route) + "</b></div>" +
+          '<div class="chip">Half-life <b>' + esc(c.halfLife) + "</b></div>" +
+        "</div>" +
+        '<div class="ev tone-' + ev.tone + '">' +
+          '<div class="ev-top"><i class="ev-dot"></i><div class="ev-label">' + esc(ev.label) + "</div></div>" +
+          "<p>" + esc(c.evidenceNote) + "</p>" +
+        "</div>" +
+      "</div>" +
+
+      "<section><h2>Cadence</h2>" +
+        '<div class="cad-head"><div class="cad-word">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div>" +
+        '<div class="cad-sub">' + esc(CAD_SUB[c.cadence] || "") + "</div></div>" +
+        '<div class="week">' + week + "</div>" +
+        '<div class="cad-note">' + esc(c.cadenceNote) + "</div>" +
+      "</section>" +
+
+      "<section><h2>Protocol</h2>" +
+        '<div class="rows">' + rows + "</div>" +
+      "</section>" +
+
+      "<section><h2>Reconstitution</h2>" +
+        '<div class="calc">' +
+          '<div class="fields">' +
+            '<div class="field"><label for="f-vial">Vial strength (mg)</label><input id="f-vial" type="number" inputmode="decimal" step="any" min="0" value="' + c.recon.vialMg + '"></div>' +
+            '<div class="field"><label for="f-bac">Diluent added (mL)</label><input id="f-bac" type="number" inputmode="decimal" step="any" min="0" value="' + c.recon.bacMl + '"></div>' +
+            '<div class="field"><label for="f-dose">Target dose (mg)</label><input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="' + c.recon.doseMg + '"></div>' +
+          "</div>" +
+          '<div class="out" id="out"></div>' +
+          '<div class="calc-note">Units are read on a U-100 insulin syringe, where 100 units = 1 mL. ' +
+          'This converts a volume — it does not decide what the dose should be.</div>' +
+        "</div>" +
+      "</section>" +
+
+      "<section><h2>Studied for</h2><ul class=\"bul\">" + benefits + "</ul></section>" +
+
+      "<section><h2>Storage &amp; handling</h2>" +
+        '<p class="body">' + esc(c.storage) + "</p>" +
+        '<p class="body" style="margin-top:14px;color:var(--muted-2);font-size:13px">' + esc(window.HANDLING) + "</p>" +
+      "</section>" +
+
+      "<section><h2>Cautions</h2><ul class=\"bul warn\">" + cautions + "</ul></section>" +
+
+      '<div class="scope">' +
+        "<p><strong>Scope.</strong> Reference material for a compound supplied for research use. Not medical advice, " +
+        "not a prescription, and not a recommendation to administer anything to a person.</p>" +
+        "<p><strong>On the figures above.</strong> " + esc(ev.blurb) + "</p>" +
+        "<p>Anyone considering a compound in this catalogue for a person should be working with a qualified clinician " +
+        "who can weigh it against that person's history, medication and monitoring.</p>" +
+      "</div>";
+
+    wireCalc();
+  }
+
+  /* ---------------- Reconstitution maths ---------------- */
+  function wireCalc() {
+    var vial = document.getElementById("f-vial"),
+        bac = document.getElementById("f-bac"),
+        dose = document.getElementById("f-dose"),
+        out = document.getElementById("out");
+
+    function fmt(n, dp) {
+      if (!isFinite(n)) return "—";
+      var s = n.toFixed(dp == null ? 2 : dp);
+      return s.replace(/\.?0+$/, "") || "0";
+    }
+
+    function update() {
+      var v = parseFloat(vial.value), b = parseFloat(bac.value), d = parseFloat(dose.value);
+      if (!(v > 0) || !(b > 0) || !(d > 0)) {
+        out.innerHTML = '<div class="calc-warn">Enter a vial strength, a diluent volume and a target dose.</div>';
+        return;
+      }
+      var conc = v / b;             /* mg per mL */
+      var ml = d / conc;            /* mL per dose */
+      var units = ml * 100;         /* U-100 syringe units */
+      var doses = Math.floor(v / d);
+
+      /* Drawn volume = dose x diluent / vial strength. More diluent means a
+         lower concentration and a LARGER draw; less diluent, a smaller one. */
+      var warn = "";
+      if (units > 100) warn = '<div class="calc-warn">That dose is ' + fmt(units, 1) +
+        ' units — more than one full U-100 syringe. Use less diluent, for a higher concentration and a smaller draw.</div>';
+      else if (units < 2) warn = '<div class="calc-warn">That dose is ' + fmt(units, 1) +
+        ' units — under 2 units is hard to measure accurately. Use more diluent, for a lower concentration and a larger draw.</div>';
+
+      out.innerHTML =
+        '<div class="out-hero"><div class="out-num tnum">' + fmt(units, 1) + "</div>" +
+        '<div class="out-unit">units on a U-100 syringe</div></div>' +
+        '<div class="out-grid">' +
+          '<div class="out-cell"><b class="tnum">' + fmt(conc, 2) + " mg/mL</b><span>Concentration</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + fmt(ml, 3) + " mL</b><span>Per dose</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + doses + "</b><span>Doses per vial</span></div>" +
+        "</div>" + warn;
+    }
+
+    [vial, bac, dose].forEach(function (el) { el.addEventListener("input", update); });
+    update();
+  }
+
+  /* ---------------- Route ---------------- */
+  var slug = param("c");
+  var found = slug && window.COMPOUNDS.filter(function (c) { return c.slug === slug; })[0];
+  if (found) renderCompound(found);
+  else renderIndex();
+})();
+</script>
+</body>
+</html>
