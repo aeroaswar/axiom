@@ -38,6 +38,8 @@ window.COMPOUNDS = [
       "Appetite and gastric-emptying modulation via central and peripheral incretin signalling.",
       "Improvements in lipid profile and blood pressure observed as secondary endpoints."
     ],
+    timing: { when: "Any time of day", food: "With or without food", note: "The day matters more than the hour — pick one day a week and keep it. Many choose a day that stays predictable across travel and work." },
+    perWeek: 1,
     recon: { vialMg: 10, bacMl: 2, doseMg: 2.5, unit: "mg" },
     storage: "Refrigerate 2–8 °C. Protect from light. Do not freeze. Discard if the solution is cloudy or discoloured.",
     cautions: [
@@ -64,6 +66,8 @@ window.COMPOUNDS = [
       "Largest weight reduction reported to date in Phase 2 incretin trials.",
       "Studied for hepatic fat reduction and glycaemic endpoints."
     ],
+    timing: { when: "Any time of day", food: "With or without food", note: "Weekly in trial protocols, on a fixed day. Gastrointestinal effects are usually worst in the first 48 h after a dose, which is worth planning around." },
+    perWeek: 1,
     recon: { vialMg: 10, bacMl: 2, doseMg: 2, unit: "mg" },
     storage: "Lyophilised: store sealed at −20 °C, protected from light. Reconstituted: 2–8 °C, avoid freeze–thaw cycles.",
     cautions: [
@@ -90,6 +94,8 @@ window.COMPOUNDS = [
       "Stimulates endogenous GH release rather than supplying exogenous GH.",
       "Studied for effects on triglycerides and hepatic fat fraction."
     ],
+    timing: { when: "Before bed", food: "Fasted — 2 h after the last meal", note: "Growth-hormone release is pulsatile and largely nocturnal, so evening administration aligns with the body's own rhythm. Elevated glucose blunts the response." },
+    perWeek: 7,
     recon: { vialMg: 10, bacMl: 2, doseMg: 2, unit: "mg" },
     storage: "Lyophilised: 2–8 °C. Reconstitute with the supplied diluent and use promptly; do not freeze once reconstituted.",
     cautions: [
@@ -118,6 +124,8 @@ window.COMPOUNDS = [
       "Angiogenesis promotion via VEGFR2 signalling in animal work.",
       "Studied for cytoprotection against NSAID-induced injury."
     ],
+    timing: { when: "Morning and evening in study protocols", food: "Either", note: "Split dosing appears in animal protocols because the half-life is short. No human schedule is established." },
+    perWeek: 7,
     recon: { vialMg: 10, bacMl: 2, doseMg: 0.25, unit: "mg" },
     storage: "Lyophilised: sealed at −20 °C, protected from light. Reconstituted: 2–8 °C, use within weeks, no freeze–thaw.",
     cautions: [
@@ -146,6 +154,8 @@ window.COMPOUNDS = [
       "Studied alongside BPC-157 for soft-tissue and cardiac repair endpoints.",
       "Anti-fibrotic signalling reported in preclinical cardiac work."
     ],
+    timing: { when: "Any time of day", food: "Either", note: "Preclinical protocols front-load with two administrations a week, spaced three to four days apart, then reduce frequency." },
+    perWeek: 2,
     recon: { vialMg: 10, bacMl: 2, doseMg: 2, unit: "mg" },
     storage: "Lyophilised: −20 °C sealed. Reconstituted: 2–8 °C, protect from light, avoid repeated freeze–thaw.",
     cautions: [
@@ -173,6 +183,8 @@ window.COMPOUNDS = [
       "Ipamorelin is selective — minimal cortisol and prolactin release compared with earlier GHS compounds.",
       "Studied for recovery, sleep quality and body-composition endpoints."
     ],
+    timing: { when: "Before sleep", food: "Fasted — at least 2 h after eating", note: "Both components act on the GH axis, which is most responsive at night and is suppressed by circulating glucose and somatostatin tone. A carbohydrate-heavy meal beforehand blunts the pulse." },
+    perWeek: 5,
     recon: { vialMg: 10, bacMl: 2, doseMg: 0.2, unit: "mg" },
     storage: "Lyophilised: −20 °C. Reconstituted: 2–8 °C. Both components are light-sensitive.",
     cautions: [
@@ -201,7 +213,9 @@ window.COMPOUNDS = [
       "Exercise-capacity and mitochondrial-function research interest.",
       "Studied within the broader mitochondrial-signalling and longevity literature."
     ],
-    recon: { vialMg: 10, bacMl: 2, doseMg: 5, unit: "mg" },
+    timing: { when: "Morning", food: "Either", note: "Study protocols dose on alternate days rather than continuously. Morning administration is conventional in the metabolic literature but not established." },
+    perWeek: 3,
+    recon: { vialMg: 10, bacMl: 1, doseMg: 5, unit: "mg" },
     storage: "Lyophilised: −20 °C sealed, protected from light. Reconstituted: 2–8 °C.",
     cautions: [
       "No human safety dataset.",
@@ -229,6 +243,8 @@ window.COMPOUNDS = [
       "Antioxidant and anti-inflammatory signalling in the copper-peptide literature.",
       "Hair-follicle research interest."
     ],
+    timing: { when: "Evening, on clean skin", food: "n/a — topical", note: "Applied to cleansed skin at night in the cosmetic studies, before heavier occlusive products. Copper peptides are photosensitive." },
+    perWeek: 7,
     recon: { vialMg: 50, bacMl: 5, doseMg: 2, unit: "mg" },
     storage: "Lyophilised: −20 °C, protect from light — copper peptides are photosensitive. Reconstituted: 2–8 °C.",
     cautions: [
@@ -255,6 +271,8 @@ window.COMPOUNDS = [
       "Episodic use rather than daily dosing.",
       "Studied in both female (approved) and male populations."
     ],
+    timing: { when: "45 minutes or more before", food: "Either; a heavy meal slows onset", note: "Episodic, not scheduled. The labelled ceiling is one dose in 24 h and eight in a month — that limit, not the timing, is the binding constraint." },
+    perWeek: 2,
     recon: { vialMg: 10, bacMl: 2, doseMg: 1.75, unit: "mg" },
     storage: "Lyophilised: −20 °C. Reconstituted: 2–8 °C, protect from light.",
     cautions: [
@@ -281,6 +299,8 @@ window.COMPOUNDS = [
       "Registered use in chronic hepatitis B.",
       "Studied as a vaccine adjuvant and in sepsis and oncology-support settings."
     ],
+    timing: { when: "Any time of day", food: "Either", note: "The registered regimen is twice weekly, spaced three to four days apart, over a course of months." },
+    perWeek: 2,
     recon: { vialMg: 10, bacMl: 2, doseMg: 1.6, unit: "mg" },
     storage: "Lyophilised: 2–8 °C acceptable; −20 °C for long-term. Reconstituted: 2–8 °C, use promptly.",
     cautions: [
@@ -308,6 +328,8 @@ window.COMPOUNDS = [
       "Studied for attention, cognition and neuroprotection endpoints.",
       "Non-sedating anxiolytic profile reported alongside Selank."
     ],
+    timing: { when: "Morning and early afternoon", food: "Either", note: "Divided across the day given the very short half-life. It can be activating, so a late dose is usually avoided." },
+    perWeek: 7,
     recon: { vialMg: 10, bacMl: 2, doseMg: 0.3, unit: "mg" },
     storage: "Lyophilised: −20 °C. Reconstituted: 2–8 °C, protect from light, short in-use window.",
     cautions: [
@@ -333,7 +355,9 @@ window.COMPOUNDS = [
       "Melatonin-rhythm and pineal-function endpoints in the source literature.",
       "Antioxidant signalling in animal ageing models."
     ],
-    recon: { vialMg: 10, bacMl: 2, doseMg: 5, unit: "mg" },
+    timing: { when: "Evening", food: "Either", note: "Evening dosing in the source literature aligns with pineal melatonin rhythm. Given as a short course, then a long break — not continuously." },
+    perWeek: 5,
+    recon: { vialMg: 10, bacMl: 1, doseMg: 5, unit: "mg" },
     storage: "Lyophilised: −20 °C sealed. Reconstituted: 2–8 °C, short in-use window, protect from light.",
     cautions: [
       "The human evidence base is thin and largely single-source.",

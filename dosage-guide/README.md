@@ -1,46 +1,69 @@
 # AXIOM — Protocol Card & Compound Guide
 
-A scannable card that ships with a compound, and the guide it resolves to.
+A card that carries nothing but the wordmark and a QR, and the guide it opens.
 
 | File | What it is |
 | --- | --- |
-| `card.html` | Print-ready protocol card — 85 × 55 mm, front and back, with the QR generated on the page. Pick a compound, set the URL and lot, print. |
-| `index.html` | The scan destination. Mobile-first compound guide: cadence, protocol, reconstitution calculator, studied benefits, storage, cautions. |
+| `card.html` | Print-ready card — 85 × 55 mm, AXIOM wordmark left, QR right, nothing else. Pick a compound, set the URL, print. |
+| `index.html` | What the QR opens. Mobile-first compound guide: cadence, when to apply, protocol, a dose-and-supply calculator, a dose schedule, studied benefits, storage, cautions. |
 | `compounds.js` | The data behind both. One entry per compound. |
 | `qr.js` | Self-contained QR encoder. No CDN, no network — the card generates its own code. |
-| `assets/axiom-wordmark-white.svg` | The AXIOM wordmark, copied from `business-proposal/assets/logo/`. Used on the card front and in the guide's top bar. |
+| `assets/axiom-wordmark-white.svg` | The AXIOM wordmark, copied from `business-proposal/assets/logo/`. |
 
 Open either file directly in a browser; there is no build step.
 
 ## The card
 
-**Front** — the AXIOM wordmark, then compound, class, cadence and route badges,
-and the QR under a `SCAN FOR PROTOCOL` cue. A footer strip carries half-life,
-evidence tier and lot.
+One face: the wordmark on the left, the QR on the right. Everything the card
+used to say in small print now lives behind the code, where there is room for it.
 
-**Back** — route, half-life and both storage temperatures; a seven-day cadence
-strip; the headline protocol line; and the guide URL in plain text, so the card
-still works when a camera will not cooperate.
+- **Trim** 85 × 55 mm. **Bleed** 3 mm. **Safe margin** 5 mm. QR 24 mm.
+- **Bleed + crop marks** adds the bleed and corner marks — send this to a commercial printer.
+- **A4 sheet** lays out 10 cards (2 × 5) on one page.
+- The panel reports the QR version and module size in mm and warns below the 0.5 mm print floor. Defaults give a v3 code at ECC Q with 0.73 mm modules.
 
-### Printing
+The QR payload is `{base URL}/{compound slug}`, e.g. `https://axiom.id/g/tirzepatide`.
+Point the base URL at wherever the guide is hosted.
 
-- **Trim** 85 × 55 mm. **Bleed** 3 mm (toggle on for the printer). **Safe margin** 4.2 mm.
-- **Bleed + crop marks** adds the 3 mm bleed and corner marks — send this version to a commercial printer.
-- **A4 imposition sheet** lays out 8 cards, fronts on page 1 and backs on page 2, for duplex printing.
-- The panel reports the QR version, module size in mm, and warns below the 0.5 mm print floor. Shorten the base URL or drop the ECC level if it trips.
+## The guide
 
-Defaults produce a v3 QR at ECC Q with 0.64 mm modules — comfortably inside print tolerance.
+Per compound, in order:
 
-### QR payload
+1. **At a glance** — cadence, when to take it, route, half-life.
+2. **Evidence banner** — which tier the figures below come from.
+3. **Cadence** — daily / weekly / cyclical / as-needed, with a seven-day strip.
+4. **When to apply** — time of day, food, and why that timing rather than another.
+5. **Protocol** — the documented rows, each with its provenance.
+6. **Dose & supply** — the calculator, below.
+7. **Next doses** — the cadence pattern projected onto real dates from today.
+8. **Studied for**, **Storage & handling**, **Cautions**, **Scope**.
 
-`{base URL}/{compound slug}`, e.g. `https://axiom.id/g/tirzepatide`. Point the
-base URL at wherever the guide is hosted; the slug comes from `compounds.js`.
+The index lists everything by category with a search across name, class,
+category and cadence.
+
+### Dose & supply calculator
+
+Inputs: vial strength, diluent volume, dose, doses per week, vials on hand, and
+the date of reconstitution.
+
+Outputs: concentration, volume per dose, **units on a U-100 syringe**, doses per
+vial, how many days the supply lasts, and the date the reconstituted vial should
+be discarded.
+
+Vial strength ÷ diluent gives the concentration; dose ÷ concentration gives the
+volume; units are that volume on a U-100 syringe, where 100 units = 1 mL. It
+converts a volume and projects a supply — it does not decide what the dose should
+be. It flags three things:
+
+- a draw over 100 units (more than one syringe) — use less diluent;
+- a draw under 2 units (hard to measure) — use more diluent;
+- a vial that outlasts its 28-day in-use window at the chosen frequency, which means product thrown away.
 
 ## Evidence tiers
 
-The spine of both the card and the guide. Every dosing figure carries the tier
-it came from, and where no human protocol exists the guide says so rather than
-filling the gap with a number.
+The spine of the guide. Every dosing figure carries the tier it came from, and
+where no human protocol exists the guide says so rather than filling the gap
+with a number.
 
 | Tier | Meaning |
 | --- | --- |
@@ -65,8 +88,10 @@ from the array.
   cls: "α-MSH C-terminal tripeptide",
   halfLife: "Short", route: "Subcutaneous",
   cadence: "daily",              // daily | weekly | cycle | as-needed
-  days: [1,1,1,1,1,0,0],         // Mon–Sun, drives the seven-day strip
+  days: [1,1,1,1,1,0,0],         // Mon–Sun; drives the strip and the schedule
   cadenceNote: "…",
+  timing: { when: "Morning", food: "Either", note: "…" },
+  perWeek: 7,                    // seeds the calculator's doses-per-week
   evidence: "preclinical",       // label | trial | regional | preclinical
   evidenceNote: "…",             // shown verbatim in the guide's banner
   protocol: [{ k: "Human dose", v: "Not established", n: "…" }],
@@ -78,15 +103,8 @@ from the array.
 ```
 
 A protocol row whose value reads *Not established* or *None* renders in the
-muted "no figure" style, and the card back switches to its no-human-dose line.
-
-## Reconstitution calculator
-
-Vial strength ÷ diluent gives the concentration; the target dose divided by that
-concentration gives the volume; units are that volume on a U-100 syringe, where
-100 units = 1 mL. It converts a volume — it does not decide what the dose should
-be. It flags a draw over 100 units (one full syringe) or under 2 units (hard to
-measure), and says which way to change the diluent.
+muted "no figure" style. A compound with an all-zero `days` array is treated as
+episodic and gets no projected schedule.
 
 ## Verification
 
@@ -95,7 +113,8 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - Codeword construction, data placement, format-info BCH and Reed–Solomon syndromes verified against an independent implementation.
 - Mask selection matches independent penalty scoring across all eight masks.
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
-- All twelve cards were rendered to print PDFs, rasterised at 300 and 600 dpi, and decoded back to the exact expected URL — with the wordmark confirmed present in each.
+- All twelve cards rendered to print PDFs, rasterised at 300 dpi, and decoded back to the exact expected URL, with the wordmark confirmed present in each.
+- Printed geometry measured off the PDF: 85.0 × 55.0 mm trim, 91.0 × 60.9 mm with bleed, 10-up sheet at 170 × 275 mm.
 
 ## Scope
 
