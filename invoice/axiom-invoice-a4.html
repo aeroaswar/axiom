@@ -64,12 +64,15 @@
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
 /* ── A4 sheet ─────────────────────────────────────────────── */
-.page{position:relative;width:210mm;min-height:297mm;padding:15mm 15mm 14mm;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);font-size:12px;line-height:1.5}
+.page{position:relative;z-index:0;width:210mm;min-height:297mm;padding:15mm 15mm 14mm;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);font-size:12px;line-height:1.5}
 
 /* Ambient glow, drawn with fully opaque colours pre-blended over --bg.
    An rgba gradient exports as a PDF shading + soft mask; viewers that drop the
    mask paint it at full strength as a hard bronze disc. No alpha, no artefact.
-   z-index:-1 keeps it under in-flow text — at 0 it would paint over the table. */
+   z-index:-1 keeps it under in-flow text — at 0 it would paint over the table.
+   .page needs its own z-index:0 for that to work: with z-index:auto it forms no
+   stacking context, the negative-z children escape to an ancestor one, and they
+   paint BEHIND .page's opaque background instead of over it. */
 .glow{position:absolute;z-index:-1;pointer-events:none}
 .g1{left:30%;top:-32%;width:104%;height:80%;background:radial-gradient(closest-side,#261B11 0%,#070605 60%)}
 .g2{left:16%;top:66%;width:88%;height:68%;background:radial-gradient(closest-side,#1E140B 0%,#070605 60%)}
