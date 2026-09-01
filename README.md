@@ -12,6 +12,8 @@ repository, where the work had accumulated across several unmerged topic branche
   `claude/axiom-brand-book-0puows`.
 - `business-proposal/` — business proposal, GTM strategy, and pricing materials.
   Migrated from `claude/axiom-business-proposal-p57t1y`.
+- `coa/` — print-ready A4 Certificate of Analysis in the AXIOM brand system, driven by a
+  single per-lot data object. See `coa/README.md` for how to issue one for a new lot.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.
