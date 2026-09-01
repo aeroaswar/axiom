@@ -396,7 +396,7 @@ button,input,select{font:inherit;color:inherit}
           <span id="qcount"></span>
           <span style="display:flex;gap:10px">
             <button class="btn btn--ghost" id="clear">Clear</button>
-            <button class="btn" id="print" disabled>Print sheet</button>
+            <button class="btn" id="print" disabled>Save as PDF</button>
           </span>
         </div>
       </div>
@@ -404,11 +404,17 @@ button,input,select{font:inherit;color:inherit}
 
     <section class="sheetsec">
       <p class="kick">Sheet preview — <span id="pageCount">1 page</span></p>
-      <p class="note" id="printNote" hidden style="margin:0 0 18px">
-        <b>Printing is blocked inside this embedded view.</b> Open this page in its own browser
-        tab and print from there. The sheets below are the exact A4 artwork, so what you see is
-        what prints.
-      </p>
+      <div class="note" id="printNote" hidden style="margin:0 0 18px">
+        <b>Saving a PDF needs its own browser tab.</b> This embedded view blocks it.
+        <a id="openLink" href="#" target="_blank" rel="noopener">Open the builder in a new tab →</a>
+        then use <b>Save as PDF</b> there. Your queue is rebuilt from scratch in the new tab, so
+        re-add the compounds — or print from <code>stickers/builder.html</code> in the repo.
+        <br><br>
+        In the print dialog: <b>Destination</b> Save as PDF · <b>Paper</b> A4 ·
+        <b>Scale</b> 100% · <b>Margins</b> None · <b>Background graphics ON</b>.
+        That last one matters — without it the onyx ground drops out and the labels
+        print as white boxes.
+      </div>
       <div class="sheets" id="sheet"></div>
     </section>
 
@@ -1181,14 +1187,22 @@ function renderSheet(){
   autofit($('sheet'));
 }
 
-/* A sandboxed iframe blocks window.print(); say so instead of doing nothing. */
+/* A sandboxed iframe blocks window.print(), so the button says what it can
+   actually do in this context rather than failing silently. Deliberately no
+   JS-generated PDF: html2canvas-style output is raster, which would soften
+   4pt micro-print and turn the vector die contour into pixels. Print-to-PDF
+   keeps real vector with the fonts embedded. */
+const embedded = window.self !== window.top;
+if (embedded) $('print').textContent = 'Open in new tab for PDF';
+
 $('print').addEventListener('click', () => {
-  let ok = true;
-  try { window.print(); } catch (e) { ok = false; }
-  if (!ok || window.self !== window.top){
-    $('printNote').hidden = false;
-    $('sheet').scrollIntoView({ behavior:'smooth', block:'start' });
+  $('openLink').href = location.href;
+  if (!embedded){
+    try { window.print(); return; } catch (e) { /* fall through */ }
   }
+  window.open(location.href, '_blank', 'noopener');
+  $('printNote').hidden = false;
+  $('printNote').scrollIntoView({ behavior:'smooth', block:'center' });
 });
 
 /* ---------- go ----------
