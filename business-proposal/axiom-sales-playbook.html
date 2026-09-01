@@ -1,0 +1,687 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AXIOM · Sales Acceleration Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070605;--ink:#F2EDE5;--muted:#9C9488;--muted-2:#6A635A;--line:rgba(242,237,229,.12);--line-2:rgba(242,237,229,.22);--line-soft:rgba(242,237,229,.06);--accent:#C88A4E;--accent-bright:#E7B173;--accent-deep:#7C4C24;--accent-soft:rgba(200,138,78,.14);--accent-line:rgba(200,138,78,.34);--ok:#8FA37E;--warn:#C8A24E;--maxw:1080px;--pad:34px;--display:"Jost","Century Gothic",system-ui,sans-serif;--sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+--c-1:#9C6C3D;--c-2:#B37B46;--c-3:#C88A4E;--c-4:#E7B173;--c-cost:#7C4C24;--c-grid:rgba(242,237,229,.10);--c-axis:rgba(242,237,229,.22)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.tab,.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+a{color:var(--accent-bright);text-decoration:none}
+header.mast{padding:70px 0 34px;border-bottom:1px solid var(--line);position:relative;background:radial-gradient(58% 58% at 76% 24%,rgba(200,138,78,.16),transparent 60%),radial-gradient(46% 40% at 56% 82%,rgba(124,76,36,.20),transparent 60%)}
+.kick{font-family:var(--sans);font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+.wm{font-family:var(--display);font-weight:400;letter-spacing:.42em;font-size:32px;margin:14px 0 2px;text-indent:.42em}
+.mast h1{font-family:var(--display);font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.04;letter-spacing:-.01em;margin:16px 0 0;max-width:18ch}
+.mast h1 em{font-style:normal;color:var(--muted)}
+.mast .lead{color:var(--muted);font-size:15.5px;max-width:66ch;margin:18px 0 0}
+.docmeta{display:flex;flex-wrap:wrap;gap:26px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line-soft)}
+.docmeta .m .k{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2)}
+.docmeta .m .v{font-family:var(--display);font-size:15px;margin-top:3px}
+nav.toc{border-bottom:1px solid var(--line);padding:18px 0}
+nav.toc .wrap{display:flex;flex-wrap:wrap;gap:6px 20px}
+nav.toc a{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+nav.toc a b{color:var(--accent);margin-right:6px;font-weight:500}
+section.sec{padding:64px 0;border-bottom:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:96px 1fr;gap:26px;margin-bottom:30px}
+.sec-head .idx{font-family:var(--display);font-weight:400;color:var(--accent);font-size:15px}
+.sec-head .kk{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);font-weight:500;display:block;margin-top:8px}
+.sec-head h2{font-family:var(--display);font-weight:300;font-size:clamp(24px,3.4vw,38px);line-height:1.06;letter-spacing:-.01em;margin:0}
+.sec-head h2 em{font-style:normal;color:var(--muted)}
+.sec-head .lead{color:var(--muted);font-size:15px;max-width:62ch;margin:12px 0 0}
+.leaktag{display:inline-block;margin-top:14px;border:1px solid var(--accent-line);border-radius:999px;padding:3px 12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-bright)}
+.body-col{max-width:74ch}
+.body-col p{color:var(--muted);margin:0 0 14px}
+.body-col p strong,.body-col li strong,td strong{color:var(--ink);font-weight:500}
+h3.sub{font-family:var(--display);font-weight:400;font-size:18px;color:var(--ink);margin:30px 0 10px;letter-spacing:-.005em}
+.eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:28px 0 12px}
+ul.clean{list-style:none;padding:0;margin:0 0 14px}
+ul.clean li{position:relative;padding:0 0 10px 20px;color:var(--muted);font-size:14px}
+ul.clean li:before{content:"";position:absolute;left:0;top:9px;width:6px;height:1px;background:var(--accent)}
+ol.steps{margin:0 0 14px;padding-left:20px;color:var(--muted);font-size:14px}
+ol.steps li{margin-bottom:9px;padding-left:4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:14px 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.card .role{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.card h4{font-family:var(--display);font-weight:400;font-size:16px;margin:0 0 8px}
+.card p{font-size:13px;color:var(--muted);margin:0 0 8px}
+.card p:last-child{margin-bottom:0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin:16px 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:13px;font-variant-numeric:tabular-nums}
+caption{text-align:left;padding:16px 18px 0;font-family:var(--display);font-size:16px;color:var(--ink)}
+th{text-align:left;font-weight:500;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);padding:12px 16px 8px;border-bottom:1px solid var(--line)}
+td{padding:11px 16px;border-bottom:1px solid var(--line-soft);color:var(--muted);vertical-align:top}
+td.name{color:var(--ink)}
+th.num,td.num{text-align:right}
+td.num{color:var(--ink)}
+tbody tr:last-child td{border-bottom:none}
+.total-row td{border-top:1px solid var(--line-2);color:var(--ink)}
+.script{border:1px solid var(--line);border-left:2px solid var(--accent-line);border-radius:0 12px 12px 0;padding:16px 20px;margin:12px 0;background:rgba(200,138,78,.04)}
+.script .lbl{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.script p{color:var(--ink);font-size:13.5px;margin:0 0 8px;line-height:1.65}
+.script p:last-child{margin-bottom:0}
+.script p.them{color:var(--muted)}
+.script p.note{color:var(--muted-2);font-size:11.5px;font-style:italic;margin:8px 0 0}
+.script .spk{color:var(--muted-2);font-size:10px;letter-spacing:.18em;text-transform:uppercase;display:block;margin-bottom:2px}
+.pill{display:inline-block;border:1px solid var(--accent-line);border-radius:999px;padding:2px 10px;font-size:10px;letter-spacing:.1em;color:var(--accent-bright);margin:0 6px 6px 0}
+.ruo{border:1px solid var(--accent-line);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:12px;color:var(--muted);line-height:1.65}
+.ruo b{color:var(--accent-bright);text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:500;display:block;margin-bottom:4px}
+.chart{border:1px solid var(--line);border-radius:16px;padding:24px 24px 20px;margin:18px 0}
+.chart .ct{font-family:var(--display);font-size:19px;margin:0 0 4px;font-weight:400}
+.chart .cc{font-size:12.5px;color:var(--muted-2);margin:0 0 20px;max-width:64ch}
+.svgwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.chart svg{width:100%;min-width:640px;height:auto;display:block;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px}
+.legend .li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.legend .sw{width:14px;height:8px;border-radius:2px;display:inline-block}
+.svg-lbl{font-size:11px;fill:var(--ink);font-family:var(--sans);font-variant-numeric:tabular-nums}
+.svg-cat{font-size:11.5px;fill:var(--muted);font-family:var(--sans)}
+.svg-sub{font-size:10.5px;fill:var(--muted-2);font-family:var(--sans);font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:16px 0}
+.kpi{padding:20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi .k{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.kpi .target{font-family:var(--display);font-size:27px;color:var(--accent-bright);font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .def{font-size:12px;color:var(--muted-2);margin-top:8px;line-height:1.55}
+.timeline{border-left:1px solid var(--line);margin-left:8px;padding-left:28px;margin-top:18px}
+.tl-item{position:relative;padding-bottom:28px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item:before{content:"";position:absolute;left:-33px;top:6px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(200,138,78,.14)}
+.tl-item .when{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.tl-item .what{font-size:15px;color:var(--ink);margin-bottom:4px;font-family:var(--display);font-weight:400}
+.tl-item .desc{font-size:13.5px;color:var(--muted)}
+.synthesis{border:1px solid var(--accent-line);border-radius:16px;padding:30px 28px;background:linear-gradient(180deg,rgba(200,138,78,.06),transparent)}
+.synthesis h3{font-family:var(--display);font-weight:300;font-size:25px;margin:0 0 10px}
+.synthesis .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:22px}
+.synthesis .cell .k{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.synthesis .cell .v{font-size:13.5px;color:var(--muted)}
+.synthesis .cell .v strong{color:var(--ink);font-weight:500}
+footer{padding:40px 0 70px;color:var(--muted-2);font-size:11.5px;line-height:1.7}
+footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;margin-top:28px}
+footer .fgrid .h{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px}
+footer .fgrid p{margin:0 0 5px;color:var(--muted)}
+footer .fwm{font-family:var(--display);letter-spacing:.3em;font-size:20px;color:var(--accent)}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.synthesis .grid{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){:root{--pad:20px}.sec-head{grid-template-columns:1fr;gap:10px}section.sec{padding:48px 0}.kpis{grid-template-columns:1fr}.kpi{border-right:0}.synthesis .grid{grid-template-columns:1fr}footer .fgrid{grid-template-columns:1fr}}
+@media print{
+ :root{--bg:#F2EDE5;--ink:#070605;--muted:#4A443C;--muted-2:#6A635A;--line:rgba(7,6,5,.16);--line-2:rgba(7,6,5,.28);--line-soft:rgba(7,6,5,.08);--accent:#7C4C24;--accent-bright:#7C4C24;--accent-line:rgba(124,76,36,.40);
+ --c-1:#D3A887;--c-2:#B37B46;--c-3:#9C6C3D;--c-4:#7C4C24;--c-cost:#E6D3C4;--c-grid:rgba(7,6,5,.10);--c-axis:rgba(7,6,5,.24)}
+ @page{size:A4;margin:14mm}
+ body{background:#F2EDE5;color:#070605;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:10.5px;line-height:1.55}
+ header.mast{background:none;padding:0 0 20px}
+ nav.toc{display:none}
+ section.sec{padding:22px 0;break-inside:auto}
+ .sec-head{break-after:avoid}
+ .chart,.script,.card,.tablewrap,.kpi,.tl-item,.synthesis{break-inside:avoid}
+ .svgwrap{overflow:visible}
+ .chart svg{min-width:0}
+ .script{background:rgba(124,76,36,.05)}
+ .ruo{background:rgba(124,76,36,.05)}
+ a{color:#7C4C24}
+ .wrap{max-width:none;padding:0}
+}
+</style></head><body>
+
+<header class="mast"><div class="wrap">
+  <div class="kick">Sales acceleration &middot; board strategy, execution layer &middot; Jakarta</div>
+  <div class="wm">AXIOM</div>
+  <h1>Selling better, <em>without promising more.</em></h1>
+  <p class="lead">The go-to-market strategy set the ground. This playbook is what happens on it &mdash; where the money leaks between a first message and a second order, and the assembled offer, the closing loops, the quote, the follow-up ladder, the daily number and the content engine that plug each leak. Nothing here loosens the standard by a word.</p>
+  <div class="docmeta">
+    <div class="m"><div class="k">Document</div><div class="v">Sales Acceleration Playbook</div></div>
+    <div class="m"><div class="k">Version</div><div class="v tab">1.0</div></div>
+    <div class="m"><div class="k">Stage</div><div class="v">First orders, inconsistent</div></div>
+    <div class="m"><div class="k">Focus</div><div class="v">WhatsApp close &middot; demand</div></div>
+    <div class="m"><div class="k">Doc ID</div><div class="v tab">AXM&mdash;SALES&mdash;PB&mdash;001</div></div>
+  </div>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#s00"><b>00</b> Leak map</a>
+  <a href="#s01"><b>01</b> The offer</a>
+  <a href="#s02"><b>02</b> The close</a>
+  <a href="#s03"><b>03</b> Quote &amp; follow-up</a>
+  <a href="#s04"><b>04</b> The number</a>
+  <a href="#s05"><b>05</b> Demand</a>
+  <a href="#s06"><b>06</b> Spread &amp; rhythm</a>
+  <a href="#s07"><b>07</b> 30-day sprint</a>
+  <a href="#s08"><b>08</b> Synthesis</a>
+</div></nav>
+
+<!-- ============ 00 ============ -->
+<section class="sec" id="s00"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">00</div><span class="kk">Diagnosis</span></div>
+    <div>
+      <h2>The leak map. <em>Find the money before spending it.</em></h2>
+      <p class="lead">Revenue at this stage is not inconsistent because the market is small. It is inconsistent because four junctions between a first message and a second order are unmeasured and unmanaged. Every section that follows is labelled with the junction it repairs.</p>
+    </div>
+  </div>
+  <div class="body-col">
+    <p><strong>Read this first.</strong> The figures below are the modelled assumptions carried over from the Go-to-Market Strategy v1.0, written before the first order shipped. They are a shape, not a measurement. In week one of the sprint, replace every one of them with the count from your own message history &mdash; the playbook is built to be re-based, and a real close rate of 18% or 54% changes what you fix first.</p>
+  </div>
+
+  <div class="chart">
+    <p class="ct">Where 100 conversations end up</p>
+    <p class="cc">Modelled baseline from GTM v1.0, per 100 inbound conversations. The named failure sits on each drop. Replace with measured counts in week 1.</p>
+    <div class="svgwrap"><svg viewBox="0 0 720 268" role="img" aria-label="Funnel from 100 inbound conversations to 62 quotes, 20 paid orders and 5 reorders within 90 days">
+      <g>
+        <text class="svg-cat" x="0" y="26">Inbound conversation</text>
+        <rect x="188" y="16" width="410" height="14" rx="4" fill="var(--c-1)"></rect>
+        <text class="svg-lbl" x="610" y="27">100</text>
+      </g>
+      <line x1="188" y1="46" x2="598" y2="46" stroke="var(--c-grid)" stroke-width="1"></line>
+      <text class="svg-sub" x="188" y="62">&minus;38 &nbsp;&middot;&nbsp; slow first reply, unclear catalogue, gate not completed</text>
+
+      <g>
+        <text class="svg-cat" x="0" y="94">Itemised quote sent</text>
+        <rect x="188" y="84" width="254" height="14" rx="4" fill="var(--c-2)"></rect>
+        <text class="svg-lbl" x="454" y="95">62</text>
+      </g>
+      <line x1="188" y1="114" x2="598" y2="114" stroke="var(--c-grid)" stroke-width="1"></line>
+      <text class="svg-sub" x="188" y="130">&minus;42 &nbsp;&middot;&nbsp; quote sent once, then silence &mdash; no follow-up ladder</text>
+
+      <g>
+        <text class="svg-cat" x="0" y="162">Paid order</text>
+        <rect x="188" y="152" width="82" height="14" rx="4" fill="var(--c-3)"></rect>
+        <text class="svg-lbl" x="282" y="163">20</text>
+      </g>
+      <line x1="188" y1="182" x2="598" y2="182" stroke="var(--c-grid)" stroke-width="1"></line>
+      <text class="svg-sub" x="188" y="198">&minus;15 &nbsp;&middot;&nbsp; no lot alert, no 90-day prompt &mdash; the buyer is never asked again</text>
+
+      <g>
+        <text class="svg-cat" x="0" y="230">Reorder within 90 days</text>
+        <rect x="188" y="220" width="21" height="14" rx="4" fill="var(--c-4)"></rect>
+        <text class="svg-lbl" x="221" y="231">5</text>
+      </g>
+      <line x1="188" y1="252" x2="598" y2="252" stroke="var(--c-axis)" stroke-width="1"></line>
+    </svg></div>
+  </div>
+
+  <div class="tablewrap"><table>
+    <caption>The four junctions &mdash; and where each one is repaired</caption>
+    <thead><tr><th>Junction</th><th>What is actually failing</th><th>Baseline</th><th>Repaired in</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Conversation &rarr; quote</td><td>Reply latency, no standing answer to &ldquo;what do you carry and what does it cost&rdquo;, acknowledgement gate abandoned mid-way</td><td class="num">62%</td><td>&sect;02, &sect;03</td></tr>
+      <tr><td class="name">Quote &rarr; paid order</td><td>The quote is sent once and left to decide on its own. No second touch carrying new information</td><td class="num">32%</td><td>&sect;03</td></tr>
+      <tr><td class="name">Order &rarr; order value</td><td>The single-vial reflex. One lot, one price, no assembled alternative on the table</td><td class="num">Rp 1.100.000 blended</td><td>&sect;01</td></tr>
+      <tr><td class="name">Order &rarr; reorder</td><td>No lot-release alert, no 90-day prompt. The cheapest revenue in the house is left to the buyer to remember</td><td class="num">25%</td><td>&sect;03, &sect;06</td></tr>
+      <tr><td class="name">Upstream volume</td><td>Not enough conversations enter at all &mdash; content is produced when there is time, not as a by-product of the work</td><td class="num">Unmeasured</td><td>&sect;05</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="body-col">
+    <p><strong>The order of operations matters.</strong> Three of these five leaks are repaired with words and a calendar, at no cost and no new traffic. Fix those first &mdash; a house that closes 32% of quotes does not need more quotes, it needs the second touch. Only then does volume (&sect;05) pay for itself.</p>
+  </div>
+</div></section>
+
+<!-- ============ 01 ============ -->
+<section class="sec" id="s01"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">01</div><span class="kk">Hormozi &middot; the offer</span></div>
+    <div>
+      <h2>The first order is the hard one. <em>Make it obvious.</em></h2>
+      <p class="lead">A serious buyer facing Rp 2.800.000 of material from a house he has not bought from is not weighing price. He is weighing whether the paperwork is real. Assemble the answer to that, name it, and put it on the table before he asks.</p>
+      <div class="leaktag">Repairs &mdash; order value, and part of quote &rarr; close</div>
+    </div>
+  </div>
+  <div class="body-col">
+    <h3 class="sub">The value equation, read correctly for AXIOM</h3>
+    <p>The equation is dream outcome, multiplied by the likelihood it is achieved, divided by time and effort. For a compliant house the dream outcome is <strong>certainty of material</strong> &mdash; identity, purity, chain of custody, a person who answers. It is never a health result, and stating it as one would cost more than it earns.</p>
+    <div class="tablewrap"><table>
+      <caption>The four terms, per persona</caption>
+      <thead><tr><th>Term</th><th>Researcher</th><th>Decade Athlete</th><th>Clinic Buyer</th></tr></thead>
+      <tbody>
+        <tr><td class="name">Dream outcome</td><td>Material that matches its label, lot after lot</td><td>A source that will still be here in five years</td><td>Hardware and supply that never embarrasses the room</td></tr>
+        <tr><td class="name">Likelihood</td><td>HPLC/MS &ge; 98%, CoA per lot, representative CoA before purchase</td><td>One standard across five pillars, the same mark lab to label</td><td>Verified irradiance at true 660 + 850 nm, spec sheet on request</td></tr>
+        <tr><td class="name">Time delay</td><td>Lot reserved same day, dispatch on confirmation</td><td>Quote inside the hour, held price for a stated window</td><td>Demo unit inside two weeks, restock window named</td></tr>
+        <tr><td class="name">Effort</td><td>Nothing to chase &mdash; CoA arrives in the box and by message</td><td>One conversation, one person, one number</td><td>Account terms, standing restock, one point of contact</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">The assembled offer &mdash; built from what the house already carries</h3>
+    <p>Nothing below is a new cost. Every component already exists in the operation and is simply unnamed and unpriced in the conversation, which is the same as being invisible. Name it, assign it a place in the offer, and state it in the same order every time.</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="role">Core</div><h4>The documented lot</h4><p>Research-grade material, HPLC/MS verified to &ge; 98%, Certificate of Analysis for that specific lot in the box and sent by message on dispatch.</p></div>
+    <div class="card"><div class="role">Assembled &middot; 01</div><h4>Cold-chain handling</h4><p>Held at &minus;20 &deg;C, moved at 2&ndash;8 &deg;C, insured and tracked, with the dispatch photograph sent on the day it leaves.</p></div>
+    <div class="card"><div class="role">Assembled &middot; 02</div><h4>The research kit</h4><p>BAC water, alcohol swabs and syringes with every shipment &mdash; laboratory consumables, supplied as material, with no usage guidance attached.</p></div>
+    <div class="card"><div class="role">Assembled &middot; 03</div><h4>A person on the line</h4><p>One named contact on WhatsApp before and after the order, who answers on the same number for the reorder a year later.</p></div>
+    <div class="card"><div class="role">Assembled &middot; 04</div><h4>The lot-alert place</h4><p>A standing list for the compounds a buyer follows &mdash; notified on release with the CoA, before the lot is offered generally.</p></div>
+    <div class="card"><div class="role">Assembled &middot; 05</div><h4>The held reorder price</h4><p>A documented buyer&rsquo;s price is held for 90 days on the same compound, so the second order needs no negotiation.</p></div>
+  </div>
+
+  <div class="body-col">
+    <h3 class="sub">The three-part guarantee</h3>
+    <p>Risk reversal here can only ever cover documentation, handling and supply. It can never cover an outcome, and the restraint is what makes it credible &mdash; a house that will not promise a result but will refund a missing document is telling the buyer exactly what it controls.</p>
+    <ul class="clean">
+      <li><strong>Documentation.</strong> A Certificate of Analysis for your lot, in the box. If it is missing or does not match the material described, the order is refunded in full.</li>
+      <li><strong>Cold chain.</strong> Material leaves at 2&ndash;8 &deg;C, insured and tracked. If it arrives outside the stated handling condition, it is replaced from the next lot at no charge.</li>
+      <li><strong>Supply.</strong> Your documented price is held for 90 days on the same compound. If a lot you have ordered before is out, you are on the alert list for its release before it is offered generally.</li>
+    </ul>
+    <div class="ruo"><b>Compliance gate on this section</b>Every element above is a guarantee of documentation, handling or supply. No component of the offer states or implies a human dose, route, frequency, repeat schedule, therapeutic benefit or any outcome. Peptides remain Research Use Only, in-vitro.</div>
+
+    <h3 class="sub">The single-vial reflex, and the arithmetic against it</h3>
+    <p>A buyer asks about one compound and receives a price for one compound. That is not a decision the house has influenced &mdash; it is order-taking. The alternative is to quote the single lot <em>and</em> one assembled set beside it, on the same message, with the documentation identical in both. Composition of a set reflects lot release and documentation only; it carries no implication about use, and the RUO line travels with it.</p>
+  </div>
+
+  <div class="chart">
+    <p class="ct">What the order shape is worth</p>
+    <p class="cc">Real catalogue prices and cost basis from the AXIOM peptide price list. Held-set prices give up two margin points and roughly double the order. Cost basis includes verification and cold-chain per the existing 53% pricing rule.</p>
+    <div class="svgwrap"><svg viewBox="0 0 720 232" role="img" aria-label="Stacked bars comparing cost basis and gross profit for a single vial, a documented pair and a documented set">
+      <g>
+        <text class="svg-cat" x="0" y="24">Single vial</text>
+        <text class="svg-sub" x="0" y="40">Ipamorelin 10 mg</text>
+        <rect x="188" y="16" width="71" height="14" rx="4" fill="var(--c-cost)"></rect>
+        <rect x="261" y="16" width="80" height="14" rx="4" fill="var(--c-3)"></rect>
+        <text class="svg-lbl" x="353" y="27">Rp 2.800.000</text>
+      </g>
+      <g>
+        <text class="svg-cat" x="0" y="94">Documented pair</text>
+        <text class="svg-sub" x="0" y="110">BPC-157 10 mg + GHK-Cu 50 mg</text>
+        <rect x="188" y="86" width="121" height="14" rx="4" fill="var(--c-cost)"></rect>
+        <rect x="311" y="86" width="129" height="14" rx="4" fill="var(--c-3)"></rect>
+        <text class="svg-lbl" x="452" y="97">Rp 4.600.000</text>
+      </g>
+      <g>
+        <text class="svg-cat" x="0" y="164">Documented set</text>
+        <text class="svg-sub" x="0" y="180">Three lots, one release</text>
+        <rect x="188" y="156" width="195" height="14" rx="4" fill="var(--c-cost)"></rect>
+        <rect x="385" y="156" width="203" height="14" rx="4" fill="var(--c-3)"></rect>
+        <text class="svg-lbl" x="600" y="167">Rp 7.300.000</text>
+      </g>
+      <line x1="188" y1="200" x2="588" y2="200" stroke="var(--c-axis)" stroke-width="1"></line>
+      <text class="svg-sub" x="188" y="216">Rp 0</text>
+      <text class="svg-sub" x="518" y="216">Rp 7.300.000</text>
+    </svg></div>
+    <div class="legend">
+      <div class="li"><span class="sw" style="background:var(--c-cost)"></span>Cost basis &mdash; material, verification, cold chain</div>
+      <div class="li"><span class="sw" style="background:var(--c-3)"></span>Gross profit</div>
+    </div>
+  </div>
+
+  <div class="tablewrap"><table>
+    <caption>The arithmetic, from the price list</caption>
+    <thead><tr><th>Order shape</th><th>Composition</th><th class="num">Cost basis</th><th class="num">Price</th><th class="num">Gross profit</th><th class="num">Margin</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Single vial</td><td>Ipamorelin 10 mg</td><td class="num">Rp 1.300.000</td><td class="num">Rp 2.800.000</td><td class="num">Rp 1.500.000</td><td class="num">54%</td></tr>
+      <tr><td class="name">Documented pair</td><td>BPC-157 10 mg &middot; GHK-Cu 50 mg</td><td class="num">Rp 2.220.000</td><td class="num">Rp 4.600.000</td><td class="num">Rp 2.380.000</td><td class="num">52%</td></tr>
+      <tr><td class="name">Documented set</td><td>BPC-157 10 mg &middot; TB-500 10 mg &middot; GHK-Cu 50 mg</td><td class="num">Rp 3.570.000</td><td class="num">Rp 7.300.000</td><td class="num">Rp 3.730.000</td><td class="num">51%</td></tr>
+      <tr class="total-row"><td class="name">Effect of the pair over the single</td><td>Same documentation, same dispatch, one conversation</td><td class="num">&mdash;</td><td class="num">+64%</td><td class="num">+Rp 880.000</td><td class="num">&minus;2 pts</td></tr>
+    </tbody>
+  </table></div>
+  <div class="body-col">
+    <p class="tab" style="font-size:12.5px;color:var(--muted-2)">Set prices above are the sum of list prices less a held-price allowance, rounded to the nearest Rp 100.000, consistent with the existing pricing rule. Sets are defined by lot release and documentation. Before publishing set names, confirm the composition wording against the compliance standard &mdash; a set must never read as a suggested combination for use.</p>
+  </div>
+</div></section>
+
+<!-- ============ 02 ============ -->
+<section class="sec" id="s02"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">02</div><span class="kk">Belfort &middot; the close</span></div>
+    <div>
+      <h2>Three certainties, <em>and the two questions that find the weak one.</em></h2>
+      <p class="lead">A buyer who does not order is not short of information. He is short of certainty in one of three places, and answering the wrong one loses the conversation politely. Diagnose first, then loop.</p>
+      <div class="leaktag">Repairs &mdash; conversation &rarr; quote, quote &rarr; close</div>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="role">Certainty 01</div><h4>The material</h4><p>Is this what it says it is. Answered with the CoA, the HPLC/MS figure, the lot number and the cold chain &mdash; never with an adjective.</p></div>
+    <div class="card"><div class="role">Certainty 02</div><h4>The house</h4><p>Will this arrive, documented, and will they be here next year. Answered with dispatch photographs, tracking, restock history and the standard.</p></div>
+    <div class="card"><div class="role">Certainty 03</div><h4>The person</h4><p>Is there someone accountable. Answered by being fast, named, plain-spoken, and by saying what AXIOM does not do.</p></div>
+  </div>
+  <div class="body-col">
+    <h3 class="sub">The two-question diagnostic</h3>
+    <p>Run this before any objection handling. It costs one message and tells you which certainty is low, which decides everything that follows.</p>
+  </div>
+  <div class="script">
+    <div class="lbl">Diagnostic</div>
+    <p><span class="spk">You</span>Happy to help. Two quick things so I quote you properly &mdash; which compound and lot size are you after, and have you sourced documented material before, or would this be your first time working with a documented supplier?</p>
+    <p class="note">First half qualifies the order. Second half surfaces the real state: a buyer who has bought documented material before needs the material certainty answered. A buyer who has not needs the house and the person answered first, and the CoA will not do it on its own.</p>
+  </div>
+  <div class="body-col">
+    <h3 class="sub">Five loops</h3>
+    <p>A loop does not argue with the objection. It isolates it, raises the certainty underneath it, and returns to the same question. Three loops in one conversation is normal here and is not pressure &mdash; each one adds information the buyer did not have.</p>
+  </div>
+
+  <div class="script">
+    <div class="lbl">Loop 01 &middot; price</div>
+    <p class="them"><span class="spk">Them</span>It is more expensive than what I have been quoted elsewhere.</p>
+    <p><span class="spk">You &mdash; isolate</span>That is fair, and probably true. Can I ask &mdash; if the price were the same, would you take the documented one, or is there something else in the way?</p>
+    <p><span class="spk">You &mdash; raise</span>Here is the difference in what you receive. Every lot is HPLC and mass-spec verified to &ge; 98%, and the Certificate of Analysis for your specific lot is in the box and in your chat. It moves cold-chain, insured and tracked. If the documentation is missing or does not match, the order is refunded. A cheaper vial without paperwork is a different product, not the same product at a lower number.</p>
+    <p><span class="spk">You &mdash; return</span>Want me to send a representative CoA so you can see exactly what arrives, and hold your lot at this price while you look at it?</p>
+  </div>
+
+  <div class="script">
+    <div class="lbl">Loop 02 &middot; is this legitimate</div>
+    <p class="them"><span class="spk">Them</span>How do I know the material is real.</p>
+    <p><span class="spk">You &mdash; acknowledge</span>The right question, and the reason the house exists.</p>
+    <p><span class="spk">You &mdash; raise</span>I will send you a Certificate of Analysis from a recent lot now &mdash; compound, lot number, HPLC purity, mass confirmation, storage temperature. Yours arrives the same way, for your lot, before you pay anything. On dispatch you get the photograph of your parcel and the tracking number.</p>
+    <p><span class="spk">You &mdash; return</span>Have a look at it, and tell me if that is the level of documentation you are working to.</p>
+    <p class="note">Send the document, not a claim about the document. The paperwork answers faster than any sentence.</p>
+  </div>
+
+  <div class="script">
+    <div class="lbl">Loop 03 &middot; stock and timing</div>
+    <p class="them"><span class="spk">Them</span>Let me come back to you next week.</p>
+    <p><span class="spk">You &mdash; isolate</span>No problem. Is it the timing on your side, or are you still deciding on the material.</p>
+    <p><span class="spk">You &mdash; raise</span>Two honest things about next week. I hold your price for seven days, so waiting costs you nothing there. What I cannot hold is the lot &mdash; there are a limited number of units left from this release, and the next one is not dated yet.</p>
+    <p><span class="spk">You &mdash; return</span>I can reserve yours now at this price with no obligation, and release it if you decide against. Want me to do that.</p>
+    <p class="note">Only ever state a count you can verify. A reserve that is not real is the one thing that destroys the standard faster than a bad lot.</p>
+  </div>
+
+  <div class="script">
+    <div class="lbl">Loop 04 &middot; the legality question</div>
+    <p class="them"><span class="spk">Them</span>Is this allowed here.</p>
+    <p><span class="spk">You</span>Straight answer. Material is supplied as Research Use Only, for in-vitro laboratory research &mdash; not for human or veterinary use, and we provide no guidance on use. Several compounds are regulated differently in different jurisdictions, and confirming what applies to you is your responsibility as the buyer. I would rather tell you that plainly than have you find it later.</p>
+    <p class="note">Never soften this and never improvise around it. Buyers who want an evasive answer are not buyers the house can keep, and the restraint itself closes the serious ones.</p>
+  </div>
+
+  <div class="script">
+    <div class="lbl">Loop 05 &middot; the usage question</div>
+    <p class="them"><span class="spk">Them</span>How much should I use, and how often.</p>
+    <p><span class="spk">You</span>I have to be straight with you &mdash; AXIOM supplies material and documentation only, and does not advise on use in any form. What I can tell you is what is in the vial, the purity figure, the mass confirmation and how it is stored and shipped. Want me to send the CoA for the lot.</p>
+    <p class="note">This is the single most common message the house will receive and the single most expensive one to answer badly. The reply is fixed, it is never abbreviated, and it is never given by voice note where it cannot be quoted back accurately.</p>
+  </div>
+
+  <div class="body-col">
+    <h3 class="sub">Tonality, for a channel that has no voice</h3>
+    <ul class="clean">
+      <li><strong>Certainty on the material.</strong> Short declaratives, figures, no hedging words. &ldquo;Verified to &ge; 98%. CoA in the box.&rdquo;</li>
+      <li><strong>The reasonable register on price.</strong> Longer sentences, acknowledgement first. This is the only place contractions and warmth do real work.</li>
+      <li><strong>Plain and slow on compliance.</strong> Full sentences, no abbreviation, in text and never in a voice note.</li>
+      <li><strong>Voice notes for one thing only</strong> &mdash; the greeting and the human moment. Numbers, specifications and compliance stay in text where they can be read back.</li>
+      <li><strong>No exclamation marks anywhere.</strong> The house does not raise its voice, on any channel.</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- ============ 03 ============ -->
+<section class="sec" id="s03"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">03</div><span class="kk">Kennedy &middot; the asset and the ladder</span></div>
+    <div>
+      <h2>The quote is the sales letter. <em>The ladder is the revenue.</em></h2>
+      <p class="lead">Direct response has always been one structure and one discipline: an asset that does the selling on its own, and a sequence that keeps arriving with something new. AXIOM has the first in rough form and does not have the second at all. This is the largest single leak in the house.</p>
+      <div class="leaktag">Repairs &mdash; quote &rarr; close, order &rarr; reorder</div>
+    </div>
+  </div>
+  <div class="body-col">
+    <h3 class="sub">The quote, rebuilt on structure</h3>
+    <p>Same six blocks, same order, every time. Proof before price, one action at the end, nothing else asked of the reader.</p>
+    <ol class="steps">
+      <li><strong>The proof line.</strong> One sentence naming what makes this material documented, before any number appears.</li>
+      <li><strong>The itemisation.</strong> Compound, lot size, unit price, quantity, line total &mdash; tabular, in IDR, no rounding surprises.</li>
+      <li><strong>What is in the box.</strong> CoA for your lot, BAC water and research kit, cold-chain dispatch, insured tracking.</li>
+      <li><strong>The three-part guarantee.</strong> Documentation, cold chain, supply &mdash; stated in one line each, verbatim from &sect;01.</li>
+      <li><strong>The held window.</strong> A real date. &ldquo;This price is held until Friday 12 September.&rdquo;</li>
+      <li><strong>One action.</strong> A single instruction. Confirm and it moves to dispatch. Never two options, never a question that can be answered with silence.</li>
+    </ol>
+  </div>
+
+  <div class="script">
+    <div class="lbl">Quote message &middot; template</div>
+    <p>Here is your quote. Everything on it is HPLC and mass-spec verified to &ge; 98%, with the Certificate of Analysis for your specific lot in the box and sent to you on dispatch.</p>
+    <p><span class="spk">Itemised</span>BPC-157 10 mg &mdash; Rp 2.700.000 &times; 1<br>GHK-Cu 50 mg &mdash; Rp 2.100.000 &times; 1<br>Documented pair, held price &mdash; Rp 4.600.000</p>
+    <p><span class="spk">In the box</span>CoA for your lot &middot; BAC water and research kit &middot; cold-chain dispatch at 2&ndash;8 &deg;C &middot; insured and tracked</p>
+    <p><span class="spk">Our side of it</span>CoA in the box or the order is refunded. Outside handling condition on arrival, it is replaced from the next lot. Your price is held for 90 days on a reorder of the same compound.</p>
+    <p>Price held until Friday. Reply <em>confirm</em> and I will move it to dispatch today.</p>
+    <p class="note">The quote is sent as one message, not five. Fragmented quotes read as improvised and invite a fragmented reply.</p>
+  </div>
+
+  <div class="body-col">
+    <h3 class="sub">The follow-up ladder</h3>
+    <p>Six touches over thirty days, and each one carries a named asset rather than a nudge. A nudge asks the buyer to do work. An asset gives him a reason to reopen the conversation, and it is the reason, not the reminder, that closes the 42 quotes currently going quiet.</p>
+  </div>
+  <div class="tablewrap"><table>
+    <caption>Six touches, six assets</caption>
+    <thead><tr><th>Day</th><th>Asset carried</th><th>What it says</th><th>Certainty raised</th></tr></thead>
+    <tbody>
+      <tr><td class="name tab">0</td><td>The quote</td><td>Itemised, the guarantee stated, held to a date, one action</td><td>Material</td></tr>
+      <tr><td class="name tab">1</td><td>Representative CoA</td><td>&ldquo;So you can see exactly what arrives &mdash; this is a recent lot, yours will look like this for your lot number.&rdquo;</td><td>Material</td></tr>
+      <tr><td class="name tab">3</td><td>Cold-chain note or dispatch photograph</td><td>How the material is held and moved, with a photograph of a real parcel leaving</td><td>House</td></tr>
+      <tr><td class="name tab">7</td><td>The held-price close</td><td>&ldquo;Your price is held until today. Want me to extend it or release the lot.&rdquo;</td><td>Person</td></tr>
+      <tr><td class="name tab">14</td><td>Lot status</td><td>Honest count remaining from the release, and whether the next one is dated</td><td>House</td></tr>
+      <tr><td class="name tab">30</td><td>Lot-alert offer</td><td>&ldquo;I will stop quoting. Want me to put you on the alert list for this compound so you hear on the next release.&rdquo;</td><td>Person</td></tr>
+    </tbody>
+  </table></div>
+  <div class="body-col">
+    <p><strong>The thirtieth touch is a close, not a farewell.</strong> A buyer who declines six times and joins the alert list has converted from a lost quote into a standing audience for every future release &mdash; which is the same asset the content engine is trying to build, acquired for free at the end of a conversation that was going to end anyway.</p>
+
+    <h3 class="sub">The reorder engine</h3>
+    <p>The cheapest revenue in the business is a documented buyer being asked a second time. It currently depends on the buyer remembering. Two mechanisms fix that, and both are calendar work rather than marketing spend.</p>
+    <ul class="clean">
+      <li><strong>The 90-day prompt.</strong> Every paid order creates one dated task at ninety days. The message names the compound and the lot, offers the held price, and offers a fresh CoA. It is a single message, sent by a person.</li>
+      <li><strong>The lot-release broadcast.</strong> When a lot is verified and released, the alert list for that compound hears first &mdash; with the CoA attached, the count available, and the price. One broadcast per release, never a general newsletter.</li>
+    </ul>
+  </div>
+  <div class="script">
+    <div class="lbl">90-day reorder prompt</div>
+    <p>Your last documented order was GHK-Cu 50 mg, lot released in June. A new lot is verified and in stock, CoA attached. Your price is held at what you paid. Want me to prepare the same again, or would you rather see what else came out of this release.</p>
+  </div>
+  <div class="script">
+    <div class="lbl">Lot-release broadcast</div>
+    <p>New lot released &mdash; BPC-157 10 mg. HPLC and mass-spec verified to &ge; 98%, CoA attached. Limited units from this release, cold-chain dispatch as usual. Reply here for an itemised quote.</p>
+    <p class="note">Broadcast copy carries the RUO line wherever a compound is named. No superlatives, no exclamation marks, no reference to use.</p>
+  </div>
+</div></section>
+
+<!-- ============ 04 ============ -->
+<section class="sec" id="s04"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">04</div><span class="kk">Cardone &middot; the number</span></div>
+    <div>
+      <h2>Volume on the pipeline, <em>never on the claim.</em></h2>
+      <p class="lead">GTM v1.0 set 44 quotes a day. That is a run-rate figure for a staffed operation, not a founder-scale one, and an impossible daily number is abandoned in week two &mdash; which is itself a cause of inconsistency. Here is the month-one floor, derived, and countable by one person.</p>
+      <div class="leaktag">Repairs &mdash; consistency, and upstream volume</div>
+    </div>
+  </div>
+  <div class="body-col">
+    <p>Set the floor at <strong>Rp 120.000.000</strong> for month one. It is not the ambition; it is the number below which the house is not yet a business, and it is the first rung on the way to the Rp 400.000.000 run-rate in the strategy. Everything below is that number divided by the assumptions in &sect;01, then multiplied for coverage.</p>
+  </div>
+  <div class="tablewrap"><table>
+    <caption>Backward math &mdash; month one, one founder</caption>
+    <thead><tr><th>Driver</th><th class="num">Value</th><th>Basis</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Revenue floor, month one</td><td class="num">Rp 120.000.000</td><td>Set, not derived. The first rung</td></tr>
+      <tr><td class="name">Average order value</td><td class="num">Rp 4.600.000</td><td>The documented pair from &sect;01, quoted beside every single</td></tr>
+      <tr><td class="name">Paid orders per month</td><td class="num">26</td><td>Floor divided by order value</td></tr>
+      <tr><td class="name">Paid orders per working day</td><td class="num">1</td><td>26 working days</td></tr>
+      <tr><td class="name">Quote &rarr; close rate</td><td class="num">32%</td><td>Modelled baseline &mdash; re-base in week 1</td></tr>
+      <tr><td class="name">Quotes per month</td><td class="num">82</td><td>Orders divided by close rate</td></tr>
+      <tr><td class="name">Quotes per working day</td><td class="num">3</td><td>Founder-scale, and countable</td></tr>
+      <tr><td class="name">Live conversations at any time</td><td class="num">10</td><td>Three times weekly coverage</td></tr>
+      <tr class="total-row"><td class="name">Daily activity</td><td class="num">3 &middot; 10 &middot; 5</td><td>Three quotes out, ten ladder touches, five reorder or alert prompts</td></tr>
+    </tbody>
+  </table></div>
+  <div class="body-col">
+    <p><strong>Three, ten, five.</strong> Three quotes sent, ten follow-up touches from the ladder, five reorder or lot-alert prompts. It fits in one two-hour block, it is logged at the end of the day, and it is not negotiable on a slow day &mdash; a slow day is precisely when the ladder is what produces revenue three weeks later.</p>
+    <p>Ten times the outreach, the follow-up and the reorder discipline. The claims stay exactly where they are.</p>
+  </div>
+</div></section>
+
+<!-- ============ 05 ============ -->
+<section class="sec" id="s05"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">05</div><span class="kk">Vaynerchuk &middot; demand</span></div>
+    <div>
+      <h2>The verification work <em>is the content.</em></h2>
+      <p class="lead">Content is inconsistent for the same reason revenue is: it is treated as a separate job requiring a separate mood. It is not. Every lot that clears verification generates a week of material as a by-product, and the only discipline required is capturing it while the work happens.</p>
+      <div class="leaktag">Repairs &mdash; upstream volume</div>
+    </div>
+  </div>
+  <div class="body-col">
+    <h3 class="sub">One lot, one week</h3>
+    <p>When a lot is verified, three minutes of capture at the bench produces everything below. Shoot first, decide later &mdash; the material is worthless once the parcel has left.</p>
+    <ol class="steps">
+      <li><strong>Capture at verification.</strong> The CoA on the bench, the trace on screen, the vial and label, the cold-chain packing, the parcel leaving. Five stills and two short clips.</li>
+      <li><strong>Publish the release.</strong> The CoA post, the anchor for the week, carrying the lot number and the purity figure.</li>
+      <li><strong>Cut the week.</strong> Trace detail, label macro, packing sequence, dispatch &mdash; four further posts from the same three minutes.</li>
+      <li><strong>Write the teardown.</strong> One standard explained in depth, published weekly, and cut into the following week&rsquo;s short posts.</li>
+      <li><strong>Broadcast it.</strong> The same release goes to the alert list as a quote invitation, which is where content becomes pipeline.</li>
+    </ol>
+  </div>
+  <div class="tablewrap"><table>
+    <caption>Weekly cadence &mdash; format, purpose, funnel stage</caption>
+    <thead><tr><th>Slot</th><th>Format</th><th>Purpose</th><th>Feeds</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Daily</td><td>Proof post &mdash; a CoA, a lot, a dispatch</td><td>Compound trust by repetition; stay documented in public</td><td>Awareness</td></tr>
+      <tr><td class="name">Three times weekly</td><td>Reel &mdash; lab macro, packing, recovery scene</td><td>Reach the smallest viable market where it already scrolls</td><td>Awareness</td></tr>
+      <tr><td class="name">Weekly</td><td>Teardown &mdash; one standard explained</td><td>Convert distrust into trust with depth no reseller will match</td><td>Consideration</td></tr>
+      <tr><td class="name">Weekly</td><td>Broadcast &mdash; lot release with CoA</td><td>Direct pull on the alert list; the conversion moment</td><td>Quote request</td></tr>
+      <tr><td class="name">Monthly</td><td>Standards note &mdash; what changed and why</td><td>Show the standard improving, which is what a decade buyer is buying</td><td>Retention</td></tr>
+    </tbody>
+  </table></div>
+  <div class="body-col">
+    <h3 class="sub">Caption rules</h3>
+    <ul class="clean">
+      <li>Every caption carries <strong>a number, a method or a document</strong>. If it carries none of the three, it is not a proof post and it does not go out.</li>
+      <li>No superlatives, no exclamation marks, no comparison to a named competitor.</li>
+      <li>Mechanism and laboratory handling only. <strong>Never</strong> dose, route, frequency, repeat schedule or benefit.</li>
+      <li>Any post naming a compound carries the Research Use Only, in-vitro line. Without exception, including stories.</li>
+      <li>The call to action is always the same one: a message for an itemised quote.</li>
+    </ul>
+    <div class="ruo"><b>Content compliance gate &mdash; before publishing</b>Does the caption state or imply a human dose, route, frequency, repeat schedule or therapeutic benefit. Does it use a superlative or an exclamation mark. Does it name a compound without the Research Use Only, in-vitro line. Three answers of no, and it ships.</div>
+  </div>
+</div></section>
+
+<!-- ============ 06 ============ -->
+<section class="sec" id="s06"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">06</div><span class="kk">Godin &amp; Robbins &middot; spread and rhythm</span></div>
+    <div>
+      <h2>Make the document travel. <em>Make the day repeat.</em></h2>
+      <p class="lead">Two questions decide whether this compounds: what a satisfied buyer can hand to a training partner, and what the founder does on the days when nothing is urgent.</p>
+      <div class="leaktag">Repairs &mdash; upstream volume, order &rarr; reorder, consistency</div>
+    </div>
+  </div>
+  <div class="body-col">
+    <h3 class="sub">The forwardable artifact</h3>
+    <p>Nobody forwards a price. People forward a document that makes them look careful. The Certificate of Analysis is already the most remarkable object the house produces &mdash; it simply needs to be built to travel: the mark on it, the lot legible, the purity figure unmissable, a clean file name, and a single line at the foot naming where it came from and the compliance standard it was issued under.</p>
+    <p>That is the whole referral mechanism. A buyer sends a friend the paperwork, not a pitch, and the paperwork is the argument. It is also the one piece of marketing a competitor selling undocumented material cannot copy at any price, which is what makes it worth the effort of designing properly.</p>
+    <ul class="clean">
+      <li><strong>Design the CoA as a brand surface</strong> &mdash; on the AXIOM standard, not the supplier&rsquo;s letterhead alone.</li>
+      <li><strong>Name the file so it survives forwarding</strong> &mdash; compound, lot, date. It will be re-sent months later with no message attached.</li>
+      <li><strong>Ask once, at the right moment.</strong> On the dispatch confirmation, not at the sale: &ldquo;If anyone asks where it came from, the CoA has everything they need.&rdquo;</li>
+    </ul>
+
+    <h3 class="sub">The weekly rhythm</h3>
+    <p>Inconsistent revenue is almost always an inconsistent week. The fix is not motivation, it is a fixed shape that survives a bad mood, a slow month and a travel week.</p>
+  </div>
+  <div class="tablewrap"><table>
+    <caption>The shape of the week</caption>
+    <thead><tr><th>Rhythm</th><th>Ritual</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Daily, first block</td><td>Two hours, one screen, nothing else open &mdash; quotes out, ladder touches, reorder prompts</td><td>Three, ten, five, logged</td></tr>
+      <tr><td class="name">Daily, at the bench</td><td>Capture whatever verification or dispatch happened that day</td><td>One proof post</td></tr>
+      <tr><td class="name">Monday</td><td>Set the week &mdash; open quotes, where each sits on the ladder, coverage against the weekly number</td><td>The week&rsquo;s pipeline named</td></tr>
+      <tr><td class="name">Friday</td><td>Numbers &mdash; quotes sent, close rate, reorders, content shipped, and one adjustment for next week</td><td>One adjustment, written down</td></tr>
+      <tr><td class="name">Monthly</td><td>Re-base the assumptions in &sect;00 and &sect;04 against what actually happened</td><td>A model that matches reality</td></tr>
+    </tbody>
+  </table></div>
+  <div class="body-col">
+    <p><strong>One adjustment per week, not five.</strong> Five changes at once make the following week unreadable &mdash; nothing can be attributed, so nothing is learned, and the month ends with activity and no knowledge. Change one thing, keep the count, and let the number say whether it worked.</p>
+  </div>
+</div></section>
+
+<!-- ============ 07 ============ -->
+<section class="sec" id="s07"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">07</div><span class="kk">Execution</span></div>
+    <div>
+      <h2>The thirty-day sprint. <em>What ships, in what order.</em></h2>
+      <p class="lead">Week one is measurement and assets, because everything after depends on a real baseline. No new traffic is bought until the ladder exists &mdash; buying attention for a funnel that leaks at the second junction is the most expensive mistake available.</p>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="when">Week 1 &middot; measure and arm</div>
+      <div class="what">Re-base the model and build the two assets</div>
+      <div class="desc">Count the real numbers out of the message history &mdash; conversations, quotes, orders, reorders &mdash; and overwrite every figure in &sect;00 and &sect;04. Write the quote template (&sect;03) and the six ladder assets. Design the CoA to travel (&sect;06). Fix the five loop scripts (&sect;02) where they can be copied, not improvised.</div>
+    </div>
+    <div class="tl-item">
+      <div class="when">Week 2 &middot; the ladder, retroactively</div>
+      <div class="what">Run every open and dead quote through the ladder</div>
+      <div class="desc">Every quote sent in the last ninety days that never closed enters at the day-appropriate rung. This is the single highest-return week in the sprint: the conversations already exist, they cost nothing to reopen, and the asset carried is new information rather than a reminder. Start the daily three, ten, five.</div>
+    </div>
+    <div class="tl-item">
+      <div class="when">Week 3 &middot; order value and reorder</div>
+      <div class="what">Quote the assembled offer beside every single</div>
+      <div class="desc">No single vial is quoted alone from here. Publish the documented pair and set with their compliance wording confirmed. Load every past buyer into the ninety-day prompt schedule and start the lot-release broadcast on the next verification.</div>
+    </div>
+    <div class="tl-item">
+      <div class="when">Week 4 &middot; demand, and read the month</div>
+      <div class="what">The content engine, then the numbers</div>
+      <div class="desc">Capture at the bench becomes routine; the weekly teardown ships; the alert list is offered at the end of every ladder. Close the month against the scoreboard, re-base the assumptions again, and change one thing.</div>
+    </div>
+  </div>
+
+  <div class="body-col"><h3 class="sub">The scoreboard</h3>
+  <p>Seven numbers, counted weekly, on one page. Targets are the month-one floor, not the ambition &mdash; and each one is replaced by a measured figure the moment there is one.</p></div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Time to first reply</div><div class="target">&lt; 15 min</div><div class="def">Median elapsed time from an inbound message to a human reply, in working hours. The cheapest number to move and the one that decides the first junction.</div></div>
+    <div class="kpi"><div class="k">Conversation &rarr; quote</div><div class="target">70%</div><div class="def">Share of inbound conversations that receive an itemised quote. Below this, the diagnostic in &sect;02 is not being run.</div></div>
+    <div class="kpi"><div class="k">Quote &rarr; close</div><div class="target">32%</div><div class="def">Share of quotes that become paid orders within 30 days. Modelled baseline; measure it in week 1 and set the real target at plus five points.</div></div>
+    <div class="kpi"><div class="k">Ladder completion</div><div class="target">100%</div><div class="def">Share of open quotes that received all six touches. The only input metric here, and the one that predicts the next month&rsquo;s revenue.</div></div>
+    <div class="kpi"><div class="k">Average order value</div><div class="target">Rp 4.600.000</div><div class="def">Blended across all paid orders. Rises when the assembled offer is quoted beside every single, and only then.</div></div>
+    <div class="kpi"><div class="k">Reorder within 90 days</div><div class="target">35%</div><div class="def">Share of documented buyers who order a second time inside ninety days. The cheapest revenue in the house and the clearest signal that the standard is felt.</div></div>
+    <div class="kpi"><div class="k">Quote requests from content</div><div class="target">8 / week</div><div class="def">Inbound conversations attributable to a post or a broadcast. The only content number that matters; reach is not on this page.</div></div>
+    <div class="kpi"><div class="k">Revenue against the floor</div><div class="target">Rp 120.000.000</div><div class="def">Month one. Reviewed by pillar on the last working day, with margin stated beside it.</div></div>
+    <div class="kpi"><div class="k">Compliance exceptions</div><div class="target">0</div><div class="def">Any message, caption or document that stated or implied use. Counted honestly, reviewed monthly, and treated as the most serious number on the board.</div></div>
+  </div>
+</div></section>
+
+<!-- ============ 08 ============ -->
+<section class="sec" id="s08"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">08</div><span class="kk">Synthesis</span></div>
+    <div>
+      <h2>Eight views, <em>one instruction.</em></h2>
+    </div>
+  </div>
+  <div class="synthesis">
+    <h3>Answer the second message, and ask the second time.</h3>
+    <div class="body-col" style="max-width:70ch">
+      <p>The board converges on an unglamorous conclusion. AXIOM does not have a positioning problem, a pricing problem or a product problem &mdash; the strategy already solved those, and the standard is genuinely defensible. It has a <strong>sequence problem</strong>. A quote is sent once, an order is taken once, and a buyer is asked once. Every leak on the map is a version of the same omission, and each one is repaired with words and a calendar rather than capital.</p>
+      <p>So the month is spent on the second touch, not on new attention: the assembled offer beside every single, six ladder assets behind every quote, a ninety-day prompt behind every order, and a proof post behind every verification. Volume applies to the pipeline. The claim stays exactly where the standard put it.</p>
+    </div>
+    <div class="grid">
+      <div class="cell"><div class="k">Hormozi</div><div class="v"><strong>The assembled offer.</strong> Name what the house already carries, guarantee documentation and supply, quote the pair beside the single.</div></div>
+      <div class="cell"><div class="k">Belfort</div><div class="v"><strong>Diagnose, then loop.</strong> Two questions find the low certainty; five scripted loops raise it without a claim.</div></div>
+      <div class="cell"><div class="k">Kennedy</div><div class="v"><strong>The quote and the ladder.</strong> Six blocks in the quote, six assets over thirty days, a reorder engine on a calendar.</div></div>
+      <div class="cell"><div class="k">Cardone</div><div class="v"><strong>Three, ten, five.</strong> A founder-scale daily count against a Rp 120.000.000 floor, logged every day.</div></div>
+      <div class="cell"><div class="k">Vaynerchuk</div><div class="v"><strong>One lot, one week.</strong> Capture at the bench; the verification work is the content, and the broadcast is the pipeline.</div></div>
+      <div class="cell"><div class="k">Godin</div><div class="v"><strong>The forwardable CoA.</strong> Design the document to travel &mdash; it is the referral mechanism and it cannot be copied.</div></div>
+      <div class="cell"><div class="k">Robbins</div><div class="v"><strong>One shape, one adjustment.</strong> A fixed week that survives a bad mood; change one thing and keep the count.</div></div>
+      <div class="cell"><div class="k">The standard</div><div class="v"><strong>Nothing loosens.</strong> Research Use Only, in-vitro. No dose, no route, no frequency, no benefit &mdash; in any script, caption or offer on this page.</div></div>
+      <div class="cell"><div class="k">Week one</div><div class="v"><strong>Count first.</strong> Every figure here is a modelled baseline until the message history replaces it.</div></div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="ruo"><b>Research Use Only</b>Research Use Only. Intended exclusively for in-vitro laboratory research &mdash; not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Every script, caption, offer and guarantee in this document was written to that standard; any adaptation of them must hold it.</div>
+  <div class="fgrid">
+    <div class="col">
+      <div class="fwm">AXIOM</div>
+      <p style="margin-top:10px">AXIOM is a human-performance and longevity house based in Jakarta, Indonesia. We bring research-grade peptides, clinical red-light therapy, recovery, wellness and apparel under one standard &mdash; verified, documented, sourced right. Peptides are Research Use Only, in-vitro. Prices in IDR.</p>
+    </div>
+    <div class="col">
+      <div class="h">Document</div>
+      <p>Sales Acceleration Playbook</p>
+      <p class="tab">Version 1.0</p>
+      <p class="tab">AXM&mdash;SALES&mdash;PB&mdash;001</p>
+    </div>
+    <div class="col">
+      <div class="h">Reads with</div>
+      <p>Go-to-Market Strategy v1.0</p>
+      <p>Business Model &amp; Launch Proposal</p>
+      <p>Peptide Price List</p>
+    </div>
+  </div>
+  <p style="margin-top:28px">Confidential &middot; Jakarta &middot; prices indicative and subject to change &middot; all figures in Indonesian Rupiah. Baseline figures are modelled assumptions carried from the Go-to-Market Strategy and are to be replaced with measured performance.</p>
+</div></footer>
+
+</body></html>

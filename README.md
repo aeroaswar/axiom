@@ -11,7 +11,10 @@ repository, where the work had accumulated across several unmerged topic branche
 - `brand-book/` — the AXIOM brand book / style guide. Migrated from
   `claude/axiom-brand-book-0puows`.
 - `business-proposal/` — business proposal, GTM strategy, and pricing materials.
-  Migrated from `claude/axiom-business-proposal-p57t1y`.
+  Migrated from `claude/axiom-business-proposal-p57t1y`. Also holds
+  `axiom-sales-playbook.html` — the sales acceleration playbook, the execution layer under the
+  GTM strategy: the leak map, the assembled offer, closing loops, the quote and follow-up ladder,
+  the daily number, the content engine and a 30-day sprint.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.
