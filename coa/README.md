@@ -23,6 +23,26 @@ the certificate itself, live. **Print / PDF** gives one A4 page.
   verdict logic parses survive. A banner stays up until you confirm you have checked the
   values against the report. The section is hidden when the file is opened from disk, where
   the capability does not exist — everything else still works there.
+- **The record lifecycle** — a lot is a **draft** until you press Issue. A draft prints with a
+  diagonal *Draft — not issued* watermark, so it can never be mistaken for a certificate. On
+  Issue the lot is frozen (every field, row and pad goes read-only), stamped with a SHA-256
+  fingerprint, and written to the register. To change an issued lot you **Revise** it, which
+  opens R+1 as a fresh draft and marks the previous revision *superseded* once the new one is
+  issued. **Void** withdraws a certificate with a reason and keeps the entry — a register does
+  not lose rows.
+- **Nothing blocks issuing.** A failing row, an unsigned release block, a missing date or an
+  empty batch all raise warnings you can click straight past — and what you overrode is stored
+  on the register entry, so the record shows the lot went out with a failing row.
+- **Fingerprint** — the first 12 hex characters of a SHA-256 over the record print in the
+  footer (`A3F2 9C41 77B0`), so a PDF someone shows you can be checked against the register.
+  Where the browser has no SHA-256 (Firefox on a `file://` page) it is omitted rather than
+  replaced with something weaker.
+- **Register** — every issued record, searchable by lot, batch or order reference, filterable
+  by status. Log a **Shipment** against a record (order ref, quantity, date) and the search
+  becomes a recall path: type an order reference, get the lot. In the published builder the
+  register lives in the cloud and follows you across devices; opened from disk it falls back
+  to this-device storage and says so. **Export register** is the backup and the bridge between
+  the two.
 - **Signatures** — draw on the pad with a mouse, trackpad or finger, or upload a photo of
   a signature (the paper is dropped and the ink kept). The signature sits on the ruled
   line. Sign for AXIOM's own people only: never draw or upload someone else's signature,

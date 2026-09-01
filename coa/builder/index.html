@@ -27,6 +27,7 @@
 
 /* ── The sheet ────────────────────────────────────────────────────────────── */
 .sheet{
+  position:relative;
   width:210mm; min-height:297mm; margin:0 auto;
   background:var(--bone); color:var(--onyx);
   padding:15mm 16mm 13mm;
@@ -34,6 +35,17 @@
   box-shadow:0 1px 2px rgba(0,0,0,.12),0 18px 46px rgba(0,0,0,.20);
   display:flex; flex-direction:column;
 }
+
+/* ── Status stamp ─────────────────────────────────────────────────────────── */
+.stamp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;overflow:hidden}
+.stamp span{transform:rotate(-24deg);font-family:var(--display);font-weight:600;
+  font-size:44px;letter-spacing:.14em;text-transform:uppercase;text-align:center;
+  padding:14px 34px;border:4px solid currentColor;border-radius:6px;line-height:1.1;
+  max-width:80%}
+.stamp.draft span{color:rgba(141,141,141,.32)}
+.stamp.superseded span{color:rgba(58,58,58,.26);font-size:34px}
+.stamp.void span{color:rgba(163,80,60,.34);font-size:38px}
 
 /* ── Masthead ─────────────────────────────────────────────────────────────── */
 .mast{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
@@ -236,7 +248,7 @@ button,input,select,textarea{font:inherit;color:inherit}
   outline:none;background:var(--ui-well-2)}
 .fld input::placeholder,.fld textarea::placeholder{color:var(--ui-dim)}
 .fld input[type=date]{font-variant-numeric:tabular-nums}
-.fld .hint{font-size:9.5px;color:var(--ui-dim);line-height:1.5}
+.hint{font-size:9.5px;color:var(--ui-dim);line-height:1.5}
 .stack{display:flex;flex-direction:column;gap:10px}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 
@@ -320,6 +332,49 @@ button,input,select,textarea{font:inherit;color:inherit}
 }
 [hidden]{display:none!important}
 
+/* ── Record state ─────────────────────────────────────────────────────────── */
+.schip{font-family:var(--display);font-weight:600;font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;padding:4px 9px;border-radius:3px;border:1px solid;flex:none}
+.schip.draft{color:var(--ui-muted);border-color:var(--ui-line-2);background:var(--ui-well)}
+.schip.issued{color:var(--ui-accent);border-color:var(--ui-accent-line);background:var(--ui-accent-soft)}
+.schip.superseded{color:var(--ui-dim);border-color:var(--ui-line-2);background:transparent}
+.schip.void{color:var(--ui-fail);border-color:var(--ui-fail);background:rgba(208,123,100,.12)}
+.lockbar{display:flex;gap:10px;align-items:center;padding:11px 18px;font-size:11px;
+  background:var(--ui-accent-soft);border-bottom:1px solid var(--ui-accent-line);
+  color:var(--ui-ink);line-height:1.5}
+.lockbar .pad{flex:none}
+.issuewarn{padding:12px 18px;background:rgba(208,123,100,.12);
+  border-bottom:1px solid rgba(208,123,100,.4);font-size:11px;line-height:1.6}
+.issuewarn b{color:var(--ui-fail);font-weight:500}
+.issuewarn ul{margin:8px 0;padding-left:18px;color:var(--ui-muted)}
+.issuewarn li{margin:2px 0}
+
+/* ── Register ─────────────────────────────────────────────────────────────── */
+.regwhere{font-size:9.6px;letter-spacing:.1em;color:var(--ui-dim);line-height:1.5}
+.regwhere.warn{color:var(--ui-fail)}
+.regrow{background:var(--ui-well);border:1px solid var(--ui-line);border-radius:4px;
+  padding:9px 10px;margin-bottom:7px;font-size:11px}
+.regrow .rtop{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.regrow .st{font-family:var(--display);font-weight:600;font-size:8.6px;letter-spacing:.14em;
+  text-transform:uppercase;padding:2px 6px;border-radius:2px;border:1px solid}
+.regrow .st.issued{color:var(--ui-accent);border-color:var(--ui-accent-line)}
+.regrow .st.draft{color:var(--ui-muted);border-color:var(--ui-line-2)}
+.regrow .st.superseded{color:var(--ui-dim);border-color:var(--ui-line-2)}
+.regrow .st.void{color:var(--ui-fail);border-color:var(--ui-fail)}
+.regrow .rid{font-family:var(--display);font-size:11px;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;min-width:0}
+.regrow .fp{margin-left:auto;font-size:9px;letter-spacing:.1em;color:var(--ui-dim);
+  font-variant-numeric:tabular-nums}
+.regrow .rsub{color:var(--ui-muted);margin-top:3px;font-size:10.5px}
+.regrow .rwarn{margin-top:5px;font-size:9.6px;color:var(--ui-fail);line-height:1.5}
+.regrow .rship{margin-top:5px;display:flex;flex-wrap:wrap;gap:5px}
+.regrow .rship span{font-size:9.2px;color:var(--ui-muted);background:var(--ui-well-2);
+  border:1px solid var(--ui-line-2);border-radius:2px;padding:1px 5px}
+.regrow .ract{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.regrow .shipform{display:grid;grid-template-columns:1fr auto auto auto;gap:5px;margin-top:7px}
+.regrow .shipform input{background:var(--ui-well-2);border:1px solid var(--ui-line-2);
+  border-radius:3px;padding:4px 6px;font-size:10.5px;min-width:0}
+
 /* ── Read a report ────────────────────────────────────────────────────────── */
 .banner{display:flex;gap:12px;align-items:flex-start;padding:12px 18px;
   background:rgba(208,123,100,.12);border-bottom:1px solid rgba(208,123,100,.4);
@@ -370,14 +425,22 @@ button,input,select,textarea{font:inherit;color:inherit}
     <svg class="wmk" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg>
     <span class="tag">COA Builder</span>
     <span class="spacer"></span>
+    <span class="schip draft" id="statusChip">Draft</span>
     <span class="state" id="state"></span>
     <button class="btn ghost" id="btnImport">Import</button>
     <button class="btn ghost" id="btnJson">JSON</button>
     <button class="btn ghost" id="btnHtml">Export sheet</button>
-    <button class="btn primary" id="btnPrint">Print / PDF</button>
+    <button class="btn ghost" id="btnPrint">Print / PDF</button>
+    <button class="btn ghost" id="btnRevise" hidden>Revise</button>
+    <button class="btn primary" id="btnIssue">Issue</button>
   </header>
 
   <aside class="rail">
+    <div class="lockbar" id="lockbar" hidden>
+      <span class="pad">&#128274;</span><span id="lockwhat"></span>
+    </div>
+    <div class="issuewarn" id="issueWarn" hidden></div>
+
     <div class="banner" id="rdBanner" hidden>
       <div><b>These values came from an automatic read.</b> Check every field and every row
         against the report before you issue this certificate.</div>
@@ -522,13 +585,25 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">09</span>Saved lots<span class="caret">▶</span></summary>
+      <summary><span class="ix">09</span>Register<span class="caret">&#9654;</span></summary>
       <div class="body">
-        <div class="row" style="margin-bottom:10px">
-          <button class="btn mini" id="btnSaveLot">Save this lot</button>
-          <button class="btn mini ghost" id="btnNewLot">Start a blank lot</button>
+        <div class="regwhere" id="regWhere"></div>
+        <div class="row" id="regTools" style="margin:10px 0">
+          <input id="regFilter" placeholder="Find a lot, batch or order ref"
+                 style="flex:1;min-width:0;background:var(--ui-well);border:1px solid var(--ui-line-2);border-radius:3px;padding:6px 8px;font-size:11.5px">
+          <select id="regStatus" style="background:var(--ui-well);border:1px solid var(--ui-line-2);border-radius:3px;padding:5px 7px;font-size:10.5px">
+            <option value="">All</option><option value="issued">Issued</option>
+            <option value="draft">Draft</option><option value="superseded">Superseded</option>
+            <option value="void">Void</option>
+          </select>
         </div>
-        <div id="lotlist"></div>
+        <div id="reglist"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn mini ghost" id="btnRegExport">Export register</button>
+          <button class="btn mini ghost" id="btnRegImport">Import register</button>
+          <button class="btn mini ghost" id="btnNewLot">New blank lot</button>
+          <span class="hint" id="regCount" style="margin-left:auto"></span>
+        </div>
       </div>
     </details>
 
@@ -573,7 +648,6 @@ const PXMM = 96 / 25.4;
 const SHEET_W = 210 * PXMM;
 const PAGE_BUDGET_MM = 297 - 28;          /* A4 less the 14mm print margins */
 const DRAFT_KEY = "axiom.coa.draft.v1";
-const LOTS_KEY  = "axiom.coa.lots.v1";
 
 /* ── Text helpers ─────────────────────────────────────────────────────────── */
 const esc  = s => String(s == null ? "" : s).replace(/[&<>"]/g,
@@ -690,7 +764,9 @@ const blankLot = () => ({
   mfgDate:"", expDate:"", reportDate:"", standard:"In house", storage:"",
   testedBy:"the manufacturer against its in-house standard", supplierRef:"",
   conclusion:"This product conforms with enterprise standards and qualifications.",
-  tests:[], signatories: BLANK_SIGS()
+  tests:[], signatories: BLANK_SIGS(),
+  /* record state — a lot is a draft until it is issued */
+  status:"draft", issuedAt:"", fingerprint:"", supersedes:"", supersededBy:"", voidReason:""
 });
 
 /* ── The sheet ────────────────────────────────────────────────────────────── */
@@ -729,6 +805,21 @@ function seal(lot){
             font-size="8.6" font-weight="400" letter-spacing="1.5" fill="#8D8D8D">${esc(fmtDate(lot.issued).toUpperCase())}</text>
     </svg>`;
 }
+/* Anything not "issued" is stamped, so a printed draft can never pass for a
+   certificate and a withdrawn one says so on its face. */
+const STAMPS = {
+  draft:      l => "Draft — not issued",
+  superseded: l => "Superseded" + (l.supersededBy ? " by " + l.supersededBy : ""),
+  void:       l => "Void" + (l.voidReason ? " — " + l.voidReason : "")
+};
+function stamp(lot){
+  const make = STAMPS[lot.status];
+  if (!make) return "";
+  return `<div class="stamp ${esc(lot.status)}"><span>${esc(make(lot))}</span></div>`;
+}
+/* A3F29C4177B0 → A3F2 9C41 77B0 */
+const fpGroups = fp => String(fp).slice(0, 12).toUpperCase().replace(/(.{4})(?=.)/g, "$1 ");
+
 function renderSheet(lot){
   const id = docIdOf(lot), failing = overallVerdict(lot) === "fail";
   const fields = [
@@ -751,7 +842,8 @@ function renderSheet(lot){
     </div>
     <div class="mast-r">
       <div class="chip${failing ? " is-fail" : ""}">${failing ? "Fail" : "Pass"}</div>
-      <div class="docmeta">Doc <b>${esc(id)}</b><br>Rev <b>${esc(lot.rev)}</b> · Issued <b>${esc(fmtDate(lot.issued))}</b></div>
+      <div class="docmeta">Doc <b>${esc(id)}</b><br>Rev <b>${esc(lot.rev)}</b> · Issued <b>${esc(fmtDate(lot.issued))}</b>${
+        lot.supersedes ? "<br>Supersedes <b>" + esc(lot.supersedes) + "</b>" : ""}</div>
     </div>
   </header>
 
@@ -803,13 +895,14 @@ function renderSheet(lot){
 
   <footer>
     <div class="ruo">Research Use Only · Not for human or veterinary use</div>
-    <div class="pg">${esc(id)} · ${esc(lot.rev)} · Page 1 / 1</div>
-  </footer>`;
+    <div class="pg">${lot.fingerprint ? esc(fpGroups(lot.fingerprint)) + " · " : ""}${esc(id)} · ${esc(lot.rev)} · Page 1 / 1</div>
+  </footer>
+  ${stamp(lot)}`;
 }
 
 /* ── State ────────────────────────────────────────────────────────────────── */
 const $ = id => document.getElementById(id);
-let LOT = load() || structuredClone(EXAMPLE);
+let LOT = load() || normalise(EXAMPLE);
 let zoomMode = "fit";
 
 function store(key, value){
@@ -1078,6 +1171,7 @@ function renderSigCards(){
   });
 }
 let sigTarget = 0;
+let regImportMode = false;
 
 function makePad(wrap, i){
   const canvas = wrap.querySelector("canvas");
@@ -1225,36 +1319,276 @@ function importText(text){
   toast("Loaded " + (docIdOf(LOT) || "lot"));
 }
 
-/* ── Saved lots (this browser only) ───────────────────────────────────────── */
-function renderLots(){
-  const lots = read(LOTS_KEY) || [];
-  $("lotlist").innerHTML = lots.length ? lots.map((l, i) => `
-    <div class="trow" style="grid-template-columns:1fr auto;align-items:center">
-      <div style="min-width:0">
-        <div style="font-family:var(--display);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l.label)}</div>
-        <div style="font-size:9.5px;color:var(--ui-dim);margin-top:2px">${esc(l.savedAt)}</div>
+/* ══ The register ══════════════════════════════════════════════════════════
+   A certificate is a record, so it moves through states rather than being
+   overwritten: draft → issued (frozen) → revised into R+1 (prior superseded),
+   or voided. Every issued entry is kept — a register does not lose rows.
+   ═══════════════════════════════════════════════════════════════════════ */
+const REG_KEY = "axiom.coa.register.v1";
+const STATUS_LABEL = { draft:"Draft", issued:"Issued", superseded:"Superseded", void:"Void" };
+
+/* ── Fingerprint ──────────────────────────────────────────────────────────────
+   SHA-256 over the record with its keys sorted, so the same lot always hashes
+   the same. Register bookkeeping is excluded — the hash covers the certificate,
+   not its filing. */
+const FP_SKIP = new Set(["status","issuedAt","fingerprint","supersedes","supersededBy","voidReason"]);
+function canonical(v){
+  if (Array.isArray(v)) return "[" + v.map(canonical).join(",") + "]";
+  if (v && typeof v === "object")
+    return "{" + Object.keys(v).filter(k => !FP_SKIP.has(k)).sort()
+      .map(k => JSON.stringify(k) + ":" + canonical(v[k])).join(",") + "}";
+  return JSON.stringify(v === undefined ? null : v);
+}
+async function fingerprint(lot){
+  try {
+    const buf = new TextEncoder().encode(canonical(lot));
+    const d = await crypto.subtle.digest("SHA-256", buf);
+    return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) {
+    /* No SHA-256 here (Firefox on file://, say). Print nothing rather than a
+       weak checksum dressed up as one. */
+    return "";
+  }
+}
+
+/* ── Storage: the cloud register, or this device ──────────────────────────── */
+const Store = {
+  db: null,
+  get cloud(){ return !!Store.db; },
+  async init(){
+    try { Store.db = await claude.use("db"); } catch (e) { Store.db = null; }
+    $("regWhere").textContent = Store.db
+      ? "Cloud register — follows you across devices"
+      : "This device only — the cloud register lives in the published builder";
+    $("regWhere").classList.toggle("warn", !Store.db);
+    await renderRegister();
+  },
+  id(e){ return (e.docId + "__" + e.rev).replace(/[^A-Za-z0-9._-]/g, "-").slice(0, 180); },
+  async all(){
+    if (Store.db){
+      try {
+        const snap = await Store.db.collection("register").get();
+        return snap.docs.map(d => d.data()).filter(Boolean);
+      } catch (e) { dbTrouble(e); return []; }
+    }
+    return read(REG_KEY) || [];
+  },
+  async put(entry){
+    if (Store.db){
+      try { await Store.db.doc("register/" + Store.id(entry)).set(entry); return true; }
+      catch (e) {
+        /* A record carries up to three signature PNGs; if the store will not
+           take it, keep it here rather than lose it, and say so. */
+        dbTrouble(e);
+        const kept = putLocal(entry);
+        toast(kept ? "Kept on this device — the cloud register refused that record."
+                   : "Could not save that record anywhere.", true);
+        return kept;
+      }
+    }
+    return putLocal(entry);
+  },
+  async remove(entry){
+    if (Store.db){
+      try { await Store.db.doc("register/" + Store.id(entry)).delete(); return; }
+      catch (e) { dbTrouble(e); }
+    }
+    const list = (read(REG_KEY) || []).filter(x => !(x.docId === entry.docId && x.rev === entry.rev));
+    store(REG_KEY, list);
+  }
+};
+function putLocal(entry){
+  const list = read(REG_KEY) || [];
+  const at = list.findIndex(x => x.docId === entry.docId && x.rev === entry.rev);
+  if (at >= 0) list[at] = entry; else list.unshift(entry);
+  return store(REG_KEY, list);
+}
+function dbTrouble(e){
+  const c = e && e.code;
+  if (c === "quota_exceeded") toast("The register is full — delete some records first.", true);
+  else if (c === "resource_exhausted") toast("Too many register writes at once. Try again shortly.", true);
+  else if (c === "invalid_argument") { /* handled by the caller's fallback */ }
+  else if (c) toast("Register trouble (" + c + ").", true);
+}
+
+/* ── Warnings — surfaced, never blocking ──────────────────────────────────────
+   Aero's call: nothing stops an issue. What is overridden is stored on the
+   entry, so the record shows the lot went out with a failing row. */
+function issueWarnings(lot){
+  const w = [];
+  if (!lot.product.trim()) w.push("No product name");
+  if (!lot.batch.trim()) w.push("No batch number");
+  if (!lot.tests.length) w.push("No inspection rows");
+  if (overallVerdict(lot) === "fail") w.push("A row fails its specification");
+  if (!lot.signatories[2] || !lot.signatories[2].sig) w.push("Released-by block is unsigned");
+  for (const [k, label] of [["mfgDate","manufacturing"],["expDate","expiration"],["reportDate","report"]])
+    if (!lot[k]) w.push("No " + label + " date");
+  return w;
+}
+
+async function issueLot(){
+  const warnings = issueWarnings(LOT);
+  if (warnings.length && !(await confirmIssue(warnings))) return;
+  LOT.status = "issued";
+  LOT.issuedAt = new Date().toISOString();
+  LOT.docId = docIdOf(LOT);
+  LOT.fingerprint = await fingerprint(LOT);
+  const entry = {
+    docId: LOT.docId, rev: LOT.rev, status: "issued",
+    product: LOT.product, batch: LOT.batch,
+    issuedAt: LOT.issuedAt, fingerprint: LOT.fingerprint,
+    warnings, supersedes: LOT.supersedes || "", supersededBy: "", voidReason: "",
+    shipments: [], data: LOT
+  };
+  await Store.put(entry);
+  /* The revision this one replaces stops being current. */
+  if (LOT.supersedes){
+    const prior = (await Store.all())
+      .find(x => x.docId === LOT.docId && x.rev === LOT.supersedes);
+    if (prior && prior.status === "issued"){
+      prior.status = "superseded"; prior.supersededBy = LOT.rev;
+      if (prior.data) { prior.data.status = "superseded"; prior.data.supersededBy = LOT.rev; }
+      await Store.put(prior);
+    }
+  }
+  bootRail(); renderPreview(); await renderRegister();
+  toast("Issued " + LOT.docId + " · " + LOT.rev + (warnings.length ? " with " + warnings.length + " warning(s)" : ""));
+}
+
+function confirmIssue(warnings){
+  return new Promise(resolve => {
+    const el = $("issueWarn");
+    el.hidden = false;
+    el.innerHTML = `<div><b>Issue anyway?</b> Nothing here blocks you — it is recorded on the entry.</div>
+      <ul>${warnings.map(w => "<li>" + esc(w) + "</li>").join("")}</ul>
+      <div class="row"><button class="btn mini primary" id="iwGo">Issue anyway</button>
+      <button class="btn mini ghost" id="iwNo">Go back</button></div>`;
+    const done = v => { el.hidden = true; el.innerHTML = ""; resolve(v); };
+    $("iwGo").addEventListener("click", () => done(true));
+    $("iwNo").addEventListener("click", () => done(false));
+  });
+}
+
+function nextRev(rev){
+  const m = /^R(\d+)$/i.exec(String(rev).trim());
+  return m ? "R" + (+m[1] + 1) : "R1";
+}
+async function reviseLot(){
+  LOT = normalise(Object.assign({}, LOT, {
+    status: "draft", rev: nextRev(LOT.rev), issuedAt: "", fingerprint: "",
+    supersedes: LOT.rev, supersededBy: "", voidReason: "",
+    issued: new Date().toISOString().slice(0, 10)
+  }));
+  bootRail(); renderPreview();
+  toast("Revision " + LOT.rev + " opened as a draft");
+}
+async function voidEntry(entry, reason){
+  entry.status = "void"; entry.voidReason = reason;
+  if (entry.data){ entry.data.status = "void"; entry.data.voidReason = reason; }
+  await Store.put(entry);
+  if (LOT.docId === entry.docId && LOT.rev === entry.rev){
+    LOT.status = "void"; LOT.voidReason = reason; bootRail(); renderPreview();
+  }
+  await renderRegister();
+  toast("Voided " + entry.docId + " · " + entry.rev);
+}
+
+/* ── Register UI ──────────────────────────────────────────────────────────── */
+let regFilter = "", regStatus = "";
+async function renderRegister(){
+  const all = await Store.all();
+  const q = regFilter.trim().toLowerCase();
+  const rows = all
+    .filter(e => !regStatus || e.status === regStatus)
+    .filter(e => !q || [e.docId, e.rev, e.product, e.batch, e.fingerprint]
+      .concat((e.shipments || []).map(s => s.orderRef))
+      .join(" ").toLowerCase().includes(q))
+    .sort((a, b) => String(b.issuedAt).localeCompare(String(a.issuedAt)));
+
+  $("regCount").textContent = all.length ? all.length + " record" + (all.length === 1 ? "" : "s") : "";
+  $("reglist").innerHTML = rows.length ? rows.map((e, i) => `
+    <div class="regrow" data-i="${i}">
+      <div class="rtop">
+        <span class="st ${esc(e.status)}">${esc(STATUS_LABEL[e.status] || e.status)}</span>
+        <span class="rid">${esc(e.docId)} · ${esc(e.rev)}</span>
+        ${e.fingerprint ? `<span class="fp">${esc(fpGroups(e.fingerprint))}</span>` : ""}
       </div>
-      <div class="row" style="gap:5px;flex-wrap:nowrap">
-        <button class="btn mini ghost" data-lot="open" data-i="${i}">Open</button>
-        <button class="iconbtn danger" data-lot="rm" data-i="${i}" aria-label="Delete ${esc(l.label)}">✕</button>
+      <div class="rsub">${esc(e.product || "—")}${e.batch ? " · " + esc(e.batch) : ""}
+        ${e.issuedAt ? " · " + esc(fmtDate(e.issuedAt.slice(0, 10))) : ""}</div>
+      ${e.warnings && e.warnings.length ? `<div class="rwarn">Issued with ${e.warnings.length} warning${e.warnings.length === 1 ? "" : "s"}: ${esc(e.warnings.join("; "))}</div>` : ""}
+      ${e.voidReason ? `<div class="rwarn">Void — ${esc(e.voidReason)}</div>` : ""}
+      ${(e.shipments || []).length ? `<div class="rship">${e.shipments.map(s =>
+        `<span>${esc(s.orderRef)}${s.qty ? " · " + esc(s.qty) : ""}${s.shippedAt ? " · " + esc(fmtDate(s.shippedAt)) : ""}</span>`).join("")}</div>` : ""}
+      <div class="ract">
+        <button class="btn mini ghost" data-reg="open" data-i="${i}">Open</button>
+        ${e.status === "issued" ? `<button class="btn mini ghost" data-reg="revise" data-i="${i}">Revise</button>` : ""}
+        <button class="btn mini ghost" data-reg="ship" data-i="${i}">Shipment</button>
+        ${e.status !== "void" ? `<button class="btn mini ghost" data-reg="void" data-i="${i}">Void</button>` : ""}
+      </div>
+      <div class="shipform" hidden>
+        <input placeholder="Order reference" data-s="orderRef">
+        <input placeholder="Qty" data-s="qty">
+        <input type="date" data-s="shippedAt">
+        <button class="btn mini" data-reg="shipsave" data-i="${i}">Add</button>
       </div>
     </div>`).join("")
-    : `<div class="fld"><span class="hint">Nothing saved on this device yet.</span></div>`;
+    : `<div class="fld"><span class="hint">${all.length ? "Nothing matches that filter." : "No records yet. Issue a certificate and it lands here."}</span></div>`;
 
-  $("lotlist").querySelectorAll("[data-lot]").forEach(b => b.addEventListener("click", () => {
-    const lots = read(LOTS_KEY) || [], i = +b.dataset.i;
-    if (b.dataset.lot === "open"){ LOT = normalise(lots[i].data); bootRail(); renderPreview(); toast("Opened " + lots[i].label); }
-    else { lots.splice(i, 1); store(LOTS_KEY, lots); renderLots(); }
+  $("reglist").querySelectorAll("[data-reg]").forEach(btn => btn.addEventListener("click", async () => {
+    const e = rows[+btn.dataset.i], act = btn.dataset.reg;
+    const card = btn.closest(".regrow");
+    if (act === "open"){ LOT = normalise(e.data); bootRail(); renderPreview(); toast("Opened " + e.docId + " · " + e.rev); }
+    else if (act === "revise"){ LOT = normalise(e.data); await reviseLot(); }
+    else if (act === "ship"){ const f = card.querySelector(".shipform"); f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); }
+    else if (act === "shipsave"){
+      const f = card.querySelector(".shipform");
+      const get = k => f.querySelector(`[data-s="${k}"]`).value.trim();
+      if (!get("orderRef")){ toast("An order reference is needed.", true); return; }
+      e.shipments = (e.shipments || []).concat([{ orderRef: get("orderRef"), qty: get("qty"), shippedAt: get("shippedAt") }]);
+      await Store.put(e); await renderRegister();
+      toast("Shipment logged against " + e.docId);
+    }
+    else if (act === "void"){
+      const reason = prompt("Why is " + e.docId + " · " + e.rev + " being voided?");
+      if (reason && reason.trim()) await voidEntry(e, reason.trim());
+    }
   }));
 }
-function saveLot(){
-  const lots = read(LOTS_KEY) || [];
-  const label = docIdOf(LOT) + " · " + (LOT.rev || "R0");
-  const entry = { label, savedAt: new Date().toLocaleString(), data: LOT };
-  const at = lots.findIndex(l => l.label === label);
-  if (at >= 0) lots[at] = entry; else lots.unshift(entry);
-  if (!store(LOTS_KEY, lots.slice(0, 40))) { toast("Storage is full or blocked — export the JSON instead.", true); return; }
-  renderLots(); toast("Saved " + label);
+
+async function exportRegister(){
+  const all = await Store.all();
+  await saveFile("AXIOM-COA-register.json", JSON.stringify(all, null, 2), "application/json");
+}
+async function importRegister(text){
+  let list = null;
+  try { list = JSON.parse(text); } catch (e) {}
+  if (!Array.isArray(list)){ toast("That is not a register export.", true); return; }
+  let n = 0;
+  for (const e of list){
+    if (!e || !e.docId || !e.rev) continue;
+    if (e.data) e.data = normalise(e.data);
+    e.shipments = Array.isArray(e.shipments) ? e.shipments : [];
+    if (await Store.put(e)) n++;
+  }
+  await renderRegister();
+  toast("Imported " + n + " record" + (n === 1 ? "" : "s"));
+}
+
+/* ── Frozen once issued ───────────────────────────────────────────────────── */
+function applyLock(){
+  const locked = LOT.status !== "draft";
+  $("lockbar").hidden = !locked;
+  $("lockwhat").textContent = LOT.status === "issued"
+    ? "Issued and frozen — open a revision to change anything."
+    : LOT.status === "void" ? "Voided — kept as a record." : "Superseded by a later revision.";
+  $("btnIssue").hidden = locked;
+  $("btnRevise").hidden = LOT.status === "draft";
+  document.querySelectorAll(".rail input, .rail textarea, .rail select, .rail .trow button")
+    .forEach(el => { if (!el.closest("#secRead") && !el.closest("#regTools") && !el.closest(".regrow")) el.disabled = locked; });
+  document.querySelectorAll(".sigcard .padwrap").forEach(w => w.style.pointerEvents = locked ? "none" : "");
+  document.querySelectorAll(".sigcard .btn").forEach(b => b.disabled = locked);
+  $("statusChip").textContent = STATUS_LABEL[LOT.status] || "Draft";
+  $("statusChip").className = "schip " + LOT.status;
 }
 
 /* ══ Read a report ═════════════════════════════════════════════════════════
@@ -1462,7 +1796,7 @@ function applyExtract(picked){
 }
 
 /* ── Wiring ───────────────────────────────────────────────────────────────── */
-function bootRail(){ bindFields(); renderRows(); renderSigCards(); renderLots(); }
+function bootRail(){ bindFields(); renderRows(); renderSigCards(); applyLock(); }
 
 function wire(){
   $("btnAddRow").addEventListener("click", () => {
@@ -1486,8 +1820,10 @@ function wire(){
   $("btnImport").addEventListener("click", () => $("filepick").click());
   $("filepick").addEventListener("change", e => {
     const f = e.target.files[0]; e.target.value = "";
+    const asRegister = regImportMode; regImportMode = false;
     if (!f) return;
-    f.text().then(importText).catch(() => toast("Could not read that file.", true));
+    f.text().then(t => asRegister ? importRegister(t) : importText(t))
+            .catch(() => toast("Could not read that file.", true));
   });
   $("sigpick").addEventListener("change", e => {
     const f = e.target.files[0]; e.target.value = "";
@@ -1524,10 +1860,15 @@ function wire(){
   });
   $("rdBannerOk").addEventListener("click", () => { $("rdBanner").hidden = true; });
 
-  $("btnSaveLot").addEventListener("click", saveLot);
+  $("btnIssue").addEventListener("click", issueLot);
+  $("btnRevise").addEventListener("click", reviseLot);
   $("btnNewLot").addEventListener("click", () => {
     LOT = blankLot(); bootRail(); renderPreview(); toast("Blank lot started");
   });
+  $("btnRegExport").addEventListener("click", exportRegister);
+  $("btnRegImport").addEventListener("click", () => { regImportMode = true; $("filepick").click(); });
+  $("regFilter").addEventListener("input", debounce(e => { regFilter = e.target.value; renderRegister(); }, 180));
+  $("regStatus").addEventListener("change", e => { regStatus = e.target.value; renderRegister(); });
 
   document.querySelectorAll("[data-zoom]").forEach(b => b.addEventListener("click", () => {
     zoomMode = b.dataset.zoom; applyZoom();
@@ -1546,7 +1887,8 @@ bootRail();
 wire();
 renderPreview();
 $("state").textContent = "Ready";
-/* Resolves later than this script, and to null wherever it cannot run. */
+/* Both resolve later than this script, and to null wherever they cannot run. */
 initSample();
+Store.init();
 
 </script>
