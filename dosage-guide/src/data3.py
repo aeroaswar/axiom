@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Part 3 — 03 Healing & Repair, 04 Brain & Mood."""
+"""Part 3 — Healing & Repair."""
 from data1 import FRIDGE, FRIDGE_LIGHT
 
 NOHUMAN = ("Human dose","Not set","No completed human trials have set a dose. Any number presented as an established dose isn't backed by published evidence.")
@@ -199,4 +199,22 @@ dict(slug="snap-8", name="SNAP-8", cat="Healing & Repair",
   sizes=[(10,"mg",2500000)], dose=1, unit="mg",
   storage="Cool and dark. Fridge is fine. Don't freeze.",
   cautions=["Meant for skin, not injection.","Effects are subtle compared with injectables."]),
+
+dict(slug="vip", name="VIP", cat="Healing & Repair",
+  what="A hormone your body makes that widens blood vessels and calms inflammation, especially in the lungs and gut.",
+  cls="Vasoactive intestinal peptide", half="About 1–2 minutes", route="Up the nose or as a drip",
+  cadence="daily", days=[1,1,1,1,1,1,1], perWeek=7,
+  cadNote="Several times a day when used nasally, because it breaks down within minutes.",
+  when="Split through the day", food="Either",
+  timeNote="Its extremely short life is why nasal protocols split it into several small doses.",
+  ev="trial", evNote="A synthetic version (aviptadil) went through real human trials for severe lung failure. Not approved for general use.",
+  protocol=[("Trial use","As a drip, in hospital","Trialled for severe respiratory failure, including in COVID."),
+            ("Nasal use","Not established","Used off-label for mould illness; no trial has set a dose."),
+            ("Status","Not approved","Trials were run; approval was not granted.")],
+  benefits=["Calms inflammation, particularly in the lungs and gut.",
+            "Widens blood vessels and lowers pressure in the lungs.",
+            "Involved in the body's own clock and immune balance."],
+  sizes=[(10,"mg",3300000)], dose=0.2, unit="mg",
+  storage=FRIDGE, cautions=["Can drop blood pressure and cause flushing.",
+    "Only trialled in hospital settings.","Not approved for general use."]),
 ]
