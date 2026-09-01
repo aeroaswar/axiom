@@ -269,7 +269,6 @@ th.p{text-align:right}
     <legend>Issued by</legend>
     <label for="f-ient">Legal entity</label><input id="f-ient" data-k="issuer.entity">
     <label for="f-iaddr">Address</label><textarea id="f-iaddr" data-k="issuer.addr"></textarea>
-    <label for="f-inpwp">NPWP</label><input id="f-inpwp" data-k="issuer.npwp">
   </fieldset>
 
   <fieldset>
@@ -437,7 +436,7 @@ function ph(v, fallback){
 const DEFAULTS = () => ({
   no:"AX-INV-2026-0001", ref:"", issue:new Date().toISOString().slice(0,10), terms:14, due:"",
   client:{name:"", company:"", addr:"", email:"", phone:""},
-  issuer:{entity:"[Legal entity name]", addr:"[Street address]", npwp:"[00.000.000.0-000.000]"},
+  issuer:{entity:"[Legal entity name]", addr:"[Street address]"},
   items:[
     {sel:"0:2",  n:"Retatrutide",                    s:"10 mg",  p:3100000, q:2},
     {sel:"0:8",  n:"Tirzepatide",                    s:"30 mg",  p:3800000, q:1},
@@ -529,10 +528,7 @@ function partiesHTML(){
       <p>
         <b>${esc(i.entity)}</b><br>
         ${lines(i.addr)}<br>
-        Jakarta, Indonesia<br>
-        NPWP ${esc(i.npwp)}<br>
-        hello@axiomperformance.example<br>
-        WhatsApp +62 812 857 3396
+        Jakarta, Indonesia
       </p>
     </div>
     <div class="col det">
