@@ -101,8 +101,11 @@ button,input,select{font:inherit;color:inherit}
 .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent-bright)}
 
 /* ---------- compound list ---------- */
-.list{border:1px solid var(--line);border-radius:8px;overflow:hidden;max-height:38vh;overflow-y:auto}
-@media (max-width:900px){ .list{max-height:none} }
+/* flex:none matters — as a shrinkable flex child in the panel column the list
+   collapsed to ~160px once the density block was added, showing three rows. */
+.list{flex:0 0 auto;border:1px solid var(--line);border-radius:8px;
+  min-height:264px;max-height:38vh;overflow-y:auto}
+@media (max-width:900px){ .list{max-height:46vh} }
 .grp{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
   background:var(--panel-2);padding:8px 12px;border-bottom:1px solid var(--line-soft);
   position:sticky;top:0;z-index:1}
