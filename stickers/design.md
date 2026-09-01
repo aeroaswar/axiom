@@ -215,6 +215,33 @@ A screen-only header strip states sheet size, label size, pitch, count and the s
 
 ---
 
+## 7b. Sending it to a print shop
+
+`builder.html` has a **Die lines for vendor** toggle. With it on, each page carries:
+
+| | |
+|---|---|
+| Cut contour | The real 40 × 20 mm trim with the 2 mm radius, 0.09 mm (~0.25 pt) in 100% magenta — the usual CutContour convention. Ask the vendor to use it as the cut path and not print it. |
+| Bleed | 1 mm of the onyx ground past the trim on all four sides, so a slight cut variance never leaves a white edge. |
+| Spec line | Printed at the foot of every page: size, radius, bleed, what the magenta means, density and page number. |
+
+Turning it on also drops the alignment guides — the contour replaces them.
+
+**Producing the PDF.** The builder is HTML; the PDF comes from the browser.
+Open `builder.html` (or the published builder in its own tab, not embedded — a
+sandboxed iframe blocks printing), then Print with **Destination: Save as PDF ·
+Paper: A4 · Scale: 100% · Margins: None · Background graphics: ON**. Background
+graphics is the one that matters: without it the onyx ground drops out and the
+labels print as white boxes.
+
+**Two things to tell the vendor.** The PDF is RGB — the bronze `#C88A4E` will
+shift on a CMYK press, so ask for a match to a printed swatch, or give them
+Pantone 7502 C from `../brand-book/index.html:2162-2181`. And the die is a
+rounded rectangle, 40 × 20 mm, 2 mm corner radius — worth stating in writing as
+well as drawing, since a new die is cut from the spec, not traced off a PDF.
+
+---
+
 ## 8. Production notes
 
 The brand book (`../brand-book/index.html:2521-2589`, *07.2 — Label & Packaging Specifications*)

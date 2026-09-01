@@ -204,6 +204,22 @@ button,input,select{font:inherit;color:inherit}
 .page[data-guides="off"] .cell::before,
 .page[data-guides="off"] .cell::after{display:none}
 
+/* ---------- vendor mode ----------
+   The die contour sits exactly on the 40x20mm trim with the real 2mm radius,
+   drawn 0.09mm (~0.25pt) in 100% magenta — the usual CutContour convention.
+   box-shadow paints 1mm of bleed outside the trim and follows the radius,
+   without affecting layout, so the black ground runs past the cut. */
+.page[data-die="on"] .cell{overflow:visible}
+.page[data-die="on"] .lbl{box-shadow:0 0 0 1mm var(--bg)}
+.page[data-die="on"] .lbl::after{
+  content:"";position:absolute;inset:0;border:.09mm solid #F0F;
+  border-radius:var(--r);pointer-events:none;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.spec{display:none;position:absolute;left:var(--pad);right:var(--pad);
+  bottom:calc(var(--pad) / 2.4);color:#000;font-family:var(--sans);font-weight:400;
+  font-size:2.1mm;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.page[data-die="on"] .spec{display:block}
+
 @page{ size:A4 portrait; margin:0; }
 @media print{
   html,body{background:#fff}
@@ -348,6 +364,11 @@ button,input,select{font:inherit;color:inherit}
       <p class="kick">3 · Sheet density</p>
       <div class="chips" id="dens"></div>
       <p class="hint" id="densHint" style="margin:9px 0 0"></p>
+      <div class="chips" style="margin-top:12px">
+        <button class="chip" id="die" aria-pressed="false">Die lines for vendor</button>
+      </div>
+      <p class="hint" style="margin:9px 0 0">Adds a magenta cut contour on the trim, 1&nbsp;mm
+        of bleed, and a spec line on each page. Turn off for printing at home.</p>
     </div>
   </aside>
 
@@ -965,7 +986,7 @@ const DENSITIES = {
   diecut:   { name:'Die-cut',  pad:5, cols:5, rows:14, gx:0, gy:0, guides:false,
               hint:'5 &times; 14 at a 5&nbsp;mm page margin — the densest fit on A4. Send to a vendor for kiss-cutting; most office printers cannot hold a 5&nbsp;mm margin.' },
 };
-let densKey = 'standard';
+let densKey = 'standard', die = false;
 const dens = () => DENSITIES[densKey];
 const perPage = () => dens().cols * dens().rows;
 
@@ -1087,6 +1108,11 @@ $('dens').addEventListener('click', e => {
   renderQueue();
 });
 $('densHint').innerHTML = dens().hint;
+$('die').addEventListener('click', () => {
+  die = !die;
+  $('die').setAttribute('aria-pressed', String(die));
+  renderSheet();
+});
 
 /* ---------- queue ---------- */
 const used = () => queue.reduce((n, r) => n + r.copies, 0);
@@ -1140,9 +1166,14 @@ function renderSheet(){
   for (let i = 0; i < pages; i++){
     const cells = flat.slice(i * pp, (i + 1) * pp)
       .map(x => `<div class="cell">${labelHTML(x)}</div>`).join('');
+    const spec = `AXIOM vial label · 40 × 20 mm · 2 mm corner radius · 1 mm bleed · `
+      + `die line = magenta (CutContour), do not print · ${d.name} ${d.cols}×${d.rows} · `
+      + `page ${i + 1} of ${pages}`;
     html += `<figure style="margin:0">
-      <div class="pagebox"><div class="page" data-guides="${d.guides ? 'on' : 'off'}"
-        style="--pad:${d.pad}mm;--cols:${d.cols};--gx:${d.gx}mm;--gy:${d.gy}mm">${cells}</div></div>
+      <div class="pagebox"><div class="page"
+        data-guides="${d.guides && !die ? 'on' : 'off'}" data-die="${die ? 'on' : 'off'}"
+        style="--pad:${d.pad}mm;--cols:${d.cols};--gx:${d.gx}mm;--gy:${d.gy}mm">${cells}
+        <div class="spec">${esc(spec)}</div></div></div>
       <figcaption class="pagelab">Page ${i + 1} of ${pages}</figcaption></figure>`;
   }
   $('sheet').innerHTML = html;
