@@ -1040,7 +1040,14 @@ function renderSheet(){
 }
 $('print').addEventListener('click', () => window.print());
 
-/* ---------- go ---------- */
-renderList(); preview(); renderQueue();
+/* ---------- go ----------
+   Open on a real worked example rather than an empty shell: Retatrutide
+   30 mg is the SKU whose click conversion we actually have. Clear removes it. */
+select(CATALOGUE.items.find(d => d.compound === 'Retatrutide' && d.lot === '30 mg'));
+$('fDose').value = doseMem[memKey(sel)] || '10 clicks = 1 mg';
+$('fCopies').value = 8;
+renderList(); preview();
+queue = [{ ...draft(), copies: 8 }];
+renderQueue();
 </script>
 </body></html>
