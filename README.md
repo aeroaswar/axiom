@@ -15,14 +15,16 @@ repository, where the work had accumulated across several unmerged topic branche
 - `invoice/` — an A4 invoice builder in the current AXIOM system, plus a sample rendered
   PDF. Open `axiom-invoice-a4.html` in a browser: fill in the form on the left, watch the
   A4 sheet redraw on the right, then *Save as PDF* (paper A4, margins none, background
-  graphics on). Line items come from a dropdown of the full price list — 52 lots across
-  the 8 pathways, plus devices and apparel — so picking a lot fills its price, and a
+  graphics on). Line items come from a dropdown of the full price list — 79 lots across
+  the 9 pathways, plus devices and apparel — so picking a lot fills its price, and a
   *Custom item…* option covers anything off-catalogue. Subtotal, optional discount,
   handling, optional PPN and the total are computed, long invoices paginate across A4
   sheets, and inputs are remembered in the browser between sessions. Prices in IDR.
   It shares the print skeleton and embedded fonts of
-  `business-proposal/axiom-pricelist-print.html`; its catalogue is generated from that
-  file's prices, not from the stale `archive/premium-hero/data.js`.
+  `business-proposal/axiom-pricelist-print.html`, but its catalogue is generated from
+  `invoice/AXIOM-Price-List-v1.0.pdf`, kept alongside it as the pricing source of record.
+  Note that `business-proposal/`'s own price list still carries older, higher prices and
+  has not been brought onto v1.0.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.
