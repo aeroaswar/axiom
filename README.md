@@ -12,6 +12,11 @@ repository, where the work had accumulated across several unmerged topic branche
   `claude/axiom-brand-book-0puows`.
 - `business-proposal/` — business proposal, GTM strategy, and pricing materials.
   Migrated from `claude/axiom-business-proposal-p57t1y`.
+- `invoice/` — a reusable A4 invoice template in the current AXIOM system, plus its
+  rendered PDF. Prices in IDR, no tax line. Replace every `[bracketed]` value and the
+  rows in `<tbody>`, then print to A4 with margins set to none and background graphics
+  on. It shares the print skeleton and embedded fonts of
+  `business-proposal/axiom-pricelist-print.html`.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.
