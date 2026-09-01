@@ -226,12 +226,27 @@ th.p{text-align:right}
 
 /* ══ Print: the sheets only ══ */
 @media print{
-  html,body{background:var(--bg)}
+  /* The sheet adapts to whatever page box the print dialog hands us. Pinning it to a
+     fixed 210x297mm only works when margins are set to None: with the browser's default
+     margin the printable box is smaller, a 297mm sheet overflows, and the footer is
+     pushed onto a second page. Sizing to 100% keeps the footer on the bottom margin at
+     any margin setting — the flex spacer simply takes up less room. */
+  html,body{background:var(--bg);height:100%}
   .panel{display:none!important}
-  .app{display:block}
-  .stage{display:block;padding:0;background:none}
-  .sheets{display:block}
+  .app,.stage,.sheets{display:block;height:auto}
+  /* .stage carries overflow-x:auto for the screen. Left alone it computes overflow-y to
+     auto as well, which clips every sheet after the first when printing. */
+  .stage{padding:0;background:none;overflow:visible}
   .sheets .page{box-shadow:none;margin:0}
+  /* A one-sheet invoice sizes itself to whatever page box the dialog gives us, so the
+     footer stays on the bottom margin whether margins are None or the browser default —
+     a fixed 210x297mm sheet overflows a margined page and pushes the footer onto page 2.
+     Multi-sheet invoices keep the fixed sheet the JS paginated against; giving the
+     container a definite height would collapse them into too few pages. */
+  body.single-sheet .app,
+  body.single-sheet .stage,
+  body.single-sheet .sheets{height:100%}
+  body.single-sheet .sheets .page{width:100%;min-height:100%}
 }
 
 /* ── Additions for the multi-page / builder-rendered sheet ── */
@@ -319,7 +334,7 @@ th.p{text-align:right}
   </div>
 
   <button class="btn primary" type="button" id="pdf">Save as PDF</button>
-  <p class="hint">In the print dialog: paper <b>A4</b>, margins <b>None</b>, <b>Background graphics</b> on.</p>
+  <p class="hint">In the print dialog: paper <b>A4</b>, <b>Background graphics</b> on. A one-page invoice prints correctly at any margin setting; set margins to <b>None</b> once it runs past one page.</p>
   <button class="btn ghost" type="button" id="reset">Reset to defaults</button>
 </aside>
 
@@ -687,6 +702,8 @@ function paint(){
       pages.push([]);                    /* the tail alone needs its own sheet */
     } else break;                        /* a single row taller than a page: leave it */
   }
+  /* Only a single sheet can size itself to the print page box — see the print rules. */
+  document.body.classList.toggle("single-sheet", pages.length === 1);
   return pages.length;
 }
 
