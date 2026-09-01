@@ -75,6 +75,16 @@ for i, c in enumerate(ALL):
       "sizes": [{"qty": q, "unit": u} for q, u, _ in c["sizes"]],
       "storage": c["storage"], "cautions": c["cautions"],
     }
+    # Optional alternative schedules. Only emitted where a compound has more
+    # than one sensible way to spread the same weekly amount.
+    if c.get("regimens"):
+        rs = c["regimens"]
+        assert len(rs) > 1, c["slug"]
+        for r in rs:
+            assert len(r["days"]) == 7 and r["dose"] > 0, (c["slug"], r["id"])
+        o["regimens"] = [{"id": r["id"], "label": r["label"], "sub": r["sub"],
+                          "dose": r["dose"], "perWeek": r["perWeek"],
+                          "days": r["days"], "note": r["note"]} for r in rs]
     out.write("  " + js(o) + ("," if i < len(ALL) - 1 else "") + "\n")
 
 out.write("""];

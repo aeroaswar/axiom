@@ -139,6 +139,17 @@ h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
 .size:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .size.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
 .sizes-label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-top:20px}
+.regimens{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.reg{
+  flex:1 1 180px;text-align:left;border:1px solid var(--line);border-radius:4px;background:var(--panel);
+  padding:13px 15px;cursor:pointer;font-family:inherit;color:var(--ink);transition:.16s;
+}
+.reg:hover{border-color:var(--line-2)}
+.reg:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.reg.on{border-color:var(--accent-line);background:var(--accent-soft)}
+.reg b{display:block;font-family:var(--display);font-weight:400;font-size:16px;line-height:1.25}
+.reg span{display:block;font-size:12px;color:var(--muted-2);margin-top:3px;font-variant-numeric:tabular-nums}
+.reg.on b{color:var(--accent-bright)}
 .sd.last{border-color:var(--line-2)}
 .cal-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
 .btn-cal{
@@ -354,8 +365,19 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       "</div>" +
 
       "<section><h2>How often</h2>" +
-        '<div class="cad-head"><div class="cad-word">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div>" +
-        '<div class="cad-sub">' + esc(CAD_SUB[c.cadence] || "") + "</div></div>" +
+        '<div class="cad-head"><div class="cad-word" id="cad-word">' +
+          esc(c.regimens ? c.regimens[0].label : (CAD_WORD[c.cadence] || c.cadence)) + "</div>" +
+        '<div class="cad-sub" id="cad-sub">' +
+          esc(c.regimens
+            ? (c.regimens[0].perWeek === 1 ? "Same day each week" : c.regimens[0].perWeek + " days a week, evenly spaced")
+            : (CAD_SUB[c.cadence] || "")) + "</div></div>" +
+        (c.regimens
+          ? '<div class="regimens">' + c.regimens.map(function (r, i) {
+              return '<button class="reg' + (i === 0 ? " on" : "") + '" data-reg="' + i + '" type="button">' +
+                "<b>" + esc(r.label) + "</b><span>" + esc(r.sub) + "</span></button>";
+            }).join("") + "</div>" +
+            '<div class="note" id="reg-note" style="margin-bottom:18px">' + esc(c.regimens[0].note) + "</div>"
+          : "") +
         '<div class="week" id="week"></div>' +
         '<div class="note" id="week-note"></div>' +
         '<div class="note" style="margin-top:10px">' + esc(c.cadenceNote) + "</div>" +
@@ -429,10 +451,36 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     var weekEl = document.getElementById("week");
     var weekNote = document.getElementById("week-note");
 
+    /* Some compounds offer more than one way to spread the same weekly
+       amount. The chosen one supplies the pattern, the dose and the frequency. */
+    var regimen = c.regimens ? c.regimens[0] : null;
+
     /* The week pattern is rotatable: same cadence and spacing, shifted to
        whichever day you actually start on. */
-    var pattern = c.days.slice();
+    var pattern = (regimen ? regimen.days : c.days).slice();
     var hasPattern = pattern.some(function (x) { return x; });
+
+    var regEl = document.querySelector(".regimens");
+    if (regEl) regEl.addEventListener("click", function (e) {
+      var btn = e.target.closest(".reg");
+      if (!btn) return;
+      regimen = c.regimens[+btn.getAttribute("data-reg")];
+      Array.prototype.forEach.call(regEl.querySelectorAll(".reg"), function (b) {
+        b.classList.toggle("on", b === btn);
+      });
+      document.getElementById("reg-note").textContent = regimen.note;
+      document.getElementById("cad-word").textContent = regimen.label;
+      document.getElementById("cad-sub").textContent =
+        regimen.perWeek === 1 ? "Same day each week" : regimen.perWeek + " days a week, evenly spaced";
+      pattern = regimen.days.slice();
+      f.dose.value = regimen.dose;
+      f.week.value = regimen.perWeek;
+      /* Keep the run starting on the day already chosen. */
+      var d = parseIso(f.date.value);
+      if (d) rotateTo(weekdayIdx(d));
+      drawWeek();
+      update();
+    });
 
     function firstOn(p) { for (var i = 0; i < 7; i++) if (p[i]) return i; return 0; }
     function rotateTo(target) {

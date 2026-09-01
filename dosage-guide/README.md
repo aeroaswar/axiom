@@ -47,6 +47,22 @@ Per compound, in order:
 The index lists everything by category with a search across name, class, category
 and description.
 
+### More than one schedule
+
+Where a compound has more than one sensible way to spread the same weekly
+amount, `regimens` on that compound puts a switcher above the seven-day strip.
+Picking one sets the pattern, the size of each dose and the frequency together,
+and everything downstream — strip, calculator, dose dates, calendar export —
+follows.
+
+Retatrutide is the first to use it: once a week at the full amount, or twice a
+week at half each. The weekly total is identical either way, so a pen lasts the
+same number of days; only the peak after each injection differs. The option's
+note says plainly that the trials tested the weekly schedule, not the split.
+
+The field is generic — add a `regimens` array to any compound in `src/` and the
+switcher appears. Compounds without one behave exactly as before.
+
 ### Shifting the week
 
 The seven-day strip is made of buttons. Tap any day and the whole pattern rotates
@@ -122,6 +138,13 @@ each entry looks like this, and both pages pick up a new one with no other chang
   protocol: [{ k: "Human dose", v: "Not set", n: "…" }],
   benefits: ["…"],
   pen: { qty: 10, dose: 0.5, unit: "mg" },      // unit: mg | IU | mL
+  // optional — omit unless there is genuinely more than one way to schedule it
+  regimens: [
+    { id: "weekly", label: "Once a week", sub: "2 mg in one go",
+      dose: 2, perWeek: 1, days: [1,0,0,0,0,0,0], note: "…" },
+    { id: "split",  label: "Twice a week", sub: "1 mg each time",
+      dose: 1, perWeek: 2, days: [1,0,0,1,0,0,0], note: "…" }
+  ],
   sizes: [{ qty: 10, unit: "mg" }],           // prices live in src/, not here
   storage: "…", cautions: ["…"]
 }
