@@ -318,6 +318,36 @@ button,input,select,textarea{font:inherit;color:inherit}
     gap:10px}
   .canvasarea{padding:18px 10px 40px}
 }
+[hidden]{display:none!important}
+
+/* ── Read a report ────────────────────────────────────────────────────────── */
+.banner{display:flex;gap:12px;align-items:flex-start;padding:12px 18px;
+  background:rgba(208,123,100,.12);border-bottom:1px solid rgba(208,123,100,.4);
+  font-size:11px;line-height:1.6;color:var(--ui-ink)}
+.banner b{color:var(--ui-fail);font-weight:500}
+.banner button{flex:none;align-self:center}
+.rderr{background:rgba(208,123,100,.1);border:1px solid rgba(208,123,100,.4);border-radius:4px;
+  padding:9px 11px;font-size:11px;line-height:1.6;color:var(--ui-ink)}
+.rderr pre{margin:8px 0 0;padding:8px;background:var(--ui-bg);border-radius:3px;
+  max-height:160px;overflow:auto;font-size:10px;white-space:pre-wrap;color:var(--ui-muted)}
+.review{border:1px solid var(--ui-line-2);border-radius:4px;margin-top:4px;overflow:hidden}
+.review .rhd{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--ui-well-2);
+  border-bottom:1px solid var(--ui-line-2);font-family:var(--display);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ui-muted)}
+.review .rhd .btn{margin-left:auto}
+.rrow{display:grid;grid-template-columns:auto 1fr;gap:9px;padding:8px 11px;
+  border-bottom:1px solid var(--ui-line);font-size:11px;align-items:start}
+.rrow:last-child{border-bottom:0}
+.rrow input[type=checkbox]{margin:2px 0 0;accent-color:var(--ui-accent);width:14px;height:14px}
+.rrow .k{font-size:8.6px;letter-spacing:.16em;text-transform:uppercase;color:var(--ui-dim)}
+.rrow .was{color:var(--ui-dim);text-decoration:line-through;word-break:break-word}
+.rrow .now{color:var(--ui-ink);word-break:break-word}
+.rrow .now b{color:var(--ui-accent);font-weight:500}
+.rrow.miss .now{color:var(--ui-dim);font-style:italic}
+.review .rft{padding:9px 11px;display:flex;gap:8px;align-items:center;background:var(--ui-well-2);
+  border-top:1px solid var(--ui-line-2)}
+.review .rft .hint{margin-left:auto}
+
 @media screen and (max-width:560px){
   .grid3{grid-template-columns:1fr 1fr}
 }
@@ -348,8 +378,39 @@ button,input,select,textarea{font:inherit;color:inherit}
   </header>
 
   <aside class="rail">
+    <div class="banner" id="rdBanner" hidden>
+      <div><b>These values came from an automatic read.</b> Check every field and every row
+        against the report before you issue this certificate.</div>
+      <button class="btn mini ghost" id="rdBannerOk">I&rsquo;ve checked them</button>
+    </div>
+
+    <details class="sec" id="secRead" open hidden>
+      <summary><span class="ix">01</span>Read a report<span class="caret">&#9654;</span></summary>
+      <div class="body stack">
+        <div class="fld"><label for="rdText">Paste the report text</label>
+          <textarea id="rdText" rows="5" placeholder="Paste the manufacturer&rsquo;s Certificate of Analysis here…"></textarea></div>
+        <div class="fld" id="rdImgWrap" hidden>
+          <label>…or add a photo / screenshot of it</label>
+          <div class="row">
+            <button class="btn mini ghost" id="rdPick">Choose image</button>
+            <button class="btn mini ghost" id="rdImgClear" hidden>Remove</button>
+            <span class="hint" id="rdFiles"></span>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn" id="rdGo">Read the report</button>
+          <button class="btn mini ghost" id="rdStop" hidden>Stop</button>
+          <span class="hint" id="rdState"></span>
+        </div>
+        <div class="rderr" id="rdErr" hidden></div>
+        <div id="rdReview"></div>
+        <div class="fld"><span class="hint">Nothing reaches the certificate until you apply it.
+          Anything that cannot be read with certainty comes back empty rather than guessed.</span></div>
+      </div>
+    </details>
+
     <details class="sec" open>
-      <summary><span class="ix">01</span>Document<span class="caret">▶</span></summary>
+      <summary><span class="ix">02</span>Document<span class="caret">▶</span></summary>
       <div class="body stack">
         <div class="grid2">
           <div class="fld"><label for="f-rev">Revision</label>
@@ -364,7 +425,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">02</span>Product<span class="caret">▶</span></summary>
+      <summary><span class="ix">03</span>Product<span class="caret">▶</span></summary>
       <div class="body stack">
         <div class="fld"><label for="f-product">Product name</label>
           <input id="f-product" data-bind="product" placeholder="β-Nicotinamide Adenine Dinucleotide"></div>
@@ -390,7 +451,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">03</span>Dates &amp; storage<span class="caret">▶</span></summary>
+      <summary><span class="ix">04</span>Dates &amp; storage<span class="caret">▶</span></summary>
       <div class="body stack">
         <div class="grid3">
           <div class="fld"><label for="f-mfg">Manufactured</label>
@@ -407,7 +468,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">04</span>Basis of analysis<span class="caret">▶</span></summary>
+      <summary><span class="ix">05</span>Basis of analysis<span class="caret">▶</span></summary>
       <div class="body stack">
         <div class="fld"><label for="f-testedBy">Assays performed by</label>
           <select id="f-testedByPick">
@@ -425,7 +486,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">05</span>Inspection results<span class="caret">▶</span></summary>
+      <summary><span class="ix">06</span>Inspection results<span class="caret">▶</span></summary>
       <div class="body">
         <div class="trows" id="trows"></div>
         <div class="row">
@@ -444,7 +505,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">06</span>Conclusion<span class="caret">▶</span></summary>
+      <summary><span class="ix">07</span>Conclusion<span class="caret">▶</span></summary>
       <div class="body">
         <div class="fld"><label for="f-conclusion">Conclusion line</label>
           <textarea id="f-conclusion" data-bind="conclusion" rows="2"></textarea></div>
@@ -452,7 +513,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">07</span>Signatures<span class="caret">▶</span></summary>
+      <summary><span class="ix">08</span>Signatures<span class="caret">▶</span></summary>
       <div class="body" id="sigcards"></div>
       <div class="note" style="border-top:0;padding-top:0">
         <b>Sign for your own people only.</b> These pads are for AXIOM's signatories.
@@ -461,7 +522,7 @@ button,input,select,textarea{font:inherit;color:inherit}
     </details>
 
     <details class="sec" open>
-      <summary><span class="ix">08</span>Saved lots<span class="caret">▶</span></summary>
+      <summary><span class="ix">09</span>Saved lots<span class="caret">▶</span></summary>
       <div class="body">
         <div class="row" style="margin-bottom:10px">
           <button class="btn mini" id="btnSaveLot">Save this lot</button>
@@ -498,6 +559,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="filepick" accept=".json,.html,application/json,text/html" hidden>
 <input type="file" id="sigpick" accept="image/*" hidden>
+<input type="file" id="rdFile" accept="image/*" multiple hidden>
 
 
 <script>
@@ -1195,6 +1257,210 @@ function saveLot(){
   renderLots(); toast("Saved " + label);
 }
 
+/* ══ Read a report ═════════════════════════════════════════════════════════
+   Paste or photograph a manufacturer's certificate and have Claude propose the
+   fields. Nothing here writes to LOT: an automatic read is a draft to check,
+   so the answer lands in a review panel and only Apply moves it across.
+   ═══════════════════════════════════════════════════════════════════════ */
+const READ_FIELDS = [
+  ["product","Product name"], ["synonym","Synonym"], ["cas","CAS number"],
+  ["batch","Batch no"], ["quantity","Quantity"], ["formula","Molecular formula"],
+  ["mw","Molecular weight"], ["standard","Standard"],
+  ["mfgDate","Manufactured"], ["expDate","Expires"], ["reportDate","Reported"],
+  ["storage","Storage"], ["supplierRef","Source lot reference"], ["conclusion","Conclusion"]
+];
+
+const READ_PROMPT = `You are reading a manufacturer's Certificate of Analysis so its measurements can be transcribed into a different company's certificate.
+
+Return ONLY a JSON object of this shape:
+{
+  "product": string|null, "synonym": string|null, "cas": string|null,
+  "batch": string|null, "quantity": string|null, "formula": string|null,
+  "mw": string|null, "standard": string|null,
+  "mfgDate": "YYYY-MM-DD"|null, "expDate": "YYYY-MM-DD"|null, "reportDate": "YYYY-MM-DD"|null,
+  "storage": string|null, "supplierRef": string|null, "conclusion": string|null,
+  "tests": [{"item": string, "spec": string, "result": string}] | null
+}
+
+Rules, in order of importance:
+1. If a value is not readable with certainty, return null for it. Never infer, complete, correct or guess. A missing field is fine; a half-read number is not. This is a quality-control record.
+2. Copy "spec" and "result" verbatim, character for character, including units and the symbols >=, <=, <, > (use the exact glyphs on the report) and any dash in a range. Do not reword, round, convert or normalise them.
+3. Dates as YYYY-MM-DD.
+4. "formula" as plain text without subscripts, e.g. C21H27N7O14P2.
+5. "supplierRef" is the manufacturer's own batch or lot number for this material.
+6. Do NOT return a pass/fail or verdict column, signatures, signatory names, inspector names, the issuing company's name, its address, its logo or its stamp. Only the product identity and the measurements.
+7. In "tests", include only rows that are actual inspection items. Skip headers, spacers, totals and free-text notes.
+
+THE REPORT FOLLOWS.
+`;
+
+let SAMPLE = null;            /* the capability, once it resolves */
+let readImages = [];          /* Blob[] the viewer attached */
+let readAbort = null;
+let proposal = null;          /* last extraction, awaiting review */
+
+async function initSample(){
+  let s = null;
+  try { s = await claude.use("sample"); } catch (e) { s = null; }
+  if (!s) return;                                   /* local file, or not granted */
+  SAMPLE = s;
+  $("secRead").hidden = false;
+  try {
+    const caps = await s.limits();
+    if (caps && caps.images){
+      $("rdImgWrap").hidden = false;
+      $("rdFile").accept = caps.images.mediaTypes.join(",");
+      $("rdFile").dataset.max = caps.images.maxCount;
+      $("rdFile").dataset.bytes = caps.images.maxInputBytes;
+    }
+  } catch (e) { /* no image affordance, the text box still works */ }
+}
+
+function readBusy(on){
+  $("rdGo").disabled = on;
+  $("rdStop").hidden = !on;
+  $("rdState").textContent = on ? "Reading the report…" : "";
+}
+function readError(code, msg, raw){
+  const el = $("rdErr");
+  el.hidden = false;
+  el.innerHTML = "<div>" + esc(msg) + "</div>";
+  if (raw){
+    const btn = document.createElement("button");
+    btn.className = "btn mini ghost";
+    btn.style.marginTop = "8px";
+    btn.textContent = "Show what came back";
+    const pre = document.createElement("pre");
+    pre.hidden = true; pre.textContent = raw;
+    btn.addEventListener("click", () => { pre.hidden = !pre.hidden; });
+    el.append(btn, pre);
+  }
+}
+
+async function readReport(){
+  const text = $("rdText").value.trim();
+  if (!text && !readImages.length){
+    readError(null, "Paste the report text, or add a photo of it, first.");
+    return;
+  }
+  $("rdErr").hidden = true; $("rdErr").innerHTML = "";
+  $("rdReview").innerHTML = "";
+  readAbort = new AbortController();
+  readBusy(true);
+  const input = READ_PROMPT + (readImages.length
+    ? "The report is in the attached image" + (readImages.length > 1 ? "s" : "") + ".\n" +
+      (text ? "\nAdditional pasted text:\n" + text : "")
+    : "\n" + text);
+  try {
+    const data = await SAMPLE.json(input, {
+      images: readImages.length ? readImages : undefined,
+      modelTier: "default",
+      signal: readAbort.signal
+    });
+    proposal = data && typeof data === "object" ? data : null;
+    if (!proposal){ readError(null, "The reply was not a lot record. Try pasting a cleaner copy of the report."); return; }
+    renderReview(proposal);
+  } catch (e) {
+    const code = e && e.code;
+    if (code === "cancelled") { /* the viewer stopped it */ }
+    else if (code === "not_granted") { $("secRead").hidden = true; toast("Reading reports needs your permission — it stays off for this view.", true); }
+    else if (code === "rate_limited") readError(code, "Too many reads just now. Wait a moment and try again.");
+    else if (code === "prompt_too_large") readError(code, "That is too much text. Paste just the certificate page.");
+    else if (code === "images_unavailable" || code === "image_rejected"){
+      readImages = []; renderReadFiles();
+      readError(code, "That image could not be sent. Paste the report text instead.");
+    }
+    else if (code === "invalid_json") readError(code, "The reply was not usable JSON. Try again, or paste a cleaner copy of the report.", e.text);
+    else if (code === "refused") readError(code, "Claude would not read that document.");
+    else readError(code, "The read failed" + (code ? " (" + code + ")" : "") + ". Nothing on the certificate has changed.");
+  } finally {
+    readBusy(false); readAbort = null;
+  }
+}
+
+function renderReadFiles(){
+  $("rdFiles").textContent = readImages.length
+    ? readImages.length + (readImages.length > 1 ? " images attached" : " image attached")
+    : "";
+  $("rdImgClear").hidden = !readImages.length;
+}
+
+/* ── Review ───────────────────────────────────────────────────────────────── */
+function renderReview(d){
+  const rows = [];
+  const missing = [];
+  for (const [key, label] of READ_FIELDS){
+    const v = d[key];
+    if (v == null || String(v).trim() === "") { missing.push(label); continue; }
+    const now = String(v).trim(), was = String(LOT[key] || "");
+    if (now === was) continue;                       /* nothing to decide */
+    rows.push({ key, label, was, now });
+  }
+  const tests = Array.isArray(d.tests)
+    ? d.tests.filter(t => t && (t.item || t.spec || t.result)) : [];
+
+  if (!rows.length && !tests.length){
+    readError(null, "Nothing new was read from that report.");
+    return;
+  }
+  const html = `<div class="review">
+    <div class="rhd">Proposed — review before applying
+      <button class="btn mini ghost" id="rdNone">Untick all</button></div>
+    ${rows.map((r, i) => `<label class="rrow">
+      <input type="checkbox" data-r="${i}" checked>
+      <span><span class="k">${esc(r.label)}</span>
+        ${r.was ? `<div class="was">${esc(r.was)}</div>` : ""}
+        <div class="now">${esc(r.now)}</div></span>
+    </label>`).join("")}
+    ${tests.length ? `<label class="rrow">
+      <input type="checkbox" data-tests="1" checked>
+      <span><span class="k">Inspection results</span>
+        <div class="now"><b>${tests.length}</b> row${tests.length > 1 ? "s" : ""} — replaces the
+          ${LOT.tests.length} row${LOT.tests.length === 1 ? "" : "s"} on the certificate</div></span>
+    </label>` : ""}
+    ${missing.length ? `<div class="rrow miss"><span></span><span>
+      <span class="k">Not found — fill these in by hand</span>
+      <div class="now">${esc(missing.join(" · "))}</div></span></div>` : ""}
+    <div class="rft">
+      <button class="btn primary" id="rdApply">Apply</button>
+      <button class="btn mini ghost" id="rdDiscard">Discard</button>
+      <span class="hint">Ticked values only</span>
+    </div>
+  </div>`;
+  $("rdReview").innerHTML = html;
+
+  $("rdNone").addEventListener("click", () =>
+    $("rdReview").querySelectorAll("input[type=checkbox]").forEach(c => { c.checked = false; }));
+  $("rdDiscard").addEventListener("click", () => { $("rdReview").innerHTML = ""; proposal = null; });
+  $("rdApply").addEventListener("click", () => {
+    const picked = {};
+    $("rdReview").querySelectorAll("input[data-r]").forEach(c => {
+      if (c.checked){ const r = rows[+c.dataset.r]; picked[r.key] = r.now; }
+    });
+    const t = $("rdReview").querySelector("input[data-tests]");
+    if (t && t.checked) picked.tests = tests;
+    const n = Object.keys(picked).length;
+    if (!n){ toast("Nothing ticked — nothing applied."); return; }
+    applyExtract(picked);
+    $("rdReview").innerHTML = ""; proposal = null;
+    $("rdBanner").hidden = false;
+    toast("Applied " + n + " item" + (n === 1 ? "" : "s") + " — check each against the report.");
+  });
+}
+
+/* Extracted data goes down the same hardening path as an imported file. */
+function mergeExtract(lot, picked){
+  const merged = Object.assign({}, lot, picked);
+  if (picked.tests) merged.tests = picked.tests.map(t => ({
+    item: t.item, spec: t.spec, result: t.result, verdict: "auto"
+  }));
+  return normalise(merged);
+}
+function applyExtract(picked){
+  LOT = mergeExtract(LOT, picked);
+  bootRail(); renderPreview();
+}
+
 /* ── Wiring ───────────────────────────────────────────────────────────────── */
 function bootRail(){ bindFields(); renderRows(); renderSigCards(); renderLots(); }
 
@@ -1242,6 +1508,22 @@ function wire(){
     fr.readAsDataURL(f);
   });
 
+  $("rdGo").addEventListener("click", readReport);
+  $("rdStop").addEventListener("click", () => { if (readAbort) readAbort.abort(); });
+  $("rdPick").addEventListener("click", () => $("rdFile").click());
+  $("rdImgClear").addEventListener("click", () => { readImages = []; renderReadFiles(); });
+  $("rdFile").addEventListener("change", e => {
+    const max = +($("rdFile").dataset.max || 1);
+    const cap = +($("rdFile").dataset.bytes || Infinity);
+    const files = [...e.target.files]; e.target.value = "";
+    const tooBig = files.filter(f => f.size > cap);
+    readImages = files.filter(f => f.size <= cap).slice(0, max);
+    renderReadFiles();
+    if (tooBig.length) toast("Left out " + tooBig.length + " image over the size limit.", true);
+    else if (files.length > max) toast("Only the first " + max + " image(s) will be sent.");
+  });
+  $("rdBannerOk").addEventListener("click", () => { $("rdBanner").hidden = true; });
+
   $("btnSaveLot").addEventListener("click", saveLot);
   $("btnNewLot").addEventListener("click", () => {
     LOT = blankLot(); bootRail(); renderPreview(); toast("Blank lot started");
@@ -1264,5 +1546,7 @@ bootRail();
 wire();
 renderPreview();
 $("state").textContent = "Ready";
+/* Resolves later than this script, and to null wherever it cannot run. */
+initSample();
 
 </script>

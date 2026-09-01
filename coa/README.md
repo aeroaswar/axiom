@@ -14,6 +14,15 @@ HTML file, one lot per document.
 Open `builder/index.html`. A rail on the left edits the lot; the A4 sheet on the right is
 the certificate itself, live. **Print / PDF** gives one A4 page.
 
+- **Read a report** (published artifact only) — paste the manufacturer's COA text, or add a
+  photo or screenshot of it, and Claude proposes the fields. It never writes to the
+  certificate: the answer lands in a review panel showing *old value → proposed value* with a
+  checkbox per field, and only **Apply** moves the ticked ones across. Anything the model
+  cannot read with certainty comes back empty and is listed as *not found — fill in by hand*
+  rather than guessed, and specifications are copied verbatim so the `≥ ≤ < >` glyphs the
+  verdict logic parses survive. A banner stays up until you confirm you have checked the
+  values against the report. The section is hidden when the file is opened from disk, where
+  the capability does not exist — everything else still works there.
 - **Signatures** — draw on the pad with a mouse, trackpad or finger, or upload a photo of
   a signature (the paper is dropped and the ink kept). The signature sits on the ruled
   line. Sign for AXIOM's own people only: never draw or upload someone else's signature,
