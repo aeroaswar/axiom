@@ -78,8 +78,10 @@ there is nothing to dilute and no draw volume to compute. It works in whatever
 unit the compound is sold in: mg, IU or mL.
 
 Inputs: quantity in the pen, size of each dose, doses per week, date of the first
-dose. Outputs: **doses in the pen**, quantity, each dose, each week, how long the
-pen lasts, and the date of the last dose.
+dose, and the time of day — pre-filled from the compound's own timing guidance
+("Before sleep" gives 21:30, "Morning" 08:00) and editable. Outputs: **doses in
+the pen**, quantity, each dose, each week, how long the pen lasts, and the date
+of the last dose.
 
 Tap a size chip to load that pen size, which makes it easy to see which size
 actually fits a protocol. It flags a dose bigger than the pen holds, and a
@@ -94,9 +96,9 @@ build input — it does not need to be deployed with the pages.
 Every dose in the pen is projected onto real dates, through to the last one. Two
 ways to get them into a calendar:
 
-- **Download .ics** — one all-day event per dose, named with the compound and
-  dose, each carrying the timing note. Imports into Apple Calendar, Google
-  Calendar and Outlook.
+- **Download .ics** — one 30-minute event per dose at the chosen time, named
+  with the compound and dose, each carrying the timing note. Imports into Apple
+  Calendar, Google Calendar and Outlook.
 - **Google Calendar** — a plain link that opens one repeating event, the weekly
   pattern expressed as an `RRULE` with a `COUNT` matching the doses in the pen.
   It needs no file at all, which makes it the route that works on a phone or
@@ -110,6 +112,11 @@ handles all three:
 - **CRLF** throughout, including a trailing one;
 - **no `METHOD:`** — with one, Apple Calendar treats the file as a meeting
   invitation rather than a calendar to import, and refuses it.
+
+Times are written as **floating local** (`DTSTART:20260901T213000` — no `Z`, no
+`TZID`), so every calendar reads them in the viewer's own zone. That is what you
+want for a personal reminder: 21:30 stays 21:30 after a flight, and the file
+needs no `VTIMEZONE` block.
 
 Where a sandbox blocks downloads the button shows the file's text instead. That
 copy goes through the clipboard API rather than the textarea, because a textarea

@@ -404,6 +404,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
             '<div class="field"><label for="f-dose">Each dose (' + esc(c.pen.unit) + ')</label><input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="' + c.pen.dose + '"></div>' +
             '<div class="field"><label for="f-week">Doses per week</label><input id="f-week" type="number" inputmode="numeric" step="1" min="0" max="21" value="' + c.perWeek + '"></div>' +
             '<div class="field"><label for="f-date">First dose on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
+            '<div class="field"><label for="f-time">Time of day</label><input id="f-time" type="time" value="' + esc(c.timing.time) + '"></div>' +
           "</div>" +
           '<div class="out" id="out"></div>' +
           '<div class="calc-note">Your pen comes ready to use — the mixing water is already in the quantity ' +
@@ -448,7 +449,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       qty: document.getElementById("f-qty"),
       dose: document.getElementById("f-dose"),
       week: document.getElementById("f-week"),
-      date: document.getElementById("f-date")
+      date: document.getElementById("f-date"),
+      time: document.getElementById("f-time")
     };
     var out = document.getElementById("out");
     var schedWrap = document.getElementById("sched-wrap");
@@ -623,7 +625,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           ? '<div class="note" style="margin-top:12px">Showing the first ' + doseDates.length +
             " of " + doses + " doses.</div>"
           : "") +
-        '<div class="note" style="margin-top:14px">Every dose in this pen, from your start date. ' +
+        '<div class="note" style="margin-top:14px">Every dose in this pen, from your start date, at ' +
+        esc(hhmm()) + ". " +
         "Tap a day above to move the whole run — the gaps between doses stay the same.</div>" +
         '<div id="ics-fallback"></div>';
 
@@ -669,8 +672,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         lines.push("BEGIN:VEVENT");
         lines.push("UID:axiom-" + c.slug + "-" + dayStamp(d) + "-" + i + "@axiom");
         lines.push("DTSTAMP:" + now);
-        lines.push("DTSTART;VALUE=DATE:" + dayStamp(d));
-        lines.push("DTEND;VALUE=DATE:" + dayStamp(addDays(d, 1)));
+        lines.push("DTSTART:" + localStamp(d, 0));
+        lines.push("DTEND:" + localStamp(d, 30));
         lines.push("SUMMARY:" + esc2(c.name + " " + fmtNum(dose, 2) + " " + c.pen.unit));
         lines.push("DESCRIPTION:" + esc2(
           "Dose " + (i + 1) + " of " + doseDates.length + ". " +
@@ -685,6 +688,25 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       return d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
     }
 
+    /* The chosen time, as [hours, minutes]; falls back to the compound's own. */
+    function clock() {
+      var v = /^(\d{1,2}):(\d{2})$/.exec((f.time && f.time.value) || c.timing.time || "09:00");
+      return v ? [Math.min(23, +v[1]), Math.min(59, +v[2])] : [9, 0];
+    }
+    function hhmm() {
+      var t = clock();
+      return String(t[0]).padStart(2, "0") + ":" + String(t[1]).padStart(2, "0");
+    }
+    /* Local date-time with no Z and no TZID: a "floating" time, which every
+       calendar reads in the viewer's own zone. Right for a personal reminder,
+       and it avoids shipping a VTIMEZONE block. */
+    function localStamp(d, addMinutes) {
+      var t = clock();
+      var x = new Date(d.getFullYear(), d.getMonth(), d.getDate(), t[0], t[1] + (addMinutes || 0), 0);
+      return dayStamp(x) + "T" + String(x.getHours()).padStart(2, "0") +
+        String(x.getMinutes()).padStart(2, "0") + "00";
+    }
+
     /* A single repeating event, as a plain link. Needs no file at all, which
        is the one route that works everywhere — phones and sandboxes included. */
     function googleUrl(c, dose) {
@@ -697,7 +719,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       var p = {
         action: "TEMPLATE",
         text: c.name + " " + fmtNum(dose, 2) + " " + c.pen.unit,
-        dates: dayStamp(first) + "/" + dayStamp(addDays(first, 1)),
+        dates: localStamp(first, 0) + "/" + localStamp(first, 30),
         details: "When: " + c.timing.when + ". Food: " + c.timing.food + "." +
                  "\n" + doseDates.length + " doses in this pen.",
         recur: "RRULE:FREQ=WEEKLY;BYDAY=" + byday.join(",") + ";COUNT=" + doseDates.length

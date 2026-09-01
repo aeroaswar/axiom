@@ -8,6 +8,18 @@ from data3 import C3
 from data4 import C4, C5, C6
 from data5 import C7, C8, C9
 
+
+def default_time(when):
+    """Map the plain-language timing to a clock time for the calendar."""
+    w = when.lower()
+    if "sleep" in w or "bed" in w:            return "21:30"
+    # "Morning and evening" is a split dose — the first one is the morning.
+    if "morning" in w:                        return "08:00"
+    if "after training" in w:                 return "18:00"
+    if "training" in w:                       return "07:30"
+    if "evening" in w or "night" in w:        return "20:00"
+    return "09:00"
+
 ALL = C1 + C2 + C3 + C4 + C5 + C6 + C7 + C8 + C9
 
 # Category display order, matching the price list.
@@ -64,7 +76,8 @@ for i, c in enumerate(ALL):
       "what": c["what"], "cls": c["cls"],
       "halfLife": c["half"], "route": c["route"],
       "cadence": c["cadence"], "days": c["days"], "cadenceNote": c["cadNote"],
-      "timing": {"when": c["when"], "food": c["food"], "note": c["timeNote"]},
+      "timing": {"when": c["when"], "food": c["food"], "note": c["timeNote"],
+                 "time": c.get("time") or default_time(c["when"])},
       "perWeek": c["perWeek"],
       "evidence": c["ev"], "evidenceNote": c["evNote"],
       "protocol": [{"k": k, "v": v, "n": n} for k, v, n in c["protocol"]],
