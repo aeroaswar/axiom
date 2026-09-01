@@ -499,7 +499,7 @@ const DEFAULTS = () => ({
   ],
   handling:350000, discount:0, ppn:0,
   pay:{bank:"BCA", acct:"Mohamad Jagad Marcelleno", no:"0658 139 196", swift:"", ref:""},
-  notes:"Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\nGoods ship cold chain at 2–8 °C. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\nOpened lots are not returnable. Report any discrepancy in writing within 7 days of delivery."
+  notes:"Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\nGoods ship cold chain. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\nOpened lots are not returnable. Report any discrepancy in writing within 7 days of delivery."
 });
 
 let S = DEFAULTS();
@@ -587,7 +587,7 @@ function partiesHTML(){
       <div class="kv"><span>Reference</span><span class="${ref.c.trim()}">${esc(ref.t)}</span></div>
       <div class="kv"><span>Terms</span><span>${esc(termsLabel())}</span></div>
       <div class="kv"><span>Currency</span><span>IDR</span></div>
-      <div class="kv"><span>Handling</span><span>Cold chain 2&ndash;8 &deg;C</span></div>
+      <div class="kv"><span>Handling</span><span>Cold chain</span></div>
     </div>
   </section>`;
 }
