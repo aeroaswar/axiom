@@ -596,7 +596,7 @@ function tableHTML(rows, offset){
   const t = totals();
   const body = rows.map((it, k) => {
     const n = offset + k;
-    const spec = it.s ? esc(it.s) + " lot &middot; CoA per lot" : "";
+    const spec = it.s ? esc(it.s) + " lot" : "";
     return `<tr>
       <td class="ix">${String(n+1).padStart(2,"0")}</td>
       <td class="desc"><div class="d">${esc(it.n || "—")}</div>${spec ? `<div class="s">${spec}</div>` : ""}</td>
