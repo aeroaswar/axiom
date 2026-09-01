@@ -3,14 +3,40 @@
 Print-ready A4 Certificate of Analysis in the AXIOM brand system. One self-contained
 HTML file, one lot per document.
 
-- `index.html` — the certificate. Open it in a browser; **Print → Save as PDF** gives
-  a single A4 page.
+- `builder/index.html` — **the COA builder.** Fill in the lot, sign it on screen, print
+  it. Start here.
+- `index.html` — the plain certificate, driven by a `LOT` object in the file. Kept as
+  the reference sheet and as a template you can hand-edit without the tool.
 - `AXIOM-COA-NAD-RT20250722.pdf` — the rendered certificate for the current lot.
 
-## Issuing a COA for a new lot
+## The builder
 
-Edit the `LOT` object near the bottom of `index.html`. Nothing else needs to change —
-the header, identity grid, results table, seal caption and footer all render from it.
+Open `builder/index.html`. A rail on the left edits the lot; the A4 sheet on the right is
+the certificate itself, live. **Print / PDF** gives one A4 page.
+
+- **Signatures** — draw on the pad with a mouse, trackpad or finger, or upload a photo of
+  a signature (the paper is dropped and the ink kept). The signature sits on the ruled
+  line. Sign for AXIOM's own people only: never draw or upload someone else's signature,
+  or a supplier's stamp.
+- **Verdicts** work themselves out from the specification where one can be parsed
+  (`≥ ≤ < >` or a range) — numbers only, units are not checked — and any row can be
+  overridden. One failing row turns the header chip and the conclusion block red.
+- **Page fit** is shown live in the preview bar (`259 / 269 mm`), so a lot with too many
+  rows is caught before the print dialog.
+- **Test panels** seed the specification column for a peptide (HPLC/MS) or small-molecule
+  lot. They carry no compound identity — no CAS numbers, no molecular weights. Those come
+  off the source report, never from a guess in the tool.
+- **Export sheet** writes a standalone, self-contained HTML certificate; **JSON** writes
+  the lot record; **Import** reads either back (the exported sheet carries its own JSON).
+- **Saved lots** and the working draft live in `localStorage` on that one device. Nothing
+  is synced and nothing reaches Claude. Use JSON to move a lot between machines or to
+  keep an issued record in this repo.
+
+## Issuing a COA by hand
+
+If you would rather not use the builder, edit the `LOT` object near the bottom of
+`index.html`. Nothing else needs to change — the header, identity grid, results table,
+seal caption and footer all render from it.
 
 ```js
 const LOT = {
