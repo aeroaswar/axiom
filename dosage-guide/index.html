@@ -158,6 +158,10 @@ h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
   padding:11px 18px;cursor:pointer;
 }
 .btn-cal:hover{filter:brightness(1.08)}
+.btn-cal.ghost{background:none;color:var(--accent-bright);border:1px solid var(--accent-line);text-decoration:none;display:inline-block}
+.btn-cal.ghost:hover{background:var(--accent-soft);filter:none}
+.ics-fb-top b{color:var(--ink);font-weight:500}
+.ics-fb-top code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent-bright)}
 .btn-cal:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .cal-note{font-size:12px;color:var(--muted-2)}
 .ics-fb{margin-top:16px;border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:14px}
@@ -598,6 +602,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           "Taken when needed, so there are no dates to plan.</div>";
         return;
       }
+      var gcal = googleUrl(c, dose);
       var cells = doseDates.map(function (day, i) {
         var last = i === doseDates.length - 1;
         return '<div class="sd' + (i === 0 ? " first" : "") + (last ? " last" : "") + '">' +
@@ -609,7 +614,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         '<h2 style="margin-top:34px">Your dose dates</h2>' +
         '<div class="sched">' + cells + "</div>" +
         '<div class="cal-row">' +
-          '<button class="btn-cal" id="ics" type="button">Add to calendar</button>' +
+          '<button class="btn-cal" id="ics" type="button">Download .ics</button>' +
+          (gcal ? '<a class="btn-cal ghost" href="' + esc(gcal) + '" target="_blank" rel="noopener">Google Calendar</a>' : "") +
           '<span class="cal-note">' + doseDates.length + " dose" + (doseDates.length === 1 ? "" : "s") +
           (doseDates.length ? ", ending " + fmtDate(doseDates[doseDates.length - 1]) : "") + "</span>" +
         "</div>" +
@@ -626,7 +632,26 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       });
     }
 
-    /* ---- Calendar export ---- */
+    /* ---- Calendar export ----
+       RFC 5545 is strict about two things that quietly break Apple Calendar:
+       lines must fold at 75 octets, and CRLF is required throughout. */
+    function utf8Len(ch) {
+      var c = ch.codePointAt(0);
+      return c < 0x80 ? 1 : c < 0x800 ? 2 : c < 0x10000 ? 3 : 4;
+    }
+    function foldLine(line) {
+      var out = [], cur = "", bytes = 0;
+      for (var i = 0; i < line.length; i++) {
+        var ch = line[i], code = line.charCodeAt(i);
+        if (code >= 0xD800 && code <= 0xDBFF && i + 1 < line.length) { ch += line[i + 1]; i++; }
+        var b = utf8Len(ch);
+        if (bytes + b > 75) { out.push(cur); cur = " "; bytes = 1; }   /* continuation starts with a space */
+        cur += ch; bytes += b;
+      }
+      out.push(cur);
+      return out.join("\r\n");
+    }
+
     function icsText(c, dose) {
       function esc2(t) { return String(t).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n"); }
       function stamp(d) {
@@ -635,13 +660,11 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           String(d.getUTCHours()).padStart(2, "0") + String(d.getUTCMinutes()).padStart(2, "0") +
           String(d.getUTCSeconds()).padStart(2, "0") + "Z";
       }
-      function dayStamp(d) {
-        return d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
-      }
       var now = stamp(new Date());
+      /* No METHOD: with one, Apple Calendar treats the file as a meeting
+         invitation rather than a calendar to import. */
       var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//AXIOM//Compound Guide//EN",
-                   "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
-                   "X-WR-CALNAME:" + esc2("AXIOM — " + c.name)];
+                   "CALSCALE:GREGORIAN", "X-WR-CALNAME:" + esc2("AXIOM " + c.name)];
       doseDates.forEach(function (d, i) {
         lines.push("BEGIN:VEVENT");
         lines.push("UID:axiom-" + c.slug + "-" + dayStamp(d) + "-" + i + "@axiom");
@@ -655,7 +678,32 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         lines.push("END:VEVENT");
       });
       lines.push("END:VCALENDAR");
-      return lines.join("\r\n");
+      return lines.map(foldLine).join("\r\n") + "\r\n";
+    }
+
+    function dayStamp(d) {
+      return d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+    }
+
+    /* A single repeating event, as a plain link. Needs no file at all, which
+       is the one route that works everywhere — phones and sandboxes included. */
+    function googleUrl(c, dose) {
+      if (!doseDates.length) return null;
+      var BY = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
+      var byday = [];
+      pattern.forEach(function (on, i) { if (on) byday.push(BY[i]); });
+      if (!byday.length) return null;
+      var first = doseDates[0];
+      var p = {
+        action: "TEMPLATE",
+        text: c.name + " " + fmtNum(dose, 2) + " " + c.pen.unit,
+        dates: dayStamp(first) + "/" + dayStamp(addDays(first, 1)),
+        details: "When: " + c.timing.when + ". Food: " + c.timing.food + "." +
+                 "\n" + doseDates.length + " doses in this pen.",
+        recur: "RRULE:FREQ=WEEKLY;BYDAY=" + byday.join(",") + ";COUNT=" + doseDates.length
+      };
+      return "https://calendar.google.com/calendar/render?" +
+        Object.keys(p).map(function (k) { return k + "=" + encodeURIComponent(p[k]); }).join("&");
     }
 
     function downloadIcs(c, dose) {
@@ -673,18 +721,26 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
       } catch (err) { /* fall through to the copy panel below */ }
 
-      /* Some embedded viewers block downloads outright. Offer the file's
-         text so it can still be saved by hand. */
+      /* Embedded viewers block downloads outright, so offer the text instead.
+         Note the warning: a textarea normalises line endings, so the copy goes
+         through the clipboard API to keep the CRLF the format requires. */
       if (window.self !== window.top) {
-        fallback.innerHTML = '<div class="ics-fb"><div class="ics-fb-top">If nothing downloaded, ' +
-          "copy this and save it as a file ending in .ics</div>" +
-          "<textarea readonly rows=\"5\"></textarea>" +
+        fallback.innerHTML = '<div class="ics-fb"><div class="ics-fb-top">' +
+          "<b>Downloads are blocked in this preview.</b> Use the Google Calendar button above, " +
+          "or copy this and save it as a <b>plain text</b> file named <code>axiom.ics</code> — " +
+          "TextEdit must be in plain-text mode (Format → Make Plain Text), or Calendar will refuse it." +
+          "</div><textarea readonly rows=\"5\"></textarea>" +
           '<button class="btn-cal" id="ics-copy" type="button">Copy</button></div>';
         fallback.querySelector("textarea").value = text;
         document.getElementById("ics-copy").addEventListener("click", function () {
-          var ta = fallback.querySelector("textarea");
-          ta.select();
-          try { document.execCommand("copy"); this.textContent = "Copied"; } catch (e) { this.textContent = "Select and copy"; }
+          var btn = this;
+          function done(msg) { btn.textContent = msg; }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () { done("Copied"); },
+              function () { done("Select the text and copy"); });
+          } else {
+            done("Select the text and copy");
+          }
         });
       }
     }

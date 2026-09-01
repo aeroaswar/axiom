@@ -91,13 +91,29 @@ build input — it does not need to be deployed with the pages.
 
 ### Dose dates and calendar export
 
-Every dose in the pen is projected onto real dates, through to the last one. **Add
-to calendar** builds a standard `.ics` file — one all-day event per dose, named
-with the compound and dose, each carrying the timing note in its description. It
-imports into Apple Calendar, Google Calendar and Outlook.
+Every dose in the pen is projected onto real dates, through to the last one. Two
+ways to get them into a calendar:
 
-Where a page is embedded in a sandbox that blocks downloads, the button falls back
-to showing the file's text to copy and save by hand.
+- **Download .ics** — one all-day event per dose, named with the compound and
+  dose, each carrying the timing note. Imports into Apple Calendar, Google
+  Calendar and Outlook.
+- **Google Calendar** — a plain link that opens one repeating event, the weekly
+  pattern expressed as an `RRULE` with a `COUNT` matching the doses in the pen.
+  It needs no file at all, which makes it the route that works on a phone or
+  inside a sandbox.
+
+RFC 5545 is strict in ways that quietly break Apple Calendar, so the writer
+handles all three:
+
+- lines fold at **75 octets**, counted in UTF-8 bytes so a multi-byte character
+  is never split across a fold;
+- **CRLF** throughout, including a trailing one;
+- **no `METHOD:`** — with one, Apple Calendar treats the file as a meeting
+  invitation rather than a calendar to import, and refuses it.
+
+Where a sandbox blocks downloads the button shows the file's text instead. That
+copy goes through the clipboard API rather than the textarea, because a textarea
+normalises CRLF to LF and would hand over a file the format does not allow.
 
 ## Evidence tiers
 
@@ -163,7 +179,7 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
 - Cards rendered to print PDFs, rasterised at 300 dpi, and decoded back to the exact expected URL, with the wordmark confirmed present in each.
 - All 65 compound pages checked for correct dose counts, schedule length, size chips and layout.
-- The generated `.ics` validated against the spec and parsed by the `icalendar` library.
+- The generated `.ics` validated for all 62 scheduled compounds — 1201 events — against line length, CRLF, absent `METHOD` and round-trip parsing with the `icalendar` library.
 - Printed geometry measured off the PDF: 85.0 × 55.0 mm trim, 91.0 × 60.9 mm with bleed, 10-up sheet at 170 × 275 mm.
 
 ## Scope
