@@ -1,4 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AXIOM — Invoice</title>
 <style>
 @font-face {
@@ -144,161 +145,653 @@ th.p{text-align:right}
 .ruo-line{position:relative;margin-top:14px;padding-top:10px;border-top:1px solid var(--line-soft);font-size:8px;color:var(--muted-2);line-height:1.7;text-align:center;letter-spacing:.02em}
 .foot{position:relative;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:18px;font-size:8px;color:var(--muted-2);letter-spacing:.14em;text-transform:uppercase}
 .foot b{color:var(--muted);font-weight:400}
+
+/* ══════════════════════════════════════════════════════════
+   BUILDER SHELL — screen only, removed entirely when printing
+   ══════════════════════════════════════════════════════════ */
+.app{display:flex;align-items:flex-start;gap:0;min-height:100vh}
+.panel{
+  flex:0 0 392px;position:sticky;top:0;max-height:100vh;overflow-y:auto;
+  background:#0d0b09;border-right:1px solid var(--line);
+  padding:22px 22px 40px;font-size:13px;color:var(--ink)
+}
+.stage{flex:1;min-width:0;padding:30px;display:flex;flex-direction:column;align-items:center;gap:22px;background:#141210}
+.sheets{display:flex;flex-direction:column;gap:22px}
+.sheets .page{box-shadow:0 18px 60px rgba(0,0,0,.6);flex:none}
+
+.panel h1{font-family:var(--display);font-weight:300;font-size:21px;letter-spacing:.01em;margin:0 0 3px}
+.panel .tag{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+.panel fieldset{border:0;border-top:1px solid var(--line);margin:0 0 4px;padding:16px 0 4px}
+.panel fieldset:first-of-type{border-top:0;padding-top:0}
+.panel legend{font-size:9px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);padding:0}
+.panel label{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin:11px 0 4px}
+.panel input,.panel select,.panel textarea{
+  width:100%;background:#070605;color:var(--ink);border:1px solid var(--line);border-radius:4px;
+  padding:8px 9px;font-family:var(--sans);font-size:12.5px;font-weight:300;line-height:1.4;
+  font-variant-numeric:tabular-nums
+}
+.panel textarea{resize:vertical;min-height:74px;line-height:1.55}
+.panel select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 15px) 15px,calc(100% - 10px) 15px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:28px}
+.panel input:focus,.panel select:focus,.panel textarea:focus{outline:0;border-color:var(--accent-line);background:#0a0908}
+.panel .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.panel .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 12px}
+.panel .hint{font-size:10.5px;color:var(--muted-2);line-height:1.55;margin:8px 0 0}
+.panel .locked{opacity:.5;pointer-events:none}
+
+/* Line-item rows */
+.item{border:1px solid var(--line);border-radius:6px;padding:10px 11px 12px;margin-top:12px;background:rgba(242,237,229,.02)}
+.item .ihead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px}
+.item .inum{font-family:var(--display);color:var(--accent);font-size:12px}
+.item .iamt{font-size:11px;color:var(--accent-bright);font-variant-numeric:tabular-nums}
+.item label:first-of-type{margin-top:6px}
+.item .tools{display:flex;gap:4px}
+.item .tools button{
+  background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:4px;
+  width:24px;height:22px;font-size:12px;line-height:1;cursor:pointer;padding:0
+}
+.item .tools button:hover:not(:disabled){border-color:var(--accent-line);color:var(--accent-bright)}
+.item .tools button:disabled{opacity:.3;cursor:default}
+
+.btn{
+  display:block;width:100%;margin-top:14px;padding:11px;border-radius:5px;cursor:pointer;
+  font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--line-2);color:var(--ink)
+}
+.btn:hover{border-color:var(--accent-line);color:var(--accent-bright)}
+.btn.primary{background:var(--accent-deep);border-color:var(--accent-deep);color:#F7EEE2}
+.btn.primary:hover{background:var(--accent);border-color:var(--accent);color:#1a0f05}
+.btn.ghost{font-size:10px;letter-spacing:.14em;padding:8px;color:var(--muted-2)}
+
+.status{
+  display:flex;justify-content:space-between;gap:12px;margin-top:16px;padding-top:13px;
+  border-top:1px solid var(--line);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)
+}
+.status b{color:var(--accent-bright);font-weight:400;font-variant-numeric:tabular-nums}
+.status .over{color:#C87A5E}
+
+@media(max-width:1180px){
+  .app{flex-direction:column}
+  .panel{flex:none;width:100%;position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line)}
+  .stage{width:100%;padding:22px 10px}
+  .sheets .page{transform-origin:top center}
+}
+
+/* ══ Print: the sheets only ══ */
+@media print{
+  html,body{background:var(--bg)}
+  .panel{display:none!important}
+  .app{display:block}
+  .stage{display:block;padding:0;background:none}
+  .sheets{display:block}
+  .sheets .page{box-shadow:none;margin:0}
+}
+
+/* ── Additions for the multi-page / builder-rendered sheet ── */
+.stage{overflow-x:auto}
+.measuring .page{min-height:0!important;overflow:visible!important}
+.mast.cont{align-items:center;padding-bottom:11px;margin-bottom:13px}
+.mast.cont .logo .wm-art{width:150px}
+.mast.cont .title .meta{margin-top:0}
+.foot .pg{color:var(--muted)}
+.totals .row.neg .v{color:var(--muted)}
 </style></head><body>
-<!--
-  AXIOM — A4 invoice template.
+<div class="app">
 
-  To issue an invoice, replace every [bracketed] value and the rows in <tbody>.
-  Print / export:  Chromium → Print → A4, margins None, "Background graphics" on.
-  Currency convention: "Rp 3.100.000" — space after Rp, periods as thousands
-  separators, no decimals.  A second page: duplicate the whole <div class="page">.
--->
-<div class="page">
+<aside class="panel">
+  <h1>Invoice builder</h1>
+  <div class="tag">AXIOM &middot; IDR &middot; A4</div>
 
+  <fieldset>
+    <legend>Invoice</legend>
+    <div class="grid2">
+      <div><label for="f-no">Invoice no.</label><input id="f-no" data-k="no"></div>
+      <div><label for="f-ref">Reference</label><input id="f-ref" data-k="ref" placeholder="PO / quote no."></div>
+    </div>
+    <div class="grid3">
+      <div><label for="f-issue">Issued</label><input id="f-issue" data-k="issue" type="date"></div>
+      <div><label for="f-terms">Net days</label><input id="f-terms" data-k="terms" type="number" min="0" step="1"></div>
+      <div><label for="f-due">Due</label><input id="f-due" data-k="due" type="date"></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Billed to</legend>
+    <label for="f-cname">Name</label><input id="f-cname" data-k="client.name" placeholder="Client name">
+    <label for="f-cco">Company / institution</label><input id="f-cco" data-k="client.company">
+    <label for="f-caddr">Address</label><textarea id="f-caddr" data-k="client.addr" placeholder="Street address&#10;City, postcode &middot; Indonesia"></textarea>
+    <div class="grid2">
+      <div><label for="f-cmail">Email</label><input id="f-cmail" data-k="client.email"></div>
+      <div><label for="f-cphone">Phone</label><input id="f-cphone" data-k="client.phone"></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Issued by</legend>
+    <label for="f-ient">Legal entity</label><input id="f-ient" data-k="issuer.entity">
+    <label for="f-iaddr">Address</label><textarea id="f-iaddr" data-k="issuer.addr"></textarea>
+    <label for="f-inpwp">NPWP</label><input id="f-inpwp" data-k="issuer.npwp">
+  </fieldset>
+
+  <fieldset>
+    <legend>Line items</legend>
+    <div id="items"></div>
+    <button class="btn" type="button" id="add">+ Add item</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Adjustments</legend>
+    <div class="grid3">
+      <div><label for="f-hand">Handling</label><input id="f-hand" data-k="handling" inputmode="numeric"></div>
+      <div><label for="f-disc">Discount</label><input id="f-disc" data-k="discount" inputmode="numeric"></div>
+      <div><label for="f-ppn">PPN %</label><input id="f-ppn" data-k="ppn" type="number" min="0" max="100" step="0.5"></div>
+    </div>
+    <p class="hint">A row is left off the invoice when its value is zero.</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Payment</legend>
+    <div class="grid2">
+      <div><label for="f-bank">Bank</label><input id="f-bank" data-k="pay.bank"></div>
+      <div><label for="f-swift">SWIFT / BIC</label><input id="f-swift" data-k="pay.swift" placeholder="optional"></div>
+    </div>
+    <label for="f-acct">Account name</label><input id="f-acct" data-k="pay.acct">
+    <label for="f-accno">Account no.</label><input id="f-accno" data-k="pay.no">
+    <label for="f-payref">Transfer reference</label><input id="f-payref" data-k="pay.ref" placeholder="mirrors the invoice no.">
+    <p class="hint">Leave SWIFT empty for a domestic transfer &mdash; the row is dropped from the invoice.</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Notes</legend>
+    <textarea id="f-notes" data-k="notes" style="min-height:130px"></textarea>
+    <p class="hint">A blank line starts a new paragraph.</p>
+  </fieldset>
+
+  <div class="status">
+    <span>Total due <b id="st-total">&mdash;</b></span>
+    <span id="st-pages">&mdash;</span>
+  </div>
+
+  <button class="btn primary" type="button" id="pdf">Save as PDF</button>
+  <p class="hint">In the print dialog: paper <b>A4</b>, margins <b>None</b>, <b>Background graphics</b> on.</p>
+  <button class="btn ghost" type="button" id="reset">Reset to defaults</button>
+</aside>
+
+<main class="stage"><div class="sheets" id="sheets"></div></main>
+</div>
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   AXIOM invoice builder
+
+   The catalogue below is generated from business-proposal/axiom-pricelist-print.html
+   (the current price list) plus the device and apparel prices in
+   company-profile/index.html. Regenerate it when the price list moves.
+   Do NOT source it from archive/premium-hero/data.js — that is the superseded
+   archive catalogue and its prices are roughly a third low.
+   ═══════════════════════════════════════════════════════════════ */
+const CATALOG=[
+{g:"GLP-1s & Weight Loss",i:[
+  {n:"Cagrilintide",s:"10 mg",p:3000000},
+  {n:"Retatrutide",s:"5 mg",p:2700000},
+  {n:"Retatrutide",s:"10 mg",p:3100000},
+  {n:"Retatrutide",s:"15 mg",p:3500000},
+  {n:"Retatrutide",s:"20 mg",p:3900000},
+  {n:"Retatrutide",s:"30 mg",p:5100000},
+  {n:"Retatrutide",s:"60 mg",p:8300000},
+  {n:"Tirzepatide",s:"10 mg",p:2400000},
+  {n:"Tirzepatide",s:"30 mg",p:3800000},
+  {n:"Tirzepatide",s:"40 mg",p:4500000}
+]},
+{g:"GH Secretagogues",i:[
+  {n:"CJC-1295 (No DAC) + Ipamorelin",s:"10 mg",p:3000000},
+  {n:"CJC-1295 (No DAC) + Ipamorelin",s:"20 mg",p:4300000},
+  {n:"HGH 191AA (Somatropin)",s:"36 IU",p:3200000},
+  {n:"HGH 191AA (Somatropin)",s:"40 IU",p:3600000},
+  {n:"Ipamorelin",s:"10 mg",p:2800000},
+  {n:"Ipamorelin + Tesamorelin",s:"18 mg",p:5000000},
+  {n:"Tesamorelin",s:"10 mg",p:3600000},
+  {n:"Tesamorelin",s:"20 mg",p:4700000}
+]},
+{g:"Healing & Repair",i:[
+  {n:"BPC-157",s:"10 mg",p:2700000},
+  {n:"BPC-157 + TB-500 (Wolverine)",s:"20 mg",p:3900000},
+  {n:"GHK-Cu",s:"50 mg",p:2100000},
+  {n:"GHK-Cu",s:"100 mg",p:2300000},
+  {n:"KPV",s:"10 mg",p:2600000},
+  {n:"KLOW (BPC+TB+GHK+KPV)",s:"80 mg",p:4400000},
+  {n:"LL-37",s:"5 mg",p:3000000},
+  {n:"Peg MGF",s:"2 mg",p:3100000},
+  {n:"TB-500",s:"10 mg",p:2900000}
+]},
+{g:"Brain Health & Nootropics",i:[
+  {n:"Adamax",s:"10 mg",p:3100000},
+  {n:"Cerebrolysin",s:"60 mg",p:3000000},
+  {n:"Pinealon",s:"20 mg",p:3600000},
+  {n:"Selank",s:"10 mg",p:2300000},
+  {n:"Semax",s:"10 mg",p:2300000},
+  {n:"Selank + Semax",s:"20 mg",p:3200000}
+]},
+{g:"Energy & Endurance",i:[
+  {n:"5-Amino-1MQ",s:"50 mg",p:3200000},
+  {n:"AICAR",s:"50 mg",p:3000000},
+  {n:"L-Carnitine (Injectable)",s:"5000 mg",p:3000000},
+  {n:"MOTS-c",s:"10 mg",p:2400000},
+  {n:"MOTS-c",s:"40 mg",p:4300000},
+  {n:"SLU-PP-332 (Injectable)",s:"5 mg",p:2700000}
+]},
+{g:"Immunity",i:[
+  {n:"Thymosin Alpha-1",s:"10 mg",p:3600000}
+]},
+{g:"Sexual Health",i:[
+  {n:"HCG",s:"10000 IU",p:3000000},
+  {n:"HMG",s:"75 IU",p:2700000},
+  {n:"Kisspeptin",s:"10 mg",p:3200000},
+  {n:"Oxytocin Acetate",s:"10 mg",p:3000000},
+  {n:"PT-141",s:"10 mg",p:2600000}
+]},
+{g:"Longevity & Cellular Repair",i:[
+  {n:"DSIP",s:"5 mg",p:2100000},
+  {n:"DSIP",s:"10 mg",p:2600000},
+  {n:"Epithalon",s:"50 mg",p:3400000},
+  {n:"Humanin",s:"10 mg",p:4500000},
+  {n:"NAD+",s:"500 mg",p:2600000},
+  {n:"NAD+",s:"1000 mg",p:3000000},
+  {n:"SS-31",s:"50 mg",p:4500000}
+]},
+{g:"Devices & Apparel",i:[
+  {n:"Red Light Leg Compression System",s:"unit",p:6500000},
+  {n:"Red Light Therapy Mat",s:"unit",p:5900000},
+  {n:"Red Light Therapy Mask",s:"unit",p:2400000},
+  {n:"AXIOM Hoodie",s:"unit",p:950000},
+  {n:"AXIOM Tee",s:"unit",p:450000}
+]}
+];
+const A4 = 297 * 96 / 25.4;              /* 1122.52px — the printable sheet height */
+const MONTHS = ["January","February","March","April","May","June",
+                "July","August","September","October","November","December"];
+
+const $  = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const rp  = n => "Rp " + Math.round(n || 0).toLocaleString("de-DE");
+const digits = v => { const n = parseInt(String(v).replace(/[^\d]/g, ""), 10); return isNaN(n) ? 0 : n; };
+
+function fmtDate(iso){
+  if(!iso) return "";
+  const p = String(iso).split("-");
+  if(p.length !== 3) return iso;
+  return p[2].padStart(2,"0") + " " + (MONTHS[+p[1]-1] || "") + " " + p[0];
+}
+function addDays(iso, n){
+  if(!iso) return "";
+  const d = new Date(iso + "T00:00:00");
+  if(isNaN(d)) return "";
+  d.setDate(d.getDate() + (+n || 0));
+  return d.toISOString().slice(0,10);
+}
+/* A value that is still a placeholder renders in the muted "fill me in" tone. */
+function ph(v, fallback){
+  const t = String(v == null ? "" : v).trim();
+  return t ? {t:t, c:""} : {t:fallback, c:" ph"};
+}
+
+const DEFAULTS = () => ({
+  no:"AX-INV-2026-0001", ref:"", issue:new Date().toISOString().slice(0,10), terms:14, due:"",
+  client:{name:"", company:"", addr:"", email:"", phone:""},
+  issuer:{entity:"[Legal entity name]", addr:"[Street address]", npwp:"[00.000.000.0-000.000]"},
+  items:[
+    {sel:"0:2",  n:"Retatrutide",                    s:"10 mg",  p:3100000, q:2},
+    {sel:"0:8",  n:"Tirzepatide",                    s:"30 mg",  p:3800000, q:1},
+    {sel:"1:0",  n:"CJC-1295 (No DAC) + Ipamorelin", s:"10 mg",  p:3000000, q:1},
+    {sel:"7:4",  n:"NAD+",                           s:"500 mg", p:2600000, q:2},
+    {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3400000, q:1}
+  ],
+  handling:350000, discount:0, ppn:0,
+  pay:{bank:"BCA", acct:"Mohamad Jagad Marcelleno", no:"0658 139 196", swift:"", ref:""},
+  notes:"Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\nGoods ship cold chain at 2–8 °C. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\nOpened lots are not returnable. Report any discrepancy in writing within 7 days of delivery."
+});
+
+let S = DEFAULTS();
+const KEY = "axiom.invoice.v1";
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) S = Object.assign(DEFAULTS(), JSON.parse(raw));
+  }catch(e){ S = DEFAULTS(); }
+}
+
+/* ── Money ─────────────────────────────────────────────────── */
+function totals(){
+  const lines = S.items.map(it => (+it.q || 0) * (+it.p || 0));
+  const sub   = lines.reduce((a,b) => a+b, 0);
+  const disc  = digits(S.discount);
+  const hand  = digits(S.handling);
+  const net   = sub - disc + hand;
+  const ppn   = Math.round(net * (parseFloat(S.ppn) || 0) / 100);
+  return {lines, sub, disc, hand, ppn, total: net + ppn};
+}
+
+/* ── Sheet fragments ───────────────────────────────────────── */
+const WORDMARK = '<svg class="wm-art" viewBox="0 0 582 70" aria-label="AXIOM"><path fill="#F2EDE5" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg>';
+
+function dueDate(){ return S.due || addDays(S.issue, S.terms); }
+
+function mastHTML(page, pages){
+  const t = totals();
+  if(page > 0) return `
+  <header class="mast cont">
+    <div class="logo"><div class="wm">${WORDMARK}</div></div>
+    <div class="title"><div class="meta">Invoice <b>${esc(S.no)}</b> &middot; continued</div></div>
+  </header>`;
+  return `
   <header class="mast">
     <div class="logo">
       <div class="kick">Human Performance &amp; Longevity</div>
-      <div class="wm">
-        <svg class="wm-art" viewBox="0 0 582 70" aria-label="AXIOM"><path fill="#F2EDE5" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg>
-      </div>
+      <div class="wm">${WORDMARK}</div>
       <div class="sub">Jakarta &middot; Indonesia</div>
     </div>
     <div class="title">
       <h1>Invoice</h1>
       <div class="meta">
-        No. <b>[AX-INV-2026-0001]</b><br>
-        Issued <b>[01 September 2026]</b><br>
-        Due <b>[15 September 2026]</b>
+        No. <b>${esc(S.no)}</b><br>
+        Issued <b>${esc(fmtDate(S.issue))}</b><br>
+        Due <b>${esc(fmtDate(dueDate()))}</b>
       </div>
       <div class="amount-flag">
         <span class="l">Amount due</span>
-        <span class="v">Rp 21.950.000</span>
+        <span class="v">${rp(t.total)}</span>
       </div>
     </div>
-  </header>
+  </header>`;
+}
 
+function partiesHTML(){
+  const c = S.client, i = S.issuer;
+  const cname = ph(c.name, "[Client name]");
+  const lines = v => esc(v).split("\n").filter(Boolean).join("<br>");
+  const cbody = [
+    c.company ? esc(c.company) : '<span class="ph">[Company / institution]</span>',
+    c.addr    ? lines(c.addr)  : '<span class="ph">[Street address]<br>[City, postcode &middot; Indonesia]</span>',
+    c.email   ? esc(c.email)   : '<span class="ph">[email@client.example]</span>',
+    c.phone   ? esc(c.phone)   : '<span class="ph">[+62 000 0000 0000]</span>'
+  ].join("<br>");
+  const ref = ph(S.ref, "[PO / quote no.]");
+  return `
   <section class="parties">
     <div class="col">
       <h2>Billed to</h2>
-      <div class="nm ph">[Client name]</div>
-      <p class="ph">
-        [Company / institution]<br>
-        [Street address]<br>
-        [City, postcode &middot; Indonesia]<br>
-        [email@client.example]<br>
-        [+62 000 0000 0000]
-      </p>
+      <div class="nm${cname.c}">${esc(cname.t)}</div>
+      <p>${cbody}</p>
     </div>
     <div class="col">
       <h2>Issued by</h2>
       <div class="nm">AXIOM</div>
       <p>
-        <b>[Legal entity name]</b><br>
-        [Street address]<br>
+        <b>${esc(i.entity)}</b><br>
+        ${lines(i.addr)}<br>
         Jakarta, Indonesia<br>
-        NPWP [00.000.000.0-000.000]<br>
+        NPWP ${esc(i.npwp)}<br>
         hello@axiomperformance.example<br>
         WhatsApp +62 812 857 3396
       </p>
     </div>
     <div class="col det">
       <h2>Details</h2>
-      <div class="kv"><span>Reference</span><span class="ph">[PO / quote no.]</span></div>
-      <div class="kv"><span>Terms</span><span>Net 14</span></div>
+      <div class="kv"><span>Reference</span><span class="${ref.c.trim()}">${esc(ref.t)}</span></div>
+      <div class="kv"><span>Terms</span><span>Net ${esc(S.terms)}</span></div>
       <div class="kv"><span>Currency</span><span>IDR</span></div>
       <div class="kv"><span>Handling</span><span>Cold chain 2&ndash;8 &deg;C</span></div>
     </div>
-  </section>
+  </section>`;
+}
 
+function tableHTML(rows, offset){
+  const t = totals();
+  const body = rows.map((it, k) => {
+    const n = offset + k;
+    const spec = it.s ? esc(it.s) + " lot &middot; CoA per lot" : "";
+    return `<tr>
+      <td class="ix">${String(n+1).padStart(2,"0")}</td>
+      <td class="desc"><div class="d">${esc(it.n || "—")}</div>${spec ? `<div class="s">${spec}</div>` : ""}</td>
+      <td class="q">${esc(it.q)}</td>
+      <td class="u">${rp(it.p)}</td>
+      <td class="p">${rp(t.lines[n])}</td>
+    </tr>`;
+  }).join("");
+  return `
   <table>
-    <thead>
-      <tr>
-        <th class="ix">#</th>
-        <th>Description</th>
-        <th class="q">Qty</th>
-        <th class="u">Unit price</th>
-        <th class="p">Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="ix">01</td>
-        <td class="desc"><div class="d">Retatrutide</div><div class="s">10 mg lot &middot; lyophilised &middot; CoA per lot</div></td>
-        <td class="q">2</td>
-        <td class="u">Rp 3.100.000</td>
-        <td class="p">Rp 6.200.000</td>
-      </tr>
-      <tr>
-        <td class="ix">02</td>
-        <td class="desc"><div class="d">Tirzepatide</div><div class="s">30 mg lot &middot; lyophilised &middot; CoA per lot</div></td>
-        <td class="q">1</td>
-        <td class="u">Rp 3.800.000</td>
-        <td class="p">Rp 3.800.000</td>
-      </tr>
-      <tr>
-        <td class="ix">03</td>
-        <td class="desc"><div class="d">CJC-1295 (No DAC) + Ipamorelin</div><div class="s">10 mg lot &middot; blend &middot; CoA per lot</div></td>
-        <td class="q">1</td>
-        <td class="u">Rp 3.000.000</td>
-        <td class="p">Rp 3.000.000</td>
-      </tr>
-      <tr>
-        <td class="ix">04</td>
-        <td class="desc"><div class="d">NAD+</div><div class="s">500 mg lot &middot; lyophilised &middot; CoA per lot</div></td>
-        <td class="q">2</td>
-        <td class="u">Rp 2.600.000</td>
-        <td class="p">Rp 5.200.000</td>
-      </tr>
-      <tr>
-        <td class="ix">05</td>
-        <td class="desc"><div class="d">Epithalon</div><div class="s">50 mg lot &middot; lyophilised &middot; CoA per lot</div></td>
-        <td class="q">1</td>
-        <td class="u">Rp 3.400.000</td>
-        <td class="p">Rp 3.400.000</td>
-      </tr>
-    </tbody>
-  </table>
+    <thead><tr>
+      <th class="ix">#</th><th>Description</th>
+      <th class="q">Qty</th><th class="u">Unit price</th><th class="p">Amount</th>
+    </tr></thead>
+    <tbody>${body}</tbody>
+  </table>`;
+}
 
-  <div class="totals">
-    <div class="box">
-      <div class="row"><span>Subtotal</span><span class="v">Rp 21.600.000</span></div>
-      <div class="row"><span>Cold-chain handling &amp; delivery</span><span class="v">Rp 350.000</span></div>
-      <!-- If a tax line is ever required, paste this row in above the total and
-           add it to the total:
-      <div class="row"><span>PPN 11%</span><span class="v">Rp 2.414.500</span></div>
-      -->
-      <div class="due">
-        <span class="l">Total due</span>
-        <span class="v">Rp 21.950.000</span>
-      </div>
-    </div>
-  </div>
+function tailHTML(){
+  const t = totals();
+  const row = (l, v, neg) => `<div class="row${neg ? " neg" : ""}"><span>${l}</span><span class="v">${neg ? "− " : ""}${rp(v)}</span></div>`;
+  let rows = row("Subtotal", t.sub);
+  if(t.disc) rows += row("Discount", t.disc, true);
+  if(t.hand) rows += row("Cold-chain handling &amp; delivery", t.hand);
+  if(t.ppn)  rows += row("PPN " + (parseFloat(S.ppn) || 0) + "%", t.ppn);
+
+  const p = S.pay;
+  const kv = (l, v) => `<div class="kv"><span>${l}</span><span>${esc(v)}</span></div>`;
+  let pay = kv("Bank", p.bank) + kv("Account name", p.acct) + kv("Account no.", p.no);
+  if(String(p.swift).trim()) pay += kv("SWIFT / BIC", p.swift);
+  pay += kv("Reference", String(p.ref).trim() || S.no);
+
+  const notes = String(S.notes).replace(/\{TERMS\}/g, S.terms)
+    .split(/\n\s*\n/).filter(x => x.trim())
+    .map(x => `<p>${esc(x.trim()).replace(/\n/g, "<br>")}</p>`).join("");
+
+  return `
+  <div class="totals"><div class="box">
+    ${rows}
+    <div class="due"><span class="l">Total due</span><span class="v">${rp(t.total)}</span></div>
+  </div></div>
 
   <section class="lower">
-    <div class="col">
-      <h2>Payment</h2>
-      <div class="kv"><span>Bank</span><span class="ph">[Bank name]</span></div>
-      <div class="kv"><span>Account name</span><span class="ph">[Account holder]</span></div>
-      <div class="kv"><span>Account no.</span><span class="ph">[000 000 0000]</span></div>
-      <div class="kv"><span>SWIFT / BIC</span><span class="ph">[XXXXIDJA]</span></div>
-      <div class="kv"><span>Reference</span><span class="ph">[AX-INV-2026-0001]</span></div>
-    </div>
-    <div class="col">
-      <h2>Notes</h2>
-      <p>Payment is due within <b>14 days</b> of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.</p>
-      <p>Goods ship cold chain at 2&ndash;8 &deg;C. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.</p>
-      <p>Opened lots are not returnable. Report any discrepancy in writing within 7 days of delivery.</p>
-    </div>
-  </section>
+    <div class="col"><h2>Payment</h2>${pay}</div>
+    <div class="col"><h2>Notes</h2>${notes}</div>
+  </section>`;
+}
 
-  <div class="spacer"></div>
+const RUO = `<div class="ruo-line">Research Use Only. Intended exclusively for in-vitro laboratory research &mdash; not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>`;
 
-  <div class="ruo-line">Research Use Only. Intended exclusively for in-vitro laboratory research &mdash; not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>
-
-  <div class="foot">
+function footHTML(page, pages){
+  const mark = pages > 1 ? `<span class="pg">Page ${page+1} of ${pages}</span>` : "";
+  return `<div class="foot">
     <span><b>AXIOM</b> &middot; Human Performance &amp; Longevity</span>
+    ${mark}
     <span>Documented, not promised.</span>
-  </div>
+  </div>`;
+}
 
-</div>
+function pageHTML(rows, page, pages, offset){
+  const last = page === pages - 1;
+  return `<div class="page">
+    ${mastHTML(page, pages)}
+    ${page === 0 ? partiesHTML() : ""}
+    ${rows.length ? tableHTML(rows, offset) : ""}
+    ${last ? tailHTML() : ""}
+    <div class="spacer"></div>
+    ${last ? RUO : ""}
+    ${footHTML(page, pages)}
+  </div>`;
+}
+
+/* ── Pagination ────────────────────────────────────────────────
+   Render, measure the real sheets with their 297mm clamp lifted, and
+   push the last row of any overflowing page onto the next one. Repeat
+   until every sheet fits. Measuring beats predicting: the row heights
+   depend on how the descriptions wrap. */
+function paint(){
+  const host = $("#sheets");
+  let pages = [S.items.slice()];
+
+  for(let guard = 0; guard < 400; guard++){
+    const offsets = []; let acc = 0;
+    pages.forEach(p => { offsets.push(acc); acc += p.length; });
+    host.innerHTML = pages.map((rows, i) => pageHTML(rows, i, pages.length, offsets[i])).join("");
+
+    host.classList.add("measuring");
+    const over = [...host.children].findIndex(el => el.offsetHeight > A4 + 0.5);
+    host.classList.remove("measuring");
+    if(over < 0) break;
+
+    const p = pages[over];
+    if(p.length > 1){
+      const moved = p.pop();
+      if(over === pages.length - 1) pages.push([moved]);
+      else pages[over + 1].unshift(moved);
+    } else if(over === pages.length - 1){
+      pages.push([]);                    /* the tail alone needs its own sheet */
+    } else break;                        /* a single row taller than a page: leave it */
+  }
+  return pages.length;
+}
+
+/* ── Form ──────────────────────────────────────────────────── */
+function get(path){ return path.split(".").reduce((o,k) => o && o[k], S); }
+function set(path, v){
+  const parts = path.split(".");
+  const leaf = parts.pop();
+  parts.reduce((o,p) => o[p], S)[leaf] = v;
+}
+
+/* One <select> of the whole catalogue, plus the off-catalogue escape hatch. */
+function options(sel){
+  let out = '<option value="">— select a compound —</option>';
+  CATALOG.forEach((g, gi) => {
+    out += `<optgroup label="${esc(g.g)}">`;
+    g.i.forEach((it, ii) => {
+      const v = gi + ":" + ii;
+      out += `<option value="${v}"${v === sel ? " selected" : ""}>${esc(it.n)} · ${esc(it.s)} · ${rp(it.p)}</option>`;
+    });
+    out += "</optgroup>";
+  });
+  out += `<option value="custom"${sel === "custom" ? " selected" : ""}>Custom item…</option>`;
+  return out;
+}
+
+function paintItems(){
+  const t = totals();
+  $("#items").innerHTML = S.items.map((it, i) => {
+    const custom = it.sel === "custom";
+    return `<div class="item" data-i="${i}">
+      <div class="ihead">
+        <span class="inum">${String(i+1).padStart(2,"0")}</span>
+        <span class="iamt">${rp(t.lines[i])}</span>
+        <span class="tools">
+          <button type="button" data-act="up"   ${i === 0 ? "disabled" : ""} title="Move up">↑</button>
+          <button type="button" data-act="down" ${i === S.items.length-1 ? "disabled" : ""} title="Move down">↓</button>
+          <button type="button" data-act="del"  ${S.items.length === 1 ? "disabled" : ""} title="Remove">×</button>
+        </span>
+      </div>
+      <label>Compound</label>
+      <select data-f="sel">${options(it.sel)}</select>
+      <div class="grid2${custom ? "" : " locked"}">
+        <div><label>Description</label><input data-f="n" value="${esc(it.n)}"${custom ? "" : " tabindex=-1"}></div>
+        <div><label>Lot / spec</label><input data-f="s" value="${esc(it.s)}"${custom ? "" : " tabindex=-1"}></div>
+      </div>
+      <div class="grid2">
+        <div><label>Qty</label><input data-f="q" type="number" min="0" step="1" value="${esc(it.q)}"></div>
+        <div><label>Unit price</label><input data-f="p" inputmode="numeric" value="${esc(rp(it.p))}"></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function syncFields(){
+  document.querySelectorAll(".panel [data-k]").forEach(el => {
+    const k = el.dataset.k;
+    let v = get(k);
+    if(k === "due") v = dueDate();
+    if(k === "handling" || k === "discount") v = rp(v);
+    el.value = v == null ? "" : v;
+  });
+}
+
+function render(opts){
+  const pages = paint();
+  if(!opts || !opts.keepItems) paintItems();
+  const t = totals();
+  $("#st-total").textContent = rp(t.total);
+  const st = $("#st-pages");
+  st.textContent = pages + (pages === 1 ? " page" : " pages");
+  st.className = pages > 1 ? "over" : "";
+  document.title = "AXIOM-Invoice-" + String(S.no || "draft").replace(/[^\w.-]+/g, "-");
+  save();
+}
+
+/* Top-level fields */
+$(".panel").addEventListener("input", e => {
+  const el = e.target;
+  if(el.dataset.k){
+    const k = el.dataset.k;
+    set(k, (k === "handling" || k === "discount") ? digits(el.value) : el.value);
+    if(k === "issue" || k === "terms"){ S.due = ""; $("#f-due").value = dueDate(); }
+    render({keepItems:true});
+    if(k === "handling" || k === "discount") paintItems();
+    return;
+  }
+  const row = el.closest(".item");
+  if(!row) return;
+  const it = S.items[+row.dataset.i], f = el.dataset.f;
+  if(f === "sel"){
+    it.sel = el.value;
+    if(el.value && el.value !== "custom"){
+      const [g,i] = el.value.split(":").map(Number);
+      const src = CATALOG[g].i[i];
+      it.n = src.n; it.s = src.s; it.p = src.p;
+    }
+    render();                                   /* repaint: locks/unlocks the free-text fields */
+    return;
+  }
+  if(f === "q") it.q = Math.max(0, parseInt(el.value, 10) || 0);
+  else if(f === "p") it.p = digits(el.value);
+  else it[f] = el.value;
+  render({keepItems:true});
+  row.querySelector(".iamt").textContent = rp((+it.q||0) * (+it.p||0));
+});
+
+/* Money inputs tidy up on blur, so you can type freely while editing. */
+$(".panel").addEventListener("focusout", e => {
+  const el = e.target;
+  if(el.dataset.k === "handling" || el.dataset.k === "discount"){ el.value = rp(get(el.dataset.k)); }
+  else if(el.dataset.f === "p"){ const it = S.items[+el.closest(".item").dataset.i]; el.value = rp(it.p); }
+});
+
+/* Row tools */
+$("#items").addEventListener("click", e => {
+  const b = e.target.closest("button[data-act]");
+  if(!b) return;
+  const i = +b.closest(".item").dataset.i;
+  if(b.dataset.act === "del")  S.items.splice(i, 1);
+  if(b.dataset.act === "up"   && i > 0) S.items.splice(i-1, 0, S.items.splice(i,1)[0]);
+  if(b.dataset.act === "down" && i < S.items.length-1) S.items.splice(i+1, 0, S.items.splice(i,1)[0]);
+  render();
+});
+
+$("#add").addEventListener("click", () => {
+  S.items.push({sel:"", n:"", s:"", p:0, q:1});
+  render();
+  $("#items").lastElementChild.querySelector("select").focus();
+});
+
+$("#pdf").addEventListener("click", () => window.print());
+
+$("#reset").addEventListener("click", () => {
+  if(!confirm("Reset every field back to the defaults?")) return;
+  S = DEFAULTS();
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  syncFields(); render();
+});
+
+load();
+syncFields();
+render();
+</script>
 </body></html>

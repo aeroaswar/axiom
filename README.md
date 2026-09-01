@@ -12,11 +12,17 @@ repository, where the work had accumulated across several unmerged topic branche
   `claude/axiom-brand-book-0puows`.
 - `business-proposal/` — business proposal, GTM strategy, and pricing materials.
   Migrated from `claude/axiom-business-proposal-p57t1y`.
-- `invoice/` — a reusable A4 invoice template in the current AXIOM system, plus its
-  rendered PDF. Prices in IDR, no tax line. Replace every `[bracketed]` value and the
-  rows in `<tbody>`, then print to A4 with margins set to none and background graphics
-  on. It shares the print skeleton and embedded fonts of
-  `business-proposal/axiom-pricelist-print.html`.
+- `invoice/` — an A4 invoice builder in the current AXIOM system, plus a sample rendered
+  PDF. Open `axiom-invoice-a4.html` in a browser: fill in the form on the left, watch the
+  A4 sheet redraw on the right, then *Save as PDF* (paper A4, margins none, background
+  graphics on). Line items come from a dropdown of the full price list — 52 lots across
+  the 8 pathways, plus devices and apparel — so picking a lot fills its price, and a
+  *Custom item…* option covers anything off-catalogue. Subtotal, optional discount,
+  handling, optional PPN and the total are computed, long invoices paginate across A4
+  sheets, and inputs are remembered in the browser between sessions. Prices in IDR.
+  It shares the print skeleton and embedded fonts of
+  `business-proposal/axiom-pricelist-print.html`; its catalogue is generated from that
+  file's prices, not from the stale `archive/premium-hero/data.js`.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.
