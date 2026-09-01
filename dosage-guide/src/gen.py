@@ -51,7 +51,8 @@ out.write('''/* ----------------------------------------------------------------
  *   "preclinical" Lab and animal work only. NO human dose has been set, and
  *                 the guide says so rather than inventing one.
  *
- * Nothing here is a prescription. Prices are in IDR, from the price list.
+ * Nothing here is a prescription. Pen sizes come from the price list;
+ * prices are deliberately not included.
  * ------------------------------------------------------------------ */
 window.COMPOUNDS = [
 ''')
@@ -69,7 +70,9 @@ for i, c in enumerate(ALL):
       "protocol": [{"k": k, "v": v, "n": n} for k, v, n in c["protocol"]],
       "benefits": c["benefits"],
       "pen": {"qty": smallest[0], "dose": c["dose"], "unit": c["unit"]},
-      "sizes": [{"qty": q, "unit": u, "price": p} for q, u, p in c["sizes"]],
+      # Prices deliberately stay out of the shipped data — src/ keeps them as
+      # the record of the price list, but the guide does not show them.
+      "sizes": [{"qty": q, "unit": u} for q, u, _ in c["sizes"]],
       "storage": c["storage"], "cautions": c["cautions"],
     }
     out.write("  " + js(o) + ("," if i < len(ALL) - 1 else "") + "\n")

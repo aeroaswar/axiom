@@ -65,9 +65,13 @@ Inputs: quantity in the pen, size of each dose, doses per week, date of the firs
 dose. Outputs: **doses in the pen**, quantity, each dose, each week, how long the
 pen lasts, and the date of the last dose.
 
-Tap a size chip to load that pen size and its price, which makes it easy to see
-which size actually fits a protocol. It flags a dose bigger than the pen holds,
-and a remainder too small for another full dose.
+Tap a size chip to load that pen size, which makes it easy to see which size
+actually fits a protocol. It flags a dose bigger than the pen holds, and a
+remainder too small for another full dose.
+
+Prices are deliberately not shown and are not in the shipped data. The source
+tables under `src/` keep them as the record of the price list, so `src/` is a
+build input — it does not need to be deployed with the pages.
 
 ### Dose dates and calendar export
 
@@ -118,7 +122,7 @@ each entry looks like this, and both pages pick up a new one with no other chang
   protocol: [{ k: "Human dose", v: "Not set", n: "…" }],
   benefits: ["…"],
   pen: { qty: 10, dose: 0.5, unit: "mg" },      // unit: mg | IU | mL
-  sizes: [{ qty: 10, unit: "mg", price: 2300000 }],
+  sizes: [{ qty: 10, unit: "mg" }],           // prices live in src/, not here
   storage: "…", cautions: ["…"]
 }
 ```

@@ -132,14 +132,12 @@ h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
 .sizes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .size{
   border:1px solid var(--line);border-radius:3px;background:var(--panel-2);
-  padding:9px 13px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);transition:.16s;
+  padding:10px 15px;cursor:pointer;font-family:var(--display);font-size:15px;
+  color:var(--ink);transition:.16s;font-variant-numeric:tabular-nums;
 }
-.size:hover{border-color:var(--accent-line)}
+.size:hover{border-color:var(--line-2)}
 .size:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.size.on{border-color:var(--accent-line);background:var(--accent-soft)}
-.size b{display:block;font-family:var(--display);font-size:15px;font-weight:400}
-.size span{display:block;font-size:10.5px;color:var(--muted-2);margin-top:2px;font-variant-numeric:tabular-nums}
-.size.on b{color:var(--accent-bright)}
+.size.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
 .sizes-label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-top:20px}
 .sd.last{border-color:var(--line-2)}
 .cal-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
@@ -238,9 +236,6 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
   function param(name) {
     var m = new RegExp("[?&]" + name + "=([^&#]*)").exec(location.search);
     return m ? decodeURIComponent(m[1]) : null;
-  }
-  function idr(n) {
-    return "Rp " + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
   function fmtNum(n, dp) {
     if (!isFinite(n)) return "—";
@@ -388,10 +383,10 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           '<div class="calc-note">Your pen comes ready to use — the mixing water is already in the quantity ' +
           "shown, so there is nothing to prepare. This works out how many doses are in your pen and how long " +
           "it lasts. It does not tell you what your dose should be.</div>" +
-          '<div class="sizes-label">Sizes AXIOM sells — tap to compare</div>' +
+          '<div class="sizes-label">Pen sizes — tap to switch</div>' +
           '<div class="sizes">' + c.sizes.map(function (z) {
             return '<button class="size" data-qty="' + z.qty + '" type="button">' +
-              "<b>" + z.qty + " " + esc(z.unit) + "</b><span>" + idr(z.price) + "</span></button>";
+              z.qty + " " + esc(z.unit) + "</button>";
           }).join("") + "</div>" +
         "</div>" +
         '<div id="sched-wrap"></div>' +
