@@ -1277,8 +1277,10 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       b += '<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+'</span><span class="v" style="display:flex;align-items:center;gap:10px">'+
            '<span class="qty"><button data-q="'+i+'" data-d="-1" aria-label="Less">'+ic("minus")+'</button><span>'+l[1]+'</span><button data-q="'+i+'" data-d="1" aria-label="More">'+ic("plus")+'</button></span>'+
            '<span style="min-width:96px">'+idr(line)+'</span><button class="linebtn" data-rm="'+i+'" aria-label="Remove">'+ic("trash")+'</button></span></div>'; });
-    var addable = VARIANTS.filter(function(v){ return v.stock>0 && !quote.some(function(l){return l[0]===v.id;}); }).slice(0,4);
-    b += '<div class="hrow" style="margin:14px 0">'+addable.map(function(v){ return '<button class="chip" data-add="'+v.id+'">'+ic("plus")+' '+h(v.name)+'</button>'; }).join("")+'</div>';
+    var opts = VARIANTS.filter(function(v){ return !quote.some(function(l){return l[0]===v.id;}); })
+      .map(function(v){ return '<option value="'+v.id+'"'+(v.stock===0?' disabled':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(tierPrice(v,c.pct))+(v.stock===0?' · out of stock':'')+'</option>'; }).join("");
+    b += '<div class="field" style="margin:16px 0 4px"><label>Add from price list</label><select data-add-sel>'+
+         '<option value="">Choose a compound or product…</option>'+opts+'</select></div>';
     b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(total)+'</span></div>';
     b += marginBox(quote,c.pct,"Margin on this quote");
     b += '<div class="kicker" style="margin:20px 0 9px">WhatsApp preview</div><div class="wa">'+h(quoteMsg())+'</div>';
@@ -1597,8 +1599,14 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   sheet.addEventListener("touchend", function(e){ if(y0!==null && e.changedTouches[0].clientY-y0>60) closeSheet(); y0=null; }, {passive:true});
 
   /* one delegated handler for everything rendered dynamically */
+  $(".app").addEventListener("change", function(e){
+    var sel=e.target.closest("[data-add-sel]"); if(!sel||!sel.value) return;
+    quote.push([sel.value,1]); $("[data-sheet-body]").innerHTML=quoteBody();
+    var next=$("[data-add-sel]"); if(next) next.focus();
+    toast(V(quote[quote.length-1][0]).name+" added");
+  });
   $(".app").addEventListener("click", function(e){
-    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-add],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-tier],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print]");
+    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-tier],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print]");
     if(!el) return;
     var d = el.dataset;
     if(d.f!==undefined && el.classList.contains("chip")){ setFilter(el.parentNode.dataset.chips, d.f); return; }
@@ -1608,7 +1616,6 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     if(d.variant){ openVariant(d.variant); return; }
     if(d.product){ openProduct(d.product); return; }
     if(d.save){ saved[d.save]=!saved[d.save]; renderShop(); renderSaved(); openProduct(d.save); toast(saved[d.save]?"Saved":"Removed from saved"); return; }
-    if(d.add){ quote.push([d.add,1]); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
     if(d.rm!==undefined){ quote.splice(+d.rm,1); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
     if(d.q!==undefined){ var l=quote[+d.q]; l[1]=Math.max(1,l[1]+ +d.d); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
     if(d.stock){ var v=V(d.stock); v.stock=Math.max(0,v.stock+ +d.d); $("[data-stock-val]").textContent=v.stock; renderCatalogue(); renderShop(); renderPricing(); toast((+d.d>0?"Intake":"Sale")+" recorded · "+v.name+" balance "+v.stock); return; }
