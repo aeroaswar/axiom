@@ -16,7 +16,15 @@ compliance guardrails **verbatim**. Where the two disagree, the business prompt 
 **Fill-in fields**
 - Deploy target: «___» — default: Vercel, production + preview.
 - Supabase project: «project ref / "create new"» — default: create new, region `ap-southeast-1` (Singapore).
-- Seed data: «___» — default: port the 8 categories / 57 SKUs from `website/index.html` `window.CATALOG`.
+- Seed data: «___» — default: peptides from `business-proposal/axiom-peptide-pricelist.html` (52 lots,
+  each with cost basis), devices and apparel from `website/index.html` `window.CATALOG`.
+- **Canonical peptide price list: «website / price list»** — the two disagree by ~1.7× (BPC-157 10 mg is
+  Rp 1.600.000 on the site and Rp 2.700.000 on the price list). Only the price list carries cost basis,
+  so it is the default; the executor must not silently pick one.
+- Device and apparel landed cost: «___» — default: devices 60% of list (40% GM), apparel 40% of list
+  (60% GM). Stated assumptions, not sourced figures.
+- PPN: «rate / not registered» — default: charge PPN at 11% on invoices, editable per invoice. Verify the
+  current rate and the entity's PKP status before launch.
 - Default locale: «EN / ID» — default: ID, with an EN toggle persisted per user.
 - Currency: **IDR only.** Not a fill-in field. No multi-currency, no FX display.
 - Auth method: «___» — default: Supabase email magic-link, plus password for `owner` and `ops`.
@@ -160,7 +168,48 @@ segments, and no chart junk — the brand's restraint applies to data as much as
 exposes its definition, and an `ops` session receives a permission error rather than a blank card
 where the `owner`-only metrics sit.
 
-### 4.4 Deferred — schema-reserved, do not build
+### 4.4 Price list & margin engine (owner-only figures)
+**Entities:** `product_variants` (`price_idr`, `cost_idr`, `supplier_cost_idr`), `price_tiers`, `margin_snapshots`.
+
+**The rule, as the business already prices.** For peptides, cost basis = supplier lot + Rp 600.000
+(verification, CoA and cold-chain per lot); list price = cost basis ÷ 0.47, rounded to the nearest
+Rp 100.000; gross-margin target 53%. Devices and apparel carry landed cost directly. The engine stores
+both `supplier_cost_idr` and the derived `cost_idr` so the Rp 600.000 can change without a data migration.
+
+**Console (owner).** A price-list screen listing every variant with supplier cost, cost basis, list price,
+the price at each tier, margin in rupiah and GM %. A tier selector recalculates the whole table. Rows
+under a **45% GM floor** at the selected tier are flagged. Every quote, order and invoice shows a margin
+block — total, cost, margin, GM % — and a per-line margin on hover. An `ops` session sees none of these
+columns or blocks, enforced by RLS on `cost_idr` and `supplier_cost_idr`, not by hiding elements.
+
+**Margin on every transaction.** `quote_items` and `order_items` freeze `unit_cost_idr` alongside
+`unit_price_idr` at write time, so historical margin is exact even after a supplier price changes. The
+dashboard's gross-margin KPI is computed from those frozen figures, never from live variant cost.
+
+**Acceptance.** Changing a variant's supplier cost changes its list price and every tier price by the
+rule, changes no existing order's margin, and is invisible to an `ops` session by direct API call.
+
+### 4.5 Invoice builder with PDF
+**Entities:** `invoices`, `invoice_items`, `invoice_sequences`.
+
+**Console.** From any order: build an invoice with number (sequence per year, `INV-YYMM-NNNN`), issue
+date, payment terms (on receipt · net 7 · 14 · 30) driving the due date, PPN on or off with an editable
+rate, notes, and bank details. A live preview renders on the **paper palette** (§7 print inversion) —
+never on glass. Three actions: **Download PDF** (server-rendered A4, Inter and Jost embedded, tabular
+numerals), **Send PDF** (on a phone, the device share sheet with the PDF attached so WhatsApp and mail
+are one tap; on desktop, a signed download link in a WhatsApp message), and **Print**. Issuing an invoice
+freezes its lines and prices; a change after issue creates a credit note, never an edit.
+
+**Account.** Own invoices, the same PDF, the same Download and Send.
+
+**Compliance.** An invoice carrying a peptide line prints the RUO disclaimer in its footer, verbatim.
+The margin block is shown beside the preview for `owner` and is never part of the printed document.
+
+**Acceptance.** A generated PDF opens with the paper ground, embedded fonts, IDR figures in tabular
+numerals, PPN computed correctly at the chosen rate, and the RUO footer present on a peptide invoice and
+absent on an apparel-only one.
+
+### 4.6 Deferred — schema-reserved, do not build
 Lots, Certificate of Analysis documents, per-lot verification lookup, and the cold-chain
 temperature log are **Phase 2**. Do not build the UI. **Do** create `lots` and `coa_documents` in
 the migration with their foreign keys from `product_variants` and `order_items`, so Phase 2 is an
@@ -232,7 +281,7 @@ first and hold it to this spec exactly.
   navigate** — the sheet rises with the signature ease over 220 ms, corners `16px 16px 0 0` (the
   one sanctioned radius), a hairline top edge, a scrim behind it at `rgba(0,0,0,.6)` with
   `blur(6px)`, and it is dismissible by swipe-down, scrim tap and Escape.
-- Each tab owns its own navigation stack with **preserved scroll position**. Leaving Orders three
+- Each tab owns its own navigation history with **preserved scroll position**. Leaving Orders three
   levels deep and coming back returns to that scroll offset, not the top.
 - Switching tabs never triggers a full page reload.
 - The bar persists across in-tab navigation. It hides only behind a sheet or a full-screen modal.
@@ -326,16 +375,19 @@ acknowledgements  id · profile_id · kind(age_18|qualified_researcher) · versi
 categories        id · no · name · icon · blurb · is_consumer · sort
 products          id · category_id · name · slug · summary · is_active
 product_variants  id · product_id · dose · content · price_idr · cost_idr(owner)
-                  · low_stock_threshold · is_active
+                  · supplier_cost_idr(owner) · low_stock_threshold · is_active
 stock_movements   id · variant_id · delta · reason(intake|sale|adjust|return) · ref · created_at
 quotes            id · account_id · state(draft|sent|accepted|expired|lost) · currency('IDR')
                   · subtotal_idr · total_idr · valid_until · sent_at · created_by · created_at
-quote_items       id · quote_id · variant_id · qty · unit_price_idr · line_total_idr
+quote_items       id · quote_id · variant_id · qty · unit_price_idr · unit_cost_idr(owner) · line_total_idr
 orders            id · account_id · quote_id · state(pending|packing|dispatched|delivered|cancelled)
                   · total_idr · placed_at
-order_items       id · order_id · variant_id · qty · unit_price_idr · line_total_idr · lot_id(null)
+order_items       id · order_id · variant_id · qty · unit_price_idr · unit_cost_idr(owner) · line_total_idr · lot_id(null)
 shipments         id · order_id · carrier · tracking_no · dispatched_at · delivered_at
-invoices          id · order_id · number · issued_at · total_idr · pdf_path
+invoices          id · order_id · number · issued_at · due_at · terms_days · ppn_rate · subtotal_idr
+                  · ppn_idr · total_idr · notes · bank_details · pdf_path · sent_at · sent_via
+invoice_items     id · invoice_id · description · qty · unit_price_idr · line_total_idr
+invoice_sequences year · last_number
 leads             id · name · persona · source · stage · owner_id · account_id(null) · created_at
 activities        id · subject_type · subject_id · kind · body · actor_id · created_at
 lots              -- Phase 2, created now, unused
@@ -404,7 +456,10 @@ WhatsApp messages, the invoices and the emails equally.
 | 13 | RUO present | The disclaimer renders on every peptide-adjacent surface including generated WhatsApp text and invoices. |
 | 14 | Bilingual | Every user-facing string resolves in both EN and ID; no hardcoded strings in components. |
 | 15 | Reduced motion | With `prefers-reduced-motion: reduce`, no sheet rise, no reveal, no stagger. |
-| 16 | Seed loads | 8 categories and 57 variants present, prices matching `window.CATALOG`. |
+| 16 | Seed loads | 52 peptide lots with cost basis, plus devices and apparel; list prices match the chosen canonical source. |
+| 17 | Margin is exact | Changing a supplier cost changes list and tier prices by the rule and leaves every existing order's frozen margin unchanged. |
+| 18 | Invoice PDF | Downloaded PDF has the paper ground, embedded Inter/Jost, correct PPN at the chosen rate, and the RUO footer present on peptide invoices only. |
+| 19 | Send PDF | On a phone the share sheet opens with the PDF attached; on desktop a WhatsApp message carries a working download link. |
 
 ---
 
@@ -447,6 +502,24 @@ WhatsApp messages, the invoices and the emails equally.
 - `website/index.html` — token block, component CSS, `window.CATALOG` seed data, nav hide-on-scroll.
 - `company-profile/index.html` — the ambient glow and the print palette inversion.
 - `business-proposal/axiom-business-master-prompt.md` — business context, compliance, KPI definitions.
+
+---
+
+## 12 · OPEN DECISIONS (ask these before building — do not assume)
+1. **Which peptide price list is canonical?** The site and the price list differ by ~1.7×. If the site is
+   a launch discount, say so and model it as a tier, not a second list.
+2. **Device and apparel landed cost per SKU.** The 40% / 60% GM defaults are placeholders.
+3. **PPN.** Current rate, PKP registration status, and whether Research-tier institutional buyers are
+   invoiced differently. Also whether e-Faktur integration is required at launch.
+4. **Invoice numbering and legal identity.** The issuing entity's name, NPWP and bank account for the
+   invoice footer; whether invoices need e-Meterai above a threshold.
+5. **Margin floor.** 45% is the flag threshold in this prompt; confirm, and whether ops may quote below
+   it with owner approval or not at all.
+6. **Cost basis loading.** Is the Rp 600.000 verification and cold-chain cost per lot, per unit, or per
+   shipment? It changes margin on multi-unit lines.
+7. **Price-list pathway names.** The price list groups peptides as "Weight Loss", "Sexual Health" and
+   "Brain Health" — benefit claims the RUO standard forbids. The app must use the site's research-neutral
+   category names; confirm the price list is to be reissued to match.
 
 ---
 
