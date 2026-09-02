@@ -461,58 +461,60 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 /* the invoice document — dark canvas, as the AXIOM invoice builder renders it. Glass never prints; this does. */
 .doc-wrap,.pdf-stage{container-type:inline-size;container-name:doc}
 .pdf-stage{position:absolute;left:-10000px;top:0;width:794px;pointer-events:none}
-.inv-doc{position:relative;overflow:hidden;background:var(--bg);color:var(--ink);padding:64px;font-size:12px;line-height:1.55;
-  width:100%;max-width:794px;aspect-ratio:210/297;display:flex;flex-direction:column;box-sizing:border-box;
-  border:1px solid var(--line-soft);font-feature-settings:"tnum" 1;box-shadow:0 24px 60px rgba(0,0,0,.45)}
-.pdf-stage .inv-doc{box-shadow:none;border:none;max-width:none;width:794px;min-height:1123px;aspect-ratio:auto}
+/* A4 width is fixed; height grows in whole pages. Never clip - a clipped invoice is a wrong invoice. */
+.inv-doc{position:relative;background:var(--bg);color:var(--ink);padding:44px;font-size:11.5px;line-height:1.5;
+  width:100%;max-width:794px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;
+  border:1px solid var(--line-soft);font-feature-settings:"tnum" 1;box-shadow:0 24px 60px rgba(0,0,0,.45);
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 1122px,var(--line) 1122px,var(--line) 1123px)}
+.pdf-stage .inv-doc{box-shadow:none;border:none;max-width:none;width:794px;background-image:none}
 .inv-doc::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(42% 30% at 88% 12%,rgba(200,138,78,.10),transparent 70%),radial-gradient(50% 26% at 50% 100%,rgba(124,76,36,.16),transparent 70%)}
 .inv-doc>*{position:relative}
 .inv-doc .d-body{flex:1}
 .inv-doc .lab{display:block;font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.d-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:26px;border-bottom:1px solid var(--line)}
-.d-head .wm-sv{fill:var(--ink);width:299px;height:36px;margin-top:10px;overflow:visible}
+.d-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.d-head .wm-sv{fill:var(--ink);width:249px;height:30px;margin-top:8px;overflow:visible}
 .d-head .rt{text-align:right}
-.d-title{font-family:var(--display);font-weight:300;font-size:34px;letter-spacing:-.01em;line-height:1;margin-bottom:12px}
-.d-meta{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);line-height:1.9;font-variant-numeric:tabular-nums}
+.d-title{font-family:var(--display);font-weight:300;font-size:28px;letter-spacing:-.01em;line-height:1;margin-bottom:10px}
+.d-meta{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:1.75;font-variant-numeric:tabular-nums}
 .d-meta b{color:var(--ink);font-weight:600}
-.d-due{display:inline-block;margin-top:14px;border:1px solid var(--accent-line);background:var(--glass-accent);padding:12px 18px;text-align:right}
+.d-due{display:inline-block;margin-top:11px;border:1px solid var(--accent-line);background:var(--glass-accent);padding:9px 15px;text-align:right}
 .d-due .lab{color:var(--accent);opacity:.85;font-size:8px;margin-bottom:5px}
-.d-due .v{font-family:var(--display);font-weight:300;font-size:26px;color:var(--accent-bright);font-variant-numeric:tabular-nums;line-height:1}
-.d-cols{display:grid;grid-template-columns:1fr 1fr 1fr;padding:22px 0;border-bottom:1px solid var(--line)}
-.d-cols>div{padding:0 22px;min-width:0}
+.d-due .v{font-family:var(--display);font-weight:300;font-size:22px;color:var(--accent-bright);font-variant-numeric:tabular-nums;line-height:1}
+.d-cols{display:grid;grid-template-columns:1fr 1fr 1fr;padding:16px 0;border-bottom:1px solid var(--line)}
+.d-cols>div{padding:0 18px;min-width:0}
 .d-cols>div:first-child{padding-left:0}
 .d-cols>div+div{border-left:1px solid var(--line)}
-.d-cols .nm{font-size:14px;font-weight:500;margin:8px 0 6px}
-.d-cols .sm{font-size:11px;color:var(--muted);font-weight:300;line-height:1.7;white-space:pre-line}
-.d-kv{display:flex;justify-content:space-between;gap:12px;font-size:11px;line-height:2}
+.d-cols .nm{font-size:13px;font-weight:500;margin:6px 0 4px}
+.d-cols .sm{font-size:10.5px;color:var(--muted);font-weight:300;line-height:1.6;white-space:pre-line}
+.d-kv{display:flex;justify-content:space-between;gap:12px;font-size:10.5px;line-height:1.85}
 .d-kv span:first-child{color:var(--muted);font-weight:300}
 .d-tbl{width:100%;border-collapse:collapse;margin-top:8px}
-.d-tbl th{text-align:left;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:16px 0 10px;border-bottom:1px solid var(--line-2)}
-.d-tbl td{padding:14px 0;border-bottom:1px solid var(--line);vertical-align:top;font-weight:400}
+.d-tbl th{text-align:left;font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:14px 0 8px;border-bottom:1px solid var(--line-2)}
+.d-tbl td{padding:10px 0;border-bottom:1px solid var(--line);vertical-align:top;font-weight:400}
 .d-tbl .ix{color:var(--accent);font-variant-numeric:tabular-nums;width:46px}
-.d-tbl .sub{display:block;font-size:10.5px;color:var(--muted);font-weight:300;margin-top:3px}
+.d-tbl .sub{display:block;font-size:10px;color:var(--muted);font-weight:300;margin-top:2px}
 .d-tbl .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:16px}
 .d-tbl .am{color:var(--accent)}
 .d-tot{margin-left:auto;width:min(100%,480px);margin-top:14px}
-.d-tot div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:12px;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line)}
+.d-tot div{display:flex;justify-content:space-between;gap:16px;padding:7px 0;font-size:11.5px;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line)}
 .d-tot div span:first-child{color:var(--muted);font-weight:300}
-.d-tot .g{border-top:1px solid var(--accent-line);border-bottom:none;margin-top:4px;padding-top:16px;align-items:baseline}
+.d-tot .g{border-top:1px solid var(--accent-line);border-bottom:none;margin-top:3px;padding-top:13px;align-items:baseline}
 .d-tot .g span:first-child{font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
-.d-tot .g span:last-child{font-family:var(--display);font-weight:300;font-size:26px;color:var(--accent-bright)}
-.d-pay{display:grid;grid-template-columns:1fr 1fr;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
+.d-tot .g span:last-child{font-family:var(--display);font-weight:300;font-size:23px;color:var(--accent-bright)}
+.d-pay{display:grid;grid-template-columns:1fr 1fr;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
 .d-pay>div{padding-right:28px;min-width:0}
 .d-pay>div+div{border-left:1px solid var(--line);padding-left:28px;padding-right:0}
 .d-pay .lab{margin-bottom:10px}
-.d-pay p{font-size:11px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:10px}
-.d-foot{margin-top:auto;padding-top:24px}
-.d-ruo{text-align:center;font-size:10px;color:var(--muted-2);padding:10px 0 14px;border-bottom:1px solid var(--line)}
+.d-pay p{font-size:10.5px;color:var(--muted);font-weight:300;line-height:1.55;margin-bottom:8px}
+.d-foot{margin-top:auto;padding-top:18px}
+.d-ruo{text-align:center;font-size:9.5px;color:var(--muted-2);padding:8px 0 11px;border-bottom:1px solid var(--line)}
 .d-brand{display:flex;justify-content:space-between;gap:12px;padding-top:14px;font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
 .d-brand b{color:var(--ink);font-weight:500}
 .margin-box{border:1px solid var(--accent-line);background:var(--glass-accent);padding:14px 16px;margin-top:20px}
 .margin-box .kicker{margin-bottom:8px;display:block}
 @container doc (max-width:560px){
-  .inv-doc{padding:28px 22px}
+  .inv-doc{padding:24px 18px;min-height:0}
   .d-head{flex-direction:column;gap:16px}
   .d-head .rt{text-align:left}
   .d-due{text-align:left}
@@ -879,7 +881,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
             <div class="ib-foot">
               <div class="ib-total"><span>Total due <b data-ib-total></b></span><span data-ib-pages>1 page</span></div>
               <button class="btn-save" data-inv-pdf>Save as PDF</button>
-              <p class="hint" style="margin-top:12px">In the print dialog: paper <b>A4</b>, <b>Background graphics</b> on. A one-page invoice prints correctly at any margin setting; set margins to <b>None</b> once it runs past one page.</p>
+              <p class="hint" style="margin-top:12px">Saves a PDF of the document exactly as previewed. Where the browser blocks a script-started download, the print dialog opens instead — choose <b>Save as PDF</b>, paper <b>A4</b>, <b>Background graphics</b> on, margins <b>None</b>.</p>
               <div class="hrow" style="margin-top:4px">
                 <button class="btn btn-sm" data-inv-send><svg class="ic-sv"><use href="#i-share"></use></svg>Send PDF</button>
                 <button class="btn btn-sm" data-inv-print><svg class="ic-sv"><use href="#i-print"></use></svg>Print</button>
@@ -1216,7 +1218,8 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     toastEl.textContent = msg; toastEl.classList.add("on");
     clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("on"); }, 2400);
   }
-  function openWA(msg,num){ window.open(waLink(msg,num),"_blank","noopener"); toast("Opening WhatsApp"); }
+  function openWA(msg,num){ var w=null; try{ w=window.open(waLink(msg,num),"_blank","noopener"); }catch(e){}
+    if(w) toast("Opening WhatsApp"); return !!w; }
 
   /* ------------------------------------------------------------ renderers - */
   function renderOrders(){
@@ -1581,7 +1584,10 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     $("[data-inv-margin]").innerHTML='<span class="kicker">Margin on this invoice · owner only</span><div class="kv"><span class="k">Revenue</span><span class="v">'+idr(rev)+'</span></div><div class="kv"><span class="k">Cost basis</span><span class="v">'+idr(cost)+'</span></div>'+
       '<div class="kv" style="border:none"><span class="k">Margin</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(rev-cost)+' '+gmChip(pct)+'</span></div>'+(custom?'<p class="note" style="margin-top:6px">'+custom+' custom line'+(custom>1?'s':'')+' without a cost basis excluded.</p>':'')+'<p class="note" style="margin-top:6px">Shown beside the form only. Never printed.</p>';
     $("[data-ib-total]").textContent=idr(x.total);
-    var doc=$("[data-doc]"), pages=Math.max(1,Math.ceil((doc.scrollHeight)/(doc.getBoundingClientRect().width*1.4142)));
+    /* measure at true A4 width so the count matches the PDF, whatever the viewport */
+    var doc=$("[data-doc]"), w=doc.getBoundingClientRect().width||794;
+    var pages=Math.max(1,Math.round(doc.scrollHeight/(w*(1123/794))*100)/100);
+    pages=Math.max(1,Math.ceil(pages-0.02));
     $("[data-ib-pages]").textContent=pages+(pages>1?" pages":" page");
     $("[data-inv-status]").innerHTML = inv.issued ? '<span class="chip ok"><span class="dot"></span>Issued'+(inv.sent?' · sent':'')+'</span>' : '<span class="chip"><span class="dot"></span>Draft</span>';
   }
@@ -1635,17 +1641,85 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   }
   function issueInvoice(){ var o=invoiceCtx.o, inv=invoiceCtx.inv; inv.issued=true; inv.total=invCalc(inv).total; o.invoice=inv; ro=true; renderInvoices(); renderDoc(); lockForm(); }
   function invSummary(){ var inv=invoiceCtx.inv; return "AXIOM · Invoice "+inv.no+"\n"+(inv.toName||"")+"\nReference "+(inv.ref||inv.no)+"\nTotal due "+idr(invCalc(inv).total)+" · due "+fmtShort(inv.due)+"\n\nPDF attached."; }
-  function downloadPdf(){ toast("Rendering "+invPdfName()); capturePdf(function(d){ if(!d) return; issueInvoice();
-    try{ d.save(invPdfName()); toast(invPdfName()+" · "+Math.round(window.__lastPdfBytes/1024)+" KB"); }catch(e){ toast("Download blocked in this viewer — open the repo file or use Send"); } }); }
-  function sendPdf(){ toast("Rendering "+invPdfName()); capturePdf(function(d){ if(!d) return; issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderDoc();
-    var blob=d.output("blob"), file; try{ file=new File([blob],invPdfName(),{type:"application/pdf"}); }catch(e){}
-    if(file && navigator.canShare && navigator.canShare({files:[file]})){ navigator.share({files:[file],title:invPdfName(),text:invSummary()}).then(function(){ toast("Shared "+invPdfName()); }).catch(function(){ toast("Share cancelled"); }); }
-    else { openWA(invSummary(), C(invoiceCtx.o.client).wa); toast("No file share here — WhatsApp message opened; PDF attaches on a phone"); } }); }
-  function printInvoice(){ var w=null; try{ w=window.open("","_blank"); }catch(e){}
-    if(!w){ toast("Print window blocked in this viewer"); return; }
-    var css=$("style").textContent;
-    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+invoiceCtx.inv.no+'</title><style>'+css+' html,body{background:#070605!important;height:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact} #root{position:static!important;overflow:visible!important} .inv-doc{box-shadow:none;border:none;margin:0 auto;max-width:794px} @page{size:A4;margin:0}</style></head><body><div id="root"><div class="doc-wrap">'+$("svg[aria-hidden]").outerHTML+'<div class="inv-doc">'+$("[data-doc]").innerHTML+'</div></div></div></body></html>');
-    w.document.close(); setTimeout(function(){ w.focus(); w.print(); },350); issueInvoice(); }
+  /* The artifact viewer sandboxes the page: popups are blocked and any download the page starts
+     itself is inert. So Print goes through a same-document hidden iframe, and Save as PDF falls
+     back to that print dialog — the browser's own "Save as PDF" produces a better, text-selectable
+     file than the raster capture anyway. Every rung of the ladder says what actually happened. */
+  function printDoc(after,msg){
+    var html='<!doctype html><html><head><meta charset="utf-8"><title>'+h(invoiceCtx.inv.no)+'</title>'+
+      '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">'+
+      '<style>'+$("style").textContent+
+      ' html,body{background:#070605!important;margin:0;height:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      ' #root{position:static!important;overflow:visible!important;background:#070605!important}'+
+      ' .inv-doc{box-shadow:none;border:none;margin:0 auto;max-width:794px;background-image:none}'+
+      ' @page{size:A4;margin:0}</style></head><body><div id="root"><div class="doc-wrap">'+
+      $("svg[aria-hidden]").outerHTML+'<div class="inv-doc">'+$("[data-doc]").innerHTML+'</div></div></div></body></html>';
+    var fr=document.createElement("iframe");
+    fr.setAttribute("aria-hidden","true");
+    fr.style.cssText="position:absolute;left:-10000px;top:0;width:794px;height:1123px;border:0;opacity:0";
+    document.body.appendChild(fr);
+    var done=false, finish=function(okMsg){ if(done) return; done=true;
+      setTimeout(function(){ fr.remove(); },1000); toast(msg||okMsg); if(after) after(); };
+    try{
+      var d=fr.contentWindow.document; d.open(); d.write(html); d.close();
+      setTimeout(function(){
+        try{ fr.contentWindow.focus(); fr.contentWindow.print(); finish("Print dialog open — paper A4, background graphics on"); }
+        catch(e){ fr.remove(); done=true; printPopup(after,msg); }
+      }, 450);
+      return true;
+    }catch(e){ fr.remove(); return printPopup(after,msg); }
+  }
+  function printPopup(after,msg){                               /* second rung: a real window */
+    var w=null; try{ w=window.open("","_blank"); }catch(e){}
+    if(!w){ toast("Printing is blocked in this viewer — open the file directly to print"); if(after) after(); return false; }
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+h(invoiceCtx.inv.no)+'</title><style>'+$("style").textContent+
+      ' html,body{background:#070605!important;margin:0;height:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+      ' #root{position:static!important;overflow:visible!important} .inv-doc{box-shadow:none;border:none;margin:0 auto;max-width:794px;background-image:none}'+
+      ' @page{size:A4;margin:0}</style></head><body><div id="root"><div class="doc-wrap">'+$("svg[aria-hidden]").outerHTML+
+      '<div class="inv-doc">'+$("[data-doc]").innerHTML+'</div></div></div></body></html>');
+    w.document.close(); setTimeout(function(){ w.focus(); w.print(); },350);
+    toast(msg||"Print dialog open — paper A4, background graphics on"); if(after) after(); return true;
+  }
+  /* A script-started download is inert inside the artifact's sandboxed frame and does NOT throw,
+     so failure cannot be caught — detect the frame instead and go straight to the print dialog. */
+  function canDownload(){ try{ return window.self === window.top; }catch(e){ return false; } }
+  function downloadPdf(){
+    if(!canDownload()){
+      printDoc(issueInvoice, "This viewer blocks script downloads — print dialog open, choose Save as PDF, paper A4, background graphics on");
+      return;
+    }
+    toast("Rendering "+invPdfName());
+    capturePdf(function(d){
+      if(!d){ printDoc(issueInvoice, "PDF engine unavailable — print dialog open, choose Save as PDF"); return; }
+      try{ d.save(invPdfName()); issueInvoice(); toast(invPdfName()+" · "+Math.round(window.__lastPdfBytes/1024)+" KB"); }
+      catch(e){ printDoc(issueInvoice, "Saving was blocked — print dialog open, choose Save as PDF"); }
+    });
+  }
+  function sendPdf(){
+    toast("Rendering "+invPdfName());
+    capturePdf(function(d){
+      if(!d){ printDoc(issueInvoice); return; }
+      issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderDoc();
+      var blob=d.output("blob"), file=null;
+      try{ file=new File([blob],invPdfName(),{type:"application/pdf"}); }catch(e){}
+      if(file && navigator.canShare && navigator.canShare({files:[file]})){
+        navigator.share({files:[file],title:invPdfName(),text:invSummary()})
+          .then(function(){ toast("Shared "+invPdfName()); })
+          .catch(function(){ toast("Share cancelled"); });
+        return;
+      }
+      var wa=C(invoiceCtx.o.client).wa;
+      if(openWA(invSummary(), wa)){ toast("WhatsApp opened with the summary — attach the PDF, or share from a phone"); return; }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(invSummary())
+          .then(function(){ toast("Invoice summary copied to the clipboard"); })
+          .catch(function(){ toast("Could not share here — use Print to save a PDF"); });
+        return;
+      }
+      toast("Could not share here — use Print to save a PDF");
+    });
+  }
+  function printInvoice(){ printDoc(issueInvoice); }
   function moveLine(i,d){ var L=invoiceCtx.inv.lines, j=i+d; if(j<0||j>=L.length) return; var t=L[i]; L[i]=L[j]; L[j]=t; renderLines(); renderDoc(); }
 
   /* ------------------------------------------------------------ nav ------- */

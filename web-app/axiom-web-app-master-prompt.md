@@ -221,6 +221,8 @@ bronze line numerals and amounts, Payment beside Notes, "Research Use Only." abo
 `AXIOM · Human Performance & Longevity` / `Documented, not promised.` as the last line. A row whose
 value is zero is left off the invoice.
 
+**Never clip.** The invoice document keeps A4 *width* and grows in whole A4 pages; it must never be given a fixed height with hidden overflow, because a clipped invoice is a wrong invoice and the preview would then disagree with the PDF. The preview shows every page the PDF will contain, and the page counter is measured, not assumed.
+
 **One template, two outputs.** The on-screen preview and the PDF are rendered from the **same**
 invoice template — the PDF is produced by printing that template server-side (headless Chromium via
 Playwright, `printToPDF`, A4, fonts embedded), never by a second hand-laid PDF layout. If the preview
