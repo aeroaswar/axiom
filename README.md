@@ -8,6 +8,10 @@ repository, where the work had accumulated across several unmerged topic branche
 - `website/` — the current AXIOM product site (Human Performance & Longevity: peptides,
   clinical red-light therapy, recovery, wellness, apparel). Migrated from
   `claude/axiom-check-uk4uhm`, the most complete and recent iteration of the site.
+- `web-app/` — the AXIOM Console (admin) and Account (client) web app: a master prompt
+  (`axiom-web-app-master-prompt.md`) that an executing agent can build from, plus a clickable
+  single-file mockup (`mockup/index.html`) showing the smoked-bronze glass UI, the desktop rail
+  and the Instagram-style mobile tab bar.
 - `brand-book/` — the AXIOM brand book / style guide. Migrated from
   `claude/axiom-brand-book-0puows`.
 - `business-proposal/` — business proposal, GTM strategy, and pricing materials.
