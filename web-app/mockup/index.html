@@ -415,57 +415,118 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 #root[data-role="ops"] .owner-only{display:none!important}
 .mchip{font-variant-numeric:tabular-nums}
 
-/* ---------- invoice builder ---------- */
-.inv-grid{display:grid;grid-template-columns:minmax(280px,380px) 1fr;gap:24px;align-items:start}
-.field{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+/* ---------- invoice builder (ported from the AXIOM invoice builder) ---------- */
+.inv-grid{display:grid;grid-template-columns:minmax(300px,400px) 1fr;gap:28px;align-items:start}
+.ib-title{font-family:var(--display);font-weight:300;font-size:26px;letter-spacing:-.01em;line-height:1.1}
+.ib-sub{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-top:8px}
+.ib-sec{display:flex;align-items:center;gap:12px;margin:26px 0 12px;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.ib-sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;min-width:0}
 .field label{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
-.field input,.field textarea{background:rgba(242,237,229,.03);border:1px solid var(--line-2);padding:9px 11px;font-size:13px;font-weight:300;color:var(--ink);outline:none;width:100%;border-radius:var(--r)}
-.field input:focus,.field textarea:focus{border-color:var(--accent-line)}
-.field textarea{min-height:64px;resize:vertical;font-family:var(--sans)}
-.field .hrow{margin-top:2px}
+.field input,.field textarea,.field select{background:rgba(242,237,229,.03);border:1px solid var(--line-2);padding:10px 12px;font-size:13.5px;font-weight:300;color:var(--ink);outline:none;width:100%;border-radius:var(--r);font-family:var(--sans);color-scheme:dark}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent-line)}
+.field input:disabled,.field textarea:disabled,.field select:disabled{opacity:.6}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted-2)}
+.field textarea{resize:vertical;line-height:1.5}
+.field select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px;text-overflow:ellipsis}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.hint{font-size:11px;color:var(--muted-2);font-weight:300;line-height:1.55;margin:-2px 0 12px}
+.hint b{color:var(--muted);font-weight:500}
+.li-card{border:1px solid var(--line);padding:14px 14px 4px;margin-bottom:12px;background:rgba(242,237,229,.012)}
+.li-head{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.li-head .ix{color:var(--accent);font-size:12px;letter-spacing:.08em;font-variant-numeric:tabular-nums}
+.li-head .amt{color:var(--accent);font-size:13px;font-variant-numeric:tabular-nums}
+.li-head .sp{flex:1}
+.li-ctl{display:flex;gap:4px}
+.li-ctl button{width:30px;height:30px;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:.2s var(--ease)}
+.li-ctl button:hover:not(:disabled){color:var(--ink);border-color:var(--line-2)}
+.li-ctl button:disabled{opacity:.3;cursor:default}
+.li-ctl .ic-sv{font-size:12px}
+.btn-add{width:100%;border:1px solid var(--line-2);padding:14px;font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;font-weight:500;color:var(--ink);transition:.2s var(--ease)}
+.btn-add:hover:not(:disabled){background:var(--ink);color:#000}
+.btn-add:disabled{opacity:.4;cursor:default}
+.ib-foot{border-top:1px solid var(--line);margin-top:26px;padding-top:16px}
+.ib-total{display:flex;justify-content:space-between;align-items:baseline;font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.ib-total b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.btn-save{width:100%;background:var(--accent-deep);color:var(--ink);padding:16px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;font-weight:600;transition:.2s var(--ease);border:1px solid transparent}
+.btn-save:hover{background:var(--accent);color:#0a0704}
+.btn-reset{width:100%;border:1px solid var(--line-2);padding:14px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-top:14px;transition:.2s var(--ease)}
+.btn-reset:hover:not(:disabled){color:var(--ink);border-color:var(--ink)}
+.btn-reset:disabled{opacity:.4;cursor:default}
 .tlink{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--muted);display:inline-flex;align-items:center;gap:8px;padding-bottom:4px;border-bottom:1px solid var(--line-2);transition:.22s var(--ease)}
 .tlink:hover{color:var(--ink);border-color:var(--ink)}
 .tlink .ic-sv{font-size:13px;transform:rotate(180deg)}
 
-/* paper palette — the print inversion from the master prompt §7. Glass never prints. */
-.paper{--pink:#141210;--pmuted:#4b463f;--pline:rgba(20,18,16,.16);--paccent:#7C4C24;
-  background:#F2EDE5;color:var(--pink);padding:44px 44px 36px;font-size:12px;line-height:1.55;
-  box-shadow:0 24px 60px rgba(0,0,0,.45);font-feature-settings:"tnum" 1;
-  width:100%;max-width:794px;aspect-ratio:210/297;display:flex;flex-direction:column;box-sizing:border-box}
-.paper-wrap,.pdf-stage{container-type:inline-size;container-name:paper}
-.paper .p-body{flex:1}
-.paper .p-foot{margin-top:auto}
-/* offscreen stage: the PDF is captured from a clone at exact A4 width, whatever the viewport */
+/* the invoice document — dark canvas, as the AXIOM invoice builder renders it. Glass never prints; this does. */
+.doc-wrap,.pdf-stage{container-type:inline-size;container-name:doc}
 .pdf-stage{position:absolute;left:-10000px;top:0;width:794px;pointer-events:none}
-.pdf-stage .paper{box-shadow:none;max-width:none;width:794px;min-height:1123px;aspect-ratio:auto}
-.paper .wm-sv{fill:var(--pink);height:14px}
-.paper .p-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--pink)}
-.paper .p-lab{display:block;font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--pmuted);margin-bottom:4px}
-.paper .p-title{font-family:var(--display);font-weight:300;font-size:26px;letter-spacing:-.01em;line-height:1;margin-top:10px}
-.paper .p-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--pline)}
-.paper .p-meta div{font-size:11.5px}
-.paper .p-meta b{font-weight:500}
-.paper table{width:100%;border-collapse:collapse;margin-top:16px;font-size:11.5px}
-.paper th{text-align:left;font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--pmuted);padding:0 0 8px;border-bottom:1px solid var(--pink);font-weight:500}
-.paper th.n,.paper td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.paper td{padding:9px 0;border-bottom:1px solid var(--pline);vertical-align:top;font-weight:300}
-.paper td.k{font-weight:400}
-.paper .p-tot{margin-left:auto;width:min(100%,280px);margin-top:12px}
-.paper .p-tot div{display:flex;justify-content:space-between;gap:16px;padding:6px 0;font-size:11.5px;font-variant-numeric:tabular-nums}
-.paper .p-tot .g{border-top:1px solid var(--pink);margin-top:6px;padding-top:10px;font-family:var(--display);font-size:18px;font-weight:400}
-.paper .p-note{font-size:10.5px;color:var(--pmuted);margin-top:18px;line-height:1.6;font-weight:300}
-.paper .p-ruo{border-left:2px solid var(--paccent);padding:8px 12px;font-size:10px;color:var(--pmuted);margin-top:16px;line-height:1.55}
-.paper .p-foot{display:flex;justify-content:space-between;gap:12px;margin-top:22px;padding-top:10px;border-top:1px solid var(--pline);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pmuted)}
-@container paper (max-width:520px){
-  .paper{padding:24px 20px 20px}
-  .paper .p-meta{grid-template-columns:1fr}
-}
-.margin-box{border:1px solid var(--accent-line);background:var(--glass-accent);padding:14px 16px;margin-top:14px}
+.inv-doc{position:relative;overflow:hidden;background:var(--bg);color:var(--ink);padding:64px;font-size:12px;line-height:1.55;
+  width:100%;max-width:794px;aspect-ratio:210/297;display:flex;flex-direction:column;box-sizing:border-box;
+  border:1px solid var(--line-soft);font-feature-settings:"tnum" 1;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.pdf-stage .inv-doc{box-shadow:none;border:none;max-width:none;width:794px;min-height:1123px;aspect-ratio:auto}
+.inv-doc::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(42% 30% at 88% 12%,rgba(200,138,78,.10),transparent 70%),radial-gradient(50% 26% at 50% 100%,rgba(124,76,36,.16),transparent 70%)}
+.inv-doc>*{position:relative}
+.inv-doc .d-body{flex:1}
+.inv-doc .lab{display:block;font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.d-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+.d-head .wm-sv{fill:var(--ink);width:299px;height:36px;margin-top:10px;overflow:visible}
+.d-head .rt{text-align:right}
+.d-title{font-family:var(--display);font-weight:300;font-size:34px;letter-spacing:-.01em;line-height:1;margin-bottom:12px}
+.d-meta{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);line-height:1.9;font-variant-numeric:tabular-nums}
+.d-meta b{color:var(--ink);font-weight:600}
+.d-due{display:inline-block;margin-top:14px;border:1px solid var(--accent-line);background:var(--glass-accent);padding:12px 18px;text-align:right}
+.d-due .lab{color:var(--accent);opacity:.85;font-size:8px;margin-bottom:5px}
+.d-due .v{font-family:var(--display);font-weight:300;font-size:26px;color:var(--accent-bright);font-variant-numeric:tabular-nums;line-height:1}
+.d-cols{display:grid;grid-template-columns:1fr 1fr 1fr;padding:22px 0;border-bottom:1px solid var(--line)}
+.d-cols>div{padding:0 22px;min-width:0}
+.d-cols>div:first-child{padding-left:0}
+.d-cols>div+div{border-left:1px solid var(--line)}
+.d-cols .nm{font-size:14px;font-weight:500;margin:8px 0 6px}
+.d-cols .sm{font-size:11px;color:var(--muted);font-weight:300;line-height:1.7;white-space:pre-line}
+.d-kv{display:flex;justify-content:space-between;gap:12px;font-size:11px;line-height:2}
+.d-kv span:first-child{color:var(--muted);font-weight:300}
+.d-tbl{width:100%;border-collapse:collapse;margin-top:8px}
+.d-tbl th{text-align:left;font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:16px 0 10px;border-bottom:1px solid var(--line-2)}
+.d-tbl td{padding:14px 0;border-bottom:1px solid var(--line);vertical-align:top;font-weight:400}
+.d-tbl .ix{color:var(--accent);font-variant-numeric:tabular-nums;width:46px}
+.d-tbl .sub{display:block;font-size:10.5px;color:var(--muted);font-weight:300;margin-top:3px}
+.d-tbl .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:16px}
+.d-tbl .am{color:var(--accent)}
+.d-tot{margin-left:auto;width:min(100%,480px);margin-top:14px}
+.d-tot div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:12px;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line)}
+.d-tot div span:first-child{color:var(--muted);font-weight:300}
+.d-tot .g{border-top:1px solid var(--accent-line);border-bottom:none;margin-top:4px;padding-top:16px;align-items:baseline}
+.d-tot .g span:first-child{font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.d-tot .g span:last-child{font-family:var(--display);font-weight:300;font-size:26px;color:var(--accent-bright)}
+.d-pay{display:grid;grid-template-columns:1fr 1fr;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
+.d-pay>div{padding-right:28px;min-width:0}
+.d-pay>div+div{border-left:1px solid var(--line);padding-left:28px;padding-right:0}
+.d-pay .lab{margin-bottom:10px}
+.d-pay p{font-size:11px;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:10px}
+.d-foot{margin-top:auto;padding-top:24px}
+.d-ruo{text-align:center;font-size:10px;color:var(--muted-2);padding:10px 0 14px;border-bottom:1px solid var(--line)}
+.d-brand{display:flex;justify-content:space-between;gap:12px;padding-top:14px;font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.d-brand b{color:var(--ink);font-weight:500}
+.margin-box{border:1px solid var(--accent-line);background:var(--glass-accent);padding:14px 16px;margin-top:20px}
 .margin-box .kicker{margin-bottom:8px;display:block}
-
+@container doc (max-width:560px){
+  .inv-doc{padding:28px 22px}
+  .d-head{flex-direction:column;gap:16px}
+  .d-head .rt{text-align:left}
+  .d-due{text-align:left}
+  .d-cols{grid-template-columns:1fr;padding:6px 0 10px}
+  .d-cols>div{padding:12px 0;border-left:none!important;border-top:1px solid var(--line)}
+  .d-cols>div:first-child{border-top:none}
+  .d-tot{width:100%}
+  .d-pay{grid-template-columns:1fr}
+  .d-pay>div{padding:0}
+  .d-pay>div+div{border-left:none;border-top:1px solid var(--line);padding-top:16px;margin-top:16px}
+}
 @container app (max-width:1023px){
-  .inv-grid{grid-template-columns:1fr;gap:18px}
-  .paper{aspect-ratio:auto}
+  .inv-grid{grid-template-columns:1fr;gap:20px}
+  .f3{grid-template-columns:1fr 1fr}
 }
 
 /* ---------- reduced motion ---------- */
@@ -521,6 +582,8 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3.4v11.2M7.6 7.8 12 3.4l4.4 4.4"/><path d="M5 12.6v7.8h14v-7.8"/></symbol>
 <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.4v11.2M7.6 10.2 12 14.6l4.4-4.4"/><path d="M5 16.6v3.8h14v-3.8"/></symbol>
 <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 8.4V3.6h10v4.8"/><path d="M4.4 8.4h15.2v8h-3.2v4H7.6v-4H4.4z"/><path d="M7.6 14h8.8"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.6 6.4h14.8M9 6.4V4.2h6v2.2M6.4 6.4l.8 14h9.6l.8-14"/></symbol>
 </defs></svg>
 
@@ -746,31 +809,83 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
         <p class="note" style="margin-top:16px">An invoice freezes the order's line prices at issue time. The PDF is the preview itself, captured at A4 — what you approve on screen is what the client receives. Send hands it to WhatsApp or mail through the device share sheet.</p>
       </section>
 
-      <!-- ============ SHARED · INVOICE BUILDER ============ -->
+      <!-- ============ SHARED · INVOICE BUILDER (ported from the AXIOM invoice builder) ============ -->
       <section class="screen" data-screen="invoice">
         <div style="margin-bottom:18px"><button class="tlink" data-inv-back><svg class="ic-sv"><use href="#i-caret"></use></svg><span data-inv-back-label>Invoices</span></button></div>
         <div class="inv-grid">
           <div data-inv-form>
-            <div class="sec-h"><span class="kicker">Invoice details</span></div>
-            <div class="field"><label>Invoice number</label><input data-inv="no" /></div>
-            <div class="field"><label>Issue date</label><input data-inv="date" /></div>
-            <div class="field"><label>Payment terms</label>
-              <div class="hrow"><button class="chip" data-terms="0">On receipt</button><button class="chip on" data-terms="7">Net 7</button><button class="chip" data-terms="14">Net 14</button><button class="chip" data-terms="30">Net 30</button></div>
-              <input data-inv="due" style="margin-top:8px" /></div>
-            <div class="field"><label>PPN</label>
-              <div class="hrow"><button class="chip on" data-ppn="1">Charge PPN</button><button class="chip" data-ppn="0">No PPN</button>
-                <span class="qty" style="margin-left:6px"><button data-rate="-1" aria-label="Lower rate"><svg class="ic-sv"><use href="#i-minus"></use></svg></button><span data-rate-val>11%</span><button data-rate="1" aria-label="Raise rate"><svg class="ic-sv"><use href="#i-plus"></use></svg></button></span></div></div>
-            <div class="field"><label>Notes on invoice</label><textarea data-inv="notes"></textarea></div>
-            <div class="field"><label>Bank details</label><input data-inv="bank" /></div>
+            <div class="ib-title">Invoice builder</div>
+            <div class="ib-sub">AXIOM · IDR · A4</div>
+
+            <div class="ib-sec">Invoice</div>
+            <div class="f2">
+              <div class="field"><label>Invoice no.</label><input data-inv="no" /></div>
+              <div class="field"><label>Reference</label><input data-inv="ref" placeholder="PO / quote no." /></div>
+            </div>
+            <div class="f3">
+              <div class="field"><label>Issued</label><input data-inv="date" type="date" /></div>
+              <div class="field"><label>Net days</label><input data-inv="terms" type="number" min="0" max="120" /></div>
+              <div class="field"><label>Due</label><input data-inv="due" type="date" readonly /></div>
+            </div>
+
+            <div class="ib-sec">Billed to</div>
+            <div class="field"><label>Name</label><input data-inv="toName" placeholder="Client name" /></div>
+            <div class="field"><label>Company / institution</label><input data-inv="toCo" /></div>
+            <div class="field"><label>Address</label><textarea data-inv="toAddr" rows="2" placeholder="Street address&#10;City, postcode · Indonesia"></textarea></div>
+            <div class="f2">
+              <div class="field"><label>Email</label><input data-inv="toEmail" type="email" /></div>
+              <div class="field"><label>Phone</label><input data-inv="toPhone" /></div>
+            </div>
+
+            <div class="ib-sec">Issued by</div>
+            <div class="field"><label>Legal entity</label><input data-inv="byEntity" /></div>
+            <div class="field"><label>Address</label><textarea data-inv="byAddr" rows="2"></textarea></div>
+
+            <div class="ib-sec">Line items</div>
+            <div data-inv-lines></div>
+            <button class="btn-add" data-line-add>+ Add item</button>
+
+            <div class="ib-sec">Adjustments</div>
+            <div class="f3">
+              <div class="field"><label>Handling</label><input data-inv="handling" data-money inputmode="numeric" /></div>
+              <div class="field"><label>Discount</label><input data-inv="discount" data-money inputmode="numeric" /></div>
+              <div class="field"><label>PPN %</label><input data-inv="ppn" type="number" min="0" max="15" /></div>
+            </div>
+            <p class="hint">A row is left off the invoice when its value is zero.</p>
+
+            <div class="ib-sec">Payment</div>
+            <div class="f2">
+              <div class="field"><label>Bank</label><input data-inv="bank" /></div>
+              <div class="field"><label>SWIFT / BIC</label><input data-inv="swift" placeholder="optional" /></div>
+            </div>
+            <div class="field"><label>Account name</label><input data-inv="acctName" /></div>
+            <div class="field"><label>Account no.</label><input data-inv="acctNo" /></div>
+            <div class="field"><label>Transfer reference</label><input data-inv="xfer" placeholder="mirrors the invoice no." /></div>
+            <p class="hint">Leave SWIFT empty for a domestic transfer — the row is dropped from the invoice.</p>
+
+            <div class="ib-sec">Notes</div>
+            <div class="field"><textarea data-inv="notes" rows="7"></textarea></div>
+            <p class="hint">A blank line starts a new paragraph. <b>{TERMS}</b> becomes the net days.</p>
+
             <div class="margin-box owner-only" data-inv-margin></div>
+
+            <div class="ib-foot">
+              <div class="ib-total"><span>Total due <b data-ib-total></b></span><span data-ib-pages>1 page</span></div>
+              <button class="btn-save" data-inv-pdf>Save as PDF</button>
+              <p class="hint" style="margin-top:12px">In the print dialog: paper <b>A4</b>, <b>Background graphics</b> on. A one-page invoice prints correctly at any margin setting; set margins to <b>None</b> once it runs past one page.</p>
+              <div class="hrow" style="margin-top:4px">
+                <button class="btn btn-sm" data-inv-send><svg class="ic-sv"><use href="#i-share"></use></svg>Send PDF</button>
+                <button class="btn btn-sm" data-inv-print><svg class="ic-sv"><use href="#i-print"></use></svg>Print</button>
+              </div>
+              <button class="btn-reset" data-inv-reset>Reset to defaults</button>
+            </div>
           </div>
           <div>
-            <div class="sec-h"><span class="kicker">Preview · A4 · paper palette</span><span class="sp"></span><span data-inv-status></span></div>
-            <div class="paper-wrap"><div class="paper" data-paper></div></div>
-            <div class="hrow" style="margin-top:16px">
+            <div class="sec-h"><span class="kicker">Preview · A4</span><span class="sp"></span><span data-inv-status></span></div>
+            <div class="doc-wrap"><div class="inv-doc" data-doc></div></div>
+            <div class="hrow" style="margin-top:16px" data-ro-actions hidden>
               <button class="btn btn-sm btn-accent" data-inv-pdf><svg class="ic-sv"><use href="#i-download"></use></svg>Download PDF</button>
               <button class="btn btn-sm" data-inv-send><svg class="ic-sv"><use href="#i-share"></use></svg>Send PDF</button>
-              <button class="btn btn-sm" data-inv-print><svg class="ic-sv"><use href="#i-print"></use></svg>Print</button>
             </div>
           </div>
         </div>
@@ -1083,13 +1198,13 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     var r="", issued=0;
     ORDERS.forEach(function(o){ if(o.state==="pending") return; var c=C(o.client), inv=o.invoice; if(inv) issued++;
       r += '<button class="row" data-open-invoice="'+o.id+'" data-tags="'+(inv?"issued":"draft")+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+(inv?inv.no:"Draft · "+o.id)+
-           '</span><span class="t2">'+h(c.name)+' · '+(inv?"issued "+inv.date+(inv.sent?" · sent":""):o.date)+'</span></span><span class="rt"><span class="amt">'+idr(inv?inv.total:orderTotal(o))+'</span>'+
+           '</span><span class="t2">'+h(c.name)+' · '+(inv?"issued "+fmtShort(inv.date)+(inv.sent?" · sent":""):o.date)+'</span></span><span class="rt"><span class="amt">'+idr(inv?inv.total:orderTotal(o))+'</span>'+
            (inv?'<span class="chip ok"><span class="dot"></span>Issued</span>':'<span class="chip"><span class="dot"></span>Not invoiced</span>')+'</span></button>'; });
     $('[data-list="invoice-rows"]').innerHTML=r; applyFilter("invoices");
     $("[data-invoices-sub]").textContent = issued+" issued · "+(ORDERS.filter(function(o){return o.state!=="pending"&&!o.invoice;}).length)+" to build";
     var inv="";
     ORDERS.forEach(function(x){ if(x.client!=="regenera"||!x.invoice) return; var n=x.invoice;
-      inv += '<button class="row" data-open-invoice="'+x.id+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+n.no+'</span><span class="t2">Issued '+n.date+' · due '+n.due+'</span></span><span class="rt"><span class="amt">'+idr(n.total)+'</span></span></button>'; });
+      inv += '<button class="row" data-open-invoice="'+x.id+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+n.no+'</span><span class="t2">Issued '+fmtShort(n.date)+' · due '+fmtShort(n.due)+'</span></span><span class="rt"><span class="amt">'+idr(n.total)+'</span></span></button>'; });
     $('[data-list="invoices"]').innerHTML = inv || '<div class="empty">No invoices issued yet.</div>';
   }
   function setRole(r){ role=r; root.dataset.role=r; $$("[data-role-btn]").forEach(function(b){ b.classList.toggle("on", b.dataset.roleBtn===r); });
@@ -1265,113 +1380,151 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 
   /* ------------------------------------------------------------ invoices -- */
   var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  function fmtDate(d){ return ("0"+d.getDate()).slice(-2)+" "+MONTHS[d.getMonth()]+" "+d.getFullYear(); }
-  function addDays(str,n){ var p=str.split(" "), d=new Date(+p[2],MONTHS.indexOf(p[1]),+p[0]); d.setDate(d.getDate()+n); return fmtDate(d); }
+  var MONTHS_LONG=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function isoToday(){ var d=new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+  function addDaysISO(iso,n){ var p=(iso||isoToday()).split("-"), d=new Date(+p[0],+p[1]-1,+p[2]); d.setDate(d.getDate()+(+n||0));
+    return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+  function fmtShort(iso){ if(!iso) return ""; var p=iso.split("-"); return p[2]+" "+MONTHS[+p[1]-1]+" "+p[0]; }
+  function fmtLong(iso){ if(!iso) return ""; var p=iso.split("-"); return p[2]+" "+MONTHS_LONG[+p[1]-1]+" "+p[0]; }
+  function num(v){ return +String(v==null?"":v).replace(/[^\d]/g,"")||0; }
+  var NOTES_DEFAULT = "Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\n"+
+    "Goods ship cold chain at 2–8 °C. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\n"+
+    "Opened lots are not returnable. Report any discrepancy in writing within 7 days of delivery.";
   function invoiceDraft(o){
-    if(o.invoice) return o.invoice;
-    var today=fmtDate(new Date());
-    return {no:"INV"+o.id.slice(2), date:today, terms:7, due:addDays(today,7), ppn:true, rate:11,
-            notes:"Payment by bank transfer. Cold-chain peptide lines ship on cleared funds.",
-            bank:"Bank Mandiri · 123-00-4567890-1 · a.n. PT AXIOM Performa Indonesia", issued:false, sent:false};
+    var c=C(o.client), today=isoToday();
+    return { no:"AX-INV-"+today.slice(0,4)+"-"+o.id.slice(-4), ref:o.id, date:today, terms:30, due:addDaysISO(today,30),
+      toName:c.name, toCo:c.type==="individual"?"":c.name, toAddr:"", toEmail:"", toPhone:"",
+      byEntity:"[Legal entity name]", byAddr:"[Street address]",
+      lines:o.lines.map(function(l){ var v=V(l[0]); return {v:v.id, desc:v.name, spec:v.dose, qty:l[1], price:tierPrice(v,c.pct)}; }),
+      handling:o.ship, discount:0, ppn:0,
+      bank:"BCA", swift:"", acctName:"Mohamad Jagad Marcelleno", acctNo:"0658 139 196", xfer:"",
+      notes:NOTES_DEFAULT, issued:false, sent:false };
   }
-  function invCalc(o,inv){ var c=C(o.client), sub=0; o.lines.forEach(function(l){ sub+=tierPrice(V(l[0]),c.pct)*l[1]; }); sub+=o.ship;
-    var ppn=inv.ppn?Math.round(sub*inv.rate/100):0; return {sub:sub,ppn:ppn,total:sub+ppn}; }
+  function invCalc(inv){ var sub=0; inv.lines.forEach(function(l){ sub+=num(l.price)*(+l.qty||0); });
+    var base=sub+num(inv.handling)-num(inv.discount), ppn=inv.ppn>0?Math.round(base*inv.ppn/100):0; return {sub:sub,base:base,ppn:ppn,total:base+ppn}; }
+  function invHasPeptide(inv){ return inv.lines.some(function(l){ var v=l.v&&V(l.v); return v&&v.cat==="peptide"; }); }
+  var ro=false;
   function openInvoice(orderId){
     var o=O(orderId); invoiceCtx={o:o, inv:o.invoice?o.invoice:invoiceDraft(o)};
-    var ro = surface==="account" || !!o.invoice;
+    ro = surface==="account" || !!o.invoice;
     $("[data-inv-form]").hidden = surface==="account";
-    $$("[data-inv-form] input,[data-inv-form] textarea,[data-inv-form] .chip,[data-inv-form] .qty button").forEach(function(el){ el.disabled = ro; });
+    $("[data-ro-actions]").hidden = surface!=="account";
     $("[data-inv-back-label]").textContent = surface==="account"?"Orders":"Invoices";
-    fillInvoiceForm(); renderPaper(); show("invoice");
+    fillInvoiceForm(); renderLines(); renderDoc(); show("invoice");
   }
+  function lockForm(){ $$("[data-inv-form] input,[data-inv-form] textarea,[data-inv-form] select,[data-inv-form] .li-ctl button,[data-line-add],[data-inv-reset]").forEach(function(el){ el.disabled=ro; }); }
   function fillInvoiceForm(){ var inv=invoiceCtx.inv;
-    ["no","date","due","notes","bank"].forEach(function(k){ $('[data-inv="'+k+'"]').value=inv[k]; });
-    $$("[data-terms]").forEach(function(b){ b.classList.toggle("on", +b.dataset.terms===inv.terms); });
-    $$("[data-ppn]").forEach(function(b){ b.classList.toggle("on", (b.dataset.ppn==="1")===inv.ppn); });
-    $("[data-rate-val]").textContent=inv.rate+"%";
-  }
-  function renderPaper(){
-    var o=invoiceCtx.o, inv=invoiceCtx.inv, c=C(o.client), x=invCalc(o,inv), hasPep=o.lines.some(function(l){return V(l[0]).cat==="peptide";});
-    var rows=o.lines.map(function(l){ var v=V(l[0]), u=tierPrice(v,c.pct);
-      return '<tr><td class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+'<br><span style="color:var(--pmuted);font-size:10px">'+h(v.content)+(v.cat==="peptide"?' · Research Use Only':'')+'</span></td><td class="n">'+l[1]+'</td><td class="n">'+idr(u)+'</td><td class="n">'+idr(u*l[1])+'</td></tr>'; }).join("");
-    if(o.ship) rows += '<tr><td class="k">Insured shipping</td><td class="n">1</td><td class="n">'+idr(o.ship)+'</td><td class="n">'+idr(o.ship)+'</td></tr>';
-    var wmPath = $("#wm").innerHTML;                      /* inline, so the capture engine can draw it */
-    $("[data-paper]").innerHTML = '<div class="p-body">'+
-      '<div class="p-head"><div><svg class="wm-sv" viewBox="0 0 582 70" role="img" aria-label="AXIOM">'+wmPath+'</svg><div style="font-size:10px;color:var(--pmuted);margin-top:8px">Human Performance &amp; Longevity · Jakarta</div></div>'+
-      '<div style="text-align:right"><span class="p-lab">Invoice</span><div class="p-title">'+h(inv.no)+'</div></div></div>'+
-      '<div class="p-meta"><div><span class="p-lab">Billed to</span><b>'+h(c.name)+'</b><br>'+c.type.charAt(0).toUpperCase()+c.type.slice(1)+' account · '+c.tier+'<br>Order '+o.id+'</div>'+
-      '<div><span class="p-lab">Dates</span>Issued <b>'+inv.date+'</b><br>Due <b>'+inv.due+'</b>'+(inv.terms?' · net '+inv.terms:' · on receipt')+'<br>Prices in IDR</div></div>'+
-      '<table><thead><tr><th>Item</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Total</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-      '<div class="p-tot"><div><span>Subtotal</span><span>'+idr(x.sub)+'</span></div>'+(inv.ppn?'<div><span>PPN '+inv.rate+'%</span><span>'+idr(x.ppn)+'</span></div>':'<div><span>PPN</span><span>Not charged</span></div>')+
-      '<div class="g"><span>Total due</span><span>'+idr(x.total)+'</span></div></div>'+
-      (inv.notes?'<div class="p-note">'+h(inv.notes)+'</div>':'')+'<div class="p-note"><span class="p-lab">Payment</span>'+h(inv.bank)+'</div>'+
-      (hasPep?'<div class="p-ruo"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>':'')+
-      '</div><div class="p-foot"><span>'+h(inv.no)+' · '+o.id+'</span><span>Certificate of Analysis per lot</span></div>';
-    $("[data-inv-margin]").innerHTML = marginBox(o.lines,c.pct,"Margin on this invoice").replace('class="margin-box owner-only"','class="margin-box"').replace("</div>",'</div><p class="note" style="margin-top:8px">Shown beside the preview only. Never printed.</p>');
+    $$("[data-inv]").forEach(function(el){ var k=el.dataset.inv, v=inv[k]; el.value = el.hasAttribute("data-money") ? idr(num(v)) : (v==null?"":v); }); lockForm(); }
+  function compoundOptions(sel){ var c=C(invoiceCtx.o.client), o='<option value="">Custom line</option>';
+    VARIANTS.forEach(function(v){ o+='<option value="'+v.id+'"'+(v.id===sel?' selected':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(tierPrice(v,c.pct))+'</option>'; }); return o; }
+  function renderLines(){ var inv=invoiceCtx.inv, out="";
+    inv.lines.forEach(function(l,i){ out+=
+      '<div class="li-card"><div class="li-head"><span class="ix">'+("0"+(i+1)).slice(-2)+'</span><span class="amt">'+idr(num(l.price)*(+l.qty||0))+'</span><span class="sp"></span>'+
+      '<span class="li-ctl"><button data-line-up="'+i+'" aria-label="Move up"'+(i===0?' disabled':'')+'>'+ic("up")+'</button><button data-line-down="'+i+'" aria-label="Move down"'+(i===inv.lines.length-1?' disabled':'')+'>'+ic("down")+'</button><button data-line-rm="'+i+'" aria-label="Remove">'+ic("x")+'</button></span></div>'+
+      '<div class="field"><label>Compound</label><select data-line-sel="'+i+'">'+compoundOptions(l.v)+'</select></div>'+
+      '<div class="f2"><div class="field"><label>Description</label><input data-line="'+i+'" data-k="desc" value="'+h(l.desc)+'" /></div><div class="field"><label>Lot / spec</label><input data-line="'+i+'" data-k="spec" value="'+h(l.spec)+'" /></div></div>'+
+      '<div class="f2"><div class="field"><label>Qty</label><input type="number" min="1" data-line="'+i+'" data-k="qty" value="'+l.qty+'" /></div><div class="field"><label>Unit price</label><input data-line="'+i+'" data-k="price" data-money inputmode="numeric" value="'+idr(num(l.price))+'" /></div></div></div>'; });
+    $("[data-inv-lines]").innerHTML = out || '<div class="empty">No lines. Add an item.</div>'; lockForm(); }
+  function renderDoc(){
+    var inv=invoiceCtx.inv, c=C(invoiceCtx.o.client), x=invCalc(inv), hasPep=invHasPeptide(inv), wmPath=$("#wm").innerHTML;
+    var rows=inv.lines.map(function(l,i){ var v=l.v&&V(l.v);
+      return '<tr><td class="ix">'+("0"+(i+1)).slice(-2)+'</td><td><span>'+h(l.desc||"—")+'</span>'+(l.spec?'<span class="sub">'+h(l.spec)+(v&&v.cat==="peptide"?' lot':'')+'</span>':'')+
+             '</td><td class="n">'+(+l.qty||0)+'</td><td class="n">'+idr(num(l.price))+'</td><td class="n am">'+idr(num(l.price)*(+l.qty||0))+'</td></tr>'; }).join("");
+    var notes=(inv.notes||"").replace(/\{TERMS\}/g,inv.terms).split(/\n\s*\n/).filter(function(p){return p.trim();}).map(function(p){ return '<p>'+h(p.trim())+'</p>'; }).join("");
+    var toDetails=[inv.toCo&&inv.toCo!==inv.toName?inv.toCo:"", inv.toAddr, inv.toEmail, inv.toPhone].filter(Boolean).join("\n") || "[Client details]";
+    $("[data-doc]").innerHTML = '<div class="d-body">'+
+      '<div class="d-head"><svg class="wm-sv" viewBox="0 0 582 70" width="299" height="36" preserveAspectRatio="xMinYMid meet" role="img" aria-label="AXIOM">'+wmPath+'</svg>'+
+        '<div class="rt"><div class="d-title">Invoice</div><div class="d-meta">No. <b>'+h(inv.no)+'</b><br>Issued <b>'+fmtLong(inv.date)+'</b><br>Due <b>'+fmtLong(inv.due)+'</b></div>'+
+        '<div class="d-due"><span class="lab">Amount due</span><span class="v">'+idr(x.total)+'</span></div></div></div>'+
+      '<div class="d-cols"><div><span class="lab">Billed to</span><div class="nm">'+h(inv.toName||"[Client name]")+'</div><div class="sm">'+h(toDetails)+'</div></div>'+
+        '<div><span class="lab">Issued by</span><div class="nm">AXIOM</div><div class="sm">'+h(inv.byEntity)+'\n'+h(inv.byAddr)+'</div></div>'+
+        '<div><span class="lab">Details</span><div style="margin-top:8px"><div class="d-kv"><span>Reference</span><span>'+h(inv.ref||"[PO / quote no.]")+'</span></div>'+
+        '<div class="d-kv"><span>Terms</span><span>'+(inv.terms>0?"Net "+inv.terms:"On receipt")+'</span></div><div class="d-kv"><span>Currency</span><span>IDR</span></div>'+
+        '<div class="d-kv"><span>Handling</span><span>'+(hasPep?"Cold chain":"Insured")+'</span></div></div></div></div>'+
+      '<table class="d-tbl"><thead><tr><th>#</th><th>Description</th><th class="n">Qty</th><th class="n">Unit price</th><th class="n">Amount</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+      '<div class="d-tot"><div><span>Subtotal</span><span>'+idr(x.sub)+'</span></div>'+
+        (num(inv.handling)?'<div><span>Cold-chain handling &amp; delivery</span><span>'+idr(num(inv.handling))+'</span></div>':'')+
+        (num(inv.discount)?'<div><span>Discount</span><span>− '+idr(num(inv.discount))+'</span></div>':'')+
+        (inv.ppn>0?'<div><span>PPN '+inv.ppn+'%</span><span>'+idr(x.ppn)+'</span></div>':'')+
+        '<div class="g"><span>Total due</span><span>'+idr(x.total)+'</span></div></div>'+
+      '<div class="d-pay"><div><span class="lab">Payment</span><div class="d-kv"><span>Bank</span><span>'+h(inv.bank)+'</span></div>'+
+        (inv.swift?'<div class="d-kv"><span>SWIFT / BIC</span><span>'+h(inv.swift)+'</span></div>':'')+
+        '<div class="d-kv"><span>Account name</span><span>'+h(inv.acctName)+'</span></div><div class="d-kv"><span>Account no.</span><span>'+h(inv.acctNo)+'</span></div>'+
+        '<div class="d-kv"><span>Reference</span><span>'+h(inv.xfer||inv.no)+'</span></div></div><div><span class="lab">Notes</span>'+notes+'</div></div>'+
+      '</div><div class="d-foot">'+(hasPep?'<div class="d-ruo">Research Use Only.</div>':'<div class="d-ruo" style="visibility:hidden">·</div>')+
+      '<div class="d-brand"><span><b>AXIOM</b> · Human Performance &amp; Longevity</span><span>Documented, not promised.</span></div></div>';
+    /* owner-only margin, over lines that map to a priced variant */
+    var rev=0,cost=0,custom=0; inv.lines.forEach(function(l){ var v=l.v&&V(l.v); if(!v){ custom++; return; } rev+=num(l.price)*(+l.qty||0); cost+=v.cost*(+l.qty||0); });
+    var pct=rev?Math.round((rev-cost)/rev*100):0;
+    $("[data-inv-margin]").innerHTML='<span class="kicker">Margin on this invoice · owner only</span><div class="kv"><span class="k">Revenue</span><span class="v">'+idr(rev)+'</span></div><div class="kv"><span class="k">Cost basis</span><span class="v">'+idr(cost)+'</span></div>'+
+      '<div class="kv" style="border:none"><span class="k">Margin</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(rev-cost)+' '+gmChip(pct)+'</span></div>'+(custom?'<p class="note" style="margin-top:6px">'+custom+' custom line'+(custom>1?'s':'')+' without a cost basis excluded.</p>':'')+'<p class="note" style="margin-top:6px">Shown beside the form only. Never printed.</p>';
+    $("[data-ib-total]").textContent=idr(x.total);
+    var doc=$("[data-doc]"), pages=Math.max(1,Math.ceil((doc.scrollHeight)/(doc.getBoundingClientRect().width*1.4142)));
+    $("[data-ib-pages]").textContent=pages+(pages>1?" pages":" page");
     $("[data-inv-status]").innerHTML = inv.issued ? '<span class="chip ok"><span class="dot"></span>Issued'+(inv.sent?' · sent':'')+'</span>' : '<span class="chip"><span class="dot"></span>Draft</span>';
   }
   function invPdfName(){ return invoiceCtx.inv.no+".pdf"; }
-  function buildPdf(){
+  function buildPdf(){   /* vector fallback, dark palette — used only when the capture engine is unavailable */
     if(!window.jspdf || !window.jspdf.jsPDF){ toast("PDF engine still loading — try again in a moment"); return null; }
-    var o=invoiceCtx.o, inv=invoiceCtx.inv, c=C(o.client), x=invCalc(o,inv), hasPep=o.lines.some(function(l){return V(l[0]).cat==="peptide";});
-    var d=new window.jspdf.jsPDF({unit:"mm",format:"a4"}), W=210, L=20, R=190, y=22;
-    d.setFillColor(242,237,229); d.rect(0,0,W,297,"F");
-    d.setTextColor(20,18,16); d.setFont("helvetica","bold"); d.setFontSize(15); d.setCharSpace(3); d.text("AXIOM",L,y); d.setCharSpace(0);
-    d.setFont("helvetica","normal"); d.setFontSize(7.5); d.setTextColor(75,70,63); d.text("HUMAN PERFORMANCE & LONGEVITY  ·  JAKARTA",L,y+5.5);
-    d.setFontSize(7); d.text("INVOICE",R,y-4,{align:"right"}); d.setTextColor(20,18,16); d.setFontSize(20); d.setFont("helvetica","normal"); d.text(inv.no,R,y+4,{align:"right"});
-    y+=12; d.setDrawColor(20,18,16); d.setLineWidth(.3); d.line(L,y,R,y); y+=8;
-    d.setFontSize(7); d.setTextColor(75,70,63); d.text("BILLED TO",L,y); d.text("DATES",115,y); y+=5;
-    d.setFontSize(9.5); d.setTextColor(20,18,16); d.setFont("helvetica","bold"); d.text(c.name,L,y); d.setFont("helvetica","normal");
-    d.text("Issued  "+inv.date,115,y); y+=4.8; d.setTextColor(75,70,63);
-    d.text(c.type.charAt(0).toUpperCase()+c.type.slice(1)+" account  ·  "+c.tier,L,y); d.text("Due  "+inv.due+(inv.terms?"  ·  net "+inv.terms:"  ·  on receipt"),115,y); y+=4.8;
-    d.text("Order "+o.id,L,y); d.text("Prices in IDR",115,y); y+=6; d.setDrawColor(201,195,184); d.setLineWidth(.2); d.line(L,y,R,y); y+=8;
-    d.setFontSize(7); d.text("ITEM",L,y); d.text("QTY",128,y,{align:"right"}); d.text("UNIT",158,y,{align:"right"}); d.text("TOTAL",R,y,{align:"right"}); y+=2.2; d.setDrawColor(20,18,16); d.setLineWidth(.3); d.line(L,y,R,y); y+=6;
-    d.setFontSize(9.5);
-    function row(name,sub,q,u,t){ d.setTextColor(20,18,16); d.text(name,L,y); d.text(String(q),128,y,{align:"right"}); d.text(idr(u),158,y,{align:"right"}); d.text(idr(t),R,y,{align:"right"});
-      if(sub){ y+=4; d.setFontSize(7.5); d.setTextColor(75,70,63); d.text(sub,L,y); d.setFontSize(9.5); } y+=3; d.setDrawColor(201,195,184); d.setLineWidth(.2); d.line(L,y,R,y); y+=6; }
-    o.lines.forEach(function(l){ var v=V(l[0]), u=tierPrice(v,c.pct); row(v.name+(v.cat==="peptide"?"  ·  "+v.dose:""), v.content+(v.cat==="peptide"?"  ·  Research Use Only":""), l[1], u, u*l[1]); });
-    if(o.ship) row("Insured shipping",null,1,o.ship,o.ship);
-    y+=2; var tx=120;
-    d.setTextColor(75,70,63); d.text("Subtotal",tx,y); d.setTextColor(20,18,16); d.text(idr(x.sub),R,y,{align:"right"}); y+=5.5;
-    d.setTextColor(75,70,63); d.text(inv.ppn?"PPN "+inv.rate+"%":"PPN",tx,y); d.setTextColor(20,18,16); d.text(inv.ppn?idr(x.ppn):"Not charged",R,y,{align:"right"}); y+=4; d.setDrawColor(20,18,16); d.setLineWidth(.3); d.line(tx,y,R,y); y+=7;
-    d.setFontSize(13); d.text("Total due",tx,y); d.text(idr(x.total),R,y,{align:"right"}); y+=12;
-    d.setFontSize(8.5); d.setTextColor(75,70,63);
-    if(inv.notes){ d.text(d.splitTextToSize(inv.notes,R-L),L,y); y+=4.5*Math.ceil(inv.notes.length/95)+4; }
-    d.setFontSize(7); d.text("PAYMENT",L,y); y+=4; d.setFontSize(8.5); d.text(d.splitTextToSize(inv.bank,R-L),L,y); y+=10;
-    if(hasPep){ d.setDrawColor(124,76,36); d.setLineWidth(.6); d.line(L,y-2,L,y+9); d.setFontSize(7.5);
-      d.text(d.splitTextToSize("Research Use Only. Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.",R-L-6),L+4,y+1); y+=14; }
-    d.setDrawColor(201,195,184); d.setLineWidth(.2); d.line(L,282,R,282); d.setFontSize(6.5); d.setTextColor(75,70,63);
-    d.text((inv.no+"  ·  "+o.id).toUpperCase(),L,287); d.text("CERTIFICATE OF ANALYSIS PER LOT",R,287,{align:"right"});
-    window.__lastPdfBytes = d.output("arraybuffer").byteLength;
-    return d;
+    var inv=invoiceCtx.inv, x=invCalc(inv), hasPep=invHasPeptide(inv);
+    var d=new window.jspdf.jsPDF({unit:"mm",format:"a4"}), L=20, R=190, y=24;
+    var INK=[242,237,229], MUTED=[156,148,136], ACC=[200,138,78], ACCB=[231,177,115], LINE=[40,36,32];
+    d.setFillColor(7,6,5); d.rect(0,0,210,297,"F");
+    d.setTextColor.apply(d,INK); d.setFont("helvetica","bold"); d.setFontSize(16); d.setCharSpace(3.5); d.text("AXIOM",L,y); d.setCharSpace(0);
+    d.setFont("helvetica","normal"); d.setFontSize(22); d.text("Invoice",R,y,{align:"right"}); y+=7;
+    d.setFontSize(7.5); d.setTextColor.apply(d,MUTED);
+    [["NO.",inv.no],["ISSUED",fmtLong(inv.date).toUpperCase()],["DUE",fmtLong(inv.due).toUpperCase()]].forEach(function(r){ d.text(r[0]+"  "+r[1],R,y,{align:"right"}); y+=4.2; });
+    y+=3; d.setDrawColor.apply(d,ACC); d.setLineWidth(.3); d.rect(R-58,y-1,58,15); d.setFontSize(6.5); d.setTextColor.apply(d,ACC); d.text("AMOUNT DUE",R-3,y+3.5,{align:"right"});
+    d.setFontSize(15); d.setTextColor.apply(d,ACCB); d.text(idr(x.total),R-3,y+11,{align:"right"}); y+=22;
+    d.setDrawColor.apply(d,LINE); d.setLineWidth(.2); d.line(L,y,R,y); y+=8;
+    d.setFontSize(7); d.setTextColor.apply(d,MUTED); d.text("BILLED TO",L,y); d.text("ISSUED BY",80,y); d.text("DETAILS",140,y); y+=5.5;
+    d.setFontSize(10); d.setTextColor.apply(d,INK); d.text(inv.toName||"[Client name]",L,y); d.text("AXIOM",80,y); d.setFontSize(8.5); d.setTextColor.apply(d,MUTED);
+    d.text("Reference  "+(inv.ref||"—"),140,y); y+=4.5; d.text(inv.byEntity,80,y); d.text("Terms  "+(inv.terms>0?"Net "+inv.terms:"On receipt"),140,y); y+=4.5; d.text(inv.byAddr,80,y); d.text("Currency  IDR",140,y); y+=8;
+    d.setDrawColor.apply(d,LINE); d.line(L,y,R,y); y+=8;
+    d.setFontSize(7); d.text("#",L,y); d.text("DESCRIPTION",L+12,y); d.text("QTY",130,y,{align:"right"}); d.text("UNIT PRICE",160,y,{align:"right"}); d.text("AMOUNT",R,y,{align:"right"}); y+=2.5; d.line(L,y,R,y); y+=6;
+    inv.lines.forEach(function(l,i){ var v=l.v&&V(l.v); d.setFontSize(9.5); d.setTextColor.apply(d,ACC); d.text(("0"+(i+1)).slice(-2),L,y); d.setTextColor.apply(d,INK); d.text(l.desc||"—",L+12,y);
+      d.text(String(+l.qty||0),130,y,{align:"right"}); d.text(idr(num(l.price)),160,y,{align:"right"}); d.setTextColor.apply(d,ACC); d.text(idr(num(l.price)*(+l.qty||0)),R,y,{align:"right"});
+      if(l.spec){ y+=4; d.setFontSize(7.5); d.setTextColor.apply(d,MUTED); d.text(l.spec+(v&&v.cat==="peptide"?" lot":""),L+12,y); } y+=3.5; d.line(L,y,R,y); y+=6; });
+    var tx=118; d.setFontSize(9); d.setTextColor.apply(d,MUTED); d.text("Subtotal",tx,y); d.setTextColor.apply(d,INK); d.text(idr(x.sub),R,y,{align:"right"}); y+=6;
+    if(num(inv.handling)){ d.setTextColor.apply(d,MUTED); d.text("Cold-chain handling & delivery",tx,y); d.setTextColor.apply(d,INK); d.text(idr(num(inv.handling)),R,y,{align:"right"}); y+=6; }
+    if(num(inv.discount)){ d.setTextColor.apply(d,MUTED); d.text("Discount",tx,y); d.setTextColor.apply(d,INK); d.text("- "+idr(num(inv.discount)),R,y,{align:"right"}); y+=6; }
+    if(inv.ppn>0){ d.setTextColor.apply(d,MUTED); d.text("PPN "+inv.ppn+"%",tx,y); d.setTextColor.apply(d,INK); d.text(idr(x.ppn),R,y,{align:"right"}); y+=6; }
+    d.setDrawColor.apply(d,ACC); d.line(tx,y-1,R,y-1); y+=7; d.setFontSize(7); d.setTextColor.apply(d,MUTED); d.text("TOTAL DUE",tx,y); d.setFontSize(16); d.setTextColor.apply(d,ACCB); d.text(idr(x.total),R,y,{align:"right"}); y+=14;
+    d.setDrawColor.apply(d,LINE); d.line(L,y,R,y); y+=7; d.setFontSize(7); d.setTextColor.apply(d,MUTED); d.text("PAYMENT",L,y); d.text("NOTES",110,y); y+=5; d.setFontSize(8.5);
+    var py=y; [["Bank",inv.bank],["Account name",inv.acctName],["Account no.",inv.acctNo],["Reference",inv.xfer||inv.no]].forEach(function(r){ d.setTextColor.apply(d,MUTED); d.text(r[0],L,py); d.setTextColor.apply(d,INK); d.text(r[1],100,py,{align:"right"}); py+=4.8; });
+    var ny=y; d.setTextColor.apply(d,MUTED); (inv.notes||"").replace(/\{TERMS\}/g,inv.terms).split(/\n\s*\n/).forEach(function(par){ if(!par.trim()) return; var ls=d.splitTextToSize(par.trim(),R-110); d.text(ls,110,ny); ny+=ls.length*4+3; });
+    if(hasPep){ d.setFontSize(7); d.setTextColor(106,99,90); d.text("Research Use Only.",105,272,{align:"center"}); }
+    d.setDrawColor.apply(d,LINE); d.line(L,276,R,276); d.setFontSize(6.5); d.setTextColor.apply(d,MUTED); d.text("AXIOM  ·  HUMAN PERFORMANCE & LONGEVITY",L,282); d.text("DOCUMENTED, NOT PROMISED.",R,282,{align:"right"});
+    window.__lastPdfBytes = d.output("arraybuffer").byteLength; return d;
   }
   function capturePdf(cb){
     if(!window.html2canvas || !window.jspdf || !window.jspdf.jsPDF){ var d=buildPdf(); window.__pdfSource = d?"vector":null; cb(d); return; }
     var stage=document.createElement("div"); stage.className="pdf-stage";
-    var clone=$("[data-paper]").cloneNode(true); stage.appendChild(clone); $(".app").appendChild(stage);
-    window.html2canvas(clone,{scale:2,backgroundColor:"#F2EDE5",useCORS:true,logging:false,width:794,windowWidth:794}).then(function(canvas){
+    var clone=$("[data-doc]").cloneNode(true); stage.appendChild(clone); $(".app").appendChild(stage);
+    window.html2canvas(clone,{scale:2,backgroundColor:"#070605",useCORS:true,logging:false,width:794,windowWidth:794}).then(function(canvas){
       stage.remove();
       var d=new window.jspdf.jsPDF({unit:"mm",format:"a4",compress:true});
       var img=canvas.toDataURL("image/jpeg",.92), hmm=canvas.height/canvas.width*210;
+      d.setFillColor(7,6,5); d.rect(0,0,210,297,"F");
       d.addImage(img,"JPEG",0,0,210,Math.max(hmm,297),undefined,"FAST");
-      if(hmm>297){ /* long invoice: continue on further pages from the same image */
-        var off=297; while(off<hmm-2){ d.addPage(); d.addImage(img,"JPEG",0,-off,210,hmm,undefined,"FAST"); off+=297; } }
+      if(hmm>297){ var off=297; while(off<hmm-2){ d.addPage(); d.setFillColor(7,6,5); d.rect(0,0,210,297,"F"); d.addImage(img,"JPEG",0,-off,210,hmm,undefined,"FAST"); off+=297; } }
       window.__lastPdfBytes = d.output("arraybuffer").byteLength; window.__pdfSource="capture"; cb(d);
     }).catch(function(){ stage.remove(); var d=buildPdf(); window.__pdfSource = d?"vector":null; cb(d); });
   }
-  function issueInvoice(){ var o=invoiceCtx.o, inv=invoiceCtx.inv, x=invCalc(o,inv); inv.issued=true; inv.total=x.total; o.invoice=inv; renderInvoices(); renderPaper();
-    $$("[data-inv-form] input,[data-inv-form] textarea,[data-inv-form] .chip,[data-inv-form] .qty button").forEach(function(el){ el.disabled=true; }); }
-  function invSummary(){ var o=invoiceCtx.o, inv=invoiceCtx.inv, x=invCalc(o,inv); return "AXIOM · Invoice "+inv.no+"\n"+C(o.client).name+"\nOrder "+o.id+"\nTotal due "+idr(x.total)+" · due "+inv.due+"\n\nPDF attached."; }
+  function issueInvoice(){ var o=invoiceCtx.o, inv=invoiceCtx.inv; inv.issued=true; inv.total=invCalc(inv).total; o.invoice=inv; ro=true; renderInvoices(); renderDoc(); lockForm(); }
+  function invSummary(){ var inv=invoiceCtx.inv; return "AXIOM · Invoice "+inv.no+"\n"+(inv.toName||"")+"\nReference "+(inv.ref||inv.no)+"\nTotal due "+idr(invCalc(inv).total)+" · due "+fmtShort(inv.due)+"\n\nPDF attached."; }
   function downloadPdf(){ toast("Rendering "+invPdfName()); capturePdf(function(d){ if(!d) return; issueInvoice();
     try{ d.save(invPdfName()); toast(invPdfName()+" · "+Math.round(window.__lastPdfBytes/1024)+" KB"); }catch(e){ toast("Download blocked in this viewer — open the repo file or use Send"); } }); }
-  function sendPdf(){ toast("Rendering "+invPdfName()); capturePdf(function(d){ if(!d) return; issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderPaper();
+  function sendPdf(){ toast("Rendering "+invPdfName()); capturePdf(function(d){ if(!d) return; issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderDoc();
     var blob=d.output("blob"), file; try{ file=new File([blob],invPdfName(),{type:"application/pdf"}); }catch(e){}
     if(file && navigator.canShare && navigator.canShare({files:[file]})){ navigator.share({files:[file],title:invPdfName(),text:invSummary()}).then(function(){ toast("Shared "+invPdfName()); }).catch(function(){ toast("Share cancelled"); }); }
     else { openWA(invSummary(), C(invoiceCtx.o.client).wa); toast("No file share here — WhatsApp message opened; PDF attaches on a phone"); } }); }
   function printInvoice(){ var w=null; try{ w=window.open("","_blank"); }catch(e){}
     if(!w){ toast("Print window blocked in this viewer"); return; }
-    var css=$("style").textContent; w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+invoiceCtx.inv.no+'</title><style>'+css+' html,body{background:#F2EDE5!important;height:auto} #root{position:static!important;overflow:visible!important;background:#F2EDE5!important} .paper{box-shadow:none;max-width:720px;margin:0 auto}</style></head><body><div id="root">'+$("svg[aria-hidden]").outerHTML+'<div class="paper">'+$("[data-paper]").innerHTML+'</div></div></body></html>');
+    var css=$("style").textContent;
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+invoiceCtx.inv.no+'</title><style>'+css+' html,body{background:#070605!important;height:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact} #root{position:static!important;overflow:visible!important} .inv-doc{box-shadow:none;border:none;margin:0 auto;max-width:794px} @page{size:A4;margin:0}</style></head><body><div id="root"><div class="doc-wrap">'+$("svg[aria-hidden]").outerHTML+'<div class="inv-doc">'+$("[data-doc]").innerHTML+'</div></div></div></body></html>');
     w.document.close(); setTimeout(function(){ w.focus(); w.print(); },350); issueInvoice(); }
+  function moveLine(i,d){ var L=invoiceCtx.inv.lines, j=i+d; if(j<0||j>=L.length) return; var t=L[i]; L[i]=L[j]; L[j]=t; renderLines(); renderDoc(); }
 
   /* ------------------------------------------------------------ nav ------- */
   var MAP = { console:["console-home","console-orders",null,"console-clients","console-account"],
@@ -1445,7 +1598,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 
   /* one delegated handler for everything rendered dynamically */
   $(".app").addEventListener("click", function(e){
-    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-add],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-tier],[data-role-btn],[data-open-invoice],[data-inv-back],[data-terms],[data-ppn],[data-rate],[data-inv-pdf],[data-inv-send],[data-inv-print]");
+    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-add],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-tier],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print]");
     if(!el) return;
     var d = el.dataset;
     if(d.f!==undefined && el.classList.contains("chip")){ setFilter(el.parentNode.dataset.chips, d.f); return; }
@@ -1474,18 +1627,38 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     if(d.roleBtn){ setRole(d.roleBtn); toast(d.roleBtn==="ops"?"Viewing as Ops — cost and margin hidden":"Viewing as Owner"); return; }
     if(d.openInvoice){ closeSheet(); openInvoice(d.openInvoice); return; }
     if(d.invBack!==undefined){ show(surface==="console"?"console-invoices":"account-orders"); return; }
-    if(d.terms!==undefined){ if(el.disabled) return; var inv=invoiceCtx.inv; inv.terms=+d.terms; inv.due=addDays(inv.date,inv.terms); fillInvoiceForm(); renderPaper(); return; }
-    if(d.ppn!==undefined){ if(el.disabled) return; invoiceCtx.inv.ppn=d.ppn==="1"; fillInvoiceForm(); renderPaper(); return; }
-    if(d.rate!==undefined){ if(el.disabled) return; invoiceCtx.inv.rate=Math.min(15,Math.max(0,invoiceCtx.inv.rate+ +d.rate)); fillInvoiceForm(); renderPaper(); return; }
+    if(d.lineUp!==undefined){ if(el.disabled) return; moveLine(+d.lineUp,-1); return; }
+    if(d.lineDown!==undefined){ if(el.disabled) return; moveLine(+d.lineDown,1); return; }
+    if(d.lineRm!==undefined){ if(el.disabled) return; invoiceCtx.inv.lines.splice(+d.lineRm,1); renderLines(); renderDoc(); return; }
+    if(d.lineAdd!==undefined){ if(el.disabled) return; invoiceCtx.inv.lines.push({v:null,desc:"",spec:"",qty:1,price:0}); renderLines(); renderDoc(); var last=$$("[data-line-sel]").pop(); if(last) last.focus(); return; }
+    if(d.invReset!==undefined){ if(el.disabled) return; invoiceCtx.inv=invoiceDraft(invoiceCtx.o); fillInvoiceForm(); renderLines(); renderDoc(); toast("Reset to defaults"); return; }
     if(d.invPdf!==undefined){ downloadPdf(); return; }
     if(d.invSend!==undefined){ sendPdf(); return; }
     if(d.invPrint!==undefined){ printInvoice(); return; }
   });
-  $$("[data-inv]").forEach(function(el){ el.addEventListener("input", function(){ if(!invoiceCtx) return; invoiceCtx.inv[el.dataset.inv]=el.value; if(el.dataset.inv==="date"){ invoiceCtx.inv.due=addDays(el.value,invoiceCtx.inv.terms); $('[data-inv="due"]').value=invoiceCtx.inv.due; } renderPaper(); }); });
+  /* the builder form: every field re-renders the document live */
+  $("[data-inv-form]").addEventListener("input", function(e){ var el=e.target, inv=invoiceCtx&&invoiceCtx.inv; if(!inv||ro) return;
+    if(el.dataset.inv){ var k=el.dataset.inv;
+      if(el.hasAttribute("data-money")){ inv[k]=num(el.value); }
+      else if(k==="ppn"||k==="terms"){ inv[k]=Math.max(0,+el.value||0); }
+      else { inv[k]=el.value; }
+      if(k==="date"||k==="terms"){ inv.due=addDaysISO(inv.date,inv.terms); $('[data-inv="due"]').value=inv.due; }
+      renderDoc(); return; }
+    if(el.dataset.line!==undefined && el.dataset.k){ var l=inv.lines[+el.dataset.line]; if(!l) return; var kk=el.dataset.k;
+      l[kk] = kk==="qty" ? Math.max(1,+el.value||1) : kk==="price" ? num(el.value) : el.value;
+      var head=el.closest(".li-card").querySelector(".li-head .amt"); if(head) head.textContent=idr(num(l.price)*(+l.qty||0));
+      renderDoc(); return; }
+  });
+  $("[data-inv-form]").addEventListener("change", function(e){ var el=e.target, inv=invoiceCtx&&invoiceCtx.inv; if(!inv||ro) return;
+    if(el.dataset.lineSel!==undefined){ var l=inv.lines[+el.dataset.lineSel]; if(!l) return; var v=el.value&&V(el.value), c=C(invoiceCtx.o.client);
+      if(v){ l.v=v.id; l.desc=v.name; l.spec=v.dose; l.price=tierPrice(v,c.pct); } else { l.v=null; }
+      renderLines(); renderDoc(); return; }
+    if(el.hasAttribute("data-money")){ el.value=idr(num(el.value)); }
+  });
+  $("[data-inv-form]").addEventListener("focusout", function(e){ var el=e.target; if(el.hasAttribute&&el.hasAttribute("data-money")) el.value=idr(num(el.value)); });
 
   /* ------------------------------------------------------------ boot ------ */
-  ORDERS[6].invoice={no:"INV-2601-0139",date:"18 Aug 2026",terms:7,due:"25 Aug 2026",ppn:true,rate:11,notes:"Payment by bank transfer.",bank:"Bank Mandiri · 123-00-4567890-1 · a.n. PT AXIOM Performa Indonesia",issued:true,sent:true};
-  ORDERS[6].invoice.total=invCalc(ORDERS[6],ORDERS[6].invoice).total;
+  ORDERS[6].invoice=invoiceDraft(ORDERS[6]); ORDERS[6].invoice.date="2026-08-18"; ORDERS[6].invoice.due="2026-09-17"; ORDERS[6].invoice.issued=true; ORDERS[6].invoice.sent=true; ORDERS[6].invoice.total=invCalc(ORDERS[6].invoice).total;
   renderOrders(); renderCatalogue(); renderClients(); renderShop(); renderSaved(); renderAccountOrder(); renderPricing(); renderInvoices(); paintTabs(); setRole("owner");
 })();
 </script>

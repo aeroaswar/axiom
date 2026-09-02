@@ -193,9 +193,15 @@ rule, changes no existing order's margin, and is invisible to an `ops` session b
 **Entities:** `invoices`, `invoice_items`, `invoice_sequences`.
 
 **Console.** From any order: build an invoice with number (sequence per year, `INV-YYMM-NNNN`), issue
-date, payment terms (on receipt · net 7 · 14 · 30) driving the due date, PPN on or off with an editable
-rate, notes, and bank details. A live preview renders on the **paper palette** (§7 print inversion) —
-never on glass.
+date, reference, net days driving the due date, billed-to and issued-by blocks, line items picked from
+the price list (compound, description, lot / spec, qty, unit price, reorderable), adjustments (handling,
+discount, PPN %), payment details (bank, SWIFT when foreign, account name and number, transfer
+reference) and notes with a `{TERMS}` token. A live preview renders the invoice **on the dark canvas —
+the AXIOM invoice builder's own design**, not the paper palette: near-black ground with a faint bronze
+glow, "Invoice" in Jost, an amount-due box, a three-column Billed to / Issued by / Details header,
+bronze line numerals and amounts, Payment beside Notes, "Research Use Only." above the footer, and
+`AXIOM · Human Performance & Longevity` / `Documented, not promised.` as the last line. A row whose
+value is zero is left off the invoice.
 
 **One template, two outputs.** The on-screen preview and the PDF are rendered from the **same**
 invoice template — the PDF is produced by printing that template server-side (headless Chromium via
@@ -355,9 +361,10 @@ exceed it.
   `prefers-reduced-motion`.
 - **No purple, no cool blue, no pure black, no pure white.** Semantic states use `--ok --warn
   --err --info` from §11 and nothing else.
-- **Print** (invoices, quotes, packing slips) inverts to the paper palette: `--bg:#F2EDE5`,
+- **Print.** Price lists, quotes and packing slips invert to the paper palette: `--bg:#F2EDE5`,
   `--ink:#141210`, accent `--accent-deep:#7C4C24`, because core bronze fails small-text contrast
-  on light. Glass never prints — it flattens to paper with hairlines.
+  on light. **Invoices are the exception**: the house invoice is the dark document the AXIOM
+  invoice builder produces, printed with background graphics on. Glass never prints in either case.
 
 **Reuse rather than reinvent.** `website/index.html` already carries production-quality
 `.kicker`, `.eyebrow`, `.rule`, `.btn`, `.btn-solid`, `.tlink`, `.chip`, `.tnum` and the `.pcard`
@@ -463,7 +470,7 @@ WhatsApp messages, the invoices and the emails equally.
 | 15 | Reduced motion | With `prefers-reduced-motion: reduce`, no sheet rise, no reveal, no stagger. |
 | 16 | Seed loads | 52 peptide lots with cost basis, plus devices and apparel; list prices match the chosen canonical source. |
 | 17 | Margin is exact | Changing a supplier cost changes list and tier prices by the rule and leaves every existing order's frozen margin unchanged. |
-| 18 | Invoice PDF | Downloaded PDF is rendered from the same template as the preview and matches it visually; paper ground, embedded Inter/Jost, correct PPN at the chosen rate, RUO footer on peptide invoices only. |
+| 18 | Invoice PDF | Downloaded PDF is rendered from the same template as the preview and matches the invoice builder's design: dark ground, bronze numerals and amounts, amount-due box, "Documented, not promised." footer; embedded Inter/Jost; correct PPN at the chosen rate; "Research Use Only." on peptide invoices only. |
 | 19 | Send PDF | On a phone the share sheet opens with the PDF attached; on desktop a WhatsApp message carries a working download link. |
 
 ---
@@ -522,7 +529,10 @@ WhatsApp messages, the invoices and the emails equally.
    it with owner approval or not at all.
 6. **Cost basis loading.** Is the Rp 600.000 verification and cold-chain cost per lot, per unit, or per
    shipment? It changes margin on multi-unit lines.
-7. **Price-list pathway names.** The price list groups peptides as "Weight Loss", "Sexual Health" and
+7. **The invoice builder's compound prices** (GHK-Cu 100 mg at Rp 5.000.000, Retatrutide 20 mg at
+   Rp 3.600.000) match neither the site nor the price list. Confirm they are retired in favour of the
+   price list, so margin can be shown on every invoice.
+8. **Price-list pathway names.** The price list groups peptides as "Weight Loss", "Sexual Health" and
    "Brain Health" — benefit claims the RUO standard forbids. The app must use the site's research-neutral
    category names; confirm the price list is to be reissued to match.
 
