@@ -13,7 +13,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font
 a{color:var(--accent-bright);text-decoration:none}
 header.mast{padding:70px 0 34px;border-bottom:1px solid var(--line);position:relative;background:radial-gradient(58% 58% at 76% 24%,rgba(200,138,78,.16),transparent 60%),radial-gradient(46% 40% at 56% 82%,rgba(124,76,36,.20),transparent 60%)}
 .kick{font-family:var(--sans);font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
-.wm{font-family:var(--display);font-weight:400;letter-spacing:.42em;font-size:32px;margin:14px 0 2px;text-indent:.42em}
+.wm{margin:20px 0 14px;line-height:0;color:var(--ink)}
+.wm-art{display:block;width:min(238px,54vw);height:auto}
 .mast h1{font-family:var(--display);font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.04;letter-spacing:-.01em;margin:16px 0 0;max-width:18ch}
 .mast h1 em{font-style:normal;color:var(--muted)}
 .mast .lead{color:var(--muted);font-size:15.5px;max-width:66ch;margin:18px 0 0}
@@ -101,7 +102,8 @@ footer{padding:40px 0 70px;color:var(--muted-2);font-size:11.5px;line-height:1.7
 footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;margin-top:28px}
 footer .fgrid .h{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px}
 footer .fgrid p{margin:0 0 5px;color:var(--muted)}
-footer .fwm{font-family:var(--display);letter-spacing:.3em;font-size:20px;color:var(--accent)}
+footer .fwm{line-height:0;color:var(--accent)}
+footer .fwm-art{display:block;width:148px;height:auto}
 @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.synthesis .grid{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){:root{--pad:20px}.sec-head{grid-template-columns:1fr;gap:10px}section.sec{padding:48px 0}.kpis{grid-template-columns:1fr}.kpi{border-right:0}.synthesis .grid{grid-template-columns:1fr}footer .fgrid{grid-template-columns:1fr}}
 @media print{
@@ -125,7 +127,7 @@ footer .fwm{font-family:var(--display);letter-spacing:.3em;font-size:20px;color:
 
 <header class="mast"><div class="wrap">
   <div class="kick">Sales acceleration &middot; board strategy, execution layer &middot; Jakarta</div>
-  <div class="wm">AXIOM</div>
+  <div class="wm"><svg class="wm-art" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg></div>
   <h1>Selling better, <em>without promising more.</em></h1>
   <p class="lead">The go-to-market strategy set the ground. This playbook is what happens on it &mdash; where the money leaks between a first message and a second order, and the assembled offer, the closing loops, the quote, the follow-up ladder, the daily number and the content engine that plug each leak. Nothing here loosens the standard by a word.</p>
   <div class="docmeta">
@@ -665,7 +667,7 @@ footer .fwm{font-family:var(--display);letter-spacing:.3em;font-size:20px;color:
   <div class="ruo"><b>Research Use Only</b>Research Use Only. Intended exclusively for in-vitro laboratory research &mdash; not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Every script, caption, offer and guarantee in this document was written to that standard; any adaptation of them must hold it.</div>
   <div class="fgrid">
     <div class="col">
-      <div class="fwm">AXIOM</div>
+      <div class="fwm"><svg class="fwm-art" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg></div>
       <p style="margin-top:10px">AXIOM is a human-performance and longevity house based in Jakarta, Indonesia. We bring research-grade peptides, clinical red-light therapy, recovery, wellness and apparel under one standard &mdash; verified, documented, sourced right. Peptides are Research Use Only, in-vitro. Prices in IDR.</p>
     </div>
     <div class="col">
