@@ -1,11 +1,11 @@
 category_no,category,compound,lot,lot_value,lot_unit,price_idr,pricing,formula_price_idr,price_at_53pct_idr,price_per_unit_idr,supplier_lot_idr,cost_basis_idr,gross_margin_pct,status
 01,GLP-1s & Weight Loss,AOD-9604,5 mg,5.0,mg,2700000,formula,2700000,3000000,540000,800000,1400000,48.1,new
 01,GLP-1s & Weight Loss,Cagrilintide,10 mg,10.0,mg,2700000,formula,2700000,3000000,270000,800000,1400000,48.1,existing
-01,GLP-1s & Weight Loss,Retatrutide,10 mg,10.0,mg,2700000,manual override,3700000,4000000,270000,1300000,1900000,29.6,new
-01,GLP-1s & Weight Loss,Retatrutide,20 mg,20.0,mg,3600000,manual override,4600000,5100000,180000,1800000,2400000,33.3,new
-01,GLP-1s & Weight Loss,Retatrutide,30 mg,30.0,mg,4900000,manual override,5400000,6000000,163333,2200000,2800000,42.9,new
-01,GLP-1s & Weight Loss,Retatrutide,40 mg,40.0,mg,6400000,manual override,6500000,7200000,160000,2800000,3400000,46.9,new
-01,GLP-1s & Weight Loss,Retatrutide,60 mg,60.0,mg,8500000,manual override,8300000,9100000,141667,3700000,4300000,49.4,new
+01,GLP-1s & Weight Loss,Retatrutide,10 mg,10.0,mg,2700000,manual override,2500000,2800000,270000,700000,1300000,51.9,new
+01,GLP-1s & Weight Loss,Retatrutide,20 mg,20.0,mg,3600000,manual override,3500000,3800000,180000,1200000,1800000,50.0,new
+01,GLP-1s & Weight Loss,Retatrutide,30 mg,30.0,mg,4900000,manual override,4200000,4700000,163333,1600000,2200000,55.1,new
+01,GLP-1s & Weight Loss,Retatrutide,40 mg,40.0,mg,6400000,manual override,5400000,6000000,160000,2200000,2800000,56.2,new
+01,GLP-1s & Weight Loss,Retatrutide,60 mg,60.0,mg,8500000,manual override,7100000,7900000,141667,3100000,3700000,56.5,new
 01,GLP-1s & Weight Loss,Tirzepatide,10 mg,10.0,mg,2200000,formula,2200000,2400000,220000,550000,1150000,47.7,existing
 01,GLP-1s & Weight Loss,Tirzepatide,30 mg,30.0,mg,3500000,formula,3500000,3800000,116667,1200000,1800000,48.6,existing
 01,GLP-1s & Weight Loss,Tirzepatide,40 mg,40.0,mg,4000000,formula,4000000,4500000,100000,1500000,2100000,47.5,existing
