@@ -16,13 +16,12 @@ compliance guardrails **verbatim**. Where the two disagree, the business prompt 
 **Fill-in fields**
 - Deploy target: «___» — default: Vercel, production + preview.
 - Supabase project: «project ref / "create new"» — default: create new, region `ap-southeast-1` (Singapore).
-- Seed data: «___» — default: peptides from `business-proposal/axiom-peptide-pricelist.html` (52 lots,
-  each with cost basis), devices and apparel from `website/index.html` `window.CATALOG`.
-- **Canonical peptide price list: «website / price list»** — the two disagree by ~1.7× (BPC-157 10 mg is
-  Rp 1.600.000 on the site and Rp 2.700.000 on the price list). Only the price list carries cost basis,
-  so it is the default; the executor must not silently pick one.
-- Device and apparel landed cost: «___» — default: devices 60% of list (40% GM), apparel 40% of list
-  (60% GM). Stated assumptions, not sourced figures.
+- Seed data: «___» — default: the 79 lots of the AXIOM Margin Structure; devices and apparel from
+  `website/index.html` `window.CATALOG`.
+- **Canonical price list: the AXIOM Margin Structure** (79 lots with supplier cost and selling price).
+  It supersedes both the website catalogue and the older peptide price list where they disagree.
+- Device and apparel landed cost: «___» — default: devices 60% of list, apparel 40% of list. Stated
+  assumptions, not sourced figures; the Margin Structure does not cover them.
 - PPN: «rate / not registered» — default: charge PPN at 11% on invoices, editable per invoice. Verify the
   current rate and the entity's PKP status before launch.
 - Default locale: «EN / ID» — default: ID, with an EN toggle persisted per user.
@@ -169,25 +168,44 @@ exposes its definition, and an `ops` session receives a permission error rather 
 where the `owner`-only metrics sit.
 
 ### 4.4 Price list & margin engine (owner-only figures)
-**Entities:** `product_variants` (`price_idr`, `cost_idr`, `supplier_cost_idr`), `price_tiers`, `margin_snapshots`.
+**Entities:** `product_variants` (`supplier_cost_idr`, `pen_cost_idr`, `price_idr`), `pathways`,
+`margin_snapshots`. **Source of truth: the AXIOM Margin Structure — 79 lots, nine pathways.**
 
-**The rule, as the business already prices.** For peptides, cost basis = supplier lot + Rp 600.000
-(verification, CoA and cold-chain per lot); list price = cost basis ÷ 0.47, rounded to the nearest
-Rp 100.000; gross-margin target 53%. Devices and apparel carry landed cost directly. The engine stores
-both `supplier_cost_idr` and the derived `cost_idr` so the Rp 600.000 can change without a data migration.
+**The rule, as the business actually prices.** Every lot is a vial from R-Peptides plus a **Reusable
+Injection Pen V2 at Rp 600.000**. Both are goods on the invoice, which is what makes the margin a
+true gross margin:
 
-**Console (owner).** A price-list screen listing every variant with supplier cost, cost basis, list price,
-the price at each tier, margin in rupiah and GM %. A tier selector recalculates the whole table. Rows
-under a **45% GM floor** at the selected tier are flagged. Every quote, order and invoice shows a margin
-block — total, cost, margin, GM % — and a per-line margin on hover. An `ops` session sees none of these
-columns or blocks, enforced by RLS on `cost_idr` and `supplier_cost_idr`, not by hiding elements.
+```
+base price    = supplier cost + Rp 600.000      (the pen — identical on every lot)
+selling price = set per lot                     (from the price list, NOT derived from cost)
+margin        = selling price − base price      (gross; carries no operating cost)
+```
 
-**Margin on every transaction.** `quote_items` and `order_items` freeze `unit_cost_idr` alongside
-`unit_price_idr` at write time, so historical margin is exact even after a supplier price changes. The
-dashboard's gross-margin KPI is computed from those frozen figures, never from live variant cost.
+**Margin is an outcome, not a target.** It ranges 21.9% (BPC-157 10 mg) to 78.0% (GHK-Cu 100 mg);
+blended 49.3% on Rp 249.800.000, markup 97.1%. Cost composition 31.8% supplier / 19.0% pen /
+49.3% margin. Do **not** derive price from cost with a fixed divisor — an earlier draft of this
+prompt did, and it was wrong.
 
-**Acceptance.** Changing a variant's supplier cost changes its list price and every tier price by the
-rule, changes no existing order's margin, and is invisible to an `ops` session by direct API call.
+**No price tiers.** The price list carries one selling price per lot. Do not invent clinic or
+research discounts: against these margins an 8% discount puts most of the book under 45% GM and a
+15% discount takes BPC-157 10 mg to 8.1%. If a discount is ever introduced it needs a floor guard,
+and that is a decision for the owner (§12), not a default.
+
+**Console (owner).** A price-list screen with a row per lot: pathway, compound, lot, supplier cost,
+pen, base price, selling price, margin in rupiah, GM %. Filter by pathway and by "below the 45%
+reporting floor". A per-pathway table that **foots exactly to the document totals** — supplier
+Rp 79.320.000, base Rp 126.720.000, selling Rp 249.800.000, margin Rp 123.080.000. A cost-
+composition bar. Seven lots sit under 45% at list; they are flagged, not hidden.
+
+**Margin on every transaction.** `quote_items` and `order_items` freeze `unit_price_idr`,
+`unit_supplier_cost_idr` and `unit_pen_cost_idr` at write time, so historical margin is exact after a
+supplier price moves. Every quote, order and invoice carries an owner-only block showing
+supplier + pens = base, then margin and GM %. An `ops` session sees none of it — enforced by RLS on
+the cost columns, not by hiding elements.
+
+**Non-peptide lines.** Devices and apparel are outside the Margin Structure. Their cost is an
+assumption until real landed cost arrives: label it as such in the UI, exclude them from the
+GM-floor count, and keep them out of the pathway table's footing.
 
 ### 4.5 Invoice builder with PDF
 **Entities:** `invoices`, `invoice_items`, `invoice_sequences`.
@@ -468,8 +486,8 @@ WhatsApp messages, the invoices and the emails equally.
 | 13 | RUO present | The disclaimer renders on every peptide-adjacent surface including generated WhatsApp text and invoices. |
 | 14 | Bilingual | Every user-facing string resolves in both EN and ID; no hardcoded strings in components. |
 | 15 | Reduced motion | With `prefers-reduced-motion: reduce`, no sheet rise, no reveal, no stagger. |
-| 16 | Seed loads | 52 peptide lots with cost basis, plus devices and apparel; list prices match the chosen canonical source. |
-| 17 | Margin is exact | Changing a supplier cost changes list and tier prices by the rule and leaves every existing order's frozen margin unchanged. |
+| 16 | Seed reconciles | 79 lots seeded; supplier, base, selling and margin each foot to the Margin Structure — Rp 79.320.000 / 126.720.000 / 249.800.000 / 123.080.000, 49.3%, markup 97.1%; `base − supplier === 600000` on every lot; pathway counts 10/11/13/8/8/2/6/9/12. |
+| 17 | Margin is exact | Changing a supplier cost moves base price and margin but not selling price, and leaves every existing order's frozen margin unchanged. |
 | 18 | Invoice PDF | Downloaded PDF is rendered from the same template as the preview and matches the invoice builder's design: dark ground, bronze numerals and amounts, amount-due box, "Documented, not promised." footer; embedded Inter/Jost; correct PPN at the chosen rate; "Research Use Only." on peptide invoices only. |
 | 19 | Send PDF | On a phone the share sheet opens with the PDF attached; on desktop a WhatsApp message carries a working download link. |
 
@@ -518,8 +536,8 @@ WhatsApp messages, the invoices and the emails equally.
 ---
 
 ## 12 · OPEN DECISIONS (ask these before building — do not assume)
-1. **Which peptide price list is canonical?** The site and the price list differ by ~1.7×. If the site is
-   a launch discount, say so and model it as a tier, not a second list.
+1. **Is the Rp 600.000 pen still current?** It is the single largest lever in the model — 19.0% of
+   selling price across the book. A change moves base price and margin on all 79 lots at once.
 2. **Device and apparel landed cost per SKU.** The 40% / 60% GM defaults are placeholders.
 3. **PPN.** Current rate, PKP registration status, and whether Research-tier institutional buyers are
    invoiced differently. Also whether e-Faktur integration is required at launch.
@@ -529,10 +547,12 @@ WhatsApp messages, the invoices and the emails equally.
    it with owner approval or not at all.
 6. **Cost basis loading.** Is the Rp 600.000 verification and cold-chain cost per lot, per unit, or per
    shipment? It changes margin on multi-unit lines.
-7. **The invoice builder's compound prices** (GHK-Cu 100 mg at Rp 5.000.000, Retatrutide 20 mg at
-   Rp 3.600.000) match neither the site nor the price list. Confirm they are retired in favour of the
-   price list, so margin can be shown on every invoice.
-8. **Price-list pathway names.** The price list groups peptides as "Weight Loss", "Sexual Health" and
+7. **Does any account ever get a discount?** Today there is one price per lot. If a tier is wanted,
+   set the floor it may not breach — seven lots are already under 45% at list.
+8. **Do the seven sub-45% lots stay at those prices?** BPC-157 10 mg at 21.9%, TB-500 at 25.0% and
+   Tesamorelin 10 mg at 26.1% are the thinnest in the book; several are also the best-known compounds,
+   so this may be deliberate traffic pricing rather than an error.
+9. **Price-list pathway names.** The price list groups peptides as "Weight Loss", "Sexual Health" and
    "Brain Health" — benefit claims the RUO standard forbids. The app must use the site's research-neutral
    category names; confirm the price list is to be reissued to match.
 

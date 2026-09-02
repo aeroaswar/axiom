@@ -708,7 +708,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
                 <span class="bd"><span class="t1">Acknowledgement lapsed</span><span class="t2">Klinik Senopati — peptide lines hidden</span></span>
                 <span class="rt"><span class="chip err"><span class="dot"></span>Gated</span></span></button>
               <button class="row owner-only" data-go="console-pricing"><span class="ic"><svg class="ic-sv"><use href="#i-tag"></use></svg></span>
-                <span class="bd"><span class="t1">Price list &amp; margin</span><span class="t2" data-pricing-sub>60 SKUs · margin at every tier</span></span>
+                <span class="bd"><span class="t1">Price list &amp; margin</span><span class="t2" data-pricing-sub>79 lots · margin on every one</span></span>
                 <span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
               <button class="row" data-go="console-invoices"><span class="ic"><svg class="ic-sv"><use href="#i-file"></use></svg></span>
                 <span class="bd"><span class="t1">Invoices</span><span class="t2" data-invoices-sub>Build, download or send as PDF</span></span>
@@ -756,7 +756,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           <button class="chip err" data-f="lapsed"><span class="dot"></span>Acknowledgement lapsed</button>
         </div>
         <div class="tblwrap desktop-only">
-          <table class="tbl"><thead><tr><th>Account</th><th>Type</th><th>Tier</th><th>Manager</th><th class="n">Lifetime</th><th class="n">Orders</th><th>Acknowledgement</th></tr></thead>
+          <table class="tbl"><thead><tr><th>Account</th><th>Type</th><th>Manager</th><th class="n">Lifetime</th><th class="n">Orders</th><th>Acknowledgement</th></tr></thead>
           <tbody data-list="clients-table"></tbody></table>
         </div>
         <div class="rows mobile-only" data-list="clients-rows"></div>
@@ -768,31 +768,38 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
         <div class="kpis owner-only" style="margin-bottom:22px" data-pricing-kpis></div>
         <div class="split" style="margin-bottom:22px">
           <div>
-            <div class="sec-h"><span class="kicker">Pricing rule · peptides</span></div>
-            <div class="kv"><span class="k">Cost basis</span><span class="v">Supplier lot + Rp 600.000</span></div>
-            <div class="kv"><span class="k">List price</span><span class="v">Cost basis ÷ 0.47</span></div>
-            <div class="kv"><span class="k">Gross margin target</span><span class="v">53%</span></div>
-            <div class="kv"><span class="k">Rounding</span><span class="v">Nearest Rp 100.000</span></div>
-            <p class="note" style="margin-top:12px">The Rp 600.000 covers HPLC/MS verification, CoA issue and cold-chain packaging per lot. Devices and apparel carry landed cost directly.</p>
+            <div class="sec-h"><span class="kicker">How a lot is priced</span></div>
+            <div class="kv"><span class="k">Supplier cost</span><span class="v">the vial, per lot</span></div>
+            <div class="kv"><span class="k">+ Injection pen</span><span class="v">Rp 600.000 · Reusable Injection Pen V2</span></div>
+            <div class="kv"><span class="k">= Base price</span><span class="v">what the lot costs to put on the invoice</span></div>
+            <div class="kv"><span class="k">Selling price</span><span class="v">set per lot</span></div>
+            <div class="kv"><span class="k">Margin</span><span class="v">selling price less base price</span></div>
+            <p class="note" style="margin-top:12px">Both the vial and the pen are goods on the invoice, so what remains is a true gross margin. It carries no operating cost, so it is gross, not net. Selling price is set per lot, not derived from cost — margin is an outcome, not a target.</p>
           </div>
           <div>
-            <div class="sec-h"><span class="kicker">Price tier</span></div>
-            <div class="hrow" data-chips="tier" style="margin-bottom:12px">
-              <button class="chip on" data-tier="0">List</button><button class="chip" data-tier="8">Clinic B · −8%</button>
-              <button class="chip" data-tier="12">Clinic A · −12%</button><button class="chip" data-tier="15">Research · −15%</button>
-            </div>
-            <p class="note">Every figure below recalculates at the selected tier. Margin is the tier price less cost basis. Rows under the 45% floor are flagged.</p>
-            <div class="hrow owner-only" style="margin-top:14px"><span class="eyebrow">View as</span>
+            <div class="sec-h"><span class="kicker">Cost composition · share of selling price</span></div>
+            <div class="bars" data-composition></div>
+            <div class="hrow" style="margin-top:16px"><span class="eyebrow">View as</span>
               <button class="chip on" data-role-btn="owner">Owner</button><button class="chip" data-role-btn="ops">Ops</button></div>
           </div>
         </div>
+        <div class="sec">
+          <div class="sec-h"><span class="kicker">By pathway · nine categories</span><span class="sp"></span><span class="note">Devices and apparel are priced outside this book</span></div>
+          <div class="tblwrap"><table class="tbl"><thead><tr><th>No</th><th>Pathway</th><th class="n">Lots</th><th class="n owner-only">Supplier</th><th class="n owner-only">Base</th><th class="n">Selling</th><th class="n owner-only">Margin</th><th class="n owner-only">GM</th></tr></thead>
+          <tbody data-list="pathway-table"></tbody></table></div>
+        </div>
         <div class="hrow" data-chips="pricing" style="margin-bottom:18px">
-          <button class="chip on" data-f="">All</button><button class="chip" data-f="peptide">Peptides</button>
-          <button class="chip" data-f="therapy">Therapy</button><button class="chip" data-f="apparel">Apparel</button>
+          <button class="chip on" data-f="">All lots</button>
+          <button class="chip" data-f="p01">01 GLP-1s</button><button class="chip" data-f="p02">02 GH Sec.</button>
+          <button class="chip" data-f="p03">03 Healing</button><button class="chip" data-f="p04">04 Brain</button>
+          <button class="chip" data-f="p05">05 Energy</button><button class="chip" data-f="p06">06 Immunity</button>
+          <button class="chip" data-f="p07">07 Sexual</button><button class="chip" data-f="p08">08 Longevity</button>
+          <button class="chip" data-f="p09">09 Bioregulators</button>
+          <button class="chip" data-f="nonpeptide">Devices &amp; apparel</button>
           <button class="chip warn" data-f="low"><span class="dot"></span>Below 45%</button>
         </div>
         <div class="tblwrap desktop-only">
-          <table class="tbl"><thead><tr><th>No</th><th>Variant</th><th>Content</th><th class="n owner-only">Supplier</th><th class="n owner-only">Cost basis</th><th class="n">List</th><th class="n" data-tier-head>Tier price</th><th class="n owner-only">Margin</th><th class="n owner-only">GM</th></tr></thead>
+          <table class="tbl"><thead><tr><th>No</th><th>Variant</th><th>Content</th><th class="n owner-only">Supplier</th><th class="n owner-only">Pen</th><th class="n owner-only">Base</th><th class="n">Selling</th><th class="n owner-only">Margin</th><th class="n owner-only">GM</th></tr></thead>
           <tbody data-list="pricing-table"></tbody></table>
         </div>
         <div class="rows mobile-only" data-list="pricing-rows"></div>
@@ -920,7 +927,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           <button class="chip" data-f="therapy">Therapy</button><button class="chip" data-f="apparel">Apparel</button>
           <button class="chip" data-f="saved">Saved</button>
         </div>
-        <div class="sec-h"><span class="kicker">Your tier · Clinic A · −12%</span></div>
+        <div class="sec-h"><span class="kicker">Catalogue · prices in IDR</span></div>
         <div class="pgrid" data-list="shop-grid"></div>
       </section>
 
@@ -960,7 +967,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
             <div class="sec-h"><span class="kicker">Account</span></div>
             <div class="kv"><span class="k">Name</span><span class="v">Klinik Regenera</span></div>
             <div class="kv"><span class="k">Type</span><span class="v">Clinic</span></div>
-            <div class="kv"><span class="k">Price tier</span><span class="v">Clinic A · −12%</span></div>
+            <div class="kv"><span class="k">Pricing</span><span class="v">List · one price per lot</span></div>
             <div class="kv"><span class="k">Account manager</span><span class="v">Aero</span></div>
             <div class="kv"><span class="k">Language</span><span class="v"><button class="chip on" data-lang="id">ID</button> <button class="chip" data-lang="en">EN</button></span></div>
           </div>
@@ -1020,54 +1027,137 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 
   /* ------------------------------------------------------------ data ------ */
   var WA_NUMBER = "628128573396";                       /* +62 812 857 3396 */
-  var TIER_PCT  = 12;                                   /* Klinik Regenera · Clinic A */
-  var GM_FLOOR  = 45;                                   /* flag rows under this GM % */
-  var role = "owner", tierSel = 0, invoiceCtx = null;
+  var role = "owner", pathSel = "", invoiceCtx = null;
   /* Peptides: 52 lots from business-proposal/axiom-peptide-pricelist.html — cost basis already
      includes the Rp 600.000 verification + cold-chain load. Categories use the site's research-neutral
      names, not the price list's benefit-framed ones. Devices/apparel cost: stated assumptions (40% / 60% GM). */
-  var CATS = {"01":"Metabolic","02":"Tissue Repair","03":"Growth Factors","04":"Neuro","05":"Reproductive","06":"Longevity","07":"Therapy","08":"Apparel"};
-  var P = [ /* id, no, name, dose, cost basis, list, stock */
-    ["cagri10","01","Cagrilintide","10 mg",1400000,3000000,9],
-    ["reta5","01","Retatrutide","5 mg",1250000,2700000,14],["reta10","01","Retatrutide","10 mg",1450000,3100000,24],
-    ["reta15","01","Retatrutide","15 mg",1650000,3500000,11],["reta20","01","Retatrutide","20 mg",1850000,3900000,8],
-    ["reta30","01","Retatrutide","30 mg",2400000,5100000,6],["reta60","01","Retatrutide","60 mg",3900000,8300000,2],
-    ["tirz10","01","Tirzepatide","10 mg",1150000,2400000,19],["tirz30","01","Tirzepatide","30 mg",1800000,3800000,7],["tirz40","01","Tirzepatide","40 mg",2100000,4500000,5],
-    ["amino50","01","5-Amino-1MQ","50 mg",1500000,3200000,10],["aicar50","01","AICAR","50 mg",1400000,3000000,6],
-    ["lcar","01","L-Carnitine (Injectable)","5000 mg",1400000,3000000,12],["mots10","01","MOTS-c","10 mg",1150000,2400000,15],
-    ["mots40","01","MOTS-c","40 mg",2000000,4300000,4],["slu5","01","SLU-PP-332 (Injectable)","5 mg",1250000,2700000,8],
-    ["nad500","01","NAD+","500 mg",1200000,2600000,21],["nad1000","01","NAD+","1000 mg",1400000,3000000,13],
-    ["bpc10","02","BPC-157","10 mg",1250000,2700000,31],["wolv20","02","BPC-157 + TB-500 (Wolverine)","20 mg",1850000,3900000,9],
-    ["kpv10","02","KPV","10 mg",1200000,2600000,7],["klow80","02","KLOW Blend","80 mg",2050000,4400000,5],
-    ["ll37","02","LL-37","5 mg",1400000,3000000,6],["pegmgf","02","Peg MGF","2 mg",1450000,3100000,4],["tb500","02","TB-500","10 mg",1350000,2900000,0],
-    ["cjc10","03","CJC-1295 (No DAC) + Ipamorelin","10 mg",1400000,3000000,12],["cjc20","03","CJC-1295 (No DAC) + Ipamorelin","20 mg",2000000,4300000,6],
-    ["hgh36","03","HGH 191AA (Somatropin)","36 IU",1500000,3200000,10],["hgh40","03","HGH 191AA (Somatropin)","40 IU",1700000,3600000,5],
-    ["ipa10","03","Ipamorelin","10 mg",1300000,2800000,16],["ipatesa","03","Ipamorelin + Tesamorelin","18 mg",2350000,5000000,3],
-    ["tesa10","03","Tesamorelin","10 mg",1700000,3600000,8],["tesa20","03","Tesamorelin","20 mg",2200000,4700000,4],["ta1","03","Thymosin Alpha-1","10 mg",1700000,3600000,0],
-    ["adamax","04","Adamax","10 mg",1450000,3100000,6],["cere60","04","Cerebrolysin","60 mg",1400000,3000000,9],
-    ["pine20","04","Pinealon","20 mg",1700000,3600000,5],["selank","04","Selank","10 mg",1100000,2300000,14],
-    ["semax","04","Semax","10 mg",1100000,2300000,13],["selsem","04","Selank + Semax","20 mg",1500000,3200000,7],
-    ["dsip5","04","DSIP","5 mg",1000000,2100000,11],["dsip10","04","DSIP","10 mg",1200000,2600000,9],
-    ["hcg","05","HCG","10000 IU",1400000,3000000,8],["hmg","05","HMG","75 IU",1250000,2700000,6],
-    ["kiss10","05","Kisspeptin","10 mg",1500000,3200000,5],["oxy10","05","Oxytocin Acetate","10 mg",1400000,3000000,7],["pt141","05","PT-141","10 mg",1200000,2600000,12],
-    ["ghk50","06","GHK-Cu","50 mg",970000,2100000,15],["ghk100","06","GHK-Cu","100 mg",1100000,2300000,18],
-    ["epi","06","Epithalon","50 mg",1600000,3400000,0],["huma10","06","Humanin","10 mg",2100000,4500000,3],["ss31","06","SS-31","50 mg",2100000,4500000,4],
-    ["mask","07","Red Light Therapy Mask","Face · LED array",1450000,2400000,4],["mat","07","Red Light Therapy Mat","Full-body · 660 + 850 nm",3550000,5900000,2],
-    ["legs","07","Leg Compression System","660 + 850 nm · Pair",3900000,6500000,3],
-    ["tee","08","Performance Tee","Dry-knit · Unisex",180000,450000,64],["hoodie","08","Training Hoodie","Heavyweight · Unisex",380000,950000,22],
-    ["cap","08","Logo Cap","Adjustable",140000,350000,30],["bottle","08","Steel Water Bottle","750 ml · Insulated",160000,400000,25],["duffel","08","Gym Duffel","45 L",340000,850000,9]
+  /* -- Pricing: AXIOM Margin Structure, 79 lots -----------------------------------------------
+     Every lot is a vial from R-Peptides plus a Reusable Injection Pen V2. Both are goods on the
+     invoice, so what remains is a true gross margin:
+         base price    = supplier cost + Rp 600.000   (the pen - identical on every lot)
+         selling price = set per lot, from the price list
+         margin        = selling price less base price  (gross; carries no operating cost)
+     Selling price is NOT derived from cost - margin is an outcome, 21.9 to 78.0 per cent.
+     Totals reconcile to the document: supplier Rp 79.320.000 - base Rp 126.720.000 -
+     selling Rp 249.800.000 - margin Rp 123.080.000 = 49.3 per cent, markup 97.1 per cent. -- */
+  var PEN = 600000;                                     /* Reusable Injection Pen V2, one per lot */
+  var GM_FLOOR = 45;                                    /* report threshold, not a pricing rule    */
+  var PATHWAYS = {"01":"GLP-1s & Weight Loss","02":"GH Secretagogues","03":"Healing & Repair",
+    "04":"Brain Health & Nootropics","05":"Energy & Endurance","06":"Immunity","07":"Sexual Health",
+    "08":"Longevity & Cellular Repair","09":"Peptide Bioregulators","10":"Therapy & Recovery","11":"Apparel"};
+  /* Research-neutral names for customer-facing surfaces: the price list's own pathway labels are
+     therapeutic framing the RUO standard does not allow on a product page (see prompt section 9). */
+  var CATS = {"01":"Metabolic","02":"Growth Factors","03":"Tissue Repair","04":"Neuro",
+    "05":"Cellular Energy","06":"Immune","07":"Reproductive","08":"Longevity","09":"Bioregulators",
+    "10":"Therapy","11":"Apparel"};
+  var P = [ /* id, pathway, name, lot, supplier cost (thousands), selling price (thousands) */
+    ["aod9604","01","AOD-9604","5 mg",800,2700],
+    ["cagri10","01","Cagrilintide","10 mg",800,2700],
+    ["reta10","01","Retatrutide","10 mg",700,2700],
+    ["reta20","01","Retatrutide","20 mg",1200,3600],
+    ["reta30","01","Retatrutide","30 mg",1600,4900],
+    ["reta40","01","Retatrutide","40 mg",2200,6400],
+    ["reta60","01","Retatrutide","60 mg",3100,8500],
+    ["tirz10","01","Tirzepatide","10 mg",550,2200],
+    ["tirz30","01","Tirzepatide","30 mg",1200,3500],
+    ["tirz40","01","Tirzepatide","40 mg",1500,4000],
+    ["cjc10","02","CJC-1295 (No DAC) + Ipamorelin","10 mg",800,2700],
+    ["cjc20","02","CJC-1295 (No DAC) + Ipamorelin","20 mg",1400,3800],
+    ["cjcdac5","02","CJC-1295 (With DAC)","5 mg",900,2900],
+    ["hgh36","02","HGH 191AA (Somatropin)","36 IU",900,2800],
+    ["hgh40","02","HGH 191AA (Somatropin)","40 IU",1100,3000],
+    ["igf1","02","IGF-1 LR3","1 mg",1350,3800],
+    ["ipa10","02","Ipamorelin","10 mg",700,2500],
+    ["ipatesa18","02","Ipamorelin + Tesamorelin","18 mg",1750,4500],
+    ["sermo10","02","Sermorelin","10 mg",1000,3100],
+    ["tesa10","02","Tesamorelin","10 mg",1100,2300],
+    ["tesa20","02","Tesamorelin","20 mg",1600,3300],
+    ["ahk100","03","AHK-Cu","100 mg",700,2500],
+    ["ara10","03","ARA-290","10 mg",850,2800],
+    ["ara50","03","ARA-290","50 mg",1550,4100],
+    ["bpc10","03","BPC-157","10 mg",650,1600],
+    ["wolv20","03","BPC-157 + TB-500 (Wolverine)","20 mg",1250,2900],
+    ["ghk50","03","GHK-Cu","50 mg",370,2600],
+    ["ghk100","03","GHK-Cu","100 mg",500,5000],
+    ["kpv10","03","KPV","10 mg",600,2300],
+    ["klow80","03","KLOW (BPC+TB+GHK+KPV)","80 mg",1450,5800],
+    ["ll37","03","LL-37","5 mg",800,2700],
+    ["pegmgf2","03","Peg MGF","2 mg",850,2800],
+    ["snap8","03","SNAP-8","10 mg",700,2500],
+    ["tb500","03","TB-500","10 mg",750,1800],
+    ["adamax10","04","Adamax","10 mg",850,2800],
+    ["cere80","04","Cerebrolysin","80 mg",800,2700],
+    ["dihexa10","04","Dihexa","10 mg",1200,3500],
+    ["pine20","04","Pinealon","20 mg",1100,3300],
+    ["selank10","04","Selank","10 mg",500,2100],
+    ["semax10","04","Semax","10 mg",500,2100],
+    ["selsem20","04","Selank + Semax","20 mg",900,3900],
+    ["vip10","04","VIP (Vasoactive Intestinal Peptide)","10 mg",1100,3300],
+    ["amino50","05","5-Amino-1MQ","50 mg",900,2900],
+    ["aicar50","05","AICAR","50 mg",800,2700],
+    ["lcar5000","05","L-Carnitine (Injectable)","5000 mg",800,2700],
+    ["lc216","05","LC216 Lipo-B (Injectable)","10 mL",800,2700],
+    ["lc526","05","LC526 Fat Blaster (Injectable)","10 mL",800,2700],
+    ["mots10","05","MOTS-c","10 mg",550,2200],
+    ["mots40","05","MOTS-c","40 mg",1400,3800],
+    ["slu5","05","SLU-PP-332 (Injectable)","5 mg",650,2400],
+    ["thymalin10","06","Thymalin","10 mg",700,2500],
+    ["ta1","06","Thymosin Alpha-1","10 mg",1100,3300],
+    ["hcg","07","HCG","10000 IU",800,2700],
+    ["hmg","07","HMG","75 IU",650,2400],
+    ["kiss10","07","Kisspeptin","10 mg",900,2900],
+    ["mt2","07","Melanotan II","10 mg",750,1900],
+    ["oxy10","07","Oxytocin Acetate","10 mg",800,2700],
+    ["pt141","07","PT-141","10 mg",600,2300],
+    ["dsip5","08","DSIP","5 mg",400,1900],
+    ["dsip10","08","DSIP","10 mg",600,2300],
+    ["epi50","08","Epithalon","50 mg",1000,3100],
+    ["foxo10","08","FOXO4-DRI","10 mg",1800,4600],
+    ["gluta1500","08","Glutathione","1500 mg",600,2300],
+    ["huma10","08","Humanin","10 mg",1500,4000],
+    ["nad500","08","NAD+","500 mg",600,2300],
+    ["nad1000","08","NAD+","1000 mg",800,3700],
+    ["ss31","08","SS-31","50 mg",1500,4000],
+    ["broncho20","09","Bronchogen","20 mg",1100,3300],
+    ["cardio20","09","Cardiogen","20 mg",1100,3300],
+    ["cartalax20","09","Cartalax","20 mg",1200,3500],
+    ["chonlu20","09","Chonluten","20 mg",1100,3300],
+    ["cortagen20","09","Cortagen","20 mg",1100,3300],
+    ["crysta20","09","Crystagen","20 mg",1100,3300],
+    ["livagen20","09","Livagen","20 mg",1100,3300],
+    ["ovagen20","09","Ovagen","20 mg",1100,3300],
+    ["pancra20","09","Pancragen","20 mg",1100,3300],
+    ["prosta20","09","Prostamax","20 mg",1100,3300],
+    ["testagen20","09","Testagen","20 mg",1100,3300],
+    ["vesugen20","09","Vesugen","20 mg",1100,3300],
+    /* Devices and apparel are not in the Margin Structure - cost is an assumption pending real
+       landed cost, and is labelled as such wherever it is shown. */
+    ["mask","10","Red Light Therapy Mask","Face - LED array",1450,2400],
+    ["mat","10","Red Light Therapy Mat","Full-body - 660 + 850 nm",3550,5900],
+    ["legs","10","Leg Compression System","660 + 850 nm - Pair",3900,6500],
+    ["tee","11","Performance Tee","Dry-knit - Unisex",180,450],
+    ["hoodie","11","Training Hoodie","Heavyweight - Unisex",380,950],
+    ["cap","11","Logo Cap","Adjustable",140,350],
+    ["bottle","11","Steel Water Bottle","750 ml - Insulated",160,400],
+    ["duffel","11","Gym Duffel","45 L",340,850]
   ];
-  var VARIANTS = P.map(function(r){ var no=r[1], cat=no==="07"?"therapy":no==="08"?"apparel":"peptide";
-    return {id:r[0],no:no,cat:cat,catName:CATS[no],name:r[2],dose:r[3],cost:r[4],price:r[5],stock:r[6],
-            content:cat==="peptide"?"Pen":cat==="therapy"?"Device":(/Cap|Bottle|Duffel/.test(r[2])?"Accessory":"Apparel"),
-            supplier:cat==="peptide"?r[4]-600000:null}; });
+  var STOCKSEED = {tb500:0,ta1:0,epi50:0,mat:2,legs:3,mask:4,reta30:6,reta60:2,tirz40:5,ipatesa18:3,huma10:3,duffel:9};
+  var VARIANTS = P.map(function(r,i){
+    var no=r[1], peptide = no<="09", cat = peptide?"peptide":(no==="10"?"therapy":"apparel");
+    var sup=r[4]*1000, sell=r[5]*1000, base = peptide ? sup+PEN : sup;
+    return {id:r[0], no:no, cat:cat, catName:CATS[no], pathway:PATHWAYS[no], name:r[2], dose:r[3],
+            supplier:sup, pen:peptide?PEN:0, cost:base, price:sell, assumed:!peptide,
+            content: peptide?"Vial + pen":(no==="10"?"Device":(/Cap|Bottle|Duffel/.test(r[2])?"Accessory":"Apparel")),
+            stock: STOCKSEED[r[0]]!==undefined ? STOCKSEED[r[0]] : (peptide ? 6+(i*7)%22 : 20+(i*5)%40)};
+  });
+
   var CLIENTS = [
-    {id:"regenera", name:"Klinik Regenera",  type:"clinic",      tier:"Clinic A",  pct:12, manager:"Aero",  ltv:84200000, orders:14, ack:"current", wa:"628120000001"},
-    {id:"prasetyo", name:"Dr. Prasetyo Lab", type:"institution", tier:"Research",  pct:15, manager:"Aero",  ltv:61800000, orders:9,  ack:"current", wa:"628120000002"},
-    {id:"aksara",   name:"Aksara Recovery",  type:"clinic",      tier:"Clinic B",  pct:8,  manager:"Nadia", ltv:28400000, orders:6,  ack:"current", wa:"628120000003"},
-    {id:"senopati", name:"Klinik Senopati",  type:"clinic",      tier:"Clinic B",  pct:8,  manager:"Nadia", ltv:12600000, orders:4,  ack:"lapsed",  wa:"628120000004"},
-    {id:"ivan",     name:"Ivan Wijaya",      type:"individual",  tier:"List",      pct:0,  manager:"—",     ltv:9300000,  orders:5,  ack:"current", wa:"628120000005"},
-    {id:"longa",    name:"Studio Longa",     type:"clinic",      tier:"Clinic B",  pct:8,  manager:"Nadia", ltv:6500000,  orders:1,  ack:"age",     wa:"628120000006"}
+    {id:"regenera", name:"Klinik Regenera",  type:"clinic",      manager:"Aero",  ltv:84200000, orders:14, ack:"current", wa:"628120000001"},
+    {id:"prasetyo", name:"Dr. Prasetyo Lab", type:"institution", manager:"Aero",  ltv:61800000, orders:9,  ack:"current", wa:"628120000002"},
+    {id:"aksara",   name:"Aksara Recovery",  type:"clinic",      manager:"Nadia", ltv:28400000, orders:6,  ack:"current", wa:"628120000003"},
+    {id:"senopati", name:"Klinik Senopati",  type:"clinic",      manager:"Nadia", ltv:12600000, orders:4,  ack:"lapsed",  wa:"628120000004"},
+    {id:"ivan",     name:"Ivan Wijaya",      type:"individual",  manager:"—",     ltv:9300000,  orders:5,  ack:"current", wa:"628120000005"},
+    {id:"longa",    name:"Studio Longa",     type:"clinic",      manager:"Nadia", ltv:6500000,  orders:1,  ack:"age",     wa:"628120000006"}
   ];
   var STATES = ["pending","packing","dispatched","delivered"];
   var ORDERS = [
@@ -1090,16 +1180,21 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   function V(id){ for(var i=0;i<VARIANTS.length;i++) if(VARIANTS[i].id===id) return VARIANTS[i]; }
   function C(id){ for(var i=0;i<CLIENTS.length;i++) if(CLIENTS[i].id===id) return CLIENTS[i]; }
   function O(id){ for(var i=0;i<ORDERS.length;i++) if(ORDERS[i].id===id) return ORDERS[i]; }
-  function tierPrice(v,pct){ return Math.round(v.price*(1-(pct||0)/100)/1000)*1000; }
-  function margin(v,pct){ var p=tierPrice(v,pct); return {price:p,cost:v.cost,rp:p-v.cost,pct:p?Math.round((p-v.cost)/p*100):0}; }
-  function linesMargin(lines,pct){ var t=0,c=0; lines.forEach(function(l){ var v=V(l[0]); t+=tierPrice(v,pct)*l[1]; c+=v.cost*l[1]; }); return {total:t,cost:c,rp:t-c,pct:t?Math.round((t-c)/t*100):0}; }
+  /* One selling price per lot - the price list carries no tiers, so neither does the app. */
+  function margin(v){ return {price:v.price, supplier:v.supplier, pen:v.pen, cost:v.cost,
+    rp:v.price-v.cost, pct:v.price?+((v.price-v.cost)/v.price*100).toFixed(1):0}; }
+  function linesMargin(lines){ var t=0,c=0,sup=0,pen=0;
+    lines.forEach(function(l){ var v=V(l[0]); t+=v.price*l[1]; c+=v.cost*l[1]; sup+=v.supplier*l[1]; pen+=v.pen*l[1]; });
+    return {total:t,cost:c,supplier:sup,pen:pen,rp:t-c,pct:t?+((t-c)/t*100).toFixed(1):0}; }
   function gmChip(pct){ var cls=pct<GM_FLOOR?"warn":"ok"; return '<span class="chip '+cls+' mchip"><span class="dot"></span>'+pct+'% GM</span>'; }
-  function marginBox(lines,pct,label){ var m=linesMargin(lines,pct);
+  function marginBox(lines,label){ var m=linesMargin(lines);
     return '<div class="margin-box owner-only"><span class="kicker">'+(label||"Margin on this transaction")+' · owner only</span>'+
       '<div class="kv"><span class="k">Revenue</span><span class="v">'+idr(m.total)+'</span></div>'+
-      '<div class="kv"><span class="k">Cost basis</span><span class="v">'+idr(m.cost)+'</span></div>'+
+      '<div class="kv"><span class="k">Supplier cost</span><span class="v">'+idr(m.supplier)+'</span></div>'+
+      (m.pen?'<div class="kv"><span class="k">Injection pens</span><span class="v">'+idr(m.pen)+'</span></div>':'')+
+      '<div class="kv"><span class="k">Base price</span><span class="v">'+idr(m.cost)+'</span></div>'+
       '<div class="kv" style="border:none"><span class="k">Margin</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(m.rp)+' '+gmChip(m.pct)+'</span></div></div>'; }
-  function orderTotal(o){ var c=C(o.client), t=o.ship; o.lines.forEach(function(l){ t+=tierPrice(V(l[0]),c.pct)*l[1]; }); return t; }
+  function orderTotal(o){ var t=o.ship; o.lines.forEach(function(l){ t+=V(l[0]).price*l[1]; }); return t; }
   function stateChip(s){
     var cls={pending:"",packing:"warn",dispatched:"info",delivered:"ok"}[s]||"";
     return '<span class="chip '+cls+'"><span class="dot"></span>'+s.charAt(0).toUpperCase()+s.slice(1)+'</span>';
@@ -1149,18 +1244,16 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
            '</td><td class="n"'+(v.stock===0?' style="color:var(--err)"':'')+'>'+v.stock+'</td></tr>';
     });
     $('[data-list="catalogue-table"]').innerHTML=t; applyFilter("catalogue");
-    $("[data-stockout-val]").innerHTML = out+' <span class="u">SKU</span>';
   }
   function renderClients(){
     var t="", r="";
     CLIENTS.forEach(function(c){
       var tags=c.type+(c.ack==="lapsed"?" lapsed":"");
-      var tier=c.tier+(c.pct?' · −'+c.pct+'%':'');
-      t += '<tr data-client="'+c.id+'" data-tags="'+tags+'"><td class="k">'+h(c.name)+'</td><td>'+c.type.charAt(0).toUpperCase()+c.type.slice(1)+'</td><td>'+tier+'</td><td>'+h(c.manager)+
+      t += '<tr data-client="'+c.id+'" data-tags="'+tags+'"><td class="k">'+h(c.name)+'</td><td>'+c.type.charAt(0).toUpperCase()+c.type.slice(1)+'</td><td>'+h(c.manager)+'</td><td>'+h(c.manager)+
            '</td><td class="n">'+idr(c.ltv)+'</td><td class="n">'+c.orders+'</td><td>'+ackChip(c.ack)+'</td></tr>';
       var icon = c.ack==="lapsed"?"warn":c.type==="individual"?"person":c.type==="institution"?"flask":"building";
       r += '<button class="row" data-client="'+c.id+'" data-tags="'+tags+'"><span class="ic">'+ic(icon)+'</span><span class="bd"><span class="t1">'+h(c.name)+
-           '</span><span class="t2">'+tier+' · '+c.orders+' orders</span></span><span class="rt"><span class="amt">'+idr(c.ltv)+'</span>'+ackChip(c.ack)+'</span></button>';
+           '</span><span class="t2">'+c.orders+' orders · '+h(c.manager)+'</span></span><span class="rt"><span class="amt">'+idr(c.ltv)+'</span>'+ackChip(c.ack)+'</span></button>';
     });
     $('[data-list="clients-table"]').innerHTML=t; $('[data-list="clients-rows"]').innerHTML=r; applyFilter("clients");
   }
@@ -1168,31 +1261,59 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     var g="";
     VARIANTS.forEach(function(v){
       g += '<button class="pcard'+(saved[v.id]?' saved':'')+'" data-product="'+v.id+'" data-tags="'+v.cat+(saved[v.id]?' saved':'')+'"><span class="no">'+v.no+'</span><span class="st">'+stockChip(v.stock)+
-           '</span><span class="nm">'+h(v.name)+'</span><span class="ds">'+h(v.dose)+' · '+h(v.content)+'</span><span class="pr">'+idr(tierPrice(v,TIER_PCT))+
+           '</span><span class="nm">'+h(v.name)+'</span><span class="ds">'+h(v.dose)+' · '+h(v.content)+'</span><span class="pr">'+idr(v.price)+
            '</span><span class="sv">'+ic(saved[v.id]?"bookmark-f":"bookmark")+'</span></button>';
     });
     $('[data-list="shop-grid"]').innerHTML=g; applyFilter("shop");
   }
   function renderPricing(){
-    var t="", r="", low=0, gmSum=0;
-    VARIANTS.forEach(function(v){ var m=margin(v,tierSel); gmSum+=m.pct; if(m.pct<GM_FLOOR) low++;
-      var tags=v.cat+(m.pct<GM_FLOOR?" low":"");
-      t += '<tr data-variant="'+v.id+'" data-tags="'+tags+'"><td class="id">'+v.no+'</td><td class="k">'+h(v.name)+' · '+h(v.dose)+'</td><td>'+h(v.content)+
-           '</td><td class="n owner-only">'+(v.supplier!=null?idr(v.supplier):'<span class="dim-2">landed</span>')+'</td><td class="n owner-only">'+idr(v.cost)+'</td><td class="n">'+idr(v.price)+
-           '</td><td class="n">'+idr(m.price)+'</td><td class="n owner-only">'+idr(m.rp)+'</td><td class="n owner-only"'+(m.pct<GM_FLOOR?' style="color:var(--warn)"':'')+'>'+m.pct+'%</td></tr>';
+    var t="", r="", low=0;
+    VARIANTS.forEach(function(v){ var m=margin(v), flag = !v.assumed && m.pct<GM_FLOOR; if(flag) low++;
+      var tags="p"+v.no+(flag?" low":"")+(v.cat==="peptide"?"":" nonpeptide");
+      var asm = v.assumed ? ' <span class="dim-2" title="assumed cost">~</span>' : '';
+      t += '<tr data-variant="'+v.id+'" data-tags="'+tags+'"><td class="id">'+v.no+'</td><td class="k">'+h(v.name)+' · '+h(v.dose)+
+           '</td><td>'+h(v.content)+'</td><td class="n owner-only">'+idr(v.supplier)+asm+'</td><td class="n owner-only">'+(v.pen?idr(v.pen):'<span class="dim-2">—</span>')+
+           '</td><td class="n owner-only">'+idr(v.cost)+'</td><td class="n">'+idr(v.price)+
+           '</td><td class="n owner-only">'+idr(m.rp)+'</td><td class="n owner-only"'+(m.pct<GM_FLOOR?' style="color:var(--warn)"':'')+'>'+m.pct+'%</td></tr>';
       r += '<button class="row" data-variant="'+v.id+'" data-tags="'+tags+'"><span class="ic"><span class="id" style="font-size:10px">'+v.no+'</span></span><span class="bd"><span class="t1">'+h(v.name)+' · '+h(v.dose)+
-           '</span><span class="t2 owner-only">Cost '+idr(v.cost)+' · margin '+idr(m.rp)+'</span><span class="t2" style="display:none" data-ops-sub>'+h(v.content)+'</span></span><span class="rt"><span class="amt">'+idr(m.price)+'</span><span class="owner-only">'+gmChip(m.pct)+'</span></span></button>';
+           '</span><span class="t2 owner-only">Base '+idr(v.cost)+' · margin '+idr(m.rp)+'</span><span class="t2" style="display:none" data-ops-sub>'+h(v.content)+'</span></span><span class="rt"><span class="amt">'+idr(v.price)+'</span><span class="owner-only">'+gmChip(m.pct)+'</span></span></button>';
     });
     $('[data-list="pricing-table"]').innerHTML=t; $('[data-list="pricing-rows"]').innerHTML=r; applyFilter("pricing");
-    $("[data-tier-head]").textContent = tierSel? "−"+tierSel+"% price":"Tier price";
-    $$("[data-tier]").forEach(function(b){ b.classList.toggle("on", +b.dataset.tier===tierSel); });
-    var avg=Math.round(gmSum/VARIANTS.length);
+
+    /* the document's own summary, computed from the seeded lots so a data slip shows up here */
+    var pep=VARIANTS.filter(function(v){return v.cat==="peptide";});
+    var sup=0,base=0,sell=0,pen=0; pep.forEach(function(v){ sup+=v.supplier; base+=v.cost; sell+=v.price; pen+=v.pen; });
+    var marg=sell-base, gm=+(marg/sell*100).toFixed(1), markup=+(marg/base*100).toFixed(1);
     $("[data-pricing-kpis]").innerHTML =
-      '<div class="kpi"><span class="lab">SKUs priced</span><span class="val">'+VARIANTS.length+'</span><span class="def">52 peptide lots · 3 devices · 5 apparel.</span></div>'+
-      '<div class="kpi"><span class="lab">Average GM · this tier</span><span class="val">'+avg+'<span class="u">%</span></span><span class="def">Tier price less cost basis, unweighted.</span><span class="tgt">Target 53% at list</span></div>'+
-      '<div class="kpi"><span class="lab">Below '+GM_FLOOR+'% floor</span><span class="val"'+(low?' style="color:var(--warn)"':'')+'>'+low+'</span><span class="def">Rows flagged at the selected tier.</span></div>'+
-      '<div class="kpi"><span class="lab">Verification load</span><span class="val">Rp 600.000</span><span class="def">Per peptide lot, inside cost basis.</span></div>';
-    $("[data-pricing-sub]").textContent = VARIANTS.length+" SKUs · "+avg+"% average GM at "+(tierSel?"−"+tierSel+"%":"list");
+      '<div class="kpi"><span class="lab">Lots</span><span class="val">'+pep.length+'</span><span class="def">Nine pathways, vial + pen.</span><span class="tgt">Plus '+(VARIANTS.length-pep.length)+' devices and apparel</span></div>'+
+      '<div class="kpi"><span class="lab">Supplier cost</span><span class="val">'+idr(sup)+'</span><span class="def">The vials, one of each lot.</span><span class="tgt">'+(sup/sell*100).toFixed(1)+'% of selling price</span></div>'+
+      '<div class="kpi"><span class="lab">Base price</span><span class="val">'+idr(base)+'</span><span class="def">Supplier cost plus the Rp 600.000 pen.</span><span class="tgt">Pens '+idr(pen)+'</span></div>'+
+      '<div class="kpi"><span class="lab">Selling price</span><span class="val">'+idr(sell)+'</span><span class="def">One of each lot at list.</span></div>'+
+      '<div class="kpi"><span class="lab">Margin</span><span class="val">'+gm+'<span class="u">%</span></span><span class="def">'+idr(marg)+' gross, before operating cost.</span><span class="tgt">Markup '+markup+'%</span></div>'+
+      '<div class="kpi"><span class="lab">Below '+GM_FLOOR+'%</span><span class="val"'+(low?' style="color:var(--warn)"':'')+'>'+low+'</span><span class="def">Priced lots under the reporting floor. Devices and apparel are excluded — their cost is an assumption.</span></div>'+
+      '<div class="kpi"><span class="lab">Thinnest lot</span><span class="val">'+(function(){var w=pep.slice().sort(function(a,b){return margin(a).pct-margin(b).pct;})[0];return margin(w).pct;})()+'<span class="u">%</span></span><span class="def">'+(function(){var w=pep.slice().sort(function(a,b){return margin(a).pct-margin(b).pct;})[0];return h(w.name)+" "+h(w.dose);})()+'</span></div>'+
+      '<div class="kpi"><span class="lab">Widest lot</span><span class="val">'+(function(){var w=pep.slice().sort(function(a,b){return margin(b).pct-margin(a).pct;})[0];return margin(w).pct;})()+'<span class="u">%</span></span><span class="def">'+(function(){var w=pep.slice().sort(function(a,b){return margin(b).pct-margin(a).pct;})[0];return h(w.name)+" "+h(w.dose);})()+'</span></div>';
+
+    $("[data-composition]").innerHTML =
+      [["Supplier cost",sup,"var(--accent-deep)"],["Injection pens",pen,"#9C6C3D"],["Margin",marg,"var(--accent)"]]
+      .map(function(x){ var pc=+(x[1]/sell*100).toFixed(1);
+        return '<div class="bar-row"><span class="nm">'+x[0]+'</span><span class="bar-track"><span class="bar-fill" style="width:'+pc+'%;background:'+x[2]+'"></span></span><span class="amt">'+pc+'% · '+idr(x[1])+'</span></div>'; }).join("");
+
+    var pt="";
+    Object.keys(PATHWAYS).forEach(function(k){
+      if(k>"09") return;                                 /* the nine priced pathways foot to the total */
+      var g=VARIANTS.filter(function(v){return v.no===k;}); if(!g.length) return;
+      var gs=0,gb=0,gv=0; g.forEach(function(v){ gs+=v.supplier; gb+=v.cost; gv+=v.price; });
+      var gmg=gv-gb, gp=+(gmg/gv*100).toFixed(1);
+      pt += '<tr data-tags="p'+k+'"><td class="id">'+k+'</td><td class="k">'+h(PATHWAYS[k])+'</td><td class="n">'+g.length+
+            '</td><td class="n owner-only">'+idr(gs)+'</td><td class="n owner-only">'+idr(gb)+'</td><td class="n">'+idr(gv)+
+            '</td><td class="n owner-only">'+idr(gmg)+'</td><td class="n owner-only"'+(gp<GM_FLOOR?' style="color:var(--warn)"':'')+'>'+gp+'%</td></tr>';
+    });
+    pt += '<tr><td></td><td class="k">All pathways</td><td class="n">'+pep.length+'</td><td class="n owner-only">'+idr(sup)+
+          '</td><td class="n owner-only">'+idr(base)+'</td><td class="n">'+idr(sell)+'</td><td class="n owner-only">'+idr(marg)+'</td><td class="n owner-only">'+gm+'%</td></tr>';
+    $('[data-list="pathway-table"]').innerHTML=pt;
+    $("[data-pricing-sub]").textContent = pep.length+" lots · "+gm+"% blended margin";
+    $("[data-stockout-val]").innerHTML = VARIANTS.filter(function(v){return v.stock===0;}).length+' <span class="u">SKU</span>';
   }
   function renderInvoices(){
     var r="", issued=0;
@@ -1214,7 +1335,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     VARIANTS.forEach(function(v){
       if(!saved[v.id]) return; n++;
       r += '<button class="row" data-product="'+v.id+'"><span class="ic">'+ic("bookmark-f")+'</span><span class="bd"><span class="t1">'+h(v.name)+' · '+h(v.dose)+
-           '</span><span class="t2">'+v.no+' '+h(v.catName)+' · '+h(v.content)+'</span></span><span class="rt"><span class="amt">'+idr(tierPrice(v,TIER_PCT))+'</span></span></button>';
+           '</span><span class="t2">'+v.no+' '+h(v.catName)+' · '+h(v.content)+'</span></span><span class="rt"><span class="amt">'+idr(v.price)+'</span></span></button>';
     });
     $('[data-list="saved-rows"]').innerHTML = n ? r : '<div class="empty">Nothing saved yet. Tap the bookmark on any product.</div>';
     $("[data-saved-count]").textContent = n;
@@ -1229,7 +1350,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     }).join("");
     $("[data-order-chip]").innerHTML = stateChip(o.state);
     var l="";
-    o.lines.forEach(function(x){ var v=V(x[0]); l+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(tierPrice(v,c.pct)*x[1])+'</span></div>'; });
+    o.lines.forEach(function(x){ var v=V(x[0]); l+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(v.price*x[1])+'</span></div>'; });
     l += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
     l += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(orderTotal(o))+'</span></div>';
     $("[data-order-lines]").innerHTML=l;
@@ -1272,23 +1393,23 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   function closeSheet(){ sheet.classList.remove("on"); scrim.classList.remove("on"); }
 
   function quoteBody(){
-    var c=C("regenera"), total=0, b='<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+' · '+c.tier+' −'+c.pct+'%</span></div>';
-    quote.forEach(function(l,i){ var v=V(l[0]), line=tierPrice(v,c.pct)*l[1]; total+=line;
+    var c=C("regenera"), total=0, b='<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+'</span></div>';
+    quote.forEach(function(l,i){ var v=V(l[0]), line=v.price*l[1]; total+=line;
       b += '<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+'</span><span class="v" style="display:flex;align-items:center;gap:10px">'+
            '<span class="qty"><button data-q="'+i+'" data-d="-1" aria-label="Less">'+ic("minus")+'</button><span>'+l[1]+'</span><button data-q="'+i+'" data-d="1" aria-label="More">'+ic("plus")+'</button></span>'+
            '<span style="min-width:96px">'+idr(line)+'</span><button class="linebtn" data-rm="'+i+'" aria-label="Remove">'+ic("trash")+'</button></span></div>'; });
     var opts = VARIANTS.filter(function(v){ return !quote.some(function(l){return l[0]===v.id;}); })
-      .map(function(v){ return '<option value="'+v.id+'"'+(v.stock===0?' disabled':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(tierPrice(v,c.pct))+(v.stock===0?' · out of stock':'')+'</option>'; }).join("");
+      .map(function(v){ return '<option value="'+v.id+'"'+(v.stock===0?' disabled':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(v.price)+(v.stock===0?' · out of stock':'')+'</option>'; }).join("");
     b += '<div class="field" style="margin:16px 0 4px"><label>Add from price list</label><select data-add-sel>'+
          '<option value="">Choose a compound or product…</option>'+opts+'</select></div>';
     b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(total)+'</span></div>';
-    b += marginBox(quote,c.pct,"Margin on this quote");
+    b += marginBox(quote,"Margin on this quote");
     b += '<div class="kicker" style="margin:20px 0 9px">WhatsApp preview</div><div class="wa">'+h(quoteMsg())+'</div>';
     return b;
   }
   function quoteMsg(){
-    var c=C("regenera"), total=0, m="AXIOM · Quote AX-Q-0312\n"+c.name+" · "+c.tier+"\n\n";
-    quote.forEach(function(l){ var v=V(l[0]), line=tierPrice(v,c.pct)*l[1]; total+=line; m+=v.name+(v.cat==="peptide"?" "+v.dose:"")+" × "+l[1]+" — "+idr(line)+"\n"; });
+    var c=C("regenera"), total=0, m="AXIOM · Quote AX-Q-0312\n"+c.name+"\n\n";
+    quote.forEach(function(l){ var v=V(l[0]), line=v.price*l[1]; total+=line; m+=v.name+(v.cat==="peptide"?" "+v.dose:"")+" × "+l[1]+" — "+idr(line)+"\n"; });
     m += "\nTotal "+idr(total)+"\nValid to 09 Sep 2026\n\nResearch Use Only. In-vitro laboratory research only.";
     return m;
   }
@@ -1307,10 +1428,10 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   function openOrder(id){
     var o=O(id), c=C(o.client), b='<div class="hrow" style="margin-bottom:14px">'+stateChip(o.state)+'<span class="note">'+o.date+'</span></div>';
     b += '<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+'</span></div>';
-    o.lines.forEach(function(x){ var v=V(x[0]); b+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(tierPrice(v,c.pct)*x[1])+'</span></div>'; });
+    o.lines.forEach(function(x){ var v=V(x[0]); b+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(v.price*x[1])+'</span></div>'; });
     b += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
     b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(orderTotal(o))+'</span></div>';
-    if(surface==="console") b += marginBox(o.lines,c.pct,"Margin on this order");
+    if(surface==="console") b += marginBox(o.lines,"Margin on this order");
     if(o.lines.some(function(x){return V(x[0]).cat==="peptide";})) b += '<div class="ruo" style="margin-top:16px"><b>Research Use Only.</b> In-vitro laboratory research only. No dosing or usage guidance is provided.</div>';
     var i=STATES.indexOf(o.state), foot='';
     if(surface==="console"){
@@ -1325,7 +1446,6 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   }
   function openClient(id){
     var c=C(id), b='<div class="hrow" style="margin-bottom:14px">'+ackChip(c.ack)+'<span class="chip">'+c.type+'</span></div>';
-    b += '<div class="kv"><span class="k">Price tier</span><span class="v">'+c.tier+(c.pct?' · −'+c.pct+'%':'')+'</span></div>';
     b += '<div class="kv"><span class="k">Account manager</span><span class="v">'+h(c.manager)+'</span></div>';
     b += '<div class="kv"><span class="k">Lifetime value</span><span class="v">'+idr(c.ltv)+'</span></div>';
     b += '<div class="kv"><span class="k">Orders</span><span class="v">'+c.orders+'</span></div>';
@@ -1354,7 +1474,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   function openProduct(id){
     var v=V(id), b='<div class="hrow" style="margin-bottom:14px">'+stockChip(v.stock)+'<span class="chip">'+v.no+' '+h(v.catName)+'</span></div>';
     b += '<div class="kv"><span class="k">Content</span><span class="v">'+h(v.dose)+' · '+h(v.content)+'</span></div>';
-    b += '<div class="kv"><span class="k">Your price · Clinic A</span><span class="v">'+idr(tierPrice(v,TIER_PCT))+'</span></div>';
+    b += '<div class="kv"><span class="k">Your price · Clinic A</span><span class="v">'+idr(v.price)+'</span></div>';
     b += '<div class="kv"><span class="k">List price</span><span class="v dim">'+idr(v.price)+'</span></div>';
     if(v.cat==="peptide"){
       b += '<div class="kv"><span class="k">Verification</span><span class="v">HPLC/MS ≥ 98% · CoA per lot</span></div>';
@@ -1397,7 +1517,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     return { no:"AX-INV-"+today.slice(0,4)+"-"+o.id.slice(-4), ref:o.id, date:today, terms:30, due:addDaysISO(today,30),
       toName:c.name, toCo:c.type==="individual"?"":c.name, toAddr:"", toEmail:"", toPhone:"",
       byEntity:"[Legal entity name]", byAddr:"[Street address]",
-      lines:o.lines.map(function(l){ var v=V(l[0]); return {v:v.id, desc:v.name, spec:v.dose, qty:l[1], price:tierPrice(v,c.pct)}; }),
+      lines:o.lines.map(function(l){ var v=V(l[0]); return {v:v.id, desc:v.name, spec:v.dose, qty:l[1], price:v.price}; }),
       handling:o.ship, discount:0, ppn:0,
       bank:"BCA", swift:"", acctName:"Mohamad Jagad Marcelleno", acctNo:"0658 139 196", xfer:"",
       notes:NOTES_DEFAULT, issued:false, sent:false };
@@ -1418,7 +1538,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   function fillInvoiceForm(){ var inv=invoiceCtx.inv;
     $$("[data-inv]").forEach(function(el){ var k=el.dataset.inv, v=inv[k]; el.value = el.hasAttribute("data-money") ? idr(num(v)) : (v==null?"":v); }); lockForm(); }
   function compoundOptions(sel){ var c=C(invoiceCtx.o.client), o='<option value="">Custom line</option>';
-    VARIANTS.forEach(function(v){ o+='<option value="'+v.id+'"'+(v.id===sel?' selected':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(tierPrice(v,c.pct))+'</option>'; }); return o; }
+    VARIANTS.forEach(function(v){ o+='<option value="'+v.id+'"'+(v.id===sel?' selected':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(v.price)+'</option>'; }); return o; }
   function renderLines(){ var inv=invoiceCtx.inv, out="";
     inv.lines.forEach(function(l,i){ out+=
       '<div class="li-card"><div class="li-head"><span class="ix">'+("0"+(i+1)).slice(-2)+'</span><span class="amt">'+idr(num(l.price)*(+l.qty||0))+'</span><span class="sp"></span>'+
@@ -1606,7 +1726,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     toast(V(quote[quote.length-1][0]).name+" added");
   });
   $(".app").addEventListener("click", function(e){
-    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-tier],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print]");
+    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print]");
     if(!el) return;
     var d = el.dataset;
     if(d.f!==undefined && el.classList.contains("chip")){ setFilter(el.parentNode.dataset.chips, d.f); return; }
@@ -1630,7 +1750,6 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     if(d.ackRequest){ closeSheet(); openWA("Hi "+C(d.ackRequest).name+", please complete the AXIOM qualified-researcher acknowledgement before we can quote peptide lines.", C(d.ackRequest).wa); return; }
     if(d.lang){ $$("[data-lang]").forEach(function(b){ b.classList.toggle("on", b.dataset.lang===d.lang); }); toast(d.lang==="id"?"Bahasa Indonesia":"English"); return; }
     if(d.toast){ toast(d.toast); return; }
-    if(d.tier!==undefined){ tierSel=+d.tier; renderPricing(); return; }
     if(d.roleBtn){ setRole(d.roleBtn); toast(d.roleBtn==="ops"?"Viewing as Ops — cost and margin hidden":"Viewing as Owner"); return; }
     if(d.openInvoice){ closeSheet(); openInvoice(d.openInvoice); return; }
     if(d.invBack!==undefined){ show(surface==="console"?"console-invoices":"account-orders"); return; }
@@ -1658,7 +1777,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   });
   $("[data-inv-form]").addEventListener("change", function(e){ var el=e.target, inv=invoiceCtx&&invoiceCtx.inv; if(!inv||ro) return;
     if(el.dataset.lineSel!==undefined){ var l=inv.lines[+el.dataset.lineSel]; if(!l) return; var v=el.value&&V(el.value), c=C(invoiceCtx.o.client);
-      if(v){ l.v=v.id; l.desc=v.name; l.spec=v.dose; l.price=tierPrice(v,c.pct); } else { l.v=null; }
+      if(v){ l.v=v.id; l.desc=v.name; l.spec=v.dose; l.price=v.price; } else { l.v=null; }
       renderLines(); renderDoc(); return; }
     if(el.hasAttribute("data-money")){ el.value=idr(num(el.value)); }
   });
