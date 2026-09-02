@@ -223,6 +223,18 @@ value is zero is left off the invoice.
 
 **Never clip.** The invoice document keeps A4 *width* and grows in whole A4 pages; it must never be given a fixed height with hidden overflow, because a clipped invoice is a wrong invoice and the preview would then disagree with the PDF. The preview shows every page the PDF will contain, and the page counter is measured, not assumed.
 
+**Delivery is a platform question, not a styling one.** A page embedded in a viewer is sandboxed:
+a script-started download is inert (and does not throw, so the failure cannot be caught),
+`navigator.share` is undefined, and `window.print()` is refused outright — "the document is
+sandboxed, and the 'allow-modals' keyword is not set". Use the host's own file-save capability
+where one exists, fall back to a direct save only when the page is top-level, and say plainly which
+happened. Never leave a save button that silently does nothing.
+
+**Render the document standalone.** The invoice must carry its own typography and background rather
+than inheriting them from the app shell, because the PDF is produced by rendering it in an isolated
+document. Capture from that minimal document, never from the live page: cloning a 140 KB app to
+compute styles cost 13.7 s per invoice against 0.6 s for a document holding only the invoice.
+
 **One template, two outputs.** The on-screen preview and the PDF are rendered from the **same**
 invoice template — the PDF is produced by printing that template server-side (headless Chromium via
 Playwright, `printToPDF`, A4, fonts embedded), never by a second hand-laid PDF layout. If the preview

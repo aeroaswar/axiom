@@ -450,6 +450,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 .ib-total{display:flex;justify-content:space-between;align-items:baseline;font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .ib-total b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
 .btn-save{width:100%;background:var(--accent-deep);color:var(--ink);padding:16px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;font-weight:600;transition:.2s var(--ease);border:1px solid transparent}
+.btn-save[disabled],.btn[disabled]{opacity:.55;cursor:progress}
 .btn-save:hover{background:var(--accent);color:#0a0704}
 .btn-reset{width:100%;border:1px solid var(--line-2);padding:14px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-top:14px;transition:.2s var(--ease)}
 .btn-reset:hover:not(:disabled){color:var(--ink);border-color:var(--ink)}
@@ -459,14 +460,12 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 .tlink .ic-sv{font-size:13px;transform:rotate(180deg)}
 
 /* the invoice document — dark canvas, as the AXIOM invoice builder renders it. Glass never prints; this does. */
-.doc-wrap,.pdf-stage{container-type:inline-size;container-name:doc}
-.pdf-stage{position:absolute;left:-10000px;top:0;width:794px;pointer-events:none}
+.doc-wrap{container-type:inline-size;container-name:doc}
 /* A4 width is fixed; height grows in whole pages. Never clip - a clipped invoice is a wrong invoice. */
-.inv-doc{position:relative;background:var(--bg);color:var(--ink);padding:44px;font-size:11.5px;line-height:1.5;
+.inv-doc{position:relative;background:var(--bg);color:var(--ink);font-family:var(--sans);padding:44px;font-size:11.5px;line-height:1.5;
   width:100%;max-width:794px;min-height:1123px;display:flex;flex-direction:column;box-sizing:border-box;
   border:1px solid var(--line-soft);font-feature-settings:"tnum" 1;box-shadow:0 24px 60px rgba(0,0,0,.45);
   background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 1122px,var(--line) 1122px,var(--line) 1123px)}
-.pdf-stage .inv-doc{box-shadow:none;border:none;max-width:none;width:794px;background-image:none}
 .inv-doc::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(42% 30% at 88% 12%,rgba(200,138,78,.10),transparent 70%),radial-gradient(50% 26% at 50% 100%,rgba(124,76,36,.16),transparent 70%)}
 .inv-doc>*{position:relative}
@@ -881,7 +880,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
             <div class="ib-foot">
               <div class="ib-total"><span>Total due <b data-ib-total></b></span><span data-ib-pages>1 page</span></div>
               <button class="btn-save" data-inv-pdf>Save as PDF</button>
-              <p class="hint" style="margin-top:12px">Saves a PDF of the document exactly as previewed. Where the browser blocks a script-started download, the print dialog opens instead — choose <b>Save as PDF</b>, paper <b>A4</b>, <b>Background graphics</b> on, margins <b>None</b>.</p>
+              <p class="hint" style="margin-top:12px">Saves a PDF of the document exactly as previewed — the viewer asks you to confirm the file. <b>Print</b> needs the page open directly rather than embedded; in its dialog choose paper <b>A4</b>, <b>Background graphics</b> on, margins <b>None</b>.</p>
               <div class="hrow" style="margin-top:4px">
                 <button class="btn btn-sm" data-inv-send><svg class="ic-sv"><use href="#i-share"></use></svg>Send PDF</button>
                 <button class="btn btn-sm" data-inv-print><svg class="ic-sv"><use href="#i-print"></use></svg>Print</button>
@@ -1625,19 +1624,52 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     d.setDrawColor.apply(d,LINE); d.line(L,276,R,276); d.setFontSize(6.5); d.setTextColor.apply(d,MUTED); d.text("AXIOM  ·  HUMAN PERFORMANCE & LONGEVITY",L,282); d.text("DOCUMENTED, NOT PROMISED.",R,282,{align:"right"});
     window.__lastPdfBytes = d.output("arraybuffer").byteLength; return d;
   }
+  /* Capture from a MINIMAL offscreen document, not the live app. html2canvas clones the whole
+     document to compute styles, so pointing it at this 140 KB page cost ~13.7 s per invoice;
+     cloning a document that holds only the invoice takes ~0.4 s for an identical 1588x2246 raster. */
+  function buildDocFrame(cb){
+    var fr=document.createElement("iframe");
+    fr.setAttribute("aria-hidden","true");
+    fr.style.cssText="position:absolute;left:-10000px;top:0;width:794px;height:1200px;border:0;opacity:0";
+    document.body.appendChild(fr);
+    var d=fr.contentDocument;
+    d.open();
+    d.write('<!doctype html><html><head><meta charset="utf-8">'+
+      '<style>'+$("style").textContent+
+      ' html,body{margin:0;background:#070605;font-family:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif}'+
+      ' .inv-doc{box-shadow:none;border:none;max-width:none;width:794px;background-image:none}</style></head>'+
+      '<body><div class="doc-wrap">'+$("svg[aria-hidden]").outerHTML+
+      '<div class="inv-doc">'+$("[data-doc]").innerHTML+'</div></div></body></html>');
+    d.close();
+    /* Reuse the faces the app already loaded rather than re-fetching the stylesheet: a blocked or
+       slow font CDN would otherwise stall the capture for as long as the request takes. */
+    try{ if(d.fonts && document.fonts && document.fonts.forEach) document.fonts.forEach(function(f){ try{ d.fonts.add(f); }catch(e){} }); }catch(e){}
+    var ran=false, go=function(){ if(ran) return; ran=true;
+      setTimeout(function(){ cb(fr, d.querySelector(".inv-doc")); }, 60); };
+    setTimeout(go, 800);
+    try{ if(d.fonts && d.fonts.ready) d.fonts.ready.then(go).catch(go); else go(); }catch(e){ go(); }
+  }
   function capturePdf(cb){
-    if(!window.html2canvas || !window.jspdf || !window.jspdf.jsPDF){ var d=buildPdf(); window.__pdfSource = d?"vector":null; cb(d); return; }
-    var stage=document.createElement("div"); stage.className="pdf-stage";
-    var clone=$("[data-doc]").cloneNode(true); stage.appendChild(clone); $(".app").appendChild(stage);
-    window.html2canvas(clone,{scale:2,backgroundColor:"#070605",useCORS:true,logging:false,width:794,windowWidth:794}).then(function(canvas){
-      stage.remove();
-      var d=new window.jspdf.jsPDF({unit:"mm",format:"a4",compress:true});
-      var img=canvas.toDataURL("image/jpeg",.92), hmm=canvas.height/canvas.width*210;
-      d.setFillColor(7,6,5); d.rect(0,0,210,297,"F");
-      d.addImage(img,"JPEG",0,0,210,Math.max(hmm,297),undefined,"FAST");
-      if(hmm>297){ var off=297; while(off<hmm-2){ d.addPage(); d.setFillColor(7,6,5); d.rect(0,0,210,297,"F"); d.addImage(img,"JPEG",0,-off,210,hmm,undefined,"FAST"); off+=297; } }
-      window.__lastPdfBytes = d.output("arraybuffer").byteLength; window.__pdfSource="capture"; cb(d);
-    }).catch(function(){ stage.remove(); var d=buildPdf(); window.__pdfSource = d?"vector":null; cb(d); });
+    if(!window.html2canvas || !window.jspdf || !window.jspdf.jsPDF){
+      var v=buildPdf(); window.__pdfSource = v?"vector":null; cb(v); return;
+    }
+    var fired=false, done=function(d){ if(fired) return; fired=true; cb(d); };
+    buildDocFrame(function(fr, el){
+      window.html2canvas(el,{scale:2,backgroundColor:"#070605",useCORS:true,logging:false,width:794,windowWidth:794})
+        .then(function(canvas){
+          fr.remove();
+          var d=new window.jspdf.jsPDF({unit:"mm",format:"a4",compress:true});
+          var img=canvas.toDataURL("image/jpeg",.92), hmm=canvas.height/canvas.width*210;
+          d.setFillColor(7,6,5); d.rect(0,0,210,297,"F");
+          d.addImage(img,"JPEG",0,0,210,Math.max(hmm,297),undefined,"FAST");
+          var pages=1;
+          if(hmm>297){ var off=297; while(off<hmm-2){ d.addPage(); d.setFillColor(7,6,5); d.rect(0,0,210,297,"F");
+            d.addImage(img,"JPEG",0,-off,210,hmm,undefined,"FAST"); off+=297; pages++; } }
+          window.__lastPdfBytes=d.output("arraybuffer").byteLength; window.__lastPdfPages=pages; window.__pdfSource="capture";
+          done(d);
+        })
+        .catch(function(){ fr.remove(); var v=buildPdf(); window.__pdfSource = v?"vector":null; done(v); });
+    });
   }
   function issueInvoice(){ var o=invoiceCtx.o, inv=invoiceCtx.inv; inv.issued=true; inv.total=invCalc(inv).total; o.invoice=inv; ro=true; renderInvoices(); renderDoc(); lockForm(); }
   function invSummary(){ var inv=invoiceCtx.inv; return "AXIOM · Invoice "+inv.no+"\n"+(inv.toName||"")+"\nReference "+(inv.ref||inv.no)+"\nTotal due "+idr(invCalc(inv).total)+" · due "+fmtShort(inv.due)+"\n\nPDF attached."; }
@@ -1680,23 +1712,44 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     w.document.close(); setTimeout(function(){ w.focus(); w.print(); },350);
     toast(msg||"Print dialog open — paper A4, background graphics on"); if(after) after(); return true;
   }
-  /* A script-started download is inert inside the artifact's sandboxed frame and does NOT throw,
-     so failure cannot be caught — detect the frame instead and go straight to the print dialog. */
-  function canDownload(){ try{ return window.self === window.top; }catch(e){ return false; } }
+  /* Inside the artifact viewer the page is sandboxed: a script-started download is inert (and does
+     not throw), navigator.share is undefined, and window.print() is refused outright — "the document
+     is sandboxed, and the 'allow-modals' keyword is not set". The platform's `downloads` capability
+     is the sanctioned way to hand the viewer a file, so that is the primary path; a top-level copy
+     of this file (opened from the repo) still saves directly. */
+  var topLevel = (function(){ try{ return window.self === window.top; }catch(e){ return false; } })();
+  var dlCap = null, dlReady = (window.claude && window.claude.use)
+    ? window.claude.use("downloads").then(function(c){ dlCap=c; return c; }).catch(function(){ return null; })
+    : Promise.resolve(null);
+  function saveVia(cap, blob, name, onDone){
+    cap.save({filename:name, data:blob}).then(function(){ toast("Saved "+name); if(onDone) onDone(); })
+      .catch(function(e){ var c=(e&&e.code)||"unavailable";
+        toast(c==="declined" ? "Save cancelled"
+          : c==="too_large" ? "That invoice is too large to save here"
+          : c==="rate_limited" ? "A save prompt is already open — try again in a moment"
+          : "Saving is unavailable in this view");
+        if(onDone) onDone(); });
+  }
+  function busy(on){ $$("[data-inv-pdf],[data-inv-send]").forEach(function(b){ b.disabled=on; }); }
   function downloadPdf(){
-    if(!canDownload()){
-      printDoc(issueInvoice, "This viewer blocks script downloads — print dialog open, choose Save as PDF, paper A4, background graphics on");
-      return;
-    }
-    toast("Rendering "+invPdfName());
+    busy(true); toast("Rendering "+invPdfName());
     capturePdf(function(d){
-      if(!d){ printDoc(issueInvoice, "PDF engine unavailable — print dialog open, choose Save as PDF"); return; }
-      try{ d.save(invPdfName()); issueInvoice(); toast(invPdfName()+" · "+Math.round(window.__lastPdfBytes/1024)+" KB"); }
-      catch(e){ printDoc(issueInvoice, "Saving was blocked — print dialog open, choose Save as PDF"); }
+      if(!d){ busy(false); toast("PDF engine is still loading — try again in a moment"); return; }
+      var name=invPdfName();
+      dlReady.then(function(cap){
+        busy(false);
+        if(cap){ issueInvoice(); saveVia(cap, d.output("blob"), name); return; }
+        if(topLevel){
+          try{ d.save(name); issueInvoice(); toast(name+" · "+Math.round(window.__lastPdfBytes/1024)+" KB"); }
+          catch(e){ printDoc(issueInvoice, "Saving was blocked — print dialog open, choose Save as PDF"); }
+          return;
+        }
+        toast("Saving is unavailable in this view — open the file directly to download");
+      });
     });
   }
   function sendPdf(){
-    toast("Rendering "+invPdfName());
+    busy(true); toast("Rendering "+invPdfName());
     capturePdf(function(d){
       if(!d){ printDoc(issueInvoice); return; }
       issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderDoc();
@@ -1708,18 +1761,29 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           .catch(function(){ toast("Share cancelled"); });
         return;
       }
-      var wa=C(invoiceCtx.o.client).wa;
-      if(openWA(invSummary(), wa)){ toast("WhatsApp opened with the summary — attach the PDF, or share from a phone"); return; }
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(invSummary())
-          .then(function(){ toast("Invoice summary copied to the clipboard"); })
-          .catch(function(){ toast("Could not share here — use Print to save a PDF"); });
-        return;
-      }
-      toast("Could not share here — use Print to save a PDF");
+      /* no share sheet here — save the file so it can be attached, then hand over the message */
+      var wa=C(invoiceCtx.o.client).wa, name=invPdfName(), summary=invSummary();
+      dlReady.then(function(cap){
+        if(cap){ saveVia(cap, d.output("blob"), name, function(){
+            if(!openWA(summary, wa) && navigator.clipboard && navigator.clipboard.writeText){
+              navigator.clipboard.writeText(summary).then(function(){ toast(name+" saved · summary copied, attach it in WhatsApp"); }).catch(function(){});
+            }
+          }); return; }
+        if(openWA(summary, wa)){ toast("WhatsApp opened with the summary — attach the PDF, or share from a phone"); return; }
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(summary)
+            .then(function(){ toast("Invoice summary copied to the clipboard"); })
+            .catch(function(){ toast("Could not share here — use Save as PDF"); });
+          return;
+        }
+        toast("Could not share here — use Save as PDF");
+      });
     });
   }
-  function printInvoice(){ printDoc(issueInvoice); }
+  function printInvoice(){
+    if(!topLevel){ toast("This viewer blocks the print dialog — use Save as PDF instead"); return; }
+    printDoc(issueInvoice);
+  }
   function moveLine(i,d){ var L=invoiceCtx.inv.lines, j=i+d; if(j<0||j>=L.length) return; var t=L[i]; L[i]=L[j]; L[j]=t; renderLines(); renderDoc(); }
 
   /* ------------------------------------------------------------ nav ------- */
