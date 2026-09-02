@@ -359,7 +359,6 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 .tab .ic-sv{font-size:24px}
 .tab:active{opacity:.6}
 .tab.on{color:var(--ink)}
-.tab.on::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
 /* Instagram pattern: the active tab shows the filled glyph, others the outline — never both */
 .tab .ic-f{display:none}
 .tab.on .ic-f{display:block}
@@ -530,10 +529,84 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   .f3{grid-template-columns:1fr 1fr}
 }
 
+/* ==================================================================
+   Alive — the motion vocabulary (master prompt §7). One ease, four budgets:
+   micro 220 ms · reveal 700 ms · draw 950 ms · stagger 65 ms. Moves stay
+   under 18 px, nothing bounces, bronze is a line or a point, never a wash.
+   ================================================================== */
+/* screen reveal: children rise 14 px and settle, 65 ms apart */
+.rv{animation:reveal .7s var(--ease) both;animation-delay:calc(var(--i,0) * 65ms)}
+@keyframes reveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* hairline draw-in: the top rule of a block is drawn from the left, bronze while it moves, then rests as texture */
+.rv-line{position:relative}
+.rv-line::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:var(--accent);
+  transform-origin:left;animation:draw .95s var(--ease) both;animation-delay:calc(var(--i,0) * 65ms);pointer-events:none}
+@keyframes draw{0%{transform:scaleX(0);opacity:1}70%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+/* sparkline: the last twelve readings, drawn in over the count-up */
+.kpi .spark{display:block;position:relative;width:100%;height:22px;margin-top:10px}
+.spark svg{display:block;width:100%;height:100%;overflow:visible}
+.spark polyline{fill:none;stroke:var(--muted-2);stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.spark i{position:absolute;right:-2px;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--accent)}
+.rv .spark polyline{stroke-dasharray:1;stroke-dashoffset:1;animation:spark .95s var(--ease) forwards .25s}
+.rv .spark i{opacity:0;animation:fade .22s var(--ease) forwards 1.1s}
+@keyframes spark{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+/* a row that just changed state: a bronze mark draws down its left edge and lets go */
+.row{position:relative}
+.just::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);
+  transform-origin:top;animation:mark 1.2s var(--ease) forwards;pointer-events:none}
+tr.just td{animation:flash 1.2s var(--ease) forwards}
+@keyframes mark{0%{transform:scaleY(0);opacity:1}45%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+@keyframes flash{from{background:var(--glass-accent)}to{background:transparent}}
+/* pressed: one pixel down, no bounce */
+.row:active,.pcard:active,.kpi:active{transform:translateY(1px)}
+.btn:active{transform:translateY(1px);opacity:.85}
+.tab:active{transform:translateY(1px)}
+/* the tab bar's one bronze line slides between tabs instead of blinking */
+.tab-ind{position:absolute;top:0;left:0;width:20%;height:2px;background:var(--accent);transition:left .22s var(--ease),opacity .22s var(--ease);pointer-events:none}
+.tab-ind[hidden]{display:block;opacity:0}
+/* ambient: the bronze glow behind the glass drifts on a forty-second cycle — felt, not seen */
+.stage::before{animation:drift 40s ease-in-out infinite alternate;transform:scale(1.06)}
+@keyframes drift{from{transform:translate(-1.5%,-1%) scale(1.06)}to{transform:translate(1.5%,1%) scale(1.06)}}
+/* the bell carries a count, not a dot */
+.iconbtn .badge{top:5px;right:4px;width:auto;min-width:15px;height:15px;padding:0 4px;border-radius:var(--r-pill);
+  color:#0a0704;font-size:8.5px;font-weight:600;line-height:15px;text-align:center;font-variant-numeric:tabular-nums;animation:pop .22s var(--ease)}
+.iconbtn .badge:empty{display:none}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+/* topbar clock */
+.topbar .clock{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-variant-numeric:tabular-nums;white-space:nowrap;margin-right:6px}
+.topbar.searching .clock{display:none}
+/* global search results: a glass panel under the bar, grouped, jump on tap */
+.spanel{position:absolute;left:0;right:0;top:56px;z-index:45;max-height:62%;overflow-y:auto;padding:6px 20px 18px;
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-bottom:1px solid var(--glass-line);box-shadow:var(--shadow-glass)}
+.spanel .grp{padding:14px 0 6px;font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2)}
+.spanel .row{padding:10px 4px}
+.spanel mark{background:transparent;color:var(--accent-bright);font-weight:500}
+.kbd{display:inline-block;min-width:16px;padding:0 4px;border:1px solid var(--line-2);font-size:9px;line-height:16px;text-align:center;color:var(--muted);font-family:var(--sans);letter-spacing:0}
+/* receivables strip and the cut-off row */
+.recv{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);margin-bottom:18px}
+.recv .kpi .val{font-size:20px}
+.short{font-size:10.5px;color:var(--warn);display:block;margin-top:4px}
+.hist .kv{padding:7px 0;font-size:11.5px}
+.hist .kv .k{font-variant-numeric:tabular-nums;color:var(--muted-2)}
+@container app (max-width:1023px){
+  .spanel{top:52px;padding:4px 16px 16px}
+  .topbar .clock{display:none}
+  .recv{grid-template-columns:repeat(3,1fr)}
+  .recv .kpi .val{font-size:15px}
+  .recv .kpi{padding:12px 10px}
+}
+
 /* ---------- reduced motion ---------- */
 @media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{transition-duration:.001ms !important;animation-duration:.001ms !important}
+  *,*::before,*::after{transition-duration:.001ms !important;animation-duration:.001ms !important;animation-delay:0s !important}
   .scroll{scroll-behavior:auto}
+  .rv{animation:none}
+  .rv-line::before{display:none}
+  .rv .spark polyline{animation:none;stroke-dashoffset:0}
+  .rv .spark i{animation:none;opacity:1}
+  .just::before{display:none}
+  .stage::before{animation:none;transform:none}
 }
 </style>
 </head>
@@ -623,7 +696,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       <a href="#" data-go="console-invoices"><svg class="ic-sv"><use href="#i-file"></use></svg>Invoices</a>
       <div class="grp">Relationships</div>
       <a href="#" data-go="console-clients"><svg class="ic-sv"><use href="#i-users"></use></svg>Clients</a>
-      <a href="#" data-go="console-clients" data-filter="lapsed"><svg class="ic-sv"><use href="#i-funnel"></use></svg>Lapsed accounts</a>
+      <a href="#" data-go="console-clients" data-filter="attention"><svg class="ic-sv"><use href="#i-funnel"></use></svg>Acknowledgement due</a>
       <div class="grp">Settings</div>
       <a href="#" data-go="console-account"><svg class="ic-sv"><use href="#i-user"></use></svg>Account</a>
     </div>
@@ -651,11 +724,13 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       <span class="ttl" data-title>Dashboard</span>
       <span class="sp"></span>
       <label class="search"><svg class="ic-sv" style="font-size:15px;color:var(--muted)"><use href="#i-search"></use></svg>
-        <input type="search" data-search-input placeholder="Search this screen" autocomplete="off" /></label>
+        <input type="search" data-search-input placeholder="Search orders, accounts, lots, invoices" autocomplete="off" /></label>
+      <span class="clock" data-clock></span>
       <button class="btn btn-sm btn-accent primary desktop-only" data-primary><svg class="ic-sv"><use href="#i-plus"></use></svg><span data-primary-label>New quote</span></button>
       <button class="iconbtn" data-search-btn aria-label="Search"><svg class="ic-sv"><use href="#i-search"></use></svg></button>
-      <button class="iconbtn" data-bell aria-label="Notifications"><svg class="ic-sv"><use href="#i-bell"></use></svg><span class="badge"></span></button>
+      <button class="iconbtn" data-bell aria-label="Notifications"><svg class="ic-sv"><use href="#i-bell"></use></svg><span class="badge" data-badge></span></button>
     </header>
+    <div class="spanel" data-spanel hidden></div>
 
     <div class="scroll" data-scroll>
 
@@ -664,22 +739,26 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
         <div class="sec">
           <div class="sec-h"><span class="kicker">01 · This month</span></div>
           <div class="kpis">
-            <div class="kpi"><span class="lab">Revenue MTD</span><span class="val">Rp 184.600.000</span>
-              <span class="def">Delivered orders, net of cancellations.</span><span class="tgt">Target Rp 210.000.000</span></div>
-            <div class="kpi"><span class="lab">Quote → close</span><span class="val">38<span class="u">%</span></span>
-              <span class="def">Accepted quotes ÷ quotes sent, 30-day window.</span><span class="tgt">Target 45%</span></div>
-            <div class="kpi"><span class="lab">Reorder rate</span><span class="val">41<span class="u">%</span></span>
-              <span class="def">Accounts with a second order inside 90 days.</span><span class="tgt">Target 50%</span></div>
-            <div class="kpi"><span class="lab">Blended AOV</span><span class="val">Rp 1.100.000</span>
-              <span class="def">Order total ÷ orders, all pillars.</span><span class="tgt">Target Rp 1.400.000</span></div>
-            <div class="kpi"><span class="lab">Gross margin</span><span class="val">53<span class="u">%</span></span>
+            <div class="kpi"><span class="lab">Revenue MTD</span><span class="val" data-n="184600000" data-fmt="idr">Rp 184.600.000</span>
+              <span class="def">Delivered orders, net of cancellations.</span><span class="tgt">Target Rp 210.000.000</span>
+              <span class="spark" aria-hidden="true" data-spark="92,104,98,121,117,133,128,146,141,158,171,185"></span></div>
+            <div class="kpi"><span class="lab">Quote → close</span><span class="val" data-n="38" data-fmt="pct">38<span class="u">%</span></span>
+              <span class="def">Accepted quotes ÷ quotes sent, 30-day window.</span><span class="tgt">Target 45%</span>
+              <span class="spark" aria-hidden="true" data-spark="29,31,30,34,33,36,35,37,36,39,37,38"></span></div>
+            <div class="kpi"><span class="lab">Reorder rate</span><span class="val" data-n="41" data-fmt="pct">41<span class="u">%</span></span>
+              <span class="def">Accounts with a second order inside 90 days.</span><span class="tgt">Target 50%</span>
+              <span class="spark" aria-hidden="true" data-spark="22,25,27,30,29,33,35,36,38,39,40,41"></span></div>
+            <div class="kpi"><span class="lab">Blended AOV</span><span class="val" data-n="1100000" data-fmt="idr">Rp 1.100.000</span>
+              <span class="def">Order total ÷ orders, all pillars.</span><span class="tgt">Target Rp 1.400.000</span>
+              <span class="spark" aria-hidden="true" data-spark="84,88,91,87,95,99,104,101,108,106,112,110"></span></div>
+            <div class="kpi"><span class="lab">Gross margin</span><span class="val" data-n="53" data-fmt="pct">53<span class="u">%</span></span>
               <span class="def">Owner only. Price less landed cost and verification.</span><span class="tgt">Target 53%</span></div>
-            <div class="kpi"><span class="lab">CAC</span><span class="val">Rp 120.000</span>
+            <div class="kpi"><span class="lab">CAC</span><span class="val" data-n="120000" data-fmt="idr">Rp 120.000</span>
               <span class="def">Owner only. Spend ÷ first-time buyers.</span><span class="tgt">Payback under one order</span></div>
-            <div class="kpi"><span class="lab">LTV</span><span class="val">Rp 3.200.000</span>
+            <div class="kpi"><span class="lab">LTV</span><span class="val" data-n="3200000" data-fmt="idr">Rp 3.200.000</span>
               <span class="def">Owner only. Contribution over 24 months.</span><span class="tgt">LTV / CAC 26×</span></div>
             <div class="kpi"><span class="lab">Stockout</span><span class="val" data-stockout-val>3 <span class="u">SKU</span></span>
-              <span class="def">Variants at zero balance in the movement ledger.</span><span class="tgt">Target 0</span></div>
+              <span class="def">Variants with nothing available once reservations are taken off the ledger.</span><span class="tgt">Target 0</span></div>
           </div>
         </div>
 
@@ -696,18 +775,12 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           </div>
 
           <div class="sec">
-            <div class="sec-h"><span class="kicker">03 · Today</span><span class="sp"></span>
+            <div class="sec-h"><span class="kicker">03 · Today</span><span class="note" data-today-clock></span><span class="sp"></span>
               <span class="chip warn"><span class="dot"></span><span data-open-count>7</span> open</span></div>
+            <div class="rows" data-today-rows></div>
+            <div class="sec-h" style="margin-top:22px"><span class="kicker">04 · Shortcuts</span><span class="sp"></span>
+              <span class="note desktop-only"><span class="kbd">/</span> search · <span class="kbd">n</span> new quote · <span class="kbd">1</span>–<span class="kbd">5</span> tabs</span></div>
             <div class="rows">
-              <button class="row" data-go="console-orders" data-filter="pending"><span class="ic"><svg class="ic-sv"><use href="#i-send"></use></svg></span>
-                <span class="bd"><span class="t1">Quotes awaiting reply</span><span class="t2">Oldest sent 3 days ago</span></span>
-                <span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
-              <button class="row" data-go="console-orders" data-filter="packing"><span class="ic"><svg class="ic-sv"><use href="#i-box"></use></svg></span>
-                <span class="bd"><span class="t1">Orders to pack</span><span class="t2">Cold-chain dispatch cut-off 15.00</span></span>
-                <span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
-              <button class="row" data-go="console-clients" data-filter="lapsed"><span class="ic"><svg class="ic-sv"><use href="#i-warn"></use></svg></span>
-                <span class="bd"><span class="t1">Acknowledgement lapsed</span><span class="t2">Klinik Senopati — peptide lines hidden</span></span>
-                <span class="rt"><span class="chip err"><span class="dot"></span>Gated</span></span></button>
               <button class="row owner-only" data-go="console-pricing"><span class="ic"><svg class="ic-sv"><use href="#i-tag"></use></svg></span>
                 <span class="bd"><span class="t1">Price list &amp; margin</span><span class="t2" data-pricing-sub>79 lots · margin on every one</span></span>
                 <span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
@@ -725,7 +798,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
         <div class="hrow" data-chips="orders" style="margin-bottom:18px">
           <button class="chip on" data-f="">All</button><button class="chip" data-f="pending">Pending</button>
           <button class="chip" data-f="packing">Packing</button><button class="chip" data-f="dispatched">Dispatched</button>
-          <button class="chip" data-f="delivered">Delivered</button>
+          <button class="chip" data-f="delivered">Delivered</button><button class="chip" data-f="cancelled">Cancelled</button>
         </div>
         <div class="tblwrap desktop-only">
           <table class="tbl"><thead><tr><th>Order</th><th>Account</th><th>Items</th><th>Placed</th><th class="n">Total</th><th>State</th></tr></thead>
@@ -743,10 +816,10 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           <button class="chip" data-f="stockout">Stockout</button>
         </div>
         <div class="tblwrap">
-          <table class="tbl"><thead><tr><th>Variant</th><th class="desktop-only">Category</th><th>Content</th><th class="n">Price</th><th class="n">Stock</th></tr></thead>
+          <table class="tbl"><thead><tr><th>Variant</th><th class="desktop-only">Category</th><th class="desktop-only">Content</th><th class="n">Price</th><th class="n desktop-only">On hand</th><th class="n desktop-only">Reserved</th><th class="n">Available</th></tr></thead>
           <tbody data-list="catalogue-table"></tbody></table>
         </div>
-        <p class="note" style="margin-top:14px">Stock is the balance of the movement ledger, not a stored figure. Zero balance flags the variant as a stockout. Tap a variant to record a movement.</p>
+        <p class="note" style="margin-top:14px">On hand is the balance of the movement ledger, not a stored figure. Open quotes and orders being packed reserve their lines; dispatch takes them off the ledger. Nothing available flags the variant as a stockout. Tap a variant to record a movement.</p>
       </section>
 
       <!-- ============ CONSOLE · CLIENTS ============ -->
@@ -754,10 +827,11 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
         <div class="hrow" data-chips="clients" style="margin-bottom:18px">
           <button class="chip on" data-f="">All</button><button class="chip" data-f="clinic">Clinic</button>
           <button class="chip" data-f="institution">Institution</button><button class="chip" data-f="individual">Individual</button>
-          <button class="chip err" data-f="lapsed"><span class="dot"></span>Acknowledgement lapsed</button>
+          <button class="chip err" data-f="attention"><span class="dot"></span>Acknowledgement due</button>
+          <button class="chip warn" data-f="reorder"><span class="dot"></span>Reorder due</button>
         </div>
         <div class="tblwrap desktop-only">
-          <table class="tbl"><thead><tr><th>Account</th><th>Type</th><th>Manager</th><th class="n">Lifetime</th><th class="n">Orders</th><th>Acknowledgement</th></tr></thead>
+          <table class="tbl"><thead><tr><th>Account</th><th>Type</th><th>Manager</th><th class="n">Lifetime</th><th class="n">Orders</th><th>Next reorder</th><th>Acknowledgement</th></tr></thead>
           <tbody data-list="clients-table"></tbody></table>
         </div>
         <div class="rows mobile-only" data-list="clients-rows"></div>
@@ -809,12 +883,14 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 
       <!-- ============ CONSOLE · INVOICES ============ -->
       <section class="screen" data-screen="console-invoices">
+        <div class="recv owner-only" data-receivables></div>
         <div class="hrow" data-chips="invoices" style="margin-bottom:18px">
-          <button class="chip on" data-f="">All</button><button class="chip" data-f="issued">Issued</button>
+          <button class="chip on" data-f="">All</button><button class="chip" data-f="issued">Awaiting payment</button>
+          <button class="chip err" data-f="overdue"><span class="dot"></span>Overdue</button><button class="chip" data-f="paid">Paid</button>
           <button class="chip" data-f="draft">Not yet invoiced</button>
         </div>
         <div class="rows" data-list="invoice-rows"></div>
-        <p class="note" style="margin-top:16px">An invoice freezes the order's line prices at issue time. The PDF is the preview itself, captured at A4 — what you approve on screen is what the client receives. Send hands it to WhatsApp or mail through the device share sheet.</p>
+        <p class="note" style="margin-top:16px">An invoice moves draft → issued → paid, or falls overdue when its due date passes unpaid. Mark paid from the invoice once the transfer is matched. An invoice freezes the order's line prices at issue time. The PDF is the preview itself, captured at A4 — what you approve on screen is what the client receives. Send hands it to WhatsApp or mail through the device share sheet.</p>
       </section>
 
       <!-- ============ SHARED · INVOICE BUILDER (ported from the AXIOM invoice builder) ============ -->
@@ -889,8 +965,9 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
             </div>
           </div>
           <div>
-            <div class="sec-h"><span class="kicker">Preview · A4</span><span class="sp"></span><span data-inv-status></span></div>
+            <div class="sec-h"><span class="kicker">Preview · A4</span><span class="sp"></span><span data-inv-status></span><span data-inv-paid-wrap hidden><button class="btn btn-sm btn-accent" data-inv-paid>Mark paid</button></span></div>
             <div class="doc-wrap"><div class="inv-doc" data-doc></div></div>
+            <div class="hist" data-inv-hist></div>
             <div class="hrow" style="margin-top:16px" data-ro-actions hidden>
               <button class="btn btn-sm btn-accent" data-inv-pdf><svg class="ic-sv"><use href="#i-download"></use></svg>Download PDF</button>
               <button class="btn btn-sm" data-inv-send><svg class="ic-sv"><use href="#i-share"></use></svg>Send PDF</button>
@@ -991,6 +1068,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 
     <!-- ================= mobile tab bar ================= -->
     <nav class="tabbar" aria-label="Primary">
+      <span class="tab-ind" data-tab-ind></span>
       <button class="tab on" data-tab="0"><svg class="ic-sv ic-o"><use href="#i-house"></use></svg><svg class="ic-sv ic-f"><use href="#i-house-f"></use></svg></button>
       <button class="tab" data-tab="1"><svg class="ic-sv ic-o"><use href="#i-receipt"></use></svg><svg class="ic-sv ic-f"><use href="#i-receipt-f"></use></svg></button>
       <button class="tab" data-tab="2" data-action="primary"><svg class="ic-sv ic-o"><use href="#i-plus"></use></svg><svg class="ic-sv ic-f"><use href="#i-plus-f"></use></svg></button>
@@ -1149,27 +1227,37 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     return {id:r[0], no:no, cat:cat, catName:CATS[no], pathway:PATHWAYS[no], name:r[2], dose:r[3],
             supplier:sup, pen:peptide?PEN:0, cost:base, price:sell, assumed:!peptide,
             content: peptide?"Vial + pen":(no==="10"?"Device":(/Cap|Bottle|Duffel/.test(r[2])?"Accessory":"Apparel")),
-            stock: STOCKSEED[r[0]]!==undefined ? STOCKSEED[r[0]] : (peptide ? 6+(i*7)%22 : 20+(i*5)%40)};
+            onHand: STOCKSEED[r[0]]!==undefined ? STOCKSEED[r[0]] : (peptide ? 6+(i*7)%22 : 20+(i*5)%40)};
   });
 
+  /* ackAt: when the qualified-researcher acknowledgement was recorded — it expires after twelve months
+     and is flagged from month eleven. "age" means 18+ confirmed only, so no peptide lines at all.
+     cadence: agreed reorder interval in days; overridden by the median gap once an account has three orders. */
   var CLIENTS = [
-    {id:"regenera", name:"Klinik Regenera",  type:"clinic",      manager:"Aero",  ltv:84200000, orders:14, ack:"current", wa:"628120000001"},
-    {id:"prasetyo", name:"Dr. Prasetyo Lab", type:"institution", manager:"Aero",  ltv:61800000, orders:9,  ack:"current", wa:"628120000002"},
-    {id:"aksara",   name:"Aksara Recovery",  type:"clinic",      manager:"Nadia", ltv:28400000, orders:6,  ack:"current", wa:"628120000003"},
-    {id:"senopati", name:"Klinik Senopati",  type:"clinic",      manager:"Nadia", ltv:12600000, orders:4,  ack:"lapsed",  wa:"628120000004"},
-    {id:"ivan",     name:"Ivan Wijaya",      type:"individual",  manager:"—",     ltv:9300000,  orders:5,  ack:"current", wa:"628120000005"},
-    {id:"longa",    name:"Studio Longa",     type:"clinic",      manager:"Nadia", ltv:6500000,  orders:1,  ack:"age",     wa:"628120000006"}
+    {id:"regenera", name:"Klinik Regenera",  type:"clinic",      manager:"Aero",  ltv:84200000, orders:14, ackAt:"2026-01-02", cadence:21, wa:"628120000001"},
+    {id:"prasetyo", name:"Dr. Prasetyo Lab", type:"institution", manager:"Aero",  ltv:61800000, orders:9,  ackAt:"2025-09-20", cadence:14, wa:"628120000002"},
+    {id:"aksara",   name:"Aksara Recovery",  type:"clinic",      manager:"Nadia", ltv:28400000, orders:6,  ackAt:"2026-03-11", cadence:30, wa:"628120000003"},
+    {id:"senopati", name:"Klinik Senopati",  type:"clinic",      manager:"Nadia", ltv:12600000, orders:4,  ackAt:"2025-07-14", cadence:21, wa:"628120000004"},
+    {id:"ivan",     name:"Ivan Wijaya",      type:"individual",  manager:"—",     ltv:9300000,  orders:5,  ackAt:"2026-05-02", cadence:30, wa:"628120000005"},
+    {id:"longa",    name:"Studio Longa",     type:"clinic",      manager:"Nadia", ltv:6500000,  orders:1,  ackAt:null,         cadence:0,  wa:"628120000006"}
   ];
-  var STATES = ["pending","packing","dispatched","delivered"];
+  var STATES = ["pending","packing","dispatched","delivered"];      /* the forward path; "cancelled" leaves it */
+  var CUTOFF = {cold:[15,0], ambient:[17,0]};                         /* dispatch cut-off, hours and minutes, local time */
   var ORDERS = [
-    {id:"AX-2601-0148", client:"regenera", date:"02 Sep 2026", state:"packing",    ship:216000, lines:[["reta10",2],["bpc10",2],["ghk100",1],["tee",2]]},
-    {id:"AX-2601-0147", client:"prasetyo", date:"01 Sep 2026", state:"dispatched", ship:250000, lines:[["bpc10",3],["tb500",2],["cjc10",1]]},
+    {id:"AX-2601-0148", client:"regenera", date:"02 Sep 2026", state:"packing",    ship:216000, lines:[["reta10",2],["bpc10",2],["ghk100",1],["tee",2]],
+      log:[["2026-09-02T09:14","Klinik Regenera","quote","accepted"],["2026-09-02T09:22","Aero","pending","packing"]]},
+    {id:"AX-2601-0147", client:"prasetyo", date:"01 Sep 2026", state:"dispatched", ship:250000, lines:[["bpc10",3],["tb500",2],["cjc10",1]],
+      log:[["2026-09-01T10:02","Aero","pending","packing"],["2026-09-01T14:31","Nadia","packing","dispatched"]]},
     {id:"AX-2601-0146", client:"aksara",   date:"01 Sep 2026", state:"delivered",  ship:0,      lines:[["mat",1]]},
     {id:"AX-2601-0145", client:"ivan",     date:"31 Aug 2026", state:"delivered",  ship:120000, lines:[["ghk100",2],["tee",1]]},
-    {id:"AX-2601-0144", client:"senopati", date:"30 Aug 2026", state:"pending",    ship:0,      lines:[["tee",3],["hoodie",2]]},
+    {id:"AX-2601-0144", client:"senopati", date:"30 Aug 2026", state:"pending",    ship:0,      lines:[["tee",3],["hoodie",2]],
+      log:[["2026-08-30T16:40","Nadia","draft","pending"]]},
     {id:"AX-2601-0143", client:"longa",    date:"29 Aug 2026", state:"delivered",  ship:0,      lines:[["legs",1]]},
     {id:"AX-2601-0139", client:"regenera", date:"18 Aug 2026", state:"delivered",  ship:216000, lines:[["reta10",1],["bpc10",2],["cjc10",1],["tee",2]]},
-    {id:"AX-2601-0128", client:"regenera", date:"02 Aug 2026", state:"delivered",  ship:150000, lines:[["ghk100",2],["mask",1]]}
+    {id:"AX-2601-0128", client:"regenera", date:"02 Aug 2026", state:"delivered",  ship:150000, lines:[["ghk100",2],["mask",1]]},
+    {id:"AX-2601-0117", client:"regenera", date:"14 Jul 2026", state:"delivered",  ship:216000, lines:[["reta10",2],["bpc10",1]]},
+    {id:"AX-2601-0102", client:"prasetyo", date:"18 Aug 2026", state:"delivered",  ship:250000, lines:[["cjc10",2],["tb500",1]]},
+    {id:"AX-2601-0096", client:"prasetyo", date:"04 Aug 2026", state:"delivered",  ship:250000, lines:[["bpc10",2]]}
   ];
   var saved = {"reta10":true,"mat":true,"ta1":true,"duffel":true};
   var quote = [["reta10",2],["bpc10",2],["ghk100",1]];          /* the draft quote in the sheet */
@@ -1197,19 +1285,130 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       '<div class="kv" style="border:none"><span class="k">Margin</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(m.rp)+' '+gmChip(m.pct)+'</span></div></div>'; }
   function orderTotal(o){ var t=o.ship; o.lines.forEach(function(l){ t+=V(l[0]).price*l[1]; }); return t; }
   function stateChip(s){
-    var cls={pending:"",packing:"warn",dispatched:"info",delivered:"ok"}[s]||"";
+    var cls={pending:"",packing:"warn",dispatched:"info",delivered:"ok",cancelled:"err"}[s]||"";
     return '<span class="chip '+cls+'"><span class="dot"></span>'+s.charAt(0).toUpperCase()+s.slice(1)+'</span>';
   }
-  function ackChip(a){
-    return a==="current" ? '<span class="chip ok"><span class="dot"></span>Current</span>'
-         : a==="lapsed"  ? '<span class="chip err"><span class="dot"></span>Lapsed</span>'
-         :                 '<span class="chip warn"><span class="dot"></span>18+ only</span>';
-  }
-  function stockChip(n){
+
+  /* ---------------------------------------------------------- time --------
+     One clock. window.__now lets a test pin it; the app itself reads the device. */
+  function now(){ return window.__now ? new Date(window.__now) : new Date(); }
+  var DAY=86400000, MON_IX={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  function parseD(s){ if(!s) return null; if(/^\d{4}-/.test(s)){ var p=s.split(/[-T:]/); return new Date(+p[0],+p[1]-1,+p[2],+p[3]||0,+p[4]||0); }
+    var q=s.split(" "); return new Date(+q[2],MON_IX[q[1]],+q[0]); }
+  function midnight(d){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+  function daysFrom(d){ var a=parseD(typeof d==="string"?d:null)||d; return Math.round((midnight(now())-midnight(a))/DAY); }   /* calendar days; positive = in the past */
+  function dayLabel(n){ return n===0?"today":n===1?"tomorrow":n===-1?"yesterday":n>0?"in "+n+" d":Math.abs(n)+" d ago"; }
+  function fmtClock(d){ return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()]+" "+("0"+d.getDate()).slice(-2)+" "+MONTHS[d.getMonth()]+" · "+("0"+d.getHours()).slice(-2)+"."+("0"+d.getMinutes()).slice(-2); }
+  function stamp(){ var d=now(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)+"T"+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); }
+  function fmtStamp(s){ var d=parseD(s); return ("0"+d.getDate()).slice(-2)+" "+MONTHS[d.getMonth()]+" · "+("0"+d.getHours()).slice(-2)+"."+("0"+d.getMinutes()).slice(-2); }
+
+  /* ---------------------------------------------------------- stock -------
+     On hand is the ledger balance. Open quotes and orders being packed hold their lines;
+     dispatch takes them off the ledger. Available is what can still be promised. */
+  function reserved(v){ var n=0; ORDERS.forEach(function(o){ if(o.state!=="pending"&&o.state!=="packing") return;
+    o.lines.forEach(function(l){ if(l[0]===v.id) n+=l[1]; }); }); return n; }
+  function available(v){ return Math.max(0, v.onHand-reserved(v)); }
+  function stockChip(v){ var n=typeof v==="number"?v:available(v);
     return n===0 ? '<span class="chip err"><span class="dot"></span>Out</span>'
          : n<=2  ? '<span class="chip warn"><span class="dot"></span>'+n+' left</span>'
          :         '<span class="chip ok"><span class="dot"></span>In stock</span>';
   }
+  function stockouts(){ return VARIANTS.filter(function(v){ return available(v)===0; }); }
+  /* a quote line is short when it asks for more than is available, counting its own reservation once */
+  function shortBy(lines, orderId){ var out=[]; lines.forEach(function(l){ var v=V(l[0]), held=0;
+    ORDERS.forEach(function(o){ if(o.id===orderId||(o.state!=="pending"&&o.state!=="packing")) return; o.lines.forEach(function(x){ if(x[0]===v.id) held+=x[1]; }); });
+    var avail=Math.max(0,v.onHand-held); if(l[1]>avail) out.push({v:v, want:l[1], avail:avail}); }); return out; }
+
+  /* ---------------------------------------------------------- order life --
+     Every state change is logged: when, who, from, to. Dispatch deducts stock; cancel releases it. */
+  function logState(o, who, from, to){ (o.log=o.log||[]).push([stamp(), who, from, to]); }
+  function advance(o, who){ var i=STATES.indexOf(o.state); if(i<0||i>=STATES.length-1) return false;
+    var to=STATES[i+1]; if(to==="dispatched") o.lines.forEach(function(l){ var v=V(l[0]); v.onHand=Math.max(0,v.onHand-l[1]); });
+    logState(o, who||"Aero", o.state, to); o.state=to; return true; }
+  function cancel(o, who){ if(o.state!=="pending"&&o.state!=="packing") return false; logState(o, who||"Aero", o.state, "cancelled"); o.state="cancelled"; return true; }
+  function isCold(o){ return o.lines.some(function(l){ return V(l[0]).cat==="peptide"; }); }
+  /* Dispatch rule: before the cut-off an order packed today leaves today; after it, tomorrow.
+     Cold-chain lines close at 15.00, ambient lines at 17.00. Delivery is dispatch + 2 days. */
+  function dispatchEta(o){ var t=now(), c=isCold(o)?CUTOFF.cold:CUTOFF.ambient, cut=new Date(t.getFullYear(),t.getMonth(),t.getDate(),c[0],c[1]);
+    var placed=parseD(o.date), late=t>=cut, dispatch=new Date(t.getFullYear(),t.getMonth(),t.getDate()+(late?1:0));
+    if(o.state==="dispatched"||o.state==="delivered"){ var lg=(o.log||[]).filter(function(x){return x[3]==="dispatched";})[0]; dispatch=lg?parseD(lg[0]):placed; }
+    var deliver=new Date(dispatch.getFullYear(),dispatch.getMonth(),dispatch.getDate()+2), mins=Math.round((cut-t)/60000);
+    var cutLabel=("0"+c[0]).slice(-2)+"."+("0"+c[1]).slice(-2);
+    return {cold:isCold(o), cut:cut, cutLabel:cutLabel, late:late, minsLeft:mins, dispatch:dispatch, deliver:deliver,
+      dispatchLabel: o.state==="dispatched"||o.state==="delivered" ? "Dispatched "+fmtShortD(dispatch) : late ? "Cut-off "+cutLabel+" passed · dispatch tomorrow" : "Dispatch today · cut-off "+cutLabel+" · "+leftLabel(mins),
+      deliverLabel: o.state==="delivered" ? "Delivered" : "Estimated "+fmtShortD(deliver)}; }
+  function leftLabel(m){ return m<=0?"closed":m<60?"in "+m+" min":"in "+Math.floor(m/60)+" h "+("0"+(m%60)).slice(-2)+" m"; }
+  function fmtShortD(d){ return ("0"+d.getDate()).slice(-2)+" "+MONTHS[d.getMonth()]; }
+  function cutoffState(){ var t=now(), c=CUTOFF.cold, cut=new Date(t.getFullYear(),t.getMonth(),t.getDate(),c[0],c[1]), m=Math.round((cut-t)/60000);
+    return {mins:m, cls:m<=0?"err":m<60?"warn":"", label:m<=0?"Cut-off 15.00 passed · dispatch tomorrow":"Cold-chain cut-off 15.00 · "+leftLabel(m)}; }
+
+  /* ---------------------------------------------------------- clients -----
+     Acknowledgement: current under eleven months, expiring in month twelve, lapsed after. */
+  function ackState(c){ if(!c.ackAt) return "age"; var months=daysFrom(c.ackAt)/30.44; return months>12?"lapsed":months>11?"expiring":"current"; }
+  function ackChip(a){ if(typeof a==="object") a=ackState(a);
+    return a==="current"  ? '<span class="chip ok"><span class="dot"></span>Current</span>'
+         : a==="lapsed"   ? '<span class="chip err"><span class="dot"></span>Lapsed</span>'
+         : a==="expiring" ? '<span class="chip warn"><span class="dot"></span>Renew</span>'
+         :                  '<span class="chip warn"><span class="dot"></span>18+ only</span>';
+  }
+  function ackDue(c){ return c.ackAt ? new Date(parseD(c.ackAt).getTime()+365*DAY) : null; }
+  /* Reorder cadence: the median gap between an account's orders once it has three; the agreed cadence until then. */
+  function clientOrders(id){ return ORDERS.filter(function(o){ return o.client===id&&o.state!=="cancelled"; }).map(function(o){ return parseD(o.date); }).sort(function(a,b){ return a-b; }); }
+  function cadenceDays(c){ var ds=clientOrders(c.id); if(ds.length>=3){ var gaps=[]; for(var i=1;i<ds.length;i++) gaps.push(Math.round((ds[i]-ds[i-1])/DAY));
+      gaps.sort(function(a,b){return a-b;}); var m=gaps.length>>1; return {days:gaps.length%2?gaps[m]:Math.round((gaps[m-1]+gaps[m])/2), derived:true}; }
+    return {days:c.cadence||0, derived:false}; }
+  function reorderDue(c){ var ds=clientOrders(c.id), cad=cadenceDays(c); if(!ds.length||!cad.days) return null;
+    var last=ds[ds.length-1], due=new Date(last.getTime()+cad.days*DAY), inDays=-daysFrom(due);
+    return {last:last, due:due, inDays:inDays, cadence:cad.days, derived:cad.derived, overdue:inDays<0, soon:inDays>=0&&inDays<=7,
+      label: inDays<0 ? "Overdue "+Math.abs(inDays)+" d" : inDays===0 ? "Due today" : "Due in "+inDays+" d"}; }
+
+  /* ---------------------------------------------------------- invoices ----
+     draft (not issued) → issued → paid; issued and past due unpaid = overdue. */
+  function invStatus(inv){ if(!inv||!inv.issued) return "draft"; if(inv.paid) return "paid"; return daysFrom(inv.due)>0 ? "overdue" : "issued"; }
+  function invChip(inv){ var s=invStatus(inv);
+    return s==="paid" ? '<span class="chip ok"><span class="dot"></span>Paid</span>'
+         : s==="overdue" ? '<span class="chip err"><span class="dot"></span>Overdue '+daysFrom(inv.due)+' d</span>'
+         : s==="issued" ? '<span class="chip info"><span class="dot"></span>Due '+dayLabel(-daysFrom(inv.due))+'</span>'
+         : '<span class="chip"><span class="dot"></span>Draft</span>'; }
+  function receivables(){ var out={open:0,openN:0,over:0,overN:0,paid:0,paidN:0}, t=now();
+    ORDERS.forEach(function(o){ var inv=o.invoice; if(!inv||!inv.issued) return; var s=invStatus(inv);
+      if(s==="paid"){ var p=parseD(inv.paidAt||inv.date); if(p.getMonth()===t.getMonth()&&p.getFullYear()===t.getFullYear()){ out.paid+=inv.total; out.paidN++; } }
+      else { out.open+=inv.total; out.openN++; if(s==="overdue"){ out.over+=inv.total; out.overN++; } } }); return out; }
+
+  /* ---------------------------------------------------------- events ------
+     The one list the dashboard, the bell and the badge all read. Derived on every call, never typed. */
+  function events(){ var e=[], t=now();
+    if(surface==="account"){
+      ORDERS.forEach(function(o){ if(o.client!=="regenera"||o.state==="delivered"||o.state==="cancelled") return; var eta=dispatchEta(o);
+        e.push({k:"o"+o.id, icon:o.state==="dispatched"?"truck":"box", t1:o.id+(o.state==="dispatched"?" is on its way":" is being packed"), t2:o.state==="dispatched"?eta.deliverLabel:eta.dispatchLabel, go:"account-orders"}); });
+      ORDERS.forEach(function(o){ var inv=o.invoice; if(o.client!=="regenera"||!inv||!inv.issued||inv.paid) return; var s=invStatus(inv);
+        e.push({k:"i"+inv.no, icon:"file", t1:inv.no+(s==="overdue"?" is overdue":" awaits payment"), t2:idr(inv.total)+" · due "+fmtShort(inv.due), cls:s==="overdue"?"err":"", openInvoice:o.id}); });
+      var back=VARIANTS.filter(function(v){ return saved[v.id]&&available(v)>0&&available(v)<=3; });
+      back.forEach(function(v){ e.push({k:"s"+v.id, icon:"bookmark-f", t1:v.name+" · "+available(v)+" available", t2:"Saved item, low balance", go:"account-shop", filter:"saved"}); });
+      return e;
+    }
+    var pack=ORDERS.filter(function(o){return o.state==="packing";}); if(pack.length){ var cs=cutoffState();
+      e.push({k:"pack", icon:"box", t1:pack.length+(pack.length>1?" orders":" order")+" to pack", t2:cs.label, cls:cs.cls, go:"console-orders", filter:"packing"}); }
+    var pend=ORDERS.filter(function(o){return o.state==="pending";}); if(pend.length){ var oldest=Math.max.apply(null,pend.map(function(o){return daysFrom(o.date);}));
+      e.push({k:"pend", icon:"send", t1:pend.length+(pend.length>1?" quotes awaiting reply":" quote awaiting reply"), t2:"Oldest sent "+(oldest===0?"today":oldest+" d ago")+" · stock is held while it waits", cls:oldest>=3?"warn":"", go:"console-orders", filter:"pending"}); }
+    var rc=receivables(); if(rc.overN) e.push({k:"over", icon:"file", t1:rc.overN+(rc.overN>1?" invoices overdue":" invoice overdue"), t2:idr(rc.over)+" past due · "+idr(rc.open)+" outstanding", cls:"err", go:"console-invoices", filter:"overdue"});
+    CLIENTS.forEach(function(c){ var a=ackState(c); if(a!=="lapsed"&&a!=="expiring") return;
+      e.push({k:"ack"+c.id, icon:"warn", t1:a==="lapsed"?"Acknowledgement lapsed":"Acknowledgement expires "+dayLabel(-daysFrom(ackDue(c))), t2:c.name+(a==="lapsed"?" · peptide lines hidden":" · renew to keep peptide lines"), cls:a==="lapsed"?"err":"warn", client:c.id}); });
+    var due=CLIENTS.map(function(c){ var r=reorderDue(c); return r?{c:c,r:r}:null; }).filter(Boolean).sort(function(a,b){return a.r.inDays-b.r.inDays;});
+    var od=due.filter(function(x){return x.r.overdue;}), sn=due.filter(function(x){return x.r.soon;});
+    if(od.length) e.push({k:"reo", icon:"reorder", t1:od.length+(od.length>1?" reorders overdue":" reorder overdue"), t2:od.map(function(x){return x.c.name;}).join(" · "), cls:"warn", go:"console-clients", filter:"reorder"});
+    else if(sn.length) e.push({k:"reo", icon:"reorder", t1:sn.length+(sn.length>1?" reorders due this week":" reorder due this week"), t2:sn.map(function(x){return x.c.name+" "+x.r.label.toLowerCase();}).join(" · "), go:"console-clients", filter:"reorder"});
+    else if(due.length) e.push({k:"reo", icon:"reorder", t1:"Next reorder · "+due[0].c.name, t2:due[0].r.label+" · cadence "+due[0].r.cadence+" d"+(due[0].r.derived?" from order history":" agreed"), go:"console-clients", filter:"reorder"});
+    var so=stockouts(); if(so.length) e.push({k:"so", icon:"flask", t1:so.length+(so.length>1?" variants":" variant")+" with nothing available", t2:so.slice(0,3).map(function(v){return v.name;}).join(" · ")+(so.length>3?" · +"+(so.length-3):""), cls:"", go:"console-catalogue", filter:"stockout"});
+    return e; }
+  function eventRow(x){ var attrs = x.go ? 'data-go="'+x.go+'"'+(x.filter?' data-filter="'+x.filter+'"':'') : x.client ? 'data-client="'+x.client+'"' : x.openInvoice ? 'data-open-invoice="'+x.openInvoice+'"' : '';
+    return '<button class="row" '+attrs+' data-close data-ev="'+x.k+'"><span class="ic">'+ic(x.icon)+'</span><span class="bd"><span class="t1">'+h(x.t1)+'</span><span class="t2"'+(x.cls?' style="color:var(--'+x.cls+')"':'')+'>'+h(x.t2)+'</span></span><span class="rt">'+ic("caret")+'</span></button>'; }
+  var seenSig="";
+  function renderEvents(){ var ev=events(), sig=ev.map(function(x){return x.k+x.t1;}).join("|");
+    if(surface==="console"){ $("[data-today-rows]").innerHTML = ev.length ? ev.map(eventRow).join("") : '<div class="empty">Nothing open. The day is clear.</div>'; $("[data-open-count]").textContent=ev.length; }
+    var badge=$("[data-badge]"), n=sig===seenSig?0:ev.length; if(String(n||"")!==badge.textContent) badge.textContent=n?String(n):""; }
+  function paintClock(){ var s=fmtClock(now()); $("[data-clock]").textContent=s; $("[data-today-clock]").textContent=s; }
+  function tick(){ paintClock(); renderEvents(); if(current==="account-orders") renderAccountOrder(); }
   function waLink(msg,num){ return "https://wa.me/"+(num||WA_NUMBER)+"?text="+encodeURIComponent(msg); }
 
   var toastT;
@@ -1228,41 +1427,41 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       var items = first.name+(first.dose&&first.content!=="Apparel"&&first.content!=="Accessory"?" "+first.dose:"")+(extra?" · +"+extra:"");
       t += '<tr data-order="'+o.id+'" data-tags="'+o.state+'"><td class="id">'+o.id+'</td><td class="k">'+h(c.name)+'</td><td>'+h(items)+
            '</td><td class="id">'+o.date+'</td><td class="n">'+idr(orderTotal(o))+'</td><td>'+stateChip(o.state)+'</td></tr>';
-      var icon={pending:"clock",packing:"box",dispatched:"truck",delivered:"check"}[o.state];
+      var icon={pending:"clock",packing:"box",dispatched:"truck",delivered:"check",cancelled:"x"}[o.state];
       r += '<button class="row" data-order="'+o.id+'" data-tags="'+o.state+'"><span class="ic">'+ic(icon)+'</span><span class="bd"><span class="t1">'+h(c.name)+
            '</span><span class="t2">'+o.id+' · '+o.lines.length+(o.lines.length>1?' lines':' line')+' · '+o.date.slice(0,6)+'</span></span><span class="rt"><span class="amt">'+
            idr(orderTotal(o))+'</span>'+stateChip(o.state)+'</span></button>';
     });
     tb.innerHTML=t; rows.innerHTML=r; applyFilter("orders");
-    var open = ORDERS.filter(function(o){return o.state!=="delivered";}).length;
-    $("[data-open-count]").textContent = open + 2;                   /* + the 2 non-order items */
   }
   function renderCatalogue(){
-    var t="", out=0;
-    VARIANTS.forEach(function(v){
-      if(v.stock===0) out++;
-      t += '<tr data-variant="'+v.id+'" data-tags="'+v.cat+(v.stock===0?' stockout':'')+'"><td class="k">'+h(v.name)+' · '+h(v.dose)+
-           '</td><td class="desktop-only">'+v.no+' '+h(v.catName)+'</td><td>'+h(v.content)+'</td><td class="n">'+idr(v.price)+
-           '</td><td class="n"'+(v.stock===0?' style="color:var(--err)"':'')+'>'+v.stock+'</td></tr>';
+    var t="";
+    VARIANTS.forEach(function(v){ var res=reserved(v), av=available(v);
+      t += '<tr data-variant="'+v.id+'" data-tags="'+v.cat+(av===0?' stockout':'')+'"><td class="k">'+h(v.name)+' · '+h(v.dose)+
+           '</td><td class="desktop-only">'+v.no+' '+h(v.catName)+'</td><td class="desktop-only">'+h(v.content)+'</td><td class="n">'+idr(v.price)+
+           '</td><td class="n desktop-only">'+v.onHand+'</td><td class="n desktop-only"'+(res?'':' style="color:var(--muted-2)"')+'>'+(res||'—')+
+           '</td><td class="n"'+(av===0?' style="color:var(--err)"':av<=2?' style="color:var(--warn)"':'')+'>'+av+'</td></tr>';
     });
     $('[data-list="catalogue-table"]').innerHTML=t; applyFilter("catalogue");
+    $("[data-stockout-val]").innerHTML = stockouts().length+' <span class="u">SKU</span>';
   }
   function renderClients(){
     var t="", r="";
     CLIENTS.forEach(function(c){
-      var tags=c.type+(c.ack==="lapsed"?" lapsed":"");
-      t += '<tr data-client="'+c.id+'" data-tags="'+tags+'"><td class="k">'+h(c.name)+'</td><td>'+c.type.charAt(0).toUpperCase()+c.type.slice(1)+'</td><td>'+h(c.manager)+'</td><td>'+h(c.manager)+
-           '</td><td class="n">'+idr(c.ltv)+'</td><td class="n">'+c.orders+'</td><td>'+ackChip(c.ack)+'</td></tr>';
-      var icon = c.ack==="lapsed"?"warn":c.type==="individual"?"person":c.type==="institution"?"flask":"building";
+      var a=ackState(c), rd=reorderDue(c), tags=c.type+(a==="lapsed"||a==="expiring"?" attention":"")+(rd&&(rd.overdue||rd.soon)?" reorder":"");
+      var rcell = rd ? '<span'+(rd.overdue?' style="color:var(--warn)"':rd.soon?' style="color:var(--ink)"':'')+'>'+rd.label+'</span>' : '<span class="dim-2">No cadence yet</span>';
+      t += '<tr data-client="'+c.id+'" data-tags="'+tags+'"><td class="k">'+h(c.name)+'</td><td>'+c.type.charAt(0).toUpperCase()+c.type.slice(1)+'</td><td>'+h(c.manager)+
+           '</td><td class="n">'+idr(c.ltv)+'</td><td class="n">'+c.orders+'</td><td>'+rcell+'</td><td>'+ackChip(a)+'</td></tr>';
+      var icon = a==="lapsed"?"warn":c.type==="individual"?"person":c.type==="institution"?"flask":"building";
       r += '<button class="row" data-client="'+c.id+'" data-tags="'+tags+'"><span class="ic">'+ic(icon)+'</span><span class="bd"><span class="t1">'+h(c.name)+
-           '</span><span class="t2">'+c.orders+' orders · '+h(c.manager)+'</span></span><span class="rt"><span class="amt">'+idr(c.ltv)+'</span>'+ackChip(c.ack)+'</span></button>';
+           '</span><span class="t2">'+c.orders+' orders · '+(rd?"reorder "+rd.label.toLowerCase():"no cadence yet")+'</span></span><span class="rt"><span class="amt">'+idr(c.ltv)+'</span>'+ackChip(a)+'</span></button>';
     });
     $('[data-list="clients-table"]').innerHTML=t; $('[data-list="clients-rows"]').innerHTML=r; applyFilter("clients");
   }
   function renderShop(){
     var g="";
     VARIANTS.forEach(function(v){
-      g += '<button class="pcard'+(saved[v.id]?' saved':'')+'" data-product="'+v.id+'" data-tags="'+v.cat+(saved[v.id]?' saved':'')+'"><span class="no">'+v.no+'</span><span class="st">'+stockChip(v.stock)+
+      g += '<button class="pcard'+(saved[v.id]?' saved':'')+'" data-product="'+v.id+'" data-tags="'+v.cat+(saved[v.id]?' saved':'')+'"><span class="no">'+v.no+'</span><span class="st">'+stockChip(v)+
            '</span><span class="nm">'+h(v.name)+'</span><span class="ds">'+h(v.dose)+' · '+h(v.content)+'</span><span class="pr">'+idr(v.price)+
            '</span><span class="sv">'+ic(saved[v.id]?"bookmark-f":"bookmark")+'</span></button>';
     });
@@ -1315,19 +1514,24 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           '</td><td class="n owner-only">'+idr(base)+'</td><td class="n">'+idr(sell)+'</td><td class="n owner-only">'+idr(marg)+'</td><td class="n owner-only">'+gm+'%</td></tr>';
     $('[data-list="pathway-table"]').innerHTML=pt;
     $("[data-pricing-sub]").textContent = pep.length+" lots · "+gm+"% blended margin";
-    $("[data-stockout-val]").innerHTML = VARIANTS.filter(function(v){return v.stock===0;}).length+' <span class="u">SKU</span>';
   }
   function renderInvoices(){
-    var r="", issued=0;
-    ORDERS.forEach(function(o){ if(o.state==="pending") return; var c=C(o.client), inv=o.invoice; if(inv) issued++;
-      r += '<button class="row" data-open-invoice="'+o.id+'" data-tags="'+(inv?"issued":"draft")+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+(inv?inv.no:"Draft · "+o.id)+
-           '</span><span class="t2">'+h(c.name)+' · '+(inv?"issued "+fmtShort(inv.date)+(inv.sent?" · sent":""):o.date)+'</span></span><span class="rt"><span class="amt">'+idr(inv?inv.total:orderTotal(o))+'</span>'+
-           (inv?'<span class="chip ok"><span class="dot"></span>Issued</span>':'<span class="chip"><span class="dot"></span>Not invoiced</span>')+'</span></button>'; });
+    var r="", open=0, over=0;
+    ORDERS.forEach(function(o){ if(o.state==="pending"||o.state==="cancelled") return; var c=C(o.client), inv=o.invoice, s=invStatus(inv);
+      if(s==="issued") open++; if(s==="overdue") over++;
+      r += '<button class="row" data-open-invoice="'+o.id+'" data-tags="'+(s==="overdue"?"issued overdue":s)+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+(inv?inv.no:"Draft · "+o.id)+
+           '</span><span class="t2">'+h(c.name)+' · '+(inv?(s==="paid"?"paid "+fmtShort(inv.paidAt):"issued "+fmtShort(inv.date)+(inv.sent?" · sent":"")):o.date)+'</span></span><span class="rt"><span class="amt">'+idr(inv?inv.total:orderTotal(o))+'</span>'+
+           (inv?invChip(inv):'<span class="chip"><span class="dot"></span>Not invoiced</span>')+'</span></button>'; });
     $('[data-list="invoice-rows"]').innerHTML=r; applyFilter("invoices");
-    $("[data-invoices-sub]").textContent = issued+" issued · "+(ORDERS.filter(function(o){return o.state!=="pending"&&!o.invoice;}).length)+" to build";
+    var rc=receivables();
+    $("[data-receivables]").innerHTML =
+      '<div class="kpi"><span class="lab">Outstanding</span><span class="val">'+idr(rc.open)+'</span><span class="tgt">'+rc.openN+(rc.openN===1?' invoice':' invoices')+' issued, unpaid</span></div>'+
+      '<div class="kpi"><span class="lab">Overdue</span><span class="val"'+(rc.over?' style="color:var(--err)"':'')+'>'+idr(rc.over)+'</span><span class="tgt">'+rc.overN+' past due date</span></div>'+
+      '<div class="kpi"><span class="lab">Paid this month</span><span class="val">'+idr(rc.paid)+'</span><span class="tgt">'+rc.paidN+' matched</span></div>';
+    $("[data-invoices-sub]").textContent = (over?over+" overdue · ":"")+idr(rc.open)+" outstanding · "+(ORDERS.filter(function(o){return o.state!=="pending"&&o.state!=="cancelled"&&!o.invoice;}).length)+" to build";
     var inv="";
     ORDERS.forEach(function(x){ if(x.client!=="regenera"||!x.invoice) return; var n=x.invoice;
-      inv += '<button class="row" data-open-invoice="'+x.id+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+n.no+'</span><span class="t2">Issued '+fmtShort(n.date)+' · due '+fmtShort(n.due)+'</span></span><span class="rt"><span class="amt">'+idr(n.total)+'</span></span></button>'; });
+      inv += '<button class="row" data-open-invoice="'+x.id+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+n.no+'</span><span class="t2">Issued '+fmtShort(n.date)+' · due '+fmtShort(n.due)+'</span></span><span class="rt"><span class="amt">'+idr(n.total)+'</span>'+invChip(n)+'</span></button>'; });
     $('[data-list="invoices"]').innerHTML = inv || '<div class="empty">No invoices issued yet.</div>';
   }
   function setRole(r){ role=r; root.dataset.role=r; $$("[data-role-btn]").forEach(function(b){ b.classList.toggle("on", b.dataset.roleBtn===r); });
@@ -1343,14 +1547,17 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     $("[data-saved-count]").textContent = n;
   }
   function renderAccountOrder(){
-    var o=O("AX-2601-0148"), c=C(o.client), steps=[
-      ["Quote accepted","02 Sep 2026 · 09.14"],["Order confirmed","02 Sep 2026 · 09.22"],
-      ["Packing · cold-chain","02 Sep 2026 · 11.40"],["Dispatched","Cut-off 15.00"],["Delivered","Estimated 04 Sep 2026"]];
-    var doneUpTo = {pending:2,packing:3,dispatched:4,delivered:5}[o.state];
+    var o=O("AX-2601-0148"), c=C(o.client), eta=dispatchEta(o), lg=o.log||[];
+    var at=function(to){ var x=lg.filter(function(l){return l[3]===to;})[0]; return x?fmtStamp(x[0]):""; };
+    var steps=[
+      ["Quote accepted", at("accepted")||o.date],["Order confirmed", at("pending")||at("accepted")||o.date],
+      [eta.cold?"Packing · cold-chain":"Packing", o.state==="pending"?"Waiting for confirmation":(at("packing")||"")],
+      ["Dispatched", eta.dispatchLabel],["Delivered", eta.deliverLabel]];
+    var doneUpTo = {pending:2,packing:3,dispatched:4,delivered:5,cancelled:0}[o.state];
     $("[data-timeline]").innerHTML = steps.map(function(s,i){
       return '<div class="tl-i '+(i<doneUpTo?'done':'pend')+'"><span class="t1">'+s[0]+'</span><span class="t2">'+s[1]+'</span></div>';
     }).join("");
-    $("[data-order-chip]").innerHTML = stateChip(o.state);
+    $("[data-order-chip]").innerHTML = stateChip(o.state)+(o.invoice&&o.invoice.issued?' '+invChip(o.invoice):'');
     var l="";
     o.lines.forEach(function(x){ var v=V(x[0]); l+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(v.price*x[1])+'</span></div>'; });
     l += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
@@ -1377,12 +1584,31 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   function applySearch(){
     var q = ($("[data-search-input]").value||"").trim().toLowerCase(), scr=$(".screen.on");
     $$("[data-tags], .row, tr[data-order], tr[data-client], tr[data-variant]", scr).forEach(function(el){
-      if(el.hidden && !q) return;                       /* leave chip-filtered items alone */
-      if(!q){ return; }
+      if(el.closest("[data-spanel]")) return;
+      if(!q){ if(el.dataset.tags===undefined) el.hidden=false; return; }   /* chip-filtered items are restored by applyFilter */
       el.hidden = el.textContent.toLowerCase().indexOf(q)===-1;
     });
-    if(!q){ ["orders","catalogue","clients","shop"].forEach(applyFilter); }
+    if(!q){ ["orders","catalogue","clients","shop","pricing","invoices"].forEach(applyFilter); }
+    renderSearchPanel(q);
   }
+  /* global search: orders, accounts, variants and invoices from any screen, grouped, one tap to jump */
+  function searchAll(q){ var r={orders:[],clients:[],variants:[],invoices:[]}, hit=function(s){ return String(s).toLowerCase().indexOf(q)>-1; };
+    if(q.length<2) return r;
+    ORDERS.forEach(function(o){ var c=C(o.client); if(surface==="account"&&o.client!=="regenera") return; if(hit(o.id)||hit(c.name)||o.lines.some(function(l){return hit(V(l[0]).name);})) r.orders.push(o); });
+    if(surface==="console") CLIENTS.forEach(function(c){ if(hit(c.name)||hit(c.type)||hit(c.manager)) r.clients.push(c); });
+    VARIANTS.forEach(function(v){ if(hit(v.name)||hit(v.dose)||hit(v.catName)||hit(v.pathway)) r.variants.push(v); });
+    ORDERS.forEach(function(o){ var inv=o.invoice; if(!inv||!inv.issued) return; if(surface==="account"&&o.client!=="regenera") return; if(hit(inv.no)||hit(C(o.client).name)) r.invoices.push(o); });
+    return r; }
+  function mark(s,q){ var i=String(s).toLowerCase().indexOf(q); return i<0?h(s):h(s.slice(0,i))+'<mark>'+h(s.slice(i,i+q.length))+'</mark>'+h(s.slice(i+q.length)); }
+  function renderSearchPanel(q){ var p=$("[data-spanel]"); if(q.length<2){ p.hidden=true; p.innerHTML=""; return; }
+    var r=searchAll(q), b="", n=r.orders.length+r.clients.length+r.variants.length+r.invoices.length;
+    if(r.orders.length){ b+='<div class="grp">Orders</div><div class="rows">'+r.orders.slice(0,5).map(function(o){ return '<button class="row" data-order="'+o.id+'" data-close-search><span class="ic">'+ic("receipt")+'</span><span class="bd"><span class="t1">'+mark(o.id,q)+' · '+mark(C(o.client).name,q)+'</span><span class="t2">'+o.date+' · '+idr(orderTotal(o))+'</span></span><span class="rt">'+stateChip(o.state)+'</span></button>'; }).join("")+'</div>'; }
+    if(r.clients.length){ b+='<div class="grp">Accounts</div><div class="rows">'+r.clients.slice(0,5).map(function(c){ return '<button class="row" data-client="'+c.id+'" data-close-search><span class="ic">'+ic("users")+'</span><span class="bd"><span class="t1">'+mark(c.name,q)+'</span><span class="t2">'+c.type+' · '+c.orders+' orders</span></span><span class="rt">'+ackChip(c)+'</span></button>'; }).join("")+'</div>'; }
+    if(r.variants.length){ b+='<div class="grp">Price list</div><div class="rows">'+r.variants.slice(0,6).map(function(v){ return '<button class="row" data-'+(surface==="console"?"variant":"product")+'="'+v.id+'" data-close-search><span class="ic">'+ic("flask")+'</span><span class="bd"><span class="t1">'+mark(v.name+" · "+v.dose,q)+'</span><span class="t2">'+v.no+' '+h(v.catName)+' · '+idr(v.price)+'</span></span><span class="rt">'+stockChip(v)+'</span></button>'; }).join("")+(r.variants.length>6?'<div class="empty" style="padding:12px 0">+'+(r.variants.length-6)+' more · narrow the search</div>':'')+'</div>'; }
+    if(r.invoices.length){ b+='<div class="grp">Invoices</div><div class="rows">'+r.invoices.slice(0,5).map(function(o){ var inv=o.invoice; return '<button class="row" data-open-invoice="'+o.id+'" data-close-search><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+mark(inv.no,q)+'</span><span class="t2">'+h(C(o.client).name)+' · '+idr(inv.total)+'</span></span><span class="rt">'+invChip(inv)+'</span></button>'; }).join("")+'</div>'; }
+    p.innerHTML = n ? b : '<div class="empty">Nothing matches "'+h(q)+'".</div>'; p.hidden=false; }
+  function openSearch(){ topbar.classList.add("searching"); $("[data-search-input]").focus(); }
+  function closeSearch(){ topbar.classList.remove("searching"); var inp=$("[data-search-input]"); if(inp.value){ inp.value=""; applySearch(); } $("[data-spanel]").hidden=true; }
 
   /* ------------------------------------------------------------ sheets ---- */
   function openSheet(title, body, foot){
@@ -1396,15 +1622,17 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 
   function quoteBody(){
     var c=C("regenera"), total=0, b='<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+'</span></div>';
-    quote.forEach(function(l,i){ var v=V(l[0]), line=v.price*l[1]; total+=line;
-      b += '<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+'</span><span class="v" style="display:flex;align-items:center;gap:10px">'+
-           '<span class="qty"><button data-q="'+i+'" data-d="-1" aria-label="Less">'+ic("minus")+'</button><span>'+l[1]+'</span><button data-q="'+i+'" data-d="1" aria-label="More">'+ic("plus")+'</button></span>'+
+    var short=shortBy(quote), shortOf=function(id){ return short.filter(function(s){return s.v.id===id;})[0]; };
+    quote.forEach(function(l,i){ var v=V(l[0]), line=v.price*l[1], s=shortOf(v.id); total+=line;
+      b += '<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+(s?'<span class="short">'+s.avail+' available · '+s.want+' requested</span>':'')+'</span><span class="v" style="display:flex;align-items:center;gap:10px">'+
+           '<span class="qty"><button data-q="'+i+'" data-d="-1" aria-label="Less">'+ic("minus")+'</button><span'+(s?' style="color:var(--warn)"':'')+'>'+l[1]+'</span><button data-q="'+i+'" data-d="1" aria-label="More">'+ic("plus")+'</button></span>'+
            '<span style="min-width:96px">'+idr(line)+'</span><button class="linebtn" data-rm="'+i+'" aria-label="Remove">'+ic("trash")+'</button></span></div>'; });
     var opts = VARIANTS.filter(function(v){ return !quote.some(function(l){return l[0]===v.id;}); })
-      .map(function(v){ return '<option value="'+v.id+'"'+(v.stock===0?' disabled':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(v.price)+(v.stock===0?' · out of stock':'')+'</option>'; }).join("");
+      .map(function(v){ var av=available(v); return '<option value="'+v.id+'"'+(av===0?' disabled':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(v.price)+(av===0?' · out':av<=3?' · '+av+' left':'')+'</option>'; }).join("");
     b += '<div class="field" style="margin:16px 0 4px"><label>Add from price list</label><select data-add-sel>'+
          '<option value="">Choose a compound or product…</option>'+opts+'</select></div>';
     b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(total)+'</span></div>';
+    if(short.length) b += '<p class="note" style="color:var(--warn)">'+short.length+(short.length>1?' lines ask':' line asks')+' for more than is available. Reduce the quantity or send once stock is back — a quote holds its stock from the moment it is sent.</p>';
     b += marginBox(quote,"Margin on this quote");
     b += '<div class="kicker" style="margin:20px 0 9px">WhatsApp preview</div><div class="wa">'+h(quoteMsg())+'</div>';
     return b;
@@ -1418,7 +1646,10 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   function openQuote(){
     openSheet("New quote", quoteBody(),
       '<button class="btn btn-sm" data-draft>Save draft</button><button class="btn btn-sm btn-accent" data-send-quote>'+ic("wa")+'Send on WhatsApp</button>');
+    refreshQuote(true);
   }
+  /* re-render the quote and gate Send on availability */
+  function refreshQuote(keep){ if(!keep) $("[data-sheet-body]").innerHTML=quoteBody(); var s=$("[data-send-quote]"); if(s) s.disabled=shortBy(quote).length>0; }
   function openReorder(){
     var b='<div class="kicker" style="margin-bottom:12px">Repeat a past order</div><div class="rows">';
     ORDERS.forEach(function(o){ if(o.client!=="regenera"||o.state!=="delivered") return;
@@ -1428,56 +1659,71 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     openSheet("Reorder", b);
   }
   function openOrder(id){
-    var o=O(id), c=C(o.client), b='<div class="hrow" style="margin-bottom:14px">'+stateChip(o.state)+'<span class="note">'+o.date+'</span></div>';
+    var o=O(id), c=C(o.client), eta=dispatchEta(o), b='<div class="hrow" style="margin-bottom:14px">'+stateChip(o.state)+(o.invoice&&o.invoice.issued?invChip(o.invoice):'')+'<span class="note">'+o.date+'</span></div>';
     b += '<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+'</span></div>';
     o.lines.forEach(function(x){ var v=V(x[0]); b+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(v.price*x[1])+'</span></div>'; });
     b += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
+    if(o.state==="pending"||o.state==="packing") b += '<div class="kv"><span class="k">'+(eta.cold?"Cold-chain dispatch":"Dispatch")+'</span><span class="v"'+(eta.late?' style="color:var(--warn)"':'')+'>'+h(eta.dispatchLabel)+'</span></div>';
+    if(o.state!=="cancelled") b += '<div class="kv"><span class="k">Delivery</span><span class="v">'+h(eta.deliverLabel)+'</span></div>';
     b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(orderTotal(o))+'</span></div>';
     if(surface==="console") b += marginBox(o.lines,"Margin on this order");
+    if(o.log&&o.log.length){ b+='<div class="kicker" style="margin:18px 0 6px">History</div><div class="hist">';
+      o.log.slice().reverse().forEach(function(l){ b+='<div class="kv"><span class="k">'+fmtStamp(l[0])+' · '+h(l[1])+'</span><span class="v">'+h(l[2])+' → '+h(l[3])+'</span></div>'; }); b+='</div>'; }
     if(o.lines.some(function(x){return V(x[0]).cat==="peptide";})) b += '<div class="ruo" style="margin-top:16px"><b>Research Use Only.</b> In-vitro laboratory research only. No dosing or usage guidance is provided.</div>';
     var i=STATES.indexOf(o.state), foot='';
     if(surface==="console"){
       foot = '<button class="btn btn-sm" data-wa-client="'+c.id+'" data-msg="Hi '+h(c.name)+', an update on order '+o.id+'.">'+ic("wa")+'Message</button>';
-      if(i<STATES.length-1) foot += '<button class="btn btn-sm btn-accent" data-advance="'+o.id+'">Mark '+STATES[i+1]+'</button>';
+      if(o.state==="pending"||o.state==="packing") foot += '<button class="btn btn-sm" data-cancel="'+o.id+'">Cancel</button>';
+      if(o.state==="cancelled") foot += '<button class="btn btn-sm btn-accent" data-reorder="'+o.id+'">'+ic("reorder")+'Requote</button>';
+      else if(i<STATES.length-1) foot += '<button class="btn btn-sm btn-accent" data-advance="'+o.id+'">Mark '+STATES[i+1]+'</button>';
+      else if(o.invoice&&o.invoice.issued&&!o.invoice.paid) foot += '<button class="btn btn-sm btn-accent" data-open-invoice="'+o.id+'">'+ic("file")+'Invoice · '+(invStatus(o.invoice)==="overdue"?'overdue':'awaiting payment')+'</button>';
       else foot += '<button class="btn btn-sm btn-accent" data-open-invoice="'+o.id+'">'+ic("file")+(o.invoice?'Invoice':'Build invoice')+'</button>';
     } else {
       foot = '<button class="btn btn-sm" data-wa="Hi AXIOM, a question about order '+o.id+'.">'+ic("wa")+'Message the team</button>';
-      if(o.state==="delivered") foot += '<button class="btn btn-sm btn-accent" data-reorder="'+o.id+'">'+ic("reorder")+'Reorder</button>';
+      if(o.invoice&&o.invoice.issued) foot += '<button class="btn btn-sm'+(o.invoice.paid?'':' btn-accent')+'" data-open-invoice="'+o.id+'">'+ic("file")+(o.invoice.paid?'Invoice · paid':'Pay invoice')+'</button>';
+      else if(o.state==="delivered") foot += '<button class="btn btn-sm btn-accent" data-reorder="'+o.id+'">'+ic("reorder")+'Reorder</button>';
     }
     openSheet("Order "+id, b, foot);
   }
   function openClient(id){
-    var c=C(id), b='<div class="hrow" style="margin-bottom:14px">'+ackChip(c.ack)+'<span class="chip">'+c.type+'</span></div>';
+    var c=C(id), a=ackState(c), rd=reorderDue(c), b='<div class="hrow" style="margin-bottom:14px">'+ackChip(a)+'<span class="chip">'+c.type+'</span></div>';
     b += '<div class="kv"><span class="k">Account manager</span><span class="v">'+h(c.manager)+'</span></div>';
     b += '<div class="kv"><span class="k">Lifetime value</span><span class="v">'+idr(c.ltv)+'</span></div>';
     b += '<div class="kv"><span class="k">Orders</span><span class="v">'+c.orders+'</span></div>';
+    b += '<div class="kv"><span class="k">Reorder cadence</span><span class="v">'+(rd?rd.cadence+' d · '+(rd.derived?'median of order history':'agreed'):'<span class="dim-2">Not enough history</span>')+'</span></div>';
+    if(rd) b += '<div class="kv"><span class="k">Next reorder</span><span class="v"'+(rd.overdue?' style="color:var(--warn)"':'')+'>'+fmtShortD(rd.due)+' · '+rd.label.toLowerCase()+'</span></div>';
+    if(c.ackAt) b += '<div class="kv"><span class="k">Acknowledgement</span><span class="v"'+(a!=="current"?' style="color:var(--'+(a==="lapsed"?'err':'warn')+')"':'')+'>'+fmtShort(c.ackAt)+' · '+(a==="lapsed"?'lapsed':a==="expiring"?'expires ':'valid to ')+(a==="lapsed"?fmtShortD(ackDue(c)):fmtShortD(ackDue(c)))+'</span></div>';
     var recent = ORDERS.filter(function(o){return o.client===id;});
     if(recent.length){ b+='<div class="kicker" style="margin:18px 0 8px">Recent orders</div><div class="rows">';
       recent.forEach(function(o){ b+='<button class="row" data-order="'+o.id+'"><span class="ic">'+ic("receipt")+'</span><span class="bd"><span class="t1">'+o.id+'</span><span class="t2">'+o.date+'</span></span><span class="rt"><span class="amt">'+idr(orderTotal(o))+'</span>'+stateChip(o.state)+'</span></button>'; });
       b+='</div>'; }
-    if(c.ack!=="current") b += '<p class="note" style="margin-top:16px">Peptide lines are hidden from this account and cannot be quoted until a qualified-researcher acknowledgement is recorded.</p>';
+    if(a==="lapsed"||a==="age") b += '<p class="note" style="margin-top:16px">Peptide lines are hidden from this account and cannot be quoted until a qualified-researcher acknowledgement is recorded.</p>';
+    if(a==="expiring") b += '<p class="note" style="margin-top:16px">The acknowledgement is in its twelfth month. Peptide lines are hidden the day it lapses.</p>';
     var foot = '<button class="btn btn-sm" data-wa-client="'+c.id+'" data-msg="Hi '+h(c.name)+', this is AXIOM.">'+ic("wa")+'Message</button>';
-    foot += c.ack==="current" ? '<button class="btn btn-sm btn-accent" data-quote-for="'+c.id+'">'+ic("plus")+'New quote</button>'
-                              : '<button class="btn btn-sm btn-accent" data-ack-request="'+c.id+'">Request acknowledgement</button>';
+    if(rd&&(rd.overdue||rd.soon)&&a==="current") foot += '<button class="btn btn-sm" data-wa-client="'+c.id+'" data-msg="Hi '+h(c.name)+', it has been '+Math.round((now()-rd.last)/DAY)+' days since your last AXIOM order. Shall we prepare the usual lines? Reply and we will send a quote.">'+ic("reorder")+'Nudge</button>';
+    foot += a==="current" ? '<button class="btn btn-sm btn-accent" data-quote-for="'+c.id+'">'+ic("plus")+'New quote</button>'
+          : a==="expiring" ? '<button class="btn btn-sm btn-accent" data-ack-request="'+c.id+'">Request renewal</button>'
+          : '<button class="btn btn-sm btn-accent" data-ack-request="'+c.id+'">Request acknowledgement</button>';
     openSheet(c.name, b, foot);
   }
   function openVariant(id){
-    var v=V(id), b='<div class="hrow" style="margin-bottom:14px">'+stockChip(v.stock)+'<span class="chip">'+v.no+' '+h(v.catName)+'</span></div>';
+    var v=V(id), m=margin(v), res=reserved(v), b='<div class="hrow" style="margin-bottom:14px">'+stockChip(v)+'<span class="chip">'+v.no+' '+h(v.catName)+'</span></div>';
     b += '<div class="kv"><span class="k">Content</span><span class="v">'+h(v.dose)+' · '+h(v.content)+'</span></div>';
-    b += '<div class="kv owner-only"><span class="k">'+(v.supplier!=null?'Supplier lot':'Landed cost')+'</span><span class="v">'+idr(v.supplier!=null?v.supplier:v.cost)+'</span></div>';
-    if(v.supplier!=null) b += '<div class="kv owner-only"><span class="k">Cost basis · + Rp 600.000</span><span class="v">'+idr(v.cost)+'</span></div>';
-    [["List",0],["Clinic B",8],["Clinic A",12],["Research",15]].forEach(function(t){ var m=margin(v,t[1]);
-      b += '<div class="kv"><span class="k">'+t[0]+(t[1]?' · −'+t[1]+'%':'')+'</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(m.price)+'<span class="owner-only">'+gmChip(m.pct)+'</span></span></div>'; });
-    b += '<div class="stockline"><span class="k dim">Ledger balance</span><span class="qty"><button data-stock="'+v.id+'" data-d="-1" aria-label="Record sale">'+ic("minus")+'</button><span data-stock-val>'+v.stock+'</span><button data-stock="'+v.id+'" data-d="1" aria-label="Record intake">'+ic("plus")+'</button></span></div>';
-    b += '<p class="note" style="margin-top:14px">Each tap appends a movement to the ledger. The balance is derived, never stored.</p>';
+    b += '<div class="kv owner-only"><span class="k">Supplier cost'+(v.assumed?' · assumed':'')+'</span><span class="v">'+idr(v.supplier)+'</span></div>';
+    if(v.pen) b += '<div class="kv owner-only"><span class="k">Base price · + Rp 600.000 pen</span><span class="v">'+idr(v.cost)+'</span></div>';
+    b += '<div class="kv"><span class="k">Selling price</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(v.price)+'<span class="owner-only">'+gmChip(m.pct)+'</span></span></div>';
+    b += '<div class="stockline"><span class="k dim">On hand · ledger balance</span><span class="qty"><button data-stock="'+v.id+'" data-d="-1" aria-label="Record sale">'+ic("minus")+'</button><span data-stock-val>'+v.onHand+'</span><button data-stock="'+v.id+'" data-d="1" aria-label="Record intake">'+ic("plus")+'</button></span></div>';
+    b += '<div class="kv"><span class="k">Reserved by open quotes and packing</span><span class="v" data-reserved-val>'+res+'</span></div>';
+    b += '<div class="kv"><span class="k">Available to promise</span><span class="v" data-available-val'+(available(v)===0?' style="color:var(--err)"':'')+'>'+available(v)+'</span></div>';
+    b += '<p class="note" style="margin-top:14px">Each tap appends a movement to the ledger. The balance is derived, never stored. Dispatching an order records its sale automatically.</p>';
     if(v.cat==="peptide") b += '<div class="ruo" style="margin-top:16px"><b>Research Use Only.</b> In-vitro laboratory research only. No dosing or usage guidance is provided.</div>';
     openSheet(v.name+" · "+v.dose, b);
   }
   function openProduct(id){
-    var v=V(id), b='<div class="hrow" style="margin-bottom:14px">'+stockChip(v.stock)+'<span class="chip">'+v.no+' '+h(v.catName)+'</span></div>';
+    var v=V(id), av=available(v), b='<div class="hrow" style="margin-bottom:14px">'+stockChip(v)+'<span class="chip">'+v.no+' '+h(v.catName)+'</span></div>';
     b += '<div class="kv"><span class="k">Content</span><span class="v">'+h(v.dose)+' · '+h(v.content)+'</span></div>';
-    b += '<div class="kv"><span class="k">Your price · Clinic A</span><span class="v">'+idr(v.price)+'</span></div>';
-    b += '<div class="kv"><span class="k">List price</span><span class="v dim">'+idr(v.price)+'</span></div>';
+    b += '<div class="kv"><span class="k">Price</span><span class="v">'+idr(v.price)+'</span></div>';
+    b += '<div class="kv"><span class="k">Availability</span><span class="v"'+(av===0?' style="color:var(--err)"':'')+'>'+(av===0?"Out — ask to be told when it is back":av<=3?av+" available":"Available")+'</span></div>';
     if(v.cat==="peptide"){
       b += '<div class="kv"><span class="k">Verification</span><span class="v">HPLC/MS ≥ 98% · CoA per lot</span></div>';
       b += '<div class="kv"><span class="k">Handling</span><span class="v">−20 °C sealed · 2–8 °C transit</span></div>';
@@ -1487,25 +1733,20 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       b += '<div class="kv"><span class="k">Shipping</span><span class="v">Insured · tracked</span></div>';
     }
     var foot = '<button class="btn btn-sm" data-save="'+v.id+'">'+ic(saved[v.id]?"bookmark-f":"bookmark")+(saved[v.id]?'Saved':'Save')+'</button>'+
-               '<button class="btn btn-sm btn-accent" data-wa="Hi AXIOM, a quote for '+h(v.name)+(v.cat==="peptide"?' '+v.dose:'')+' please. Klinik Regenera.">'+ic("wa")+'Request a quote</button>';
+               (av===0 ? '<button class="btn btn-sm btn-accent" data-notify="'+v.id+'">'+ic("bell")+'Tell me when it is back</button>'
+                       : '<button class="btn btn-sm btn-accent" data-wa="Hi AXIOM, a quote for '+h(v.name)+(v.cat==="peptide"?' '+v.dose:'')+' please. Klinik Regenera.">'+ic("wa")+'Request a quote</button>');
     openSheet(v.name, b, foot);
   }
   function openNotifications(){
-    var b='<div class="rows">';
-    b += '<button class="row" data-go="console-orders" data-filter="packing" data-close><span class="ic">'+ic("box")+'</span><span class="bd"><span class="t1">2 orders to pack before 15.00</span><span class="t2">Cold-chain dispatch cut-off</span></span><span class="rt">'+ic("caret")+'</span></button>';
-    b += '<button class="row" data-go="console-clients" data-filter="lapsed" data-close><span class="ic">'+ic("warn")+'</span><span class="bd"><span class="t1">Klinik Senopati acknowledgement lapsed</span><span class="t2">Peptide lines hidden</span></span><span class="rt">'+ic("caret")+'</span></button>';
-    b += '<button class="row" data-go="console-catalogue" data-filter="stockout" data-close><span class="ic">'+ic("flask")+'</span><span class="bd"><span class="t1">3 variants at zero balance</span><span class="t2">TB-500 · Thymosin Alpha-1 · Epitalon</span></span><span class="rt">'+ic("caret")+'</span></button>';
-    if(surface==="account"){
-      b = '<div class="rows"><button class="row" data-go="account-orders" data-close><span class="ic">'+ic("box")+'</span><span class="bd"><span class="t1">AX-2601-0148 is being packed</span><span class="t2">Dispatch expected today</span></span><span class="rt">'+ic("caret")+'</span></button>'+
-          '<button class="row" data-go="account-shop" data-filter="therapy" data-close><span class="ic">'+ic("sun")+'</span><span class="bd"><span class="t1">Therapy Mat back to 2 units</span><span class="t2">Restocked 01 Sep</span></span><span class="rt">'+ic("caret")+'</span></button>';
-    }
-    openSheet("Notifications", b+'</div>');
+    var ev=events(); seenSig=ev.map(function(x){return x.k+x.t1;}).join("|"); renderEvents();
+    openSheet("Notifications", '<div class="rows">'+(ev.length?ev.map(eventRow).join(""):'<div class="empty">Nothing needs you right now.</div>')+'</div>'+
+      '<p class="note" style="margin-top:14px">Every item here is derived from orders, invoices, stock and accounts as they stand — it clears itself when the work is done.</p>');
   }
 
   /* ------------------------------------------------------------ invoices -- */
   var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var MONTHS_LONG=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  function isoToday(){ var d=new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+  function isoToday(){ var d=now(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
   function addDaysISO(iso,n){ var p=(iso||isoToday()).split("-"), d=new Date(+p[0],+p[1]-1,+p[2]); d.setDate(d.getDate()+(+n||0));
     return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
   function fmtShort(iso){ if(!iso) return ""; var p=iso.split("-"); return p[2]+" "+MONTHS[+p[1]-1]+" "+p[0]; }
@@ -1588,8 +1829,13 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     var pages=Math.max(1,Math.round(doc.scrollHeight/(w*(1123/794))*100)/100);
     pages=Math.max(1,Math.ceil(pages-0.02));
     $("[data-ib-pages]").textContent=pages+(pages>1?" pages":" page");
-    $("[data-inv-status]").innerHTML = inv.issued ? '<span class="chip ok"><span class="dot"></span>Issued'+(inv.sent?' · sent':'')+'</span>' : '<span class="chip"><span class="dot"></span>Draft</span>';
+    $("[data-inv-status]").innerHTML = inv.issued ? invChip(inv)+(inv.sent&&!inv.paid?' <span class="chip"><span class="dot"></span>Sent</span>':'') : '<span class="chip"><span class="dot"></span>Draft</span>';
+    $("[data-inv-paid-wrap]").hidden = !(surface==="console" && inv.issued && !inv.paid);
+    var hist=""; (inv.log||[]).slice().reverse().forEach(function(l){ hist+='<div class="kv"><span class="k">'+fmtStamp(l[0])+' · '+h(l[1])+'</span><span class="v">'+h(l[2])+'</span></div>'; });
+    $("[data-inv-hist]").innerHTML = hist ? '<div class="kicker" style="margin:18px 0 6px">History</div>'+hist : '';
   }
+  function markPaid(){ var inv=invoiceCtx.inv, o=invoiceCtx.o; if(!inv.issued||inv.paid) return; inv.paid=true; inv.paidAt=isoToday();
+    (inv.log=inv.log||[]).push([stamp(),"Aero","paid · matched to transfer "+(inv.xfer||inv.no)]); renderInvoices(); renderEvents(); renderDoc(); if(current==="account-orders") renderAccountOrder(); toast(inv.no+" marked paid · "+idr(inv.total)); }
   function invPdfName(){ return invoiceCtx.inv.no+".pdf"; }
   function buildPdf(){   /* vector fallback, dark palette — used only when the capture engine is unavailable */
     if(!window.jspdf || !window.jspdf.jsPDF){ toast("PDF engine still loading — try again in a moment"); return null; }
@@ -1671,7 +1917,8 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
         .catch(function(){ fr.remove(); var v=buildPdf(); window.__pdfSource = v?"vector":null; done(v); });
     });
   }
-  function issueInvoice(){ var o=invoiceCtx.o, inv=invoiceCtx.inv; inv.issued=true; inv.total=invCalc(inv).total; o.invoice=inv; ro=true; renderInvoices(); renderDoc(); lockForm(); }
+  function issueInvoice(){ var o=invoiceCtx.o, inv=invoiceCtx.inv; if(!inv.issued){ inv.issued=true; inv.total=invCalc(inv).total; (inv.log=inv.log||[]).push([stamp(),"Aero","issued · "+idr(inv.total)]); }
+    o.invoice=inv; ro=true; renderInvoices(); renderEvents(); renderDoc(); lockForm(); }
   function invSummary(){ var inv=invoiceCtx.inv; return "AXIOM · Invoice "+inv.no+"\n"+(inv.toName||"")+"\nReference "+(inv.ref||inv.no)+"\nTotal due "+idr(invCalc(inv).total)+" · due "+fmtShort(inv.due)+"\n\nPDF attached."; }
   /* The artifact viewer sandboxes the page: popups are blocked and any download the page starts
      itself is inert. So Print goes through a same-document hidden iframe, and Save as PDF falls
@@ -1752,7 +1999,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     busy(true); toast("Rendering "+invPdfName());
     capturePdf(function(d){
       if(!d){ printDoc(issueInvoice); return; }
-      issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderDoc();
+      issueInvoice(); if(!invoiceCtx.inv.sent){ invoiceCtx.inv.sent=true; invoiceCtx.inv.log.push([stamp(),"Aero","sent as PDF"]); } renderInvoices(); renderDoc();
       var blob=d.output("blob"), file=null;
       try{ file=new File([blob],invPdfName(),{type:"application/pdf"}); }catch(e){}
       if(file && navigator.canShare && navigator.canShare({files:[file]})){
@@ -1795,9 +2042,49 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   var ICONS = { console:["house","receipt","plus","users","user"], account:["squares","receipt","reorder","bookmark","user"] };
   var surface="console", tabIndex={console:0,account:0}, scrollPos={}, current="console-home";
 
+  /* ------------------------------------------------------------ motion ---- */
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var counted = {};
+  /* screen reveal: the blocks of the entering screen rise 14 px and settle 65 ms apart; blocks that
+     are themselves lists stagger their first rows instead. Classes are removed when the animation ends
+     so a later re-render never replays it. */
+  function reveal(scr){
+    if(reduced) return;
+    var items=[], i=0;
+    $$(":scope > *", scr).forEach(function(block){
+      if(block.hidden) return;
+      var inner = $$(":scope > .kpi, :scope > .rows > .row, :scope > .pgrid > .pcard, :scope > .kpis > .kpi, :scope > .split > .sec, :scope > .hrow > .chip", block);
+      if(inner.length){ inner.slice(0,10).forEach(function(el){ items.push(el); }); if(inner.length>10) items.push(block); }
+      else items.push(block);
+    });
+    items.slice(0,28).forEach(function(el){ el.style.setProperty("--i", i++); el.classList.add("rv");
+      el.addEventListener("animationend", function done(){ el.classList.remove("rv"); el.style.removeProperty("--i"); el.removeEventListener("animationend",done); }); });
+    $$(".rows, .kpis, .bars, .recv", scr).forEach(function(el,k){ if(el.hidden) return; el.style.setProperty("--i", k*2); el.classList.add("rv-line");
+      el.addEventListener("animationend", function done(e){ if(e.target!==el) return; el.classList.remove("rv-line"); el.style.removeProperty("--i"); el.removeEventListener("animationend",done); }); });
+  }
+  /* count-up: a KPI reads its target from data-n and climbs to it once, over the draw budget, tabular so nothing jitters */
+  function countUp(scr){
+    $$(".kpi .val[data-n]", scr).forEach(function(el){
+      if(counted[el.dataset.n+el.dataset.fmt]) return; counted[el.dataset.n+el.dataset.fmt]=true;
+      var target=+el.dataset.n, fmt=el.dataset.fmt, t0=null, dur=reduced?0:950;
+      var paint=function(v){ el.innerHTML = fmt==="idr" ? idr(v) : Math.round(v)+'<span class="u">%</span>'; };
+      if(!dur){ paint(target); return; }
+      var step=function(ts){ if(t0===null) t0=ts; var p=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-p,3); paint(target*e); if(p<1) requestAnimationFrame(step); else paint(target); };
+      requestAnimationFrame(step);
+    });
+  }
+  /* sparklines are drawn from twelve readings on the element itself */
+  function buildSparks(){
+    $$("[data-spark]").forEach(function(el){ if(el.childNodes.length) return;
+      var pts=el.dataset.spark.split(",").map(Number), lo=Math.min.apply(null,pts), hi=Math.max.apply(null,pts), n=pts.length;
+      var xy=pts.map(function(v,i){ return [ (i/(n-1))*100, 20-((v-lo)/((hi-lo)||1))*18 ]; });
+      el.innerHTML='<svg viewBox="0 0 100 22" preserveAspectRatio="none"><polyline pathLength="1" points="'+xy.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ")+'"/></svg><i style="top:'+(xy[n-1][1]/22*100).toFixed(1)+'%"></i>';
+    });
+  }
   function show(screen){
     if(!screen) return;
     if(current) scrollPos[current] = scroll.scrollTop;
+    var changed = current!==screen;
     $$(".screen").forEach(function(s){ s.classList.toggle("on", s.dataset.screen===screen); });
     $$(".rail a").forEach(function(a){ a.classList.toggle("on", a.dataset.go===screen && !a.dataset.filter); });
     titleEl.textContent = TITLES[screen]||"";
@@ -1806,7 +2093,9 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     scroll.scrollTop = scrollPos[screen]||0; scroll.style.scrollBehavior=prev;
     var idx = MAP[surface].indexOf(screen); if(idx>-1){ tabIndex[surface]=idx; }
     paintTabs();
-    topbar.classList.remove("searching"); $("[data-search-input]").value="";
+    closeSearch();
+    var scr=$('.screen[data-screen="'+screen+'"]');
+    if(changed){ reveal(scr); } countUp(scr);
   }
   function paintTabs(){
     ICONS[surface].forEach(function(k,i){
@@ -1814,6 +2103,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       t.classList.toggle("on", i===tabIndex[surface] && i!==2);
       t.setAttribute("aria-label", ["Home","Orders",surface==="console"?"New quote":"Reorder","Clients","Account"][i]);
     });
+    var ind=$("[data-tab-ind]"), on=tabIndex[surface]; ind.hidden = on===2 || on<0; ind.style.left = (on*20)+"%";
   }
   function setSurface(name){
     surface=name; root.dataset.surface=name;
@@ -1823,7 +2113,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     $("[data-whoami]").textContent = name==="console"?"Aero · Owner":"Klinik Regenera · Clinic";
     $("[data-primary-label]").textContent = name==="console"?"New quote":"Reorder";
     $("[data-primary] use").setAttribute("href", name==="console"?"#i-plus":"#i-reorder");
-    closeSheet(); show(MAP[name][tabIndex[name]]);
+    closeSheet(); seenSig=""; show(MAP[name][tabIndex[name]]); renderEvents();
   }
   function go(screen, filter){
     var group = {"console-orders":"orders","console-clients":"clients","console-catalogue":"catalogue","account-shop":"shop","console-pricing":"pricing","console-invoices":"invoices"}[screen];
@@ -1842,16 +2132,21 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     go(MAP[surface][+t.dataset.tab]); }); });
   $("[data-primary]").addEventListener("click", primary);
   $("[data-bell]").addEventListener("click", openNotifications);
-  $("[data-search-btn]").addEventListener("click", function(){
-    var on = topbar.classList.toggle("searching");
-    if(on){ $("[data-search-input]").focus(); } else { $("[data-search-input]").value=""; applySearch(); }
-  });
+  $("[data-search-btn]").addEventListener("click", function(){ topbar.classList.contains("searching") ? closeSearch() : openSearch(); });
   $("[data-search-input]").addEventListener("input", applySearch);
-  $("[data-search-input]").addEventListener("keydown", function(e){ if(e.key==="Escape"){ topbar.classList.remove("searching"); this.value=""; applySearch(); } });
+  $("[data-search-input]").addEventListener("keydown", function(e){ if(e.key==="Escape"){ closeSearch(); } });
 
   scrim.addEventListener("click", closeSheet);
   $("[data-sheet-close]").addEventListener("click", closeSheet);
-  document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeSheet(); });
+  /* keyboard: / search · n new quote (console) · 1–5 tabs · Esc closes whatever is open */
+  document.addEventListener("keydown", function(e){
+    if(e.key==="Escape"){ closeSheet(); closeSearch(); return; }
+    var t=e.target, typing = t && (t.tagName==="INPUT"||t.tagName==="TEXTAREA"||t.tagName==="SELECT"||t.isContentEditable);
+    if(typing || e.metaKey || e.ctrlKey || e.altKey) return;
+    if(e.key==="/"){ e.preventDefault(); openSearch(); return; }
+    if(e.key==="n" && surface==="console" && !sheet.classList.contains("on")){ e.preventDefault(); openQuote(); return; }
+    if(/^[1-5]$/.test(e.key) && !sheet.classList.contains("on")){ var i=+e.key-1; if(i===2){ primary(); } else { go(MAP[surface][i]); } }
+  });
   var y0=null;
   sheet.addEventListener("touchstart", function(e){ y0=e.touches[0].clientY; }, {passive:true});
   sheet.addEventListener("touchend", function(e){ if(y0!==null && e.changedTouches[0].clientY-y0>60) closeSheet(); y0=null; }, {passive:true});
@@ -1859,29 +2154,38 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   /* one delegated handler for everything rendered dynamically */
   $(".app").addEventListener("change", function(e){
     var sel=e.target.closest("[data-add-sel]"); if(!sel||!sel.value) return;
-    quote.push([sel.value,1]); $("[data-sheet-body]").innerHTML=quoteBody();
+    quote.push([sel.value,1]); refreshQuote();
     var next=$("[data-add-sel]"); if(next) next.focus();
     toast(V(quote[quote.length-1][0]).name+" added");
   });
+  /* a row that just changed state gets the bronze mark once it is back in the list */
+  function markJust(id){ requestAnimationFrame(function(){ $$('[data-order="'+id+'"]').forEach(function(el){ if(el.closest("[data-spanel]")||el.closest("[data-sheet]")) return; el.classList.remove("just"); void el.offsetWidth; el.classList.add("just"); }); }); }
+  function afterOrderChange(o){ renderOrders(); renderCatalogue(); renderShop(); renderClients(); renderInvoices(); renderAccountOrder(); renderEvents(); markJust(o.id); }
   $(".app").addEventListener("click", function(e){
-    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print]");
+    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-rm],[data-q],[data-stock],[data-advance],[data-cancel],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print],[data-inv-paid],[data-notify]");
     if(!el) return;
     var d = el.dataset;
+    if(d.closeSearch!==undefined) closeSearch();
     if(d.f!==undefined && el.classList.contains("chip")){ setFilter(el.parentNode.dataset.chips, d.f); return; }
     if(d.go){ if(d.close!==undefined) closeSheet(); go(d.go, d.filter); return; }
     if(d.order){ openOrder(d.order); return; }
-    if(d.client){ openClient(d.client); return; }
+    if(d.client){ if(d.close!==undefined) closeSheet(); openClient(d.client); return; }
     if(d.variant){ openVariant(d.variant); return; }
     if(d.product){ openProduct(d.product); return; }
-    if(d.save){ saved[d.save]=!saved[d.save]; renderShop(); renderSaved(); openProduct(d.save); toast(saved[d.save]?"Saved":"Removed from saved"); return; }
-    if(d.rm!==undefined){ quote.splice(+d.rm,1); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
-    if(d.q!==undefined){ var l=quote[+d.q]; l[1]=Math.max(1,l[1]+ +d.d); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
-    if(d.stock){ var v=V(d.stock); v.stock=Math.max(0,v.stock+ +d.d); $("[data-stock-val]").textContent=v.stock; renderCatalogue(); renderShop(); renderPricing(); toast((+d.d>0?"Intake":"Sale")+" recorded · "+v.name+" balance "+v.stock); return; }
-    if(d.advance){ var o=O(d.advance); o.state=STATES[STATES.indexOf(o.state)+1]; renderOrders(); renderAccountOrder(); renderInvoices(); openOrder(o.id); toast(o.id+" marked "+o.state); return; }
+    if(d.save){ saved[d.save]=!saved[d.save]; renderShop(); renderSaved(); renderEvents(); openProduct(d.save); toast(saved[d.save]?"Saved":"Removed from saved"); return; }
+    if(d.rm!==undefined){ quote.splice(+d.rm,1); refreshQuote(); return; }
+    if(d.q!==undefined){ var l=quote[+d.q]; l[1]=Math.max(1,l[1]+ +d.d); refreshQuote(); return; }
+    if(d.stock){ var v=V(d.stock); v.onHand=Math.max(0,v.onHand+ +d.d); $("[data-stock-val]").textContent=v.onHand; $("[data-reserved-val]").textContent=reserved(v); var avEl=$("[data-available-val]"); avEl.textContent=available(v); avEl.style.color=available(v)===0?"var(--err)":"";
+      renderCatalogue(); renderShop(); renderEvents(); toast((+d.d>0?"Intake":"Sale")+" recorded · "+v.name+" on hand "+v.onHand+" · available "+available(v)); return; }
+    if(d.advance){ var o=O(d.advance), from=o.state; if(!advance(o)) return; afterOrderChange(o); openOrder(o.id);
+      toast(o.id+" · "+from+" → "+o.state+(o.state==="dispatched"?" · stock deducted":"")); return; }
+    if(d.cancel){ var oc=O(d.cancel); if(!cancel(oc)) return; afterOrderChange(oc); openOrder(oc.id); toast(oc.id+" cancelled · reserved stock released"); return; }
+    if(d.notify){ closeSheet(); toast("You will be told when "+V(d.notify).name+" is back"); return; }
+    if(d.invPaid!==undefined){ markPaid(); return; }
     if(d.wa){ openWA(d.wa); return; }
     if(d.waClient){ openWA(d.msg, C(d.waClient).wa); return; }
     if(d.draft!==undefined){ closeSheet(); toast("Draft saved · AX-Q-0312"); return; }
-    if(d.sendQuote!==undefined){ openWA(quoteMsg()); closeSheet(); return; }
+    if(d.sendQuote!==undefined){ if(el.disabled) return; openWA(quoteMsg()); closeSheet(); return; }
     if(d.reorder){ var src=O(d.reorder); quote=src.lines.map(function(x){return [x[0],x[1]];}); openQuote(); toast("Lines copied from "+d.reorder); return; }
     if(d.signout!==undefined){ toast("Signed out"); return; }
     if(d.quoteFor){ quote=[["reta10",1]]; openQuote(); return; }
@@ -1922,8 +2226,19 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   $("[data-inv-form]").addEventListener("focusout", function(e){ var el=e.target; if(el.hasAttribute&&el.hasAttribute("data-money")) el.value=idr(num(el.value)); });
 
   /* ------------------------------------------------------------ boot ------ */
-  ORDERS[6].invoice=invoiceDraft(ORDERS[6]); ORDERS[6].invoice.date="2026-08-18"; ORDERS[6].invoice.due="2026-09-17"; ORDERS[6].invoice.issued=true; ORDERS[6].invoice.sent=true; ORDERS[6].invoice.total=invCalc(ORDERS[6].invoice).total;
+  /* seeded invoices: one awaiting payment, one overdue, one paid — so every state is on screen */
+  function seedInvoice(o, date, terms, extra){ var inv=invoiceDraft(o); inv.date=date; inv.terms=terms; inv.due=addDaysISO(date,terms); inv.no="AX-INV-"+date.slice(0,4)+"-"+o.id.slice(-4);
+    inv.issued=true; inv.sent=true; inv.total=invCalc(inv).total; inv.log=[[date+"T10:00","Aero","issued · "+idr(inv.total)],[date+"T10:04","Aero","sent on WhatsApp"]];
+    if(extra) extra(inv); o.invoice=inv; }
+  seedInvoice(ORDERS[6], "2026-08-18", 30);
+  seedInvoice(ORDERS[7], "2026-08-02", 30);
+  seedInvoice(ORDERS[3], "2026-08-31", 14, function(inv){ inv.paid=true; inv.paidAt="2026-09-01"; inv.log.push(["2026-09-01T09:12","Aero","paid · matched to transfer "+inv.no]); });
+  seedInvoice(ORDERS[8], "2026-07-14", 30, function(inv){ inv.paid=true; inv.paidAt="2026-08-01"; inv.log.push(["2026-08-01T11:30","Aero","paid · matched to transfer "+inv.no]); });
+  buildSparks();
   renderOrders(); renderCatalogue(); renderClients(); renderShop(); renderSaved(); renderAccountOrder(); renderPricing(); renderInvoices(); paintTabs(); setRole("owner");
+  paintClock(); renderEvents(); setInterval(tick, 30000);
+  var first=$(".screen.on"); reveal(first); countUp(first);
+  window.__axiom = {events:events, available:available, reserved:reserved, invStatus:invStatus, reorderDue:reorderDue, ackState:ackState, dispatchEta:dispatchEta, tick:tick, V:V, O:O, C:C};   /* test seam */
 })();
 </script>
 </div><!-- /#root -->

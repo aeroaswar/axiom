@@ -259,6 +259,51 @@ the migration with their foreign keys from `product_variants` and `order_items`,
 additive migration rather than a rewrite. This is the brand's stated moat — the schema must not
 make it expensive to add.
 
+### 4.7 System rules — what makes the modules one system
+These are the rules that connect the modules. Each is demonstrated in the mockup; each is a
+requirement, not a suggestion. Nothing on a dashboard, in a notification list or on a badge may be
+typed by hand — every item is derived from the tables as they stand and disappears on its own when
+the work is done.
+
+- **Stock has three figures.** *On hand* is the ledger balance. *Reserved* is the sum of the lines
+  on every quote that is out and every order being packed. *Available* is on hand less reserved,
+  and is the only figure a customer-facing surface ever shows. A quote reserves its lines from the
+  moment it is sent; dispatch writes the sale movement and lifts the reservation; a cancellation
+  releases it. On hand is never edited directly, only moved. It can never go negative.
+- **Availability gates the quote.** A line that asks for more than is available shows the shortfall
+  on the line itself and disables Send until it is resolved. A variant with nothing available is
+  unselectable in the picker on the Console and shows *Tell me when it is back* on the Account.
+- **Invoice lifecycle.** `draft → issued → paid`, with `overdue` derived from `due_date < today`
+  while unpaid, never stored. Only an issued invoice can be marked paid, and marking paid records
+  who, when and the matched transfer reference. The invoices screen carries a receivables strip —
+  outstanding, overdue, paid this month — and the Account shows the same state on its order.
+- **Dispatch cut-off is a rule, not a label.** Cold-chain lines close at 15.00 local, ambient lines
+  at 17.00. Before the cut-off an order packed today leaves today; after it, tomorrow. Estimated
+  delivery is dispatch plus two days. The Console's "orders to pack" row shows the countdown and
+  turns `--warn` inside the last hour and `--err` once closed; the Account timeline reads the same
+  function. Never two implementations of this rule.
+- **One event feed.** A single `events()` query produces: orders to pack (with the cut-off state),
+  quotes awaiting reply (oldest age), overdue invoices (amount), acknowledgements lapsed or in
+  their twelfth month, reorders overdue or due within seven days, and variants with nothing
+  available. The dashboard's Today list, the bell sheet and the badge count all render from it.
+  The badge clears when the sheet is opened and returns only when the feed changes.
+- **Acknowledgement expires.** The qualified-researcher acknowledgement is valid for twelve months
+  from its recorded timestamp. Months eleven to twelve are *expiring* (a `--warn` chip, a renewal
+  prompt with a pre-filled WhatsApp message); after twelve it is *lapsed* and peptide lines are
+  hidden that day. 18+ alone never unlocks a peptide line.
+- **Reorder cadence per account.** With three or more orders, cadence is the median gap between
+  them; until then it is the agreed cadence recorded on the account. Next reorder due is last order
+  plus cadence. Clients list shows it; overdue accounts get a *Nudge* action carrying a pre-filled
+  message; the feed surfaces overdue first, then due-this-week, else the next one due.
+- **Every state change is logged.** `order_events(order_id, at, actor, from_state, to_state)` and
+  the same for invoices (issued, sent, paid). The order sheet shows the history in reverse. A cancel
+  is a state, not a delete, and is only allowed from pending or packing.
+- **Search is global.** The search field queries orders, accounts, variants and invoices from any
+  screen and shows grouped results in a glass panel under the bar; a result opens its sheet. It also
+  keeps filtering the visible list while typing. `/` focuses it, `Esc` clears it.
+- **Keyboard on desktop.** `/` search · `n` new quote · `1–5` the five tab destinations · `Esc`
+  closes the sheet or the search. Never bound while an input has focus.
+
 ---
 
 ## 5 · INFORMATION ARCHITECTURE
@@ -388,9 +433,29 @@ exceed it.
 - **Type.** Jost 300 for display and headlines, sentence case, `-0.01em`. Inter for body, UI and
   the wide-tracked uppercase micro-labels. **Tabular numerals on every price, quantity, spec, ID
   and table figure** — `font-feature-settings:"tnum" 1`.
-- **Motion.** Signature ease `cubic-bezier(.16,1,.3,1)`. Micro 220 ms, reveal 700 ms, stagger
-  65 ms. Moves ≤ 18 px. No bounce, no spring, no parallax on type. A static equivalent under
-  `prefers-reduced-motion`.
+- **Motion.** Signature ease `cubic-bezier(.16,1,.3,1)`. Micro 220 ms, reveal 700 ms, draw
+  950 ms, stagger 65 ms. Moves ≤ 18 px. No bounce, no spring, no parallax on type. A static
+  equivalent under `prefers-reduced-motion`. The app should feel alive because it is *responsive
+  and time-aware*, never because it is decorated. The vocabulary, all of it in the mockup:
+  - **Screen reveal.** On navigation the entering screen's blocks rise 14 px and settle, 65 ms
+    apart; a block that is a list staggers its first ten rows instead. Never replayed on re-render.
+  - **Hairline draw-in.** The top rule of a list, KPI grid or chart draws from the left in bronze
+    over 950 ms and rests as the normal hairline. This is the one signature motion.
+  - **Count-up.** A KPI climbs from zero to its figure once, over 950 ms, ease-out cubic, in
+    tabular numerals so nothing shifts. Reduced motion shows the final figure.
+  - **Sparklines.** The four headline KPIs carry the last twelve readings as a muted 1.2 px line
+    that draws in with the count-up; only the last point is bronze.
+  - **Sliding tab indicator.** One 2 px bronze line moves between tabs in 220 ms; the glyph swap
+    still happens. Hidden when the centre action is used.
+  - **Live clock and countdown.** Top bar shows day, date and time; the cut-off row counts down
+    in minutes; both tick every 30 s from the device clock.
+  - **Row mark.** A row whose state just changed gets a 2 px bronze mark drawn down its left edge
+    that lets go over 1.2 s; a table row flashes its glass tint instead.
+  - **Pressed.** Rows, cards, buttons and tabs move 1 px down on press. No scale.
+  - **Ambient.** The glow behind the glass drifts ±1.5% on a 40 s cycle. Felt, not seen.
+  - **Badge.** The bell carries a count that scales in over 220 ms, never a bare dot.
+  - **Not allowed.** Confetti, pulses, shimmering skeletons in bronze, bouncing chips, urgency
+    timers on customer surfaces, anything that moves without a user or the clock causing it.
 - **No purple, no cool blue, no pure black, no pure white.** Semantic states use `--ok --warn
   --err --info` from §11 and nothing else.
 - **Print.** Price lists, quotes and packing slips invert to the paper palette: `--bg:#F2EDE5`,
@@ -504,6 +569,11 @@ WhatsApp messages, the invoices and the emails equally.
 | 17 | Margin is exact | Changing a supplier cost moves base price and margin but not selling price, and leaves every existing order's frozen margin unchanged. |
 | 18 | Invoice PDF | Downloaded PDF is rendered from the same template as the preview and matches the invoice builder's design: dark ground, bronze numerals and amounts, amount-due box, "Documented, not promised." footer; embedded Inter/Jost; correct PPN at the chosen rate; "Research Use Only." on peptide invoices only. |
 | 19 | Send PDF | On a phone the share sheet opens with the PDF attached; on desktop a WhatsApp message carries a working download link. |
+| 20 | Stock never lies | Sending a quote raises *reserved* by its lines; dispatch lowers *on hand* by the same and clears the reservation; cancel releases it; a direct write that would take on hand below zero is refused by a check constraint. |
+| 21 | Nothing is typed | The Today list, the bell sheet and the badge are rendered from one `events()` query; advancing an order removes its row from all three without a reload. Grep the components for hardcoded notification strings: zero. |
+| 22 | Time is one function | With the clock pinned to 14.30 the pack row reads "in 30 min" and the Account timeline "Dispatch today"; pinned to 15.30 both read "dispatch tomorrow" and delivery moves a day. Same function, both surfaces. |
+| 23 | Everything is logged | Every order and invoice state change appears in its history with actor and timestamp; a cancelled order remains readable. |
+| 24 | Motion budgets | Computed durations on reveal, indicator and sheet are 700 / 220 / 220 ms; no keyframe translates more than 18 px; with reduced motion no animation runs and KPIs show final figures. |
 
 ---
 
@@ -569,6 +639,21 @@ WhatsApp messages, the invoices and the emails equally.
 9. **Price-list pathway names.** The price list groups peptides as "Weight Loss", "Sexual Health" and
    "Brain Health" — benefit claims the RUO standard forbids. The app must use the site's research-neutral
    category names; confirm the price list is to be reissued to match.
+10. **Payment terms by account type.** The mockup defaults to net 30 for everyone. Net 14 for
+    individuals and net 30 for clinics and institutions is the usual split; confirm, and whether an
+    overdue invoice blocks new quotes for that account.
+11. **Reservation expiry.** A quote holds its stock from the moment it is sent. Should the hold
+    lapse when the quote's validity passes (the mockup's quotes are valid seven days), or only on
+    an explicit cancel?
+12. **Cut-off scope.** 15.00 is applied to cold-chain lines and 17.00 to ambient. Confirm both
+    times, whether Saturday dispatch exists, and whether the cut-off is WIB for every account.
+13. **Who marks an invoice paid.** Owner only, or ops with the transfer reference attached?
+    Marking paid is the one action that changes receivables.
+14. **Reorder nudges.** Owner-triggered only (as built), or an automatic WhatsApp template when an
+    account passes its cadence? Automatic sends touch the customer without a human reading the
+    account first.
+15. **Acknowledgement renewal.** Twelve months for every account type, or per-order for
+    individuals? The expiry drives when peptide lines disappear from an account.
 
 ---
 
