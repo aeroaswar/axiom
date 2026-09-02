@@ -4,13 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#070605" />
-<title>AXIOM Console &amp; Account — UI mockup</title>
+<title>AXIOM Console &amp; Account</title>
 <meta name="description" content="Clickable mockup of the AXIOM admin console and client account portal — smoked-bronze glass, Instagram-style mobile tab bar." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23070605'/%3E%3Cg stroke='%23C88A4E' stroke-width='6' stroke-linecap='round' fill='none'%3E%3Cpolyline points='24,74 38,26 52,74'/%3E%3Ccircle cx='70' cy='52' r='16'/%3E%3C/g%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
-<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 <style>
 /* ==================================================================
    AXIOM — tokens (canonical block, business master prompt §9)
@@ -41,28 +40,33 @@
   --r:0; --r-sheet:16px 16px 0 0; --r-pill:999px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{
-  background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.6;
+html,body{height:100%;margin:0}
+#root{
+  position:fixed;inset:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.6;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow:hidden;
-  font-feature-settings:"tnum" 1,"cv05" 1;
+  font-feature-settings:"tnum" 1,"cv05" 1;font-size:14px;
 }
 a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
-img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+input{font:inherit;color:inherit}
 ::selection{background:var(--accent);color:#0a0704}
 .tnum{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+/* ---------- inline icon sprite (approximates Phosphor regular / fill) ---------- */
+.ic-sv{width:1em;height:1em;display:block;fill:none;stroke:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;overflow:visible;flex:none}
+.wm-sv{height:15px;width:auto;display:block;fill:var(--ink);flex:none}
 
 /* ---------- shared micro-typography (ported from website/index.html) ---------- */
 .kicker{font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;font-weight:500;color:var(--muted)}
 .eyebrow{font-size:9.5px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:var(--muted)}
 .rule{height:1px;background:var(--line);width:100%}
 h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:-.01em;line-height:1.1}
-.h-lg{font-size:clamp(22px,3.4vw,32px)}
-.h-md{font-size:19px;font-weight:400}
-.h-sm{font-size:15px;font-weight:400}
 .dim{color:var(--muted)}
 .dim-2{color:var(--muted-2)}
+.note{font-size:11px;font-weight:300;color:var(--muted);line-height:1.65}
 
 .btn{
   font-weight:500;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
@@ -71,17 +75,21 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:-.01em;lin
   white-space:nowrap;justify-content:center;
 }
 .btn:hover{background:var(--ink);color:#000;border-color:var(--ink)}
+.btn:active{opacity:.7}
 .btn-solid{background:var(--ink);border-color:var(--ink);color:#000}
 .btn-solid:hover{background:transparent;color:var(--ink);border-color:var(--line-2)}
 .btn-accent{border-color:var(--accent-line);color:var(--accent-bright)}
 .btn-accent:hover{background:var(--accent);border-color:var(--accent);color:#0a0704}
 .btn-sm{padding:8px 13px;font-size:9.5px;letter-spacing:.16em}
+.btn .ic-sv{font-size:14px}
 
 .chip{
   display:inline-flex;align-items:center;gap:6px;border-radius:var(--r-pill);
   border:1px solid var(--line);padding:4px 11px;font-size:9.5px;font-weight:500;
   letter-spacing:.16em;text-transform:uppercase;color:var(--muted);white-space:nowrap;
+  transition:.2s var(--ease);
 }
+button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 .chip.on{border-color:var(--accent-line);color:var(--accent-bright);background:var(--glass-accent)}
 .chip .dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex:none}
 .chip.ok{color:var(--ok);border-color:rgba(143,163,126,.32)}
@@ -97,9 +105,8 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:-.01em;lin
   box-shadow:var(--shadow-glass);
 }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .glass{background:#100d0b}
+  .glass,.sheet,.toast{background:#100d0b}
   .rail,.topbar,.tabbar{background:#0a0806}
-  .sheet{background:#100d0b}
 }
 
 /* ==================================================================
@@ -109,7 +116,6 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:-.01em;lin
   height:56px;display:flex;align-items:center;gap:18px;padding:0 18px;
   border-bottom:1px solid var(--line);background:#000;position:relative;z-index:20;
 }
-.wm-sv{height:15px;width:auto;display:block;fill:var(--ink);flex:none}
 .wm-chrome{height:14px}
 .chrome .tag{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2);
   border-left:1px solid var(--line);padding-left:14px;margin-left:-4px}
@@ -123,7 +129,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:-.01em;lin
 .seg button.on{background:var(--ink);color:#000}
 .seg button:not(.on):hover{color:var(--ink)}
 @media(max-width:720px){
-  .chrome .tag,.chrome .wm{display:none}
+  .chrome .tag,.wm-chrome{display:none}
   .chrome{gap:10px;padding:0 12px;justify-content:center}
   .seg button{padding:8px 10px;letter-spacing:.12em}
 }
@@ -132,15 +138,14 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:-.01em;lin
 .stage{height:calc(100% - 56px);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .stage::before{content:"";position:absolute;inset:0;background:var(--glow);pointer-events:none}
 .device{position:relative;width:100%;height:100%;transition:width .5s var(--ease),height .5s var(--ease)}
-body[data-frame="phone"] .device{
+#root[data-frame="phone"] .device{
   width:390px;max-width:calc(100% - 32px);height:min(844px,calc(100% - 32px));
   border:1px solid var(--line-2);box-shadow:0 40px 90px rgba(0,0,0,.7);
 }
-body[data-frame="phone"] .device::after{
+#root[data-frame="phone"] .device::after{
   content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:7px;
   width:120px;height:4px;border-radius:var(--r-pill);background:rgba(242,237,229,.28);pointer-events:none;z-index:60;
 }
-@media(max-width:900px){ body[data-frame="desktop"] .device{width:100%} }
 
 /* ==================================================================
    App shell — container queries so the phone frame drives real layout
@@ -158,46 +163,55 @@ body[data-frame="phone"] .device::after{
 }
 .rail .brand{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:0 20px 20px;margin-bottom:6px;border-bottom:1px solid var(--line-soft)}
 .wm-rail{height:17px}
-.rail .brand .mark{width:22px;height:22px;flex:none}
-.rail .brand .bw{display:flex;flex-direction:column;gap:4px;line-height:1}
-.rail .brand .wm{font-family:var(--display);font-weight:400;font-size:14px;letter-spacing:.4em;padding-left:1px}
 .rail .brand .sub{font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:var(--muted-2);padding-left:1px}
 .rail .grp{padding:18px 20px 7px;font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2)}
 .rail a{
   display:flex;align-items:center;gap:12px;padding:10px 20px;font-size:12px;color:var(--muted);
   border-left:2px solid transparent;transition:.2s var(--ease);
 }
-.rail a i{font-size:16px}
+.rail a .ic-sv{font-size:16px}
 .rail a:hover{color:var(--ink);background:rgba(242,237,229,.03)}
 .rail a.on{color:var(--ink);border-left-color:var(--accent);background:var(--glass-accent)}
 .rail .foot{margin-top:auto;padding:16px 20px 0;border-top:1px solid var(--line-soft)}
+.rail .foot .who{font-size:12px;margin-top:7px}
 
 /* ---------- main column ---------- */
 .main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;position:relative}
 .topbar{
-  height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px;z-index:12;
+  height:56px;flex:none;display:flex;align-items:center;gap:10px;padding:0 20px;z-index:12;
   background:var(--glass-nav);-webkit-backdrop-filter:var(--blur-nav);backdrop-filter:var(--blur-nav);
   border-bottom:1px solid var(--line);
 }
-.topbar .ttl{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.01em}
-.topbar .sp{flex:1}
+.topbar .ttl{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.01em;white-space:nowrap}
+.topbar .sp{flex:1;min-width:0}
 .topbar .mwm{display:none;height:15px}
-.iconbtn{width:38px;height:38px;display:grid;place-items:center;color:var(--muted);
-  border:1px solid transparent;transition:.2s var(--ease);border-radius:var(--r)}
-.iconbtn i{font-size:18px}
+.topbar .search{
+  flex:1;min-width:0;display:none;align-items:center;gap:10px;height:36px;padding:0 12px;
+  border:1px solid var(--line-2);background:rgba(242,237,229,.03);
+}
+.topbar .search input{flex:1;min-width:0;background:none;border:none;outline:none;font-size:13px;font-weight:300;color:var(--ink)}
+.topbar .search input::placeholder{color:var(--muted-2)}
+.topbar.searching .search{display:flex}
+.topbar.searching .ttl,.topbar.searching .mwm,.topbar.searching .sp,.topbar.searching .primary{display:none}
+.topbar .primary{margin-right:6px}
+.iconbtn{width:38px;height:38px;flex:none;display:grid;place-items:center;color:var(--muted);
+  border:1px solid transparent;transition:.2s var(--ease);border-radius:var(--r);position:relative}
+.iconbtn .ic-sv{font-size:18px}
 .iconbtn:hover{color:var(--ink);border-color:var(--line)}
+.iconbtn .badge{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
 
 .scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth}
 .screen{display:none;padding:26px 20px 40px}
 .screen.on{display:block}
 .sec{margin-bottom:34px}
-.sec-h{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.sec-h{display:flex;align-items:center;gap:12px;margin-bottom:14px;min-height:24px}
 .sec-h .sp{flex:1}
+.empty{padding:34px 0;text-align:center;color:var(--muted-2);font-size:12px;font-weight:300;border-bottom:1px solid var(--line)}
 
 /* ---------- KPI grid ---------- */
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
 .kpi{padding:18px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
-  background:rgba(242,237,229,.012);transition:.22s var(--ease)}
+  background:rgba(242,237,229,.012);transition:.22s var(--ease);text-align:left}
 .kpi:hover{background:linear-gradient(180deg,var(--glass-accent),rgba(242,237,229,.008) 62%)}
 .kpi .lab{font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:12px}
 .kpi .val{font-family:var(--display);font-weight:300;font-size:26px;letter-spacing:-.01em;line-height:1;
@@ -205,10 +219,9 @@ body[data-frame="phone"] .device::after{
 .kpi .val .u{font-size:13px;color:var(--muted);letter-spacing:.02em}
 .kpi .def{display:block;font-size:10.5px;color:var(--muted-2);margin-top:9px;line-height:1.5;font-weight:300}
 .kpi .tgt{display:block;font-size:9.5px;color:var(--muted);margin-top:7px;letter-spacing:.04em;font-variant-numeric:tabular-nums}
-.kpi.locked .val{color:var(--muted-2)}
 
 /* ---------- bar chart (no library) ---------- */
-.bars{display:flex;flex-direction:column;gap:1px;border-top:1px solid var(--line)}
+.bars{display:flex;flex-direction:column;border-top:1px solid var(--line)}
 .bar-row{display:grid;grid-template-columns:150px 1fr 118px;grid-template-areas:"nm trk amt";
   align-items:center;gap:14px;padding:11px 4px;border-bottom:1px solid var(--line)}
 .bar-row .nm{font-size:12px;color:var(--muted);font-weight:300;grid-area:nm}
@@ -226,10 +239,11 @@ body[data-frame="phone"] .device::after{
   text-align:left;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);
   font-weight:500;padding:0 12px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap;
 }
+.tbl th.n{text-align:right}
 .tbl td{padding:13px 12px;border-bottom:1px solid var(--line);font-weight:300;color:var(--muted);vertical-align:middle}
 .tbl td.k{color:var(--ink);font-weight:400}
 .tbl td.n{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
-.tbl tr{transition:background .2s var(--ease)}
+.tbl tbody tr{transition:background .2s var(--ease);cursor:pointer}
 .tbl tbody tr:hover{background:rgba(242,237,229,.025)}
 .tbl .id{font-variant-numeric:tabular-nums;letter-spacing:.06em;color:var(--muted-2);font-size:11.5px}
 .tblwrap{overflow-x:auto}
@@ -237,57 +251,68 @@ body[data-frame="phone"] .device::after{
 /* ---------- list rows (mobile-native alternative to tables) ---------- */
 .rows{border-top:1px solid var(--line)}
 .row{display:flex;align-items:center;gap:13px;padding:14px 4px;border-bottom:1px solid var(--line);
-  transition:background .2s var(--ease)}
+  width:100%;text-align:left;transition:background .2s var(--ease)}
 .row:hover{background:rgba(242,237,229,.025)}
 .row .ic{width:34px;height:34px;flex:none;display:grid;place-items:center;border:1px solid var(--line);color:var(--muted)}
-.row .ic i{font-size:16px}
-.row .bd{flex:1;min-width:0}
-.row .t1{font-size:13.5px;color:var(--ink);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row .t2{font-size:11px;color:var(--muted-2);margin-top:3px;font-weight:300;font-variant-numeric:tabular-nums}
-.row .rt{text-align:right;flex:none}
-.row .amt{font-size:13px;font-variant-numeric:tabular-nums;display:block}
-.row .rt .chip{margin-top:5px}
+.row .ic .ic-sv{font-size:16px}
+.row .bd{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.row .t1{display:block;font-size:13.5px;color:var(--ink);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t2{display:block;font-size:11px;color:var(--muted-2);font-weight:300;font-variant-numeric:tabular-nums}
+.row .rt{text-align:right;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.row .amt{font-size:13px;font-variant-numeric:tabular-nums;display:block;color:var(--ink)}
+.row .rt .ic-sv{font-size:14px;color:var(--muted-2)}
 
 /* ---------- product cards ---------- */
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:1px;
   border-top:1px solid var(--line);border-left:1px solid var(--line)}
-.pcard{padding:16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
-  background:rgba(242,237,229,.012);transition:.24s var(--ease);cursor:pointer;position:relative}
+.pcard{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:16px;
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:rgba(242,237,229,.012);transition:.24s var(--ease);position:relative}
 .pcard:hover{border-color:var(--accent-line);
   background:linear-gradient(180deg,var(--accent-soft),rgba(242,237,229,.008) 62%);transform:translateY(-3px)}
-.pcard .no{font-size:9px;letter-spacing:.26em;color:var(--muted-2);font-variant-numeric:tabular-nums}
-.pcard .nm{font-family:var(--display);font-weight:400;font-size:16px;margin-top:11px;letter-spacing:-.005em}
-.pcard .ds{font-size:11px;color:var(--muted);margin-top:5px;font-weight:300;font-variant-numeric:tabular-nums}
-.pcard .pr{font-size:13.5px;margin-top:14px;font-variant-numeric:tabular-nums}
+.pcard .no{display:block;font-size:9px;letter-spacing:.26em;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.pcard .nm{display:block;font-family:var(--display);font-weight:400;font-size:16px;margin-top:11px;letter-spacing:-.005em}
+.pcard .ds{display:block;font-size:11px;color:var(--muted);margin-top:5px;font-weight:300;font-variant-numeric:tabular-nums}
+.pcard .pr{display:block;font-size:13.5px;margin-top:14px;font-variant-numeric:tabular-nums}
 .pcard .st{position:absolute;top:14px;right:14px}
+.pcard .sv{position:absolute;bottom:14px;right:14px;color:var(--muted-2)}
+.pcard .sv .ic-sv{font-size:15px}
+.pcard.saved .sv{color:var(--accent)}
 
 /* ---------- timeline ---------- */
 .tl{position:relative;padding-left:22px}
 .tl::before{content:"";position:absolute;left:4px;top:8px;bottom:8px;width:1px;background:var(--line)}
-.tl-i{position:relative;padding:0 0 22px}
+.tl-i{position:relative;padding:0 0 22px;display:flex;flex-direction:column;gap:3px}
 .tl-i::before{content:"";position:absolute;left:-22px;top:6px;width:9px;height:9px;border-radius:50%;
   background:var(--bg);border:1px solid var(--line-2)}
 .tl-i.done::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
-.tl-i .t1{font-size:13px;color:var(--ink)}
+.tl-i .t1{display:block;font-size:13px;color:var(--ink)}
 .tl-i.pend .t1{color:var(--muted-2)}
-.tl-i .t2{font-size:11px;color:var(--muted-2);margin-top:3px;font-variant-numeric:tabular-nums}
+.tl-i .t2{display:block;font-size:11px;color:var(--muted-2);font-variant-numeric:tabular-nums}
 
-/* ---------- notices ---------- */
+/* ---------- notices / misc ---------- */
 .ruo{border-left:2px solid var(--accent-deep);background:var(--glass-accent);padding:13px 15px;
   font-size:11px;line-height:1.65;color:var(--muted);font-weight:300}
 .ruo b{color:var(--ink);font-weight:500;letter-spacing:.02em}
-.panel{padding:18px 16px}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.vcol{display:flex;flex-direction:column;gap:10px}
 .hrow{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-.kv{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.kv{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:11px 0;border-bottom:1px solid var(--line);font-size:12.5px}
 .kv .k{color:var(--muted);font-weight:300}
-.kv .v{font-variant-numeric:tabular-nums;text-align:right}
+.kv .v{font-variant-numeric:tabular-nums;text-align:right;color:var(--ink)}
 .big-total{display:flex;justify-content:space-between;align-items:baseline;padding:15px 0;border-top:1px solid var(--line-2)}
 .big-total .v{font-family:var(--display);font-weight:300;font-size:24px;font-variant-numeric:tabular-nums}
 .wa{border:1px solid var(--line);padding:15px;font-size:12px;line-height:1.75;color:var(--muted);
   font-weight:300;white-space:pre-wrap;font-variant-numeric:tabular-nums}
 .wa b{color:var(--ink);font-weight:500}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2)}
+.qty button{width:28px;height:28px;display:grid;place-items:center;color:var(--muted)}
+.qty button:hover{color:var(--ink);background:rgba(242,237,229,.05)}
+.qty span{min-width:28px;text-align:center;font-size:12px;font-variant-numeric:tabular-nums}
+.qty .ic-sv{font-size:12px}
+.linebtn{color:var(--muted-2);padding:4px}
+.linebtn:hover{color:var(--err)}
+.linebtn .ic-sv{font-size:13px}
+.stockline{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
 
 /* ==================================================================
    Mobile shell — Instagram-style tab bar (container-query driven)
@@ -302,6 +327,7 @@ body[data-frame="phone"] .device::after{
   .topbar{height:52px;padding:0 16px}
   .topbar .mwm{display:block}
   .topbar .ttl{display:none}
+  .topbar .primary{display:none}
   .screen{padding:20px 16px calc(96px + env(safe-area-inset-bottom))}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .kpi{padding:14px 13px}
@@ -316,7 +342,6 @@ body[data-frame="phone"] .device::after{
     column-gap:12px;row-gap:9px;padding:12px 0}
   .bar-row .nm{font-size:12.5px;color:var(--ink)}
   .bar-row .amt{font-size:12px;color:var(--muted)}
-  .tbl-as-rows{display:none}
 
   .tabbar{
     display:flex;position:absolute;left:0;right:0;bottom:0;z-index:40;
@@ -330,17 +355,17 @@ body[data-frame="phone"] .device::after{
 .tab{
   flex:1;position:relative;display:flex;align-items:center;justify-content:center;
   color:var(--muted);transition:opacity .12s linear,color .2s var(--ease);min-height:44px;
-  -webkit-tap-highlight-color:transparent;
 }
-.tab i{font-size:24px;line-height:1}
+.tab .ic-sv{font-size:24px}
 .tab:active{opacity:.6}
 .tab.on{color:var(--ink)}
 .tab.on::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
-.tab .ph-fill{display:none}
-.tab.on .ph-fill{display:inline}
-.tab.on .ph:not(.ph-fill){display:none}
+/* Instagram pattern: the active tab shows the filled glyph, others the outline — never both */
+.tab .ic-f{display:none}
+.tab.on .ic-f{display:block}
+.tab.on .ic-o{display:none}
 
-/* ---------- bottom sheet ---------- */
+/* ---------- sheet: bottom sheet on phone, centred glass modal on desktop ---------- */
 .scrim{
   position:absolute;inset:0;z-index:50;background:rgba(0,0,0,.6);
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
@@ -352,32 +377,93 @@ body[data-frame="phone"] .device::after{
   background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
   border-top:1px solid var(--glass-line);border-radius:var(--r-sheet);
   box-shadow:var(--shadow-glass);
-  transform:translateY(101%);transition:transform .22s var(--ease);
+  transform:translateY(101%);transition:transform .22s var(--ease),opacity .22s var(--ease);
   padding-bottom:env(safe-area-inset-bottom);
 }
 .sheet.on{transform:translateY(0)}
 .sheet .grab{width:40px;height:3px;border-radius:var(--r-pill);background:var(--line-2);margin:10px auto 4px;flex:none}
 .sheet .sh-h{display:flex;align-items:center;gap:12px;padding:12px 18px 14px;border-bottom:1px solid var(--line);flex:none}
+.sheet .sh-h .sp{flex:1}
 .sheet .sh-b{padding:18px;overflow-y:auto}
 .sheet .sh-f{padding:14px 18px 18px;border-top:1px solid var(--line);flex:none;display:flex;gap:10px}
 .sheet .sh-f .btn{flex:1}
+.sheet .sh-f:empty{display:none}
 @container app (min-width:1024px){
-  .scrim,.sheet{display:none}
+  .sheet{
+    left:50%;right:auto;bottom:auto;top:50%;width:min(560px,92%);max-height:80%;
+    border:1px solid var(--glass-line);border-radius:var(--r);
+    transform:translate(-50%,-50%) translateY(14px);opacity:0;pointer-events:none;
+  }
+  .sheet.on{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}
+  .sheet .grab{display:none}
+  .sheet .sh-h{padding-top:16px}
 }
+
+/* ---------- toast ---------- */
+.toast{
+  position:absolute;left:50%;bottom:calc(72px + env(safe-area-inset-bottom));z-index:70;
+  transform:translateX(-50%) translateY(12px);opacity:0;pointer-events:none;
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-line);box-shadow:var(--shadow-glass);
+  padding:11px 16px;font-size:12px;color:var(--ink);white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis;
+  transition:.22s var(--ease);
+}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@container app (min-width:1024px){ .toast{bottom:28px} }
 
 /* ---------- reduced motion ---------- */
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.001ms !important;animation-duration:.001ms !important}
   .scroll{scroll-behavior:auto}
-  .device{transition:none}
 }
 </style>
 </head>
-<body data-surface="console" data-frame="desktop">
+<body>
+<div id="root" data-surface="console" data-frame="desktop">
+
+<!-- ===== sprite: the real AXIOM wordmark + a small icon set ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="wm" viewBox="0 0 582 70"><path fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></symbol>
+<symbol id="i-house" viewBox="0 0 24 24"><path d="M3.4 10.2 12 3.4l8.6 6.8V20a1 1 0 0 1-1 1h-5v-6h-5.2v6h-5a1 1 0 0 1-1-1z"/></symbol>
+<symbol id="i-house-f" viewBox="0 0 24 24"><path d="M3.4 10.2 12 3.4l8.6 6.8V20a1 1 0 0 1-1 1h-5v-6h-5.2v6h-5a1 1 0 0 1-1-1z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 3h16v18l-2.7-1.8L14.6 21l-2.6-1.8L9.4 21l-2.7-1.8L4 21z"/><path d="M8 8h8M8 12h8"/></symbol>
+<symbol id="i-receipt-f" viewBox="0 0 24 24"><path d="M4 3h16v18l-2.7-1.8L14.6 21l-2.6-1.8L9.4 21l-2.7-1.8L4 21z" fill="currentColor" stroke="none"/><path d="M8 8h8M8 12h8" stroke="#070605"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-plus-f" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke-width="3"/></symbol>
+<symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.4"/><path d="M2.6 19.4a7 7 0 0 1 12.8 0"/><path d="M16.2 6.2a3.4 3.4 0 0 1 0 5.6M17.6 14.6a7 7 0 0 1 3.8 4.8"/></symbol>
+<symbol id="i-users-f" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.4" fill="currentColor" stroke="none"/><path d="M2.6 19.4a7 7 0 0 1 12.8 0z" fill="currentColor" stroke="none"/><circle cx="17.4" cy="9" r="2.9" fill="currentColor" stroke="none"/><path d="M15.4 14.2a7 7 0 0 1 6 5.2h-5z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3.2"/><path d="M5.9 18.9a7.4 7.4 0 0 1 12.2 0"/></symbol>
+<symbol id="i-user-f" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" stroke="none"/><circle cx="12" cy="10" r="3.2" fill="#070605" stroke="none"/><path d="M5.9 18.9a7.4 7.4 0 0 1 12.2 0z" fill="#070605" stroke="none"/></symbol>
+<symbol id="i-squares" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7"/><rect x="13.5" y="3.5" width="7" height="7"/><rect x="3.5" y="13.5" width="7" height="7"/><rect x="13.5" y="13.5" width="7" height="7"/></symbol>
+<symbol id="i-squares-f" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" fill="currentColor" stroke="none"/><rect x="13.5" y="3.5" width="7" height="7" fill="currentColor" stroke="none"/><rect x="3.5" y="13.5" width="7" height="7" fill="currentColor" stroke="none"/><rect x="13.5" y="13.5" width="7" height="7" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-reorder" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 3.6V8h-4.4"/></symbol>
+<symbol id="i-reorder-f" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9" stroke-width="3"/><path d="M20 3.6V8h-4.4" stroke-width="3"/></symbol>
+<symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3.6h12V21l-6-4.4L6 21z"/></symbol>
+<symbol id="i-bookmark-f" viewBox="0 0 24 24"><path d="M6 3.6h12V21l-6-4.4L6 21z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.6" cy="10.6" r="6.6"/><path d="M15.4 15.4 21 21"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.4 5.4 2 6H4c.6-.6 2-2 2-6z"/><path d="M9.8 19.4a2.4 2.4 0 0 0 4.4 0"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M5.6 5.6 18.4 18.4M18.4 5.6 5.6 18.4"/></symbol>
+<symbol id="i-caret" viewBox="0 0 24 24"><path d="M9.5 5 16.5 12l-7 7"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 3 10.4l7.4 3.2L13.6 21z"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M3.6 7.4 12 3.2l8.4 4.2v9.2L12 20.8l-8.4-4.2z"/><path d="M3.6 7.4 12 11.6l8.4-4.2M12 11.6v9.2"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.4 21.4 20H2.6z"/><path d="M12 9.6v4M12 16.6h.01"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2.6 6.4h11v10.2h-11z"/><path d="M13.6 10h4l3 3.2v3.4h-7z"/><circle cx="7" cy="18.4" r="1.9"/><circle cx="17" cy="18.4" r="1.9"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M8.2 12.2l2.8 2.8 5-5.4"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 6.8V12l3.4 2"/></symbol>
+<symbol id="i-building" viewBox="0 0 24 24"><path d="M4.4 20.4V4.6h9.2v15.8"/><path d="M13.6 9.6h6v10.8"/><path d="M7.4 8h3.2M7.4 12h3.2M7.4 16h3.2M16 13h1M16 16.6h1"/><path d="M2.6 20.4h18.8"/></symbol>
+<symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8.4" r="3.8"/><path d="M4.6 20.4a7.4 7.4 0 0 1 14.8 0"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3.4h8l4 4v13.2H6z"/><path d="M14 3.4v4h4"/><path d="M9 12.4h6M9 16h6"/></symbol>
+<symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.6 3.4v6L4.4 19a1.6 1.6 0 0 0 1.4 2.4h12.4A1.6 1.6 0 0 0 19.6 19l-5.2-9.6v-6"/><path d="M8.4 3.4h7.2M6.6 14.4h10.8"/></symbol>
+<symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3.4 4.6h17.2L14 12.6v6.8l-4 2v-8.8z"/></symbol>
+<symbol id="i-wa" viewBox="0 0 24 24"><path d="M3.4 20.6 4.9 16A8.4 8.4 0 1 1 8 19.1z"/><path d="M9 9.4c.4 2.6 3 5.2 5.6 5.6l1.2-1.6 2 1-.6 1.7c-2.9.9-7.9-4.1-7-7l1.7-.6z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.6v2.6M12 18.8v2.6M2.6 12h2.6M18.8 12h2.6M5.4 5.4l1.8 1.8M16.8 16.8l1.8 1.8M5.4 18.6l1.8-1.8M16.8 7.2l1.8-1.8"/></symbol>
+<symbol id="i-shirt" viewBox="0 0 24 24"><path d="M8.4 3.6 3.2 6.8l1.6 4.4 2.8-1v10.2h8.8V10.2l2.8 1 1.6-4.4-5.2-3.2a3.6 3.6 0 0 1-7.2 0z"/></symbol>
+<symbol id="i-signout" viewBox="0 0 24 24"><path d="M10 4.4H5.2v15.2H10"/><path d="M14.8 7.6 19.2 12l-4.4 4.4M8.8 12h10.4"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.6 6.4h14.8M9 6.4V4.2h6v2.2M6.4 6.4l.8 14h9.6l.8-14"/></symbol>
+</defs></svg>
 
 <!-- ===== mockup chrome (demo control, not part of the app) ===== -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="wm" viewBox="0 0 582 70"><path fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></symbol></defs></svg>
-
 <div class="chrome">
   <svg class="wm-sv wm-chrome" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><use href="#wm"></use></svg>
   <span class="tag">UI mockup</span>
@@ -403,45 +489,45 @@ body[data-frame="phone"] .device::after{
       <span class="sub" data-rail-sub>Console</span>
     </div>
 
-    <!-- console rail -->
     <div data-rail="console">
       <div class="grp">Operate</div>
-      <a href="#" data-go="console-home" class="on"><i class="ph ph-house"></i>Dashboard</a>
-      <a href="#" data-go="console-orders"><i class="ph ph-receipt"></i>Orders &amp; quotes</a>
-      <a href="#" data-go="console-catalogue"><i class="ph ph-flask"></i>Catalogue &amp; stock</a>
+      <a href="#" data-go="console-home" class="on"><svg class="ic-sv"><use href="#i-house"></use></svg>Dashboard</a>
+      <a href="#" data-go="console-orders"><svg class="ic-sv"><use href="#i-receipt"></use></svg>Orders &amp; quotes</a>
+      <a href="#" data-go="console-catalogue"><svg class="ic-sv"><use href="#i-flask"></use></svg>Catalogue &amp; stock</a>
       <div class="grp">Relationships</div>
-      <a href="#" data-go="console-clients"><i class="ph ph-users-three"></i>Clients</a>
-      <a href="#" data-go="console-clients"><i class="ph ph-funnel"></i>Lead pipeline</a>
+      <a href="#" data-go="console-clients"><svg class="ic-sv"><use href="#i-users"></use></svg>Clients</a>
+      <a href="#" data-go="console-clients" data-filter="lapsed"><svg class="ic-sv"><use href="#i-funnel"></use></svg>Lapsed accounts</a>
       <div class="grp">Settings</div>
-      <a href="#" data-go="console-account"><i class="ph ph-user-circle"></i>Account</a>
+      <a href="#" data-go="console-account"><svg class="ic-sv"><use href="#i-user"></use></svg>Account</a>
     </div>
 
-    <!-- account rail -->
     <div data-rail="account" hidden>
       <div class="grp">Shop</div>
-      <a href="#" data-go="account-shop" class="on"><i class="ph ph-squares-four"></i>Catalogue</a>
-      <a href="#" data-go="account-saved"><i class="ph ph-bookmark-simple"></i>Saved</a>
+      <a href="#" data-go="account-shop" class="on"><svg class="ic-sv"><use href="#i-squares"></use></svg>Catalogue</a>
+      <a href="#" data-go="account-saved"><svg class="ic-sv"><use href="#i-bookmark"></use></svg>Saved</a>
       <div class="grp">Activity</div>
-      <a href="#" data-go="account-orders"><i class="ph ph-receipt"></i>Orders &amp; quotes</a>
-      <a href="#" data-go="account-orders"><i class="ph ph-truck"></i>Tracking</a>
+      <a href="#" data-go="account-orders"><svg class="ic-sv"><use href="#i-receipt"></use></svg>Orders &amp; quotes</a>
       <div class="grp">Account</div>
-      <a href="#" data-go="account-profile"><i class="ph ph-user-circle"></i>Profile &amp; invoices</a>
+      <a href="#" data-go="account-profile"><svg class="ic-sv"><use href="#i-user"></use></svg>Profile &amp; invoices</a>
     </div>
 
     <div class="foot">
       <div class="eyebrow">Signed in</div>
-      <div style="font-size:12px;margin-top:7px" data-whoami>Aero · Owner</div>
+      <div class="who" data-whoami>Aero · Owner</div>
     </div>
   </nav>
 
   <!-- ================= main ================= -->
   <div class="main">
-    <header class="topbar">
+    <header class="topbar" data-topbar>
       <svg class="wm-sv mwm" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><use href="#wm"></use></svg>
       <span class="ttl" data-title>Dashboard</span>
       <span class="sp"></span>
-      <button class="iconbtn" aria-label="Search"><i class="ph ph-magnifying-glass"></i></button>
-      <button class="iconbtn" aria-label="Notifications"><i class="ph ph-bell"></i></button>
+      <label class="search"><svg class="ic-sv" style="font-size:15px;color:var(--muted)"><use href="#i-search"></use></svg>
+        <input type="search" data-search-input placeholder="Search this screen" autocomplete="off" /></label>
+      <button class="btn btn-sm btn-accent primary desktop-only" data-primary><svg class="ic-sv"><use href="#i-plus"></use></svg><span data-primary-label>New quote</span></button>
+      <button class="iconbtn" data-search-btn aria-label="Search"><svg class="ic-sv"><use href="#i-search"></use></svg></button>
+      <button class="iconbtn" data-bell aria-label="Notifications"><svg class="ic-sv"><use href="#i-bell"></use></svg><span class="badge"></span></button>
     </header>
 
     <div class="scroll" data-scroll>
@@ -451,54 +537,22 @@ body[data-frame="phone"] .device::after{
         <div class="sec">
           <div class="sec-h"><span class="kicker">01 · This month</span></div>
           <div class="kpis">
-            <div class="kpi">
-              <span class="lab">Revenue MTD</span>
-              <span class="val tnum">Rp 184.600.000</span>
-              <span class="def">Delivered orders, net of cancellations.</span>
-              <span class="tgt">Target Rp 210.000.000</span>
-            </div>
-            <div class="kpi">
-              <span class="lab">Quote → close</span>
-              <span class="val tnum">38<span class="u">%</span></span>
-              <span class="def">Accepted quotes ÷ quotes sent, 30-day window.</span>
-              <span class="tgt">Target 45%</span>
-            </div>
-            <div class="kpi">
-              <span class="lab">Reorder rate</span>
-              <span class="val tnum">41<span class="u">%</span></span>
-              <span class="def">Accounts with a second order inside 90 days.</span>
-              <span class="tgt">Target 50%</span>
-            </div>
-            <div class="kpi">
-              <span class="lab">Blended AOV</span>
-              <span class="val tnum">Rp 1.100.000</span>
-              <span class="def">Order total ÷ orders, all pillars.</span>
-              <span class="tgt">Target Rp 1.400.000</span>
-            </div>
-            <div class="kpi">
-              <span class="lab">Gross margin</span>
-              <span class="val tnum">53<span class="u">%</span></span>
-              <span class="def">Owner only. Price less landed cost and verification.</span>
-              <span class="tgt">Target 53%</span>
-            </div>
-            <div class="kpi">
-              <span class="lab">CAC</span>
-              <span class="val tnum">Rp 120.000</span>
-              <span class="def">Owner only. Spend ÷ first-time buyers.</span>
-              <span class="tgt">Payback under one order</span>
-            </div>
-            <div class="kpi">
-              <span class="lab">LTV</span>
-              <span class="val tnum">Rp 3.200.000</span>
-              <span class="def">Owner only. Contribution over 24 months.</span>
-              <span class="tgt">LTV / CAC 26×</span>
-            </div>
-            <div class="kpi">
-              <span class="lab">Stockout</span>
-              <span class="val tnum">3 <span class="u">SKU</span></span>
-              <span class="def">Variants at zero balance in the movement ledger.</span>
-              <span class="tgt">Target 0</span>
-            </div>
+            <div class="kpi"><span class="lab">Revenue MTD</span><span class="val">Rp 184.600.000</span>
+              <span class="def">Delivered orders, net of cancellations.</span><span class="tgt">Target Rp 210.000.000</span></div>
+            <div class="kpi"><span class="lab">Quote → close</span><span class="val">38<span class="u">%</span></span>
+              <span class="def">Accepted quotes ÷ quotes sent, 30-day window.</span><span class="tgt">Target 45%</span></div>
+            <div class="kpi"><span class="lab">Reorder rate</span><span class="val">41<span class="u">%</span></span>
+              <span class="def">Accounts with a second order inside 90 days.</span><span class="tgt">Target 50%</span></div>
+            <div class="kpi"><span class="lab">Blended AOV</span><span class="val">Rp 1.100.000</span>
+              <span class="def">Order total ÷ orders, all pillars.</span><span class="tgt">Target Rp 1.400.000</span></div>
+            <div class="kpi"><span class="lab">Gross margin</span><span class="val">53<span class="u">%</span></span>
+              <span class="def">Owner only. Price less landed cost and verification.</span><span class="tgt">Target 53%</span></div>
+            <div class="kpi"><span class="lab">CAC</span><span class="val">Rp 120.000</span>
+              <span class="def">Owner only. Spend ÷ first-time buyers.</span><span class="tgt">Payback under one order</span></div>
+            <div class="kpi"><span class="lab">LTV</span><span class="val">Rp 3.200.000</span>
+              <span class="def">Owner only. Contribution over 24 months.</span><span class="tgt">LTV / CAC 26×</span></div>
+            <div class="kpi"><span class="lab">Stockout</span><span class="val" data-stockout-val>3 <span class="u">SKU</span></span>
+              <span class="def">Variants at zero balance in the movement ledger.</span><span class="tgt">Target 0</span></div>
           </div>
         </div>
 
@@ -506,164 +560,75 @@ body[data-frame="phone"] .device::after{
           <div class="sec">
             <div class="sec-h"><span class="kicker">02 · Revenue by pillar</span></div>
             <div class="bars">
-              <div class="bar-row"><span class="nm">Peptide Science</span>
-                <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
-                <span class="amt">Rp 96.400.000</span></div>
-              <div class="bar-row"><span class="nm">Therapy &amp; Recovery</span>
-                <span class="bar-track"><span class="bar-fill" style="width:56%"></span></span>
-                <span class="amt">Rp 54.100.000</span></div>
-              <div class="bar-row"><span class="nm">Longevity</span>
-                <span class="bar-track"><span class="bar-fill" style="width:21%"></span></span>
-                <span class="amt">Rp 19.800.000</span></div>
-              <div class="bar-row"><span class="nm">Wellness</span>
-                <span class="bar-track"><span class="bar-fill" style="width:11%"></span></span>
-                <span class="amt">Rp 10.200.000</span></div>
-              <div class="bar-row"><span class="nm">Apparel</span>
-                <span class="bar-track"><span class="bar-fill" style="width:4%"></span></span>
-                <span class="amt">Rp 4.100.000</span></div>
+              <div class="bar-row"><span class="nm">Peptide Science</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span class="amt">Rp 96.400.000</span></div>
+              <div class="bar-row"><span class="nm">Therapy &amp; Recovery</span><span class="bar-track"><span class="bar-fill" style="width:56%"></span></span><span class="amt">Rp 54.100.000</span></div>
+              <div class="bar-row"><span class="nm">Longevity</span><span class="bar-track"><span class="bar-fill" style="width:21%"></span></span><span class="amt">Rp 19.800.000</span></div>
+              <div class="bar-row"><span class="nm">Wellness</span><span class="bar-track"><span class="bar-fill" style="width:11%"></span></span><span class="amt">Rp 10.200.000</span></div>
+              <div class="bar-row"><span class="nm">Apparel</span><span class="bar-track"><span class="bar-fill" style="width:4%"></span></span><span class="amt">Rp 4.100.000</span></div>
             </div>
           </div>
 
           <div class="sec">
             <div class="sec-h"><span class="kicker">03 · Today</span><span class="sp"></span>
-              <span class="chip warn"><span class="dot"></span>7 open</span></div>
+              <span class="chip warn"><span class="dot"></span><span data-open-count>7</span> open</span></div>
             <div class="rows">
-              <div class="row"><span class="ic"><i class="ph ph-paper-plane-tilt"></i></span>
-                <span class="bd"><span class="t1">4 quotes awaiting reply</span>
-                  <span class="t2">Oldest sent 3 days ago</span></span>
-                <span class="rt"><i class="ph ph-caret-right dim-2"></i></span></div>
-              <div class="row"><span class="ic"><i class="ph ph-package"></i></span>
-                <span class="bd"><span class="t1">2 orders to pack</span>
-                  <span class="t2">Cold-chain dispatch cut-off 15.00</span></span>
-                <span class="rt"><i class="ph ph-caret-right dim-2"></i></span></div>
-              <div class="row"><span class="ic"><i class="ph ph-warning"></i></span>
-                <span class="bd"><span class="t1">1 account acknowledgement lapsed</span>
-                  <span class="t2">Klinik Senopati — peptide lines hidden</span></span>
-                <span class="rt"><span class="chip err"><span class="dot"></span>Gated</span></span></div>
+              <button class="row" data-go="console-orders" data-filter="pending"><span class="ic"><svg class="ic-sv"><use href="#i-send"></use></svg></span>
+                <span class="bd"><span class="t1">Quotes awaiting reply</span><span class="t2">Oldest sent 3 days ago</span></span>
+                <span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
+              <button class="row" data-go="console-orders" data-filter="packing"><span class="ic"><svg class="ic-sv"><use href="#i-box"></use></svg></span>
+                <span class="bd"><span class="t1">Orders to pack</span><span class="t2">Cold-chain dispatch cut-off 15.00</span></span>
+                <span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
+              <button class="row" data-go="console-clients" data-filter="lapsed"><span class="ic"><svg class="ic-sv"><use href="#i-warn"></use></svg></span>
+                <span class="bd"><span class="t1">Acknowledgement lapsed</span><span class="t2">Klinik Senopati — peptide lines hidden</span></span>
+                <span class="rt"><span class="chip err"><span class="dot"></span>Gated</span></span></button>
             </div>
-            <div class="ruo" style="margin-top:18px">
-              <b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for
-              human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.
-            </div>
+            <div class="ruo" style="margin-top:18px"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>
           </div>
         </div>
       </section>
 
       <!-- ============ CONSOLE · ORDERS ============ -->
       <section class="screen" data-screen="console-orders">
-        <div class="hrow" style="margin-bottom:18px">
-          <span class="chip on">All</span><span class="chip">Pending</span><span class="chip">Packing</span>
-          <span class="chip">Dispatched</span><span class="chip">Delivered</span>
+        <div class="hrow" data-chips="orders" style="margin-bottom:18px">
+          <button class="chip on" data-f="">All</button><button class="chip" data-f="pending">Pending</button>
+          <button class="chip" data-f="packing">Packing</button><button class="chip" data-f="dispatched">Dispatched</button>
+          <button class="chip" data-f="delivered">Delivered</button>
         </div>
-
         <div class="tblwrap desktop-only">
-          <table class="tbl">
-            <thead><tr><th>Order</th><th>Account</th><th>Items</th><th>Placed</th><th style="text-align:right">Total</th><th>State</th></tr></thead>
-            <tbody>
-              <tr><td class="id">AX-2601-0148</td><td class="k">Klinik Regenera</td><td>Retatrutide 10 mg · +3</td><td class="id">02 Sep 2026</td><td class="n">Rp 8.400.000</td><td><span class="chip warn"><span class="dot"></span>Packing</span></td></tr>
-              <tr><td class="id">AX-2601-0147</td><td class="k">Dr. Prasetyo Lab</td><td>BPC-157 10 mg · +5</td><td class="id">01 Sep 2026</td><td class="n">Rp 11.200.000</td><td><span class="chip info"><span class="dot"></span>Dispatched</span></td></tr>
-              <tr><td class="id">AX-2601-0146</td><td class="k">Aksara Recovery</td><td>Red Light Therapy Mat</td><td class="id">01 Sep 2026</td><td class="n">Rp 5.900.000</td><td><span class="chip ok"><span class="dot"></span>Delivered</span></td></tr>
-              <tr><td class="id">AX-2601-0145</td><td class="k">Ivan Wijaya</td><td>GHK-Cu 100 mg · +2</td><td class="id">31 Aug 2026</td><td class="n">Rp 4.500.000</td><td><span class="chip ok"><span class="dot"></span>Delivered</span></td></tr>
-              <tr><td class="id">AX-2601-0144</td><td class="k">Klinik Senopati</td><td>Performance Tee · +4</td><td class="id">30 Aug 2026</td><td class="n">Rp 2.550.000</td><td><span class="chip"><span class="dot"></span>Pending</span></td></tr>
-              <tr><td class="id">AX-2601-0143</td><td class="k">Studio Longa</td><td>Leg Compression System</td><td class="id">29 Aug 2026</td><td class="n">Rp 6.500.000</td><td><span class="chip ok"><span class="dot"></span>Delivered</span></td></tr>
-            </tbody>
-          </table>
+          <table class="tbl"><thead><tr><th>Order</th><th>Account</th><th>Items</th><th>Placed</th><th class="n">Total</th><th>State</th></tr></thead>
+          <tbody data-list="orders-table"></tbody></table>
         </div>
-
-        <div class="rows mobile-only">
-          <div class="row"><span class="ic"><i class="ph ph-package"></i></span>
-            <span class="bd"><span class="t1">Klinik Regenera</span><span class="t2">AX-2601-0148 · 4 lines · 02 Sep</span></span>
-            <span class="rt"><span class="amt">Rp 8.400.000</span><span class="chip warn"><span class="dot"></span>Packing</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-truck"></i></span>
-            <span class="bd"><span class="t1">Dr. Prasetyo Lab</span><span class="t2">AX-2601-0147 · 6 lines · 01 Sep</span></span>
-            <span class="rt"><span class="amt">Rp 11.200.000</span><span class="chip info"><span class="dot"></span>Dispatched</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-check-circle"></i></span>
-            <span class="bd"><span class="t1">Aksara Recovery</span><span class="t2">AX-2601-0146 · 1 line · 01 Sep</span></span>
-            <span class="rt"><span class="amt">Rp 5.900.000</span><span class="chip ok"><span class="dot"></span>Delivered</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-check-circle"></i></span>
-            <span class="bd"><span class="t1">Ivan Wijaya</span><span class="t2">AX-2601-0145 · 3 lines · 31 Aug</span></span>
-            <span class="rt"><span class="amt">Rp 4.500.000</span><span class="chip ok"><span class="dot"></span>Delivered</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-hourglass"></i></span>
-            <span class="bd"><span class="t1">Klinik Senopati</span><span class="t2">AX-2601-0144 · 5 lines · 30 Aug</span></span>
-            <span class="rt"><span class="amt">Rp 2.550.000</span><span class="chip"><span class="dot"></span>Pending</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-check-circle"></i></span>
-            <span class="bd"><span class="t1">Studio Longa</span><span class="t2">AX-2601-0143 · 1 line · 29 Aug</span></span>
-            <span class="rt"><span class="amt">Rp 6.500.000</span><span class="chip ok"><span class="dot"></span>Delivered</span></span></div>
-        </div>
-
-        <div class="ruo" style="margin-top:22px">
-          <b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for
-          human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.
-        </div>
+        <div class="rows mobile-only" data-list="orders-rows"></div>
+        <div class="ruo" style="margin-top:22px"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>
       </section>
 
       <!-- ============ CONSOLE · CATALOGUE ============ -->
       <section class="screen" data-screen="console-catalogue">
-        <div class="hrow" style="margin-bottom:18px">
-          <span class="chip on">All pillars</span><span class="chip">Peptide Science</span>
-          <span class="chip">Therapy</span><span class="chip">Longevity</span><span class="chip">Apparel</span>
+        <div class="hrow" data-chips="catalogue" style="margin-bottom:18px">
+          <button class="chip on" data-f="">All pillars</button><button class="chip" data-f="peptide">Peptide Science</button>
+          <button class="chip" data-f="therapy">Therapy</button><button class="chip" data-f="apparel">Apparel</button>
+          <button class="chip" data-f="stockout">Stockout</button>
         </div>
         <div class="tblwrap">
-          <table class="tbl">
-            <thead><tr><th>Variant</th><th class="desktop-only">Category</th><th>Content</th><th style="text-align:right">Price</th><th style="text-align:right">Stock</th></tr></thead>
-            <tbody>
-              <tr><td class="k">Retatrutide · 10 mg</td><td class="desktop-only">01 Metabolic</td><td>Pen</td><td class="n">Rp 1.900.000</td><td class="n">24</td></tr>
-              <tr><td class="k">Retatrutide · 30 mg</td><td class="desktop-only">01 Metabolic</td><td>Pen</td><td class="n">Rp 3.400.000</td><td class="n">6</td></tr>
-              <tr><td class="k">BPC-157 · 10 mg</td><td class="desktop-only">02 Tissue Repair</td><td>Pen</td><td class="n">Rp 1.600.000</td><td class="n">31</td></tr>
-              <tr><td class="k">TB-500 · 10 mg</td><td class="desktop-only">02 Tissue Repair</td><td>Pen</td><td class="n">Rp 1.800.000</td><td class="n">0</td></tr>
-              <tr><td class="k">CJC No DAC + Ipamorelin · 10 mg</td><td class="desktop-only">03 Growth Factors</td><td>Pen</td><td class="n">Rp 1.900.000</td><td class="n">12</td></tr>
-              <tr><td class="k">GHK-Cu · 100 mg</td><td class="desktop-only">06 Longevity</td><td>Pen</td><td class="n">Rp 1.400.000</td><td class="n">18</td></tr>
-              <tr><td class="k">Red Light Therapy Mask</td><td class="desktop-only">07 Therapy</td><td>Device</td><td class="n">Rp 2.400.000</td><td class="n">4</td></tr>
-              <tr><td class="k">Red Light Therapy Mat</td><td class="desktop-only">07 Therapy</td><td>Device</td><td class="n">Rp 5.900.000</td><td class="n">2</td></tr>
-              <tr><td class="k">Performance Tee</td><td class="desktop-only">08 Apparel</td><td>Apparel</td><td class="n">Rp 450.000</td><td class="n">64</td></tr>
-            </tbody>
-          </table>
+          <table class="tbl"><thead><tr><th>Variant</th><th class="desktop-only">Category</th><th>Content</th><th class="n">Price</th><th class="n">Stock</th></tr></thead>
+          <tbody data-list="catalogue-table"></tbody></table>
         </div>
-        <p class="dim" style="font-size:11px;margin-top:14px;font-weight:300">
-          Stock is the balance of the movement ledger, not a stored figure. Zero balance flags the variant as a stockout.
-        </p>
+        <p class="note" style="margin-top:14px">Stock is the balance of the movement ledger, not a stored figure. Zero balance flags the variant as a stockout. Tap a variant to record a movement.</p>
       </section>
 
       <!-- ============ CONSOLE · CLIENTS ============ -->
       <section class="screen" data-screen="console-clients">
-        <div class="hrow" style="margin-bottom:18px">
-          <span class="chip on">All</span><span class="chip">Clinic</span><span class="chip">Institution</span>
-          <span class="chip">Individual</span><span class="chip err"><span class="dot"></span>Acknowledgement lapsed</span>
+        <div class="hrow" data-chips="clients" style="margin-bottom:18px">
+          <button class="chip on" data-f="">All</button><button class="chip" data-f="clinic">Clinic</button>
+          <button class="chip" data-f="institution">Institution</button><button class="chip" data-f="individual">Individual</button>
+          <button class="chip err" data-f="lapsed"><span class="dot"></span>Acknowledgement lapsed</button>
         </div>
         <div class="tblwrap desktop-only">
-          <table class="tbl">
-            <thead><tr><th>Account</th><th>Type</th><th>Tier</th><th>Manager</th><th style="text-align:right">Lifetime</th><th style="text-align:right">Orders</th><th>Acknowledgement</th></tr></thead>
-            <tbody>
-              <tr><td class="k">Klinik Regenera</td><td>Clinic</td><td>Clinic A · −12%</td><td>Aero</td><td class="n">Rp 84.200.000</td><td class="n">14</td><td><span class="chip ok"><span class="dot"></span>Current</span></td></tr>
-              <tr><td class="k">Dr. Prasetyo Lab</td><td>Institution</td><td>Research · −15%</td><td>Aero</td><td class="n">Rp 61.800.000</td><td class="n">9</td><td><span class="chip ok"><span class="dot"></span>Current</span></td></tr>
-              <tr><td class="k">Aksara Recovery</td><td>Clinic</td><td>Clinic B · −8%</td><td>Nadia</td><td class="n">Rp 28.400.000</td><td class="n">6</td><td><span class="chip ok"><span class="dot"></span>Current</span></td></tr>
-              <tr><td class="k">Klinik Senopati</td><td>Clinic</td><td>Clinic B · −8%</td><td>Nadia</td><td class="n">Rp 12.600.000</td><td class="n">4</td><td><span class="chip err"><span class="dot"></span>Lapsed</span></td></tr>
-              <tr><td class="k">Ivan Wijaya</td><td>Individual</td><td>List</td><td>—</td><td class="n">Rp 9.300.000</td><td class="n">5</td><td><span class="chip ok"><span class="dot"></span>Current</span></td></tr>
-              <tr><td class="k">Studio Longa</td><td>Clinic</td><td>Clinic B · −8%</td><td>Nadia</td><td class="n">Rp 6.500.000</td><td class="n">1</td><td><span class="chip warn"><span class="dot"></span>18+ only</span></td></tr>
-            </tbody>
-          </table>
+          <table class="tbl"><thead><tr><th>Account</th><th>Type</th><th>Tier</th><th>Manager</th><th class="n">Lifetime</th><th class="n">Orders</th><th>Acknowledgement</th></tr></thead>
+          <tbody data-list="clients-table"></tbody></table>
         </div>
-        <div class="rows mobile-only">
-          <div class="row"><span class="ic"><i class="ph ph-buildings"></i></span>
-            <span class="bd"><span class="t1">Klinik Regenera</span><span class="t2">Clinic A · −12% · 14 orders</span></span>
-            <span class="rt"><span class="amt">Rp 84.200.000</span><span class="chip ok"><span class="dot"></span>Current</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-flask"></i></span>
-            <span class="bd"><span class="t1">Dr. Prasetyo Lab</span><span class="t2">Research · −15% · 9 orders</span></span>
-            <span class="rt"><span class="amt">Rp 61.800.000</span><span class="chip ok"><span class="dot"></span>Current</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-buildings"></i></span>
-            <span class="bd"><span class="t1">Aksara Recovery</span><span class="t2">Clinic B · −8% · 6 orders</span></span>
-            <span class="rt"><span class="amt">Rp 28.400.000</span><span class="chip ok"><span class="dot"></span>Current</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-warning"></i></span>
-            <span class="bd"><span class="t1">Klinik Senopati</span><span class="t2">Clinic B · −8% · 4 orders</span></span>
-            <span class="rt"><span class="amt">Rp 12.600.000</span><span class="chip err"><span class="dot"></span>Lapsed</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-user"></i></span>
-            <span class="bd"><span class="t1">Ivan Wijaya</span><span class="t2">List price · 5 orders</span></span>
-            <span class="rt"><span class="amt">Rp 9.300.000</span><span class="chip ok"><span class="dot"></span>Current</span></span></div>
-        </div>
-        <p class="dim" style="font-size:11px;margin-top:16px;font-weight:300">
-          An account without a current qualified-researcher acknowledgement cannot see or be quoted a peptide line,
-          from any entry point.
-        </p>
+        <div class="rows mobile-only" data-list="clients-rows"></div>
+        <p class="note" style="margin-top:16px">An account without a current qualified-researcher acknowledgement cannot see or be quoted a peptide line, from any entry point.</p>
       </section>
 
       <!-- ============ CONSOLE · ACCOUNT ============ -->
@@ -672,115 +637,60 @@ body[data-frame="phone"] .device::after{
           <div class="sec-h"><span class="kicker">Signed in</span></div>
           <div class="kv"><span class="k">Name</span><span class="v">Aero Aswar</span></div>
           <div class="kv"><span class="k">Role</span><span class="v">Owner</span></div>
-          <div class="kv"><span class="k">Language</span><span class="v">Bahasa Indonesia · EN</span></div>
-          <div class="kv"><span class="k">WhatsApp line</span><span class="v tnum">+62 812 857 3396</span></div>
+          <div class="kv"><span class="k">Language</span><span class="v"><button class="chip on" data-lang="id">ID</button> <button class="chip" data-lang="en">EN</button></span></div>
+          <div class="kv"><span class="k">WhatsApp line</span><span class="v">+62 812 857 3396</span></div>
         </div>
         <div class="sec" style="max-width:520px">
           <div class="sec-h"><span class="kicker">Team</span></div>
           <div class="rows">
-            <div class="row"><span class="ic"><i class="ph ph-user-circle"></i></span>
-              <span class="bd"><span class="t1">Aero Aswar</span><span class="t2">Owner · full access</span></span></div>
-            <div class="row"><span class="ic"><i class="ph ph-user-circle"></i></span>
-              <span class="bd"><span class="t1">Nadia</span><span class="t2">Ops · margin and acquisition figures hidden</span></span></div>
+            <button class="row" data-toast="Aero Aswar · Owner · full access"><span class="ic"><svg class="ic-sv"><use href="#i-user"></use></svg></span>
+              <span class="bd"><span class="t1">Aero Aswar</span><span class="t2">Owner · full access</span></span><span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
+            <button class="row" data-toast="Nadia · Ops · margin and acquisition figures hidden"><span class="ic"><svg class="ic-sv"><use href="#i-user"></use></svg></span>
+              <span class="bd"><span class="t1">Nadia</span><span class="t2">Ops · margin and acquisition figures hidden</span></span><span class="rt"><svg class="ic-sv"><use href="#i-caret"></use></svg></span></button>
           </div>
         </div>
-        <div class="hrow"><button class="btn btn-sm">Sign out</button></div>
+        <div class="hrow"><button class="btn btn-sm" data-signout><svg class="ic-sv"><use href="#i-signout"></use></svg>Sign out</button></div>
       </section>
 
       <!-- ============ ACCOUNT · SHOP ============ -->
       <section class="screen" data-screen="account-shop">
-        <div class="ruo" style="margin-bottom:18px">
-          <b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for
-          human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.
-        </div>
-        <div class="hrow" style="margin-bottom:18px">
-          <span class="chip on">All</span><span class="chip">01 Metabolic</span><span class="chip">02 Tissue</span>
-          <span class="chip">06 Longevity</span><span class="chip">07 Therapy</span><span class="chip">08 Apparel</span>
+        <div class="ruo" style="margin-bottom:18px"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>
+        <div class="hrow" data-chips="shop" style="margin-bottom:18px">
+          <button class="chip on" data-f="">All</button><button class="chip" data-f="peptide">Peptides</button>
+          <button class="chip" data-f="therapy">Therapy</button><button class="chip" data-f="apparel">Apparel</button>
+          <button class="chip" data-f="saved">Saved</button>
         </div>
         <div class="sec-h"><span class="kicker">Your tier · Clinic A · −12%</span></div>
-        <div class="pgrid">
-          <div class="pcard"><span class="no">01</span><span class="st"><span class="chip ok"><span class="dot"></span>In stock</span></span>
-            <span class="nm">Retatrutide</span><span class="ds">10 mg · Pen</span><span class="pr">Rp 1.672.000</span></div>
-          <div class="pcard"><span class="no">02</span><span class="st"><span class="chip ok"><span class="dot"></span>In stock</span></span>
-            <span class="nm">BPC-157</span><span class="ds">10 mg · Pen</span><span class="pr">Rp 1.408.000</span></div>
-          <div class="pcard"><span class="no">02</span><span class="st"><span class="chip err"><span class="dot"></span>Out</span></span>
-            <span class="nm">TB-500</span><span class="ds">10 mg · Pen</span><span class="pr">Rp 1.584.000</span></div>
-          <div class="pcard"><span class="no">06</span><span class="st"><span class="chip ok"><span class="dot"></span>In stock</span></span>
-            <span class="nm">GHK-Cu</span><span class="ds">100 mg · Pen</span><span class="pr">Rp 1.232.000</span></div>
-          <div class="pcard"><span class="no">07</span><span class="st"><span class="chip ok"><span class="dot"></span>In stock</span></span>
-            <span class="nm">Therapy Mask</span><span class="ds">Face · LED array</span><span class="pr">Rp 2.112.000</span></div>
-          <div class="pcard"><span class="no">07</span><span class="st"><span class="chip warn"><span class="dot"></span>2 left</span></span>
-            <span class="nm">Therapy Mat</span><span class="ds">Full-body · 660 + 850 nm</span><span class="pr">Rp 5.192.000</span></div>
-          <div class="pcard"><span class="no">08</span><span class="st"><span class="chip ok"><span class="dot"></span>In stock</span></span>
-            <span class="nm">Performance Tee</span><span class="ds">Dry-knit · Unisex</span><span class="pr">Rp 396.000</span></div>
-          <div class="pcard"><span class="no">08</span><span class="st"><span class="chip ok"><span class="dot"></span>In stock</span></span>
-            <span class="nm">Training Hoodie</span><span class="ds">Heavyweight · Unisex</span><span class="pr">Rp 836.000</span></div>
-        </div>
+        <div class="pgrid" data-list="shop-grid"></div>
       </section>
 
       <!-- ============ ACCOUNT · ORDERS ============ -->
       <section class="screen" data-screen="account-orders">
         <div class="split">
           <div class="sec">
-            <div class="sec-h"><span class="kicker">Order AX-2601-0148</span><span class="sp"></span>
-              <span class="chip warn"><span class="dot"></span>Packing</span></div>
-            <div class="tl" style="margin-top:6px">
-              <div class="tl-i done"><span class="t1">Quote accepted</span><span class="t2">02 Sep 2026 · 09.14</span></div>
-              <div class="tl-i done"><span class="t1">Order confirmed</span><span class="t2">02 Sep 2026 · 09.22</span></div>
-              <div class="tl-i done"><span class="t1">Packing · cold-chain</span><span class="t2">02 Sep 2026 · 11.40</span></div>
-              <div class="tl-i pend"><span class="t1">Dispatched</span><span class="t2">Cut-off 15.00</span></div>
-              <div class="tl-i pend"><span class="t1">Delivered</span><span class="t2">Estimated 04 Sep 2026</span></div>
-            </div>
+            <div class="sec-h"><span class="kicker">Order AX-2601-0148</span><span class="sp"></span><span data-order-chip></span></div>
+            <div class="tl" style="margin-top:6px" data-timeline></div>
           </div>
           <div class="sec">
             <div class="sec-h"><span class="kicker">Lines</span></div>
-            <div class="kv"><span class="k">Retatrutide · 10 mg × 2</span><span class="v">Rp 3.344.000</span></div>
-            <div class="kv"><span class="k">BPC-157 · 10 mg × 2</span><span class="v">Rp 2.816.000</span></div>
-            <div class="kv"><span class="k">GHK-Cu · 100 mg × 1</span><span class="v">Rp 1.232.000</span></div>
-            <div class="kv"><span class="k">Performance Tee × 2</span><span class="v">Rp 792.000</span></div>
-            <div class="kv"><span class="k">Insured shipping</span><span class="v">Rp 216.000</span></div>
-            <div class="big-total"><span class="kicker">Total</span><span class="v">Rp 8.400.000</span></div>
+            <div data-order-lines></div>
             <div class="hrow" style="margin-top:16px">
-              <button class="btn btn-sm btn-accent"><i class="ph ph-whatsapp-logo"></i>Message the team</button>
-              <button class="btn btn-sm">Download invoice</button>
+              <button class="btn btn-sm btn-accent" data-wa="Hi AXIOM, a question about order AX-2601-0148."><svg class="ic-sv"><use href="#i-wa"></use></svg>Message the team</button>
+              <button class="btn btn-sm" data-invoice="INV-2601-0148"><svg class="ic-sv"><use href="#i-file"></use></svg>Download invoice</button>
             </div>
           </div>
         </div>
-
         <div class="sec" style="margin-top:8px">
           <div class="sec-h"><span class="kicker">Earlier</span></div>
-          <div class="rows">
-            <div class="row"><span class="ic"><i class="ph ph-check-circle"></i></span>
-              <span class="bd"><span class="t1">AX-2601-0139</span><span class="t2">6 lines · 18 Aug 2026</span></span>
-              <span class="rt"><span class="amt">Rp 7.150.000</span><span class="chip ok"><span class="dot"></span>Delivered</span></span></div>
-            <div class="row"><span class="ic"><i class="ph ph-check-circle"></i></span>
-              <span class="bd"><span class="t1">AX-2601-0128</span><span class="t2">3 lines · 02 Aug 2026</span></span>
-              <span class="rt"><span class="amt">Rp 4.400.000</span><span class="chip ok"><span class="dot"></span>Delivered</span></span></div>
-          </div>
+          <div class="rows" data-list="account-earlier"></div>
         </div>
-        <div class="ruo" style="margin-top:20px">
-          <b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for
-          human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.
-        </div>
+        <div class="ruo" style="margin-top:20px"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>
       </section>
 
       <!-- ============ ACCOUNT · SAVED ============ -->
       <section class="screen" data-screen="account-saved">
-        <div class="sec-h"><span class="kicker">Saved · 4 items</span></div>
-        <div class="rows">
-          <div class="row"><span class="ic"><i class="ph ph-bookmark-simple"></i></span>
-            <span class="bd"><span class="t1">Retatrutide · 10 mg</span><span class="t2">01 Metabolic · Pen</span></span>
-            <span class="rt"><span class="amt">Rp 1.672.000</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-bookmark-simple"></i></span>
-            <span class="bd"><span class="t1">Red Light Therapy Mat</span><span class="t2">07 Therapy · 660 + 850 nm</span></span>
-            <span class="rt"><span class="amt">Rp 5.192.000</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-bookmark-simple"></i></span>
-            <span class="bd"><span class="t1">Thymosin Alpha-1 · 10 mg</span><span class="t2">03 Growth Factors · Pen</span></span>
-            <span class="rt"><span class="amt">Rp 2.024.000</span></span></div>
-          <div class="row"><span class="ic"><i class="ph ph-bookmark-simple"></i></span>
-            <span class="bd"><span class="t1">Gym Duffel</span><span class="t2">08 Apparel · 45 L</span></span>
-            <span class="rt"><span class="amt">Rp 748.000</span></span></div>
-        </div>
+        <div class="sec-h"><span class="kicker">Saved · <span data-saved-count>0</span> items</span></div>
+        <div class="rows" data-list="saved-rows"></div>
       </section>
 
       <!-- ============ ACCOUNT · PROFILE ============ -->
@@ -792,63 +702,46 @@ body[data-frame="phone"] .device::after{
             <div class="kv"><span class="k">Type</span><span class="v">Clinic</span></div>
             <div class="kv"><span class="k">Price tier</span><span class="v">Clinic A · −12%</span></div>
             <div class="kv"><span class="k">Account manager</span><span class="v">Aero</span></div>
-            <div class="kv"><span class="k">Members</span><span class="v tnum">3</span></div>
+            <div class="kv"><span class="k">Language</span><span class="v"><button class="chip on" data-lang="id">ID</button> <button class="chip" data-lang="en">EN</button></span></div>
           </div>
           <div class="sec">
             <div class="sec-h"><span class="kicker">Acknowledgement</span></div>
             <div class="kv"><span class="k">18+ confirmed</span><span class="v"><span class="chip ok"><span class="dot"></span>02 Jan 2026</span></span></div>
             <div class="kv"><span class="k">Qualified researcher</span><span class="v"><span class="chip ok"><span class="dot"></span>02 Jan 2026</span></span></div>
-            <div class="kv"><span class="k">Version</span><span class="v tnum">ack-v1.2</span></div>
-            <p class="dim" style="font-size:11px;margin-top:14px;font-weight:300">
-              Recorded against your profile with a timestamp and a version. Peptide lines stay visible
-              while the acknowledgement is current.
-            </p>
+            <div class="kv"><span class="k">Version</span><span class="v">ack-v1.2</span></div>
+            <p class="note" style="margin-top:14px">Recorded against your profile with a timestamp and a version. Peptide lines stay visible while the acknowledgement is current.</p>
           </div>
         </div>
         <div class="sec">
           <div class="sec-h"><span class="kicker">Invoices</span></div>
-          <div class="rows">
-            <div class="row"><span class="ic"><i class="ph ph-file-text"></i></span>
-              <span class="bd"><span class="t1">INV-2601-0139</span><span class="t2">18 Aug 2026</span></span>
-              <span class="rt"><span class="amt">Rp 7.150.000</span></span></div>
-            <div class="row"><span class="ic"><i class="ph ph-file-text"></i></span>
-              <span class="bd"><span class="t1">INV-2601-0128</span><span class="t2">02 Aug 2026</span></span>
-              <span class="rt"><span class="amt">Rp 4.400.000</span></span></div>
-          </div>
+          <div class="rows" data-list="invoices"></div>
         </div>
+        <div class="hrow"><button class="btn btn-sm" data-signout><svg class="ic-sv"><use href="#i-signout"></use></svg>Sign out</button></div>
       </section>
 
     </div><!-- /.scroll -->
 
     <!-- ================= mobile tab bar ================= -->
     <nav class="tabbar" aria-label="Primary">
-      <button class="tab on" data-tab="0" aria-label="Home">
-        <i class="ph ph-house"></i><i class="ph-fill ph-house"></i></button>
-      <button class="tab" data-tab="1" aria-label="Orders">
-        <i class="ph ph-receipt"></i><i class="ph-fill ph-receipt"></i></button>
-      <button class="tab" data-tab="2" data-action="sheet" aria-label="New">
-        <i class="ph ph-plus"></i><i class="ph-fill ph-plus"></i></button>
-      <button class="tab" data-tab="3" aria-label="Clients">
-        <i class="ph ph-users-three"></i><i class="ph-fill ph-users-three"></i></button>
-      <button class="tab" data-tab="4" aria-label="Account">
-        <i class="ph ph-user-circle"></i><i class="ph-fill ph-user-circle"></i></button>
+      <button class="tab on" data-tab="0"><svg class="ic-sv ic-o"><use href="#i-house"></use></svg><svg class="ic-sv ic-f"><use href="#i-house-f"></use></svg></button>
+      <button class="tab" data-tab="1"><svg class="ic-sv ic-o"><use href="#i-receipt"></use></svg><svg class="ic-sv ic-f"><use href="#i-receipt-f"></use></svg></button>
+      <button class="tab" data-tab="2" data-action="primary"><svg class="ic-sv ic-o"><use href="#i-plus"></use></svg><svg class="ic-sv ic-f"><use href="#i-plus-f"></use></svg></button>
+      <button class="tab" data-tab="3"><svg class="ic-sv ic-o"><use href="#i-users"></use></svg><svg class="ic-sv ic-f"><use href="#i-users-f"></use></svg></button>
+      <button class="tab" data-tab="4"><svg class="ic-sv ic-o"><use href="#i-user"></use></svg><svg class="ic-sv ic-f"><use href="#i-user-f"></use></svg></button>
     </nav>
 
-    <!-- ================= bottom sheet ================= -->
+    <!-- ================= sheet / modal ================= -->
     <div class="scrim" data-scrim></div>
-    <div class="sheet" data-sheet role="dialog" aria-modal="true" aria-label="New quote">
+    <div class="sheet" data-sheet role="dialog" aria-modal="true">
       <span class="grab"></span>
       <div class="sh-h">
-        <span class="kicker" data-sheet-title>New quote</span>
-        <span class="sp" style="flex:1"></span>
-        <button class="iconbtn" data-sheet-close aria-label="Close"><i class="ph ph-x"></i></button>
+        <span class="kicker" data-sheet-title></span><span class="sp"></span>
+        <button class="iconbtn" data-sheet-close aria-label="Close"><svg class="ic-sv"><use href="#i-x"></use></svg></button>
       </div>
       <div class="sh-b" data-sheet-body></div>
-      <div class="sh-f">
-        <button class="btn btn-sm" data-sheet-close>Save draft</button>
-        <button class="btn btn-sm btn-accent"><i class="ph ph-whatsapp-logo"></i>Send on WhatsApp</button>
-      </div>
+      <div class="sh-f" data-sheet-foot></div>
     </div>
+    <div class="toast" data-toast-el role="status" aria-live="polite"></div>
 
   </div><!-- /.main -->
 </div><!-- /.app -->
@@ -858,167 +751,406 @@ body[data-frame="phone"] .device::after{
 <script>
 (function(){
   "use strict";
-  var body    = document.body;
-  var scroll  = document.querySelector("[data-scroll]");
-  var titleEl = document.querySelector("[data-title]");
-  var tabs    = Array.prototype.slice.call(document.querySelectorAll(".tab"));
-  var sheet   = document.querySelector("[data-sheet]");
-  var scrim   = document.querySelector("[data-scrim]");
+  var $  = function(s,el){ return (el||document).querySelector(s); };
+  var $$ = function(s,el){ return Array.prototype.slice.call((el||document).querySelectorAll(s)); };
+  var root = $("#root"), scroll = $("[data-scroll]"), titleEl = $("[data-title]"), topbar = $("[data-topbar]");
+  var tabs = $$(".tab"), sheet = $("[data-sheet]"), scrim = $("[data-scrim]"), toastEl = $("[data-toast-el]");
 
-  /* screen registry: which screen each tab index maps to, per surface */
-  var MAP = {
-    console: ["console-home","console-orders",null,"console-clients","console-account"],
-    account: ["account-shop","account-orders",null,"account-saved","account-profile"]
-  };
-  var TITLES = {
-    "console-home":"Dashboard", "console-orders":"Orders & quotes",
-    "console-catalogue":"Catalogue & stock", "console-clients":"Clients",
-    "console-account":"Account",
-    "account-shop":"Catalogue", "account-orders":"Orders & quotes",
-    "account-saved":"Saved", "account-profile":"Profile"
-  };
-  /* tab icons differ per surface (Instagram pattern: icon-only, role-specific) */
-  var ICONS = {
-    console: ["house","receipt","plus","users-three","user-circle"],
-    account: ["squares-four","receipt","arrow-clockwise","bookmark-simple","user-circle"]
-  };
-  var SHEET = {
-    console: { title:"New quote", body:
-      '<div class="kv"><span class="k">Account</span><span class="v">Klinik Regenera · Clinic A −12%</span></div>'+
-      '<div class="kv"><span class="k">Retatrutide · 10 mg × 2</span><span class="v">Rp 3.344.000</span></div>'+
-      '<div class="kv"><span class="k">BPC-157 · 10 mg × 2</span><span class="v">Rp 2.816.000</span></div>'+
-      '<div class="kv"><span class="k">GHK-Cu · 100 mg × 1</span><span class="v">Rp 1.232.000</span></div>'+
-      '<div class="hrow" style="margin:14px 0"><button class="btn btn-sm"><i class="ph ph-plus"></i>Add line</button></div>'+
-      '<div class="big-total"><span class="kicker">Total</span><span class="v">Rp 7.392.000</span></div>'+
-      '<div class="kicker" style="margin:20px 0 9px">WhatsApp preview</div>'+
-      '<div class="wa"><b>AXIOM · Quote AX-Q-0312</b>\nKlinik Regenera · Clinic A\n\n'+
-      'Retatrutide 10 mg × 2 — Rp 3.344.000\nBPC-157 10 mg × 2 — Rp 2.816.000\n'+
-      'GHK-Cu 100 mg × 1 — Rp 1.232.000\n\n<b>Total Rp 7.392.000</b>\nValid to 09 Sep 2026\n\n'+
-      'Research Use Only. In-vitro laboratory research only.</div>'
-    },
-    account: { title:"Reorder", body:
-      '<div class="kicker" style="margin-bottom:12px">Repeat a past order</div>'+
-      '<div class="rows" style="border-top:1px solid var(--line)">'+
-      '<div class="row"><span class="ic"><i class="ph ph-arrow-clockwise"></i></span><span class="bd">'+
-      '<span class="t1">AX-2601-0139</span><span class="t2">6 lines · 18 Aug 2026</span></span>'+
-      '<span class="rt"><span class="amt">Rp 7.150.000</span></span></div>'+
-      '<div class="row"><span class="ic"><i class="ph ph-arrow-clockwise"></i></span><span class="bd">'+
-      '<span class="t1">AX-2601-0128</span><span class="t2">3 lines · 02 Aug 2026</span></span>'+
-      '<span class="rt"><span class="amt">Rp 4.400.000</span></span></div></div>'+
-      '<div class="ruo" style="margin-top:18px"><b>Research Use Only.</b> Intended exclusively for in-vitro '+
-      'laboratory research — not for human or veterinary consumption, diagnosis, or treatment. '+
-      'No dosing or usage guidance is provided.</div>'
-    }
-  };
+  /* ------------------------------------------------------------ data ------ */
+  var WA_NUMBER = "628128573396";                       /* +62 812 857 3396 */
+  var TIER_PCT  = 12;                                   /* Klinik Regenera · Clinic A */
+  var VARIANTS = [
+    {id:"reta10", cat:"peptide", no:"01", catName:"Metabolic",      name:"Retatrutide",              dose:"10 mg",                    content:"Pen",    price:1900000, stock:24},
+    {id:"reta30", cat:"peptide", no:"01", catName:"Metabolic",      name:"Retatrutide",              dose:"30 mg",                    content:"Pen",    price:3400000, stock:6},
+    {id:"bpc10",  cat:"peptide", no:"02", catName:"Tissue Repair",  name:"BPC-157",                  dose:"10 mg",                    content:"Pen",    price:1600000, stock:31},
+    {id:"tb500",  cat:"peptide", no:"02", catName:"Tissue Repair",  name:"TB-500",                   dose:"10 mg",                    content:"Pen",    price:1800000, stock:0},
+    {id:"cjc10",  cat:"peptide", no:"03", catName:"Growth Factors", name:"CJC No DAC + Ipamorelin",  dose:"10 mg",                    content:"Pen",    price:1900000, stock:12},
+    {id:"ta1",    cat:"peptide", no:"03", catName:"Growth Factors", name:"Thymosin Alpha-1",         dose:"10 mg",                    content:"Pen",    price:2300000, stock:0},
+    {id:"ghk100", cat:"peptide", no:"06", catName:"Longevity",      name:"GHK-Cu",                   dose:"100 mg",                   content:"Pen",    price:1400000, stock:18},
+    {id:"epi",    cat:"peptide", no:"06", catName:"Longevity",      name:"Epitalon",                 dose:"20 mg",                    content:"Pen",    price:2200000, stock:0},
+    {id:"mask",   cat:"therapy", no:"07", catName:"Therapy",        name:"Red Light Therapy Mask",   dose:"Face · LED array",         content:"Device", price:2400000, stock:4},
+    {id:"mat",    cat:"therapy", no:"07", catName:"Therapy",        name:"Red Light Therapy Mat",    dose:"Full-body · 660 + 850 nm", content:"Device", price:5900000, stock:2},
+    {id:"legs",   cat:"therapy", no:"07", catName:"Therapy",        name:"Leg Compression System",   dose:"660 + 850 nm · Pair",      content:"Device", price:6500000, stock:3},
+    {id:"tee",    cat:"apparel", no:"08", catName:"Apparel",        name:"Performance Tee",          dose:"Dry-knit · Unisex",        content:"Apparel",price:450000,  stock:64},
+    {id:"hoodie", cat:"apparel", no:"08", catName:"Apparel",        name:"Training Hoodie",          dose:"Heavyweight · Unisex",     content:"Apparel",price:950000,  stock:22},
+    {id:"duffel", cat:"apparel", no:"08", catName:"Apparel",        name:"Gym Duffel",               dose:"45 L",                     content:"Accessory",price:850000,stock:9}
+  ];
+  var CLIENTS = [
+    {id:"regenera", name:"Klinik Regenera",  type:"clinic",      tier:"Clinic A",  pct:12, manager:"Aero",  ltv:84200000, orders:14, ack:"current", wa:"628120000001"},
+    {id:"prasetyo", name:"Dr. Prasetyo Lab", type:"institution", tier:"Research",  pct:15, manager:"Aero",  ltv:61800000, orders:9,  ack:"current", wa:"628120000002"},
+    {id:"aksara",   name:"Aksara Recovery",  type:"clinic",      tier:"Clinic B",  pct:8,  manager:"Nadia", ltv:28400000, orders:6,  ack:"current", wa:"628120000003"},
+    {id:"senopati", name:"Klinik Senopati",  type:"clinic",      tier:"Clinic B",  pct:8,  manager:"Nadia", ltv:12600000, orders:4,  ack:"lapsed",  wa:"628120000004"},
+    {id:"ivan",     name:"Ivan Wijaya",      type:"individual",  tier:"List",      pct:0,  manager:"—",     ltv:9300000,  orders:5,  ack:"current", wa:"628120000005"},
+    {id:"longa",    name:"Studio Longa",     type:"clinic",      tier:"Clinic B",  pct:8,  manager:"Nadia", ltv:6500000,  orders:1,  ack:"age",     wa:"628120000006"}
+  ];
+  var STATES = ["pending","packing","dispatched","delivered"];
+  var ORDERS = [
+    {id:"AX-2601-0148", client:"regenera", date:"02 Sep 2026", state:"packing",    ship:216000, lines:[["reta10",2],["bpc10",2],["ghk100",1],["tee",2]]},
+    {id:"AX-2601-0147", client:"prasetyo", date:"01 Sep 2026", state:"dispatched", ship:250000, lines:[["bpc10",3],["tb500",2],["cjc10",1]]},
+    {id:"AX-2601-0146", client:"aksara",   date:"01 Sep 2026", state:"delivered",  ship:0,      lines:[["mat",1]]},
+    {id:"AX-2601-0145", client:"ivan",     date:"31 Aug 2026", state:"delivered",  ship:120000, lines:[["ghk100",2],["tee",1]]},
+    {id:"AX-2601-0144", client:"senopati", date:"30 Aug 2026", state:"pending",    ship:0,      lines:[["tee",3],["hoodie",2]]},
+    {id:"AX-2601-0143", client:"longa",    date:"29 Aug 2026", state:"delivered",  ship:0,      lines:[["legs",1]]},
+    {id:"AX-2601-0139", client:"regenera", date:"18 Aug 2026", state:"delivered",  ship:216000, lines:[["reta10",1],["bpc10",2],["cjc10",1],["tee",2]]},
+    {id:"AX-2601-0128", client:"regenera", date:"02 Aug 2026", state:"delivered",  ship:150000, lines:[["ghk100",2],["mask",1]]}
+  ];
+  var saved = {"reta10":true,"mat":true,"ta1":true,"duffel":true};
+  var quote = [["reta10",2],["bpc10",2],["ghk100",1]];          /* the draft quote in the sheet */
 
-  var surface = "console";
-  var tabIndex = { console:0, account:0 };      /* active tab per surface */
-  var scrollPos = {};                           /* preserved scroll per screen */
-  var current = "console-home";
+  /* ------------------------------------------------------------ utils ----- */
+  function idr(n){ return "Rp " + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
+  function h(s){ return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function ic(n,extra){ return '<svg class="ic-sv'+(extra?" "+extra:"")+'"><use href="#i-'+n+'"></use></svg>'; }
+  function V(id){ for(var i=0;i<VARIANTS.length;i++) if(VARIANTS[i].id===id) return VARIANTS[i]; }
+  function C(id){ for(var i=0;i<CLIENTS.length;i++) if(CLIENTS[i].id===id) return CLIENTS[i]; }
+  function O(id){ for(var i=0;i<ORDERS.length;i++) if(ORDERS[i].id===id) return ORDERS[i]; }
+  function tierPrice(v,pct){ return Math.round(v.price*(1-(pct||0)/100)/1000)*1000; }
+  function orderTotal(o){ var c=C(o.client), t=o.ship; o.lines.forEach(function(l){ t+=tierPrice(V(l[0]),c.pct)*l[1]; }); return t; }
+  function stateChip(s){
+    var cls={pending:"",packing:"warn",dispatched:"info",delivered:"ok"}[s]||"";
+    return '<span class="chip '+cls+'"><span class="dot"></span>'+s.charAt(0).toUpperCase()+s.slice(1)+'</span>';
+  }
+  function ackChip(a){
+    return a==="current" ? '<span class="chip ok"><span class="dot"></span>Current</span>'
+         : a==="lapsed"  ? '<span class="chip err"><span class="dot"></span>Lapsed</span>'
+         :                 '<span class="chip warn"><span class="dot"></span>18+ only</span>';
+  }
+  function stockChip(n){
+    return n===0 ? '<span class="chip err"><span class="dot"></span>Out</span>'
+         : n<=2  ? '<span class="chip warn"><span class="dot"></span>'+n+' left</span>'
+         :         '<span class="chip ok"><span class="dot"></span>In stock</span>';
+  }
+  function waLink(msg,num){ return "https://wa.me/"+(num||WA_NUMBER)+"?text="+encodeURIComponent(msg); }
 
-  function show(screen, opts){
-    if(!screen) return;
-    opts = opts || {};
-    /* preserve the scroll offset of the screen we are leaving */
-    if(current) scrollPos[current] = scroll.scrollTop;
-    document.querySelectorAll(".screen").forEach(function(s){
-      s.classList.toggle("on", s.dataset.screen === screen);
+  var toastT;
+  function toast(msg){
+    toastEl.textContent = msg; toastEl.classList.add("on");
+    clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("on"); }, 2400);
+  }
+  function openWA(msg,num){ window.open(waLink(msg,num),"_blank","noopener"); toast("Opening WhatsApp"); }
+
+  /* ------------------------------------------------------------ renderers - */
+  function renderOrders(){
+    var tb = $('[data-list="orders-table"]'), rows = $('[data-list="orders-rows"]'), t="", r="";
+    ORDERS.slice(0,6).forEach(function(o){
+      var c=C(o.client), first=V(o.lines[0][0]), extra=o.lines.length-1;
+      var items = first.name+(first.dose&&first.content!=="Apparel"&&first.content!=="Accessory"?" "+first.dose:"")+(extra?" · +"+extra:"");
+      t += '<tr data-order="'+o.id+'" data-tags="'+o.state+'"><td class="id">'+o.id+'</td><td class="k">'+h(c.name)+'</td><td>'+h(items)+
+           '</td><td class="id">'+o.date+'</td><td class="n">'+idr(orderTotal(o))+'</td><td>'+stateChip(o.state)+'</td></tr>';
+      var icon={pending:"clock",packing:"box",dispatched:"truck",delivered:"check"}[o.state];
+      r += '<button class="row" data-order="'+o.id+'" data-tags="'+o.state+'"><span class="ic">'+ic(icon)+'</span><span class="bd"><span class="t1">'+h(c.name)+
+           '</span><span class="t2">'+o.id+' · '+o.lines.length+(o.lines.length>1?' lines':' line')+' · '+o.date.slice(0,6)+'</span></span><span class="rt"><span class="amt">'+
+           idr(orderTotal(o))+'</span>'+stateChip(o.state)+'</span></button>';
     });
-    document.querySelectorAll(".rail a").forEach(function(a){
-      a.classList.toggle("on", a.dataset.go === screen);
+    tb.innerHTML=t; rows.innerHTML=r; applyFilter("orders");
+    var open = ORDERS.filter(function(o){return o.state!=="delivered";}).length;
+    $("[data-open-count]").textContent = open + 2;                   /* + the 2 non-order items */
+  }
+  function renderCatalogue(){
+    var t="", out=0;
+    VARIANTS.forEach(function(v){
+      if(v.stock===0) out++;
+      t += '<tr data-variant="'+v.id+'" data-tags="'+v.cat+(v.stock===0?' stockout':'')+'"><td class="k">'+h(v.name)+' · '+h(v.dose)+
+           '</td><td class="desktop-only">'+v.no+' '+h(v.catName)+'</td><td>'+h(v.content)+'</td><td class="n">'+idr(v.price)+
+           '</td><td class="n"'+(v.stock===0?' style="color:var(--err)"':'')+'>'+v.stock+'</td></tr>';
     });
-    titleEl.textContent = TITLES[screen] || "";
-    current = screen;
-    /* restore, without smooth-scrolling the restore itself */
-    var prev = scroll.style.scrollBehavior;
-    scroll.style.scrollBehavior = "auto";
-    scroll.scrollTop = opts.top != null ? opts.top : (scrollPos[screen] || 0);
-    scroll.style.scrollBehavior = prev;
+    $('[data-list="catalogue-table"]').innerHTML=t; applyFilter("catalogue");
+    $("[data-stockout-val]").innerHTML = out+' <span class="u">SKU</span>';
+  }
+  function renderClients(){
+    var t="", r="";
+    CLIENTS.forEach(function(c){
+      var tags=c.type+(c.ack==="lapsed"?" lapsed":"");
+      var tier=c.tier+(c.pct?' · −'+c.pct+'%':'');
+      t += '<tr data-client="'+c.id+'" data-tags="'+tags+'"><td class="k">'+h(c.name)+'</td><td>'+c.type.charAt(0).toUpperCase()+c.type.slice(1)+'</td><td>'+tier+'</td><td>'+h(c.manager)+
+           '</td><td class="n">'+idr(c.ltv)+'</td><td class="n">'+c.orders+'</td><td>'+ackChip(c.ack)+'</td></tr>';
+      var icon = c.ack==="lapsed"?"warn":c.type==="individual"?"person":c.type==="institution"?"flask":"building";
+      r += '<button class="row" data-client="'+c.id+'" data-tags="'+tags+'"><span class="ic">'+ic(icon)+'</span><span class="bd"><span class="t1">'+h(c.name)+
+           '</span><span class="t2">'+tier+' · '+c.orders+' orders</span></span><span class="rt"><span class="amt">'+idr(c.ltv)+'</span>'+ackChip(c.ack)+'</span></button>';
+    });
+    $('[data-list="clients-table"]').innerHTML=t; $('[data-list="clients-rows"]').innerHTML=r; applyFilter("clients");
+  }
+  function renderShop(){
+    var g="";
+    VARIANTS.forEach(function(v){
+      g += '<button class="pcard'+(saved[v.id]?' saved':'')+'" data-product="'+v.id+'" data-tags="'+v.cat+(saved[v.id]?' saved':'')+'"><span class="no">'+v.no+'</span><span class="st">'+stockChip(v.stock)+
+           '</span><span class="nm">'+h(v.name)+'</span><span class="ds">'+h(v.dose)+' · '+h(v.content)+'</span><span class="pr">'+idr(tierPrice(v,TIER_PCT))+
+           '</span><span class="sv">'+ic(saved[v.id]?"bookmark-f":"bookmark")+'</span></button>';
+    });
+    $('[data-list="shop-grid"]').innerHTML=g; applyFilter("shop");
+  }
+  function renderSaved(){
+    var r="", n=0;
+    VARIANTS.forEach(function(v){
+      if(!saved[v.id]) return; n++;
+      r += '<button class="row" data-product="'+v.id+'"><span class="ic">'+ic("bookmark-f")+'</span><span class="bd"><span class="t1">'+h(v.name)+' · '+h(v.dose)+
+           '</span><span class="t2">'+v.no+' '+h(v.catName)+' · '+h(v.content)+'</span></span><span class="rt"><span class="amt">'+idr(tierPrice(v,TIER_PCT))+'</span></span></button>';
+    });
+    $('[data-list="saved-rows"]').innerHTML = n ? r : '<div class="empty">Nothing saved yet. Tap the bookmark on any product.</div>';
+    $("[data-saved-count]").textContent = n;
+  }
+  function renderAccountOrder(){
+    var o=O("AX-2601-0148"), c=C(o.client), steps=[
+      ["Quote accepted","02 Sep 2026 · 09.14"],["Order confirmed","02 Sep 2026 · 09.22"],
+      ["Packing · cold-chain","02 Sep 2026 · 11.40"],["Dispatched","Cut-off 15.00"],["Delivered","Estimated 04 Sep 2026"]];
+    var doneUpTo = {pending:2,packing:3,dispatched:4,delivered:5}[o.state];
+    $("[data-timeline]").innerHTML = steps.map(function(s,i){
+      return '<div class="tl-i '+(i<doneUpTo?'done':'pend')+'"><span class="t1">'+s[0]+'</span><span class="t2">'+s[1]+'</span></div>';
+    }).join("");
+    $("[data-order-chip]").innerHTML = stateChip(o.state);
+    var l="";
+    o.lines.forEach(function(x){ var v=V(x[0]); l+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(tierPrice(v,c.pct)*x[1])+'</span></div>'; });
+    l += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
+    l += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(orderTotal(o))+'</span></div>';
+    $("[data-order-lines]").innerHTML=l;
+    var e="";
+    ORDERS.forEach(function(x){ if(x.client!=="regenera"||x.id===o.id) return;
+      e += '<button class="row" data-order="'+x.id+'"><span class="ic">'+ic("check")+'</span><span class="bd"><span class="t1">'+x.id+'</span><span class="t2">'+x.lines.length+' lines · '+x.date+
+           '</span></span><span class="rt"><span class="amt">'+idr(orderTotal(x))+'</span>'+stateChip(x.state)+'</span></button>'; });
+    $('[data-list="account-earlier"]').innerHTML=e;
+    var inv="";
+    ORDERS.forEach(function(x){ if(x.client!=="regenera"||x.state!=="delivered") return; var n="INV"+x.id.slice(2);
+      inv += '<button class="row" data-invoice="'+n+'"><span class="ic">'+ic("file")+'</span><span class="bd"><span class="t1">'+n+'</span><span class="t2">'+x.date+'</span></span><span class="rt"><span class="amt">'+idr(orderTotal(x))+'</span></span></button>'; });
+    $('[data-list="invoices"]').innerHTML=inv;
   }
 
-  function paintTabs(){
-    var icons = ICONS[surface];
-    tabs.forEach(function(t,i){
-      t.querySelector(".ph:not(.ph-fill)").className = "ph ph-" + icons[i];
-      t.querySelector(".ph-fill").className = "ph-fill ph-" + icons[i];
-      t.classList.toggle("on", i === tabIndex[surface] && i !== 2);
+  /* ------------------------------------------------------------ filters --- */
+  var filters = {};
+  function applyFilter(group){
+    var f = filters[group]||"", wrap=$('[data-chips="'+group+'"]'); if(!wrap) return;
+    $$(".chip",wrap).forEach(function(c){ c.classList.toggle("on", (c.dataset.f||"")===f); });
+    $$("[data-tags]", wrap.parentNode).forEach(function(el){
+      var hit = !f || (" "+el.dataset.tags+" ").indexOf(" "+f+" ")>-1;
+      el.hidden = !hit;
     });
   }
-
-  function setSurface(name){
-    surface = name;
-    body.dataset.surface = name;
-    document.querySelectorAll("[data-surface-btn]").forEach(function(b){
-      b.classList.toggle("on", b.dataset.surfaceBtn === name);
+  function setFilter(group,f){ filters[group]=f; applyFilter(group); }
+  function applySearch(){
+    var q = ($("[data-search-input]").value||"").trim().toLowerCase(), scr=$(".screen.on");
+    $$("[data-tags], .row, tr[data-order], tr[data-client], tr[data-variant]", scr).forEach(function(el){
+      if(el.hidden && !q) return;                       /* leave chip-filtered items alone */
+      if(!q){ return; }
+      el.hidden = el.textContent.toLowerCase().indexOf(q)===-1;
     });
-    document.querySelectorAll("[data-rail]").forEach(function(r){
-      r.hidden = r.dataset.rail !== name;
-    });
-    document.querySelector("[data-rail-sub]").textContent = name === "console" ? "Console" : "Account";
-    document.querySelector("[data-whoami]").textContent =
-      name === "console" ? "Aero · Owner" : "Klinik Regenera · Clinic";
-    closeSheet();
-    paintTabs();
-    show(MAP[name][tabIndex[name]]);
+    if(!q){ ["orders","catalogue","clients","shop"].forEach(applyFilter); }
   }
 
-  function openSheet(){
-    var s = SHEET[surface];
-    document.querySelector("[data-sheet-title]").textContent = s.title;
-    document.querySelector("[data-sheet-body]").innerHTML = s.body;
+  /* ------------------------------------------------------------ sheets ---- */
+  function openSheet(title, body, foot){
+    $("[data-sheet-title]").textContent = title;
+    $("[data-sheet-body]").innerHTML = body;
+    $("[data-sheet-foot]").innerHTML = foot||"";
     sheet.classList.add("on"); scrim.classList.add("on");
+    $("[data-sheet-body]").scrollTop = 0;
   }
   function closeSheet(){ sheet.classList.remove("on"); scrim.classList.remove("on"); }
 
-  /* --- chrome --- */
-  document.querySelectorAll("[data-surface-btn]").forEach(function(b){
-    b.addEventListener("click", function(){ setSurface(b.dataset.surfaceBtn); });
-  });
-  document.querySelectorAll("[data-frame-btn]").forEach(function(b){
-    b.addEventListener("click", function(){
-      body.dataset.frame = b.dataset.frameBtn;
-      document.querySelectorAll("[data-frame-btn]").forEach(function(x){
-        x.classList.toggle("on", x === b);
-      });
-    });
-  });
+  function quoteBody(){
+    var c=C("regenera"), total=0, b='<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+' · '+c.tier+' −'+c.pct+'%</span></div>';
+    quote.forEach(function(l,i){ var v=V(l[0]), line=tierPrice(v,c.pct)*l[1]; total+=line;
+      b += '<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+'</span><span class="v" style="display:flex;align-items:center;gap:10px">'+
+           '<span class="qty"><button data-q="'+i+'" data-d="-1" aria-label="Less">'+ic("minus")+'</button><span>'+l[1]+'</span><button data-q="'+i+'" data-d="1" aria-label="More">'+ic("plus")+'</button></span>'+
+           '<span style="min-width:96px">'+idr(line)+'</span><button class="linebtn" data-rm="'+i+'" aria-label="Remove">'+ic("trash")+'</button></span></div>'; });
+    var addable = VARIANTS.filter(function(v){ return v.stock>0 && !quote.some(function(l){return l[0]===v.id;}); }).slice(0,4);
+    b += '<div class="hrow" style="margin:14px 0">'+addable.map(function(v){ return '<button class="chip" data-add="'+v.id+'">'+ic("plus")+' '+h(v.name)+'</button>'; }).join("")+'</div>';
+    b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(total)+'</span></div>';
+    b += '<div class="kicker" style="margin:20px 0 9px">WhatsApp preview</div><div class="wa">'+h(quoteMsg())+'</div>';
+    return b;
+  }
+  function quoteMsg(){
+    var c=C("regenera"), total=0, m="AXIOM · Quote AX-Q-0312\n"+c.name+" · "+c.tier+"\n\n";
+    quote.forEach(function(l){ var v=V(l[0]), line=tierPrice(v,c.pct)*l[1]; total+=line; m+=v.name+(v.cat==="peptide"?" "+v.dose:"")+" × "+l[1]+" — "+idr(line)+"\n"; });
+    m += "\nTotal "+idr(total)+"\nValid to 09 Sep 2026\n\nResearch Use Only. In-vitro laboratory research only.";
+    return m;
+  }
+  function openQuote(){
+    openSheet("New quote", quoteBody(),
+      '<button class="btn btn-sm" data-draft>Save draft</button><button class="btn btn-sm btn-accent" data-send-quote>'+ic("wa")+'Send on WhatsApp</button>');
+  }
+  function openReorder(){
+    var b='<div class="kicker" style="margin-bottom:12px">Repeat a past order</div><div class="rows">';
+    ORDERS.forEach(function(o){ if(o.client!=="regenera"||o.state!=="delivered") return;
+      b += '<button class="row" data-reorder="'+o.id+'"><span class="ic">'+ic("reorder")+'</span><span class="bd"><span class="t1">'+o.id+'</span><span class="t2">'+o.lines.length+' lines · '+o.date+
+           '</span></span><span class="rt"><span class="amt">'+idr(orderTotal(o))+'</span></span></button>'; });
+    b += '</div><div class="ruo" style="margin-top:18px"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>';
+    openSheet("Reorder", b);
+  }
+  function openOrder(id){
+    var o=O(id), c=C(o.client), b='<div class="hrow" style="margin-bottom:14px">'+stateChip(o.state)+'<span class="note">'+o.date+'</span></div>';
+    b += '<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+'</span></div>';
+    o.lines.forEach(function(x){ var v=V(x[0]); b+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(tierPrice(v,c.pct)*x[1])+'</span></div>'; });
+    b += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
+    b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(orderTotal(o))+'</span></div>';
+    if(o.lines.some(function(x){return V(x[0]).cat==="peptide";})) b += '<div class="ruo" style="margin-top:16px"><b>Research Use Only.</b> In-vitro laboratory research only. No dosing or usage guidance is provided.</div>';
+    var i=STATES.indexOf(o.state), foot='';
+    if(surface==="console"){
+      foot = '<button class="btn btn-sm" data-wa-client="'+c.id+'" data-msg="Hi '+h(c.name)+', an update on order '+o.id+'.">'+ic("wa")+'Message</button>';
+      if(i<STATES.length-1) foot += '<button class="btn btn-sm btn-accent" data-advance="'+o.id+'">Mark '+STATES[i+1]+'</button>';
+    } else {
+      foot = '<button class="btn btn-sm" data-wa="Hi AXIOM, a question about order '+o.id+'.">'+ic("wa")+'Message the team</button>';
+      if(o.state==="delivered") foot += '<button class="btn btn-sm btn-accent" data-reorder="'+o.id+'">'+ic("reorder")+'Reorder</button>';
+    }
+    openSheet("Order "+id, b, foot);
+  }
+  function openClient(id){
+    var c=C(id), b='<div class="hrow" style="margin-bottom:14px">'+ackChip(c.ack)+'<span class="chip">'+c.type+'</span></div>';
+    b += '<div class="kv"><span class="k">Price tier</span><span class="v">'+c.tier+(c.pct?' · −'+c.pct+'%':'')+'</span></div>';
+    b += '<div class="kv"><span class="k">Account manager</span><span class="v">'+h(c.manager)+'</span></div>';
+    b += '<div class="kv"><span class="k">Lifetime value</span><span class="v">'+idr(c.ltv)+'</span></div>';
+    b += '<div class="kv"><span class="k">Orders</span><span class="v">'+c.orders+'</span></div>';
+    var recent = ORDERS.filter(function(o){return o.client===id;});
+    if(recent.length){ b+='<div class="kicker" style="margin:18px 0 8px">Recent orders</div><div class="rows">';
+      recent.forEach(function(o){ b+='<button class="row" data-order="'+o.id+'"><span class="ic">'+ic("receipt")+'</span><span class="bd"><span class="t1">'+o.id+'</span><span class="t2">'+o.date+'</span></span><span class="rt"><span class="amt">'+idr(orderTotal(o))+'</span>'+stateChip(o.state)+'</span></button>'; });
+      b+='</div>'; }
+    if(c.ack!=="current") b += '<p class="note" style="margin-top:16px">Peptide lines are hidden from this account and cannot be quoted until a qualified-researcher acknowledgement is recorded.</p>';
+    var foot = '<button class="btn btn-sm" data-wa-client="'+c.id+'" data-msg="Hi '+h(c.name)+', this is AXIOM.">'+ic("wa")+'Message</button>';
+    foot += c.ack==="current" ? '<button class="btn btn-sm btn-accent" data-quote-for="'+c.id+'">'+ic("plus")+'New quote</button>'
+                              : '<button class="btn btn-sm btn-accent" data-ack-request="'+c.id+'">Request acknowledgement</button>';
+    openSheet(c.name, b, foot);
+  }
+  function openVariant(id){
+    var v=V(id), b='<div class="hrow" style="margin-bottom:14px">'+stockChip(v.stock)+'<span class="chip">'+v.no+' '+h(v.catName)+'</span></div>';
+    b += '<div class="kv"><span class="k">Content</span><span class="v">'+h(v.dose)+' · '+h(v.content)+'</span></div>';
+    b += '<div class="kv"><span class="k">List price</span><span class="v">'+idr(v.price)+'</span></div>';
+    b += '<div class="kv"><span class="k">Clinic A price</span><span class="v">'+idr(tierPrice(v,12))+'</span></div>';
+    b += '<div class="stockline"><span class="k dim">Ledger balance</span><span class="qty"><button data-stock="'+v.id+'" data-d="-1" aria-label="Record sale">'+ic("minus")+'</button><span data-stock-val>'+v.stock+'</span><button data-stock="'+v.id+'" data-d="1" aria-label="Record intake">'+ic("plus")+'</button></span></div>';
+    b += '<p class="note" style="margin-top:14px">Each tap appends a movement to the ledger. The balance is derived, never stored.</p>';
+    if(v.cat==="peptide") b += '<div class="ruo" style="margin-top:16px"><b>Research Use Only.</b> In-vitro laboratory research only. No dosing or usage guidance is provided.</div>';
+    openSheet(v.name+" · "+v.dose, b);
+  }
+  function openProduct(id){
+    var v=V(id), b='<div class="hrow" style="margin-bottom:14px">'+stockChip(v.stock)+'<span class="chip">'+v.no+' '+h(v.catName)+'</span></div>';
+    b += '<div class="kv"><span class="k">Content</span><span class="v">'+h(v.dose)+' · '+h(v.content)+'</span></div>';
+    b += '<div class="kv"><span class="k">Your price · Clinic A</span><span class="v">'+idr(tierPrice(v,TIER_PCT))+'</span></div>';
+    b += '<div class="kv"><span class="k">List price</span><span class="v dim">'+idr(v.price)+'</span></div>';
+    if(v.cat==="peptide"){
+      b += '<div class="kv"><span class="k">Verification</span><span class="v">HPLC/MS ≥ 98% · CoA per lot</span></div>';
+      b += '<div class="kv"><span class="k">Handling</span><span class="v">−20 °C sealed · 2–8 °C transit</span></div>';
+      b += '<div class="ruo" style="margin-top:16px"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>';
+    } else if(v.cat==="therapy"){
+      b += '<div class="kv"><span class="k">Wavelengths</span><span class="v">660 + 850 nm · verified irradiance</span></div>';
+      b += '<div class="kv"><span class="k">Shipping</span><span class="v">Insured · tracked</span></div>';
+    }
+    var foot = '<button class="btn btn-sm" data-save="'+v.id+'">'+ic(saved[v.id]?"bookmark-f":"bookmark")+(saved[v.id]?'Saved':'Save')+'</button>'+
+               '<button class="btn btn-sm btn-accent" data-wa="Hi AXIOM, a quote for '+h(v.name)+(v.cat==="peptide"?' '+v.dose:'')+' please. Klinik Regenera.">'+ic("wa")+'Request a quote</button>';
+    openSheet(v.name, b, foot);
+  }
+  function openNotifications(){
+    var b='<div class="rows">';
+    b += '<button class="row" data-go="console-orders" data-filter="packing" data-close><span class="ic">'+ic("box")+'</span><span class="bd"><span class="t1">2 orders to pack before 15.00</span><span class="t2">Cold-chain dispatch cut-off</span></span><span class="rt">'+ic("caret")+'</span></button>';
+    b += '<button class="row" data-go="console-clients" data-filter="lapsed" data-close><span class="ic">'+ic("warn")+'</span><span class="bd"><span class="t1">Klinik Senopati acknowledgement lapsed</span><span class="t2">Peptide lines hidden</span></span><span class="rt">'+ic("caret")+'</span></button>';
+    b += '<button class="row" data-go="console-catalogue" data-filter="stockout" data-close><span class="ic">'+ic("flask")+'</span><span class="bd"><span class="t1">3 variants at zero balance</span><span class="t2">TB-500 · Thymosin Alpha-1 · Epitalon</span></span><span class="rt">'+ic("caret")+'</span></button>';
+    if(surface==="account"){
+      b = '<div class="rows"><button class="row" data-go="account-orders" data-close><span class="ic">'+ic("box")+'</span><span class="bd"><span class="t1">AX-2601-0148 is being packed</span><span class="t2">Dispatch expected today</span></span><span class="rt">'+ic("caret")+'</span></button>'+
+          '<button class="row" data-go="account-shop" data-filter="therapy" data-close><span class="ic">'+ic("sun")+'</span><span class="bd"><span class="t1">Therapy Mat back to 2 units</span><span class="t2">Restocked 01 Sep</span></span><span class="rt">'+ic("caret")+'</span></button>';
+    }
+    openSheet("Notifications", b+'</div>');
+  }
 
-  /* --- rail --- */
-  document.querySelectorAll(".rail a").forEach(function(a){
-    a.addEventListener("click", function(e){
-      e.preventDefault();
-      show(a.dataset.go);
-      var idx = MAP[surface].indexOf(a.dataset.go);
-      if(idx > -1){ tabIndex[surface] = idx; paintTabs(); }
-    });
-  });
+  /* ------------------------------------------------------------ nav ------- */
+  var MAP = { console:["console-home","console-orders",null,"console-clients","console-account"],
+              account:["account-shop","account-orders",null,"account-saved","account-profile"] };
+  var TITLES = { "console-home":"Dashboard","console-orders":"Orders & quotes","console-catalogue":"Catalogue & stock",
+                 "console-clients":"Clients","console-account":"Account","account-shop":"Catalogue",
+                 "account-orders":"Orders & quotes","account-saved":"Saved","account-profile":"Profile" };
+  var ICONS = { console:["house","receipt","plus","users","user"], account:["squares","receipt","reorder","bookmark","user"] };
+  var surface="console", tabIndex={console:0,account:0}, scrollPos={}, current="console-home";
 
-  /* --- tab bar --- */
-  tabs.forEach(function(t){
-    t.addEventListener("click", function(){
-      var i = +t.dataset.tab;
-      if(t.dataset.action === "sheet"){ openSheet(); return; }   /* centre action never navigates */
-      tabIndex[surface] = i;
-      paintTabs();
-      show(MAP[surface][i]);
+  function show(screen){
+    if(!screen) return;
+    if(current) scrollPos[current] = scroll.scrollTop;
+    $$(".screen").forEach(function(s){ s.classList.toggle("on", s.dataset.screen===screen); });
+    $$(".rail a").forEach(function(a){ a.classList.toggle("on", a.dataset.go===screen && !a.dataset.filter); });
+    titleEl.textContent = TITLES[screen]||"";
+    current = screen;
+    var prev = scroll.style.scrollBehavior; scroll.style.scrollBehavior="auto";
+    scroll.scrollTop = scrollPos[screen]||0; scroll.style.scrollBehavior=prev;
+    var idx = MAP[surface].indexOf(screen); if(idx>-1){ tabIndex[surface]=idx; }
+    paintTabs();
+    topbar.classList.remove("searching"); $("[data-search-input]").value="";
+  }
+  function paintTabs(){
+    ICONS[surface].forEach(function(k,i){
+      var t=tabs[i]; $(".ic-o use",t).setAttribute("href","#i-"+k); $(".ic-f use",t).setAttribute("href","#i-"+k+"-f");
+      t.classList.toggle("on", i===tabIndex[surface] && i!==2);
+      t.setAttribute("aria-label", ["Home","Orders",surface==="console"?"New quote":"Reorder","Clients","Account"][i]);
     });
-  });
+  }
+  function setSurface(name){
+    surface=name; root.dataset.surface=name;
+    $$("[data-surface-btn]").forEach(function(b){ b.classList.toggle("on", b.dataset.surfaceBtn===name); });
+    $$("[data-rail]").forEach(function(r){ r.hidden = r.dataset.rail!==name; });
+    $("[data-rail-sub]").textContent = name==="console"?"Console":"Account";
+    $("[data-whoami]").textContent = name==="console"?"Aero · Owner":"Klinik Regenera · Clinic";
+    $("[data-primary-label]").textContent = name==="console"?"New quote":"Reorder";
+    $("[data-primary] use").setAttribute("href", name==="console"?"#i-plus":"#i-reorder");
+    closeSheet(); show(MAP[name][tabIndex[name]]);
+  }
+  function go(screen, filter){
+    var group = {"console-orders":"orders","console-clients":"clients","console-catalogue":"catalogue","account-shop":"shop"}[screen];
+    if(group) setFilter(group, filter||"");
+    show(screen);
+  }
+  function primary(){ surface==="console" ? openQuote() : openReorder(); }
 
-  /* --- sheet dismissal: scrim, close buttons, Escape, swipe-down --- */
+  /* ------------------------------------------------------------ events ---- */
+  $$("[data-surface-btn]").forEach(function(b){ b.addEventListener("click",function(){ setSurface(b.dataset.surfaceBtn); }); });
+  $$("[data-frame-btn]").forEach(function(b){ b.addEventListener("click",function(){
+    root.dataset.frame=b.dataset.frameBtn; $$("[data-frame-btn]").forEach(function(x){ x.classList.toggle("on",x===b); }); }); });
+  $$(".rail a").forEach(function(a){ a.addEventListener("click",function(e){ e.preventDefault(); go(a.dataset.go, a.dataset.filter); }); });
+  tabs.forEach(function(t){ t.addEventListener("click",function(){
+    if(t.dataset.action==="primary"){ primary(); return; }         /* centre action never navigates */
+    go(MAP[surface][+t.dataset.tab]); }); });
+  $("[data-primary]").addEventListener("click", primary);
+  $("[data-bell]").addEventListener("click", openNotifications);
+  $("[data-search-btn]").addEventListener("click", function(){
+    var on = topbar.classList.toggle("searching");
+    if(on){ $("[data-search-input]").focus(); } else { $("[data-search-input]").value=""; applySearch(); }
+  });
+  $("[data-search-input]").addEventListener("input", applySearch);
+  $("[data-search-input]").addEventListener("keydown", function(e){ if(e.key==="Escape"){ topbar.classList.remove("searching"); this.value=""; applySearch(); } });
+
   scrim.addEventListener("click", closeSheet);
-  document.querySelectorAll("[data-sheet-close]").forEach(function(b){
-    b.addEventListener("click", closeSheet);
-  });
-  document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeSheet(); });
-  var y0 = null;
-  sheet.addEventListener("touchstart", function(e){ y0 = e.touches[0].clientY; }, {passive:true});
-  sheet.addEventListener("touchend", function(e){
-    if(y0 !== null && e.changedTouches[0].clientY - y0 > 60) closeSheet();
-    y0 = null;
-  }, {passive:true});
+  $("[data-sheet-close]").addEventListener("click", closeSheet);
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeSheet(); });
+  var y0=null;
+  sheet.addEventListener("touchstart", function(e){ y0=e.touches[0].clientY; }, {passive:true});
+  sheet.addEventListener("touchend", function(e){ if(y0!==null && e.changedTouches[0].clientY-y0>60) closeSheet(); y0=null; }, {passive:true});
 
-  paintTabs();
+  /* one delegated handler for everything rendered dynamically */
+  $(".app").addEventListener("click", function(e){
+    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-add],[data-rm],[data-q],[data-stock],[data-advance],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request]");
+    if(!el) return;
+    var d = el.dataset;
+    if(d.f!==undefined && el.classList.contains("chip")){ setFilter(el.parentNode.dataset.chips, d.f); return; }
+    if(d.go){ if(d.close!==undefined) closeSheet(); go(d.go, d.filter); return; }
+    if(d.order){ openOrder(d.order); return; }
+    if(d.client){ openClient(d.client); return; }
+    if(d.variant){ openVariant(d.variant); return; }
+    if(d.product){ openProduct(d.product); return; }
+    if(d.save){ saved[d.save]=!saved[d.save]; renderShop(); renderSaved(); openProduct(d.save); toast(saved[d.save]?"Saved":"Removed from saved"); return; }
+    if(d.add){ quote.push([d.add,1]); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
+    if(d.rm!==undefined){ quote.splice(+d.rm,1); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
+    if(d.q!==undefined){ var l=quote[+d.q]; l[1]=Math.max(1,l[1]+ +d.d); $("[data-sheet-body]").innerHTML=quoteBody(); return; }
+    if(d.stock){ var v=V(d.stock); v.stock=Math.max(0,v.stock+ +d.d); $("[data-stock-val]").textContent=v.stock; renderCatalogue(); renderShop(); toast((+d.d>0?"Intake":"Sale")+" recorded · "+v.name+" balance "+v.stock); return; }
+    if(d.advance){ var o=O(d.advance); o.state=STATES[STATES.indexOf(o.state)+1]; renderOrders(); renderAccountOrder(); openOrder(o.id); toast(o.id+" marked "+o.state); return; }
+    if(d.wa){ openWA(d.wa); return; }
+    if(d.waClient){ openWA(d.msg, C(d.waClient).wa); return; }
+    if(d.draft!==undefined){ closeSheet(); toast("Draft saved · AX-Q-0312"); return; }
+    if(d.sendQuote!==undefined){ openWA(quoteMsg()); closeSheet(); return; }
+    if(d.reorder){ var src=O(d.reorder); quote=src.lines.map(function(x){return [x[0],x[1]];}); openQuote(); toast("Lines copied from "+d.reorder); return; }
+    if(d.invoice){ toast(d.invoice+" · PDF prepared on the paper palette"); return; }
+    if(d.signout!==undefined){ toast("Signed out"); return; }
+    if(d.quoteFor){ quote=[["reta10",1]]; openQuote(); return; }
+    if(d.ackRequest){ closeSheet(); openWA("Hi "+C(d.ackRequest).name+", please complete the AXIOM qualified-researcher acknowledgement before we can quote peptide lines.", C(d.ackRequest).wa); return; }
+    if(d.lang){ $$("[data-lang]").forEach(function(b){ b.classList.toggle("on", b.dataset.lang===d.lang); }); toast(d.lang==="id"?"Bahasa Indonesia":"English"); return; }
+    if(d.toast){ toast(d.toast); return; }
+  });
+
+  /* ------------------------------------------------------------ boot ------ */
+  renderOrders(); renderCatalogue(); renderClients(); renderShop(); renderSaved(); renderAccountOrder(); paintTabs();
 })();
 </script>
+</div><!-- /#root -->
 </body>
 </html>
