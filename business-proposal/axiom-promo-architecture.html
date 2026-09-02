@@ -1,0 +1,587 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AXIOM · Promo, Discount &amp; Bundle Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070605;--ink:#F2EDE5;--muted:#9C9488;--muted-2:#6A635A;--line:rgba(242,237,229,.12);--line-2:rgba(242,237,229,.22);--line-soft:rgba(242,237,229,.06);--accent:#C88A4E;--accent-bright:#E7B173;--accent-deep:#7C4C24;--accent-soft:rgba(200,138,78,.14);--accent-line:rgba(200,138,78,.34);--ok:#8FA37E;--warn:#C8A24E;--err:#B0553B;--maxw:1080px;--pad:34px;--display:"Jost","Century Gothic",system-ui,sans-serif;--sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+--c-low:#815932;--c-mid:#C88A4E;--c-high:#E7B173;--c-cost:#7C4C24;--c-pen:#B37B46;--c-grid:rgba(242,237,229,.10);--c-axis:rgba(242,237,229,.22)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.tab,.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+a{color:var(--accent-bright);text-decoration:none}
+header.mast{padding:70px 0 34px;border-bottom:1px solid var(--line);position:relative;background:radial-gradient(58% 58% at 76% 24%,rgba(200,138,78,.16),transparent 60%),radial-gradient(46% 40% at 56% 82%,rgba(124,76,36,.20),transparent 60%)}
+.kick{font-family:var(--sans);font-weight:500;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+.wm{margin:20px 0 14px;line-height:0;color:var(--ink)}
+.wm-art{display:block;width:min(238px,54vw);height:auto}
+.mast h1{font-family:var(--display);font-weight:300;font-size:clamp(30px,5vw,54px);line-height:1.04;letter-spacing:-.01em;margin:16px 0 0;max-width:18ch}
+.mast h1 em{font-style:normal;color:var(--muted)}
+.mast .lead{color:var(--muted);font-size:15.5px;max-width:66ch;margin:18px 0 0}
+.docmeta{display:flex;flex-wrap:wrap;gap:26px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line-soft)}
+.docmeta .m .k{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2)}
+.docmeta .m .v{font-family:var(--display);font-size:15px;margin-top:3px}
+nav.toc{border-bottom:1px solid var(--line);padding:18px 0}
+nav.toc .wrap{display:flex;flex-wrap:wrap;gap:6px 20px}
+nav.toc a{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+nav.toc a b{color:var(--accent);margin-right:6px;font-weight:500}
+section.sec{padding:64px 0;border-bottom:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:96px 1fr;gap:26px;margin-bottom:30px}
+.sec-head .idx{font-family:var(--display);font-weight:400;color:var(--accent);font-size:15px}
+.sec-head .kk{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);font-weight:500;display:block;margin-top:8px}
+.sec-head h2{font-family:var(--display);font-weight:300;font-size:clamp(24px,3.4vw,38px);line-height:1.06;letter-spacing:-.01em;margin:0}
+.sec-head h2 em{font-style:normal;color:var(--muted)}
+.sec-head .lead{color:var(--muted);font-size:15px;max-width:62ch;margin:12px 0 0}
+.tag{display:inline-block;margin-top:14px;border:1px solid var(--accent-line);border-radius:999px;padding:3px 12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-bright)}
+.body-col{max-width:74ch}
+.body-col p{color:var(--muted);margin:0 0 14px}
+.body-col p strong,.body-col li strong,td strong{color:var(--ink);font-weight:500}
+h3.sub{font-family:var(--display);font-weight:400;font-size:18px;color:var(--ink);margin:30px 0 10px;letter-spacing:-.005em}
+ul.clean{list-style:none;padding:0;margin:0 0 14px}
+ul.clean li{position:relative;padding:0 0 10px 20px;color:var(--muted);font-size:14px}
+ul.clean li:before{content:"";position:absolute;left:0;top:9px;width:6px;height:1px;background:var(--accent)}
+ol.steps{margin:0 0 14px;padding-left:20px;color:var(--muted);font-size:14px}
+ol.steps li{margin-bottom:9px;padding-left:4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:14px 0}
+.card{border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.card .role{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.card h4{font-family:var(--display);font-weight:400;font-size:16px;margin:0 0 8px}
+.card p{font-size:13px;color:var(--muted);margin:0 0 8px}
+.card p:last-child{margin-bottom:0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin:16px 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:13px;font-variant-numeric:tabular-nums}
+caption{text-align:left;padding:16px 18px 0;font-family:var(--display);font-size:16px;color:var(--ink)}
+th{text-align:left;font-weight:500;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);padding:12px 16px 8px;border-bottom:1px solid var(--line)}
+td{padding:11px 16px;border-bottom:1px solid var(--line-soft);color:var(--muted);vertical-align:top}
+td.name{color:var(--ink)}
+th.num,td.num{text-align:right}
+td.num{color:var(--ink)}
+tbody tr:last-child td{border-bottom:none}
+.total-row td{border-top:1px solid var(--line-2);color:var(--ink)}
+.ruo{border:1px solid var(--accent-line);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:12px;color:var(--muted);line-height:1.65}
+.ruo b{color:var(--accent-bright);text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:500;display:block;margin-bottom:4px}
+.chart{border:1px solid var(--line);border-radius:16px;padding:24px 24px 20px;margin:18px 0}
+.chart .ct{font-family:var(--display);font-size:19px;margin:0 0 4px;font-weight:400}
+.chart .cc{font-size:12.5px;color:var(--muted-2);margin:0 0 20px;max-width:64ch}
+.svgwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.chart svg{width:100%;min-width:600px;height:auto;display:block;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px}
+.legend .li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.legend .sw{width:14px;height:8px;border-radius:2px;display:inline-block}
+.svg-lbl{font-size:11px;fill:var(--ink);font-family:var(--sans);font-variant-numeric:tabular-nums}
+.svg-cat{font-size:11.5px;fill:var(--muted);font-family:var(--sans);font-variant-numeric:tabular-nums}
+.svg-sub{font-size:10.5px;fill:var(--muted-2);font-family:var(--sans);font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:16px 0}
+.kpi{padding:20px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi .k{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.kpi .target{font-family:var(--display);font-size:25px;color:var(--accent-bright);font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .def{font-size:12px;color:var(--muted-2);margin-top:8px;line-height:1.55}
+/* calculator */
+.calc{border:1px solid var(--accent-line);border-radius:16px;padding:26px 24px;background:linear-gradient(180deg,rgba(200,138,78,.05),transparent);margin:18px 0}
+.calc h3{font-family:var(--display);font-weight:300;font-size:23px;margin:0 0 6px}
+.calc .hint{font-size:12.5px;color:var(--muted-2);margin:0 0 20px;max-width:66ch}
+.calc .controls{display:grid;grid-template-columns:1fr 130px 160px;gap:12px;align-items:end;margin-bottom:8px}
+.calc label{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:7px}
+.calc select,.calc input{width:100%;background:rgba(242,237,229,.04);border:1px solid var(--line-2);border-radius:9px;color:var(--ink);font-family:var(--sans);font-size:13.5px;font-weight:300;padding:10px 12px;font-variant-numeric:tabular-nums}
+.calc select:focus,.calc input:focus{outline:none;border-color:var(--accent-line)}
+.calc option{background:#140f0b;color:var(--ink)}
+.calc .controls.narrow{grid-template-columns:220px 1fr;margin-top:18px}
+.calc .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.calc .btn{background:rgba(200,138,78,.14);border:1px solid var(--accent-line);border-radius:9px;color:var(--accent-bright);font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;padding:11px 16px;cursor:pointer}
+.calc .btn:hover{background:rgba(200,138,78,.22)}
+.chosen{margin:18px 0 0;border-top:1px solid var(--line);padding-top:6px}
+.chosen .row{display:grid;grid-template-columns:1fr 84px 104px 74px 30px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
+.chosen .row .nm{color:var(--ink)}
+.chosen .row .nm span{color:var(--muted-2);font-size:11.5px}
+.chosen .row .v{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.chosen .row .x{background:none;border:0;color:var(--muted-2);cursor:pointer;font-size:15px;line-height:1;padding:2px 4px}
+.chosen .row .x:hover{color:var(--err)}
+.chosen .empty{color:var(--muted-2);font-size:13px;padding:14px 0}
+.band{display:inline-block;border-radius:999px;padding:2px 9px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
+.band.lead{background:rgba(176,85,59,.18);color:#d98b73}
+.band.std{background:rgba(156,148,136,.16);color:var(--muted)}
+.band.head{background:rgba(143,163,126,.18);color:#a9c095}
+.out{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:20px}
+.out .o{padding:16px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.out .o .k{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:8px}
+.out .o .v{font-family:var(--display);font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums}
+.verdict{margin-top:16px;border-radius:12px;padding:14px 18px;font-size:13.5px;border:1px solid var(--line)}
+.verdict.pass{border-color:rgba(143,163,126,.5);background:rgba(143,163,126,.08);color:#a9c095}
+.verdict.fail{border-color:rgba(176,85,59,.5);background:rgba(176,85,59,.08);color:#d98b73}
+.verdict.idle{color:var(--muted-2)}
+footer{padding:40px 0 70px;color:var(--muted-2);font-size:11.5px;line-height:1.7}
+footer .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;margin-top:28px}
+footer .fgrid .h{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px}
+footer .fgrid p{margin:0 0 5px;color:var(--muted)}
+footer .fwm{line-height:0;color:var(--accent)}
+footer .fwm-art{display:block;width:148px;height:auto}
+@media(max-width:900px){.kpis,.out{grid-template-columns:repeat(2,1fr)}.calc .controls,.calc .controls.narrow{grid-template-columns:1fr}}
+@media(max-width:720px){:root{--pad:20px}.sec-head{grid-template-columns:1fr;gap:10px}section.sec{padding:48px 0}.kpis,.out{grid-template-columns:1fr}.kpi,.out .o{border-right:0}.chosen .row{grid-template-columns:1fr 90px 30px;row-gap:4px}footer .fgrid{grid-template-columns:1fr}}
+@media print{
+ :root{--bg:#F2EDE5;--ink:#070605;--muted:#4A443C;--muted-2:#6A635A;--line:rgba(7,6,5,.16);--line-2:rgba(7,6,5,.28);--line-soft:rgba(7,6,5,.08);--accent:#7C4C24;--accent-bright:#7C4C24;--accent-line:rgba(124,76,36,.40);
+ --c-low:#9C6C3D;--c-mid:#815932;--c-high:#7C4C24;--c-cost:#7C4C24;--c-pen:#B37B46;--c-grid:rgba(7,6,5,.10);--c-axis:rgba(7,6,5,.24)}
+ @page{size:A4;margin:14mm}
+ body{background:#F2EDE5;color:#070605;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:10.5px;line-height:1.55}
+ header.mast{background:none;padding:0 0 20px}
+ nav.toc{display:none}
+ section.sec{padding:22px 0}
+ .sec-head{break-after:avoid}
+ .chart,.card,.tablewrap,.kpi,.calc,.ruo,.out{break-inside:avoid}
+ .svgwrap{overflow:visible}.chart svg{min-width:0}
+ .calc{background:rgba(124,76,36,.05)}
+ .wrap{max-width:none;padding:0}
+ a{color:#7C4C24}
+}
+</style></head><body>
+
+<header class="mast"><div class="wrap">
+  <div class="kick">Pricing &middot; promotion &middot; margin discipline &middot; Jakarta</div>
+  <div class="wm"><svg class="wm-art" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg></div>
+  <h1>Where the discount <em>can come from.</em></h1>
+  <p class="lead">Seventy-nine lots, one margin structure, and a catalogue that is not priced the way it looks. Five lots are sold deliberately thin to win the market, five carry nearly all the room in the book, and sixty-nine sit on a single default. This document says which compounds may be promoted, by how much, and what the blended margin is when they are.</p>
+  <div class="docmeta">
+    <div class="m"><div class="k">Document</div><div class="v">Promo &amp; Bundle Architecture</div></div>
+    <div class="m"><div class="k">Version</div><div class="v tab">1.0</div></div>
+    <div class="m"><div class="k">Catalogue</div><div class="v tab">79 lots &middot; 9 pathways</div></div>
+    <div class="m"><div class="k">Blended margin</div><div class="v tab">48,1%</div></div>
+    <div class="m"><div class="k">Floor</div><div class="v tab">40% blended</div></div>
+    <div class="m"><div class="k">Doc ID</div><div class="v tab">AXM&mdash;PROMO&mdash;001</div></div>
+  </div>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#s00"><b>00</b> What the book earns</a>
+  <a href="#s01"><b>01</b> Three bands</a>
+  <a href="#s02"><b>02</b> The rule</a>
+  <a href="#s03"><b>03</b> The ladder</a>
+  <a href="#s04"><b>04</b> Bundles, priced</a>
+  <a href="#s05"><b>05</b> Calculator</a>
+  <a href="#s06"><b>06</b> What not to do</a>
+  <a href="#s07"><b>07</b> Guardrails</a>
+</div></nav>
+
+<!-- 00 -->
+<section class="sec" id="s00"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">00</div><span class="kk">The structure</span></div>
+    <div>
+      <h2>What the book actually earns. <em>And what the pen is.</em></h2>
+      <p class="lead">Every lot is a vial from R-Peptides plus a Reusable Injection Pen V2 from R-Peptides. Both are goods on the invoice, so what remains is a true gross margin &mdash; and the pen is the same Rp 600.000 on every lot, whatever the vial inside costs.</p>
+    </div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="k">Supplier cost</div><div class="target">Rp 82.320.000</div><div class="def">The vials, priced per lot. 33,0% of selling price.</div></div>
+    <div class="kpi"><div class="k">Pen</div><div class="target">Rp 47.400.000</div><div class="def">79 &times; Reusable Injection Pen V2 at Rp 600.000. 19,0% of selling price.</div></div>
+    <div class="kpi"><div class="k">Selling price</div><div class="target">Rp 249.800.000</div><div class="def">One of each lot, at current list.</div></div>
+    <div class="kpi"><div class="k">Gross margin</div><div class="target">48,1%</div><div class="def">Rp 120.080.000. Gross, not net &mdash; it carries no operating cost.</div></div>
+  </div>
+
+  <div class="body-col">
+    <p><strong>The pen is a good, not a service.</strong> That distinction decides the entire architecture. Because it is one physical pen per lot, a multi-lot order carries no shared cost that can be given away, and a returning buyer who already owns a pen still receives another. There is no free discount anywhere in this structure. <strong>Every rupiah taken off a price comes out of real margin.</strong></p>
+  </div>
+
+  <div class="chart">
+    <p class="ct">Cost composition</p>
+    <p class="cc">Share of Rp 249.800.000 of selling price across the full catalogue.</p>
+    <div class="svgwrap"><svg viewBox="0 0 720 92" role="img" aria-label="Cost composition: supplier cost 33 percent, pen 19 percent, margin 48.1 percent of selling price">
+      <rect x="0" y="14" width="235" height="18" rx="4" fill="var(--c-cost)"></rect>
+      <rect x="237" y="14" width="134" height="18" rx="4" fill="var(--c-pen)"></rect>
+      <rect x="373" y="14" width="347" height="18" rx="4" fill="var(--c-high)"></rect>
+      <text class="svg-lbl" x="0" y="52">33,0%</text><text class="svg-sub" x="0" y="68">Supplier &mdash; Rp 82.320.000</text>
+      <text class="svg-lbl" x="237" y="52">19,0%</text><text class="svg-sub" x="237" y="68">Pen &mdash; Rp 47.400.000</text>
+      <text class="svg-lbl" x="373" y="52">48,1%</text><text class="svg-sub" x="373" y="68">Margin &mdash; Rp 120.080.000</text>
+    </svg></div>
+  </div>
+
+  <div class="tablewrap"><table>
+    <caption>By pathway</caption>
+    <thead><tr><th>Pathway</th><th class="num">Lots</th><th class="num">Supplier cost</th><th class="num">Selling price</th><th class="num">Margin</th><th class="num">%</th></tr></thead>
+    <tbody>
+      <tr><td class="name">01 &nbsp;GLP-1s & Weight Loss</td><td class="num">10</td><td class="num">Rp 16.650.000</td><td class="num">Rp 41.200.000</td><td class="num">Rp 18.550.000</td><td class="num">45,0%</td></tr>
+      <tr><td class="name">02 &nbsp;GH Secretagogues</td><td class="num">11</td><td class="num">Rp 12.600.000</td><td class="num">Rp 34.700.000</td><td class="num">Rp 15.500.000</td><td class="num">44,7%</td></tr>
+      <tr><td class="name">03 &nbsp;Healing & Repair</td><td class="num">13</td><td class="num">Rp 11.020.000</td><td class="num">Rp 39.400.000</td><td class="num">Rp 20.580.000</td><td class="num">52,2%</td></tr>
+      <tr><td class="name">04 &nbsp;Brain Health & Nootropics</td><td class="num">8</td><td class="num">Rp 6.950.000</td><td class="num">Rp 23.700.000</td><td class="num">Rp 11.950.000</td><td class="num">50,4%</td></tr>
+      <tr><td class="name">05 &nbsp;Energy & Endurance</td><td class="num">8</td><td class="num">Rp 6.700.000</td><td class="num">Rp 22.100.000</td><td class="num">Rp 10.600.000</td><td class="num">48,0%</td></tr>
+      <tr><td class="name">06 &nbsp;Immunity</td><td class="num">2</td><td class="num">Rp 1.800.000</td><td class="num">Rp 5.800.000</td><td class="num">Rp 2.800.000</td><td class="num">48,3%</td></tr>
+      <tr><td class="name">07 &nbsp;Sexual Health</td><td class="num">6</td><td class="num">Rp 4.500.000</td><td class="num">Rp 14.900.000</td><td class="num">Rp 6.800.000</td><td class="num">45,6%</td></tr>
+      <tr><td class="name">08 &nbsp;Longevity & Cellular Repair</td><td class="num">9</td><td class="num">Rp 8.800.000</td><td class="num">Rp 28.200.000</td><td class="num">Rp 14.000.000</td><td class="num">49,6%</td></tr>
+      <tr><td class="name">09 &nbsp;Peptide Bioregulators</td><td class="num">12</td><td class="num">Rp 13.300.000</td><td class="num">Rp 39.800.000</td><td class="num">Rp 19.300.000</td><td class="num">48,5%</td></tr>
+      <tr class="total-row"><td class="name">All pathways</td><td class="num">79</td><td class="num">Rp 82.320.000</td><td class="num">Rp 249.800.000</td><td class="num">Rp 120.080.000</td><td class="num">48,1%</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<!-- 01 -->
+<section class="sec" id="s01"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">01</div><span class="kk">The shape of the book</span></div>
+    <div>
+      <h2>Three bands, <em>and only one of them can pay.</em></h2>
+      <p class="lead">Margin across the catalogue is not a spread. It is a spike with two tails: sixty-nine lots on a single default setting, a thin tail sold deliberately below the floor, and five lots carrying nearly all the room there is.</p>
+    </div>
+  </div>
+
+  <div class="chart">
+    <p class="ct">Margin distribution across 79 lots</p>
+    <p class="cc">Count of lots by gross margin band. The 40% floor sits between the third and fourth row: everything above it is promotable, everything below it is sold thin on purpose or by drift.</p>
+    <div class="svgwrap"><svg viewBox="0 0 720 290" role="img" aria-label="Histogram of gross margin across 79 lots, with a spike of 64 lots in the 45 to 50 percent band">
+      <text class="svg-cat" x="0" y="27">&lt; 25%</text>
+      <rect x="120" y="17" width="7" height="13" rx="3" fill="var(--c-low)"></rect>
+      <text class="svg-lbl" x="137" y="28">1</text>
+      <text class="svg-cat" x="0" y="51">25&ndash;30%</text>
+      <rect x="120" y="41" width="27" height="13" rx="3" fill="var(--c-low)"></rect>
+      <text class="svg-lbl" x="157" y="52">4</text>
+      <text class="svg-cat" x="0" y="75">30&ndash;35%</text>
+      <rect x="120" y="65" width="13" height="13" rx="3" fill="var(--c-low)"></rect>
+      <text class="svg-lbl" x="143" y="76">2</text>
+      <text class="svg-cat" x="0" y="99">35&ndash;40%</text>
+      <rect x="120" y="89" width="7" height="13" rx="3" fill="var(--c-low)"></rect>
+      <text class="svg-lbl" x="137" y="100">1</text>
+      <text class="svg-cat" x="0" y="123">40&ndash;45%</text>
+      <rect x="120" y="113" width="13" height="13" rx="3" fill="var(--c-mid)"></rect>
+      <text class="svg-lbl" x="143" y="124">2</text>
+      <text class="svg-cat" x="0" y="147">45&ndash;50%</text>
+      <rect x="120" y="137" width="430" height="13" rx="3" fill="var(--c-mid)"></rect>
+      <text class="svg-lbl" x="560" y="148">64</text>
+      <text class="svg-cat" x="0" y="171">50&ndash;55%</text>
+      <text class="svg-lbl" x="130" y="172">0</text>
+      <text class="svg-cat" x="0" y="195">55&ndash;60%</text>
+      <text class="svg-lbl" x="130" y="196">0</text>
+      <text class="svg-cat" x="0" y="219">60&ndash;65%</text>
+      <rect x="120" y="209" width="27" height="13" rx="3" fill="var(--c-high)"></rect>
+      <text class="svg-lbl" x="157" y="220">4</text>
+      <text class="svg-cat" x="0" y="243">65+%</text>
+      <rect x="120" y="233" width="7" height="13" rx="3" fill="var(--c-high)"></rect>
+      <text class="svg-lbl" x="137" y="244">1</text>
+      <line x1="120" y1="264" x2="600" y2="264" stroke="var(--c-axis)" stroke-width="1"></line>
+      <text class="svg-sub" x="120" y="280">Lots, by gross margin band</text>
+    </svg></div>
+    <div class="legend">
+      <div class="li"><span class="sw" style="background:var(--c-low)"></span>Below the 40% floor &mdash; 8 lots</div>
+      <div class="li"><span class="sw" style="background:var(--c-mid)"></span>Standard band &mdash; 66 lots</div>
+      <div class="li"><span class="sw" style="background:var(--c-high)"></span>Headroom &mdash; 5 lots</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="role">Band 01 &middot; 5 lots</div><h4>Leaders</h4><p>Priced deliberately thin to win a market that price-shops these exact compounds. All five sit below the floor already.</p><p><strong>Never discounted.</strong> A discount here is sold at a loss.</p></div>
+    <div class="card"><div class="role">Band 02 &middot; 66 lots</div><h4>Standard</h4><p>Sixty-four of them sit in a 45&ndash;50% band &mdash; the default setting. Each carries a thin slice of room above the floor, useful only in a blend.</p><p><strong>Promote in company, not alone.</strong></p></div>
+    <div class="card"><div class="role">Band 03 &middot; 5 lots</div><h4>Headroom</h4><p>GHK-Cu 100 mg, KLOW, GHK-Cu 50 mg, NAD+ 1000 mg, Selank + Semax. Between 61,5% and 78,0%.</p><p><strong>These five fund every promotion in the house.</strong></p></div>
+  </div>
+
+  <div class="tablewrap"><table>
+    <caption>The leaders &mdash; never discounted</caption>
+    <thead><tr><th>Compound</th><th>Lot</th><th class="num">Base price</th><th class="num">Selling price</th><th class="num">Margin</th><th class="num">%</th></tr></thead>
+    <tbody>
+      <tr><td class="name">BPC-157</td><td>10 mg</td><td class="num">Rp 1.250.000</td><td class="num">Rp 1.600.000</td><td class="num">Rp 350.000</td><td class="num">21,9%</td></tr>
+      <tr><td class="name">TB-500</td><td>10 mg</td><td class="num">Rp 1.350.000</td><td class="num">Rp 1.800.000</td><td class="num">Rp 450.000</td><td class="num">25,0%</td></tr>
+      <tr><td class="name">Tesamorelin</td><td>10 mg</td><td class="num">Rp 1.700.000</td><td class="num">Rp 2.300.000</td><td class="num">Rp 600.000</td><td class="num">26,1%</td></tr>
+      <tr><td class="name">Melanotan II</td><td>10 mg</td><td class="num">Rp 1.350.000</td><td class="num">Rp 1.900.000</td><td class="num">Rp 550.000</td><td class="num">28,9%</td></tr>
+      <tr><td class="name">Retatrutide</td><td>10 mg</td><td class="num">Rp 1.900.000</td><td class="num">Rp 2.700.000</td><td class="num">Rp 800.000</td><td class="num">29,6%</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tablewrap"><table>
+    <caption>The headroom &mdash; where the discount comes from</caption>
+    <thead><tr><th>Compound</th><th>Lot</th><th class="num">Base price</th><th class="num">Selling price</th><th class="num">%</th><th class="num">Room to the floor</th></tr></thead>
+    <tbody>
+      <tr><td class="name">GHK-Cu</td><td>100 mg</td><td class="num">Rp 1.100.000</td><td class="num">Rp 5.000.000</td><td class="num">78,0%</td><td class="num">Rp 3.166.667</td></tr>
+      <tr><td class="name">KLOW (BPC+TB+GHK+KPV)</td><td>80 mg</td><td class="num">Rp 2.050.000</td><td class="num">Rp 5.800.000</td><td class="num">64,7%</td><td class="num">Rp 2.383.333</td></tr>
+      <tr><td class="name">GHK-Cu</td><td>50 mg</td><td class="num">Rp 970.000</td><td class="num">Rp 2.600.000</td><td class="num">62,7%</td><td class="num">Rp 983.333</td></tr>
+      <tr><td class="name">NAD+</td><td>1000 mg</td><td class="num">Rp 1.400.000</td><td class="num">Rp 3.700.000</td><td class="num">62,2%</td><td class="num">Rp 1.366.667</td></tr>
+      <tr><td class="name">Selank + Semax</td><td>20 mg</td><td class="num">Rp 1.500.000</td><td class="num">Rp 3.900.000</td><td class="num">61,5%</td><td class="num">Rp 1.400.000</td></tr>
+      <tr class="total-row"><td class="name">Five lots</td><td>&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">Rp 9.300.000</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="body-col">
+    <p>Across all seventy-nine lots the catalogue holds <strong>Rp 36.833.333</strong> of theoretical discount capacity before anything breaches a 40% floor. <strong>Rp 9.300.000</strong> of it &mdash; a quarter &mdash; sits in five lots. That concentration is the reason a promotion has to be designed rather than announced.</p>
+  </div>
+
+  <div class="tablewrap"><table>
+    <caption>Already below the floor &mdash; eight lots</caption>
+    <thead><tr><th>Compound</th><th>Lot</th><th class="num">%</th><th class="num">Price at 40%</th><th class="num">Selling now</th><th class="num">Short by</th><th>Read</th></tr></thead>
+    <tbody>
+      <tr><td class="name">BPC-157</td><td>10 mg</td><td class="num">21,9%</td><td class="num">Rp 2.083.333</td><td class="num">Rp 1.600.000</td><td class="num">Rp 483.333</td><td>deliberate leader</td></tr>
+      <tr><td class="name">TB-500</td><td>10 mg</td><td class="num">25,0%</td><td class="num">Rp 2.250.000</td><td class="num">Rp 1.800.000</td><td class="num">Rp 450.000</td><td>deliberate leader</td></tr>
+      <tr><td class="name">Tesamorelin</td><td>10 mg</td><td class="num">26,1%</td><td class="num">Rp 2.833.333</td><td class="num">Rp 2.300.000</td><td class="num">Rp 533.333</td><td>deliberate leader</td></tr>
+      <tr><td class="name">Melanotan II</td><td>10 mg</td><td class="num">28,9%</td><td class="num">Rp 2.250.000</td><td class="num">Rp 1.900.000</td><td class="num">Rp 350.000</td><td>deliberate leader</td></tr>
+      <tr><td class="name">Retatrutide</td><td>10 mg</td><td class="num">29,6%</td><td class="num">Rp 3.166.667</td><td class="num">Rp 2.700.000</td><td class="num">Rp 466.667</td><td>deliberate leader</td></tr>
+      <tr><td class="name">Retatrutide</td><td>20 mg</td><td class="num">33,3%</td><td class="num">Rp 4.000.000</td><td class="num">Rp 3.600.000</td><td class="num">Rp 400.000</td><td>falls through</td></tr>
+      <tr><td class="name">Tesamorelin</td><td>20 mg</td><td class="num">33,3%</td><td class="num">Rp 3.666.667</td><td class="num">Rp 3.300.000</td><td class="num">Rp 366.667</td><td>falls through</td></tr>
+      <tr><td class="name">BPC-157 + TB-500 (Wolverine)</td><td>20 mg</td><td class="num">36,2%</td><td class="num">Rp 3.083.333</td><td class="num">Rp 2.900.000</td><td class="num">Rp 183.333</td><td>falls through</td></tr>
+    </tbody>
+  </table></div>
+  <div class="body-col">
+    <p>Five of the eight are intentional. Three &mdash; Retatrutide 20 mg, Tesamorelin 20 mg and the Wolverine combination &mdash; appear to have fallen through rather than been placed, since their neighbours at other lot sizes price normally. <strong>Confirm whether those three are meant to sit there, or reprice them.</strong> Bringing all three to the floor recovers roughly Rp 950.000 per set of one.</p>
+  </div>
+</div></section>
+
+<!-- 02 -->
+<section class="sec" id="s02"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">02</div><span class="kk">The rule</span></div>
+    <div>
+      <h2>The leader brings them in. <em>The pair carries the margin.</em></h2>
+      <p class="lead">One sentence governs every promotion in the house, and it follows directly from the shape of the book.</p>
+    </div>
+  </div>
+  <div class="body-col">
+    <ol class="steps">
+      <li><strong>A leader is never discounted.</strong> BPC-157, TB-500, Tesamorelin 10 mg, Melanotan II and Retatrutide 10 mg are already below the floor. They earn their place by pulling the price-shopper in at a number no documented competitor will match. Taking anything off them converts a thin sale into a loss.</li>
+      <li><strong>A leader is never quoted alone.</strong> If a first conversation ends with one leader in the basket, the house has bought a customer and sold nothing. The quote always carries a second lot beside it.</li>
+      <li><strong>The discount is funded by the second lot, not the first.</strong> Room lives in the headroom five and in the thin slice each standard lot holds above the floor.</li>
+      <li><strong>Margin is tested on the blended order, never per line.</strong> A pair at 43,1% is a good order even though half of it sits at 21,9%. A line-by-line rule would forbid the very trade that makes the leader worth carrying.</li>
+      <li><strong>The floor is 40% blended.</strong> Below it, the order is re-cut or declined &mdash; it is not approved as an exception because the buyer pushed.</li>
+    </ol>
+    <p>This is why the discount conversation is not a pricing conversation. The number a buyer sees is set by <em>what else is in the order</em>, which is a question the house controls and the buyer does not.</p>
+  </div>
+</div></section>
+
+<!-- 03 -->
+<section class="sec" id="s03"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">03</div><span class="kk">Mechanics</span></div>
+    <div>
+      <h2>The promotion ladder. <em>Reach for these in order.</em></h2>
+      <p class="lead">Because no discount here is free, the mechanics that cost nothing come first and the ones that cost margin come last. The order is the discipline.</p>
+      <span class="tag">Rung 1 costs nothing &middot; rung 4 costs the most</span>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="role">Rung 01 &middot; zero margin cost</div><h4>Give documentation, not money</h4>
+      <p>Upgraded cold-chain handling over a stated order value. The full HPLC and mass-spectrometry trace pack rather than the summary. Priority access to the alert list on the next release. A held price for a documented buyer, extended.</p>
+      <p>Each one deepens the thing the house is actually selling. None of them touches the margin.</p></div>
+    <div class="card"><div class="role">Rung 02 &middot; funded, blended</div><h4>The pair and the set</h4>
+      <p>A leader plus a headroom lot, or two standard lots, priced as one and tested on blended margin. This is the workhorse: it lifts order value, it protects the leader, and it puts the discount where there is room for it.</p></div>
+    <div class="card"><div class="role">Rung 03 &middot; retention</div><h4>The documented-buyer price</h4>
+      <p>A held price on a repeat of the same lot, offered to buyers who have already paid once. Cheaper to serve, no acquisition cost against it, and it never appears on a public page &mdash; which is what keeps it from becoming the new list price.</p></div>
+    <div class="card"><div class="role">Rung 04 &middot; last resort</div><h4>Time-boxed lot clearance</h4>
+      <p>One named lot, one dated window, one stated reason &mdash; a release moving on. Never a standing rate, never a category, never repeated on the same compound twice in a quarter.</p></div>
+  </div>
+  <div class="body-col">
+    <p><strong>Rung 1 is not a consolation prize.</strong> For the buyer this house is built for, a full trace pack and priority on the next release answer the question he is actually asking, which is whether the material is what it says it is. A rupiah discount answers a question he did not ask.</p>
+  </div>
+</div></section>
+
+<!-- 04 -->
+<section class="sec" id="s04"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">04</div><span class="kk">Priced</span></div>
+    <div>
+      <h2>Eight orders, <em>costed to the rupiah.</em></h2>
+      <p class="lead">Every combination below clears the 40% blended floor with the discount already taken. Composition follows the catalogue pathway and the release, and carries no implication about use.</p>
+    </div>
+  </div>
+  <div class="tablewrap"><table>
+    <caption>Recommended combinations</caption>
+    <thead><tr><th>Combination</th><th class="num">List</th><th class="num">Offer price</th><th class="num">Discount</th><th class="num">Blended margin</th><th>Leader carried</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Pair &middot; Healing &amp; Repair<br><span style="color:var(--muted-2);font-size:11.5px">BPC-157 10 mg &middot; GHK-Cu 50 mg</span></td><td class="num">Rp 4.200.000</td><td class="num">Rp 3.900.000</td><td class="num">Rp 300.000</td><td class="num">43,1%</td><td>BPC-157</td></tr>
+      <tr><td class="name">Pair &middot; Healing &amp; Repair, larger lot<br><span style="color:var(--muted-2);font-size:11.5px">BPC-157 10 mg &middot; GHK-Cu 100 mg</span></td><td class="num">Rp 6.600.000</td><td class="num">Rp 6.000.000</td><td class="num">Rp 600.000</td><td class="num">60,8%</td><td>BPC-157</td></tr>
+      <tr><td class="name">Pair &middot; Structure<br><span style="color:var(--muted-2);font-size:11.5px">TB-500 10 mg &middot; KLOW (BPC+TB+GHK+KPV) 80 mg</span></td><td class="num">Rp 7.600.000</td><td class="num">Rp 7.000.000</td><td class="num">Rp 600.000</td><td class="num">51,4%</td><td>TB-500</td></tr>
+      <tr><td class="name">Pair &middot; Metabolic<br><span style="color:var(--muted-2);font-size:11.5px">Retatrutide 10 mg &middot; NAD+ 1000 mg</span></td><td class="num">Rp 6.400.000</td><td class="num">Rp 5.900.000</td><td class="num">Rp 500.000</td><td class="num">44,1%</td><td>Retatrutide</td></tr>
+      <tr><td class="name">Pair &middot; Neuro<br><span style="color:var(--muted-2);font-size:11.5px">Semax 10 mg &middot; Selank + Semax 20 mg</span></td><td class="num">Rp 6.000.000</td><td class="num">Rp 5.500.000</td><td class="num">Rp 500.000</td><td class="num">52,7%</td><td>&mdash;</td></tr>
+      <tr><td class="name">Pair &middot; Longevity<br><span style="color:var(--muted-2);font-size:11.5px">Epithalon 50 mg &middot; NAD+ 1000 mg</span></td><td class="num">Rp 6.800.000</td><td class="num">Rp 6.200.000</td><td class="num">Rp 600.000</td><td class="num">51,6%</td><td>&mdash;</td></tr>
+      <tr><td class="name">Set &middot; Healing &amp; Repair<br><span style="color:var(--muted-2);font-size:11.5px">BPC-157 10 mg &middot; TB-500 10 mg &middot; GHK-Cu 100 mg</span></td><td class="num">Rp 8.400.000</td><td class="num">Rp 7.600.000</td><td class="num">Rp 800.000</td><td class="num">51,3%</td><td>BPC-157 &middot; TB-500</td></tr>
+      <tr><td class="name">Set &middot; Documented three<br><span style="color:var(--muted-2);font-size:11.5px">GHK-Cu 50 mg &middot; KPV 10 mg &middot; KLOW (BPC+TB+GHK+KPV) 80 mg</span></td><td class="num">Rp 10.700.000</td><td class="num">Rp 9.500.000</td><td class="num">Rp 1.200.000</td><td class="num">55,6%</td><td>&mdash;</td></tr>
+    </tbody>
+  </table></div>
+  <div class="body-col">
+    <p><strong>Read the second row.</strong> BPC-157 with GHK-Cu 100 mg gives the buyer Rp 600.000 off and still returns 60,8% blended, because the second lot carries 78,0% on its own. The same leader paired with the 50 mg lot instead returns 43,1% for a Rp 300.000 discount. <em>Identical leader, identical conversation, seventeen points of difference</em> &mdash; decided entirely by which lot was put next to it.</p>
+    <p>That is the whole argument for having a rule. Without one, the pairing is chosen by whatever the buyer mentions first.</p>
+  </div>
+  <div class="ruo"><b>Composition note</b>Combinations are defined by catalogue pathway and lot release. They are not a suggested combination for use, and no material in them is offered with dosing, route, frequency or repeat guidance of any kind. Peptides are Research Use Only, in-vitro.</div>
+</div></section>
+
+<!-- 05 -->
+<section class="sec" id="s05"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">05</div><span class="kk">The working piece</span></div>
+    <div>
+      <h2>Price any order <em>before you send it.</em></h2>
+      <p class="lead">All seventy-nine lots, live. Add what the buyer asked for, set the price you want to quote, and read the blended margin against the floor before the message goes out.</p>
+    </div>
+  </div>
+
+  <div class="calc">
+    <h3>Blended margin calculator</h3>
+    <p class="hint">Add lots, then either accept the list total or type the price you intend to quote. Margin is calculated against base price, which is supplier cost plus the Rp 600.000 pen on every lot. It is gross and carries no operating cost.</p>
+    <div class="controls">
+      <div><label for="lotSelect">Add a lot</label>
+        <select id="lotSelect"></select></div>
+      <div><label for="floorInput">Floor %</label>
+        <input id="floorInput" type="number" value="40" min="0" max="90" step="1"></div>
+      <div><button class="btn" id="addLot" type="button">Add to order</button></div>
+    </div>
+    <div class="chosen" id="chosen"></div>
+    <div class="controls narrow">
+      <div><label for="priceInput">Offer price (IDR)</label>
+        <input id="priceInput" type="number" step="100000" placeholder="list total"></div>
+      <div class="btnrow"><button class="btn" id="resetPrice" type="button">Reset to list</button><button class="btn" id="clearAll" type="button">Clear order</button></div>
+    </div>
+    <div class="out">
+      <div class="o"><div class="k">List total</div><div class="v" id="outList">&mdash;</div></div>
+      <div class="o"><div class="k">Base cost</div><div class="v" id="outBase">&mdash;</div></div>
+      <div class="o"><div class="k">Discount</div><div class="v" id="outDisc">&mdash;</div></div>
+      <div class="o"><div class="k">Blended margin</div><div class="v" id="outMargin">&mdash;</div></div>
+      <div class="o"><div class="k">Price at floor</div><div class="v" id="outFloorPrice">&mdash;</div></div>
+      <div class="o"><div class="k">Room to floor</div><div class="v" id="outCapacity">&mdash;</div></div>
+      <div class="o"><div class="k">Gross profit</div><div class="v" id="outProfit">&mdash;</div></div>
+      <div class="o"><div class="k">Lots in order</div><div class="v" id="outCount">0</div></div>
+    </div>
+    <div class="verdict idle" id="outVerdict">Add a lot to begin.</div>
+  </div>
+</div></section>
+
+<!-- 06 -->
+<section class="sec" id="s06"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">06</div><span class="kk">Guardrails</span></div>
+    <div>
+      <h2>Four things that would <em>undo this.</em></h2>
+    </div>
+  </div>
+  <div class="body-col">
+    <ul class="clean">
+      <li><strong>A percentage off the whole catalogue.</strong> Sixty-nine lots sit within a few points of each other, so a flat rate lands very differently on each and pushes the eight thin lots further under. It also re-prices the book permanently &mdash; a market that has seen 15% off waits for 15% off.</li>
+      <li><strong>Discounting a leader to close a deal.</strong> BPC-157 at Rp 1.600.000 returns Rp 350.000. Take Rp 200.000 off to win the conversation and the house has worked a full order for Rp 150.000. Pair it instead, every time.</li>
+      <li><strong>A free vial with purchase.</strong> Beyond the margin cost, material given away to encourage a larger order reads as encouraging use, which is precisely the line the house does not go near. Give documentation and handling instead.</li>
+      <li><strong>Approving a below-floor order as an exception.</strong> The floor holds or it is not a floor. An order that cannot reach 40% blended is re-cut with a different second lot, which is nearly always possible.</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- 07 -->
+<section class="sec" id="s07"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="idx">07</div><span class="kk">Standing rules</span></div>
+    <div>
+      <h2>What holds, <em>whoever is quoting.</em></h2>
+    </div>
+  </div>
+  <div class="tablewrap"><table>
+    <caption>The standing rules</caption>
+    <thead><tr><th>Rule</th><th>Statement</th><th>Test</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Floor</td><td>40% blended margin on any order carrying a discount</td><td>Calculator returns pass before the quote is sent</td></tr>
+      <tr><td class="name">Leaders</td><td>The five leader lots are never discounted and never quoted alone</td><td>Every quote containing one contains a second lot</td></tr>
+      <tr><td class="name">Order of mechanics</td><td>Documentation and handling are offered before any rupiah</td><td>Rung 1 was offered and declined before rung 2 is reached</td></tr>
+      <tr><td class="name">Composition</td><td>Combinations are defined by pathway and release, never by a suggested use</td><td>No combination name implies an outcome or a regimen</td></tr>
+      <tr><td class="name">Publication</td><td>The documented-buyer price never appears on a public page</td><td>Public list price is unchanged by any retention offer</td></tr>
+      <tr><td class="name">Clearance</td><td>One lot, one dated window, one stated reason</td><td>No compound cleared twice in a quarter</td></tr>
+      <tr><td class="name">Basis</td><td>Margin is measured against base price, which includes the pen</td><td>No calculation omits the Rp 600.000</td></tr>
+    </tbody>
+  </table></div>
+  <div class="ruo"><b>Compliance gate &mdash; before any promotion is published</b>Does the name or copy state or imply a human dose, route, frequency, repeat schedule or therapeutic benefit. Does it present a combination as a regimen. Does it name a compound without the Research Use Only, in-vitro line. Does it offer material rather than documentation as the incentive. Four answers of no, and it ships.</div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="ruo"><b>Research Use Only</b>Research Use Only. Intended exclusively for in-vitro laboratory research &mdash; not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Every price, combination and mechanic in this document was written to that standard; any adaptation of them must hold it.</div>
+  <div class="fgrid">
+    <div class="col">
+      <div class="fwm"><svg class="fwm-art" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></svg></div>
+      <p style="margin-top:10px">AXIOM is a human-performance and longevity house based in Jakarta, Indonesia. We bring research-grade peptides, clinical red-light therapy, recovery, wellness and apparel under one standard &mdash; verified, documented, sourced right. Peptides are Research Use Only, in-vitro. Prices in IDR.</p>
+    </div>
+    <div class="col">
+      <div class="h">Document</div>
+      <p>Promo &amp; Bundle Architecture</p>
+      <p class="tab">Version 1.0</p>
+      <p class="tab">AXM&mdash;PROMO&mdash;001</p>
+    </div>
+    <div class="col">
+      <div class="h">Source</div>
+      <p>AXIOM Margin Structure, 79 lots</p>
+      <p>Supplier costs &mdash; R-Peptides sheet</p>
+      <p>Reads with the Sales Playbook</p>
+    </div>
+  </div>
+  <p style="margin-top:28px">Confidential &middot; Jakarta &middot; all figures in Indonesian Rupiah &middot; margin is gross and carries no operating cost. Figures derive from the AXIOM Margin Structure; the earlier 52-lot price list in this repository is superseded.</p>
+</div></footer>
+
+<script>
+const LOTS = [{"n":"AOD-9604","l":"5 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Cagrilintide","l":"10 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Retatrutide","l":"10 mg","s":1300000,"b":1900000,"p":2700000,"m":29.6,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Retatrutide","l":"20 mg","s":1800000,"b":2400000,"p":3600000,"m":33.3,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Retatrutide","l":"30 mg","s":2200000,"b":2800000,"p":4900000,"m":42.9,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Retatrutide","l":"40 mg","s":2800000,"b":3400000,"p":6400000,"m":46.9,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Retatrutide","l":"60 mg","s":3700000,"b":4300000,"p":8500000,"m":49.4,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Tirzepatide","l":"10 mg","s":550000,"b":1150000,"p":2200000,"m":47.7,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Tirzepatide","l":"30 mg","s":1200000,"b":1800000,"p":3500000,"m":48.6,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"Tirzepatide","l":"40 mg","s":1500000,"b":2100000,"p":4000000,"m":47.5,"c":"01","cn":"GLP-1s & Weight Loss"},{"n":"CJC-1295 (No DAC) + Ipamorelin","l":"10 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"02","cn":"GH Secretagogues"},{"n":"CJC-1295 (No DAC) + Ipamorelin","l":"20 mg","s":1400000,"b":2000000,"p":3800000,"m":47.4,"c":"02","cn":"GH Secretagogues"},{"n":"CJC-1295 (With DAC)","l":"5 mg","s":900000,"b":1500000,"p":2900000,"m":48.3,"c":"02","cn":"GH Secretagogues"},{"n":"HGH 191AA (Somatropin)","l":"36 IU","s":900000,"b":1500000,"p":2800000,"m":46.4,"c":"02","cn":"GH Secretagogues"},{"n":"HGH 191AA (Somatropin)","l":"40 IU","s":1100000,"b":1700000,"p":3000000,"m":43.3,"c":"02","cn":"GH Secretagogues"},{"n":"IGF-1 LR3","l":"1 mg","s":1350000,"b":1950000,"p":3800000,"m":48.7,"c":"02","cn":"GH Secretagogues"},{"n":"Ipamorelin","l":"10 mg","s":700000,"b":1300000,"p":2500000,"m":48.0,"c":"02","cn":"GH Secretagogues"},{"n":"Ipamorelin + Tesamorelin","l":"18 mg","s":1750000,"b":2350000,"p":4500000,"m":47.8,"c":"02","cn":"GH Secretagogues"},{"n":"Sermorelin","l":"10 mg","s":1000000,"b":1600000,"p":3100000,"m":48.4,"c":"02","cn":"GH Secretagogues"},{"n":"Tesamorelin","l":"10 mg","s":1100000,"b":1700000,"p":2300000,"m":26.1,"c":"02","cn":"GH Secretagogues"},{"n":"Tesamorelin","l":"20 mg","s":1600000,"b":2200000,"p":3300000,"m":33.3,"c":"02","cn":"GH Secretagogues"},{"n":"AHK-Cu","l":"100 mg","s":700000,"b":1300000,"p":2500000,"m":48.0,"c":"03","cn":"Healing & Repair"},{"n":"ARA-290","l":"10 mg","s":850000,"b":1450000,"p":2800000,"m":48.2,"c":"03","cn":"Healing & Repair"},{"n":"ARA-290","l":"50 mg","s":1550000,"b":2150000,"p":4100000,"m":47.6,"c":"03","cn":"Healing & Repair"},{"n":"BPC-157","l":"10 mg","s":650000,"b":1250000,"p":1600000,"m":21.9,"c":"03","cn":"Healing & Repair"},{"n":"BPC-157 + TB-500 (Wolverine)","l":"20 mg","s":1250000,"b":1850000,"p":2900000,"m":36.2,"c":"03","cn":"Healing & Repair"},{"n":"GHK-Cu","l":"50 mg","s":370000,"b":970000,"p":2600000,"m":62.7,"c":"03","cn":"Healing & Repair"},{"n":"GHK-Cu","l":"100 mg","s":500000,"b":1100000,"p":5000000,"m":78.0,"c":"03","cn":"Healing & Repair"},{"n":"KPV","l":"10 mg","s":600000,"b":1200000,"p":2300000,"m":47.8,"c":"03","cn":"Healing & Repair"},{"n":"KLOW (BPC+TB+GHK+KPV)","l":"80 mg","s":1450000,"b":2050000,"p":5800000,"m":64.7,"c":"03","cn":"Healing & Repair"},{"n":"LL-37","l":"5 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"03","cn":"Healing & Repair"},{"n":"Peg MGF","l":"2 mg","s":850000,"b":1450000,"p":2800000,"m":48.2,"c":"03","cn":"Healing & Repair"},{"n":"SNAP-8","l":"10 mg","s":700000,"b":1300000,"p":2500000,"m":48.0,"c":"03","cn":"Healing & Repair"},{"n":"TB-500","l":"10 mg","s":750000,"b":1350000,"p":1800000,"m":25.0,"c":"03","cn":"Healing & Repair"},{"n":"Adamax","l":"10 mg","s":850000,"b":1450000,"p":2800000,"m":48.2,"c":"04","cn":"Brain Health & Nootropics"},{"n":"Cerebrolysin","l":"80 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"04","cn":"Brain Health & Nootropics"},{"n":"Dihexa","l":"10 mg","s":1200000,"b":1800000,"p":3500000,"m":48.6,"c":"04","cn":"Brain Health & Nootropics"},{"n":"Pinealon","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"04","cn":"Brain Health & Nootropics"},{"n":"Selank","l":"10 mg","s":500000,"b":1100000,"p":2100000,"m":47.6,"c":"04","cn":"Brain Health & Nootropics"},{"n":"Semax","l":"10 mg","s":500000,"b":1100000,"p":2100000,"m":47.6,"c":"04","cn":"Brain Health & Nootropics"},{"n":"Selank + Semax","l":"20 mg","s":900000,"b":1500000,"p":3900000,"m":61.5,"c":"04","cn":"Brain Health & Nootropics"},{"n":"VIP (Vasoactive Intestinal Peptide)","l":"10 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"04","cn":"Brain Health & Nootropics"},{"n":"5-Amino-1MQ","l":"50 mg","s":900000,"b":1500000,"p":2900000,"m":48.3,"c":"05","cn":"Energy & Endurance"},{"n":"AICAR","l":"50 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"05","cn":"Energy & Endurance"},{"n":"L-Carnitine (Injectable)","l":"5000 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"05","cn":"Energy & Endurance"},{"n":"LC216 Lipo-B (Injectable)","l":"10 mL","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"05","cn":"Energy & Endurance"},{"n":"LC526 Fat Blaster (Injectable)","l":"10 mL","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"05","cn":"Energy & Endurance"},{"n":"MOTS-c","l":"10 mg","s":550000,"b":1150000,"p":2200000,"m":47.7,"c":"05","cn":"Energy & Endurance"},{"n":"MOTS-c","l":"40 mg","s":1400000,"b":2000000,"p":3800000,"m":47.4,"c":"05","cn":"Energy & Endurance"},{"n":"SLU-PP-332 (Injectable)","l":"5 mg","s":650000,"b":1250000,"p":2400000,"m":47.9,"c":"05","cn":"Energy & Endurance"},{"n":"Thymalin","l":"10 mg","s":700000,"b":1300000,"p":2500000,"m":48.0,"c":"06","cn":"Immunity"},{"n":"Thymosin Alpha-1","l":"10 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"06","cn":"Immunity"},{"n":"HCG","l":"10000 IU","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"07","cn":"Sexual Health"},{"n":"HMG","l":"75 IU","s":650000,"b":1250000,"p":2400000,"m":47.9,"c":"07","cn":"Sexual Health"},{"n":"Kisspeptin","l":"10 mg","s":900000,"b":1500000,"p":2900000,"m":48.3,"c":"07","cn":"Sexual Health"},{"n":"Melanotan II","l":"10 mg","s":750000,"b":1350000,"p":1900000,"m":28.9,"c":"07","cn":"Sexual Health"},{"n":"Oxytocin Acetate","l":"10 mg","s":800000,"b":1400000,"p":2700000,"m":48.1,"c":"07","cn":"Sexual Health"},{"n":"PT-141","l":"10 mg","s":600000,"b":1200000,"p":2300000,"m":47.8,"c":"07","cn":"Sexual Health"},{"n":"DSIP","l":"5 mg","s":400000,"b":1000000,"p":1900000,"m":47.4,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"DSIP","l":"10 mg","s":600000,"b":1200000,"p":2300000,"m":47.8,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"Epithalon","l":"50 mg","s":1000000,"b":1600000,"p":3100000,"m":48.4,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"FOXO4-DRI","l":"10 mg","s":1800000,"b":2400000,"p":4600000,"m":47.8,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"Glutathione","l":"1500 mg","s":600000,"b":1200000,"p":2300000,"m":47.8,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"Humanin","l":"10 mg","s":1500000,"b":2100000,"p":4000000,"m":47.5,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"NAD+","l":"500 mg","s":600000,"b":1200000,"p":2300000,"m":47.8,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"NAD+","l":"1000 mg","s":800000,"b":1400000,"p":3700000,"m":62.2,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"SS-31","l":"50 mg","s":1500000,"b":2100000,"p":4000000,"m":47.5,"c":"08","cn":"Longevity & Cellular Repair"},{"n":"Bronchogen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Cardiogen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Cartalax","l":"20 mg","s":1200000,"b":1800000,"p":3500000,"m":48.6,"c":"09","cn":"Peptide Bioregulators"},{"n":"Chonluten","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Cortagen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Crystagen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Livagen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Ovagen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Pancragen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Prostamax","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Testagen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"},{"n":"Vesugen","l":"20 mg","s":1100000,"b":1700000,"p":3300000,"m":48.5,"c":"09","cn":"Peptide Bioregulators"}];
+const fmt = n => 'Rp ' + Math.round(n).toLocaleString('de-DE');
+const pct = n => n.toFixed(1).replace('.', ',') + '%';
+const bandOf = m => m < 30 ? ['lead','Leader'] : (m >= 55 ? ['head','Headroom'] : ['std','Standard']);
+const sel = document.getElementById('lotSelect');
+LOTS.forEach((l, i) => {
+  const o = document.createElement('option');
+  o.value = i; o.textContent = l.n + ' ' + l.l + ' — ' + fmt(l.p) + ' · ' + pct(l.m);
+  sel.appendChild(o);
+});
+let order = [];
+let priceTouched = false;
+const $ = id => document.getElementById(id);
+
+function render() {
+  const box = $('chosen');
+  box.innerHTML = '';
+  if (!order.length) {
+    box.innerHTML = '<div class="empty">No lots in the order yet.</div>';
+  } else {
+    order.forEach((idx, pos) => {
+      const l = LOTS[idx], b = bandOf(l.m);
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = '<div class="nm">' + l.n + ' <span>' + l.l + '</span></div>' +
+        '<div class="v"><span class="band ' + b[0] + '">' + b[1] + '</span></div>' +
+        '<div class="v">' + fmt(l.p) + '</div>' +
+        '<div class="v">' + pct(l.m) + '</div>';
+      const x = document.createElement('button');
+      x.className = 'x'; x.type = 'button'; x.textContent = '×';
+      x.setAttribute('aria-label', 'Remove ' + l.n);
+      x.onclick = () => { order.splice(pos, 1); priceTouched = false; render(); };
+      row.appendChild(x);
+      box.appendChild(row);
+    });
+  }
+  compute();
+}
+
+function compute() {
+  const list = order.reduce((s, i) => s + LOTS[i].p, 0);
+  const base = order.reduce((s, i) => s + LOTS[i].b, 0);
+  const floor = Math.max(0, Math.min(90, parseFloat($('floorInput').value) || 0)) / 100;
+  if (!priceTouched) $('priceInput').value = list || '';
+  const price = parseFloat($('priceInput').value) || 0;
+  const floorPrice = floor < 1 ? base / (1 - floor) : 0;
+  const margin = price > 0 ? (price - base) / price * 100 : 0;
+  $('outCount').textContent = order.length;
+  $('outList').textContent = order.length ? fmt(list) : '—';
+  $('outBase').textContent = order.length ? fmt(base) : '—';
+  $('outDisc').textContent = order.length ? fmt(Math.max(0, list - price)) : '—';
+  $('outMargin').textContent = order.length && price > 0 ? pct(margin) : '—';
+  $('outFloorPrice').textContent = order.length ? fmt(floorPrice) : '—';
+  $('outCapacity').textContent = order.length ? fmt(list - floorPrice) : '—';
+  $('outProfit').textContent = order.length && price > 0 ? fmt(price - base) : '—';
+  const v = $('outVerdict');
+  if (!order.length) { v.className = 'verdict idle'; v.textContent = 'Add a lot to begin.'; return; }
+  if (price <= 0) { v.className = 'verdict idle'; v.textContent = 'Set an offer price.'; return; }
+  const leaders = order.map(i => LOTS[i]).filter(l => l.m < 30);
+  const solo = order.length === 1 && leaders.length === 1;
+  if (margin + 1e-9 < floor * 100) {
+    v.className = 'verdict fail';
+    v.textContent = 'Below the floor. At ' + pct(margin) + ' this order is under the ' +
+      pct(floor * 100) + ' floor by ' + fmt(floorPrice - price) +
+      '. Re-cut it with a headroom lot rather than approving an exception.';
+  } else if (solo) {
+    v.className = 'verdict fail';
+    v.textContent = 'A leader quoted alone. ' + leaders[0].n +
+      ' is priced to bring a buyer in, not to be sold on its own. Add a second lot before quoting.';
+  } else {
+    v.className = 'verdict pass';
+    v.textContent = 'Clears the floor at ' + pct(margin) + ' blended, ' +
+      fmt(price - base) + ' gross on ' + fmt(price) +
+      (leaders.length ? '. Leader carried: ' + leaders.map(l => l.n).join(', ') + '.' : '.');
+  }
+}
+
+$('addLot').onclick = () => { order.push(parseInt(sel.value, 10)); priceTouched = false; render(); };
+$('priceInput').oninput = () => { priceTouched = true; compute(); };
+$('floorInput').oninput = compute;
+$('resetPrice').onclick = () => { priceTouched = false; compute(); };
+$('clearAll').onclick = () => { order = []; priceTouched = false; render(); };
+render();
+</script>
+</body></html>
