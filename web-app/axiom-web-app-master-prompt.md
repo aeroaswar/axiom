@@ -195,8 +195,13 @@ rule, changes no existing order's margin, and is invisible to an `ops` session b
 **Console.** From any order: build an invoice with number (sequence per year, `INV-YYMM-NNNN`), issue
 date, payment terms (on receipt · net 7 · 14 · 30) driving the due date, PPN on or off with an editable
 rate, notes, and bank details. A live preview renders on the **paper palette** (§7 print inversion) —
-never on glass. Three actions: **Download PDF** (server-rendered A4, Inter and Jost embedded, tabular
-numerals), **Send PDF** (on a phone, the device share sheet with the PDF attached so WhatsApp and mail
+never on glass.
+
+**One template, two outputs.** The on-screen preview and the PDF are rendered from the **same**
+invoice template — the PDF is produced by printing that template server-side (headless Chromium via
+Playwright, `printToPDF`, A4, fonts embedded), never by a second hand-laid PDF layout. If the preview
+and the PDF can drift, the build is wrong. Three actions: **Download PDF** (A4, Inter and Jost
+embedded, tabular numerals, selectable text), **Send PDF** (on a phone, the device share sheet with the PDF attached so WhatsApp and mail
 are one tap; on desktop, a signed download link in a WhatsApp message), and **Print**. Issuing an invoice
 freezes its lines and prices; a change after issue creates a credit note, never an edit.
 
@@ -458,7 +463,7 @@ WhatsApp messages, the invoices and the emails equally.
 | 15 | Reduced motion | With `prefers-reduced-motion: reduce`, no sheet rise, no reveal, no stagger. |
 | 16 | Seed loads | 52 peptide lots with cost basis, plus devices and apparel; list prices match the chosen canonical source. |
 | 17 | Margin is exact | Changing a supplier cost changes list and tier prices by the rule and leaves every existing order's frozen margin unchanged. |
-| 18 | Invoice PDF | Downloaded PDF has the paper ground, embedded Inter/Jost, correct PPN at the chosen rate, and the RUO footer present on peptide invoices only. |
+| 18 | Invoice PDF | Downloaded PDF is rendered from the same template as the preview and matches it visually; paper ground, embedded Inter/Jost, correct PPN at the chosen rate, RUO footer on peptide invoices only. |
 | 19 | Send PDF | On a phone the share sheet opens with the PDF attached; on desktop a WhatsApp message carries a working download link. |
 
 ---

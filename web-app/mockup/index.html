@@ -429,8 +429,15 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 
 /* paper palette — the print inversion from the master prompt §7. Glass never prints. */
 .paper{--pink:#141210;--pmuted:#4b463f;--pline:rgba(20,18,16,.16);--paccent:#7C4C24;
-  background:#F2EDE5;color:var(--pink);padding:34px 34px 28px;font-size:12px;line-height:1.55;
-  box-shadow:0 24px 60px rgba(0,0,0,.45);font-feature-settings:"tnum" 1}
+  background:#F2EDE5;color:var(--pink);padding:44px 44px 36px;font-size:12px;line-height:1.55;
+  box-shadow:0 24px 60px rgba(0,0,0,.45);font-feature-settings:"tnum" 1;
+  width:100%;max-width:794px;aspect-ratio:210/297;display:flex;flex-direction:column;box-sizing:border-box}
+.paper-wrap,.pdf-stage{container-type:inline-size;container-name:paper}
+.paper .p-body{flex:1}
+.paper .p-foot{margin-top:auto}
+/* offscreen stage: the PDF is captured from a clone at exact A4 width, whatever the viewport */
+.pdf-stage{position:absolute;left:-10000px;top:0;width:794px;pointer-events:none}
+.pdf-stage .paper{box-shadow:none;max-width:none;width:794px;min-height:1123px;aspect-ratio:auto}
 .paper .wm-sv{fill:var(--pink);height:14px}
 .paper .p-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--pink)}
 .paper .p-lab{display:block;font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--pmuted);margin-bottom:4px}
@@ -449,13 +456,16 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 .paper .p-note{font-size:10.5px;color:var(--pmuted);margin-top:18px;line-height:1.6;font-weight:300}
 .paper .p-ruo{border-left:2px solid var(--paccent);padding:8px 12px;font-size:10px;color:var(--pmuted);margin-top:16px;line-height:1.55}
 .paper .p-foot{display:flex;justify-content:space-between;gap:12px;margin-top:22px;padding-top:10px;border-top:1px solid var(--pline);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--pmuted)}
+@container paper (max-width:520px){
+  .paper{padding:24px 20px 20px}
+  .paper .p-meta{grid-template-columns:1fr}
+}
 .margin-box{border:1px solid var(--accent-line);background:var(--glass-accent);padding:14px 16px;margin-top:14px}
 .margin-box .kicker{margin-bottom:8px;display:block}
 
 @container app (max-width:1023px){
   .inv-grid{grid-template-columns:1fr;gap:18px}
-  .paper{padding:22px 18px 18px}
-  .paper .p-meta{grid-template-columns:1fr}
+  .paper{aspect-ratio:auto}
 }
 
 /* ---------- reduced motion ---------- */
@@ -733,7 +743,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           <button class="chip" data-f="draft">Not yet invoiced</button>
         </div>
         <div class="rows" data-list="invoice-rows"></div>
-        <p class="note" style="margin-top:16px">An invoice freezes the order's line prices at issue time. Download produces an A4 PDF on the paper palette; Send hands the PDF to WhatsApp or mail through the device share sheet.</p>
+        <p class="note" style="margin-top:16px">An invoice freezes the order's line prices at issue time. The PDF is the preview itself, captured at A4 — what you approve on screen is what the client receives. Send hands it to WhatsApp or mail through the device share sheet.</p>
       </section>
 
       <!-- ============ SHARED · INVOICE BUILDER ============ -->
@@ -756,7 +766,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
           </div>
           <div>
             <div class="sec-h"><span class="kicker">Preview · A4 · paper palette</span><span class="sp"></span><span data-inv-status></span></div>
-            <div class="paper" data-paper></div>
+            <div class="paper-wrap"><div class="paper" data-paper></div></div>
             <div class="hrow" style="margin-top:16px">
               <button class="btn btn-sm btn-accent" data-inv-pdf><svg class="ic-sv"><use href="#i-download"></use></svg>Download PDF</button>
               <button class="btn btn-sm" data-inv-send><svg class="ic-sv"><use href="#i-share"></use></svg>Send PDF</button>
@@ -883,6 +893,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 </div><!-- /.device -->
 </div><!-- /.stage -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 (function(){
@@ -1284,8 +1295,9 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     var rows=o.lines.map(function(l){ var v=V(l[0]), u=tierPrice(v,c.pct);
       return '<tr><td class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+'<br><span style="color:var(--pmuted);font-size:10px">'+h(v.content)+(v.cat==="peptide"?' · Research Use Only':'')+'</span></td><td class="n">'+l[1]+'</td><td class="n">'+idr(u)+'</td><td class="n">'+idr(u*l[1])+'</td></tr>'; }).join("");
     if(o.ship) rows += '<tr><td class="k">Insured shipping</td><td class="n">1</td><td class="n">'+idr(o.ship)+'</td><td class="n">'+idr(o.ship)+'</td></tr>';
-    $("[data-paper]").innerHTML =
-      '<div class="p-head"><div><svg class="wm-sv" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><use href="#wm"></use></svg><div style="font-size:10px;color:var(--pmuted);margin-top:8px">Human Performance &amp; Longevity · Jakarta</div></div>'+
+    var wmPath = $("#wm").innerHTML;                      /* inline, so the capture engine can draw it */
+    $("[data-paper]").innerHTML = '<div class="p-body">'+
+      '<div class="p-head"><div><svg class="wm-sv" viewBox="0 0 582 70" role="img" aria-label="AXIOM">'+wmPath+'</svg><div style="font-size:10px;color:var(--pmuted);margin-top:8px">Human Performance &amp; Longevity · Jakarta</div></div>'+
       '<div style="text-align:right"><span class="p-lab">Invoice</span><div class="p-title">'+h(inv.no)+'</div></div></div>'+
       '<div class="p-meta"><div><span class="p-lab">Billed to</span><b>'+h(c.name)+'</b><br>'+c.type.charAt(0).toUpperCase()+c.type.slice(1)+' account · '+c.tier+'<br>Order '+o.id+'</div>'+
       '<div><span class="p-lab">Dates</span>Issued <b>'+inv.date+'</b><br>Due <b>'+inv.due+'</b>'+(inv.terms?' · net '+inv.terms:' · on receipt')+'<br>Prices in IDR</div></div>'+
@@ -1294,7 +1306,7 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
       '<div class="g"><span>Total due</span><span>'+idr(x.total)+'</span></div></div>'+
       (inv.notes?'<div class="p-note">'+h(inv.notes)+'</div>':'')+'<div class="p-note"><span class="p-lab">Payment</span>'+h(inv.bank)+'</div>'+
       (hasPep?'<div class="p-ruo"><b>Research Use Only.</b> Intended exclusively for in-vitro laboratory research — not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.</div>':'')+
-      '<div class="p-foot"><span>'+h(inv.no)+' · '+o.id+'</span><span>Certificate of Analysis per lot</span></div>';
+      '</div><div class="p-foot"><span>'+h(inv.no)+' · '+o.id+'</span><span>Certificate of Analysis per lot</span></div>';
     $("[data-inv-margin]").innerHTML = marginBox(o.lines,c.pct,"Margin on this invoice").replace('class="margin-box owner-only"','class="margin-box"').replace("</div>",'</div><p class="note" style="margin-top:8px">Shown beside the preview only. Never printed.</p>');
     $("[data-inv-status]").innerHTML = inv.issued ? '<span class="chip ok"><span class="dot"></span>Issued'+(inv.sent?' · sent':'')+'</span>' : '<span class="chip"><span class="dot"></span>Draft</span>';
   }
@@ -1333,15 +1345,29 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
     window.__lastPdfBytes = d.output("arraybuffer").byteLength;
     return d;
   }
+  function capturePdf(cb){
+    if(!window.html2canvas || !window.jspdf || !window.jspdf.jsPDF){ var d=buildPdf(); window.__pdfSource = d?"vector":null; cb(d); return; }
+    var stage=document.createElement("div"); stage.className="pdf-stage";
+    var clone=$("[data-paper]").cloneNode(true); stage.appendChild(clone); $(".app").appendChild(stage);
+    window.html2canvas(clone,{scale:2,backgroundColor:"#F2EDE5",useCORS:true,logging:false,width:794,windowWidth:794}).then(function(canvas){
+      stage.remove();
+      var d=new window.jspdf.jsPDF({unit:"mm",format:"a4",compress:true});
+      var img=canvas.toDataURL("image/jpeg",.92), hmm=canvas.height/canvas.width*210;
+      d.addImage(img,"JPEG",0,0,210,Math.max(hmm,297),undefined,"FAST");
+      if(hmm>297){ /* long invoice: continue on further pages from the same image */
+        var off=297; while(off<hmm-2){ d.addPage(); d.addImage(img,"JPEG",0,-off,210,hmm,undefined,"FAST"); off+=297; } }
+      window.__lastPdfBytes = d.output("arraybuffer").byteLength; window.__pdfSource="capture"; cb(d);
+    }).catch(function(){ stage.remove(); var d=buildPdf(); window.__pdfSource = d?"vector":null; cb(d); });
+  }
   function issueInvoice(){ var o=invoiceCtx.o, inv=invoiceCtx.inv, x=invCalc(o,inv); inv.issued=true; inv.total=x.total; o.invoice=inv; renderInvoices(); renderPaper();
     $$("[data-inv-form] input,[data-inv-form] textarea,[data-inv-form] .chip,[data-inv-form] .qty button").forEach(function(el){ el.disabled=true; }); }
   function invSummary(){ var o=invoiceCtx.o, inv=invoiceCtx.inv, x=invCalc(o,inv); return "AXIOM · Invoice "+inv.no+"\n"+C(o.client).name+"\nOrder "+o.id+"\nTotal due "+idr(x.total)+" · due "+inv.due+"\n\nPDF attached."; }
-  function downloadPdf(){ var d=buildPdf(); if(!d) return; issueInvoice();
-    try{ d.save(invPdfName()); toast(invPdfName()+" · "+Math.round(window.__lastPdfBytes/1024)+" KB"); }catch(e){ toast("Download blocked in this viewer — open the repo file or use Send"); } }
-  function sendPdf(){ var d=buildPdf(); if(!d) return; issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderPaper();
+  function downloadPdf(){ toast("Rendering "+invPdfName()); capturePdf(function(d){ if(!d) return; issueInvoice();
+    try{ d.save(invPdfName()); toast(invPdfName()+" · "+Math.round(window.__lastPdfBytes/1024)+" KB"); }catch(e){ toast("Download blocked in this viewer — open the repo file or use Send"); } }); }
+  function sendPdf(){ toast("Rendering "+invPdfName()); capturePdf(function(d){ if(!d) return; issueInvoice(); invoiceCtx.inv.sent=true; renderInvoices(); renderPaper();
     var blob=d.output("blob"), file; try{ file=new File([blob],invPdfName(),{type:"application/pdf"}); }catch(e){}
     if(file && navigator.canShare && navigator.canShare({files:[file]})){ navigator.share({files:[file],title:invPdfName(),text:invSummary()}).then(function(){ toast("Shared "+invPdfName()); }).catch(function(){ toast("Share cancelled"); }); }
-    else { openWA(invSummary(), C(invoiceCtx.o.client).wa); toast("No file share here — WhatsApp message opened; PDF attaches on a phone"); } }
+    else { openWA(invSummary(), C(invoiceCtx.o.client).wa); toast("No file share here — WhatsApp message opened; PDF attaches on a phone"); } }); }
   function printInvoice(){ var w=null; try{ w=window.open("","_blank"); }catch(e){}
     if(!w){ toast("Print window blocked in this viewer"); return; }
     var css=$("style").textContent; w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+invoiceCtx.inv.no+'</title><style>'+css+' html,body{background:#F2EDE5!important;height:auto} #root{position:static!important;overflow:visible!important;background:#F2EDE5!important} .paper{box-shadow:none;max-width:720px;margin:0 auto}</style></head><body><div id="root">'+$("svg[aria-hidden]").outerHTML+'<div class="paper">'+$("[data-paper]").innerHTML+'</div></div></body></html>');
