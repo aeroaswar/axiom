@@ -270,6 +270,19 @@ the work is done.
   and is the only figure a customer-facing surface ever shows. A quote reserves its lines from the
   moment it is sent; dispatch writes the sale movement and lifts the reservation; a cancellation
   releases it. On hand is never edited directly, only moved. It can never go negative.
+- **Delivery is a tariff, not a typed figure.** **Rp 100.000 per three units, capped at Rp 300.000.**
+  So 1–3 units cost Rp 100.000, 4–6 cost Rp 200.000, and 7 or more cost Rp 300.000 however large the
+  consignment gets — above nine units AXIOM absorbs the rest of the courier cost, deliberately, as a
+  standing promise to clinics. **Units are quantities summed, not lines**: three vials on one line is
+  three units. One `shipping(lines, zone)` function computes it, and the quote, the order, the Account
+  timeline and the invoice's handling row all read that one function — never a second implementation.
+  An order freezes its delivery charge and zone when it is placed, exactly as it freezes line prices.
+- **Zone is reserved; only Jabodetabek is priced.** Every account carries a delivery zone and every
+  order copies it. Jabodetabek has the tariff above; any other zone returns *rate pending* — not zero —
+  and **a quote with an unpriced zone cannot be sent**, because sending it would understate what the
+  account pays. Adding Jawa or luar Jawa later is a rate table entry, not a rewrite. Delivery is a
+  pass-through service and is excluded from gross margin, so the margin figure is the margin on goods;
+  say so wherever margin is shown rather than leaving the omission silent.
 - **Availability gates the quote.** A line that asks for more than is available shows the shortfall
   on the line itself and disables Send until it is resolved. A variant with nothing available is
   unselectable in the picker on the Console and shows *Tell me when it is back* on the Account.
@@ -573,7 +586,8 @@ WhatsApp messages, the invoices and the emails equally.
 | 21 | Nothing is typed | The Today list, the bell sheet and the badge are rendered from one `events()` query; advancing an order removes its row from all three without a reload. Grep the components for hardcoded notification strings: zero. |
 | 22 | Time is one function | With the clock pinned to 14.30 the pack row reads "in 30 min" and the Account timeline "Dispatch today"; pinned to 15.30 both read "dispatch tomorrow" and delivery moves a day. Same function, both surfaces. |
 | 23 | Everything is logged | Every order and invoice state change appears in its history with actor and timestamp; a cancelled order remains readable. |
-| 24 | Motion budgets | Computed durations on reveal, indicator and sheet are 700 / 220 / 220 ms; no keyframe translates more than 18 px; with reduced motion no animation runs and KPIs show final figures. |
+| 24 | Delivery is one tariff | 3, 4, 7, 9 and 40 units charge Rp 100.000 / 200.000 / 300.000 / 300.000 / 300.000; two lines of 2 charge the same as one line of 4. The quote, the order sheet, the Account timeline and the invoice's handling row show one figure for the same order. A quote to an unpriced zone reads "rate pending", adds nothing to the total, and cannot be sent. |
+| 25 | Motion budgets | Computed durations on reveal, indicator and sheet are 700 / 220 / 220 ms; no keyframe translates more than 18 px; with reduced motion no animation runs and KPIs show final figures. |
 
 ---
 
@@ -654,6 +668,17 @@ WhatsApp messages, the invoices and the emails equally.
     account first.
 15. **Acknowledgement renewal.** Twelve months for every account type, or per-order for
     individuals? The expiry drives when peptide lines disappear from an account.
+16. **What the courier actually costs per consignment.** The Rp 300.000 cap is a deliberate promise,
+    but above nine units the excess is absorbed, so on a large cold-chain order delivery becomes a real
+    negative contribution that the margin box does not show — it reports margin on goods only. Worth
+    recording the courier's own tariff so the true contribution per order can be reported later.
+17. **Is delivery part of the taxable supply or a reimbursement?** `invCalc` currently folds handling
+    into the base before PPN, so delivery is taxed. If it is treated as *penggantian* — a reimbursement
+    outside the DPP — the tax on every invoice changes. Confirm with the tax adviser before PKP
+    registration, because it is far cheaper to settle now than to reissue faktur pajak later.
+18. **Delivery rates outside Jabodetabek.** The zone is reserved and unpriced today, which blocks those
+    quotes by design. Supply the tariff for the zones AXIOM actually serves, and say whether it is a
+    flat rate per zone or weight-based — weight would need a shipping weight per variant.
 
 ---
 

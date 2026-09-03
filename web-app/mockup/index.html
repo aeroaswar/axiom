@@ -1234,33 +1234,34 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
      and is flagged from month eleven. "age" means 18+ confirmed only, so no peptide lines at all.
      cadence: agreed reorder interval in days; overridden by the median gap once an account has three orders. */
   var CLIENTS = [
-    {id:"regenera", name:"Klinik Regenera",  type:"clinic",      manager:"Aero",  ltv:84200000, orders:14, ackAt:"2026-01-02", cadence:21, wa:"628120000001"},
-    {id:"prasetyo", name:"Dr. Prasetyo Lab", type:"institution", manager:"Aero",  ltv:61800000, orders:9,  ackAt:"2025-09-20", cadence:14, wa:"628120000002"},
-    {id:"aksara",   name:"Aksara Recovery",  type:"clinic",      manager:"Nadia", ltv:28400000, orders:6,  ackAt:"2026-03-11", cadence:30, wa:"628120000003"},
-    {id:"senopati", name:"Klinik Senopati",  type:"clinic",      manager:"Nadia", ltv:12600000, orders:4,  ackAt:"2025-07-14", cadence:21, wa:"628120000004"},
-    {id:"ivan",     name:"Ivan Wijaya",      type:"individual",  manager:"—",     ltv:9300000,  orders:5,  ackAt:"2026-05-02", cadence:30, wa:"628120000005"},
-    {id:"longa",    name:"Studio Longa",     type:"clinic",      manager:"Nadia", ltv:6500000,  orders:1,  ackAt:null,         cadence:0,  wa:"628120000006"}
+    {id:"regenera", zone:"jkt", name:"Klinik Regenera",  type:"clinic",      manager:"Aero",  ltv:84200000, orders:14, ackAt:"2026-01-02", cadence:21, wa:"628120000001"},
+    {id:"prasetyo", zone:"jkt", name:"Dr. Prasetyo Lab", type:"institution", manager:"Aero",  ltv:61800000, orders:9,  ackAt:"2025-09-20", cadence:14, wa:"628120000002"},
+    {id:"aksara", zone:"other",   name:"Aksara Recovery",  type:"clinic",      manager:"Nadia", ltv:28400000, orders:6,  ackAt:"2026-03-11", cadence:30, wa:"628120000003"},
+    {id:"senopati", zone:"jkt", name:"Klinik Senopati",  type:"clinic",      manager:"Nadia", ltv:12600000, orders:4,  ackAt:"2025-07-14", cadence:21, wa:"628120000004"},
+    {id:"ivan", zone:"jkt",     name:"Ivan Wijaya",      type:"individual",  manager:"—",     ltv:9300000,  orders:5,  ackAt:"2026-05-02", cadence:30, wa:"628120000005"},
+    {id:"longa", zone:"jkt",    name:"Studio Longa",     type:"clinic",      manager:"Nadia", ltv:6500000,  orders:1,  ackAt:null,         cadence:0,  wa:"628120000006"}
   ];
   var STATES = ["pending","packing","dispatched","delivered"];      /* the forward path; "cancelled" leaves it */
   var CUTOFF = {cold:[15,0], ambient:[17,0]};                         /* dispatch cut-off, hours and minutes, local time */
   var ORDERS = [
-    {id:"AX-2601-0148", client:"regenera", date:"02 Sep 2026", state:"packing",    ship:216000, lines:[["reta10",2],["bpc10",2],["ghk100",1],["tee",2]],
+    {id:"AX-2601-0148", client:"regenera", date:"02 Sep 2026", state:"packing",    ship:300000, lines:[["reta10",2],["bpc10",2],["ghk100",1],["tee",2]],
       log:[["2026-09-02T09:14","Klinik Regenera","quote","accepted"],["2026-09-02T09:22","Aero","pending","packing"]]},
-    {id:"AX-2601-0147", client:"prasetyo", date:"01 Sep 2026", state:"dispatched", ship:250000, lines:[["bpc10",3],["tb500",2],["cjc10",1]],
+    {id:"AX-2601-0147", client:"prasetyo", date:"01 Sep 2026", state:"dispatched", ship:200000, lines:[["bpc10",3],["tb500",2],["cjc10",1]],
       log:[["2026-09-01T10:02","Aero","pending","packing"],["2026-09-01T14:31","Nadia","packing","dispatched"]]},
-    {id:"AX-2601-0146", client:"aksara",   date:"01 Sep 2026", state:"delivered",  ship:0,      lines:[["mat",1]]},
-    {id:"AX-2601-0145", client:"ivan",     date:"31 Aug 2026", state:"delivered",  ship:120000, lines:[["ghk100",2],["tee",1]]},
-    {id:"AX-2601-0144", client:"senopati", date:"30 Aug 2026", state:"pending",    ship:0,      lines:[["tee",3],["hoodie",2]],
+    {id:"AX-2601-0146", client:"aksara",   date:"01 Sep 2026", state:"delivered",  ship:250000,      lines:[["mat",1]]},
+    {id:"AX-2601-0145", client:"ivan",     date:"31 Aug 2026", state:"delivered",  ship:100000, lines:[["ghk100",2],["tee",1]]},
+    {id:"AX-2601-0144", client:"senopati", date:"30 Aug 2026", state:"pending",    ship:200000,      lines:[["tee",3],["hoodie",2]],
       log:[["2026-08-30T16:40","Nadia","draft","pending"]]},
-    {id:"AX-2601-0143", client:"longa",    date:"29 Aug 2026", state:"delivered",  ship:0,      lines:[["legs",1]]},
-    {id:"AX-2601-0139", client:"regenera", date:"18 Aug 2026", state:"delivered",  ship:216000, lines:[["reta10",1],["bpc10",2],["cjc10",1],["tee",2]]},
-    {id:"AX-2601-0128", client:"regenera", date:"02 Aug 2026", state:"delivered",  ship:150000, lines:[["ghk100",2],["mask",1]]},
-    {id:"AX-2601-0117", client:"regenera", date:"14 Jul 2026", state:"delivered",  ship:216000, lines:[["reta10",2],["bpc10",1]]},
-    {id:"AX-2601-0102", client:"prasetyo", date:"18 Aug 2026", state:"delivered",  ship:250000, lines:[["cjc10",2],["tb500",1]]},
-    {id:"AX-2601-0096", client:"prasetyo", date:"04 Aug 2026", state:"delivered",  ship:250000, lines:[["bpc10",2]]}
+    {id:"AX-2601-0143", client:"longa",    date:"29 Aug 2026", state:"delivered",  ship:100000,      lines:[["legs",1]]},
+    {id:"AX-2601-0139", client:"regenera", date:"18 Aug 2026", state:"delivered",  ship:200000, lines:[["reta10",1],["bpc10",2],["cjc10",1],["tee",2]]},
+    {id:"AX-2601-0128", client:"regenera", date:"02 Aug 2026", state:"delivered",  ship:100000, lines:[["ghk100",2],["mask",1]]},
+    {id:"AX-2601-0117", client:"regenera", date:"14 Jul 2026", state:"delivered",  ship:100000, lines:[["reta10",2],["bpc10",1]]},
+    {id:"AX-2601-0102", client:"prasetyo", date:"18 Aug 2026", state:"delivered",  ship:100000, lines:[["cjc10",2],["tb500",1]]},
+    {id:"AX-2601-0096", client:"prasetyo", date:"04 Aug 2026", state:"delivered",  ship:100000, lines:[["bpc10",2]]}
   ];
   var saved = {"reta10":true,"mat":true,"ta1":true,"duffel":true};
   var quote = [["reta10",2],["bpc10",2],["ghk100",1]];          /* the draft quote in the sheet */
+  var quoteZone = "jkt";                          /* set from the account at boot, overridable per quote */
 
   /* ------------------------------------------------------------ utils ----- */
   function idr(n){ return "Rp " + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,"."); }
@@ -1282,7 +1283,26 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
       '<div class="kv"><span class="k">Supplier cost</span><span class="v">'+idr(m.supplier)+'</span></div>'+
       (m.pen?'<div class="kv"><span class="k">Injection pens</span><span class="v">'+idr(m.pen)+'</span></div>':'')+
       '<div class="kv"><span class="k">Base price</span><span class="v">'+idr(m.cost)+'</span></div>'+
-      '<div class="kv" style="border:none"><span class="k">Margin</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(m.rp)+' '+gmChip(m.pct)+'</span></div></div>'; }
+      '<div class="kv" style="border:none"><span class="k">Margin</span><span class="v" style="display:flex;gap:10px;align-items:center">'+idr(m.rp)+' '+gmChip(m.pct)+'</span></div>'+
+      '<p class="note" style="margin-top:6px">Goods only. Delivery is a pass-through service and is excluded, so the percentage is the margin on what is sold.</p></div>'; }
+  /* ---------------------------------------------------------- delivery ----
+     Rp 100.000 per three units, capped at Rp 300.000. Units are quantities summed, not lines:
+     three vials on one line is three units. The cap is a standing promise — seven units and forty
+     both pay Rp 300.000, so above nine AXIOM absorbs the courier cost.
+     Zone is reserved but only Jabodetabek is priced. Anywhere else the rate is pending and the
+     quote cannot be sent until someone sets it. Adding Jawa or luar Jawa later is additive. */
+  var SHIP_STEP = 100000, SHIP_PER = 3, SHIP_CAP = 300000;
+  var ZONES = { jkt:{name:"Jabodetabek", priced:true}, other:{name:"Outside Jabodetabek", priced:false} };
+  function units(lines){ var n=0; lines.forEach(function(l){ n+=l[1]; }); return n; }
+  function shipping(lines, zone){
+    var u=units(lines), z=ZONES[zone]||ZONES.jkt;
+    if(!u) return {units:0, amount:0, priced:true, zone:z.name, capped:false};
+    if(!z.priced) return {units:u, amount:null, priced:false, zone:z.name, capped:false};
+    return {units:u, amount:Math.min(Math.ceil(u/SHIP_PER)*SHIP_STEP, SHIP_CAP),
+            priced:true, zone:z.name, capped:u > SHIP_PER*3};
+  }
+  function shipLabel(s){ return s.zone+" · "+s.units+(s.units===1?" unit":" units")+(s.capped?" · capped":""); }
+  /* An order freezes its delivery charge and zone when it is placed, as it freezes its line prices. */
   function orderTotal(o){ var t=o.ship; o.lines.forEach(function(l){ t+=V(l[0]).price*l[1]; }); return t; }
   function stateChip(s){
     var cls={pending:"",packing:"warn",dispatched:"info",delivered:"ok",cancelled:"err"}[s]||"";
@@ -1560,7 +1580,7 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
     $("[data-order-chip]").innerHTML = stateChip(o.state)+(o.invoice&&o.invoice.issued?' '+invChip(o.invoice):'');
     var l="";
     o.lines.forEach(function(x){ var v=V(x[0]); l+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(v.price*x[1])+'</span></div>'; });
-    l += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
+    l += '<div class="kv"><span class="k">Delivery · '+h(shipLabel(shipping(o.lines,o.zone)))+'</span><span class="v">'+idr(o.ship)+'</span></div>';
     l += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(orderTotal(o))+'</span></div>';
     $("[data-order-lines]").innerHTML=l;
     var e="";
@@ -1631,7 +1651,15 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
       .map(function(v){ var av=available(v); return '<option value="'+v.id+'"'+(av===0?' disabled':'')+'>'+h(v.name)+' · '+h(v.dose)+' · '+idr(v.price)+(av===0?' · out':av<=3?' · '+av+' left':'')+'</option>'; }).join("");
     b += '<div class="field" style="margin:16px 0 4px"><label>Add from price list</label><select data-add-sel>'+
          '<option value="">Choose a compound or product…</option>'+opts+'</select></div>';
-    b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(total)+'</span></div>';
+    /* delivery: derived from the quantities, charged to the account's zone unless it is overridden here */
+    var s=shipping(quote, quoteZone);
+    b += '<div class="hrow" style="margin:18px 0 4px"><span class="eyebrow">Deliver to</span>'+
+         Object.keys(ZONES).map(function(k){ return '<button class="chip'+(k===quoteZone?' on':'')+'" data-zone="'+k+'">'+h(ZONES[k].name)+'</button>'; }).join("")+'</div>';
+    b += '<div class="kv"><span class="k">Delivery'+(s.units?' · '+h(shipLabel(s)):'')+'</span><span class="v"'+(s.priced?'':' style="color:var(--warn)"')+'>'+
+         (s.priced?idr(s.amount):'Rate pending')+'</span></div>';
+    b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(total+(s.amount||0))+'</span></div>';
+    if(!s.priced) b += '<p class="note" style="color:var(--warn)">'+h(s.zone)+' has no delivery rate yet. Set one before sending — the quote would understate what the account pays.</p>';
+    if(s.capped) b += '<p class="note">Over nine units, so delivery is capped at '+idr(SHIP_CAP)+'. AXIOM carries the rest of the courier cost.</p>';
     if(short.length) b += '<p class="note" style="color:var(--warn)">'+short.length+(short.length>1?' lines ask':' line asks')+' for more than is available. Reduce the quantity or send once stock is back — a quote holds its stock from the moment it is sent.</p>';
     b += marginBox(quote,"Margin on this quote");
     b += '<div class="kicker" style="margin:20px 0 9px">WhatsApp preview</div><div class="wa">'+h(quoteMsg())+'</div>';
@@ -1640,7 +1668,9 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
   function quoteMsg(){
     var c=C("regenera"), total=0, m="AXIOM · Quote AX-Q-0312\n"+c.name+"\n\n";
     quote.forEach(function(l){ var v=V(l[0]), line=v.price*l[1]; total+=line; m+=v.name+(v.cat==="peptide"?" "+v.dose:"")+" × "+l[1]+" — "+idr(line)+"\n"; });
-    m += "\nTotal "+idr(total)+"\nValid to 09 Sep 2026\n\nResearch Use Only. In-vitro laboratory research only.";
+    var s=shipping(quote, quoteZone);
+    m += "\nDelivery "+s.zone+" — "+(s.priced?idr(s.amount):"rate pending");
+    m += "\nTotal "+idr(total+(s.amount||0))+"\nValid to 09 Sep 2026\n\nResearch Use Only. In-vitro laboratory research only.";
     return m;
   }
   function openQuote(){
@@ -1649,7 +1679,10 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
     refreshQuote(true);
   }
   /* re-render the quote and gate Send on availability */
-  function refreshQuote(keep){ if(!keep) $("[data-sheet-body]").innerHTML=quoteBody(); var s=$("[data-send-quote]"); if(s) s.disabled=shortBy(quote).length>0; }
+  /* Send is gated on two independent things: every line must be available, and the destination must
+     have a rate. Either one alone holds the quote back. */
+  function refreshQuote(keep){ if(!keep) $("[data-sheet-body]").innerHTML=quoteBody();
+    var btn=$("[data-send-quote]"); if(btn) btn.disabled = shortBy(quote).length>0 || !shipping(quote,quoteZone).priced; }
   function openReorder(){
     var b='<div class="kicker" style="margin-bottom:12px">Repeat a past order</div><div class="rows">';
     ORDERS.forEach(function(o){ if(o.client!=="regenera"||o.state!=="delivered") return;
@@ -1662,7 +1695,7 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
     var o=O(id), c=C(o.client), eta=dispatchEta(o), b='<div class="hrow" style="margin-bottom:14px">'+stateChip(o.state)+(o.invoice&&o.invoice.issued?invChip(o.invoice):'')+'<span class="note">'+o.date+'</span></div>';
     b += '<div class="kv"><span class="k">Account</span><span class="v">'+h(c.name)+'</span></div>';
     o.lines.forEach(function(x){ var v=V(x[0]); b+='<div class="kv"><span class="k">'+h(v.name)+(v.cat==="peptide"?' · '+h(v.dose):'')+' × '+x[1]+'</span><span class="v">'+idr(v.price*x[1])+'</span></div>'; });
-    b += '<div class="kv"><span class="k">Insured shipping</span><span class="v">'+idr(o.ship)+'</span></div>';
+    b += '<div class="kv"><span class="k">Delivery · '+h(shipLabel(shipping(o.lines,o.zone)))+'</span><span class="v">'+idr(o.ship)+'</span></div>';
     if(o.state==="pending"||o.state==="packing") b += '<div class="kv"><span class="k">'+(eta.cold?"Cold-chain dispatch":"Dispatch")+'</span><span class="v"'+(eta.late?' style="color:var(--warn)"':'')+'>'+h(eta.dispatchLabel)+'</span></div>';
     if(o.state!=="cancelled") b += '<div class="kv"><span class="k">Delivery</span><span class="v">'+h(eta.deliverLabel)+'</span></div>';
     b += '<div class="big-total"><span class="kicker">Total</span><span class="v">'+idr(orderTotal(o))+'</span></div>';
@@ -2162,7 +2195,7 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
   function markJust(id){ requestAnimationFrame(function(){ $$('[data-order="'+id+'"]').forEach(function(el){ if(el.closest("[data-spanel]")||el.closest("[data-sheet]")) return; el.classList.remove("just"); void el.offsetWidth; el.classList.add("just"); }); }); }
   function afterOrderChange(o){ renderOrders(); renderCatalogue(); renderShop(); renderClients(); renderInvoices(); renderAccountOrder(); renderEvents(); markJust(o.id); }
   $(".app").addEventListener("click", function(e){
-    var el = e.target.closest("[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-rm],[data-q],[data-stock],[data-advance],[data-cancel],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print],[data-inv-paid],[data-notify]");
+    var el = e.target.closest("[data-zone],[data-f],[data-order],[data-client],[data-variant],[data-product],[data-save],[data-rm],[data-q],[data-stock],[data-advance],[data-cancel],[data-wa],[data-wa-client],[data-draft],[data-send-quote],[data-reorder],[data-invoice],[data-signout],[data-toast],[data-go],[data-lang],[data-quote-for],[data-ack-request],[data-role-btn],[data-open-invoice],[data-inv-back],[data-line-up],[data-line-down],[data-line-rm],[data-line-add],[data-inv-reset],[data-inv-pdf],[data-inv-send],[data-inv-print],[data-inv-paid],[data-notify]");
     if(!el) return;
     var d = el.dataset;
     if(d.closeSearch!==undefined) closeSearch();
@@ -2173,6 +2206,7 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
     if(d.variant){ openVariant(d.variant); return; }
     if(d.product){ openProduct(d.product); return; }
     if(d.save){ saved[d.save]=!saved[d.save]; renderShop(); renderSaved(); renderEvents(); openProduct(d.save); toast(saved[d.save]?"Saved":"Removed from saved"); return; }
+    if(d.zone){ quoteZone=d.zone; refreshQuote(); return; }
     if(d.rm!==undefined){ quote.splice(+d.rm,1); refreshQuote(); return; }
     if(d.q!==undefined){ var l=quote[+d.q]; l[1]=Math.max(1,l[1]+ +d.d); refreshQuote(); return; }
     if(d.stock){ var v=V(d.stock); v.onHand=Math.max(0,v.onHand+ +d.d); $("[data-stock-val]").textContent=v.onHand; $("[data-reserved-val]").textContent=reserved(v); var avEl=$("[data-available-val]"); avEl.textContent=available(v); avEl.style.color=available(v)===0?"var(--err)":"";
@@ -2186,9 +2220,9 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
     if(d.waClient){ openWA(d.msg, C(d.waClient).wa); return; }
     if(d.draft!==undefined){ closeSheet(); toast("Draft saved · AX-Q-0312"); return; }
     if(d.sendQuote!==undefined){ if(el.disabled) return; openWA(quoteMsg()); closeSheet(); return; }
-    if(d.reorder){ var src=O(d.reorder); quote=src.lines.map(function(x){return [x[0],x[1]];}); openQuote(); toast("Lines copied from "+d.reorder); return; }
+    if(d.reorder){ var src=O(d.reorder); quote=src.lines.map(function(x){return [x[0],x[1]];}); quoteZone=src.zone||"jkt"; openQuote(); toast("Lines copied from "+d.reorder); return; }
     if(d.signout!==undefined){ toast("Signed out"); return; }
-    if(d.quoteFor){ quote=[["reta10",1]]; openQuote(); return; }
+    if(d.quoteFor){ quote=[["reta10",1]]; quoteZone=C(d.quoteFor).zone||"jkt"; openQuote(); return; }
     if(d.ackRequest){ closeSheet(); openWA("Hi "+C(d.ackRequest).name+", please complete the AXIOM qualified-researcher acknowledgement before we can quote peptide lines.", C(d.ackRequest).wa); return; }
     if(d.lang){ $$("[data-lang]").forEach(function(b){ b.classList.toggle("on", b.dataset.lang===d.lang); }); toast(d.lang==="id"?"Bahasa Indonesia":"English"); return; }
     if(d.toast){ toast(d.toast); return; }
@@ -2234,11 +2268,15 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
   seedInvoice(ORDERS[7], "2026-08-02", 30);
   seedInvoice(ORDERS[3], "2026-08-31", 14, function(inv){ inv.paid=true; inv.paidAt="2026-09-01"; inv.log.push(["2026-09-01T09:12","Aero","paid · matched to transfer "+inv.no]); });
   seedInvoice(ORDERS[8], "2026-07-14", 30, function(inv){ inv.paid=true; inv.paidAt="2026-08-01"; inv.log.push(["2026-08-01T11:30","Aero","paid · matched to transfer "+inv.no]); });
+  ORDERS.forEach(function(o){ if(!o.zone) o.zone = (C(o.client)||{}).zone || "jkt"; });
+  quoteZone = C("regenera").zone || "jkt";
   buildSparks();
   renderOrders(); renderCatalogue(); renderClients(); renderShop(); renderSaved(); renderAccountOrder(); renderPricing(); renderInvoices(); paintTabs(); setRole("owner");
   paintClock(); renderEvents(); setInterval(tick, 30000);
   var first=$(".screen.on"); reveal(first); countUp(first);
-  window.__axiom = {events:events, available:available, reserved:reserved, invStatus:invStatus, reorderDue:reorderDue, ackState:ackState, dispatchEta:dispatchEta, tick:tick, V:V, O:O, C:C};   /* test seam */
+  window.__axiom = {events:events, available:available, reserved:reserved, invStatus:invStatus, reorderDue:reorderDue,
+    ackState:ackState, dispatchEta:dispatchEta, shipping:shipping, units:units, orderTotal:orderTotal, invCalc:invCalc,
+    tick:tick, V:V, O:O, C:C, ORDERS:ORDERS};   /* test seam */
 })();
 </script>
 </div><!-- /#root -->
