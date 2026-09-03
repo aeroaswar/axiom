@@ -477,6 +477,33 @@ exceed it.
   - **Badge.** The bell carries a count that scales in over 220 ms, never a bare dot.
   - **Not allowed.** Confetti, pulses, shimmering skeletons in bronze, bouncing chips, urgency
     timers on customer surfaces, anything that moves without a user or the clock causing it.
+- **Hierarchy — where the eye lands.** These are the rules that keep the system from reading as
+  generated, all demonstrated in the mockup:
+  - **Only an exception earns a chip.** The default state of anything — in stock, delivered, paid,
+    current — is quiet text with a dot, no border. Packing, dispatched, cancelled, overdue, lapsed,
+    out, two left keep the bordered chip. Eighty identical green pills say nothing.
+  - **One solid bronze object per screen.** The primary action (New quote, Reorder, a sheet's main
+    button) is solid bronze; every other button is a hairline. Bronze elsewhere is a line or a point.
+  - **Money reads first.** In any table the figure is the heaviest cell (500, 13.5 px); the
+    identifier is readable, not the most muted thing on the row; figures and identifiers never wrap.
+  - **Group, do not repeat.** A run of rows that share a section gets a group row carrying the
+    section name; the column that would have repeated it is removed. The catalogue is 87 variants
+    under eleven pathway groups, not a 79-row wall with "01 Metabolic" ten times.
+  - **A compound is one card.** In the Account catalogue, lots of the same compound are a dose row
+    on a single card, the price is the anchor in the display face, and pathways are chapters with a
+    Jost heading. Retatrutide is one card with five doses, not five cards.
+  - **Sheet titles are display type.** Jost 22 px with a tracked kicker above naming the category
+    (Order · Klinik Regenera). Never a tracked-caps kicker alone.
+  - **No bordered icon squares** on rows. An icon alone, or a monogram for accounts.
+  - **Dashboard has tiers.** Three hero figures with sparklines, a quiet secondary strip, and
+    alerts in Today rather than dressed as KPIs. Owner-only figures are gated, not merely captioned.
+  - **The research-use notice is a slim persistent strip** above the tab bar on phone and at the
+    foot of the main column on desktop, present on every surface, with the full text one tap
+    away — not a box that eats the first hundred pixels of every screen.
+- **Master-detail on desktop.** At 1024 px and above a sheet docks to the right edge under the top
+  bar, 460 px wide, and the list stays in view with the selected row marked; the least important
+  column yields while the panel is open. On phone the same content is the bottom sheet. Never a
+  centred modal over a scrimmed list on a wide screen — that hides the thing being worked on.
 - **No purple, no cool blue, no pure black, no pure white.** Semantic states use `--ok --warn
   --err --info` from §11 and nothing else.
 - **Print.** Price lists, quotes and packing slips invert to the paper palette: `--bg:#F2EDE5`,
