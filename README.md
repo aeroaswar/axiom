@@ -18,7 +18,7 @@ repository, where the work had accumulated across several unmerged topic branche
   graphics on). Line items come from a dropdown of the full price list — 79 lots across
   the 9 pathways, plus devices and apparel — so picking a lot fills its price, and a
   *Custom item…* option covers anything off-catalogue. Subtotal, optional discount,
-  handling, optional PPN and the total are computed, long invoices paginate across A4
+  Jabodetabek shipping, optional PPN and the total are computed, long invoices paginate across A4
   sheets, and inputs are remembered in the browser between sessions. Prices in IDR.
   It shares the print skeleton and embedded fonts of
   `business-proposal/axiom-pricelist-print.html`, but its catalogue is generated from

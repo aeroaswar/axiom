@@ -302,8 +302,12 @@ th.p{text-align:right}
 
   <fieldset>
     <legend>Adjustments</legend>
-    <div class="grid3">
-      <div><label for="f-hand">Handling</label><input id="f-hand" data-k="handling" inputmode="numeric"></div>
+    <div class="grid2">
+      <div><label for="f-dest">Destinations</label><input id="f-dest" data-k="dest" type="number" min="1" step="1"></div>
+      <div><label for="f-ship">Shipping</label><input id="f-ship" data-k="shipOverride" inputmode="numeric"></div>
+    </div>
+    <p class="hint" id="ship-note"></p>
+    <div class="grid2">
       <div><label for="f-disc">Discount</label><input id="f-disc" data-k="discount" inputmode="numeric"></div>
       <div><label for="f-ppn">PPN %</label><input id="f-ppn" data-k="ppn" type="number" min="0" max="100" step="0.5"></div>
     </div>
@@ -497,7 +501,7 @@ const DEFAULTS = () => ({
     {sel:"7:6",  n:"NAD+",                           s:"500 mg", p:2300000, q:2},
     {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3100000, q:1}
   ],
-  handling:350000, discount:0, ppn:0,
+  dest:1, shipOverride:"", discount:0, ppn:0,
   pay:{bank:"BCA", acct:"Mohamad Jagad Marcelleno", no:"0658 139 196", swift:"", ref:""},
   notes:"Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\nGoods ship cold chain. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\nOpened lots are not returnable. Report any discrepancy in writing within 7 days of delivery."
 });
@@ -512,15 +516,37 @@ function load(){
   }catch(e){ S = DEFAULTS(); }
 }
 
+/* ── Shipping ──────────────────────────────────────────────────
+   Jabodetabek: Rp 100.000 per 3 units at a destination, capped at
+   Rp 300.000 there — so 1-3 units cost 100k, 4-6 cost 200k, and 7 or
+   more cost 300k. Every destination is charged separately, which is why
+   three units going to three addresses come to 300k rather than 100k.
+   Units are assumed spread as evenly as the destination count allows;
+   for a lopsided split, type over the amount. */
+const SHIP_STEP = 100000, SHIP_CAP = 300000;
+function shipTier(units){
+  return units <= 0 ? 0 : Math.min(Math.ceil(units / 3) * SHIP_STEP, SHIP_CAP);
+}
+function destCount(){ return Math.max(1, parseInt(S.dest, 10) || 1); }
+function autoShipping(){
+  const q = S.items.reduce((a, it) => a + (+it.q || 0), 0);
+  if(q <= 0) return 0;
+  const n = destCount(), base = Math.floor(q / n), rem = q % n;
+  return rem * shipTier(base + 1) + (n - rem) * shipTier(base);
+}
+/* A typed amount wins; clearing the field hands it back to the calculation. */
+function shipManual(){ return String(S.shipOverride == null ? "" : S.shipOverride).trim(); }
+function shipping(){ return shipManual() === "" ? autoShipping() : digits(shipManual()); }
+
 /* ── Money ─────────────────────────────────────────────────── */
 function totals(){
   const lines = S.items.map(it => (+it.q || 0) * (+it.p || 0));
   const sub   = lines.reduce((a,b) => a+b, 0);
   const disc  = digits(S.discount);
-  const hand  = digits(S.handling);
-  const net   = sub - disc + hand;
+  const ship  = shipping();
+  const net   = sub - disc + ship;
   const ppn   = Math.round(net * (parseFloat(S.ppn) || 0) / 100);
-  return {lines, sub, disc, hand, ppn, total: net + ppn};
+  return {lines, sub, disc, ship, ppn, total: net + ppn};
 }
 
 /* ── Sheet fragments ───────────────────────────────────────── */
@@ -588,6 +614,7 @@ function partiesHTML(){
       <div class="kv"><span>Terms</span><span>${esc(termsLabel())}</span></div>
       <div class="kv"><span>Currency</span><span>IDR</span></div>
       <div class="kv"><span>Handling</span><span>Cold chain</span></div>
+      <div class="kv"><span>Destinations</span><span>${destCount()}</span></div>
     </div>
   </section>`;
 }
@@ -620,7 +647,8 @@ function tailHTML(){
   const row = (l, v, neg) => `<div class="row${neg ? " neg" : ""}"><span>${l}</span><span class="v">${neg ? "− " : ""}${rp(v)}</span></div>`;
   let rows = row("Subtotal", t.sub);
   if(t.disc) rows += row("Discount", t.disc, true);
-  if(t.hand) rows += row("Cold-chain handling &amp; delivery", t.hand);
+  if(t.ship) rows += row("Shipping &middot; Jabodetabek" +
+                         (destCount() > 1 ? " &middot; " + destCount() + " destinations" : ""), t.ship);
   if(t.ppn)  rows += row("PPN " + (parseFloat(S.ppn) || 0) + "%", t.ppn);
 
   const p = S.pay;
@@ -763,7 +791,8 @@ function syncFields(){
     const k = el.dataset.k;
     let v = get(k);
     if(k === "due") v = dueDate();
-    if(k === "handling" || k === "discount") v = rp(v);
+    if(k === "shipOverride") v = shipManual() === "" ? rp(autoShipping()) : rp(digits(shipManual()));
+    else if(k === "discount") v = rp(v);
     el.value = v == null ? "" : v;
   });
 }
@@ -773,6 +802,16 @@ function render(opts){
   if(!opts || !opts.keepItems) paintItems();
   const t = totals();
   $("#st-total").textContent = rp(t.total);
+  const note = $("#ship-note");
+  if(note){
+    const q = S.items.reduce((a, it) => a + (+it.q || 0), 0);
+    note.innerHTML = shipManual() === ""
+      ? "Calculated: " + q + (q === 1 ? " unit" : " units") + " across " + destCount() +
+        (destCount() === 1 ? " destination" : " destinations") +
+        " &mdash; Rp 100.000 per 3 units at each, capped at Rp 300.000. Type over it to set your own; clear it to recalculate."
+      : "<b>Set by hand.</b> Clear the field to go back to Rp " +
+        autoShipping().toLocaleString("de-DE") + ".";
+  }
   const st = $("#st-pages");
   st.textContent = pages + (pages === 1 ? " page" : " pages");
   st.className = pages > 1 ? "over" : "";
@@ -785,10 +824,12 @@ $(".panel").addEventListener("input", e => {
   const el = e.target;
   if(el.dataset.k){
     const k = el.dataset.k;
-    set(k, (k === "handling" || k === "discount") ? digits(el.value) : el.value);
+    set(k, k === "discount" ? digits(el.value) : el.value);
     if(k === "issue" || k === "terms"){ S.due = ""; $("#f-due").value = dueDate(); }
+    /* Changing the destination count re-derives shipping unless it was typed over. */
+    if(k === "dest" && shipManual() === "") $("#f-ship").value = rp(autoShipping());
     render({keepItems:true});
-    if(k === "handling" || k === "discount") paintItems();
+    if(k === "discount") paintItems();
     return;
   }
   const row = el.closest(".item");
@@ -808,13 +849,15 @@ $(".panel").addEventListener("input", e => {
   else if(f === "p") it.p = digits(el.value);
   else it[f] = el.value;
   render({keepItems:true});
+  if(f === "q" && shipManual() === "") $("#f-ship").value = rp(autoShipping());
   row.querySelector(".iamt").textContent = rp((+it.q||0) * (+it.p||0));
 });
 
 /* Money inputs tidy up on blur, so you can type freely while editing. */
 $(".panel").addEventListener("focusout", e => {
   const el = e.target;
-  if(el.dataset.k === "handling" || el.dataset.k === "discount"){ el.value = rp(get(el.dataset.k)); }
+  if(el.dataset.k === "shipOverride"){ el.value = rp(shipping()); }
+  else if(el.dataset.k === "discount"){ el.value = rp(get(el.dataset.k)); }
   else if(el.dataset.f === "p"){ const it = S.items[+el.closest(".item").dataset.i]; el.value = rp(it.p); }
 });
 
