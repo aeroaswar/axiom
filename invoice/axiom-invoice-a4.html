@@ -111,6 +111,17 @@ header.mast{position:relative;display:flex;justify-content:space-between;align-i
 .kv{display:flex;justify-content:space-between;gap:10px;font-size:9.5px;color:var(--muted);line-height:1.75}
 .kv span:last-child{color:var(--ink);text-align:right}
 
+/* ── Ship to (only when an order goes to more than one address) ── */
+.shipto{border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px;break-inside:avoid}
+.shipto h2{font-family:var(--sans);font-size:7.5px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.shipto .d{display:flex;align-items:baseline;gap:12px;padding:3.5px 0;border-bottom:1px solid var(--line-soft)}
+.shipto .d:last-child{border-bottom:none}
+.shipto .ix{flex:0 0 22px;font-family:var(--display);color:var(--accent);font-size:10px;line-height:1.5}
+.shipto .a{flex:1 1 46%;font-size:9px;color:var(--muted);line-height:1.5}
+.shipto .a b{color:var(--ink);font-weight:400}
+.shipto .it{flex:1 1 36%;font-size:8.5px;color:var(--muted-2);line-height:1.5}
+.shipto .p{flex:0 0 18%;text-align:right;font-size:9px;color:var(--accent-bright);white-space:nowrap}
+
 /* ── Line items ───────────────────────────────────────────── */
 table{width:100%;border-collapse:collapse}
 th{text-align:left;font-size:7.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:500;padding:0 6px 7px;border-bottom:1px solid var(--line-2)}
@@ -295,6 +306,15 @@ th.p{text-align:right}
   </fieldset>
 
   <fieldset>
+    <legend>Ship to</legend>
+    <div id="dests"></div>
+    <button class="btn" type="button" id="add-dest">+ Add address</button>
+    <p class="hint">One address is the normal case &mdash; leave it blank and the Billed-to
+      address is used. Add more and each line item gets a <b>Ship to</b> picker, with shipping
+      charged per address.</p>
+  </fieldset>
+
+  <fieldset>
     <legend>Line items</legend>
     <div id="items"></div>
     <button class="btn" type="button" id="add">+ Add item</button>
@@ -302,10 +322,7 @@ th.p{text-align:right}
 
   <fieldset>
     <legend>Adjustments</legend>
-    <div class="grid2">
-      <div><label for="f-dest">Destinations</label><input id="f-dest" data-k="dest" type="number" min="1" step="1"></div>
-      <div><label for="f-ship">Shipping</label><input id="f-ship" data-k="shipOverride" inputmode="numeric"></div>
-    </div>
+    <label for="f-ship">Shipping</label><input id="f-ship" data-k="shipOverride" inputmode="numeric">
     <p class="hint" id="ship-note"></p>
     <div class="grid2">
       <div><label for="f-disc">Discount</label><input id="f-disc" data-k="discount" inputmode="numeric"></div>
@@ -495,13 +512,13 @@ const DEFAULTS = () => ({
   client:{name:"", company:"", addr:"", email:"", phone:""},
   issuer:{entity:"[Legal entity name]", addr:"[Street address]"},
   items:[
-    {sel:"0:2",  n:"Retatrutide",                    s:"10 mg",  p:2700000, q:2},
-    {sel:"0:8",  n:"Tirzepatide",                    s:"30 mg",  p:3500000, q:1},
-    {sel:"1:0",  n:"CJC-1295 (No DAC) + Ipamorelin", s:"10 mg",  p:2700000, q:1},
-    {sel:"7:6",  n:"NAD+",                           s:"500 mg", p:2300000, q:2},
-    {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3100000, q:1}
+    {sel:"0:2",  n:"Retatrutide",                    s:"10 mg",  p:2700000, q:2, d:0},
+    {sel:"0:8",  n:"Tirzepatide",                    s:"30 mg",  p:3500000, q:1, d:0},
+    {sel:"1:0",  n:"CJC-1295 (No DAC) + Ipamorelin", s:"10 mg",  p:2700000, q:1, d:0},
+    {sel:"7:6",  n:"NAD+",                           s:"500 mg", p:2300000, q:2, d:0},
+    {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3100000, q:1, d:0}
   ],
-  dest:1, shipOverride:"", discount:0, ppn:0,
+  dests:[{label:"", addr:""}], shipOverride:"", discount:0, ppn:0,
   pay:{bank:"BCA", acct:"Mohamad Jagad Marcelleno", no:"0658 139 196", swift:"", ref:""},
   notes:"Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\nGoods ship cold chain. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\nOpened lots are not returnable. Report any discrepancy in writing within 7 days of delivery."
 });
@@ -527,12 +544,23 @@ const SHIP_STEP = 100000, SHIP_CAP = 300000;
 function shipTier(units){
   return units <= 0 ? 0 : Math.min(Math.ceil(units / 3) * SHIP_STEP, SHIP_CAP);
 }
-function destCount(){ return Math.max(1, parseInt(S.dest, 10) || 1); }
+function destList(){
+  if(!Array.isArray(S.dests) || !S.dests.length) S.dests = [{label:"", addr:""}];
+  return S.dests;
+}
+function destCount(){ return destList().length; }
+function destOf(it){ return Math.min(Math.max(0, parseInt(it.d, 10) || 0), destCount() - 1); }
+/* Units actually routed to each address — no even-split guessing. */
+function destUnits(){
+  const u = destList().map(() => 0);
+  S.items.forEach(it => { u[destOf(it)] += (+it.q || 0); });
+  return u;
+}
+function destItems(i){
+  return S.items.filter(it => destOf(it) === i && (+it.q || 0) > 0);
+}
 function autoShipping(){
-  const q = S.items.reduce((a, it) => a + (+it.q || 0), 0);
-  if(q <= 0) return 0;
-  const n = destCount(), base = Math.floor(q / n), rem = q % n;
-  return rem * shipTier(base + 1) + (n - rem) * shipTier(base);
+  return destUnits().reduce((a, u) => a + shipTier(u), 0);
 }
 /* A typed amount wins; clearing the field hands it back to the calculation. */
 function shipManual(){ return String(S.shipOverride == null ? "" : S.shipOverride).trim(); }
@@ -619,6 +647,29 @@ function partiesHTML(){
   </section>`;
 }
 
+/* Printed only for a multi-address order; a single-address invoice is unchanged. */
+function shipToHTML(){
+  if(destCount() < 2) return "";
+  const units = destUnits();
+  const rows = destList().map((d, i) => {
+    const addr = String(d.addr || "").trim();
+    /* Kept to one line each: a stacked address block costs ~65px per destination and
+       tips a short invoice onto a second page. */
+    const body = [d.label && `<b>${esc(d.label)}</b>`,
+                  addr ? esc(addr).replace(/\s*\n\s*/g, ", ")
+                       : (i === 0 ? "As billed to" : '<span class="ph">[Address]</span>')]
+                 .filter(Boolean).join(" &middot; ");
+    const items = destItems(i).map(it => esc(it.n || "—") + " &times;" + (+it.q || 0)).join(" &middot; ");
+    return `<div class="d">
+      <div class="ix">${String(i+1).padStart(2,"0")}</div>
+      <div class="a">${body}</div>
+      <div class="it">${items || "&mdash;"}</div>
+      <div class="p">${rp(shipTier(units[i]))}</div>
+    </div>`;
+  }).join("");
+  return `<section class="shipto"><h2>Ship to</h2>${rows}</section>`;
+}
+
 function tableHTML(rows, offset){
   const t = totals();
   const body = rows.map((it, k) => {
@@ -693,7 +744,7 @@ function pageHTML(rows, page, pages, offset){
   return `<div class="page">
     <div class="glow g1"></div><div class="glow g2"></div>
     ${mastHTML(page, pages)}
-    ${page === 0 ? partiesHTML() : ""}
+    ${page === 0 ? partiesHTML() + shipToHTML() : ""}
     ${rows.length ? tableHTML(rows, offset) : ""}
     ${last ? tailHTML() : ""}
     <div class="spacer"></div>
@@ -758,6 +809,23 @@ function options(sel){
   return out;
 }
 
+function paintDests(){
+  $("#dests").innerHTML = destList().map((d, i) => `
+    <div class="item" data-d="${i}">
+      <div class="ihead">
+        <span class="inum">${String(i+1).padStart(2,"0")}</span>
+        <span class="iamt">${rp(shipTier(destUnits()[i]))}</span>
+        <span class="tools">
+          <button type="button" data-dact="del" ${destCount() === 1 ? "disabled" : ""} title="Remove">&times;</button>
+        </span>
+      </div>
+      <label>Label</label>
+      <input data-df="label" value="${esc(d.label)}" placeholder="${i === 0 ? "Recipient or site" : "Recipient or site"}">
+      <label>Address</label>
+      <textarea data-df="addr" placeholder="${i === 0 ? "Blank uses the Billed-to address" : "Street address&#10;City, postcode"}">${esc(d.addr)}</textarea>
+    </div>`).join("");
+}
+
 function paintItems(){
   const t = totals();
   $("#items").innerHTML = S.items.map((it, i) => {
@@ -782,6 +850,10 @@ function paintItems(){
         <div><label>Qty</label><input data-f="q" type="number" min="0" step="1" value="${esc(it.q)}"></div>
         <div><label>Unit price</label><input data-f="p" inputmode="numeric" value="${esc(rp(it.p))}"></div>
       </div>
+      ${destCount() > 1 ? `<label>Ship to</label>
+      <select data-f="d">${destList().map((d, k) =>
+        `<option value="${k}"${k === destOf(it) ? " selected" : ""}>${String(k+1).padStart(2,"0")} &middot; ${esc(d.label || d.addr.split("\n")[0] || "Address " + (k+1))}</option>`
+      ).join("")}</select>` : ""}
     </div>`;
   }).join("");
 }
@@ -799,15 +871,15 @@ function syncFields(){
 
 function render(opts){
   const pages = paint();
-  if(!opts || !opts.keepItems) paintItems();
+  if(!opts || !opts.keepItems){ paintDests(); paintItems(); }
   const t = totals();
   $("#st-total").textContent = rp(t.total);
   const note = $("#ship-note");
   if(note){
     const q = S.items.reduce((a, it) => a + (+it.q || 0), 0);
     note.innerHTML = shipManual() === ""
-      ? "Calculated: " + q + (q === 1 ? " unit" : " units") + " across " + destCount() +
-        (destCount() === 1 ? " destination" : " destinations") +
+      ? "Calculated: " + destUnits().map(u => u + "u").join(" + ") + " across " + destCount() +
+        (destCount() === 1 ? " address" : " addresses") +
         " &mdash; Rp 100.000 per 3 units at each, capped at Rp 300.000. Type over it to set your own; clear it to recalculate."
       : "<b>Set by hand.</b> Clear the field to go back to Rp " +
         autoShipping().toLocaleString("de-DE") + ".";
@@ -845,11 +917,15 @@ $(".panel").addEventListener("input", e => {
     render();                                   /* repaint: locks/unlocks the free-text fields */
     return;
   }
+  if(f === "d"){ it.d = parseInt(el.value, 10) || 0; render(); return; }
   if(f === "q") it.q = Math.max(0, parseInt(el.value, 10) || 0);
   else if(f === "p") it.p = digits(el.value);
   else it[f] = el.value;
   render({keepItems:true});
-  if(f === "q" && shipManual() === "") $("#f-ship").value = rp(autoShipping());
+  if(f === "q"){
+    if(shipManual() === "") $("#f-ship").value = rp(autoShipping());
+    if(destCount() > 1) paintDests();
+  }
   row.querySelector(".iamt").textContent = rp((+it.q||0) * (+it.p||0));
 });
 
@@ -859,6 +935,36 @@ $(".panel").addEventListener("focusout", e => {
   if(el.dataset.k === "shipOverride"){ el.value = rp(shipping()); }
   else if(el.dataset.k === "discount"){ el.value = rp(get(el.dataset.k)); }
   else if(el.dataset.f === "p"){ const it = S.items[+el.closest(".item").dataset.i]; el.value = rp(it.p); }
+});
+
+/* Address fields */
+$("#dests").addEventListener("input", e => {
+  const box = e.target.closest(".item");
+  if(!box || !e.target.dataset.df) return;
+  destList()[+box.dataset.d][e.target.dataset.df] = e.target.value;
+  render({keepItems:true});
+  box.querySelector(".iamt").textContent = rp(shipTier(destUnits()[+box.dataset.d]));
+});
+
+$("#dests").addEventListener("click", e => {
+  const b = e.target.closest("button[data-dact]");
+  if(!b || destCount() === 1) return;
+  const i = +b.closest(".item").dataset.d;
+  S.dests.splice(i, 1);
+  /* Re-point anything that shipped to the removed address, and close the gap above it. */
+  S.items.forEach(it => {
+    const d = parseInt(it.d, 10) || 0;
+    it.d = d === i ? 0 : (d > i ? d - 1 : d);
+  });
+  if(shipManual() === "") $("#f-ship").value = rp(autoShipping());
+  render();
+});
+
+$("#add-dest").addEventListener("click", () => {
+  destList().push({label:"", addr:""});
+  if(shipManual() === "") $("#f-ship").value = rp(autoShipping());
+  render();
+  $("#dests").lastElementChild.querySelector("input").focus();
 });
 
 /* Row tools */

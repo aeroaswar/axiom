@@ -19,7 +19,9 @@ repository, where the work had accumulated across several unmerged topic branche
   the 9 pathways, plus devices and apparel — so picking a lot fills its price, and a
   *Custom item…* option covers anything off-catalogue. Subtotal, optional discount,
   Jabodetabek shipping, optional PPN and the total are computed, long invoices paginate across A4
-  sheets, and inputs are remembered in the browser between sessions. Prices in IDR.
+  sheets, and inputs are remembered in the browser between sessions. Shipping is charged per
+  delivery address — add addresses under *Ship to*, route each line item to one, and the sheet
+  prints a Ship-to block showing what went where. Prices in IDR.
   It shares the print skeleton and embedded fonts of
   `business-proposal/axiom-pricelist-print.html`, but its catalogue is generated from
   `invoice/AXIOM-Price-List-v1.0.pdf`, kept alongside it as the pricing source of record.
