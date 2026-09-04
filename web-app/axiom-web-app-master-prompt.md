@@ -110,6 +110,38 @@ Four roles on `profiles.role`:
 
 ## 4 · MODULES
 
+### 4.0 The commercial flow — one line, read left to right
+Everything in §4 hangs off this line. Two decisions fix its shape: **AXIOM is paid before anything
+is dispatched**, and **every order starts as a quote**. Build the spine first; every screen is a
+view of where a record sits on it.
+
+```
+QUOTE    requested → draft → sent → accepted ─┐
+                              ├→ expired  (derived: 7 days after sent — never stored)
+                              └→ lost
+ORDER                                         └→ awaiting payment → packing → dispatched → delivered → reorder due
+                                                       ↓ cancel allowed only before dispatch; voids an unpaid invoice
+```
+
+| Step | Who | What it does | Rule it carries |
+|---|---|---|---|
+| Quote requested | Account | Picks lines from the catalogue, or repeats a past order. | Nothing priced, nothing held. |
+| Quote sent | Console | Prices from the list, one delivery charge per destination, sends the itemised IDR message on WhatsApp. | Sending reserves stock. Every line available and every destination priced, or Send stays off. Valid 7 days, then *expired*. |
+| Accepted → order | Account or Console | One action. Creates the order with lines, **prices**, addresses and delivery frozen exactly as quoted. | A later catalogue change never touches an accepted order. |
+| Invoice issued | System | Issued at acceptance, due in 7 days, bank transfer with the invoice number as reference. | The order's first state is therefore *awaiting payment*. A change after issue is a credit note. |
+| Paid | Console | The account reports the transfer; the console matches it to the bank and marks paid — who, when, reference. | **Payment is the only door into packing.** Overdue is derived from the due date. |
+| Packing | Console | Cold-chain lines close at 15.00, ambient at 17.00; packed before the cut-off leaves today. | The Today feed counts down to the cut-off. |
+| Dispatched | Console | Writes the sale to the stock ledger and lifts the reservation. | Estimated delivery is dispatch + 2 days. |
+| Delivered | Console | Closes the order; sets the account's next reorder from its cadence. | A reorder is a new quote request. |
+
+**Every record has exactly one next action and a date** — pay by, pack by, confirm delivery, reorder
+due — and the list, the sheet and the footer button all read it from the same function. The Console's
+*Orders & quotes* is one list with a five-stage strip across the top (quotes · awaiting payment · to pack ·
+in transit · delivered); the order sheet opens on a five-moment stepper (accepted · invoiced · paid ·
+dispatched · delivered) and a *Next* line; the Account's *Orders* groups the same records into *Needs you*
+(quotes to accept, invoices to pay), *In progress* and *Earlier*. A one-screen flow map (the mockup's
+*Flow map* button) is the reference a new team member reads first.
+
 ### 4.1 Core commerce ops
 **Entities:** `categories`, `products`, `product_variants`, `stock_movements`, `quotes`,
 `quote_items`, `orders`, `order_items`, `shipments`, `invoices`.
@@ -119,20 +151,25 @@ Four roles on `profiles.role`:
 product, not two products). Stock as a derived balance over `stock_movements`, never a mutable
 integer column — an append-only ledger is the only way a stockout figure stays trustworthy. A
 stockout flag and a low-stock threshold per variant. A quote builder: pick account → add line
-items → quantities → per-line and total in IDR → save → compose the WhatsApp message → mark sent.
-Quote states `draft · sent · accepted · expired · lost`. Convert an accepted quote to an order in
-one action, carrying line items and prices forward frozen. Order states `pending · packing ·
-dispatched · delivered · cancelled`. Shipment records with carrier and tracking number. Invoice
+items → quantities → per-line and total in IDR → save draft → compose the WhatsApp message → send.
+Quote states `requested · draft · sent · accepted · expired · lost` — *requested* is a quote the
+account opened itself and the Console has yet to price; *expired* is derived from `sent_at + 7 days`,
+never stored. Accepting a quote is one action: it creates the order with line items, prices,
+addresses and delivery frozen, **and issues the invoice** (due 7 days, prepay). Order states
+`awaiting_payment · packing · dispatched · delivered · cancelled`; *awaiting payment → packing*
+happens only through *mark paid*. Shipment records with carrier and tracking number. Invoice
 generation as a print-ready A4 view on the paper palette (§11), with the RUO footer on any
 peptide-adjacent invoice.
 
-**Account.** Browse the catalogue at the account's tier. Request a quote. See own quotes with
-state. See own orders with a fulfilment timeline and tracking link. Reorder any past order into a
-new quote in one tap. Download invoices.
+**Account.** Browse the catalogue at the account's tier. Request a quote from any product, or from
+any past order (a reorder is a quote request). See own quotes with state and accept a sent one.
+See own orders with a fulfilment timeline, bank details while payment is due, an *I have transferred*
+action that flags the order for matching, and a tracking link once dispatched. Download invoices.
 
 **Acceptance.** A quote built in the Console reaches WhatsApp as a correctly formatted IDR message;
 accepting it produces an order whose line prices match the quote exactly even after the catalogue
-price changes.
+price changes, with an issued invoice whose due date is acceptance + 7 days; the dispatch action is
+absent on that order until the invoice is marked paid.
 
 ### 4.2 Clients & clinic accounts
 **Entities:** `accounts`, `account_members`, `profiles`, `acknowledgements`, `price_tiers`.
@@ -265,11 +302,29 @@ requirement, not a suggestion. Nothing on a dashboard, in a notification list or
 typed by hand — every item is derived from the tables as they stand and disappears on its own when
 the work is done.
 
+- **One pipeline, one next action per record.** Quotes and orders are one list in the order they
+  need attention: open work by its deadline, then delivered, then cancelled and lost. A five-stage
+  strip across the top (quotes · awaiting payment · to pack · in transit · delivered) carries count,
+  value and the one thing that matters in that stage (to price, overdue, cut-off countdown, next
+  ETA, next reorder), and each tile filters the list. `nextAction(order)` and `nextActionQ(quote)`
+  return one label, one tone and one date; the list's *Next* column, the sheet's *Next* line and the
+  sheet's primary button all read them. A record with no next action is a bug.
+- **Acceptance issues the invoice.** `acceptQuote` creates the order (lines carry their price as a
+  frozen fourth element; addresses and delivery are copied) and issues its invoice in the same call,
+  due `PAY_DAYS` (7) later. The order is born *awaiting payment*. Issuing an invoice is otherwise an
+  explicit *Issue* action on a draft; saving, sending or printing a PDF never changes an invoice's
+  state — it only notes that it went out.
+- **Payment gates dispatch.** `advance()` refuses *awaiting payment → packing*; only `markPaidOrder`
+  makes that move, and it records who, when and the transfer reference. The account can report a
+  transfer (*I have transferred*), which raises a *transfer to match* event and is never itself a
+  payment. Cancelling an unpaid order voids its invoice; a paid one stands and is refunded outside
+  the app.
 - **Stock has three figures.** *On hand* is the ledger balance. *Reserved* is the sum of the lines
-  on every quote that is out and every order being packed. *Available* is on hand less reserved,
-  and is the only figure a customer-facing surface ever shows. A quote reserves its lines from the
-  moment it is sent; dispatch writes the sale movement and lifts the reservation; a cancellation
-  releases it. On hand is never edited directly, only moved. It can never go negative.
+  on every quote that is *sent* and every order not yet dispatched (awaiting payment or packing).
+  *Available* is on hand less reserved, and is the only figure a customer-facing surface ever
+  shows. A quote reserves its lines from the moment it is sent; acceptance passes the hold to the
+  order; dispatch writes the sale movement and lifts it; expiry, loss and cancellation release it.
+  On hand is never edited directly, only moved. It can never go negative.
 - **Delivery is charged per consignment, and a consignment is a destination.** Each destination pays
   **Rp 100.000 per three units sent there, capped at Rp 300.000** — 1–3 units cost Rp 100.000, 4–6 cost
   Rp 200.000, 7 or more cost Rp 300.000. **Units are quantities summed, not lines**: three vials on one
@@ -295,19 +350,23 @@ the work is done.
   on the line itself and disables Send until it is resolved. A variant with nothing available is
   unselectable in the picker on the Console and shows *Tell me when it is back* on the Account.
 - **Invoice lifecycle.** `draft → issued → paid`, with `overdue` derived from `due_date < today`
-  while unpaid, never stored. Only an issued invoice can be marked paid, and marking paid records
-  who, when and the matched transfer reference. The invoices screen carries a receivables strip —
-  outstanding, overdue, paid this month — and the Account shows the same state on its order.
+  while unpaid and `void` set by a cancel, never typed. Only an issued invoice can be marked paid,
+  and marking paid records who, when and the matched transfer reference — and moves the order into
+  packing. The invoices screen carries a receivables strip — outstanding, overdue, paid this month —
+  and the Account shows the same state on its order.
 - **Dispatch cut-off is a rule, not a label.** Cold-chain lines close at 15.00 local, ambient lines
   at 17.00. Before the cut-off an order packed today leaves today; after it, tomorrow. Estimated
   delivery is dispatch plus two days. The Console's "orders to pack" row shows the countdown and
   turns `--warn` inside the last hour and `--err` once closed; the Account timeline reads the same
   function. Never two implementations of this rule.
-- **One event feed.** A single `events()` query produces: orders to pack (with the cut-off state),
-  quotes awaiting reply (oldest age), overdue invoices (amount), acknowledgements lapsed or in
-  their twelfth month, reorders overdue or due within seven days, and variants with nothing
-  available. The dashboard's Today list, the bell sheet and the badge count all render from it.
-  The badge clears when the sheet is opened and returns only when the feed changes.
+- **One event feed.** A single `events()` query produces, in pipeline order: quote requests to
+  price, quotes awaiting reply (oldest age, any expiring within a day), quotes expired, transfers
+  to match, overdue invoices (amount), orders awaiting payment (amount), orders to pack (with the
+  cut-off state), acknowledgements lapsed or in their twelfth month, reorders overdue or due within
+  seven days, and variants with nothing available. The dashboard's Today list, the bell sheet and
+  the badge count all render from it. The badge clears when the sheet is opened and returns only
+  when the feed changes. The Account's feed is the same query from its side: quotes to accept,
+  requests being priced, invoices to pay, orders being packed or on their way.
 - **Acknowledgement expires.** The qualified-researcher acknowledgement is valid for twelve months
   from its recorded timestamp. Months eleven to twelve are *expiring* (a `--warn` chip, a renewal
   prompt with a pre-filled WhatsApp message); after twelve it is *lapsed* and peptide lines are
@@ -317,9 +376,10 @@ the work is done.
   plus cadence. Clients list shows it; overdue accounts get a *Nudge* action carrying a pre-filled
   message; the feed surfaces overdue first, then due-this-week, else the next one due.
 - **Every state change is logged.** `order_events(order_id, at, actor, from_state, to_state)` and
-  the same for invoices (issued, sent, paid). The order sheet shows the history in reverse. A cancel
-  is a state, not a delete, and is only allowed from pending or packing.
-- **Search is global.** The search field queries orders, accounts, variants and invoices from any
+  the same for quotes (`quote_events`) and invoices (issued, sent, transfer reported, paid, voided).
+  The order sheet shows the history in reverse, under a stepper of the five moments. A cancel is a
+  state, not a delete, and is only allowed from awaiting payment or packing.
+- **Search is global.** The search field queries quotes, orders, accounts, variants and invoices from any
   screen and shows grouped results in a glass panel under the bar; a result opens its sheet. It also
   keeps filtering the visible list while typing. `/` focuses it, `Esc` clears it.
 - **Keyboard on desktop.** `/` search · `n` new quote · `1–5` the five tab destinations · `Esc`
@@ -382,8 +442,12 @@ first and hold it to this spec exactly.
 
 | | 1 | 2 | 3 (center action) | 4 | 5 |
 |---|---|---|---|---|---|
-| **Console** | Home `house` | Orders `receipt` | **Quote** `plus` | Clients `users-three` | Account `user-circle` |
+| **Console** | Home `house` | Orders `receipt` | **Quote** `plus` | Clients `users-three` | More `squares-four` |
 | **Account** | Shop `squares-four` | Orders `receipt` | **Reorder** `arrow-clockwise` | Saved `bookmark-simple` | Account `user-circle` |
+
+The Console's fifth tab is *More* — a list of Catalogue & stock, Price list & margin (owner only),
+Invoices, Acknowledgement due, Account and the flow map — so every Console screen is reachable from
+the bar on a phone. Nothing may exist only behind a desktop rail entry.
 
 **Behaviour.**
 - The center tab is the primary create action. It **opens a glass bottom sheet, it does not
@@ -534,15 +598,20 @@ products          id · category_id · name · slug · summary · is_active
 product_variants  id · product_id · dose · content · price_idr · cost_idr(owner)
                   · supplier_cost_idr(owner) · low_stock_threshold · is_active
 stock_movements   id · variant_id · delta · reason(intake|sale|adjust|return) · ref · created_at
-quotes            id · account_id · state(draft|sent|accepted|expired|lost) · currency('IDR')
-                  · subtotal_idr · total_idr · valid_until · sent_at · created_by · created_at
-quote_items       id · quote_id · variant_id · qty · unit_price_idr · unit_cost_idr(owner) · line_total_idr
-orders            id · account_id · quote_id · state(pending|packing|dispatched|delivered|cancelled)
-                  · total_idr · placed_at
-order_items       id · order_id · variant_id · qty · unit_price_idr · unit_cost_idr(owner) · line_total_idr · lot_id(null)
+quotes            id · account_id · state(requested|draft|sent|accepted|lost) · currency('IDR')
+                  · subtotal_idr · total_idr · sent_at · accepted_at · order_id(null) · created_by · created_at
+                  -- expired is derived: state='sent' and sent_at + 7 days < now(); never stored
+quote_items       id · quote_id · variant_id · site_id · qty · unit_price_idr · unit_cost_idr(owner) · line_total_idr
+quote_events      id · quote_id · at · actor_id · from_state · to_state
+orders            id · account_id · quote_id · state(awaiting_payment|packing|dispatched|delivered|cancelled)
+                  · delivery_idr · total_idr · placed_at · paid_claim_at(null)
+order_items       id · order_id · variant_id · site_id · qty · unit_price_idr · unit_cost_idr(owner) · line_total_idr · lot_id(null)
+order_events      id · order_id · at · actor_id · from_state · to_state
 shipments         id · order_id · carrier · tracking_no · dispatched_at · delivered_at
 invoices          id · order_id · number · issued_at · due_at · terms_days · ppn_rate · subtotal_idr
                   · ppn_idr · total_idr · notes · bank_details · pdf_path · sent_at · sent_via
+                  · paid_at(null) · paid_ref · paid_by · voided_at(null)
+                  -- overdue is derived: paid_at is null and voided_at is null and due_at < now()
 invoice_items     id · invoice_id · description · qty · unit_price_idr · line_total_idr
 invoice_sequences year · last_number
 leads             id · name · persona · source · stage · owner_id · account_id(null) · created_at
@@ -556,6 +625,10 @@ coa_documents     -- Phase 2, created now, unused
   and a float will eventually render `Rp 1.599.999`.
 - `quote_items.unit_price_idr` and `order_items.unit_price_idr` are **frozen at write time**. Never
   join to the live variant price to display a historical document.
+- Accepting a quote is one transaction: insert the order and its items, insert the invoice, write
+  `quote.accepted_at` and `order_id`, log both events. Either all of it lands or none of it.
+- `orders.state` may move `awaiting_payment → packing` only in the same transaction that sets
+  `invoices.paid_at`. Enforce it in a trigger, not in the client.
 - Stock is `sum(stock_movements.delta)` per variant, materialised in a view. Never a mutable column.
 - `order_items.lot_id` is nullable and unused in this phase; it exists so Phase 2 does not require
   a table rewrite.
@@ -623,6 +696,9 @@ WhatsApp messages, the invoices and the emails equally.
 | 23 | Everything is logged | Every order and invoice state change appears in its history with actor and timestamp; a cancelled order remains readable. |
 | 24 | Delivery is per consignment | To one address, 3 / 4 / 7 / 9 / 40 units charge Rp 100.000 / 200.000 / 300.000 / 300.000 / 300.000, and two lines of 2 charge the same as one line of 4. Three products to three addresses charge Rp 300.000, not Rp 100.000. The cap is per destination: five addresses at ten units each charge Rp 1.500.000. The quote, its WhatsApp message, the order sheet, the Account timeline and the invoice's delivery row show one figure for the same order. A quote holding an unpriced destination reads "rate pending", adds nothing to the total, and cannot be sent. |
 | 25 | Motion budgets | Computed durations on reveal, indicator and sheet are 700 / 220 / 220 ms; no keyframe translates more than 18 px; with reduced motion no animation runs and KPIs show final figures. |
+| 26 | Acceptance is one action | Accepting a sent quote creates an order in *awaiting payment* with an issued invoice due +7 days; raising the catalogue price afterwards leaves the order total unchanged; the quote reads *accepted* and points at the order; the held stock count is unchanged by the hand-over. |
+| 27 | Payment gates dispatch | On an unpaid order the dispatch action is absent and a direct `advance()` (or a direct state write) is refused; *mark paid* records who, when and the reference and moves the order into packing in the same transaction; a cancel before payment voids the invoice. |
+| 28 | One list, one next action | The five-stage strip's counts equal the list's rows per stage; every row on both surfaces shows a non-empty next action; the Account's *Needs you* holds exactly the sent quotes and unpaid invoices of that account; on a phone every Console screen is reachable from the tab bar. |
 
 ---
 
@@ -688,12 +764,14 @@ WhatsApp messages, the invoices and the emails equally.
 9. **Price-list pathway names.** The price list groups peptides as "Weight Loss", "Sexual Health" and
    "Brain Health" — benefit claims the RUO standard forbids. The app must use the site's research-neutral
    category names; confirm the price list is to be reissued to match.
-10. **Payment terms by account type.** The mockup defaults to net 30 for everyone. Net 14 for
-    individuals and net 30 for clinics and institutions is the usual split; confirm, and whether an
-    overdue invoice blocks new quotes for that account.
-11. **Reservation expiry.** A quote holds its stock from the moment it is sent. Should the hold
-    lapse when the quote's validity passes (the mockup's quotes are valid seven days), or only on
-    an explicit cancel?
+10. **Payment terms.** Decided: pay before dispatch, for every account type, invoice due 7 days
+    after acceptance. Open: whether an established clinic may later be flagged for net terms (the
+    state machine allows it — dispatch would simply stop waiting on payment for that account), and
+    whether an overdue invoice blocks new quotes for that account.
+11. **Reservation expiry.** Decided: a quote holds its stock from the moment it is sent and the
+    hold lapses when the quote expires (7 days), is marked lost, or is cancelled after acceptance.
+    Open: whether an expired quote can be resent as-is (the mockup allows it, restarting the 7 days)
+    or must be re-priced.
 12. **Cut-off scope.** 15.00 is applied to cold-chain lines and 17.00 to ambient. Confirm both
     times, whether Saturday dispatch exists, and whether the cut-off is WIB for every account.
 13. **Who marks an invoice paid.** Owner only, or ops with the transfer reference attached?
@@ -718,6 +796,18 @@ WhatsApp messages, the invoices and the emails equally.
 19. **Delivery rates outside Jabodetabek.** The zone is reserved and unpriced today, which blocks those
     quotes by design. Supply the tariff for the zones AXIOM actually serves, and say whether it is a
     flat rate per zone or weight-based — weight would need a shipping weight per variant.
+20. **Quote validity.** Seven days is the mockup's figure. Confirm, and whether cold-chain lines
+    should carry a shorter validity given how stock moves.
+21. **Partial payment.** The model is all-or-nothing: an invoice is paid or it is not, and packing
+    starts on paid. Confirm no deposit or split-payment case exists; if one does, it needs a
+    `payments` table and a rule for when packing may start.
+22. **Who accepts.** The mockup lets the account accept in the app and lets the Console accept on
+    its behalf after a WhatsApp reply. Confirm both are acceptable evidence of acceptance, and whether
+    the WhatsApp reply should be attached to the order as the record.
+23. **What the client sees while awaiting payment.** The mockup shows bank details and an *I have
+    transferred* button that flags the order for matching. Confirm the bank account to show, whether
+    a proof-of-transfer upload is wanted, and whether a virtual account per invoice (automatic
+    matching) is worth its bank fee at this volume.
 
 ---
 
