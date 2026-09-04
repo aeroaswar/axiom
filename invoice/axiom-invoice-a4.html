@@ -323,8 +323,6 @@ th.p{text-align:right}
 
   <fieldset>
     <legend>Adjustments</legend>
-    <label for="f-ship">Shipping</label><input id="f-ship" data-k="shipOverride" inputmode="numeric">
-    <p class="hint" id="ship-note"></p>
     <div class="grid2">
       <div><label for="f-disc">Discount</label><input id="f-disc" data-k="discount" inputmode="numeric"></div>
       <div><label for="f-ppn">PPN %</label><input id="f-ppn" data-k="ppn" type="number" min="0" max="100" step="0.5"></div>
@@ -519,7 +517,7 @@ const DEFAULTS = () => ({
     {sel:"7:6",  n:"NAD+",                           s:"500 mg", p:2300000, q:2, d:0},
     {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3100000, q:1, d:0}
   ],
-  dests:[{label:"", addr:"", phone:""}], shipOverride:"", discount:0, ppn:0,
+  dests:[{label:"", addr:"", phone:"", ship:""}], discount:0, ppn:0,
   pay:{bank:"BCA", acct:"Mohamad Jagad Marcelleno", no:"0658 139 196", swift:"", ref:""},
   notes:"Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\nGoods ship cold chain. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\nOpened lots are not returnable. Report any discrepancy in writing within 7 days of delivery."
 });
@@ -546,7 +544,7 @@ function shipTier(units){
   return units <= 0 ? 0 : Math.min(Math.ceil(units / 3) * SHIP_STEP, SHIP_CAP);
 }
 function destList(){
-  if(!Array.isArray(S.dests) || !S.dests.length) S.dests = [{label:"", addr:"", phone:""}];
+  if(!Array.isArray(S.dests) || !S.dests.length) S.dests = [{label:"", addr:"", phone:"", ship:""}];
   return S.dests;
 }
 function destCount(){ return destList().length; }
@@ -560,12 +558,13 @@ function destUnits(){
 function destItems(i){
   return S.items.filter(it => destOf(it) === i && (+it.q || 0) > 0);
 }
-function autoShipping(){
-  return destUnits().reduce((a, u) => a + shipTier(u), 0);
-}
-/* A typed amount wins; clearing the field hands it back to the calculation. */
-function shipManual(){ return String(S.shipOverride == null ? "" : S.shipOverride).trim(); }
-function shipping(){ return shipManual() === "" ? autoShipping() : digits(shipManual()); }
+function destShipAuto(i){ return shipTier(destUnits()[i]); }
+/* A typed amount wins for that address; clearing it hands the address back to the
+   calculation. Shipping lives only here, so the total can never disagree with the
+   per-address figures printed on the sheet. */
+function destShipManual(i){ return String(destList()[i].ship == null ? "" : destList()[i].ship).trim(); }
+function destShip(i){ return destShipManual(i) === "" ? destShipAuto(i) : digits(destShipManual(i)); }
+function shipping(){ return destList().reduce((a, d, i) => a + destShip(i), 0); }
 
 /* ── Money ─────────────────────────────────────────────────── */
 function totals(){
@@ -668,7 +667,7 @@ function shipToHTML(){
       <div class="ix">${String(i+1).padStart(2,"0")}</div>
       <div class="a">${body}</div>
       <div class="it">${items || '<span class="ph">No items assigned</span>'}</div>
-      <div class="p">${rp(shipTier(units[i]))}</div>
+      <div class="p">${rp(destShip(i))}</div>
     </div>`;
   }).join("");
   return `<section class="shipto"><h2>Ship to</h2>${rows}</section>`;
@@ -818,7 +817,7 @@ function paintDests(){
     <div class="item" data-d="${i}">
       <div class="ihead">
         <span class="inum">${String(i+1).padStart(2,"0")}</span>
-        <span class="iamt">${rp(shipTier(destUnits()[i]))}</span>
+        <span class="iamt">${rp(destShip(i))}</span>
         <span class="tools">
           <button type="button" data-dact="del" ${destCount() === 1 ? "disabled" : ""} title="Remove">&times;</button>
         </span>
@@ -829,7 +828,14 @@ function paintDests(){
       <textarea data-df="addr" placeholder="${i === 0 ? "Blank uses the Billed-to address" : "Street address&#10;City, postcode"}">${esc(d.addr)}</textarea>
       <label>Phone / WhatsApp</label>
       <input data-df="phone" value="${esc(d.phone || "")}" placeholder="${i === 0 ? "Blank uses the Billed-to phone" : "+62 000 0000 0000"}">
-      ${destCount() > 1 && destUnits()[i] === 0
+      <label>Shipping</label>
+      <input data-df="ship" inputmode="numeric" value="${esc(rp(destShip(i)))}">
+      <p class="hint">${destShipManual(i) === ""
+        ? "Calculated from " + destUnits()[i] + (destUnits()[i] === 1 ? " unit" : " units") +
+          " &mdash; Rp 100.000 per 3, capped at Rp 300.000. Type over it to set your own."
+        : "<b>Set by hand.</b> Clear the field to go back to Rp " +
+          destShipAuto(i).toLocaleString("de-DE") + "."}</p>
+      ${destCount() > 1 && destUnits()[i] === 0 && destShipManual(i) === ""
         ? `<p class="hint">Nothing routed here yet &mdash; pick this address under <b>Ship to</b> on a line item, or remove it.</p>`
         : ""}
     </div>`).join("");
@@ -872,8 +878,7 @@ function syncFields(){
     const k = el.dataset.k;
     let v = get(k);
     if(k === "due") v = dueDate();
-    if(k === "shipOverride") v = shipManual() === "" ? rp(autoShipping()) : rp(digits(shipManual()));
-    else if(k === "discount") v = rp(v);
+    if(k === "discount") v = rp(v);
     el.value = v == null ? "" : v;
   });
 }
@@ -883,16 +888,6 @@ function render(opts){
   if(!opts || !opts.keepItems){ paintDests(); paintItems(); }
   const t = totals();
   $("#st-total").textContent = rp(t.total);
-  const note = $("#ship-note");
-  if(note){
-    const q = S.items.reduce((a, it) => a + (+it.q || 0), 0);
-    note.innerHTML = shipManual() === ""
-      ? "Calculated: " + destUnits().map(u => u + "u").join(" + ") + " across " + destCount() +
-        (destCount() === 1 ? " address" : " addresses") +
-        " &mdash; Rp 100.000 per 3 units at each, capped at Rp 300.000. Type over it to set your own; clear it to recalculate."
-      : "<b>Set by hand.</b> Clear the field to go back to Rp " +
-        autoShipping().toLocaleString("de-DE") + ".";
-  }
   const st = $("#st-pages");
   st.textContent = pages + (pages === 1 ? " page" : " pages");
   st.className = pages > 1 ? "over" : "";
@@ -907,8 +902,6 @@ $(".panel").addEventListener("input", e => {
     const k = el.dataset.k;
     set(k, k === "discount" ? digits(el.value) : el.value);
     if(k === "issue" || k === "terms"){ S.due = ""; $("#f-due").value = dueDate(); }
-    /* Changing the destination count re-derives shipping unless it was typed over. */
-    if(k === "dest" && shipManual() === "") $("#f-ship").value = rp(autoShipping());
     render({keepItems:true});
     if(k === "discount") paintItems();
     return;
@@ -931,18 +924,17 @@ $(".panel").addEventListener("input", e => {
   else if(f === "p") it.p = digits(el.value);
   else it[f] = el.value;
   render({keepItems:true});
-  if(f === "q"){
-    if(shipManual() === "") $("#f-ship").value = rp(autoShipping());
-    if(destCount() > 1) paintDests();
-  }
+  if(f === "q") paintDests();
   row.querySelector(".iamt").textContent = rp((+it.q||0) * (+it.p||0));
 });
 
 /* Money inputs tidy up on blur, so you can type freely while editing. */
 $(".panel").addEventListener("focusout", e => {
   const el = e.target;
-  if(el.dataset.k === "shipOverride"){ el.value = rp(shipping()); }
-  else if(el.dataset.k === "discount"){ el.value = rp(get(el.dataset.k)); }
+  if(el.dataset.k === "discount"){ el.value = rp(get(el.dataset.k)); }
+  /* Tidy a per-address shipping amount once the field is left. */
+  const box = el.closest("#dests .item");
+  if(box && el.dataset.df === "ship"){ el.value = rp(destShip(+box.dataset.d)); }
   else if(el.dataset.f === "p"){ const it = S.items[+el.closest(".item").dataset.i]; el.value = rp(it.p); }
 });
 
@@ -965,13 +957,11 @@ $("#dests").addEventListener("click", e => {
     const d = parseInt(it.d, 10) || 0;
     it.d = d === i ? 0 : (d > i ? d - 1 : d);
   });
-  if(shipManual() === "") $("#f-ship").value = rp(autoShipping());
   render();
 });
 
 $("#add-dest").addEventListener("click", () => {
-  destList().push({label:"", addr:"", phone:""});
-  if(shipManual() === "") $("#f-ship").value = rp(autoShipping());
+  destList().push({label:"", addr:"", phone:"", ship:""});
   render();
   $("#dests").lastElementChild.querySelector("input").focus();
 });
