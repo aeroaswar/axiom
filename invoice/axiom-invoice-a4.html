@@ -117,9 +117,10 @@ header.mast{position:relative;display:flex;justify-content:space-between;align-i
 .shipto .d{display:flex;align-items:baseline;gap:12px;padding:3.5px 0;border-bottom:1px solid var(--line-soft)}
 .shipto .d:last-child{border-bottom:none}
 .shipto .ix{flex:0 0 22px;font-family:var(--display);color:var(--accent);font-size:10px;line-height:1.5}
-.shipto .a{flex:1 1 46%;font-size:9px;color:var(--muted);line-height:1.5}
+.shipto .a{flex:1 1 56%;font-size:9px;color:var(--muted);line-height:1.5}
+.shipto .a .tel{white-space:nowrap}
 .shipto .a b{color:var(--ink);font-weight:400}
-.shipto .it{flex:1 1 36%;font-size:8.5px;color:var(--muted-2);line-height:1.5}
+.shipto .it{flex:1 1 26%;font-size:8.5px;color:var(--muted-2);line-height:1.5}
 .shipto .p{flex:0 0 18%;text-align:right;font-size:9px;color:var(--accent-bright);white-space:nowrap}
 
 /* ── Line items ───────────────────────────────────────────── */
@@ -518,7 +519,7 @@ const DEFAULTS = () => ({
     {sel:"7:6",  n:"NAD+",                           s:"500 mg", p:2300000, q:2, d:0},
     {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3100000, q:1, d:0}
   ],
-  dests:[{label:"", addr:""}], shipOverride:"", discount:0, ppn:0,
+  dests:[{label:"", addr:"", phone:""}], shipOverride:"", discount:0, ppn:0,
   pay:{bank:"BCA", acct:"Mohamad Jagad Marcelleno", no:"0658 139 196", swift:"", ref:""},
   notes:"Payment is due within {TERMS} days of the issue date. Quote the invoice number as the transfer reference so the payment can be matched to this lot.\n\nGoods ship cold chain. Each lot travels with its Certificate of Analysis; retain it with this invoice for your records.\n\nOpened lots are not returnable. Report any discrepancy in writing within 7 days of delivery."
 });
@@ -545,7 +546,7 @@ function shipTier(units){
   return units <= 0 ? 0 : Math.min(Math.ceil(units / 3) * SHIP_STEP, SHIP_CAP);
 }
 function destList(){
-  if(!Array.isArray(S.dests) || !S.dests.length) S.dests = [{label:"", addr:""}];
+  if(!Array.isArray(S.dests) || !S.dests.length) S.dests = [{label:"", addr:"", phone:""}];
   return S.dests;
 }
 function destCount(){ return destList().length; }
@@ -655,9 +656,12 @@ function shipToHTML(){
     const addr = String(d.addr || "").trim();
     /* Kept to one line each: a stacked address block costs ~65px per destination and
        tips a short invoice onto a second page. */
+    /* Address 1 falls back to the billing contact, so a single recipient needs no retyping. */
+    const phone = String(d.phone || "").trim() || (i === 0 ? String(S.client.phone || "").trim() : "");
     const body = [d.label && `<b>${esc(d.label)}</b>`,
                   addr ? esc(addr).replace(/\s*\n\s*/g, ", ")
-                       : (i === 0 ? "As billed to" : '<span class="ph">[Address]</span>')]
+                       : (i === 0 ? "As billed to" : '<span class="ph">[Address]</span>'),
+                  phone && `<span class="tel">${esc(phone)}</span>`]
                  .filter(Boolean).join(" &middot; ");
     const items = destItems(i).map(it => esc(it.n || "—") + " &times;" + (+it.q || 0)).join(" &middot; ");
     return `<div class="d">
@@ -823,6 +827,8 @@ function paintDests(){
       <input data-df="label" value="${esc(d.label)}" placeholder="${i === 0 ? "Recipient or site" : "Recipient or site"}">
       <label>Address</label>
       <textarea data-df="addr" placeholder="${i === 0 ? "Blank uses the Billed-to address" : "Street address&#10;City, postcode"}">${esc(d.addr)}</textarea>
+      <label>Phone / WhatsApp</label>
+      <input data-df="phone" value="${esc(d.phone || "")}" placeholder="${i === 0 ? "Blank uses the Billed-to phone" : "+62 000 0000 0000"}">
     </div>`).join("");
 }
 
@@ -961,7 +967,7 @@ $("#dests").addEventListener("click", e => {
 });
 
 $("#add-dest").addEventListener("click", () => {
-  destList().push({label:"", addr:""});
+  destList().push({label:"", addr:"", phone:""});
   if(shipManual() === "") $("#f-ship").value = rp(autoShipping());
   render();
   $("#dests").lastElementChild.querySelector("input").focus();
