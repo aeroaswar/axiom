@@ -667,7 +667,7 @@ function shipToHTML(){
     return `<div class="d">
       <div class="ix">${String(i+1).padStart(2,"0")}</div>
       <div class="a">${body}</div>
-      <div class="it">${items || "&mdash;"}</div>
+      <div class="it">${items || '<span class="ph">No items assigned</span>'}</div>
       <div class="p">${rp(shipTier(units[i]))}</div>
     </div>`;
   }).join("");
@@ -829,6 +829,9 @@ function paintDests(){
       <textarea data-df="addr" placeholder="${i === 0 ? "Blank uses the Billed-to address" : "Street address&#10;City, postcode"}">${esc(d.addr)}</textarea>
       <label>Phone / WhatsApp</label>
       <input data-df="phone" value="${esc(d.phone || "")}" placeholder="${i === 0 ? "Blank uses the Billed-to phone" : "+62 000 0000 0000"}">
+      ${destCount() > 1 && destUnits()[i] === 0
+        ? `<p class="hint">Nothing routed here yet &mdash; pick this address under <b>Ship to</b> on a line item, or remove it.</p>`
+        : ""}
     </div>`).join("");
 }
 
