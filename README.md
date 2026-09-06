@@ -12,6 +12,11 @@ repository, where the work had accumulated across several unmerged topic branche
   `claude/axiom-brand-book-0puows`.
 - `business-proposal/` — business proposal, GTM strategy, and pricing materials.
   Migrated from `claude/axiom-business-proposal-p57t1y`.
+- `dosage-guide/` — the AXIOM protocol card and the compound guide it opens. A
+  print-ready 85 × 55 mm card carrying the wordmark and a locally generated QR,
+  and a mobile-first guide covering cadence, when to apply, documented protocol,
+  a dose-and-supply calculator and studied benefits — with the evidence tier
+  stated for every dosing figure.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.
