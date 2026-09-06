@@ -10,7 +10,10 @@ const nextConfig: NextConfig = {
   images: { formats: ['image/avif', 'image/webp'] },
   async headers() {
     return [
-      { source: '/(console|account|request|dev)(.*)', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/:surface(console|account|request|sign-in)/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/:surface(console|account|request|sign-in)', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/:locale(en|id)/:surface(console|account|request|sign-in)/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
+      { source: '/:locale(en|id)/:surface(console|account|request|sign-in)', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
     ];
   },
 };

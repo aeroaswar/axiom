@@ -4,6 +4,7 @@ import { getSession, isStaff } from '@/lib/auth';
 import { AppShell } from '@/components/shell/app-shell';
 
 export const dynamic = 'force-dynamic';
+export const metadata = { robots: { index: false, follow: false } };
 
 // Server-side role routing: a non-staff session never renders a Console page.
 export default async function ConsoleLayout({ children }: { children: React.ReactNode }) {
