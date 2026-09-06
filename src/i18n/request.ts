@@ -4,7 +4,7 @@ import { routing } from './routing';
 
 // Message catalogues are split per surface (core · site · console · account) and merged here, so
 // every user-facing string still resolves through one i18n layer. Gate 17 checks both locales.
-const parts = ['core', 'site', 'console', 'account'] as const;
+const parts = ['core', 'site', 'console', 'commerce', 'account'] as const;
 
 async function load(locale: string) {
   const merged: Record<string, unknown> = {};
