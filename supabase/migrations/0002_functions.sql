@@ -626,10 +626,10 @@ begin
       from public.quotes q join public.accounts a on a.id = q.account_id where q.state = 'requested'
       union all
       select 'q-sent-'||q.id, 'quote_awaiting_reply', case when q.sent_at < now() - interval '6 days' then 'warn' else 'info' end, 'quote', q.id, q.number,
-             (select sum(line_total_idr) from public.quote_items where quote_id = q.id), q.sent_at + interval '7 days', jsonb_build_object('account', a.name)
+             (select sum(line_total_idr)::bigint from public.quote_items where quote_id = q.id), q.sent_at + interval '7 days', jsonb_build_object('account', a.name)
       from public.quotes q join public.accounts a on a.id = q.account_id where q.state = 'sent' and q.sent_at >= now() - interval '7 days'
       union all
-      select 'q-exp-'||q.id, 'quote_expired', 'warn', 'quote', q.id, q.number, null, q.sent_at + interval '7 days', jsonb_build_object('account', a.name)
+      select 'q-exp-'||q.id, 'quote_expired', 'warn', 'quote', q.id, q.number, null::bigint, q.sent_at + interval '7 days', jsonb_build_object('account', a.name)
       from public.quotes q join public.accounts a on a.id = q.account_id where q.state = 'sent' and q.sent_at < now() - interval '7 days'
       union all
       select 'o-transfer-'||o.id, 'transfer_to_match', 'warn', 'order', o.id, o.number, o.total_idr, o.paid_claim_at, jsonb_build_object('account', a.name, 'ref', o.paid_claim_ref)
@@ -643,34 +643,34 @@ begin
       from public.orders o join public.accounts a on a.id = o.account_id left join public.invoices i on i.order_id = o.id and i.kind = 'invoice' and i.voided_at is null
       where o.state = 'awaiting_payment' and o.paid_claim_at is null and (i.due_at is null or i.due_at >= now())
       union all
-      select 'o-pack-'||o.id, 'order_to_pack', 'info', 'order', o.id, o.number, o.total_idr, null, jsonb_build_object('account', a.name,
+      select 'o-pack-'||o.id, 'order_to_pack', 'info', 'order', o.id, o.number, o.total_idr, null::timestamptz, jsonb_build_object('account', a.name,
              'cold', exists (select 1 from public.order_items oi join public.product_variants v on v.id = oi.variant_id where oi.order_id = o.id and v.is_cold_chain))
       from public.orders o join public.accounts a on a.id = o.account_id where o.state = 'packing'
       union all
-      select 'ack-'||a.id, 'ack_'||axiom.ack_state_for(a.id), case when axiom.ack_state_for(a.id) = 'lapsed' then 'err' else 'warn' end, 'account', a.id, a.name, null, axiom.ack_expires_for(a.id), jsonb_build_object('account', a.name)
+      select 'ack-'||a.id, 'ack_'||axiom.ack_state_for(a.id), case when axiom.ack_state_for(a.id) = 'lapsed' then 'err' else 'warn' end, 'account', a.id, a.name, null::bigint, axiom.ack_expires_for(a.id), jsonb_build_object('account', a.name)
       from public.accounts a where axiom.ack_state_for(a.id) in ('expiring','lapsed')
       union all
-      select 'reorder-'||a.id, case when due < now() then 'reorder_overdue' else 'reorder_due' end, case when due < now() then 'warn' else 'info' end, 'account', a.id, a.name, null, due, jsonb_build_object('account', a.name)
+      select 'reorder-'||a.id, case when due < now() then 'reorder_overdue' else 'reorder_due' end, case when due < now() then 'warn' else 'info' end, 'account', a.id, a.name, null::bigint, due, jsonb_build_object('account', a.name)
       from (select a.id, a.name, (select max(placed_at) from public.orders o where o.account_id = a.id and o.state <> 'cancelled') + make_interval(days => axiom.cadence_days(a.id)) as due
             from public.accounts a) a
       where due is not null and due < now() + interval '7 days'
       union all
-      select 'stock-'||s.variant_id, 'stockout', 'warn', 'variant', s.variant_id, p.name || ' ' || v.dose, null, null, jsonb_build_object('sku', v.sku)
+      select 'stock-'||s.variant_id, 'stockout', 'warn', 'variant', s.variant_id, p.name || ' ' || v.dose, null::bigint, null::timestamptz, jsonb_build_object('sku', v.sku)
       from axiom.stock_all s join public.product_variants v on v.id = s.variant_id join public.products p on p.id = v.product_id
       where v.is_active and s.on_hand - s.reserved <= 0;
   else
     return query
-      select 'q-accept-'||q.id, 'quote_to_accept', 'warn', 'quote', q.id, q.number, (select sum(line_total_idr) from public.quote_items where quote_id = q.id), q.sent_at + interval '7 days', '{}'::jsonb
+      select 'q-accept-'||q.id, 'quote_to_accept', 'warn', 'quote', q.id, q.number, (select sum(line_total_idr)::bigint from public.quote_items where quote_id = q.id), q.sent_at + interval '7 days', '{}'::jsonb
       from public.quotes q where axiom.member_of(q.account_id) and q.state = 'sent' and q.sent_at >= now() - interval '7 days'
       union all
-      select 'q-pricing-'||q.id, 'request_being_priced', 'info', 'quote', q.id, q.number, null, q.created_at, '{}'::jsonb
+      select 'q-pricing-'||q.id, 'request_being_priced', 'info', 'quote', q.id, q.number, null::bigint, q.created_at, '{}'::jsonb
       from public.quotes q where axiom.member_of(q.account_id) and q.state in ('requested','draft')
       union all
       select 'i-pay-'||i.id, case when i.due_at < now() then 'invoice_overdue' else 'invoice_to_pay' end, case when i.due_at < now() then 'err' else 'warn' end, 'order', o.id, i.number, i.total_idr, i.due_at, '{}'::jsonb
       from public.invoices i join public.orders o on o.id = i.order_id
       where axiom.member_of(o.account_id) and i.kind = 'invoice' and i.paid_at is null and i.voided_at is null and o.state = 'awaiting_payment'
       union all
-      select 'o-progress-'||o.id, 'order_'||o.state, 'info', 'order', o.id, o.number, o.total_idr, null, '{}'::jsonb
+      select 'o-progress-'||o.id, 'order_'||o.state, 'info', 'order', o.id, o.number, o.total_idr, null::timestamptz, '{}'::jsonb
       from public.orders o where axiom.member_of(o.account_id) and o.state in ('packing','dispatched');
   end if;
 end $$;
