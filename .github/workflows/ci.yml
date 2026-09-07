@@ -28,8 +28,9 @@ jobs:
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
       - uses: actions/checkout@v4
+      # No `version:` — the action reads `packageManager` from package.json, and naming a version
+      # in both places is a hard error in action-setup v4.
       - uses: pnpm/action-setup@v4
-        with: { version: 10 }
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
