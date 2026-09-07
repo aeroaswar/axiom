@@ -108,7 +108,9 @@
       "wa_message": "Hi AXIOM, a question about order {number}.",
       "reorder": "Reorder these lines",
       "not_found": "That order is not on this account.",
-      "peptide_lines_hidden": "Peptide lines are not shown while the account's qualified-researcher acknowledgement is not current."
+      "peptide_lines_hidden": "Peptide lines are not shown while the account's qualified-researcher acknowledgement is not current.",
+      "dispatched_label": "Dispatched",
+      "paid_label": "Paid, confirmed by AXIOM"
     },
     "quote": {
       "title": "Quote {number}",
@@ -132,7 +134,8 @@
       "open_order": "Open order {number}",
       "reorder": "Request these lines again",
       "not_found": "That quote is not on this account.",
-      "sent_on": "Sent {when}"
+      "sent_on": "Sent {when}",
+      "decide": "Acceptance"
     },
     "shop": {
       "title": "Catalogue",
@@ -176,7 +179,11 @@
       "cold_chain": "Cold chain · 2–8 °C in transit",
       "open_guide": "Read the compound guide",
       "not_found": "That product is not in the catalogue.",
-      "qty": "Quantity"
+      "qty": "Quantity",
+      "notify_wa": "Hi AXIOM, could you tell me when {name} is back in stock?",
+      "gate_card": "Price after acknowledgement",
+      "add_short": "Add",
+      "added_short": "Added"
     },
     "saved": {
       "title": "Saved",
@@ -271,7 +278,8 @@
       "statement_researcher": "I confirm that I am a qualified researcher, or that I buy on behalf of a laboratory, clinic or institution, and that peptides supplied by AXIOM are for in-vitro laboratory research only — not for human or veterinary consumption, diagnosis or treatment. I understand that no dosing or usage guidance is provided and that compliance in my jurisdiction is my responsibility.",
       "submit": "Record the acknowledgement",
       "recorded": "Recorded. Peptide prices are open on this account.",
-      "renew_wa": "Ask on WhatsApp"
+      "renew_wa": "Ask on WhatsApp",
+      "valid_until": "Valid until"
     },
     "events": {
       "title": "Notifications",
@@ -310,6 +318,23 @@
       "issued": "Unpaid",
       "void": "Void",
       "transfer_reported": "Transfer reported"
+    },
+    "action": {
+      "ok": "Done.",
+      "working": "Working",
+      "keep": "Keep it",
+      "signed_out": "Sign in again to continue.",
+      "refused": "That did not go through: {message}",
+      "accepted": "Accepted. The order is open below.",
+      "transfer_reported": "Thank you. AXIOM will match the transfer and start packing.",
+      "cancelled": "The order is cancelled.",
+      "requested": "Asked. AXIOM prices it and sends the quote.",
+      "acknowledged": "Recorded. Peptide prices are open on this account.",
+      "saved": "Saved.",
+      "removed": "Removed.",
+      "empty": "There is nothing to ask for yet.",
+      "ack_both": "Both statements are needed before the acknowledgement can be recorded.",
+      "site_name": "An address needs a name."
     }
   }
 }

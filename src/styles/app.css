@@ -590,8 +590,8 @@ tr.just td{animation:flash 1.2s var(--ease) forwards}
   border-bottom:1px solid var(--line);color:var(--muted);font-size:10.5px;font-family:var(--sans);
   outline:none;appearance:none;-webkit-appearance:none;cursor:pointer}
 .site-sel:hover,.site-sel:focus{color:var(--ink);border-color:var(--accent-line)}
-.legs .kv{padding:7px 0;font-size:11.5px;border-bottom:1px dashed var(--line-soft)}
-.legs .kv .k{color:var(--muted-2);font-weight:300}
+.delivery-legs .kv{padding:7px 0;font-size:11.5px;border-bottom:1px dashed var(--line-soft)}
+.delivery-legs .kv .k{color:var(--muted-2);font-weight:300}
 .hist .kv{padding:7px 0;font-size:11.5px}
 .hist .kv .k{font-variant-numeric:tabular-nums;color:var(--muted-2)}
 @media (max-width:1023px){
