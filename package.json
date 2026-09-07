@@ -11,6 +11,7 @@
     "db:reset": "node scripts/db/reset.mjs",
     "db:migrate": "node scripts/db/migrate.mjs",
     "db:seed": "node scripts/db/seed.mjs",
+    "db:clean": "node scripts/db/clean.mjs",
     "gates": "node scripts/gates/run.mjs",
     "gates:sql": "node scripts/gates/sql.mjs",
     "gates:lint": "node scripts/gates/copy-lint.mjs",

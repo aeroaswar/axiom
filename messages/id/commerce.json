@@ -401,6 +401,7 @@
       "kicker": "Penyusun penawaran",
       "account": "Akun",
       "pick": "Pilih satu akun",
+      "no_accounts": "Belum ada klien. Penawaran selalu ditujukan kepada seseorang, jadi langkah pertama adalah menambahkan kliennya.",
       "ack_none": "belum ada pernyataan peneliti · hanya apparel dan perangkat",
       "ack_lapsed": "pernyataan telah berakhir · hanya apparel dan perangkat",
       "start": "Mulai penawarannya",

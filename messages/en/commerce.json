@@ -401,6 +401,7 @@
       "kicker": "Quote builder",
       "account": "Account",
       "pick": "Choose an account",
+      "no_accounts": "No clients yet. A quote is always a quote to somebody, so the first step is to add the client.",
       "ack_none": "no researcher acknowledgement · apparel and devices only",
       "ack_lapsed": "acknowledgement lapsed · apparel and devices only",
       "start": "Start the quote",
