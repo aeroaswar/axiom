@@ -248,7 +248,13 @@ test.describe('Gate 14 · the basket is honest', () => {
     await signIn(page, REGENERA, '/account/shop');
     await page.goto('/account/shop');
     const add = page.locator('[data-kind="apparel"] button[data-add], [data-kind="apparel"] form button').first();
-    await add.click();
+    // Add is a server action; navigating on the next tick races the write, and the basket is shared
+    // per account, so whichever project ran first saw an empty basket and the second saw its line.
+    // Wait for the action's own response before leaving the page.
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      add.click(),
+    ]);
     await page.goto('/account/basket');
     await expect(page.locator('[data-delivery-total]')).toBeVisible();
     const legs = page.locator('[data-delivery-leg]');

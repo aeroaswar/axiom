@@ -19,7 +19,7 @@
 .site .ribbon{position:relative;z-index:5;background:#000;color:var(--muted);border-bottom:1px solid var(--line);
   font-size:10px;letter-spacing:.26em;text-transform:uppercase;text-align:center;padding:9px 12px;font-weight:500}
 .site .ribbon b{color:var(--ink);font-weight:600}
-.site-nav{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);
+.site-nav{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.72);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);
   transition:transform .45s var(--ease)}
 .site-nav.nav-hidden{transform:translateY(-100%)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-nav{background:#0a0806}}
