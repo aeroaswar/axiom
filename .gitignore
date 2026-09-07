@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env.*.local
+*.log
+playwright-report
+test-results
+.playwright
+supabase/.temp
+.vercel
+tsconfig.tsbuildinfo
+
+# stray agent scratch files
+*.tmp.mjs
+*.tmp.cjs
+.probe-*.mjs
+.q*.mjs
+.look.mjs
+.keys.mjs

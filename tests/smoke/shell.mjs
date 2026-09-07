@@ -1,0 +1,18 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium' }); const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } }); const p = await ctx.newPage();
+p.on('console', m => { if (m.type()==='error') console.log('console.error:', m.text()); });
+await p.goto('http://127.0.0.1:3000/sign-in');
+await p.getByRole('button', { name: /sign in|masuk/i }).first().click();
+await p.waitForURL(/\/console/, { timeout: 15000 });
+console.log('url', p.url());
+console.log('who', await p.locator('.who').textContent());
+console.log('badge', await p.locator('.iconbtn .badge').textContent().catch(()=>'none'));
+console.log('rail visible', await p.locator('.rail').isVisible(), 'tabbar visible', await p.locator('.tabbar').isVisible());
+console.log('hscroll', await p.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth));
+await p.setViewportSize({ width: 390, height: 844 });
+console.log('390: rail', await p.locator('.rail').isVisible(), 'tabbar', await p.locator('.tabbar').isVisible(), 'tabs', await p.locator('.tabbar .tab').count());
+console.log('390 hscroll', await p.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth));
+await p.screenshot({ path: process.argv[2] + '/console-390.png' });
+await p.setViewportSize({ width: 1440, height: 900 }); await p.screenshot({ path: process.argv[2] + '/console-1440.png' });
+await p.goto('http://127.0.0.1:3000/'); await p.screenshot({ path: process.argv[2] + '/home.png' });
+await b.close();

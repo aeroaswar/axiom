@@ -1,0 +1,10 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' }); const p = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
+p.on('console', m => console.log('console:', m.type(), m.text().slice(0,200)));
+p.on('response', r => { if (r.status() >= 400) console.log('http', r.status(), r.url()); });
+await p.goto('http://127.0.0.1:3000/sign-in');
+await p.getByRole('button', { name: /sign in|masuk/i }).first().click();
+await p.waitForTimeout(4000);
+console.log('url', p.url());
+console.log((await p.content()).slice(0, 1500));
+await b.close();
