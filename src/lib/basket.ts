@@ -31,6 +31,15 @@ export async function getBasket(): Promise<Basket> {
   });
 }
 
+/** Add to what is already there, keeping the line's destination. Used by the public Add control. */
+export async function addBasketLine(sku: string, delta = 1): Promise<number> {
+  const basket = await getBasket();
+  const line = basket.items.find(i => i.sku === sku);
+  const qty = Math.max((line?.qty ?? 0) + delta, 0);
+  await setBasketLine(sku, qty, line?.site_id ?? null);
+  return qty;
+}
+
 export async function setBasketLine(sku: string, qty: number, siteId: string | null = null) {
   const session = await getSession();
   const key = await anonKey(true);

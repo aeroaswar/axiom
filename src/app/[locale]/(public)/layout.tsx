@@ -8,6 +8,7 @@ export default async function PublicLayout({ children, params }: { children: Rea
   setRequestLocale(locale);
   const t = await getTranslations('nav');
   const tc = await getTranslations('common');
+  const ts = await getTranslations('site.common');
   const settings = await getSettings();
   const links = [
     { href: '/compounds', label: t('compounds') },
@@ -18,9 +19,10 @@ export default async function PublicLayout({ children, params }: { children: Rea
   ];
   return (
     <div className="site">
+      <a className="skip" href="#main">{ts('skip')}</a>
       <div className="ribbon"><b>RUO</b> · {tc('ruo_short')}</div>
       <SiteNav links={links} labels={{ request: t('request'), account: t('account'), signIn: tc('sign_in'), menu: 'Menu', language: tc('language') }} />
-      <main className="wrap" style={{ flex: 1 }}>{children}</main>
+      <main id="main" className="site-main">{children}</main>
       <SiteFooter whatsapp={settings.whatsapp} />
     </div>
   );

@@ -22,7 +22,10 @@
       "lots_count": "{count, plural, one {# lot} other {# lots}}",
       "compounds_count": "{count, plural, one {# compound} other {# compounds}}",
       "read_notice": "The full notice",
-      "sign_in": "Sign in"
+      "sign_in": "Sign in",
+      "skip": "Skip to the content",
+      "per_unit": "Per unit",
+      "gated_short": "After acknowledgement"
     },
     "home": {
       "title": "Human Performance & Longevity",
@@ -82,7 +85,9 @@
       "pathway_title": "{name} · Compound guide",
       "pathway_lead": "{count, plural, one {One compound} other {# compounds}} in this pathway.",
       "card_lots": "{count, plural, one {# lot} other {# lots}}",
-      "other_pathways": "Other pathways"
+      "other_pathways": "Other pathways",
+      "pathways_kicker": "Research pathways",
+      "all_kicker": "Every compound"
     },
     "compound": {
       "meta_title": "{name} · {cls}",
@@ -111,14 +116,16 @@
       "all_in_pathway": "All of {pathway}",
       "commerce_lead": "Add a lot to the basket and request a quote. The quote is priced from the same list as this page, and sending it remains AXIOM's act.",
       "commerce_gated": "Prices on this page open after the acknowledgement: eighteen or older, and a qualified researcher or institutional buyer.",
-      "request_basket": "Open the request"
+      "request_basket": "Open the request",
+      "jump": "On this page"
     },
     "products": {
       "kicker": "Therapy and apparel",
       "about": "About",
       "options": "Options",
       "consumer_note": "Devices and apparel are ordinary consumer products. They are priced openly and can be requested without an acknowledgement.",
-      "commerce_lead": "Add an option to the basket and request a quote. Delivery is charged per consignment and shown before you submit."
+      "commerce_lead": "Add an option to the basket and request a quote. Delivery is charged per consignment and shown before you submit.",
+      "title": "Therapy and apparel"
     },
     "price_list": {
       "title": "Price list",
@@ -154,7 +161,7 @@
       "doc_visibility_gated": "After acknowledgement",
       "doc_visibility_open": "Shown",
       "doc_col_item": "Lot",
-      "doc_col_qty": "",
+      "doc_col_qty": "Qty",
       "doc_col_unit": "Price",
       "doc_col_amount": "IDR",
       "doc_notes": "Pricing model",
@@ -209,7 +216,9 @@
       "received_sign_in": "Sign in",
       "wa_intro": "Quote request {number}",
       "wa_line": "{name} · {dose} × {qty}",
-      "wa_close": "Research Use Only. In-vitro laboratory research only."
+      "wa_close": "Research Use Only. In-vitro laboratory research only.",
+      "destination_default": "Primary destination",
+      "qty": "Quantity"
     },
     "standard": {
       "title": "The standard",
@@ -248,7 +257,8 @@
       "n3_t": "Jurisdiction",
       "n3_b": "Several compounds are controlled or regulated in some territories. Buyers are solely responsible for the legality of import, possession and handling. AXIOM makes no representation of legality in any territory.",
       "n4_t": "The acknowledgement",
-      "n4_b": "Peptide commerce requires a recorded acknowledgement: eighteen or older, and a qualified researcher or institutional buyer. It is versioned, timestamped and valid for twelve months."
+      "n4_b": "Peptide commerce requires a recorded acknowledgement: eighteen or older, and a qualified researcher or institutional buyer. It is versioned, timestamped and valid for twelve months.",
+      "coa_file_pending": "The certificate file is filed with the lot and follows on request."
     },
     "coa": {
       "title": "How to read a Certificate of Analysis",
@@ -340,7 +350,8 @@
       "terms": "Terms",
       "privacy": "Privacy notice",
       "ruo": "Research Use Only notice",
-      "updated": "Last revised"
+      "updated": "Last revised",
+      "ruo_body": "Research Use Only. Intended exclusively for in-vitro laboratory research. Not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided."
     },
     "terms": {
       "title": "Terms",

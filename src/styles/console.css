@@ -1,0 +1,100 @@
+/* AXIOM Console — the data modules (catalogue & stock, price list & margin, clients, compound
+   guide, settings, search, notifications). Everything that already exists in app.css is reused;
+   this file adds only what those five screens need and nothing that duplicates a class above.
+   Tokens only — no literal colour anywhere. */
+
+/* ---------- a table row that is a real link -------------------------------
+   The anchor lives in the first cell, so the row is reachable and operable by keyboard; the
+   overlay makes the whole row the hit area without turning the <tr> into a click handler. */
+.tbl tbody tr.lnk { position: relative; }
+.tbl tbody tr.lnk td.k a { color: inherit; display: inline-block; max-width: 100%; }
+.tbl tbody tr.lnk td.k a::after { content: ""; position: absolute; inset: 0; }
+.tbl tbody tr.lnk td.k a:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+.tbl tbody tr.lnk:hover td.k a { color: var(--accent-bright); }
+.tbl td .sub { display: block; font-size: 10.5px; color: var(--muted-2); font-weight: 300; }
+
+/* a figure that is an exception carries the tone; the norm stays quiet */
+.tone-warn { color: var(--warn); }
+.tone-err { color: var(--err); }
+.tone-ok { color: var(--ok); }
+.tone-dim { color: var(--muted-2); }
+
+/* the selected row, at every width — app.css marks it only where the panel docks */
+tr.sel td { background: var(--glass-accent); }
+.row.sel { background: var(--glass-accent); }
+
+/* ---------- a group row inside a .rows list (phone) -----------------------
+   Group, do not repeat: the column that would have carried the section name is removed. */
+.grpline {
+  display: flex; align-items: baseline; gap: 10px; padding: 16px 4px 7px;
+  border-bottom: 1px solid var(--line); font-size: 9.5px; letter-spacing: .26em;
+  text-transform: uppercase; color: var(--muted-2); font-variant-numeric: tabular-nums;
+}
+.grpline .nm { color: var(--muted); letter-spacing: .18em; }
+.grpline .sp { flex: 1; }
+
+/* ---------- three figures, side by side ----------------------------------
+   On hand, reserved, available: the numbers are the content, so they are the type. */
+.figs { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); margin: 4px 0 14px; }
+.figs > div { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 13px 14px 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.figs .lab { font-size: 8.5px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
+.figs .val { font-family: var(--display); font-weight: 300; font-size: 26px; line-height: 1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.figs .val.warn { color: var(--warn); }
+.figs .val.err { color: var(--err); }
+.figs .val.dim { color: var(--muted-2); }
+
+/* ---------- an append-only ledger, newest first --------------------------- */
+.ledger { border-top: 1px solid var(--line); }
+.ledger li { display: flex; align-items: baseline; gap: 12px; padding: 9px 2px; border-bottom: 1px solid var(--line); list-style: none; font-size: 11.5px; }
+.ledger .d { font-variant-numeric: tabular-nums; color: var(--muted-2); flex: none; font-weight: 300; }
+.ledger .r { flex: 1; min-width: 0; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ledger .q { font-variant-numeric: tabular-nums; color: var(--ink); flex: none; }
+.ledger .q.neg { color: var(--warn); }
+
+/* ---------- forms inside a sheet ------------------------------------------ */
+.fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.fgrid .wide { grid-column: 1 / -1; }
+@media (max-width: 640px) { .fgrid { grid-template-columns: 1fr; } }
+.field .hint { font-size: 10.5px; color: var(--muted-2); font-weight: 300; line-height: 1.55; }
+.check { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 12.5px; color: var(--muted); }
+.check input { width: 15px; height: 15px; accent-color: var(--accent); flex: none; }
+.formfoot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.formfoot .msg { font-size: 11px; font-weight: 300; color: var(--muted); }
+.formfoot .msg.ok { color: var(--ok); }
+.formfoot .msg.err { color: var(--err); }
+
+/* a refusal the database or the copy lint handed back: stated, not swallowed */
+.refusal { border: 1px solid var(--line-2); border-left: 1px solid var(--line-2); padding: 12px 14px; margin: 12px 0; font-size: 11.5px; font-weight: 300; color: var(--muted); }
+.refusal.err { border-color: var(--err); color: var(--ink); }
+.refusal ul { margin: 6px 0 0; padding-left: 16px; }
+.refusal li { list-style: disc; color: var(--muted); line-height: 1.7; }
+
+/* ---------- the compound-guide editor ------------------------------------
+   Wider than the standard docked panel: eight bilingual fields do not read at 460 px. */
+@media (min-width: 1024px) {
+  .sheet:has([data-wide]) { width: min(660px, 54vw); }
+  .app.panel:has(.sheet [data-wide]) .scroll,
+  .app.panel:has(.sheet [data-wide]) .ruo-bar { margin-right: min(660px, 54vw); }
+}
+
+/* the preview: the sections as the public page renders them, nothing more */
+.prev { border: 1px solid var(--line); padding: 18px 18px 20px; margin-top: 6px; background: var(--glass-2); }
+.prev h4 { font-size: 18px; margin-bottom: 8px; }
+.prev .sec-t { font-size: 9.5px; letter-spacing: .28em; text-transform: uppercase; color: var(--accent); margin: 18px 0 7px; }
+.prev .sec-t:first-of-type { margin-top: 0; }
+.prev p { font-size: 12.5px; font-weight: 300; color: var(--muted); line-height: 1.75; white-space: pre-wrap; }
+.prev .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 11px; color: var(--muted-2); font-weight: 300; margin-top: 6px; }
+.prev .meta b { color: var(--muted); font-weight: 500; letter-spacing: .04em; }
+
+/* ---------- search results ------------------------------------------------ */
+.hits mark { background: transparent; color: var(--accent-bright); font-weight: 500; }
+.hits .rows { margin-bottom: 4px; }
+
+/* ---------- the More list and Settings ------------------------------------ */
+.stack { display: flex; flex-direction: column; gap: 26px; max-width: 560px; }
+.stack.wide { max-width: 860px; }
+
+/* Settings: the site record on the left, the zones and the team beside it. One column on a phone. */
+@media (max-width: 1023px) { .settings-split { grid-template-columns: 1fr; } }
+.zones th { white-space: normal; line-height: 1.5; }
+.zones input { max-width: 110px; }

@@ -32,13 +32,14 @@ export function SiteNav({ links, labels }: { links: { href: string; label: strin
           {links.map(l => (
             <Link key={l.href} href={l.href} className={pathname.startsWith(l.href) ? 'on' : ''}>{l.label}</Link>
           ))}
+          <Link href="/account" className="nav-account-m">{labels.account}</Link>
           <Link href={pathname} locale={other} className="lang" aria-label={labels.language} hrefLang={other}>{other.toUpperCase()}</Link>
         </div>
         <div className="nav-right">
           <Link href="/request" className="tlink" aria-label={labels.request}>
             <Icon name="basket" /> <BasketBadge />
           </Link>
-          <Link href="/account" className="btn btn-sm">{labels.account}</Link>
+          <Link href="/account" className="btn btn-sm nav-account">{labels.account}</Link>
           <button className="nav-toggle" aria-label={labels.menu} aria-expanded={open} aria-controls="site-links" onClick={() => setOpen(o => !o)}>
             <Icon name={open ? 'x' : 'menu'} />
           </button>

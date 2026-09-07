@@ -22,7 +22,10 @@
       "lots_count": "{count} lot",
       "compounds_count": "{count} senyawa",
       "read_notice": "Pemberitahuan lengkap",
-      "sign_in": "Masuk"
+      "sign_in": "Masuk",
+      "skip": "Lewati ke konten",
+      "per_unit": "Per unit",
+      "gated_short": "Setelah pernyataan"
     },
     "home": {
       "title": "Human Performance & Longevity",
@@ -82,7 +85,9 @@
       "pathway_title": "{name} · Panduan senyawa",
       "pathway_lead": "{count} senyawa dalam jalur ini.",
       "card_lots": "{count} lot",
-      "other_pathways": "Jalur lain"
+      "other_pathways": "Jalur lain",
+      "pathways_kicker": "Jalur riset",
+      "all_kicker": "Semua senyawa"
     },
     "compound": {
       "meta_title": "{name} · {cls}",
@@ -111,14 +116,16 @@
       "all_in_pathway": "Semua senyawa {pathway}",
       "commerce_lead": "Tambahkan lot ke keranjang dan minta penawaran. Penawaran dihargai dari daftar yang sama dengan halaman ini, dan pengirimannya tetap menjadi tindakan AXIOM.",
       "commerce_gated": "Harga di halaman ini terbuka setelah pernyataan pengakuan: berusia delapan belas tahun atau lebih, dan seorang peneliti berkualifikasi atau pembeli institusi.",
-      "request_basket": "Buka permintaan"
+      "request_basket": "Buka permintaan",
+      "jump": "Di halaman ini"
     },
     "products": {
       "kicker": "Terapi dan apparel",
       "about": "Tentang",
       "options": "Pilihan",
       "consumer_note": "Perangkat dan apparel adalah produk konsumen biasa. Harganya terbuka dan dapat diminta tanpa pernyataan pengakuan.",
-      "commerce_lead": "Tambahkan pilihan ke keranjang dan minta penawaran. Biaya pengiriman dihitung per kiriman dan ditampilkan sebelum Anda mengirim permintaan."
+      "commerce_lead": "Tambahkan pilihan ke keranjang dan minta penawaran. Biaya pengiriman dihitung per kiriman dan ditampilkan sebelum Anda mengirim permintaan.",
+      "title": "Terapi dan apparel"
     },
     "price_list": {
       "title": "Daftar harga",
@@ -154,7 +161,7 @@
       "doc_visibility_gated": "Setelah pengakuan",
       "doc_visibility_open": "Ditampilkan",
       "doc_col_item": "Lot",
-      "doc_col_qty": "",
+      "doc_col_qty": "Jml",
       "doc_col_unit": "Harga",
       "doc_col_amount": "IDR",
       "doc_notes": "Model harga",
@@ -209,7 +216,9 @@
       "received_sign_in": "Masuk",
       "wa_intro": "Permintaan penawaran {number}",
       "wa_line": "{name} · {dose} × {qty}",
-      "wa_close": "Hanya untuk keperluan riset. Riset laboratorium in-vitro saja."
+      "wa_close": "Hanya untuk keperluan riset. Riset laboratorium in-vitro saja.",
+      "destination_default": "Tujuan utama",
+      "qty": "Jumlah"
     },
     "standard": {
       "title": "Standar kami",
@@ -248,7 +257,8 @@
       "n3_t": "Yurisdiksi",
       "n3_b": "Beberapa senyawa dikendalikan atau diatur di wilayah tertentu. Pembeli sepenuhnya bertanggung jawab atas legalitas impor, kepemilikan, dan penanganan. AXIOM tidak membuat pernyataan legalitas di wilayah mana pun.",
       "n4_t": "Pernyataan pengakuan",
-      "n4_b": "Transaksi peptida memerlukan pernyataan pengakuan yang tercatat: berusia delapan belas tahun atau lebih, dan seorang peneliti berkualifikasi atau pembeli institusi. Pernyataan ini berversi, bertanda waktu, dan berlaku dua belas bulan."
+      "n4_b": "Transaksi peptida memerlukan pernyataan pengakuan yang tercatat: berusia delapan belas tahun atau lebih, dan seorang peneliti berkualifikasi atau pembeli institusi. Pernyataan ini berversi, bertanda waktu, dan berlaku dua belas bulan.",
+      "coa_file_pending": "Berkas sertifikat diarsipkan bersama lot dan dikirim atas permintaan."
     },
     "coa": {
       "title": "Cara membaca Certificate of Analysis",
@@ -340,7 +350,8 @@
       "terms": "Ketentuan",
       "privacy": "Pemberitahuan privasi",
       "ruo": "Pemberitahuan hanya untuk keperluan riset",
-      "updated": "Revisi terakhir"
+      "updated": "Revisi terakhir",
+      "ruo_body": "Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan."
     },
     "terms": {
       "title": "Ketentuan",

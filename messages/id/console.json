@@ -22,8 +22,21 @@
     },
     "catalogue": {
       "title": "Katalog & stok",
-      "chips": { "all": "Semua pilar", "peptide": "Sains peptida", "therapy": "Terapi", "apparel": "Apparel", "stockout": "Stok habis" },
-      "cols": { "variant": "Varian", "content": "Isi", "price": "Harga", "on_hand": "Di gudang", "reserved": "Dipesan", "available": "Tersedia" },
+      "chips": {
+        "all": "Semua pilar",
+        "peptide": "Sains peptida",
+        "therapy": "Terapi",
+        "apparel": "Apparel",
+        "stockout": "Stok habis"
+      },
+      "cols": {
+        "variant": "Varian",
+        "content": "Isi",
+        "price": "Harga",
+        "on_hand": "Di gudang",
+        "reserved": "Dipesan",
+        "available": "Tersedia"
+      },
       "group": "{no} · {name} · {count} varian",
       "note": "Di gudang adalah saldo buku besar pergerakan, bukan angka yang disimpan. Penawaran terkirim dan pesanan yang belum dikirim menahan barisnya; pengiriman mengeluarkannya dari buku besar; kedaluwarsa, kehilangan, dan pembatalan melepaskannya. Tidak ada yang tersedia menandai varian sebagai stok habis. Buka varian untuk mencatat pergerakan.",
       "out": "Habis",
@@ -50,14 +63,24 @@
         "title": "Catat pergerakan",
         "delta": "Jumlah · negatif mengurangi stok",
         "reason": "Alasan",
-        "reasons": { "intake": "Penerimaan", "adjust": "Penyesuaian", "return": "Retur", "loss": "Kehilangan", "expiry": "Kedaluwarsa", "sale": "Penjualan" },
+        "reasons": {
+          "intake": "Penerimaan",
+          "adjust": "Penyesuaian",
+          "return": "Retur",
+          "loss": "Kehilangan",
+          "expiry": "Kedaluwarsa",
+          "sale": "Penjualan"
+        },
         "ref": "Referensi",
         "submit": "Catat",
         "note": "Setiap pergerakan ditambahkan ke buku besar. Saldo diturunkan, tidak pernah disimpan. Pengiriman pesanan mencatat penjualannya secara otomatis. Buku besar menolak pergerakan yang membuat stok di gudang di bawah nol.",
         "refused": "Buku besar menolak pergerakan: {message}",
         "recorded": "Pergerakan tercatat."
       },
-      "ledger": { "title": "Buku besar · terbaru dahulu", "empty": "Belum ada pergerakan tercatat." },
+      "ledger": {
+        "title": "Buku besar · terbaru dahulu",
+        "empty": "Belum ada pergerakan tercatat."
+      },
       "edit": {
         "title": "Varian",
         "dose": "Dosis",
@@ -73,7 +96,11 @@
         "name": "Nama",
         "slug": "Slug",
         "kind": "Jenis",
-        "kinds": { "peptide": "Peptida", "device": "Perangkat", "apparel": "Apparel" },
+        "kinds": {
+          "peptide": "Peptida",
+          "device": "Perangkat",
+          "apparel": "Apparel"
+        },
         "submit": "Buat produk",
         "note": "Produk adalah senyawa atau barang. Lot-nya adalah varian. Halaman panduannya tetap belum terbit sampai teksnya ditulis."
       },
@@ -126,15 +153,43 @@
         "margin_v": "harga jual dikurangi harga dasar · pengiriman tidak termasuk",
         "note": "Vial dan pen sama-sama barang di faktur, sehingga yang tersisa adalah margin kotor murni atas barang. Tidak memuat biaya operasional dan tidak termasuk pengiriman, yang bersifat pass-through. Harga jual ditetapkan per lot, bukan diturunkan dari biaya — margin adalah hasil, bukan target."
       },
-      "composition": { "kicker": "Komposisi biaya · bagian dari harga jual", "supplier": "Biaya pemasok", "pens": "Pen injeksi", "margin": "Margin" },
+      "composition": {
+        "kicker": "Komposisi biaya · bagian dari harga jual",
+        "supplier": "Biaya pemasok",
+        "pens": "Pen injeksi",
+        "margin": "Margin"
+      },
       "by_pathway": {
         "kicker": "Per jalur · sembilan kategori",
         "note": "Perangkat dan apparel diberi harga di luar buku ini",
-        "cols": { "no": "No", "pathway": "Jalur", "lots": "Lot", "supplier": "Pemasok", "base": "Dasar", "selling": "Jual", "margin": "Margin", "gm": "GM" },
+        "cols": {
+          "no": "No",
+          "pathway": "Jalur",
+          "lots": "Lot",
+          "supplier": "Pemasok",
+          "base": "Dasar",
+          "selling": "Jual",
+          "margin": "Margin",
+          "gm": "GM"
+        },
         "total": "Semua jalur"
       },
-      "chips": { "all": "Semua lot", "nonpeptide": "Perangkat & apparel", "low": "Di bawah {floor}%" },
-      "cols": { "no": "No", "variant": "Varian", "content": "Isi", "supplier": "Pemasok", "pen": "Pen", "base": "Dasar", "selling": "Jual", "margin": "Margin", "gm": "GM" },
+      "chips": {
+        "all": "Semua lot",
+        "nonpeptide": "Perangkat & apparel",
+        "low": "Di bawah {floor}%"
+      },
+      "cols": {
+        "no": "No",
+        "variant": "Varian",
+        "content": "Isi",
+        "supplier": "Pemasok",
+        "pen": "Pen",
+        "base": "Dasar",
+        "selling": "Jual",
+        "margin": "Margin",
+        "gm": "GM"
+      },
       "assumed": "asumsi",
       "assumed_group": "Perangkat & apparel · biaya masih asumsi sampai biaya landed diterima · di luar penjumlahan",
       "gm_chip": "GM {pct}",
@@ -165,16 +220,40 @@
     },
     "clients": {
       "title": "Klien",
-      "chips": { "all": "Semua", "clinic": "Klinik", "institution": "Institusi", "individual": "Perorangan", "attention": "Pernyataan jatuh tempo", "reorder": "Pesan ulang jatuh tempo" },
-      "cols": { "account": "Akun", "type": "Jenis", "manager": "Manajer", "lifetime": "Seumur hidup", "orders": "Pesanan", "next_reorder": "Pesan ulang berikutnya", "ack": "Pernyataan" },
-      "types": { "individual": "Perorangan", "clinic": "Klinik", "institution": "Institusi" },
+      "chips": {
+        "all": "Semua",
+        "clinic": "Klinik",
+        "institution": "Institusi",
+        "individual": "Perorangan",
+        "attention": "Pernyataan jatuh tempo",
+        "reorder": "Pesan ulang jatuh tempo"
+      },
+      "cols": {
+        "account": "Akun",
+        "type": "Jenis",
+        "manager": "Manajer",
+        "lifetime": "Seumur hidup",
+        "orders": "Pesanan",
+        "next_reorder": "Pesan ulang berikutnya",
+        "ack": "Pernyataan"
+      },
+      "types": {
+        "individual": "Perorangan",
+        "clinic": "Klinik",
+        "institution": "Institusi"
+      },
       "no_manager": "Belum ditugaskan",
       "no_cadence": "Belum ada ritme",
       "overdue": "Lewat {days} hr",
       "due_today": "Jatuh tempo hari ini",
       "due_in": "Jatuh tempo {days} hr lagi",
       "reorder_sub": "pesan ulang {label}",
-      "ack": { "current": "Berlaku", "expiring": "Perbarui", "lapsed": "Kedaluwarsa", "none": "Hanya 18+" },
+      "ack": {
+        "current": "Berlaku",
+        "expiring": "Perbarui",
+        "lapsed": "Kedaluwarsa",
+        "none": "Hanya 18+"
+      },
       "note": "Akun tanpa pernyataan peneliti berkualifikasi yang berlaku tidak dapat melihat atau ditawari baris peptida, dari titik masuk mana pun.",
       "new": "Akun baru",
       "empty": "Tidak ada akun yang cocok dengan filter ini.",
@@ -213,8 +292,15 @@
       "members": {
         "title": "Anggota",
         "primary": "Utama",
+        "member": "Anggota",
+        "role": "Peran",
         "empty": "Belum ada anggota yang terhubung ke akun ini.",
-        "roles": { "client": "Klien", "clinic": "Klinik", "ops": "Ops", "owner": "Pemilik" },
+        "roles": {
+          "client": "Klien",
+          "clinic": "Klinik",
+          "ops": "Ops",
+          "owner": "Pemilik"
+        },
         "change_role": "Ubah peran",
         "owner_note": "Hanya pemilik yang dapat mengubah peran; basis data menolak yang lain.",
         "role_changed": "Peran diubah."
@@ -225,7 +311,12 @@
         "name": "Nama",
         "address": "Alamat",
         "zone": "Zona",
-        "zones": { "jabodetabek": "Jabodetabek", "jawa": "Jawa (luar Jabodetabek)", "luar_jawa": "Luar Jawa", "other": "Lainnya" },
+        "zones": {
+          "jabodetabek": "Jabodetabek",
+          "jawa": "Jawa (luar Jabodetabek)",
+          "luar_jawa": "Luar Jawa",
+          "other": "Lainnya"
+        },
         "rate_pending": "tarif menyusul",
         "default": "Utama",
         "empty": "Belum ada lokasi. Penawaran memerlukannya.",
@@ -262,8 +353,19 @@
     },
     "content": {
       "title": "Panduan senyawa",
-      "cols": { "product": "Produk", "pathway": "Jalur", "kind": "Jenis", "state": "Status", "references": "Referensi", "draft": "Riset" },
-      "kinds": { "peptide": "Peptida", "device": "Perangkat", "apparel": "Apparel" },
+      "cols": {
+        "product": "Produk",
+        "pathway": "Jalur",
+        "kind": "Jenis",
+        "state": "Status",
+        "references": "Referensi",
+        "draft": "Riset"
+      },
+      "kinds": {
+        "peptide": "Peptida",
+        "device": "Perangkat",
+        "apparel": "Apparel"
+      },
       "published": "Terbit",
       "unpublished": "Belum terbit",
       "draft_present": "Ada draf",
@@ -297,8 +399,8 @@
         "lint": {
           "avoid": "{field}: kata daftar hindari “{detail}”",
           "exclamation": "{field}: tanda seru",
-          "dose": "{field}: pola dosis-dan-frekuensi “{detail}”",
-          "route": "{field}: rute pemberian yang terbaca sebagai penggunaan “{detail}”"
+          "dose": "{field}: pola dosis-dan-frekuensi",
+          "route": "{field}: rute pemberian yang terbaca sebagai penggunaan"
         }
       },
       "references": {
@@ -342,13 +444,23 @@
     },
     "settings": {
       "title": "Pengaturan",
-      "profile": { "title": "Masuk sebagai", "name": "Nama", "role": "Peran", "language": "Bahasa", "submit": "Simpan profil", "saved": "Profil tersimpan." },
+      "profile": {
+        "title": "Masuk sebagai",
+        "name": "Nama",
+        "role": "Peran",
+        "language": "Bahasa",
+        "submit": "Simpan profil",
+        "saved": "Profil tersimpan."
+      },
       "sign_out": "Keluar",
       "owner_note": "Pengaturan situs, zona pengiriman, dan tim hanya untuk pemilik.",
       "site": {
         "title": "Situs",
         "price_visibility": "Visibilitas harga",
-        "visibility": { "open": "Terbuka · harga publik", "acknowledged": "Setelah pernyataan · harga tampil setelah pernyataan" },
+        "visibility": {
+          "open": "Terbuka · harga publik",
+          "acknowledged": "Setelah pernyataan · harga tampil setelah pernyataan"
+        },
         "ppn_rate": "Tarif PPN · %",
         "delivery_in_dpp": "Pengiriman termasuk dalam DPP",
         "payment_terms_days": "Jangka pembayaran · hari",
@@ -377,7 +489,7 @@
         "title": "Zona pengiriman",
         "zone": "Zona",
         "per_three": "Per tiga unit · Rp",
-        "cap": "Batas per tujuan · Rp",
+        "cap_per_destination": "Batas per tujuan · Rp",
         "eta": "Estimasi · hari",
         "note": "Kosongkan tarif untuk tarif menyusul. Penawaran yang memuat tujuan tanpa tarif tidak dapat dikirim.",
         "submit": "Simpan zona",
@@ -418,7 +530,13 @@
       "kicker": "Pencarian",
       "results": "Hasil untuk “{q}”",
       "hint": "Ketik minimal dua karakter. Penawaran, pesanan, akun, lot, dan faktur.",
-      "groups": { "quotes": "Penawaran", "orders": "Pesanan", "accounts": "Akun", "variants": "Daftar harga", "invoices": "Faktur" },
+      "groups": {
+        "quotes": "Penawaran",
+        "orders": "Pesanan",
+        "accounts": "Akun",
+        "variants": "Daftar harga",
+        "invoices": "Faktur"
+      },
       "empty": "Tidak ada yang cocok dengan “{q}”.",
       "more": "+{count} lagi · persempit pencarian"
     },
@@ -430,26 +548,80 @@
       "open": "{count} terbuka"
     },
     "events": {
-      "quote_requested": { "t1": "Permintaan penawaran {ref} perlu diberi harga", "t2": "{account} · akun sedang menunggu" },
-      "quote_awaiting_reply": { "t1": "Penawaran {ref} menunggu balasan", "t2": "{account} · {amount} · berlaku hingga {date}" },
-      "quote_expired": { "t1": "Penawaran {ref} kedaluwarsa", "t2": "{account} · stok dilepas · kirim ulang atau tandai hilang" },
-      "transfer_to_match": { "t1": "Transfer perlu dicocokkan · {ref}", "t2": "{account} · {amount} · pengemasan dimulai setelah cocok" },
-      "invoice_overdue": { "t1": "Faktur {ref} lewat jatuh tempo", "t2": "{account} · {amount} · jatuh tempo {date}" },
-      "order_awaiting_payment": { "t1": "Pesanan {ref} menunggu pembayaran", "t2": "{account} · {amount} · tidak ada yang dikemas sebelum pembayaran masuk" },
-      "order_to_pack": { "t1": "Pesanan {ref} perlu dikemas", "t2": "{account} · {amount} · {chain}" },
+      "quote_requested": {
+        "t1": "Permintaan penawaran {ref} perlu diberi harga",
+        "t2": "{account} · akun sedang menunggu"
+      },
+      "quote_awaiting_reply": {
+        "t1": "Penawaran {ref} menunggu balasan",
+        "t2": "{account} · {amount} · berlaku hingga {date}"
+      },
+      "quote_expired": {
+        "t1": "Penawaran {ref} kedaluwarsa",
+        "t2": "{account} · stok dilepas · kirim ulang atau tandai hilang"
+      },
+      "transfer_to_match": {
+        "t1": "Transfer perlu dicocokkan · {ref}",
+        "t2": "{account} · {amount} · pengemasan dimulai setelah cocok"
+      },
+      "invoice_overdue": {
+        "t1": "Faktur {ref} lewat jatuh tempo",
+        "t2": "{account} · {amount} · jatuh tempo {date}"
+      },
+      "order_awaiting_payment": {
+        "t1": "Pesanan {ref} menunggu pembayaran",
+        "t2": "{account} · {amount} · tidak ada yang dikemas sebelum pembayaran masuk"
+      },
+      "order_to_pack": {
+        "t1": "Pesanan {ref} perlu dikemas",
+        "t2": "{account} · {amount} · {chain}"
+      },
       "cold": "rantai dingin",
       "ambient": "suhu ruang",
-      "ack_expiring": { "t1": "Pernyataan berakhir {date}", "t2": "{account} · perbarui untuk mempertahankan baris peptida" },
-      "ack_lapsed": { "t1": "Pernyataan kedaluwarsa", "t2": "{account} · baris peptida disembunyikan" },
-      "reorder_overdue": { "t1": "Pesan ulang lewat tempo · {account}", "t2": "jatuh tempo {date}" },
-      "reorder_due": { "t1": "Pesan ulang jatuh tempo · {account}", "t2": "jatuh tempo {date}" },
-      "stockout": { "t1": "{ref} · tidak ada yang tersedia", "t2": "SKU {sku} · catat penerimaan" },
-      "quote_to_accept": { "t1": "Penawaran {ref} menunggu balasan Anda", "t2": "{amount} · berlaku hingga {date}" },
-      "request_being_priced": { "t1": "Permintaan penawaran {ref} sedang diberi harga", "t2": "AXIOM akan mengirimkannya lewat WhatsApp" },
-      "invoice_to_pay": { "t1": "{ref} menunggu pembayaran", "t2": "{amount} · jatuh tempo {date}" },
-      "order_packing": { "t1": "{ref} sedang dikemas", "t2": "{amount}" },
-      "order_dispatched": { "t1": "{ref} dalam perjalanan", "t2": "{amount}" },
-      "unknown": { "t1": "{ref}", "t2": "{account}" }
+      "ack_expiring": {
+        "t1": "Pernyataan berakhir {date}",
+        "t2": "{account} · perbarui untuk mempertahankan baris peptida"
+      },
+      "ack_lapsed": {
+        "t1": "Pernyataan kedaluwarsa",
+        "t2": "{account} · baris peptida disembunyikan"
+      },
+      "reorder_overdue": {
+        "t1": "Pesan ulang lewat tempo · {account}",
+        "t2": "jatuh tempo {date}"
+      },
+      "reorder_due": {
+        "t1": "Pesan ulang jatuh tempo · {account}",
+        "t2": "jatuh tempo {date}"
+      },
+      "stockout": {
+        "t1": "{ref} · tidak ada yang tersedia",
+        "t2": "SKU {sku} · catat penerimaan"
+      },
+      "quote_to_accept": {
+        "t1": "Penawaran {ref} menunggu balasan Anda",
+        "t2": "{amount} · berlaku hingga {date}"
+      },
+      "request_being_priced": {
+        "t1": "Permintaan penawaran {ref} sedang diberi harga",
+        "t2": "AXIOM akan mengirimkannya lewat WhatsApp"
+      },
+      "invoice_to_pay": {
+        "t1": "{ref} menunggu pembayaran",
+        "t2": "{amount} · jatuh tempo {date}"
+      },
+      "order_packing": {
+        "t1": "{ref} sedang dikemas",
+        "t2": "{amount}"
+      },
+      "order_dispatched": {
+        "t1": "{ref} dalam perjalanan",
+        "t2": "{amount}"
+      },
+      "unknown": {
+        "t1": "{ref}",
+        "t2": "{account}"
+      }
     }
   }
 }
