@@ -11,3 +11,7 @@ test-results
 supabase/.temp
 .vercel
 tsconfig.tsbuildinfo
+
+# stray agent scratch files
+*.tmp.mjs
+*.tmp.cjs
