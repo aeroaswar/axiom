@@ -16,7 +16,9 @@ export default defineConfig({
   webServer: process.env.E2E_BASE_URL ? undefined : {
     command: 'pnpm start',
     url: baseURL,
-    reuseExistingServer: true,
+    // Never inherit a server that is already up in CI: a wedged or stale `next start` answers the
+    // readiness probe and then fails every test for reasons that have nothing to do with the diff.
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
     env: { PORT: '3000' },
   },
