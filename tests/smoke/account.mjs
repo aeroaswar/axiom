@@ -189,11 +189,11 @@ const reg = await signIn('regenera.director');
     }
   }
   await go(page, `${BASE}/account/basket`);
-  const legs = page.locator('[data-legs] [data-leg]');
+  const legs = page.locator('[data-delivery-legs] [data-delivery-leg]');
   const legCount = await legs.count();
   const priced = await page.locator('[data-leg="priced"]').count();
   const pending = await page.locator('[data-leg="pending"]').count();
-  const legText = await page.locator('[data-legs]').innerText();
+  const legText = await page.locator('[data-delivery-legs]').innerText();
   ok('the basket names one destination per consignment', legCount === 3, `${legCount} destinations`);
   ok('two destinations are priced and one is rate pending', priced === 2 && pending === 1,
     `${priced} priced, ${pending} pending — ${legText.replace(/\s+/g, ' ')}`);

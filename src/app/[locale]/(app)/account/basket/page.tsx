@@ -90,9 +90,9 @@ export default async function BasketPage() {
             <aside className="sec rv" style={rv(2)}>
               <div className="sec-h"><span className="kicker">{t('delivery')}</span></div>
               <p className="note">{t('delivery_note', { per: base ? idr(base.per_three_idr) : '—', cap: base ? idr(base.cap_idr) : '—' })}</p>
-              <div className="delivery-legs" style={{ marginTop: 14 }} data-legs>
+              <div className="delivery-legs" style={{ marginTop: 14 }} data-delivery-legs>
                 {legs.map(l => (
-                  <div className="kv" key={l.site_id ?? l.site_name} data-leg={l.charge_idr === null ? 'pending' : 'priced'}>
+                  <div className="kv" key={l.site_id ?? l.site_name} data-delivery-leg={l.charge_idr === null ? 'pending' : 'priced'}>
                     <span className="k">{l.site_name} · {tc('units', { count: l.units })}</span>
                     <span className="v">{l.charge_idr === null ? tc('rate_pending') : idr(l.charge_idr)}</span>
                   </div>
@@ -101,7 +101,7 @@ export default async function BasketPage() {
 
               <div className="totals">
                 <div className="kv"><span className="k">{t('goods')}</span><span className="v">{priced.length ? idr(goods) : '—'}</span></div>
-                <div className="kv"><span className="k">{t('delivery')}</span><span className="v">{deliveryKnown ? idr(delivery) : tc('rate_pending')}</span></div>
+                <div className="kv"><span className="k">{t('delivery')}</span><span className="v" data-delivery-total>{deliveryKnown ? idr(delivery) : tc('rate_pending')}</span></div>
                 <div className="big-total">
                   <span className="kicker">{t('total_so_far')}</span>
                   <span className="v">{idr(goods + (deliveryKnown ? delivery : 0))}</span>
