@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { getSession, isStaff } from '@/lib/auth';
 import { withRls } from '@/lib/db';
 import { invoiceDocument, invoiceFilename } from '@/lib/documents/invoice';
-import { documentPdf } from '@/lib/pdf';
+import { documentHtml, documentPdf } from '@/lib/pdf';
 import { routing } from '@/i18n/routing';
 
 export const dynamic = 'force-dynamic';
@@ -27,6 +27,15 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ number: str
 
     const doc = await invoiceDocument(locale, session.uid, number);
     if (!doc) return new NextResponse(null, { status: 404 });
+    // `?html=1` returns the exact markup Chromium prints, under the same authorisation and with no
+    // extra data: it is how a document is read when a PDF cannot be, and how the gate proves the
+    // printed file and the on-screen preview come from one template rather than two that agree today.
+    if (req.nextUrl.searchParams.get('html') === '1') {
+      return new NextResponse(await documentHtml(doc), {
+        headers: { 'Content-Type': 'text/html; charset=utf-8', 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-store' },
+      });
+    }
+
     const pdf = await documentPdf(doc);
     return new NextResponse(new Uint8Array(pdf), {
       headers: {

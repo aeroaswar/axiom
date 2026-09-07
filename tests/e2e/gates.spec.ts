@@ -259,8 +259,15 @@ test.describe('Gate 14 · the basket is honest', () => {
 test.describe('Ops', () => {
   test('ops is refused the pricing screen and sees no error page elsewhere', async ({ page }) => {
     await signIn(page, OPS, '/console');
+    // The refusal is shown, not routed around. `variant_costs` raises for a non-owner, and the
+    // screen renders that as a stated owner-only message — a silent redirect would leave an ops
+    // user guessing why a rail item they can see does nothing. What must hold is that no cost
+    // reaches the page and the rail does not offer the screen in the first place.
     await page.goto('/console/pricing');
-    await expect(page).not.toHaveURL(/pricing/);
+    await expect(page.locator('.empty')).toContainText(/owner-only|owner only/i);
+    const priced = await page.locator('body').evaluate(el => /Rp\s?\d{1,3}(\.\d{3})+/.test(el.textContent || ''));
+    expect(priced).toBe(false);
+    expect(await page.locator('nav a[href*="/console/pricing"]').count()).toBe(0);
     await page.goto('/console/orders');
     await expect(page.locator('body')).not.toContainText(/Application error|Internal Server Error/);
   });
