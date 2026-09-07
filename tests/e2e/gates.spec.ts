@@ -71,6 +71,10 @@ test.describe('Gate 6 · acknowledgement gates commerce', () => {
     await page.goto('/account/shop');
     const cards = page.locator('.pcard');
     expect(await cards.count()).toBeGreaterThan(60);
+    // An empty selector would make "no peptide price" true for the wrong reason, so the count is
+    // asserted first: this gate has to fail when the markup moves, not pass vacuously.
+    const peptidePrices = page.locator('[data-kind="peptide"] .pr');
+    expect(await peptidePrices.count()).toBeGreaterThan(20);
     const peptidePriced = await page.evaluate(() => Array.from(document.querySelectorAll('[data-kind="peptide"] .pr')).some(el => /Rp\s?\d/.test(el.textContent || '')));
     expect(peptidePriced).toBe(false);
     await page.goto('/sign-in?next=/account/shop');
@@ -121,6 +125,9 @@ test.describe('Gate 18 · keyboard and focus', () => {
     let focusedInteractive = 0, visibleRing = 0;
     for (let i = 0; i < 25; i++) {
       await page.keyboard.press('Tab');
+      // The ring is transitioned in. Reading computed style on the next tick catches it mid-flight
+      // and reports `solid 0px` for a control that does show one, so wait for a frame to land.
+      await page.waitForTimeout(120);
       const info = await page.evaluate(() => {
         const el = document.activeElement as HTMLElement | null;
         if (!el || el === document.body) return null;

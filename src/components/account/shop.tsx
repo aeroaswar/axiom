@@ -78,7 +78,7 @@ export async function ShopGrid({ uid, ack, saved }: { uid: string; ack: Ack; sav
                 <span>{ch.no}</span><span className="nm">{ch.name}</span>
               </div>
               {compounds.map(c => (
-                <CompoundCard key={c.id} slug={c.slug} name={c.name} tags={`${c.kind}${c.variants.some(v => saved.includes(v.sku)) ? ' saved' : ''}`}
+                <CompoundCard key={c.id} slug={c.slug} name={c.name} kind={c.kind} tags={`${c.kind}${c.variants.some(v => saved.includes(v.sku)) ? ' saved' : ''}`}
                   saved={saved}
                   lots={c.variants
                     .slice()

@@ -14,8 +14,8 @@ import { AddToBasket, SaveMark } from './client-forms';
 
 export type Lot = { sku: string; dose: string; content: string; price: number | null; available: number };
 
-export function CompoundCard({ slug, name, lots, saved, tags }: {
-  slug: string; name: string; lots: Lot[]; saved: string[]; tags: string;
+export function CompoundCard({ slug, name, kind, lots, saved, tags }: {
+  slug: string; name: string; kind: string; lots: Lot[]; saved: string[]; tags: string;
 }) {
   const [sku, setSku] = useState(lots[0]?.sku ?? '');
   const t = useTranslations('account.shop');
@@ -29,7 +29,10 @@ export function CompoundCard({ slug, name, lots, saved, tags }: {
   const addable = sel.price !== null && sel.available > 0;
 
   return (
-    <article className={`pcard${addable ? '' : ' flat'}`} data-tags={tags} data-compound={slug} data-priced={sel.price === null ? '0' : '1'}>
+    // `data-kind` is what tells a peptide card from a device card without reading its text: the
+    // acknowledgement gate withholds a peptide price and never a device's, so a check on "no price
+    // showing" has to be able to say which kind it is looking at.
+    <article className={`pcard${addable ? '' : ' flat'}`} data-kind={kind} data-tags={tags} data-compound={slug} data-priced={sel.price === null ? '0' : '1'}>
       {short ? (
         <span className="st"><span className={`chip ${sel.available <= 0 ? 'err' : 'warn'}`}><span className="dot" />{short}</span></span>
       ) : null}
