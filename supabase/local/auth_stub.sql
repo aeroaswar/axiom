@@ -29,7 +29,12 @@ $$;
 
 grant usage on schema auth to anon, authenticated, service_role;
 grant usage on schema public to anon, authenticated, service_role;
-alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
-alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
+-- anon reads; it never writes. Supabase's own default grants `all` to anon here, which quietly
+-- hands an unauthenticated caller TRUNCATE on every table added later — and TRUNCATE is the one
+-- write that row-level security does not reach. 0003 grants what each role actually needs.
+alter default privileges in schema public grant select on tables to anon;
+alter default privileges in schema public grant all on tables to authenticated, service_role;
+alter default privileges in schema public revoke truncate on tables from authenticated;
+alter default privileges in schema public grant usage, select on sequences to authenticated, service_role;
 alter default privileges in schema public grant execute on functions to anon, authenticated, service_role;
 grant select on auth.users to service_role, authenticated;

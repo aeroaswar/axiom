@@ -80,7 +80,11 @@ for (const [f, s] of Object.entries(read)) {
   s.split('\n').forEach((l, i) => { if (/#[0-9a-fA-F]{6}\b/.test(l) && !/^\s*(\/\/|\*)/.test(l) && !/themeColor/.test(l)) fail(`${f}:${i + 1} literal hex colour: ${l.trim().slice(0, 100)}`); });
 }
 
-try { execSync('git ls-files website archive', { encoding: 'utf8' }).trim() && fail('the retired legacy site (website/, archive/) is still in the tree'); } catch {}
+// A check that swallows its own failure passes for the wrong reason: say so when it cannot run.
+try {
+  if (execSync('git ls-files website archive', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim())
+    fail('the retired legacy site (website/, archive/) is still in the tree');
+} catch { console.log('  · legacy-site check skipped: git is not available here'); }
 
 console.log(failures ? `\n${failures} finding(s)` : '\n  ✓ zero second copies, zero typed figures');
 process.exit(failures ? 1 : 0);

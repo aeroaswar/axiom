@@ -14,9 +14,22 @@ export type Session = {
   email: string | null;
 };
 
-const DEV = process.env.AUTH_MODE === 'dev';
+// The dev cookie path is a local convenience: it signs a session for any seeded user id with no
+// credential at all. It is closed by the build, not only by an environment variable, so setting
+// AUTH_MODE=dev on a deployed instance cannot open it. In production the only door is Supabase Auth.
+const PRODUCTION = process.env.NODE_ENV === 'production';
+const DEV = process.env.AUTH_MODE === 'dev' && !PRODUCTION;
 const COOKIE = 'axiom_session';
-const secret = () => new TextEncoder().encode(process.env.AUTH_SECRET || 'axiom-dev-secret');
+const FALLBACK_SECRET = 'axiom-dev-secret';
+
+/** The key the dev cookie is signed with. A published default may never sign a real session. */
+function secret() {
+  const s = process.env.AUTH_SECRET;
+  if (PRODUCTION && (!s || s === FALLBACK_SECRET)) {
+    throw new Error('AUTH_SECRET is unset or still the published default; refusing to sign a session');
+  }
+  return new TextEncoder().encode(s || FALLBACK_SECRET);
+}
 
 /** The signed-in user's id, from Supabase Auth in production or the dev cookie locally. */
 async function currentUid(): Promise<string | null> {
@@ -48,9 +61,10 @@ export const getSession = cache(async (): Promise<Session | null> => {
 
 export const isStaff = (s: Session | null) => !!s && (s.role === 'ops' || s.role === 'owner');
 
-/** Dev-only sign-in: writes the signed cookie for a seeded user. Refuses outside AUTH_MODE=dev. */
+/** Dev-only sign-in: writes the signed cookie for a seeded user. Impossible in a production build. */
 export async function devSignIn(uid: string) {
-  if (!DEV) throw new Error('dev sign-in is disabled');
+  if (!DEV || PRODUCTION) throw new Error('dev sign-in is disabled');
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uid)) throw new Error('dev sign-in needs a user id');
   const token = await new SignJWT({}).setProtectedHeader({ alg: 'HS256' }).setSubject(uid).setIssuedAt().setExpirationTime('30d').sign(secret());
   const jar = await cookies();
   jar.set(COOKIE, token, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 30 });

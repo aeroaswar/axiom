@@ -21,9 +21,14 @@ function documentCss(): string {
   return cssCache;
 }
 
+/** The document's own fields reach the surrounding markup as text, never as HTML. `number` is
+ *  trigger-generated but staff may insert an explicit one, so escape it rather than trust it. */
+const esc = (s: string) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+
 export function documentHtml(d: DocumentData, fontsHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap'): string {
   const body = renderToStaticMarkup(createElement(AxiomDocument, { d }));
-  return `<!doctype html><html lang="${d.lang}"><head><meta charset="utf-8"><title>${d.number}</title>
+  const lang = /^[a-z]{2}(-[A-Za-z0-9]{2,8})*$/.test(d.lang) ? d.lang : 'id';
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(d.number)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="${fontsHref}" rel="stylesheet">
 <style>${documentCss()}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-print-color-adjust:exact;print-color-adjust:exact}

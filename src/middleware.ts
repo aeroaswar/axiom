@@ -10,6 +10,9 @@ const intl = createMiddleware(routing);
 // database through RLS. The middleware never trusts anything but the presence of a session.
 export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  // The Supabase Auth callback is not a page and has no locale: next-intl would rewrite
+  // /auth/callback to /id/auth/callback, where no route exists, and sign-in would 404.
+  if (pathname.startsWith('/auth/')) return NextResponse.next();
   const bare = pathname.replace(/^\/(en|id)(?=\/|$)/, '');
   const authed = /^\/(console|account)(\/|$)/.test(bare);
   if (authed) {

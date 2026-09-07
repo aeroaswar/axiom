@@ -40,5 +40,10 @@ console.log('Gate 8: research text without a reference (must not render)');
 for (const d of drafts) console.log(`  · ${d.slug}: research draft held back (no reference yet)`);
 if (drafts.length && process.env.AXIOM_REFS_STRICT === '1') fail(`${drafts.length} published compound(s) carry unsourced research text`);
 
-console.log(failures ? `\n${failures} finding(s)` : `\n  ✓ ${checked} reference(s) resolve; ${drafts.length} draft(s) held back`);
+// AXIOM_REFS_OFFLINE=1 skips the network, so it must not report the references as resolved:
+// a gate that claims a check it did not run is worse than no gate.
+console.log(
+  failures ? `\n${failures} finding(s)`
+  : offline ? `\n  · ${checked} reference(s) NOT resolved (AXIOM_REFS_OFFLINE=1); ${drafts.length} draft(s) held back — gate 8 did not run`
+  : `\n  ✓ ${checked} reference(s) resolve; ${drafts.length} draft(s) held back`);
 process.exit(failures ? 1 : 0);

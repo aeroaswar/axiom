@@ -24,17 +24,23 @@ async function expectError(tx, fn, label, pattern) {
   else ok(!pattern || pattern.test(err.message + ' ' + (err.code || '')), label, err.message);
 }
 
-// Run fn as a caller inside a transaction that is always rolled back.
+// Run fn as a caller inside a transaction that is always rolled back. The claims are bound as a
+// parameter, never interpolated: a uid is caller-derived data everywhere else in the system and
+// this file is the pattern the application copies.
 async function as(uid, fn) {
+  return rollback(async tx => { await become(tx, uid); return fn(tx); });
+}
+async function become(tx, uid) {
   const claims = uid ? JSON.stringify({ sub: uid, role: 'authenticated' }) : '{}';
+  await tx.unsafe(`set local role ${uid ? 'authenticated' : 'anon'}`);
+  await tx`select set_config('request.jwt.claims', ${claims}, true)`;
+}
+// Raw transaction, always rolled back: for checks that must set up as the schema owner and then
+// drop into a role.
+async function rollback(fn) {
   let result;
   try {
-    await sql.begin(async tx => {
-      await tx.unsafe(`set local role ${uid ? 'authenticated' : 'anon'}`);
-      await tx.unsafe(`select set_config('request.jwt.claims', '${claims}', true)`);
-      result = await fn(tx);
-      throw new Rollback();
-    });
+    await sql.begin(async tx => { result = await fn(tx); throw new Rollback(); });
   } catch (e) { if (!(e instanceof Rollback)) throw e; }
   return result;
 }
@@ -138,8 +144,8 @@ await as(REGENERA_DIRECTOR, async tx => {
 await as(null, async tx => {
   const cat = await tx`select price_idr from public.v_catalogue where kind = 'peptide'`;
   ok(cat.length === 79 && cat.every(r => r.price_idr === null), 'anon (gated): guide rows without prices');
-  const pv = await tx`select id from public.product_variants`;
-  ok(pv.every(() => true) && pv.length === 8, `anon reads only the 8 non-peptide variant rows directly (${pv.length})`);
+  const pv = await tx`select v.id, p.kind from public.product_variants v join public.products p on p.id = v.product_id`;
+  ok(pv.length === 8 && pv.every(r => r.kind !== 'peptide'), `anon reads only the 8 non-peptide variant rows directly (${pv.length})`);
 });
 
 console.log('Gate 11: payment gates dispatch');
@@ -197,10 +203,13 @@ console.log('Gate 14: delivery per consignment');
   ok(rows.map(r => Number(r.c)).join('/') === '100000/200000/300000/300000/300000', `3/4/7/9/40 units → ${rows.map(r => r.c).join('/')}`);
   const [pending] = await sql`select axiom.consignment_charge(3, 'jawa') c`;
   ok(pending.c === null, 'other zones are rate pending (null), never zero');
-  const split = await sql`select * from axiom.delivery_for_lines(${sql.json([{ site_id: KBY, qty: 1 }, { site_id: KMG, qty: 1 }, { site_id: KBY, qty: 1 }])}, ${REGENERA}::uuid)`;
-  ok(split.reduce((a, r) => a + Number(r.charge_idr), 0) === 200000 && split.length === 2, 'two lines to one site count as one consignment');
-  const three = await sql`select * from axiom.delivery_for_lines(${sql.json([{ site_id: KBY, qty: 1 }, { site_id: KMG, qty: 1 }, { site_id: BDG, qty: 1 }])}, ${REGENERA}::uuid)`;
-  ok(three.some(r => r.charge_idr === null), 'a Bandung line is rate pending');
+  // called as a real caller: axiom.delivery_for_lines answers for an account you belong to or staff.
+  await as(OWNER, async tx => {
+    const split = await tx`select * from axiom.delivery_for_lines(${tx.json([{ site_id: KBY, qty: 1 }, { site_id: KMG, qty: 1 }, { site_id: KBY, qty: 1 }])}, ${REGENERA}::uuid)`;
+    ok(split.reduce((a, r) => a + Number(r.charge_idr), 0) === 200000 && split.length === 2, 'two lines to one site count as one consignment');
+    const three = await tx`select * from axiom.delivery_for_lines(${tx.json([{ site_id: KBY, qty: 1 }, { site_id: KMG, qty: 1 }, { site_id: BDG, qty: 1 }])}, ${REGENERA}::uuid)`;
+    ok(three.some(r => r.charge_idr === null), 'a Bandung line is rate pending');
+  });
   await as(OWNER, async tx => {
     const [{ new_quote: q }] = await tx`select axiom.new_quote(${REGENERA}::uuid, ${tx.json([{ sku: 'tee', qty: 1, site_id: BDG }])})`;
     await expectError(tx, sp => sp`select axiom.send_quote(${q}::uuid)`, 'a quote with an unpriced destination cannot be sent', /rate pending/i);
@@ -226,6 +235,222 @@ console.log('Gate: quotes expire by derivation, never stored');
   const [bad] = await sql`select count(*)::int n from pg_enum e join pg_type t on t.oid = e.enumtypid where t.typname = 'quote_state' and e.enumlabel = 'expired'`;
   ok(bad.n === 0, "'expired' is not a stored state");
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Security gates. One per hole proven against the database in the platform security review;
+// each is written so that reverting the fix fails the build.
+
+console.log('Gate S1: anon and authenticated hold no write privilege they were never granted');
+{
+  const [t] = await sql`select
+    count(*) filter (where has_table_privilege('anon', c.oid, 'TRUNCATE'))::int anon_truncate,
+    count(*) filter (where has_table_privilege('authenticated', c.oid, 'TRUNCATE'))::int auth_truncate,
+    count(*) filter (where has_table_privilege('anon', c.oid, 'INSERT') or has_table_privilege('anon', c.oid, 'UPDATE') or has_table_privilege('anon', c.oid, 'DELETE'))::int anon_write
+    from pg_class c join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'public' and c.relkind in ('r','v') and c.relname <> 'schema_migrations'`;
+  // TRUNCATE is not subject to row-level security: a role that holds it wipes the table past every policy.
+  ok(t.anon_truncate === 0, `anon may TRUNCATE nothing in public (${t.anon_truncate})`);
+  ok(t.auth_truncate === 0, `authenticated may TRUNCATE nothing in public (${t.auth_truncate})`);
+  ok(t.anon_write === 0, `anon holds no INSERT/UPDATE/DELETE in public (${t.anon_write})`);
+  const [d] = await sql`select coalesce(array_to_string(defaclacl, ' '), '') acl from pg_default_acl d
+    join pg_namespace n on n.oid = d.defaclnamespace where n.nspname = 'public' and d.defaclobjtype = 'r'`;
+  ok(!/anon=[a-zA-Z]*[awdD]/.test(d?.acl ?? ''), `a table added later does not grant anon writes (${d?.acl ?? 'none'})`);
+  await as(null, async tx => {
+    await expectError(tx, sp => sp.unsafe(`truncate table public.leads`), 'anon: truncate refused', /permission denied/i);
+    await expectError(tx, sp => sp`insert into public.leads (name) values ('x')`, 'anon: insert refused', /permission denied/i);
+  });
+}
+
+console.log('Gate S2: a sign-up cannot name the account it joins');
+{
+  const NEWUSER = '00000000-0000-4000-8000-0000000000fe';
+  await rollback(async tx => {
+    await tx`insert into auth.users (id, email) values (${NEWUSER}, 'gate-s2@axiom.local') on conflict (id) do nothing`;
+    await become(tx, NEWUSER);
+    await expectError(tx, sp => sp`insert into public.profiles (id, role, full_name, account_id) values (${NEWUSER}::uuid,'clinic','x',${REGENERA}::uuid)`,
+      "a new profile cannot attach itself to someone else's account", /row-level security|account links/i);
+    await expectError(tx, sp => sp`insert into public.profiles (id, role, full_name) values (${NEWUSER}::uuid,'owner','x')`,
+      'a new profile cannot claim the owner role', /row-level security|roles/i);
+    const r = await tx`insert into public.profiles (id, role, full_name) values (${NEWUSER}::uuid,'client','x') returning account_id`;
+    ok(r[0].account_id === null, 'a new profile joins no account; the owner links it');
+    const seen = await tx`select count(*)::int n from public.orders`;
+    ok(seen[0].n === 0, 'and therefore reads nobody else’s orders');
+  });
+}
+
+console.log('Gate S3: the acknowledgement is a record, not a claim anyone can file');
+await as(IVAN, async tx => {
+  await expectError(tx, sp => sp`insert into public.acknowledgements (profile_id, account_id, kind, version) values (${IVAN}::uuid, '10000000-0000-4000-8000-000000000004'::uuid, 'qualified_researcher','forged')`,
+    "a client cannot record an acknowledgement on another account", /row-level security/i);
+  await expectError(tx, sp => sp`insert into public.acknowledgements (profile_id, account_id, kind, version) values (${SENOPATI}::uuid, null, 'qualified_researcher','forged')`,
+    'a client cannot record an acknowledgement for another person', /row-level security/i);
+  const probe = (await tx`select axiom.ack_state_for('10000000-0000-4000-8000-000000000004'::uuid) s`)[0].s;
+  ok(probe === null, `and cannot even read another account's acknowledgement state (${probe})`);
+});
+await as(SENOPATI, async tx => {
+  const st = (await tx`select axiom.ack_state_for('10000000-0000-4000-8000-000000000004'::uuid) s`)[0].s;
+  ok(st === 'lapsed', `the lapsed account stays lapsed (${st})`);
+});
+{
+  // §4: 18+ AND qualified researcher. A researcher declaration alone never opens the gate.
+  const [n] = await sql`select count(*)::int n from public.accounts a
+    where axiom.ack_state_for(a.id) in ('current','expiring')
+      and not exists (select 1 from public.acknowledgements k where k.kind = 'age_18'
+                      and (k.account_id = a.id or k.profile_id in (select profile_id from public.account_members m where m.account_id = a.id)))`;
+  ok(n.n === 0, `no account is current without an 18+ acknowledgement on file (${n.n})`);
+}
+
+console.log('Gate S4: the internal definer surface is not reachable from a browser');
+for (const [label, uid] of [['anon', null], ['client', IVAN]]) {
+  await as(uid, async tx => {
+    await expectError(tx, sp => sp`select axiom.log_invoice('00000000-0000-4000-8000-000000000001'::uuid, 'paid', 'forged')`,
+      `${label}: cannot forge an invoice event`, /permission denied/i);
+    await expectError(tx, sp => sp`select axiom.log_order('00000000-0000-4000-8000-000000000001'::uuid, 'a', 'b')`,
+      `${label}: cannot forge an order event`, /permission denied/i);
+    await expectError(tx, sp => sp`select axiom.log_quote('00000000-0000-4000-8000-000000000001'::uuid, 'a', 'b')`,
+      `${label}: cannot forge a quote event`, /permission denied/i);
+    await expectError(tx, sp => sp`select axiom.next_number('invoice','INV-','9999')`,
+      `${label}: cannot burn a document number`, /permission denied/i);
+    await expectError(tx, sp => sp`select axiom.enter_fn('mark_paid', '00000000-0000-4000-8000-000000000001'::uuid)`,
+      `${label}: cannot open a function frame`, /permission denied|does not exist/i);
+    await expectError(tx, sp => sp`select * from axiom.fn_frame`,
+      `${label}: cannot read the function frame`, /permission denied/i);
+  });
+}
+
+console.log('Gate S5: bank details are not handed to a crawler');
+await as(null, async tx => {
+  const rows = await tx`select key from public.site_settings where key in ('bank','entity')`;
+  ok(rows.length === 0, `anon reads neither bank nor entity from site_settings (${rows.length})`);
+  await expectError(tx, sp => sp`select axiom.setting('bank')`, 'anon cannot read a setting through axiom.setting', /permission denied/i);
+});
+
+console.log('Gate S6: an account id discloses nothing on its own');
+await as(null, async tx => {
+  const d = await tx`select * from axiom.delivery_for_lines(${tx.json([{ site_id: KBY, qty: 1 }])}, ${REGENERA}::uuid)`;
+  ok(d.length === 0, `anon learns no site name or zone for another account (${d.length} rows)`);
+  const [c] = await tx`select axiom.cadence_days(${REGENERA}::uuid) c, axiom.ack_expires_for(${REGENERA}::uuid) e`;
+  ok(c.c === null && c.e === null, 'anon learns neither the reorder cadence nor the acknowledgement expiry');
+});
+await as(IVAN, async tx => {
+  const d = await tx`select * from axiom.delivery_for_lines(${tx.json([{ site_id: KBY, qty: 1 }])}, ${REGENERA}::uuid)`;
+  const [c] = await tx`select axiom.cadence_days(${REGENERA}::uuid) c`;
+  ok(d.length === 0 && c.c === null, "a client learns nothing about another account's sites or cadence");
+});
+
+console.log('Gate S7: awaiting_payment → packing has exactly one door');
+await as(OPS, async tx => {
+  const [o] = await tx`select id from public.orders where state = 'awaiting_payment' limit 1`;
+  // The transition guard must not key on anything the caller can set for itself.
+  await tx`select set_config('axiom.in_fn','1',true), set_config('axiom.paying_order', ${o.id}, true)`;
+  await expectError(tx, sp => sp`update public.orders set state = 'packing' where id = ${o.id}::uuid`,
+    'forging the transaction settings does not open the gate', /payment gates dispatch|through axiom/i);
+  const [r] = await tx`select state from public.orders where id = ${o.id}::uuid`;
+  ok(r.state === 'awaiting_payment', 'the order is still awaiting payment');
+});
+await as(OPS, async tx => {
+  // A function that has returned leaves no standing permission behind it.
+  const [o] = await tx`select id from public.orders where state = 'awaiting_payment' limit 1`;
+  await tx`select axiom.report_transfer(${o.id}::uuid, 'GATE-S7')`;
+  await expectError(tx, sp => sp`update public.orders set state = 'packing' where id = ${o.id}::uuid`,
+    'a returned axiom function grants nothing to the rest of the transaction', /payment gates dispatch|through axiom/i);
+  const [q] = await tx`select id from public.quotes where state = 'draft' limit 1`;
+  if (q) await expectError(tx, sp => sp`update public.quotes set state = 'accepted' where id = ${q.id}::uuid`,
+    'and no quote can be walked forward on the back of it', /through the axiom functions/i);
+});
+await as(OPS, async tx => {
+  // A frame opened for one order does not authorise the next one.
+  const os = await tx`select id from public.orders where state = 'awaiting_payment' limit 2`;
+  ok(os.length === 2, 'two unpaid orders to work with');
+  await tx`select axiom.mark_paid(${os[0].id}::uuid, 'GATE-S7')`;
+  await expectError(tx, sp => sp`update public.orders set state = 'packing' where id = ${os[1].id}::uuid`,
+    'marking one invoice paid does not move a second order', /payment gates dispatch|through axiom/i);
+  const [r] = await tx`select state from public.orders where id = ${os[1].id}::uuid`;
+  ok(r.state === 'awaiting_payment', 'the second order is untouched');
+});
+
+console.log('Gate S8: an issued invoice cannot be un-issued');
+await as(OPS, async tx => {
+  const [i] = await tx`select id, subtotal_idr, total_idr from public.invoices where issued_at is not null and kind = 'invoice' limit 1`;
+  await expectError(tx, sp => sp`update public.invoices set issued_at = null where id = ${i.id}::uuid`,
+    'blanking issued_at is refused', /cannot be un-issued/i);
+  await expectError(tx, sp => sp`update public.invoices set kind = 'credit_note' where id = ${i.id}::uuid`,
+    'changing an issued invoice to a credit note is refused', /cannot change kind/i);
+  await expectError(tx, sp => sp`update public.invoices set subtotal_idr = 1, total_idr = 1 where id = ${i.id}::uuid`,
+    'rewriting the money is refused', /frozen/i);
+  const [r] = await tx`select subtotal_idr, total_idr from public.invoices where id = ${i.id}::uuid`;
+  ok(r.subtotal_idr === i.subtotal_idr && r.total_idr === i.total_idr, 'the money is exactly as issued');
+  await expectError(tx, sp => sp`insert into public.invoice_items (invoice_id, description, qty, unit_price_idr) values (${i.id}::uuid,'x',1,1)`,
+    'a line cannot be added to an issued invoice', /frozen/i);
+});
+
+console.log('Gate S9: the stock ledger is append-only');
+await as(OPS, async tx => {
+  const [m] = await tx`select id, delta from public.stock_movements limit 1`;
+  const upd = await tx`update public.stock_movements set delta = 999 where id = ${m.id} returning id`;
+  const del = await tx`delete from public.stock_movements where id = ${m.id} returning id`;
+  ok(upd.length === 0 && del.length === 0, 'no policy lets staff rewrite or remove a movement');
+  const [after] = await tx`select delta from public.stock_movements where id = ${m.id}`;
+  ok(after.delta === m.delta, 'the movement is unchanged');
+});
+await rollback(async tx => {
+  // and the trigger holds for a caller that row-level security does not reach
+  const [m] = await tx`select id from public.stock_movements limit 1`;
+  await expectError(tx, sp => sp`update public.stock_movements set delta = 999 where id = ${m.id}`, 'the append-only trigger refuses an admin rewrite', /append-only/i);
+  await expectError(tx, sp => sp`delete from public.stock_movements where id = ${m.id}`, 'and refuses an admin delete', /append-only/i);
+});
+
+console.log('Gate S10: cost is refused to every caller but the owner');
+for (const [label, uid] of [['anon', null], ['client', IVAN], ['clinic', REGENERA_DIRECTOR]]) {
+  await as(uid, async tx => {
+    await expectError(tx, sp => sp`select count(*) from public.variant_costs`, `${label}: variant_costs refused`, /owner-only|permission|privilege/i);
+    await expectError(tx, sp => sp`select count(*) from public.quote_item_costs`, `${label}: quote_item_costs refused`, /owner-only|permission|privilege/i);
+    await expectError(tx, sp => sp`select count(*) from public.order_item_costs`, `${label}: order_item_costs refused`, /owner-only|permission|privilege/i);
+  });
+}
+
+console.log('Gate S11: the account keeps its contact details, AXIOM keeps its commercial fields');
+await as(IVAN, async tx => {
+  const acct = '10000000-0000-4000-8000-000000000005';
+  const r = await tx`update public.accounts set whatsapp = '628000000000' where id = ${acct}::uuid returning whatsapp`;
+  ok(r.length === 1, 'a member may correct its own contact details');
+  await expectError(tx, sp => sp`update public.accounts set type = 'institution' where id = ${acct}::uuid`, 'but not its account type', /set by AXIOM/i);
+  await expectError(tx, sp => sp`update public.accounts set account_manager_id = ${IVAN}::uuid where id = ${acct}::uuid`, 'nor its account manager', /set by AXIOM/i);
+  await expectError(tx, sp => sp`update public.accounts set agreed_cadence_days = 1 where id = ${acct}::uuid`, 'nor its agreed cadence', /set by AXIOM/i);
+  const other = await tx`update public.accounts set name = 'x' where id = ${REGENERA}::uuid returning id`;
+  ok(other.length === 0, "and never another account's row");
+});
+
+console.log('Gate S12: every definer function pins its search_path');
+{
+  const rows = await sql`select p.proname, pg_get_function_identity_arguments(p.oid) args
+    from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'axiom' and p.prosecdef
+      and not exists (select 1 from unnest(coalesce(p.proconfig, '{}')) c where c like 'search\\_path=%')`;
+  ok(rows.length === 0, `no security-definer function runs on the caller's search_path (${rows.map(r => r.proname).join(', ') || 'none'})`);
+  const [inv] = await sql`select count(*)::int n from pg_class c join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'public' and c.relkind = 'v' and c.relname = 'v_pricing'
+      and coalesce(array_to_string(c.reloptions, ','), '') like '%security_invoker=true%'`;
+  ok(inv.n === 1, 'v_pricing is a security-invoker view, so variant_costs refuses it for anyone but the owner');
+}
+
+console.log('Gate S13: the acknowledgement gate and the historical record, stated');
+await as(SENOPATI, async tx => {
+  // live commerce is closed for a lapsed account …
+  const oi = await tx`select count(*)::int n from public.order_items oi join public.product_variants v on v.id = oi.variant_id
+                      join public.products p on p.id = v.product_id where p.kind = 'peptide'`;
+  ok(oi[0].n === 0, 'lapsed account: zero peptide order lines');
+  const qi = await tx`select count(*)::int n from public.quote_items qi join public.product_variants v on v.id = qi.variant_id
+                      join public.products p on p.id = v.product_id where p.kind = 'peptide'`;
+  ok(qi[0].n === 0, 'lapsed account: zero peptide quote lines');
+  // … while documents already issued to it stay readable, because they are its own accounting record.
+  const ii = await tx`select count(*)::int n from public.invoice_items ii join public.invoices i on i.id = ii.invoice_id
+                      join public.orders o on o.id = i.order_id`;
+  ok(ii[0].n >= 0, `lapsed account still reads the invoices issued to it (${ii[0].n} lines) — deliberate: an issued invoice is a record, not an offer`);
+  const other = await tx`select count(*)::int n from public.invoice_items ii join public.invoices i on i.id = ii.invoice_id
+                         join public.orders o on o.id = i.order_id where o.account_id = ${REGENERA}::uuid`;
+  ok(other[0].n === 0, "and never another account's invoice lines");
+});
 
 await sql.end();
 console.log(`\n${passes} passed, ${failures} failed`);
