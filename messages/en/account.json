@@ -195,7 +195,7 @@
       "destination": "Destination",
       "default_site": "Default address",
       "delivery": "Delivery per destination",
-      "delivery_note": "Rp 100.000 per three units to each destination, capped at Rp 300.000 per destination, in Jabodetabek. Other zones are priced when the quote is sent.",
+      "delivery_note": "{per} per three units to each destination, capped at {cap} per destination, in Jabodetabek. Other zones are priced when the quote is sent.",
       "rate_pending": "Rate pending",
       "goods": "Goods",
       "goods_gated": "Peptide prices appear on the quote once the acknowledgement is recorded.",

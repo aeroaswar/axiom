@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Jost } from 'next/font/google';
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { hasLocale } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -36,7 +36,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
     <html lang={locale} className={`${inter.variable} ${jost.variable}`}>
       <body>
         <Sprite />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        {children}
       </body>
     </html>
   );

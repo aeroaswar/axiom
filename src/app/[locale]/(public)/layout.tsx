@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Messages, CORE } from '@/i18n/provider';
 import { SiteNav } from '@/components/site/site-nav';
 import { SiteFooter } from '@/components/site/site-footer';
 import { getSettings } from '@/lib/settings';
@@ -18,6 +19,7 @@ export default async function PublicLayout({ children, params }: { children: Rea
     { href: '/faq', label: t('faq') },
   ];
   return (
+    <Messages only={[...CORE, 'site']}>
     <div className="site">
       <a className="skip" href="#main">{ts('skip')}</a>
       <div className="ribbon"><b>RUO</b> · {tc('ruo_short')}</div>
@@ -25,5 +27,6 @@ export default async function PublicLayout({ children, params }: { children: Rea
       <main id="main" className="site-main">{children}</main>
       <SiteFooter whatsapp={settings.whatsapp} />
     </div>
+    </Messages>
   );
 }

@@ -109,7 +109,7 @@ export default async function StandardPage({ params }: { params: Promise<{ local
       {/* ---------------------------------------------------------- compliance */}
       <section className="band">
         <div className="wrap">
-          <Reveal as="div" className="shead nonum">
+          <Reveal as="div" className="shead nonum duo">
             <div>
               <span className="kicker k">{t('notice_kicker')}</span>
               <h2>{t('notice_title')}</h2>

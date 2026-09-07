@@ -57,7 +57,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       {/* --------------------------------------------------------- 01 position */}
       <section className="band" id="position">
         <div className="wrap">
-          <Reveal as="div" className="shead">
+          <Reveal as="div" className="shead duo">
             <span className="no">{t('pos_no')}</span>
             <div>
               <span className="kicker k">{t('pos_kicker')}</span>
@@ -71,7 +71,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       {/* --------------------------------------------------------- 02 standard */}
       <section className="band" id="standard">
         <div className="wrap">
-          <Reveal as="div" className="shead">
+          <Reveal as="div" className="shead duo">
             <span className="no">{t('std_no')}</span>
             <div>
               <span className="kicker k">{t('std_kicker')}</span>
@@ -103,7 +103,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       {/* --------------------------------------------------------- 03 pillars */}
       <section className="band" id="pillars">
         <div className="wrap">
-          <Reveal as="div" className="shead">
+          <Reveal as="div" className="shead duo">
             <span className="no">{t('pil_no')}</span>
             <div>
               <span className="kicker k">{t('pil_kicker')}</span>

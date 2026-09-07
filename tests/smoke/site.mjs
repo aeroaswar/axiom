@@ -33,8 +33,12 @@ const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM 
 // the dev server recompiles on demand; a first hit can reset the connection while it does
 async function go(page, url, waitUntil = 'domcontentloaded') {
   for (let i = 0; i < 3; i++) {
-    try { return await page.goto(url, { waitUntil, timeout: 45000 }); }
-    catch (e) { if (i === 2) throw e; await page.waitForTimeout(1500); }
+    try {
+      const res = await page.goto(url, { waitUntil, timeout: 45000 });
+      // a dev server that is still compiling answers 500 once; give it a moment and ask again
+      if (res && res.status() >= 500 && i < 2) { await page.waitForTimeout(2000); continue; }
+      return res;
+    } catch (e) { if (i === 2) throw e; await page.waitForTimeout(1500); }
   }
 }
 
@@ -248,6 +252,45 @@ for (const width of [390, 1440]) {
     return el ? getComputedStyle(el).outlineStyle : 'none';
   });
   ok('focus is visible', ring !== 'none', ring);
+  await ctx.close();
+}
+
+// ---------------------------------------------------------------- largest contentful paint
+// A throttled mid-range mobile profile. Against `next dev` these figures carry the compiler and
+// the unminified bundle; set LCP_STRICT=1 to make the 2.5 s budget a hard gate on a production
+// build, which is where the number is meant to be read.
+{
+  const strict = process.env.LCP_STRICT === '1';
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+  for (const route of ['/', '/price-list', compoundHref]) {
+    const page = await ctx.newPage();
+    const cdp = await ctx.newCDPSession(page);
+    await cdp.send('Network.enable');
+    await cdp.send('Network.emulateNetworkConditions', {
+      offline: false, latency: 150, downloadThroughput: (1.6 * 1024 * 1024) / 8, uploadThroughput: (750 * 1024) / 8,
+    });
+    await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+    await go(page, `${BASE}${route}`, 'domcontentloaded');   // warm the compiler
+    await page.close();
+
+    const p2 = await ctx.newPage();
+    const cdp2 = await ctx.newCDPSession(p2);
+    await cdp2.send('Network.enable');
+    await cdp2.send('Network.emulateNetworkConditions', {
+      offline: false, latency: 150, downloadThroughput: (1.6 * 1024 * 1024) / 8, uploadThroughput: (750 * 1024) / 8,
+    });
+    await cdp2.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+    await go(p2, `${BASE}${route}`, 'load');
+    const lcp = await p2.evaluate(() => new Promise(resolve => {
+      let value = 0;
+      new PerformanceObserver(list => { for (const e of list.getEntries()) value = e.startTime; }).observe({ type: 'largest-contentful-paint', buffered: true });
+      setTimeout(() => resolve(Math.round(value)), 2500);
+    }));
+    const label = `LCP ${route === '/' ? '/' : route} ${lcp} ms (throttled 390px, dev server)`;
+    if (strict) ok(label, lcp > 0 && lcp < 2500);
+    else { pass++; console.log('  ·', label); }
+    await p2.close();
+  }
   await ctx.close();
 }
 

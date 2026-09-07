@@ -1,7 +1,6 @@
 import 'server-only';
 import fs from 'node:fs';
 import path from 'node:path';
-import { renderToStaticMarkup } from 'react-dom/server';
 import { createElement } from 'react';
 import { AxiomDocument, type DocumentData } from '@/components/document/document';
 import { SPRITE } from '@/components/shell/sprite-svg';
@@ -25,7 +24,11 @@ function documentCss(): string {
  *  trigger-generated but staff may insert an explicit one, so escape it rather than trust it. */
 const esc = (s: string) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 
-export function documentHtml(d: DocumentData, fontsHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap'): string {
+// `react-dom/server` is refused as a static import in every App Router server layer, route
+// handlers included, so it is pulled in at call time. That is what makes this the one renderer
+// the preview, the print view and the PDF can all share.
+export async function documentHtml(d: DocumentData, fontsHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap'): Promise<string> {
+  const { renderToStaticMarkup } = await import('react-dom/server');
   const body = renderToStaticMarkup(createElement(AxiomDocument, { d }));
   const lang = /^[a-z]{2}(-[A-Za-z0-9]{2,8})*$/.test(d.lang) ? d.lang : 'id';
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(d.number)}</title>
@@ -43,7 +46,7 @@ export async function documentPdf(d: DocumentData): Promise<Buffer> {
   const browser = await chromium.launch({ executablePath });
   try {
     const page = await browser.newPage();
-    await page.setContent(documentHtml(d), { waitUntil: 'networkidle' });
+    await page.setContent(await documentHtml(d), { waitUntil: 'networkidle' });
     await page.evaluate(() => (document as unknown as { fonts: { ready: Promise<unknown> } }).fonts.ready);
     const pdf = await page.pdf({ format: 'A4', printBackground: true, preferCSSPageSize: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
     return Buffer.from(pdf);

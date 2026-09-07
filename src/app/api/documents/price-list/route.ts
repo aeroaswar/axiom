@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { getSession } from '@/lib/auth';
 import { getPricesAsAt } from '@/lib/site/catalogue';
 import { priceListDocument, priceListFilename } from '@/lib/documents/price-list';
-import { documentPdf } from '@/lib/documents/render';
+import { documentPdf } from '@/lib/pdf';
 import { routing } from '@/i18n/routing';
 
 export const dynamic = 'force-dynamic';
