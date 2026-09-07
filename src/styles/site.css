@@ -316,8 +316,8 @@
 .site .chips{display:flex;gap:8px;flex-wrap:wrap;padding:20px 0;border-bottom:1px solid var(--line)}
 
 /* ---------- request ---------- */
-.site .req{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:64px;align-items:start;margin-top:44px}
-@media(max-width:960px){.site .req{grid-template-columns:1fr;gap:44px}}
+.site .req-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:64px;align-items:start;margin-top:44px}
+@media(max-width:960px){.site .req-grid{grid-template-columns:1fr;gap:44px}}
 .site .req-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 26px;padding:22px 0;border-bottom:1px solid var(--line);align-items:center}
 .site .req-line .nm{font-family:var(--display);font-weight:300;font-size:20px;letter-spacing:-.01em;color:var(--ink)}
 .site .req-line .sub{font-size:11.5px;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
@@ -387,3 +387,25 @@
   .site .doses-tbl td.dose{white-space:normal}
   .site .doses-tbl th{letter-spacing:.16em}
 }
+
+/* the hero meta strip folds to two even columns on a phone, so the four figures still line up */
+@media(max-width:680px){
+  .site .hero-meta .wrap{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+  .site .hero-meta .m{min-width:0;padding:16px 16px 16px 0;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);display:flex;flex-direction:column}
+  .site .hero-meta .m:nth-child(2n){border-right:none;padding-left:16px}
+  .site .hero-meta .m:nth-last-child(-n+2){border-bottom:none}
+  .site .hero-meta .m .k{min-height:2.6em}
+  .site .hero-meta .m .v{margin-top:auto}
+}
+
+@media(max-width:680px){
+  .site .page-hero{padding:54px 0 34px}
+  .site .cp-head{padding:54px 0 28px}
+  .site .cp-sec{padding:42px 0}
+  .site .cp-sec .hd{margin-bottom:22px}
+}
+
+/* a section head without a numeral: the numerals belong to the home page's movements and to a
+   compound's sections, not to every sub-heading on the site */
+.site .shead.nonum{grid-template-columns:minmax(0,1fr)}
+.site .band>.wrap>.stmts:first-child,.site .band>.wrap>.psteps:first-child{margin-top:0}

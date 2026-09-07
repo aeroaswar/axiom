@@ -66,10 +66,19 @@ export function TopBarActions({ surface, badge, primaryHref, primaryLabel, searc
       }
       if (e.key === '/') { e.preventDefault(); setSearching(true); setTimeout(() => input.current?.focus(), 0); }
       else if (e.key === 'n' && surface === 'console') { router.push(primaryHref); }
-      else if (e.key === 'Escape') { setSearching(false); router.back(); }
+      else if (e.key === 'Escape') {
+        // Escape closes the search only. An open sheet closes itself (it owns its own handler and
+        // its own route), and Escape on a plain list must not navigate anywhere.
+        setSearching(false);
+      }
       else if (/^[1-5]$/.test(e.key)) {
-        const tabs = document.querySelectorAll<HTMLAnchorElement>('.tabbar .tab, .rail a');
-        const el = tabs[Number(e.key) - 1]; if (el) el.click();
+        // Whichever navigation is actually on screen: the rail above 1024 px, the tab bar below.
+        // Both are in the DOM at every width, so pick the visible one rather than the first match.
+        const nav = document.querySelector<HTMLElement>('.tabbar');
+        const visible = nav && nav.offsetParent !== null
+          ? nav.querySelectorAll<HTMLAnchorElement>('.tab')
+          : document.querySelectorAll<HTMLAnchorElement>('.rail a[href]');
+        const el = visible[Number(e.key) - 1]; if (el) el.click();
       }
     };
     window.addEventListener('keydown', onKey);

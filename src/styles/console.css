@@ -72,7 +72,10 @@ tr.sel td { background: var(--glass-accent); }
 /* ---------- the compound-guide editor ------------------------------------
    Wider than the standard docked panel: eight bilingual fields do not read at 460 px. */
 @media (min-width: 1024px) {
+  .sheet-wide,
   .sheet:has([data-wide]) { width: min(660px, 54vw); }
+  .app.panel:has(.sheet-wide) .scroll,
+  .app.panel:has(.sheet-wide) .ruo-bar,
   .app.panel:has(.sheet [data-wide]) .scroll,
   .app.panel:has(.sheet [data-wide]) .ruo-bar { margin-right: min(660px, 54vw); }
 }

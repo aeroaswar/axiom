@@ -8,8 +8,10 @@ import { Icon } from './sprite';
  * to the right edge at 1024 px and above with the list still in view. One component, both surfaces.
  * `backHref` is where closing goes; the list page that opened the sheet.
  */
-export function Sheet({ kicker, title, children, footer, backHref, closeLabel = 'Close' }: {
+export function Sheet({ kicker, title, children, footer, backHref, closeLabel = 'Close', className, wide }: {
   kicker?: string; title: string; children: React.ReactNode; footer?: React.ReactNode; backHref: string; closeLabel?: string;
+  /** Extra classes on the panel. `wide` is the sanctioned widening for an editing surface. */
+  className?: string; wide?: boolean;
 }) {
   const router = useRouter();
   const start = useRef<number | null>(null);
@@ -25,7 +27,7 @@ export function Sheet({ kicker, title, children, footer, backHref, closeLabel = 
   return (
     <>
       <div className="scrim on" onClick={close} aria-hidden="true" />
-      <aside className="sheet on" role="dialog" aria-modal="true" aria-label={title}
+      <aside className={`sheet on${wide ? ' sheet-wide' : ''}${className ? ' ' + className : ''}`} role="dialog" aria-modal="true" aria-label={title}
         onTouchStart={e => { start.current = e.touches[0].clientY; }}
         onTouchEnd={e => { if (start.current !== null && e.changedTouches[0].clientY - start.current > 80) close(); start.current = null; }}>
         <div className="grab" />

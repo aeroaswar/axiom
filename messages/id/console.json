@@ -373,7 +373,7 @@
       "refs": "{count, plural, =0 {Tanpa referensi} other {# referensi}}",
       "needs_refs": "Teks riset tanpa referensi",
       "note": "Halaman senyawa memuat identitas, apa yang telah diteliti, penanganan, dan verifikasi. Teks riset tampil di situs publik hanya bila ada setidaknya satu referensi. Tidak ada yang tayang sebelum diterbitkan.",
-      "empty": "Belum ada produk.",
+      "empty": "Tidak ada senyawa yang cocok dengan filter ini.",
       "editor": {
         "kicker": "Panduan senyawa",
         "back": "Semua senyawa",

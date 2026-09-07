@@ -1,4 +1,3 @@
-import '@/styles/console.css';
 import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 import { PageTitle } from '@/components/shell/shell-client';

@@ -23,6 +23,7 @@ export default async function StandardPage({ params }: { params: Promise<{ local
   setRequestLocale(locale);
   const t = await getTranslations('site.standard');
   const tn = await getTranslations('nav');
+  const th = await getTranslations('site.home');
   const [settings, coa] = await Promise.all([getSettings(), getSampleCoa()]);
   const coaFile = coa ? coaFileExists(coa.file_path) : false;
   const method = settings.verification.method;
@@ -60,7 +61,7 @@ export default async function StandardPage({ params }: { params: Promise<{ local
               <div className="stmt" key={it.t}>
                 <span className="idx mono-n">{String(i + 1).padStart(2, '0')}</span>
                 <div><h3>{it.t}</h3><p>{it.b}</p></div>
-                {i === 0 ? <div className="fig mono-n">{threshold}<small>{t('kicker')}</small></div> : null}
+                {i === 0 ? <div className="fig mono-n">{threshold}<small>{th('meta_purity')}</small></div> : null}
               </div>
             ))}
           </Stagger>
@@ -108,8 +109,7 @@ export default async function StandardPage({ params }: { params: Promise<{ local
       {/* ---------------------------------------------------------- compliance */}
       <section className="band">
         <div className="wrap">
-          <Reveal as="div" className="shead">
-            <span className="no">05</span>
+          <Reveal as="div" className="shead nonum">
             <div>
               <span className="kicker k">{t('notice_kicker')}</span>
               <h2>{t('notice_title')}</h2>

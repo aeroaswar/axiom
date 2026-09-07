@@ -1,4 +1,3 @@
-import '@/styles/console.css';
 import { getTranslations } from 'next-intl/server';
 import { Sheet } from '@/components/shell/sheet';
 import { PageTitle } from '@/components/shell/shell-client';

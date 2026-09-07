@@ -84,7 +84,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
               </div>
             </div>
           ) : (
-            <div className="req">
+            <div className="req-grid">
               {/* ------------------------------------------------------- the lines */}
               <div>
                 <span className="kicker">{t('lines')}</span>

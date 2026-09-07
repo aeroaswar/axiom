@@ -373,7 +373,7 @@
       "refs": "{count, plural, =0 {No references} one {# reference} other {# references}}",
       "needs_refs": "Research text without a reference",
       "note": "A compound page carries identity, what has been studied, handling and verification. Research text renders on the public site only when at least one reference exists. Nothing goes live unpublished.",
-      "empty": "No products.",
+      "empty": "No compounds match this filter.",
       "editor": {
         "kicker": "Compound guide",
         "back": "All compounds",

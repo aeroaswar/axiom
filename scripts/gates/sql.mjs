@@ -228,6 +228,27 @@ console.log('Gate 22: everything is logged');
   ok(inv.n === 0, 'every issued invoice carries its issued event');
 }
 
+console.log('Gate S14: ack_state_for is total, and still closed to a stranger');
+{
+  // A script, a job or this suite assumes no role: it must read a real state, never NULL.
+  const rows = await sql`select axiom.ack_state_for(id) st from public.accounts`;
+  ok(rows.every(r => r.st !== null), `every account has a state for a trusted caller (${rows.map(r => r.st).join(', ')})`);
+  ok(rows.some(r => r.st === 'current') && rows.some(r => r.st === 'lapsed') && rows.some(r => r.st === 'none'),
+     'the seeded accounts still span current, lapsed and none');
+}
+await as(null, async tx => {
+  const [r] = await tx`select axiom.ack_state_for(${REGENERA}::uuid) st`;
+  ok(r.st === 'none', `anon reads 'none' for another account, never its real state (${r.st})`);
+});
+await as(IVAN, async tx => {
+  const [r] = await tx`select axiom.ack_state_for(${REGENERA}::uuid) st`;
+  ok(r.st === 'none', `a client of another account reads 'none' (${r.st})`);
+});
+await as(REGENERA_DIRECTOR, async tx => {
+  const [r] = await tx`select axiom.ack_state_for(${REGENERA}::uuid) st`;
+  ok(r.st === 'current', `a member reads its own real state (${r.st})`);
+});
+
 console.log('Gate: quotes expire by derivation, never stored');
 {
   const [r] = await sql`select count(*)::int n from public.quotes q where axiom.quote_state(q) = 'expired'`;
@@ -284,8 +305,10 @@ await as(IVAN, async tx => {
     "a client cannot record an acknowledgement on another account", /row-level security/i);
   await expectError(tx, sp => sp`insert into public.acknowledgements (profile_id, account_id, kind, version) values (${SENOPATI}::uuid, null, 'qualified_researcher','forged')`,
     'a client cannot record an acknowledgement for another person', /row-level security/i);
+  // Senopati is lapsed. A stranger must not learn that: the function is total, so it answers with
+  // the safe default rather than the real state (and never with the account's actual standing).
   const probe = (await tx`select axiom.ack_state_for('10000000-0000-4000-8000-000000000004'::uuid) s`)[0].s;
-  ok(probe === null, `and cannot even read another account's acknowledgement state (${probe})`);
+  ok(probe === 'none', `and cannot read another account's real acknowledgement state (${probe})`);
 });
 await as(SENOPATI, async tx => {
   const st = (await tx`select axiom.ack_state_for('10000000-0000-4000-8000-000000000004'::uuid) s`)[0].s;
