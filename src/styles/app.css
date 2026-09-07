@@ -159,6 +159,8 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 .kpis.sub .kpi .val{font-size:18px}
 .kpis.sub .kpi .def{display:none}
 .kpis.sub .kpi .tgt{margin:0;flex-basis:100%;font-size:9px}
+.kpis.sub[data-cols="4"]{grid-template-columns:repeat(4,1fr)}
+.kpis.sub[data-cols="1"]{grid-template-columns:1fr}
 /* ---------- bar chart (no library) ---------- */
 .bars{display:flex;flex-direction:column;border-top:1px solid var(--line)}
 .bar-row{display:grid;grid-template-columns:150px 1fr 118px;grid-template-areas:"nm trk amt";
@@ -298,6 +300,8 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   .kpis.hero{grid-template-columns:1fr}
   .kpis.hero .kpi{padding:16px 14px 14px}
   .kpis.hero .kpi .val{font-size:30px}
+  /* Two up, never four: a wrapped "Rp 11.962.500" is not a figure anyone can read. */
+  .kpis.sub[data-cols="4"]{grid-template-columns:repeat(2,1fr)}
   .kpis.sub .kpi{display:block;padding:12px 13px}
   .kpis.sub .kpi .lab{margin-bottom:6px}
   .kpis.sub .kpi .val{font-size:17px}

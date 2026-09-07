@@ -76,7 +76,10 @@ export async function Dashboard({ figures, gm, pipeline, events, receivable, own
           </div>
         </div>
 
-        <div className="kpis sub rv" style={{ ...rv(2), gridTemplateColumns: `repeat(${owner ? 4 : 1}, 1fr)` }}>
+        {/* The column count is a data attribute, not an inline style: an inline grid-template wins
+            over the media query below 900 px and held four columns on a phone, where a rupiah figure
+            wraps mid-number. CSS decides the count at each width. */}
+        <div className="kpis sub rv" data-cols={owner ? 4 : 1} style={rv(2)}>
           <div className="kpi">
             <span className="lab">{t('aov')}</span>
             <span className="val">{idr(figures.aov)}</span>
