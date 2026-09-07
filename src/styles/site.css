@@ -185,6 +185,7 @@
 
 /* ---------- print: paper palette for the price list and documents; the invoice is the exception ---------- */
 @media print{
+  .site .reveal,.site .stagger>*{opacity:1!important;transform:none!important}
   .site{--bg:#F2EDE5;--ink:#141210;--muted:#5a544c;--muted-2:#7a7268;--line:rgba(20,18,16,.16);--line-2:rgba(20,18,16,.32);--accent:#7C4C24;--accent-bright:#7C4C24}
   .site-nav,.site-foot,.site .no-print{display:none!important}
   .site{background:var(--bg);color:var(--ink)}
@@ -247,13 +248,13 @@
 /* ---------- pillars: one lead cell, two supporting — not three identical cards ---------- */
 .site .pillars{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:52px}
 .site .pillars>*{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 28px;display:flex;flex-direction:column;min-width:0}
-.site .pillars .lead-cell{grid-row:span 2;justify-content:space-between}
+.site .pillars .lead-cell{justify-content:space-between}
 .site .pillars .lead-cell h3{font-size:clamp(26px,2.6vw,34px)}
 .site .pillars h3{font-size:22px;margin:12px 0 12px}
 .site .pillars p{color:var(--muted);line-height:1.7;font-size:14px;max-width:44ch}
 .site .pillars .no{color:var(--accent);font-size:10px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
 .site .pillars .proof{margin-top:26px;padding-top:18px;border-top:1px solid var(--line-soft);color:var(--ink);font-size:13.5px;line-height:1.7;font-weight:300}
-@media(max-width:900px){.site .pillars{grid-template-columns:1fr}.site .pillars .lead-cell{grid-row:auto}}
+@media(max-width:900px){.site .pillars{grid-template-columns:1fr}}
 
 /* ---------- pathway index: a chapter list, numerals in bronze ---------- */
 .site .plist{border-top:1px solid var(--line)}
@@ -275,9 +276,9 @@
 .site .cp-head .cls{color:var(--muted);font-size:16px;margin-top:16px;font-weight:300}
 .site .cp-sec{border-top:1px solid var(--line);padding:56px 0}
 .site .cp-sec:last-of-type{border-bottom:1px solid var(--line)}
-.site .cp-sec>.hd{display:flex;gap:18px;align-items:baseline;margin-bottom:30px}
-.site .cp-sec>.hd .no{color:var(--accent);font-size:11px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
-.site .cp-sec>.hd h2{font-size:clamp(22px,2.6vw,30px)}
+.site .cp-sec .hd{display:flex;gap:18px;align-items:baseline;margin-bottom:30px}
+.site .cp-sec .hd .no{color:var(--accent);font-size:11px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
+.site .cp-sec .hd h2{font-size:clamp(22px,2.6vw,30px)}
 .site .cp-body p{color:var(--muted);line-height:1.85;font-size:15px;max-width:68ch}
 .site .cp-body p+p{margin-top:18px}
 .site .dl{border-top:1px solid var(--line)}
@@ -382,7 +383,7 @@
    the presentation column folds into the dose line where there is no room for it */
 .site .doses-tbl .btn{white-space:normal;text-align:center;line-height:1.3;padding:10px 12px}
 @media(max-width:560px){
-  .site .doses-tbl th:nth-child(2),.site .doses-tbl td:nth-child(2){display:none}
-  .site .doses-tbl th,.site .doses-tbl td{padding-right:8px}
+  .site .doses-tbl th,.site .doses-tbl td{padding-right:8px;font-size:12.5px}
   .site .doses-tbl td.dose{white-space:normal}
+  .site .doses-tbl th{letter-spacing:.16em}
 }

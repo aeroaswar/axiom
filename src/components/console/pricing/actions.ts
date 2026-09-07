@@ -1,5 +1,4 @@
 'use server';
-import { revalidatePath } from 'next/cache';
 import { attempt, bool, money, str } from '../shared/act';
 import type { ActionState } from '../shared/action-form';
 
@@ -11,11 +10,9 @@ import type { ActionState } from '../shared/action-form';
 export async function setPrice(_prev: ActionState, form: FormData): Promise<ActionState> {
   const variantId = str(form, 'variant_id');
   const price = money(form, 'price').toString();
-  const result = await attempt(async tx => {
+  return attempt(async tx => {
     await tx`select axiom.set_price(${variantId}::uuid, ${price}::bigint)`;
   }, 'pricing.sheet.price_set');
-  if (result?.ok) revalidatePath('/', 'layout');
-  return result;
 }
 
 /** Supplier cost and the pen. Base price is their sum and is never entered by hand. */

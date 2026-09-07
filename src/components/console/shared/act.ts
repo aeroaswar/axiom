@@ -1,4 +1,5 @@
 import 'server-only';
+import { revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
 import { getSession, isStaff, type Session } from '@/lib/auth';
 import { pgMessage, withRls, type Tx } from '@/lib/db';
@@ -22,6 +23,11 @@ export async function attempt(
   } catch (e) {
     return { error: t('common.refused', { message: pgMessage(e) }) };
   }
+  // Every figure in the Console is derived, and several of them — availability, price, the
+  // acknowledgement state — also render on the public site. One write can therefore change what a
+  // list, a docked sheet, the bell and a public page each show, so the whole tree is revalidated
+  // rather than guessed at segment by segment.
+  revalidatePath('/', 'layout');
   return { ok: t(okKey) };
 }
 

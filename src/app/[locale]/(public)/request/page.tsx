@@ -32,7 +32,16 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
   const skus = basket.items.map(i => i.sku);
   const rows = await getRowsForSkus(session?.uid ?? null, skus);
   const bySku = new Map(rows.map(r => [r.sku, r]));
-  const lines = basket.items
+  // one row per lot and destination: cart_items can hold several rows for the same lot because a
+  // NULL destination is distinct from itself in a unique index, so fold them before rendering.
+  const merged = new Map<string, { sku: string; qty: number; site_id: string | null }>();
+  for (const i of basket.items) {
+    const key = `${i.sku}:${i.site_id ?? ''}`;
+    const at = merged.get(key);
+    if (at) at.qty += i.qty;
+    else merged.set(key, { sku: i.sku, qty: i.qty, site_id: i.site_id });
+  }
+  const lines = [...merged.values()]
     .map(i => ({ ...i, row: bySku.get(i.sku) }))
     .filter(l => l.row);
 

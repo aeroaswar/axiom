@@ -1,5 +1,4 @@
 'use server';
-import { revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
 import { lintFields } from '@/lib/copy-lint';
 import { attempt, str } from '../shared/act';
@@ -24,7 +23,7 @@ export async function saveContent(_prev: ActionState, form: FormData): Promise<A
   }
   const slug = str(form, 'slug');
   const synonyms = str(form, 'synonyms').split(',').map(s => s.trim()).filter(Boolean);
-  const result = await attempt(async tx => {
+  return attempt(async tx => {
     await tx`
       update public.products set
         name = ${str(form, 'name')},
@@ -42,8 +41,6 @@ export async function saveContent(_prev: ActionState, form: FormData): Promise<A
         handling_id = ${fields.handling_id || null}
       where slug = ${slug}`;
   }, 'content.editor.saved');
-  if (result?.ok) revalidatePath('/', 'layout');
-  return result;
 }
 
 export async function addReference(_prev: ActionState, form: FormData): Promise<ActionState> {
@@ -52,22 +49,18 @@ export async function addReference(_prev: ActionState, form: FormData): Promise<
   const doi = str(form, 'doi');
   if (!pubmed && !doi) return { error: t('references.need_one') };
   const productId = str(form, 'product_id');
-  const result = await attempt(async tx => {
+  return attempt(async tx => {
     await tx`
       insert into public.product_references (product_id, claim_key, citation, pubmed_id, doi, url)
       values (${productId}::uuid, ${str(form, 'claim_key')}, ${str(form, 'citation')},
               ${pubmed || null}, ${doi || null}, ${str(form, 'url') || null})`;
   }, 'content.references.added');
-  if (result?.ok) revalidatePath('/', 'layout');
-  return result;
 }
 
 export async function deleteReference(_prev: ActionState, form: FormData): Promise<ActionState> {
-  const result = await attempt(async tx => {
+  return attempt(async tx => {
     await tx`delete from public.product_references where id = ${str(form, 'reference_id')}::uuid`;
   }, 'content.references.deleted');
-  if (result?.ok) revalidatePath('/', 'layout');
-  return result;
 }
 
 /**
@@ -89,12 +82,10 @@ export async function setPublished(_prev: ActionState, form: FormData): Promise<
     });
     if (guard?.error) return { error: t('publish.refused') };
   }
-  const result = await attempt(async tx => {
+  return attempt(async tx => {
     await tx`
       update public.products
       set is_published = ${publish}, published_at = ${publish ? new Date() : null}
       where slug = ${slug}`;
   }, publish ? 'content.publish.done' : 'content.publish.undone');
-  if (result?.ok) revalidatePath('/', 'layout');
-  return result;
 }

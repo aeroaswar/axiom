@@ -31,12 +31,16 @@ export async function getBasket(): Promise<Basket> {
   });
 }
 
-/** Add to what is already there, keeping the line's destination. Used by the public Add control. */
+/** Add to what is already there, keeping the line's destination. Used by the public Add control.
+ *  `cart_items`' unique index is (cart_id, variant_id, site_id) and Postgres treats NULL site_ids
+ *  as distinct, so the same lot can end up on several rows. Sum them, clear them, write one. */
 export async function addBasketLine(sku: string, delta = 1): Promise<number> {
   const basket = await getBasket();
-  const line = basket.items.find(i => i.sku === sku);
-  const qty = Math.max((line?.qty ?? 0) + delta, 0);
-  await setBasketLine(sku, qty, line?.site_id ?? null);
+  const same = basket.items.filter(i => i.sku === sku);
+  const siteId = same.find(i => i.site_id)?.site_id ?? null;
+  const qty = Math.max(same.reduce((a, i) => a + i.qty, 0) + delta, 0);
+  if (same.length > 1) for (const i of same) await setBasketLine(sku, 0, i.site_id);
+  await setBasketLine(sku, qty, siteId);
   return qty;
 }
 

@@ -1,11 +1,13 @@
 'use server';
-import { revalidatePath } from 'next/cache';
 import { attempt, bool, int, money, str } from '../shared/act';
 import type { ActionState } from '../shared/action-form';
 import type { Tx } from '@/lib/db';
 
+// `tx.json` is the only correct way to write a jsonb column here: a pre-stringified value with a
+// `::jsonb` cast is re-serialised by the driver and lands as a jsonb *string* holding JSON, which
+// every reader — `axiom.prices_visible()` included — would then compare against and never match.
 const put = (tx: Tx, key: string, value: unknown) => tx`
-  insert into public.site_settings (key, value, updated_at) values (${key}, ${JSON.stringify(value)}::jsonb, now())
+  insert into public.site_settings (key, value, updated_at) values (${key}, ${tx.json(value as never)}, now())
   on conflict (key) do update set value = excluded.value, updated_at = now()`;
 
 export async function saveProfile(_prev: ActionState, form: FormData): Promise<ActionState> {
@@ -19,7 +21,7 @@ export async function saveProfile(_prev: ActionState, form: FormData): Promise<A
  * price at all, so saving revalidates the public site: the flag is read server-side, once.
  */
 export async function saveSiteSettings(_prev: ActionState, form: FormData): Promise<ActionState> {
-  const result = await attempt(async tx => {
+  return attempt(async tx => {
     await put(tx, 'price_visibility', str(form, 'price_visibility'));
     await put(tx, 'ppn_rate', Number(str(form, 'ppn_rate') || 0));
     await put(tx, 'delivery_in_dpp', bool(form, 'delivery_in_dpp'));
@@ -37,14 +39,12 @@ export async function saveSiteSettings(_prev: ActionState, form: FormData): Prom
     await put(tx, 'whatsapp', { number: str(form, 'whatsapp_number'), display: str(form, 'whatsapp_display') });
     await put(tx, 'cutoff', { cold: str(form, 'cutoff_cold'), ambient: str(form, 'cutoff_ambient'), tz: str(form, 'cutoff_tz') });
   }, 'settings.site.saved');
-  if (result?.ok) revalidatePath('/', 'layout');
-  return result;
 }
 
 /** A zone with no rate is rate pending, not free — leave the rate empty and the quote cannot be sent. */
 export async function saveZones(_prev: ActionState, form: FormData): Promise<ActionState> {
   const zones = form.getAll('zone').map(String);
-  const result = await attempt(async tx => {
+  return attempt(async tx => {
     for (const z of zones) {
       const rate = str(form, `per_three_${z}`);
       const cap = str(form, `cap_${z}`);
@@ -56,8 +56,6 @@ export async function saveZones(_prev: ActionState, form: FormData): Promise<Act
         where zone = ${z}::public.delivery_zone`;
     }
   }, 'settings.zones.saved');
-  if (result?.ok) revalidatePath('/', 'layout');
-  return result;
 }
 
 export async function changeStaffRole(_prev: ActionState, form: FormData): Promise<ActionState> {

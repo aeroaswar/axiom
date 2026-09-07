@@ -30,16 +30,24 @@ const ROUTES = [
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium' });
 
+// the dev server recompiles on demand; a first hit can reset the connection while it does
+async function go(page, url, waitUntil = 'domcontentloaded') {
+  for (let i = 0; i < 3; i++) {
+    try { return await page.goto(url, { waitUntil, timeout: 45000 }); }
+    catch (e) { if (i === 2) throw e; await page.waitForTimeout(1500); }
+  }
+}
+
 // ---------------------------------------------------------------- data from the site itself
 const probe = await browser.newContext();
 const p0 = await probe.newPage();
-await p0.goto(`${BASE}/price-list`, { waitUntil: 'domcontentloaded' });
+await go(p0, `${BASE}/price-list`);
 const lotRows = await p0.locator('table.tbl tr[data-lot="1"]').count();
 const declared = Number(await p0.locator('table.tbl').first().getAttribute('data-rows'));
 ok('price list carries every lot', lotRows === declared && lotRows > 0, `${lotRows} rows, table declares ${declared}`);
 
 // one compound page, discovered rather than typed
-await p0.goto(`${BASE}/compounds/metabolic`, { waitUntil: 'domcontentloaded' });
+await go(p0, `${BASE}/compounds/metabolic`);
 const compoundHref = (await p0.locator('a.pcard').first().getAttribute('href') || '').replace(/^\/(en|id)(?=\/)/, '');
 ok('a compound page is reachable from its pathway', !!compoundHref, compoundHref || '');
 
@@ -52,14 +60,14 @@ for (const width of [390, 1440]) {
   for (const locale of ['', '/en']) {
     for (const route of ROUTES) {
       const url = `${BASE}${locale}${route === '/' ? '' : route}` || `${BASE}/`;
-      const res = await page.goto(url || `${BASE}/`, { waitUntil: 'domcontentloaded' });
+      const res = await go(page, url || `${BASE}/`);
       const status = res?.status() ?? 0;
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       ok(`${width}px ${locale || '/id'}${route}`, status === 200 && overflow <= 0, `status ${status}, overflow ${overflow}px`);
     }
     if (compoundHref) {
       const url = `${BASE}${locale}${compoundHref}`;
-      const res = await page.goto(url, { waitUntil: 'domcontentloaded' });
+      const res = await go(page, url);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       ok(`${width}px ${locale || '/id'}${compoundHref}`, res?.status() === 200 && overflow <= 0, `overflow ${overflow}px`);
     }
@@ -68,7 +76,19 @@ for (const width of [390, 1440]) {
   // screenshots for the design review
   for (const [name, route] of [['home', '/'], ['compounds', '/compounds'], ['pathway', '/compounds/metabolic'], ['compound', compoundHref], ['price-list', '/price-list'], ['standard', '/standard'], ['process', '/process'], ['faq', '/faq'], ['request', '/request'], ['terms', '/terms']]) {
     if (!route) continue;
-    await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' }).catch(() => {});
+    await go(page, `${BASE}${route}`, 'networkidle').catch(() => {});
+    if (width === 1440) {
+      // walk the page so every reveal has settled before the full-page capture
+      await page.evaluate(async () => {
+        const step = window.innerHeight * 0.8;
+        for (let y = 0; y < document.body.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise(r => setTimeout(r, 120));
+        }
+        window.scrollTo(0, 0);
+        await new Promise(r => setTimeout(r, 800));
+      });
+    }
     await page.screenshot({ path: `${DIR}/site-${name}-${width}.png`, fullPage: width === 1440 });
   }
   await ctx.close();
@@ -81,12 +101,34 @@ for (const width of [390, 1440]) {
   const a = await anon.newPage();
   const b = await bot.newPage();
   const url = `${BASE}${compoundHref}`;
-  const ra = await a.goto(url, { waitUntil: 'domcontentloaded' });
-  const rb = await b.goto(url, { waitUntil: 'domcontentloaded' });
+  const ra = await go(a, url);
+  const rb = await go(b, url);
   const ha = await ra.text();
   const hb = await rb.text();
-  const strip = s => s.replace(/"\$ACTION[^"]*"|\$ACTION_[A-Z_]*:\d+|k\d{6,}|\?v=\d+|"[0-9a-f]{40,}"/g, '');
-  ok('crawler HTML is the anonymous HTML', strip(ha) === strip(hb), `${ha.length} vs ${hb.length} bytes`);
+  // dev-server cache-busters (?v=<ms>) and per-build asset hashes are not content; everything else
+  // must match byte for byte, and so must the text a reader sees.
+  const strip = s => s
+    .replace(/\?v=\d+/g, '?v=')
+    .replace(/\?dpl=[A-Za-z0-9_-]+/g, '?dpl=')
+    .replace(/"\$ACTION[^"]*"/g, '"$ACTION"')
+    .replace(/\$ACTION_[A-Z_]*:\d+/g, '$ACTION')
+    .replace(/k\d{6,}/g, 'k')
+    .replace(/\\"[A-Za-z0-9_-]{21}\\"/g, '\\"tok\\"');
+  // the dev server streams its flight chunks in whatever order they resolve, so compare the
+  // document byte for byte and the chunks as a set
+  const CHUNK = /<script>self\.__next_f\.push\(.*?\)<\/script>/gs;
+  const doc = s => strip(s).replace(CHUNK, '');
+  const chunks = s => (strip(s).match(CHUNK) || []).slice().sort();
+  const sa = doc(ha), sb = doc(hb);
+  let at = 0; while (at < Math.min(sa.length, sb.length) && sa[at] === sb[at]) at++;
+  const ca = chunks(ha), cb = chunks(hb);
+  ok('crawler HTML is the anonymous HTML', sa === sb, sa === sb ? `${sa.length} bytes` : `diverges at ${at}: ${JSON.stringify(sa.slice(at, at + 60))} vs ${JSON.stringify(sb.slice(at, at + 60))}`);
+  ok('crawler gets the same server payload', ca.length === cb.length && ca.join('') === cb.join(''), `${ca.length} vs ${cb.length} chunks`);
+  // and the education itself, as text, after both pages have settled
+  await a.waitForLoadState('networkidle'); await b.waitForLoadState('networkidle');
+  const ta = await a.evaluate(() => document.getElementById('main')?.innerText ?? '');
+  const tb = await b.evaluate(() => document.getElementById('main')?.innerText ?? '');
+  ok('crawler reads the same guide text as a person', ta === tb && ta.length > 500, `${ta.length} vs ${tb.length} chars`);
   ok('the identity text is in the server HTML', /class="cp-body"/.test(ha) && /id="verification"/.test(ha) && /id="handling"/.test(ha));
   await anon.close(); await bot.close();
 }
@@ -97,24 +139,24 @@ for (const width of [390, 1440]) {
   const page = await ctx.newPage();
   const peptidePages = ['/compounds', '/compounds/metabolic', compoundHref, '/price-list'];
   for (const route of peptidePages) {
-    const res = await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded' });
+    const res = await go(page, `${BASE}${route}`);
     const html = await res.text();
     const ld = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(m => m[1]);
     const types = ld.flatMap(s => { try { const j = JSON.parse(s); return [j['@type']]; } catch { return ['unparsable']; } });
     ok(`no Product or Offer markup on ${route}`, !types.includes('Product') && !/"@type":\s*"Offer"/.test(html), types.join(','));
   }
   // a device page is allowed to carry it
-  const dev = await page.goto(`${BASE}/products/red-light-therapy-mask`, { waitUntil: 'domcontentloaded' });
+  const dev = await go(page, `${BASE}/products/red-light-therapy-mask`);
   ok('a device page may carry Product markup', /"@type":"Product"/.test(await dev.text()));
 
   // zero rupiah figures for anonymous eyes on any peptide surface
   for (const route of ['/compounds/metabolic', compoundHref]) {
-    await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded' });
+    await go(page, `${BASE}${route}`);
     const money = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
     ok(`no rupiah figure for anon on ${route}`, money.length === 0, money.slice(0, 3).join(', '));
   }
   // the price list shows devices and apparel openly and peptides gated
-  await page.goto(`${BASE}/price-list`, { waitUntil: 'domcontentloaded' });
+  await go(page, `${BASE}/price-list`);
   const money = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []).length);
   const gated = await page.locator('table.tbl .gated').count();
   ok('price list: peptide prices gated, device prices open', gated > 70 && money > 0 && money < 20, `${gated} gated cells, ${money} figures`);
@@ -122,7 +164,7 @@ for (const width of [390, 1440]) {
   // and the anonymous browser never asks for prices
   const calls = [];
   page.on('request', r => { if (r.url().includes('/api/prices')) calls.push(r.url()); });
-  await page.goto(`${BASE}/price-list`, { waitUntil: 'networkidle' });
+  await go(page, `${BASE}/price-list`, 'networkidle');
   await page.waitForTimeout(800);
   ok('anon never calls /api/prices', calls.length === 0, calls.join(','));
   await ctx.close();
@@ -132,7 +174,7 @@ for (const width of [390, 1440]) {
 {
   const ctx = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await ctx.newPage();
-  await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+  await go(page, `${BASE}/`, 'networkidle');
   await page.waitForTimeout(1500);
   const canvas = await page.locator('#scene').count();
   const fallback = await page.locator('.hero-fallback').count();
@@ -147,7 +189,7 @@ for (const width of [390, 1440]) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
-  await page.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+  await go(page, `${BASE}/`, 'networkidle');
   await page.waitForTimeout(3000);
   const canvas = await page.locator('#scene').count();
   ok('the hero field mounts after idle', canvas === 1, `canvas ${canvas}`);
@@ -159,7 +201,7 @@ for (const width of [390, 1440]) {
 {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
-  const res = await page.goto(`${BASE}/sitemap.xml`, { waitUntil: 'domcontentloaded' });
+  const res = await go(page, `${BASE}/sitemap.xml`);
   const xml = await res.text();
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
   ok('sitemap parses', xml.startsWith('<?xml') && locs.length > 0, `${locs.length} urls`);
@@ -168,10 +210,10 @@ for (const width of [390, 1440]) {
   // spot-check a sample of them
   const sample = [locs[0], locs[Math.floor(locs.length / 2)], locs[locs.length - 1]];
   for (const u of sample) {
-    const r = await page.goto(u.replace('http://localhost:3000', BASE), { waitUntil: 'domcontentloaded' });
+    const r = await go(page, u.replace('http://localhost:3000', BASE));
     ok(`sitemap url answers 200 · ${u.replace(/^https?:\/\/[^/]+/, '') || '/'}`, r?.status() === 200, String(r?.status()));
   }
-  const rb = await page.goto(`${BASE}/robots.txt`, { waitUntil: 'domcontentloaded' });
+  const rb = await go(page, `${BASE}/robots.txt`);
   const robots = await rb.text();
   ok('robots disallows the request path and the account', /Disallow: \/request/.test(robots) && /Disallow: \/account/.test(robots));
   await ctx.close();
@@ -181,10 +223,10 @@ for (const width of [390, 1440]) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
-  await page.goto(`${BASE}${compoundHref}`, { waitUntil: 'networkidle' });
+  await go(page, `${BASE}${compoundHref}`, 'networkidle');
   await page.locator('form button[type="submit"]').first().click();
   await page.waitForTimeout(1200);
-  await page.goto(`${BASE}/request`, { waitUntil: 'networkidle' });
+  await go(page, `${BASE}/request`, 'networkidle');
   const lines = await page.locator('.req-line').count();
   ok('a lot added from the guide reaches the request', lines >= 1, `${lines} lines`);
   const leadForm = await page.locator('#rq-name').count();
@@ -197,7 +239,7 @@ for (const width of [390, 1440]) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
-  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded' });
+  await go(page, `${BASE}/`);
   await page.keyboard.press('Tab');
   const first = await page.evaluate(() => document.activeElement?.className || '');
   ok('the first tab stop is the skip link', first.includes('skip'), first);
@@ -206,6 +248,48 @@ for (const width of [390, 1440]) {
     return el ? getComputedStyle(el).outlineStyle : 'none';
   });
   ok('focus is visible', ring !== 'none', ring);
+  await ctx.close();
+}
+
+// ---------------------------------------------------------------- signed in: the gate opens
+// Only meaningful against a dev-mode sign-in (AUTH_MODE=dev). Skipped otherwise.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await ctx.newPage();
+  await go(page, `${BASE}/sign-in`);
+  const forms = page.locator('form.cell');
+  const count = await forms.count();
+  if (!count) {
+    console.log('  — dev sign-in not available, skipping the signed-in checks');
+  } else {
+    // an account whose acknowledgement is current sees prices; one without still does not
+    const priceCalls = [];
+    page.on('request', r => { if (r.url().includes('/api/prices')) priceCalls.push(r.url()); });
+    let signedIn = null;
+    for (let i = 0; i < count; i++) {
+      const row = forms.nth(i);
+      const who = (await row.innerText()).split('\n')[0];
+      await row.locator('button[type="submit"]').click();
+      await page.waitForURL(/\/(account|console)/, { timeout: 20000 }).catch(() => {});
+      await go(page, `${BASE}/price-list`, 'networkidle');
+      await page.waitForTimeout(900);
+      const money = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []).length);
+      if (money > 60) { signedIn = { who, money }; break; }
+      await go(page, `${BASE}/sign-in`);
+    }
+    ok('a session asks the server for its prices', priceCalls.length > 0, `${priceCalls.length} calls`);
+    ok('an acknowledged account sees peptide prices', !!signedIn, signedIn ? `${signedIn.who}: ${signedIn.money} figures` : 'no seeded account has a current acknowledgement');
+
+    // a basket with more than one destination shows the split before it is submitted
+    await go(page, `${BASE}${compoundHref}`, 'networkidle');
+    await page.locator('form button[type="submit"]').first().click();
+    await page.waitForTimeout(1200);
+    await go(page, `${BASE}/request`, 'networkidle');
+    const lines = await page.locator('.req-line').count();
+    ok('the account basket carries the line', lines >= 1, `${lines} lines`);
+    const delivery = await page.locator('.req-side .kv').count();
+    ok('the running delivery is shown before submitting', delivery >= 2, `${delivery} summary rows`);
+  }
   await ctx.close();
 }
 

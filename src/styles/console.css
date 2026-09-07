@@ -98,3 +98,12 @@ tr.sel td { background: var(--glass-accent); }
 @media (max-width: 1023px) { .settings-split { grid-template-columns: 1fr; } }
 .zones th { white-space: normal; line-height: 1.5; }
 .zones input { max-width: 110px; }
+
+/* A grid item takes its content's minimum width unless told otherwise: a long option in a select
+   would otherwise widen the screen on a phone. */
+.fgrid > *, .split > *, .stack > * { min-width: 0; }
+.stack { width: 100%; }
+.field select, .field input, .field textarea { max-width: 100%; }
+
+/* GM per lot: the figure always, and the chip only where the lot falls under the reporting floor. */
+.gmcell { display: inline-flex; align-items: center; justify-content: flex-end; gap: 9px; }

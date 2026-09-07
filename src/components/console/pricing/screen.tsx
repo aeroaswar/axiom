@@ -53,7 +53,12 @@ export async function PricingScreen({ rows, floor }: { rows: PricingRow[]; floor
       <td className="n desktop-only">{idr(r.base_idr)}</td>
       <td className="n money">{idr(r.price_idr)}</td>
       <td className="n">{idr(r.margin_idr)}</td>
-      <td className={`n${under(r, floor) ? ' tone-warn' : ''}`}>{pct(r.gm_pct)}</td>
+      <td className="n">
+        <span className="gmcell">
+          {under(r, floor) ? <span className="chip warn"><span className="dot" />{t('chips.low', { floor })}</span> : null}
+          <span className={under(r, floor) ? 'tone-warn' : ''}>{pct(r.gm_pct)}</span>
+        </span>
+      </td>
     </tr>
   );
 

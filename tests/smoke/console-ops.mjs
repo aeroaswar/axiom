@@ -17,6 +17,7 @@ const ok = (name, pass, detail = '') => {
   if (!pass) failures++;
   console.log(`${pass ? '  ok  ' : '  FAIL'} ${name}${detail ? ` — ${detail}` : ''}`);
 };
+const OWNER_UID = '00000000-0000-4000-8000-000000000001';
 const idr = n => 'Rp ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium' });
@@ -114,10 +115,15 @@ const owner = await signIn('owner');
   ok('the change lands in price_changes',
     change?.from_idr === String(original) && change?.to_idr === target && !!change?.changed_by,
     `${change?.from_idr} → ${change?.to_idr}`);
-  await page.goto(`${BASE}/price-list`, { waitUntil: 'networkidle' });
-  const listed = await page.locator('body').innerText();
+  // The public price list shows a peptide price only to a reader with a current acknowledgement:
+  // commerce is gated, education is not. So the reader here is one — the same page, one role along.
+  const acknowledged = await signIn('regenera.director');
+  await acknowledged.page.goto(`${BASE}/price-list`, { waitUntil: 'networkidle' });
+  const listed = await acknowledged.page.locator('body').innerText();
   ok('the public price list carries the new price', listed.includes(idr(target)), idr(target));
   ok('the public price list has dropped the old one', !listed.includes(idr(original)), idr(original));
+  await acknowledged.ctx.close();
+
   // put it back: this runs against the shared development database
   await page.goto(`${BASE}/console/pricing/${priceSku}`, { waitUntil: 'networkidle' });
   await page.fill('#price', String(original));
@@ -128,7 +134,11 @@ const owner = await signIn('owner');
 
   // 5 · the six seeded accounts carry the acknowledgement state the database computes
   await page.goto(`${BASE}/console/clients`, { waitUntil: 'networkidle' });
-  const accounts = await sql`select name, axiom.ack_state_for(id) st from accounts order by name`;
+  const accounts = await sql.begin(async tx => {
+    await tx.unsafe('set local role authenticated');
+    await tx`select set_config('request.jwt.claims', ${JSON.stringify({ sub: OWNER_UID, role: 'authenticated' })}, true)`;
+    return tx`select name, axiom.ack_state_for(id) as st from public.accounts order by name`;
+  });
   const LABEL = { current: 'Current', expiring: 'Renew', lapsed: 'Lapsed', none: '18+ only' };
   const shown = await page.locator('.tbl tbody tr.lnk').allTextContents();
   ok('every seeded account is listed', shown.length === accounts.length, `${shown.length} of ${accounts.length}`);
@@ -198,9 +208,10 @@ await owner.ctx.close();
   ok('ops is told the figures are owner-only', /owner-only|hanya pemilik/i.test(text), text.replace(/\s+/g, ' ').slice(0, 110));
   ok('ops sees no margin figure', !/Blended|marjin gabungan/i.test(text));
   ok('the rail offers ops no route to the book', (await page.locator('.rail a[href*="pricing"]').count()) === 0);
+  const OPS_UID = '00000000-0000-4000-8000-000000000002';
   const denied = await sql.begin(async tx => {
     await tx.unsafe('set local role authenticated');
-    await tx`select set_config('request.jwt.claims', ${JSON.stringify({ sub: '00000000-0000-4000-8000-000000000002', role: 'authenticated' })}, true)`;
+    await tx`select set_config('request.jwt.claims', ${JSON.stringify({ sub: OPS_UID, role: 'authenticated' })}, true)`;
     try { await tx`select 1 from v_pricing limit 1`; return null; } catch (e) { return e.message; }
   }).catch(e => e.message);
   ok('the database itself refuses an ops query for cost', /owner-only/.test(String(denied)), String(denied).slice(0, 80));

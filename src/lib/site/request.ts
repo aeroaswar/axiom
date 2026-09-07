@@ -18,9 +18,9 @@ export async function getAccountSites(uid: string, accountId: string): Promise<S
 /** The running delivery charge per destination, from axiom.delivery_for_lines. Never recomputed. */
 export async function getDeliveryForLines(uid: string, accountId: string, lines: Line[]): Promise<DeliveryRow[]> {
   if (!lines.length) return [];
-  const payload = JSON.stringify(lines.map(l => ({ site_id: l.site_id, qty: l.qty })));
+  const payload = lines.map(l => ({ site_id: l.site_id, qty: l.qty }));
   const rows = await withRls({ uid }, tx => tx<Record<string, unknown>[]>`
-    select site_id, site_name, zone, units, charge_idr from axiom.delivery_for_lines(${payload}::jsonb, ${accountId}::uuid)`);
+    select site_id, site_name, zone, units, charge_idr from axiom.delivery_for_lines(${tx.json(payload)}, ${accountId}::uuid)`);
   return rows.map(r => ({
     site_id: r.site_id ? String(r.site_id) : null,
     site_name: String(r.site_name ?? ''),
@@ -32,10 +32,10 @@ export async function getDeliveryForLines(uid: string, accountId: string, lines:
 
 /** Signed in: the basket becomes a `requested` quote, visible in the Console the same moment. */
 export async function requestQuote(uid: string, accountId: string, lines: Line[], note: string | null): Promise<string> {
-  const payload = JSON.stringify(lines.map(l => ({ sku: l.sku, qty: l.qty, site_id: l.site_id })));
+  const payload = lines.map(l => ({ sku: l.sku, qty: l.qty, site_id: l.site_id }));
   return withRls({ uid }, async tx => {
     const [{ request_quote: id }] = await tx<{ request_quote: string }[]>`
-      select axiom.request_quote(${accountId}::uuid, ${payload}::jsonb, ${note})`;
+      select axiom.request_quote(${accountId}::uuid, ${tx.json(payload)}, ${note})`;
     const [q] = await tx<{ number: string }[]>`select number from public.quotes where id = ${id}::uuid`;
     return q?.number ?? '';
   });
@@ -45,10 +45,10 @@ export type PublicRequest = { name: string; clinic: string | null; role: string 
 
 /** Signed out: a lead, an unverified account and a requested quote, in one call. */
 export async function submitPublicRequest(f: PublicRequest, lines: Line[], locale: string, anonKey: string | null): Promise<{ quoteNumber: string }> {
-  const payload = JSON.stringify(lines.map(l => ({ sku: l.sku, qty: l.qty })));
+  const payload = lines.map(l => ({ sku: l.sku, qty: l.qty }));
   const rows = await withRls({ uid: null }, tx => tx<{ quote_number: string }[]>`
     select quote_number from axiom.submit_public_request(
-      ${f.name}, ${f.clinic}, ${f.role}, ${f.email}, ${f.whatsapp}, ${payload}::jsonb, ${locale}, ${anonKey})`);
+      ${f.name}, ${f.clinic}, ${f.role}, ${f.email}, ${f.whatsapp}, ${tx.json(payload)}, ${locale}, ${anonKey})`);
   return { quoteNumber: rows[0]?.quote_number ?? '' };
 }
 
