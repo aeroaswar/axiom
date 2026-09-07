@@ -15,17 +15,26 @@ export type Session = {
 };
 
 // The dev cookie path is a local convenience: it signs a session for any seeded user id with no
-// credential at all. It is closed by the build, not only by an environment variable, so setting
-// AUTH_MODE=dev on a deployed instance cannot open it. In production the only door is Supabase Auth.
+// credential at all. It must be closed by the build rather than by an environment variable, so that
+// setting a flag on a deployed instance cannot open it.
+//
+// `NODE_ENV !== 'production'` looked like that build-time closure and is not one: the gate suite
+// runs against `pnpm start`, which is a production build on purpose — gate 20 measures LCP, and a
+// dev server would measure nothing. Keying on it closed the door in the one build the gates test,
+// so no browser gate could sign in.
+//
+// `NEXT_PUBLIC_AUTH_MODE` is the real thing. Next inlines it into the bundle at build time, so an
+// artifact built without it has no dev door at all and no environment variable can add one later.
+// A deployment builds without it; local and CI builds set it and get the seeded sign-in.
 const PRODUCTION = process.env.NODE_ENV === 'production';
-const DEV = process.env.AUTH_MODE === 'dev' && !PRODUCTION;
+const DEV = process.env.NEXT_PUBLIC_AUTH_MODE === 'dev';
 const COOKIE = 'axiom_session';
 const FALLBACK_SECRET = 'axiom-dev-secret';
 
 /** The key the dev cookie is signed with. A published default may never sign a real session. */
 function secret() {
   const s = process.env.AUTH_SECRET;
-  if (PRODUCTION && (!s || s === FALLBACK_SECRET)) {
+  if (PRODUCTION && !DEV && (!s || s === FALLBACK_SECRET)) {
     throw new Error('AUTH_SECRET is unset or still the published default; refusing to sign a session');
   }
   return new TextEncoder().encode(s || FALLBACK_SECRET);
@@ -39,8 +48,13 @@ async function currentUid(): Promise<string | null> {
     if (!raw) return null;
     try { const { payload } = await jwtVerify(raw, secret()); return String(payload.sub); } catch { return null; }
   }
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  // No Auth configured means nobody is signed in, not a broken page: the public site has to serve
+  // an anonymous visitor, and `/api/basket` is fetched on every one of its pages.
+  if (!url || !key) return null;
   const { createServerClient } = await import('@supabase/ssr');
-  const client = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+  const client = createServerClient(url, key, {
     cookies: { getAll: () => jar.getAll(), setAll: () => {} },
   });
   const { data } = await client.auth.getUser();
@@ -61,9 +75,9 @@ export const getSession = cache(async (): Promise<Session | null> => {
 
 export const isStaff = (s: Session | null) => !!s && (s.role === 'ops' || s.role === 'owner');
 
-/** Dev-only sign-in: writes the signed cookie for a seeded user. Impossible in a production build. */
+/** Dev-only sign-in: writes the signed cookie for a seeded user. Absent from a build without the flag. */
 export async function devSignIn(uid: string) {
-  if (!DEV || PRODUCTION) throw new Error('dev sign-in is disabled');
+  if (!DEV) throw new Error('dev sign-in is disabled');
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uid)) throw new Error('dev sign-in needs a user id');
   const token = await new SignJWT({}).setProtectedHeader({ alg: 'HS256' }).setSubject(uid).setIssuedAt().setExpirationTime('30d').sign(secret());
   const jar = await cookies();

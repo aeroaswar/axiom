@@ -22,7 +22,8 @@ jobs:
       DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/axiom
       AXIOM_DB_LOCAL: '1'
       AXIOM_SEED_DEV: '1'
-      AUTH_MODE: dev
+      # The browser gates sign in as seeded users; the door is inlined by the build below.
+      NEXT_PUBLIC_AUTH_MODE: dev
       AUTH_SECRET: ci-secret
       NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
       NEXT_TELEMETRY_DISABLED: '1'

@@ -80,6 +80,24 @@ for (const [f, s] of Object.entries(read)) {
   s.split('\n').forEach((l, i) => { if (/#[0-9a-fA-F]{6}\b/.test(l) && !/^\s*(\/\/|\*)/.test(l) && !/themeColor/.test(l)) fail(`${f}:${i + 1} literal hex colour: ${l.trim().slice(0, 100)}`); });
 }
 
+console.log('Gate: the seeded sign-in is closed by the build, not by a runtime variable');
+{
+  const auth = fs.readFileSync('src/lib/auth.ts', 'utf8');
+  const decl = /const DEV = process\.env\.(\w+) === 'dev';/.exec(auth);
+  if (!decl) fail('src/lib/auth.ts no longer declares the dev-auth switch in the shape this gate reads');
+  // Next inlines NEXT_PUBLIC_* at build time. Keyed on anything else, a deployed artifact could be
+  // opened by setting a variable on the running instance — which is the whole point of the switch.
+  else if (!decl[1].startsWith('NEXT_PUBLIC_')) fail(`the dev sign-in is keyed on ${decl[1]}, which is read at run time; it must be a NEXT_PUBLIC_ name so the build decides`);
+  else console.log(`  ✓ keyed on ${decl[1]}, inlined at build time`);
+  if (!/if \(!DEV\) throw new Error\('dev sign-in is disabled'\);/.test(auth)) fail('devSignIn no longer refuses when the dev door is closed');
+  else console.log('  ✓ devSignIn refuses when it is off');
+  for (const f of ['.env.example', '.github/workflows/ci.yml']) {
+    const t = fs.readFileSync(f, 'utf8');
+    if (/\bAUTH_MODE\b/.test(t.replace(/NEXT_PUBLIC_AUTH_MODE/g, ''))) fail(`${f} still names a second auth switch; one flag, not two`);
+  }
+  console.log('  ✓ one auth flag across the env template and CI');
+}
+
 // A check that swallows its own failure passes for the wrong reason: say so when it cannot run.
 try {
   if (execSync('git ls-files website archive', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim())

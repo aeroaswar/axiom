@@ -18,11 +18,19 @@ async function signIn(page: Page, name: string, next = '/account') {
 
 const noHorizontalScroll = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1);
 
+// The locale prefix is negotiated, not fixed: `id` is the default and carries no prefix, but a
+// browser sending `Accept-Language: en-US` — which every Playwright context does — is redirected to
+// `/en/...`. Matching on a literal prefix would only ever pass in one of the two, so these helpers
+// match the segment and let the prefix be whatever the negotiation produced.
+const COMPOUND_LINK = 'a[href$="/compounds"], a[href*="/compounds/"]';
+
 async function firstCompoundPath(page: Page): Promise<string> {
   await page.goto('/compounds');
-  const pathway = await page.locator('a[href^="/compounds/"], a[href^="/id/compounds/"]').first().getAttribute('href');
+  const pathway = await page.locator(COMPOUND_LINK).filter({ hasNot: page.locator('nav a') })
+    .evaluateAll(as => (as as HTMLAnchorElement[]).map(a => a.getAttribute('href')!)
+      .find(h => /\/compounds\/[^/]+$/.test(h)));
   await page.goto(pathway!);
-  const compound = await page.locator('a[href*="/compounds/"][href*="/"]').filter({ hasNot: page.locator('nav a') }).evaluateAll(as => (as as HTMLAnchorElement[]).map(a => a.getAttribute('href')!).find(h => h.split('/').filter(Boolean).length >= 3));
+  const compound = await page.locator(COMPOUND_LINK).filter({ hasNot: page.locator('nav a') }).evaluateAll(as => (as as HTMLAnchorElement[]).map(a => a.getAttribute('href')!).find(h => /\/compounds\/[^/]+\/[^/]+$/.test(h)));
   return compound!;
 }
 

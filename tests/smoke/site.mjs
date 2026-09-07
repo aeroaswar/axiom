@@ -295,7 +295,7 @@ for (const width of [390, 1440]) {
 }
 
 // ---------------------------------------------------------------- signed in: the gate opens
-// Only meaningful against a dev-mode sign-in (AUTH_MODE=dev). Skipped otherwise.
+// Only meaningful against a dev-mode sign-in (NEXT_PUBLIC_AUTH_MODE=dev). Skipped otherwise.
 {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();

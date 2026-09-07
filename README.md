@@ -59,6 +59,7 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
 ## Production
 
 Supabase (Postgres, Auth magic link, Storage) + Vercel. Set `DATABASE_URL` to the project's direct
-connection, `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `AUTH_MODE=supabase`,
-`NEXT_PUBLIC_SITE_URL`. Apply `supabase/migrations` and `supabase/seed.sql` (never `seed_dev.sql`).
+connection, `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `NEXT_PUBLIC_SITE_URL`, and build
+**without** `NEXT_PUBLIC_AUTH_MODE` — that variable is inlined at build time, so an artifact built
+without it has no seeded sign-in and no runtime setting can add one. Apply `supabase/migrations` and `supabase/seed.sql` (never `seed_dev.sql`).
 Fill the « » placeholders in Console → Settings (entity, NPWP, bank, PPN) before the first invoice.
