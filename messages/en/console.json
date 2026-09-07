@@ -303,7 +303,15 @@
         },
         "change_role": "Change role",
         "owner_note": "Only the owner may change a role; the database refuses anyone else.",
-        "role_changed": "Role changed."
+        "role_changed": "Role changed.",
+        "person": "Person",
+        "link": "Link to this account",
+        "unlink": "Unlink",
+        "as_primary": "Primary contact",
+        "linked": "Linked to the account.",
+        "unlinked": "Unlinked.",
+        "nobody_waiting": "Nobody has signed in who is waiting to be linked.",
+        "ack_blocked": "This account has no acknowledgement, so peptide lines cannot be quoted to it. Link the person who asked, and they record it on their own profile."
       },
       "sites": {
         "title": "Sites · delivery destinations",
@@ -621,6 +629,60 @@
       "unknown": {
         "t1": "{ref}",
         "t2": "{account}"
+      },
+      "ack_none": {
+        "t1": "Quote {quote} cannot be sent",
+        "t2": "{account} · no acknowledgement on the account yet"
+      },
+      "refund_due": {
+        "t1": "Refund owed on {ref}",
+        "t2": "{account} · {amount} taken against a cancelled order"
+      },
+      "lead_new": {
+        "t1": "New enquiry from {ref}",
+        "t2": "{account} · nobody has answered it"
+      }
+    },
+    "leads": {
+      "title": "Pipeline",
+      "who": "Who",
+      "source": "Source",
+      "account": "Account",
+      "quote": "Quote",
+      "next": "Next",
+      "stage": "Stage",
+      "empty": "No enquiries at this stage.",
+      "f_all": "All",
+      "stages": {
+        "new": "New",
+        "contacted": "Contacted",
+        "acknowledged": "Acknowledged",
+        "quoted": "Quoted",
+        "won": "Won",
+        "lost": "Lost"
+      },
+      "sources": {
+        "site": "Website",
+        "whatsapp": "WhatsApp",
+        "referral": "Referral"
+      },
+      "n_answer": "Answer it — nobody has replied yet",
+      "n_no_account": "No account yet",
+      "n_no_ack": "Waiting on the acknowledgement",
+      "n_price": "Price the request {number}",
+      "n_quoted": "Quote {number} is with them",
+      "n_won": "Won on {number}",
+      "n_lost": "Closed",
+      "wa_note": "Answer on WhatsApp:",
+      "moved": "Stage moved.",
+      "move": {
+        "title": "Move a lead",
+        "lead": "Lead",
+        "stage": "Stage",
+        "note": "Note",
+        "note_ph": "What happened",
+        "submit": "Move",
+        "derived_note": "Only Contacted is set by hand. Acknowledged follows the acknowledgement, Quoted the sent quote, Won the accepted one and Lost the lost one."
       }
     }
   }
