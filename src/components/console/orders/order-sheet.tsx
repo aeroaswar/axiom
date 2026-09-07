@@ -32,6 +32,7 @@ export async function OrderSheetBody({ order, lines, legs, events, margin, owner
     invoice_due_at: order.invoice_due_at, invoice_paid_at: order.invoice_paid_at,
     invoice_voided_at: order.invoice_voided_at, cold: order.cold, eta_days: order.eta_days,
     reorder_due_at: order.reorder_due_at, cadence_days: order.cadence_days,
+    held_idr: order.held_idr,
   };
   const na = nextAction(view, cutoff);
   const steps = orderSteps({ ...view, invoice_number: order.invoice_number, accepted_at: order.accepted_at }, cutoff);

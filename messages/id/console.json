@@ -303,7 +303,15 @@
         },
         "change_role": "Ubah peran",
         "owner_note": "Hanya pemilik yang dapat mengubah peran; basis data menolak yang lain.",
-        "role_changed": "Peran diubah."
+        "role_changed": "Peran diubah.",
+        "person": "Orang",
+        "link": "Hubungkan ke akun ini",
+        "unlink": "Lepaskan",
+        "as_primary": "Kontak utama",
+        "linked": "Terhubung ke akun.",
+        "unlinked": "Sudah dilepaskan.",
+        "nobody_waiting": "Belum ada yang masuk dan menunggu dihubungkan.",
+        "ack_blocked": "Akun ini belum menandatangani pernyataan, sehingga baris peptida belum bisa ditawarkan. Hubungkan orang yang mengajukan, lalu ia mencatatnya sendiri di profilnya."
       },
       "sites": {
         "title": "Lokasi · tujuan pengiriman",
@@ -621,6 +629,60 @@
       "unknown": {
         "t1": "{ref}",
         "t2": "{account}"
+      },
+      "ack_none": {
+        "t1": "Penawaran {quote} belum bisa dikirim",
+        "t2": "{account} · akun belum menandatangani pernyataan"
+      },
+      "refund_due": {
+        "t1": "Pengembalian dana pada {ref}",
+        "t2": "{account} · {amount} diterima atas pesanan yang dibatalkan"
+      },
+      "lead_new": {
+        "t1": "Permintaan baru dari {ref}",
+        "t2": "{account} · belum ada yang menjawab"
+      }
+    },
+    "leads": {
+      "title": "Alur prospek",
+      "who": "Siapa",
+      "source": "Sumber",
+      "account": "Akun",
+      "quote": "Penawaran",
+      "next": "Berikutnya",
+      "stage": "Tahap",
+      "empty": "Tidak ada permintaan di tahap ini.",
+      "f_all": "Semua",
+      "stages": {
+        "new": "Baru",
+        "contacted": "Dihubungi",
+        "acknowledged": "Pernyataan lengkap",
+        "quoted": "Ditawarkan",
+        "won": "Menang",
+        "lost": "Batal"
+      },
+      "sources": {
+        "site": "Situs web",
+        "whatsapp": "WhatsApp",
+        "referral": "Rujukan"
+      },
+      "n_answer": "Jawab — belum ada yang membalas",
+      "n_no_account": "Belum ada akun",
+      "n_no_ack": "Menunggu pernyataan",
+      "n_price": "Beri harga permintaan {number}",
+      "n_quoted": "Penawaran {number} ada di tangan mereka",
+      "n_won": "Menang lewat {number}",
+      "n_lost": "Ditutup",
+      "wa_note": "Jawab lewat WhatsApp:",
+      "moved": "Tahap dipindahkan.",
+      "move": {
+        "title": "Pindahkan prospek",
+        "lead": "Prospek",
+        "stage": "Tahap",
+        "note": "Catatan",
+        "note_ph": "Apa yang terjadi",
+        "submit": "Pindahkan",
+        "derived_note": "Hanya Dihubungi yang diisi manual. Pernyataan lengkap mengikuti pernyataan, Ditawarkan mengikuti penawaran terkirim, Menang mengikuti yang diterima dan Batal mengikuti yang hilang."
       }
     }
   }

@@ -40,7 +40,8 @@
       "o_reorder_due": "Terkirim · pemesanan ulang sekitar {date}",
       "o_reorder_overdue": "Terkirim · pemesanan ulang jatuh {date}",
       "o_delivered": "Terkirim {date}",
-      "o_cancelled": "Dibatalkan {date}"
+      "o_cancelled": "Dibatalkan {date}",
+      "o_refund_due": "Pengembalian dana sedang diproses"
     },
     "steps": {
       "accepted": "Disetujui",

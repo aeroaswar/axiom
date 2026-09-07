@@ -60,7 +60,8 @@
       "o_reorder_due": "Pemesanan ulang {days, plural, =0 {jatuh tempo hari ini} other {jatuh tempo dalam # h}} · irama {cadence} h",
       "o_reorder_overdue": "Pemesanan ulang lewat tempo {days} h · irama {cadence} h",
       "o_delivered": "Diterima {date}",
-      "o_cancelled": "Dibatalkan {date}"
+      "o_cancelled": "Dibatalkan {date}",
+      "o_refund_due": "Perlu pengembalian dana — terbitkan nota kredit"
     },
     "cutoff": {
       "closed": "tutup",
@@ -400,6 +401,7 @@
       "kicker": "Penyusun penawaran",
       "account": "Akun",
       "pick": "Pilih satu akun",
+      "no_accounts": "Belum ada klien. Penawaran selalu ditujukan kepada seseorang, jadi langkah pertama adalah menambahkan kliennya.",
       "ack_none": "belum ada pernyataan peneliti · hanya apparel dan perangkat",
       "ack_lapsed": "pernyataan telah berakhir · hanya apparel dan perangkat",
       "start": "Mulai penawarannya",
