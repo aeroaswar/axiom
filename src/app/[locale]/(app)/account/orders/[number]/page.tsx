@@ -14,7 +14,7 @@ export default async function OrderPage({ params }: { params: Promise<{ number: 
   const t = await getTranslations('account.order');
 
   const [found, settings, bank] = await Promise.all([
-    orderByNumber(session.uid, session.accountId, decodeURIComponent(number)),
+    orderByNumber(session.uid, session.accountId, number),
     getSettings(),
     bankDetails(session.uid),
   ]);

@@ -475,6 +475,62 @@ await as(SENOPATI, async tx => {
   ok(other[0].n === 0, "and never another account's invoice lines");
 });
 
+console.log('Gate S14: a destination belongs to the account that owns it');
+{
+  const IVAN_ACCT = '10000000-0000-4000-8000-000000000005';
+  const PONDOK = '20000000-0000-4000-8000-000000000007';
+  // KBY is Regenera's. Before 0007 `axiom.delivery_for_lines` was a definer function joining
+  // account_sites with no account filter, so it named any site it was handed — the other clinic's
+  // name, zone and a charge computed for it — and the id then persisted onto the caller's own quote.
+  await as(IVAN, async tx => {
+    const foreign = await tx`select * from axiom.delivery_for_lines(
+      ${tx.json([{ site_id: KBY, qty: 3 }])}::jsonb, ${IVAN_ACCT}::uuid)`;
+    ok(foreign.length === 0, "another account's destination is not costed, named or returned");
+    const own = await tx`select site_name from axiom.delivery_for_lines(
+      ${tx.json([{ site_id: PONDOK, qty: 3 }])}::jsonb, ${IVAN_ACCT}::uuid)`;
+    ok(own.length === 1, 'its own destination still costs normally');
+
+    const lines = tx.json([{ sku: 'reta10', qty: 1, site_id: KBY }]);
+    await expectError(tx, sp => sp`select axiom.request_quote(${IVAN_ACCT}::uuid, ${lines}::jsonb)`,
+      'a request cannot address another account’s destination', /does not belong/i);
+
+    const [c] = await tx`select axiom.cart_for('gate-s14-anon-key-0001', ${IVAN_ACCT}::uuid) as id`;
+    await expectError(tx, sp => sp`select axiom.cart_set(${c.id}::uuid, null, 'reta10', 1, ${KBY}::uuid)`,
+      'nor can a basket line', /does not belong/i);
+  });
+  // Staff are not exempt: the Console builder writes through the same door.
+  await as(OPS, async tx => {
+    const lines = tx.json([{ sku: 'reta10', qty: 1, site_id: PONDOK }]);
+    await expectError(tx, sp => sp`select axiom.new_quote(${REGENERA}::uuid, ${lines}::jsonb)`,
+      'and neither can a staff-built quote', /does not belong/i);
+  });
+}
+
+console.log('Gate S15: payment and void are recorded only by the functions that check who may');
+{
+  const [inv] = await sql`select i.id::text id, o.id::text oid from public.invoices i
+    join public.orders o on o.id = i.order_id
+    where o.state = 'awaiting_payment' and i.issued_at is not null and i.paid_at is null limit 1`;
+  // `invoices_write` is `for all using (axiom.is_staff())`, so any staff member could write the
+  // column directly and step around the `paid_by_owner_only` check inside axiom.mark_paid.
+  for (const [who, label] of [[OPS, 'ops'], [OWNER, 'owner']]) {
+    await as(who, async tx => {
+      await expectError(tx, sp => sp`update public.invoices set paid_at = now(), paid_ref = 'forged' where id = ${inv.id}::uuid`,
+        `${label}: a bare paid_at write is refused`, /functions that check/i);
+      await expectError(tx, sp => sp`update public.invoices set voided_at = now() where id = ${inv.id}::uuid`,
+        `${label}: a bare voided_at write is refused`, /functions that check/i);
+    });
+  }
+  // The door itself still opens, and the notes an invoice is allowed to carry still save.
+  await as(OWNER, async tx => {
+    await tx`update public.invoices set notes = 'gate s15' where id = ${inv.id}::uuid`;
+    ok(true, 'the fields an issued invoice may still carry are untouched');
+    await tx`select axiom.mark_paid(${inv.oid}::uuid, 'TRF GATE-S15')`;
+    const [after] = await tx`select paid_at is not null paid, paid_ref from public.invoices where id = ${inv.id}::uuid`;
+    ok(after.paid && after.paid_ref === 'TRF GATE-S15', 'axiom.mark_paid still records the payment');
+  });
+}
+
 await sql.end();
 console.log(`\n${passes} passed, ${failures} failed`);
 process.exit(failures ? 1 : 0);

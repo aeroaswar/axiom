@@ -325,6 +325,7 @@
       "keep": "Biarkan",
       "signed_out": "Masuk kembali untuk melanjutkan.",
       "refused": "Belum berhasil: {message}",
+      "failed": "Belum berhasil. Coba lagi, atau hubungi AXIOM lewat WhatsApp.",
       "accepted": "Disetujui. Pesanannya terbuka di bawah.",
       "transfer_reported": "Terima kasih. AXIOM akan mencocokkan transfer Anda lalu mulai mengemas.",
       "cancelled": "Pesanan dibatalkan.",

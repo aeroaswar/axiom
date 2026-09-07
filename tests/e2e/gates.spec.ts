@@ -7,6 +7,7 @@ const OWNER = 'Aero';
 const OPS = 'Nadia';
 const REGENERA = 'dr. Ratna';
 const SENOPATI = 'Klinik Senopati';
+const AKSARA = 'Aksara Recovery';
 
 async function signIn(page: Page, name: string, next = '/account') {
   await page.goto(`/sign-in?next=${encodeURIComponent(next)}`);
@@ -196,6 +197,34 @@ test.describe('Gate 21 · documents match', () => {
     const res = await context.request.get('/api/documents/price-list');
     expect(res.headers()['content-type']).toContain('application/pdf');
     expect((await res.body()).length).toBeGreaterThan(20_000);
+  });
+});
+
+test.describe('Gate 21 · a quotation exists only once AXIOM sends it', () => {
+  // The account screen withholds prices on a quote nobody has priced. The PDF route is the same
+  // data over a second surface, and it used to authorize on visibility alone — so a client could
+  // fetch a formal, fully priced quotation for a request AXIOM had not yet looked at, skipping the
+  // three tests axiom.send_quote applies before pricing goes out.
+  test('a client cannot fetch the PDF for a quote that has not been sent', async ({ page, context }) => {
+    await signIn(page, AKSARA, '/account');
+    await page.goto('/account');
+    const unsent = await context.request.get('/api/documents/quote/AX-Q-0010');
+    expect(unsent.status()).toBe(404);
+  });
+  test('but the one AXIOM sent prints, and staff may preview a draft', async ({ page, context }) => {
+    await signIn(page, REGENERA, '/account');
+    const sent = await context.request.get('/api/documents/quote/AX-Q-0005');
+    expect(sent.status()).toBe(200);
+    expect(sent.headers()['content-type']).toContain('application/pdf');
+    const other = await context.request.get('/api/documents/quote/AX-Q-0010');
+    expect(other.status()).toBe(404);
+
+    const staff = await page.context().browser()!.newContext();
+    const sp = await staff.newPage();
+    await signIn(sp, OWNER, '/console');
+    const draft = await staff.request.get('/api/documents/quote/AX-Q-0010');
+    expect(draft.status()).toBe(200);
+    await staff.close();
   });
 });
 

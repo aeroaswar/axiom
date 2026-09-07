@@ -14,7 +14,7 @@ export default async function QuotePage({ params }: { params: Promise<{ number: 
   const t = await getTranslations('account.quote');
 
   const [found, settings] = await Promise.all([
-    quoteByNumber(session.uid, session.accountId, decodeURIComponent(number)),
+    quoteByNumber(session.uid, session.accountId, number),
     getSettings(),
   ]);
   if (!found) notFound();

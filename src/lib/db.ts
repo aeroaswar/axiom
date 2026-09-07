@@ -60,3 +60,14 @@ export function pgMessage(e: unknown): string {
   if (isPgError(e)) return e.message.replace(/^.*?:\s*/, '');
   return e instanceof Error ? e.message : String(e);
 }
+
+/**
+ * The subset of `pgMessage` that is safe to show a client. The domain layer marks every refusal it
+ * wants read — an expired quote, an order past dispatch, a peptide line on a lapsed acknowledgement
+ * — with `errcode = 'check_violation'`, so that sentence was written for the reader. Anything else
+ * reaching here is incidental: a driver parse failure, a constraint name, a privilege refusal. Those
+ * are for the log, not for a clinic's screen, so this returns null and the caller says so plainly.
+ */
+export function pgRefusal(e: unknown): string | null {
+  return isPgError(e) && e.code === '23514' ? pgMessage(e) : null;
+}

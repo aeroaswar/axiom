@@ -83,6 +83,21 @@ select v.id,
 from public.product_variants v join public.products p on p.id = v.product_id
 where v.sku not in ('tb500','ta1','epi50');
 
+-- Fixtures age the record after the fact: every state below was produced by the real functions and
+-- only the clock is moved. Migration 0007 froze `paid_at` on an issued invoice behind the frame the
+-- domain functions open, so the backdating names itself the same way instead of writing the column
+-- bare. Session-local, and gone when the seed's connection closes.
+create function pg_temp.backdate_invoices(ord uuid, issued timestamptz, due timestamptz, paid timestamptz) returns void
+language plpgsql as $fn$
+declare iv uuid;
+begin
+  for iv in select id from public.invoices where order_id = ord loop
+    perform axiom.enter_fn('invoice', iv);
+    update public.invoices set issued_at = issued, due_at = due, paid_at = paid where id = iv;
+    perform axiom.leave_fn();
+  end loop;
+end $fn$;
+
 -- quotes and orders through the spine
 do $$
 declare q uuid; o uuid; reg uuid := '10000000-0000-4000-8000-000000000001'; pra uuid := '10000000-0000-4000-8000-000000000002';
@@ -94,12 +109,12 @@ begin
   q := axiom.new_quote(reg, jsonb_build_array(jsonb_build_object('sku','reta10','qty',2,'site_id',kby), jsonb_build_object('sku','bpc10','qty',1,'site_id',kby)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2607-0117'); perform axiom.advance_order(o, 'Paxel', 'PX-0117'); perform axiom.advance_order(o);
   update public.orders set placed_at = now() - interval '54 days', delivered_at = now() - interval '52 days' where id = o;
-  update public.invoices set issued_at = now() - interval '54 days', due_at = now() - interval '47 days', paid_at = now() - interval '54 days' where order_id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '54 days', now() - interval '47 days', now() - interval '54 days');
 
   q := axiom.new_quote(reg, jsonb_build_array(jsonb_build_object('sku','ghk100','qty',2,'site_id',kby), jsonb_build_object('sku','mask','qty',1,'site_id',kby)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2608-0128'); perform axiom.advance_order(o, 'Paxel', 'PX-0128'); perform axiom.advance_order(o);
   update public.orders set placed_at = now() - interval '35 days', delivered_at = now() - interval '33 days' where id = o;
-  update public.invoices set issued_at = now() - interval '35 days', due_at = now() - interval '28 days', paid_at = now() - interval '35 days' where order_id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '35 days', now() - interval '28 days', now() - interval '35 days');
 
   q := axiom.new_quote(reg, jsonb_build_array(jsonb_build_object('sku','reta10','qty',1,'site_id',kby), jsonb_build_object('sku','bpc10','qty',2,'site_id',kby), jsonb_build_object('sku','cjc10','qty',1,'site_id',kby), jsonb_build_object('sku','tee','qty',2,'site_id',kby)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q);
@@ -118,11 +133,11 @@ begin
   q := axiom.new_quote(pra, jsonb_build_array(jsonb_build_object('sku','bpc10','qty',2)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2608-0096'); perform axiom.advance_order(o, 'Paxel', 'PX-0096'); perform axiom.advance_order(o);
   update public.orders set placed_at = now() - interval '33 days', delivered_at = now() - interval '31 days' where id = o;
-  update public.invoices set issued_at = now() - interval '33 days', due_at = now() - interval '26 days', paid_at = now() - interval '33 days' where order_id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '33 days', now() - interval '26 days', now() - interval '33 days');
   q := axiom.new_quote(pra, jsonb_build_array(jsonb_build_object('sku','cjc10','qty',2), jsonb_build_object('sku','kpv10','qty',1)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2608-0102'); perform axiom.advance_order(o, 'Paxel', 'PX-0102'); perform axiom.advance_order(o);
   update public.orders set placed_at = now() - interval '19 days', delivered_at = now() - interval '17 days' where id = o;
-  update public.invoices set issued_at = now() - interval '19 days', due_at = now() - interval '12 days', paid_at = now() - interval '19 days' where order_id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '19 days', now() - interval '12 days', now() - interval '19 days');
   q := axiom.new_quote(pra, jsonb_build_array(jsonb_build_object('sku','bpc10','qty',3), jsonb_build_object('sku','cjc10','qty',1)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2609-0147'); perform axiom.advance_order(o, 'Paxel', 'PX-0147');
   update public.orders set placed_at = now() - interval '5 days' where id = o;
@@ -144,7 +159,7 @@ begin
   q := axiom.new_quote(ivan, jsonb_build_array(jsonb_build_object('sku','ghk100','qty',2), jsonb_build_object('sku','tee','qty',1)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2608-0145'); perform axiom.advance_order(o, 'Paxel', 'PX-0145'); perform axiom.advance_order(o);
   update public.orders set placed_at = now() - interval '6 days', delivered_at = now() - interval '4 days' where id = o;
-  update public.invoices set issued_at = now() - interval '6 days', due_at = now() + interval '1 day', paid_at = now() - interval '6 days' where order_id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '6 days', now() + interval '1 day', now() - interval '6 days');
   q := axiom.new_quote(ivan, jsonb_build_array(jsonb_build_object('sku','ghk50','qty',2)));
   perform axiom.send_quote(q);
   update public.quotes set sent_at = now() - interval '8 days' where id = q;   -- expired, derived
@@ -153,7 +168,7 @@ begin
   q := axiom.new_quote(lon, jsonb_build_array(jsonb_build_object('sku','legs','qty',1)));
   perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2608-0143'); perform axiom.advance_order(o, 'JNE', 'JNE-0143'); perform axiom.advance_order(o);
   update public.orders set placed_at = now() - interval '8 days', delivered_at = now() - interval '6 days' where id = o;
-  update public.invoices set issued_at = now() - interval '8 days', due_at = now() - interval '1 day', paid_at = now() - interval '8 days' where order_id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '8 days', now() - interval '1 day', now() - interval '8 days');
   q := axiom.new_quote(lon, jsonb_build_array(jsonb_build_object('sku','mask','qty',1)));
   perform axiom.send_quote(q); perform axiom.mark_quote_lost(q);
 end $$;

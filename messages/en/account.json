@@ -325,6 +325,7 @@
       "keep": "Keep it",
       "signed_out": "Sign in again to continue.",
       "refused": "That did not go through: {message}",
+      "failed": "That did not go through. Try again, or reach AXIOM on WhatsApp.",
       "accepted": "Accepted. The order is open below.",
       "transfer_reported": "Thank you. AXIOM will match the transfer and start packing.",
       "cancelled": "The order is cancelled.",

@@ -45,3 +45,38 @@ environment variables; none is code.
 - **The app reads Postgres directly** (one pool, a transaction per request that adopts the caller's
   role and JWT claims). RLS therefore applies to the app's own queries exactly as it does to
   PostgREST; the SQL gates set the same claims. Supabase provides Auth, Storage and the database.
+
+## Findings closed after the commerce and account modules landed
+
+A security review over the console-commerce and account code found two authorisation defects and
+two smaller ones. All four are fixed; each of the first two is pinned by a gate so it stays fixed.
+
+- **A quotation could be printed before AXIOM sent it.** `/api/documents/quote/{number}`
+  authorised on visibility alone, and `quotes_read` carries no state predicate, so a client who
+  had merely *requested* a quote could fetch a formal, letterheaded, fully priced quotation for it
+  — `quoteBody` falls back to today's list price for a line that is not yet frozen. That skipped
+  every test `axiom.send_quote` applies before pricing leaves the building: current acknowledgement
+  on peptide lines, quantities actually available, a rate for every destination. The route now
+  requires `sent_at is not null` for a non-staff caller; staff may still preview their own draft.
+  Pinned by the Playwright gate *a quotation exists only once AXIOM sends it*.
+- **A destination was never checked against the account that owns it.** `site_id` arrived from a
+  form field and was stored verbatim by `axiom.cart_set`, `axiom.request_quote` and
+  `axiom.save_quote_draft`, and `axiom.delivery_for_lines` — `security definer`, so RLS did not
+  apply inside it — joined `account_sites` with no account filter and would name any site it was
+  handed. Migration `0007` adds `axiom.site_of`, which refuses a destination that does not belong
+  to the account, puts all three writers through it, and filters the join as well. Pinned by SQL
+  gate S14.
+- **Payment and void were writable as plain columns.** `guard_invoice_edit` froze the money on an
+  issued invoice but left `paid_at`, `paid_ref` and `voided_at` open, while `invoices_write` is
+  `for all using (axiom.is_staff())` — so the `paid_by_owner_only` setting was a check on one code
+  path, not on the column, and the Console already writes `public.invoices` directly for notes and
+  the sent stamp. `0007` moves those columns behind the same transaction frame the domain layer
+  uses; `axiom.mark_paid` and `axiom.cancel_order` name themselves, and nothing else may. The dev
+  fixtures backdate invoices through a session-local helper for the same reason. Pinned by S15.
+- **A driver error reached a clinic's screen.** The account surface rendered `pgMessage(e)` for any
+  failure. The domain layer marks the refusals it *wants* read with `errcode = 'check_violation'`,
+  so `pgRefusal` passes only those through and everything else becomes one plain sentence.
+
+Two things the review raised that were checked and left alone: cost and margin never reach a
+non-owner (every cost read joins a relation whose policy raises, and `deliveredMargin` returns a
+refusal for an ops session), and no action anywhere accepts a price, total or discount from a form.

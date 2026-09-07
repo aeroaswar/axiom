@@ -1,7 +1,7 @@
 import 'server-only';
 import { revalidatePath } from 'next/cache';
 import { getTranslations } from 'next-intl/server';
-import { pgMessage, withRls, type Tx } from '@/lib/db';
+import { pgRefusal, withRls, type Tx } from '@/lib/db';
 import { accountSession, type AccountSession } from './data';
 import type { ActionState } from '@/components/console/shared/action-form';
 
@@ -26,7 +26,8 @@ export async function attempt<T = void>(
   try {
     value = await withRls({ uid: session.uid }, tx => fn(tx, session));
   } catch (e) {
-    return { error: t('refused', { message: pgMessage(e) }) };
+    const refusal = pgRefusal(e);
+    return { error: refusal ? t('refused', { message: refusal }) : t('failed') };
   }
   // A single write moves a quote to an order, issues an invoice, changes the bell count and empties
   // the basket the public site shares. Revalidating the tree is cheaper than guessing which.
