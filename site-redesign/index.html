@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070605">
+<title>AXIOM Peptide Science</title>
+<meta name="description" content="Peptida riset terverifikasi HPLC/MS, Certificate of Analysis per lot, rantai dingin ke seluruh Indonesia. Satu harga per lot. Hanya untuk keperluan riset. Jakarta.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23070605'/%3E%3Cg stroke='%23C88A4E' stroke-width='6' stroke-linecap='round' fill='none'%3E%3Cpolyline points='24,74 38,26 52,74'/%3E%3Ccircle cx='70' cy='52' r='16'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ==================================================================
+   AXIOM — tokens (canonical block, business master prompt §9).
+   One visual world: onyx ground, bone ink, bronze accent. Painted explicitly.
+   ================================================================== */
+:root{
+  --bg:#070605; --ink:#F2EDE5; --muted:#9C9488; --muted-2:#6A635A;
+  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
+  --accent:#C88A4E; --accent-bright:#E7B173; --accent-deep:#7C4C24;
+  --accent-soft:rgba(200,138,78,.14); --accent-line:rgba(200,138,78,.34);
+  --accent-grad:linear-gradient(120deg,#E7B173 0%,#C88A4E 46%,#9A5F2C 100%);
+  --glass-accent:rgba(200,138,78,.10);
+  --ok:#8FA37E; --err:#B0553B;
+  --display:"Jost","Century Gothic",system-ui,sans-serif;
+  --sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --maxw:1280px; --pad:34px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink);scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.6;font-size:14px;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"tnum" 1,"cv05" 1;min-height:100dvh;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:0}
+input,select,textarea{font:inherit;color:inherit;border-radius:0}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+::selection{background:var(--accent);color:#0a0704}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+[hidden]{display:none!important}
+.wm-sv{height:22px;width:auto;display:block;fill:var(--ink);flex:none}
+.ic{width:1em;height:1em;display:inline-block;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;overflow:visible;flex:none;vertical-align:-.12em}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad);width:100%}
+@media(max-width:680px){:root{--pad:20px}}
+
+/* ---------- type ---------- */
+.kicker{font-family:var(--sans);font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;font-weight:500;color:var(--accent);opacity:.92}
+h1,h2,h3{font-family:var(--display);font-weight:300;letter-spacing:-.01em;line-height:1.1;text-wrap:balance}
+h1 em,h2 em{font-style:normal;background:var(--accent-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--accent)}
+p{font-weight:300}
+.lead{color:var(--muted);font-size:16px;line-height:1.75;font-weight:300;max-width:60ch}
+.dim{color:var(--muted)}.dim-2{color:var(--muted-2)}
+.note{font-size:11.5px;font-weight:300;color:var(--muted);line-height:1.65}
+.mono-n{font-variant-numeric:tabular-nums}
+.tag{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+
+/* ---------- ribbon + nav ---------- */
+.ribbon{position:relative;z-index:5;background:#000;color:var(--muted);border-bottom:1px solid var(--line);
+  font-size:10px;letter-spacing:.26em;text-transform:uppercase;text-align:center;padding:9px 12px;font-weight:500}
+.ribbon b{color:var(--ink);font-weight:600}
+.site-nav{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);transition:transform .45s var(--ease)}
+.site-nav.nav-hidden{transform:translateY(-100%)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-nav{background:#0a0806}}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:76px;gap:20px}
+.brand{display:flex;align-items:center;gap:12px}
+.nav-links{display:flex;gap:30px;align-items:center;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.nav-links a{transition:color .22s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.on{color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:18px}
+.lang{display:inline-flex;border:1px solid var(--line);font-size:10px;letter-spacing:.16em;font-weight:500}
+.lang button{padding:8px 10px;color:var(--muted-2);transition:.18s}
+.lang button.on{background:var(--ink);color:#000}
+.lang button:not(.on):hover{color:var(--ink)}
+.nav-toggle{display:none;border:1px solid var(--line-2);color:var(--ink);width:44px;height:44px;place-items:center}
+.nav-toggle .ic{font-size:20px}
+@media(max-width:960px){
+  .nav-links{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:#0a0806;border-bottom:1px solid var(--line);padding:8px 0;display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:14px var(--pad);border-top:1px solid var(--line-soft)}
+  .nav-toggle{display:grid}
+  .nav-in{height:64px}
+  .site-nav .nav-cta{display:none}
+}
+@media(max-width:520px){.brand .wm-sv{height:18px}.nav-right{gap:12px}}
+
+/* ---------- buttons / links / chips ---------- */
+.btn{font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:15px 26px;border:1px solid var(--line-2);background:transparent;color:var(--ink);
+  cursor:pointer;transition:.24s var(--ease);display:inline-flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap}
+.btn:hover{background:var(--accent);color:#0a0704;border-color:var(--accent)}
+.btn-solid{background:var(--accent);border-color:var(--accent);color:#0a0704}
+.btn-solid:hover{background:var(--accent-bright);border-color:var(--accent-bright);color:#0a0704}
+.btn-sm{padding:10px 16px;font-size:10px}
+.btn[disabled]{opacity:.5;cursor:default}
+.tlink{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:9px;position:relative;padding-bottom:6px}
+.tlink::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--line-2);transition:background .24s}
+.tlink:hover::after{background:var(--accent)}
+.tlink:hover{color:var(--accent-bright)}
+.tlink .ar{transition:transform .24s;color:var(--accent)}
+.tlink:hover .ar{transform:translateX(4px)}
+.chip{font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:9px 14px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);transition:.18s;white-space:nowrap}
+.chip:hover{border-color:var(--line-2);color:var(--ink)}
+.chip.on{background:var(--ink);color:#000;border-color:var(--ink)}
+.chip .n{color:inherit;opacity:.6;margin-left:6px;font-variant-numeric:tabular-nums}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:104px 0 0;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 70% at 78% 26%,rgba(200,138,78,.18),transparent 62%),radial-gradient(50% 60% at 14% 96%,rgba(124,76,36,.12),transparent 62%)}
+.hero-bg canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(100deg,rgba(7,6,5,.92) 0%,rgba(7,6,5,.82) 36%,rgba(7,6,5,.42) 60%,rgba(7,6,5,0) 84%)}
+.hero .wrap{position:relative;z-index:2}
+.hero-in{max-width:900px}
+.hero h1{font-size:clamp(36px,5.6vw,74px);line-height:1.02;margin-top:14px;max-width:16ch}
+.hero .lead{margin-top:30px;max-width:58ch}
+.hero-cta{display:flex;gap:34px;align-items:center;margin-top:44px;flex-wrap:wrap}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:64px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.trust>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 22px 24px;background:rgba(7,6,5,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.trust .t{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:400;font-size:17px;color:var(--ink)}
+.trust .t .ic{color:var(--accent);font-size:18px}
+.trust p{color:var(--muted);font-size:13px;line-height:1.65;margin-top:8px}
+.hero-meta{margin-top:0;border-top:1px solid var(--line);position:relative;z-index:2;background:rgba(7,6,5,.6)}
+.hero-meta .wrap{display:flex;flex-wrap:wrap}
+.hero-meta .m{flex:1;min-width:150px;padding:22px 26px 24px 0;border-right:1px solid var(--line-soft)}
+.hero-meta .m:last-child{border-right:none}
+.hero-meta .m .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.hero-meta .m .v{font-family:var(--display);font-weight:400;font-size:21px;color:var(--ink);margin-top:8px;letter-spacing:.01em}
+@media(max-width:900px){.trust{grid-template-columns:1fr}}
+@media(max-width:680px){
+  .hero{padding-top:56px}.hero-cta{gap:22px}
+  .hero-scrim{background:linear-gradient(180deg,rgba(7,6,5,.5) 0%,rgba(7,6,5,.85) 60%,var(--bg) 100%)}
+  .hero-meta .wrap{display:grid;grid-template-columns:1fr 1fr}
+  .hero-meta .m{padding:16px 16px 16px 0;border-bottom:1px solid var(--line-soft)}
+  .hero-meta .m:nth-child(2n){border-right:none;padding-left:16px}
+  .hero-meta .m:nth-last-child(-n+2){border-bottom:none}
+}
+
+/* ---------- bands and section heads ---------- */
+.band{border-top:1px solid var(--line);position:relative}
+.band>.wrap{padding-top:96px;padding-bottom:96px}
+.band.tight>.wrap{padding-top:64px;padding-bottom:64px}
+@media(max-width:680px){.band>.wrap{padding-top:64px;padding-bottom:64px}}
+.shead{display:grid;grid-template-columns:120px minmax(0,1fr);gap:24px;align-items:start}
+.shead .no{color:var(--accent);font-size:11px;letter-spacing:.3em;font-variant-numeric:tabular-nums;padding-top:9px}
+.shead h2{font-size:clamp(26px,3.4vw,44px);max-width:20ch}
+.shead .k{margin-bottom:14px;display:block}
+.shead p{color:var(--muted);line-height:1.75;max-width:62ch;margin-top:18px;font-size:15px}
+.shead>*{min-width:0}
+@media(max-width:760px){.shead{grid-template-columns:1fr;gap:10px}.shead .no{padding-top:0}}
+@media(min-width:1080px){
+  .shead.duo>div{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);column-gap:64px;align-items:start}
+  .shead.duo>div>.k{grid-column:1;grid-row:1}
+  .shead.duo>div>h2{grid-column:1;grid-row:2;max-width:16ch}
+  .shead.duo>div>p{grid-column:2;grid-row:1/3;margin-top:0;max-width:46ch}
+}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:64px;align-items:start}
+.split>*{min-width:0}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:40px}}
+.sp-24{height:24px}.sp-44{height:44px}
+
+/* ---------- statements (the standard) ---------- */
+.stmts{margin-top:52px;border-bottom:1px solid var(--line)}
+.stmt{display:grid;grid-template-columns:120px minmax(0,1fr);gap:28px;padding:26px 0;border-top:1px solid var(--line);align-items:start}
+.stmt .idx{color:var(--accent);font-size:11px;letter-spacing:.3em;font-variant-numeric:tabular-nums;padding-top:6px}
+.stmt h3{font-size:24px;margin-bottom:10px}
+.stmt p{color:var(--muted);line-height:1.7;max-width:64ch}
+@media(max-width:600px){.stmt{grid-template-columns:1fr;gap:8px}}
+
+/* ---------- CoA specimen ---------- */
+.coa{border:1px solid var(--line-2);background:var(--ink);color:#141210;padding:30px 30px 26px;position:relative;font-family:var(--sans);
+  box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.coa::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--accent-grad)}
+.coa .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:1px solid rgba(20,18,16,.18)}
+.coa .hd .wm-sv{fill:#141210;height:16px}
+.coa .hd .tag{color:#7C4C24}
+.coa .title{font-family:var(--display);font-weight:300;font-size:22px;margin-top:16px;letter-spacing:-.01em;color:#141210}
+.coa .rows{margin-top:14px;border-top:1px solid rgba(20,18,16,.12)}
+.coa .r{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;padding:10px 0;border-bottom:1px solid rgba(20,18,16,.12);font-size:13px;align-items:baseline}
+.coa .r dt{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#7a7268;font-weight:500}
+.coa .r dd{color:#141210;font-weight:400;font-variant-numeric:tabular-nums}
+.coa .r dd.big{font-family:var(--display);font-size:22px;font-weight:400}
+.coa .ft{display:flex;justify-content:space-between;gap:12px;margin-top:16px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#7a7268;font-weight:500}
+.coa .stamp{position:absolute;right:26px;bottom:64px;width:78px;height:78px;border:1px solid rgba(124,76,36,.5);border-radius:50%;display:grid;place-items:center;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#7C4C24;text-align:center;line-height:1.5;transform:rotate(-8deg);opacity:.85}
+@media(max-width:480px){.coa{padding:22px 18px}.coa .r{grid-template-columns:1fr;gap:4px}.coa .stamp{display:none}}
+
+/* ---------- catalogue ---------- */
+.tools{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;padding:22px 0;border-bottom:1px solid var(--line);margin-top:52px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;flex:1 1 auto}
+.field{display:flex;flex-direction:column;gap:9px;min-width:0}
+.field label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.field label .req{color:var(--accent)}
+.field input,.field textarea,.field select{background:transparent;border:none;border-bottom:1px solid var(--line-2);color:var(--ink);font-size:14px;font-weight:300;padding:10px 2px;outline:none;transition:border-color .2s;width:100%;color-scheme:dark}
+.field textarea{min-height:96px;resize:vertical;line-height:1.6}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted-2)}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field input:focus-visible,.field textarea:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+.field .err{font-size:10.5px;color:var(--err);font-weight:400;letter-spacing:.02em;min-height:1em}
+.tools .search{flex:0 1 260px}
+.cnt{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-variant-numeric:tabular-nums;white-space:nowrap;padding:0 0 11px}
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:18px 14px 12px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+.tbl th.n,.tbl td.n{text-align:right}
+.tbl td{padding:14px 14px;border-bottom:1px solid var(--line);font-weight:300;color:var(--muted);vertical-align:middle}
+.tbl td.k{color:var(--ink);font-weight:400}
+.tbl td.k small{display:block;color:var(--muted);font-size:12px;font-weight:300;margin-top:3px}
+.tbl td.id{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
+.tbl td.money{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:500;white-space:nowrap}
+.tbl tr.grp td{padding:34px 14px 10px;font-family:var(--display);font-size:22px;color:var(--ink);font-weight:300;border-bottom:1px solid var(--line-2)}
+.tbl tr.grp td .no{font-family:var(--sans);font-size:9px;letter-spacing:.3em;color:var(--accent);margin-right:14px;text-transform:uppercase;vertical-align:middle}
+.tbl tr.grp td .sm{display:block;font-family:var(--sans);font-size:12.5px;color:var(--muted);font-weight:300;margin-top:4px}
+.tbl td.act{text-align:right;white-space:nowrap;width:1%}
+.tbl .add{border:1px solid var(--line-2);padding:8px 12px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:7px;transition:.18s var(--ease)}
+.tbl .add:hover{border-color:var(--accent);color:var(--accent-bright)}
+.tbl .add.on{background:var(--accent);border-color:var(--accent);color:#0a0704}
+.tbl tr.empty td{padding:34px 14px;color:var(--muted-2)}
+@media(max-width:640px){.tbl{font-size:12.5px}.tbl th:nth-child(2),.tbl td:nth-child(2){display:none}.tbl td,.tbl th{padding-left:6px;padding-right:6px}
+  .tbl .add{padding:8px 9px}.tbl .add .lbl{display:none}.tbl tr.grp td{font-size:19px;padding-top:28px}.tbl td.money{font-size:12.5px}}
+.cat-foot{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;flex-wrap:wrap;margin-top:28px}
+.cat-foot .note{max-width:60ch}
+
+/* ---------- grid cells ---------- */
+.grid{display:grid;border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:52px}
+.grid>*{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 26px;min-width:0}
+.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:960px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.g4,.g2{grid-template-columns:1fr}}
+.cell .ic{color:var(--accent);font-size:22px}
+.cell h3{font-size:20px;margin:16px 0 10px}
+.cell p{color:var(--muted);font-size:13.5px;line-height:1.7}
+.cell .no{color:var(--accent);font-size:10px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
+.ruo{border-left:2px solid var(--accent-deep);background:var(--glass-accent);padding:16px 18px;font-size:12.5px;line-height:1.7;color:var(--muted);font-weight:300}
+.ruo b{color:var(--ink);font-weight:500;letter-spacing:.02em}
+.handling{margin-top:52px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:40px;padding-top:34px;border-top:1px solid var(--line)}
+.handling p{color:var(--muted);line-height:1.8;font-size:14.5px;max-width:68ch}
+@media(max-width:900px){.handling{grid-template-columns:1fr;gap:16px}}
+
+/* ---------- comparison ---------- */
+.cmp{width:100%;border-collapse:collapse;margin-top:52px;font-size:13.5px}
+.cmp th{text-align:left;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:0 16px 14px;border-bottom:1px solid var(--line-2)}
+.cmp th.ax{color:var(--accent-bright)}
+.cmp td{padding:18px 16px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65;font-weight:300;color:var(--muted)}
+.cmp td.c{color:var(--ink);font-weight:400;font-family:var(--display);font-size:17px;white-space:nowrap}
+.cmp td.ax{color:var(--ink);background:linear-gradient(90deg,var(--accent-soft),transparent 90%);border-left:1px solid var(--accent-line)}
+.cmp td.ax::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);margin-right:10px;vertical-align:middle}
+.cmp td.mk{color:var(--muted-2)}
+.cmp th:first-child,.cmp td:first-child{padding-left:0}
+@media(max-width:760px){
+  .cmp thead{display:none}
+  .cmp tr{display:grid;grid-template-columns:1fr;border-bottom:1px solid var(--line);padding:14px 0}
+  .cmp td{border:none;padding:6px 0}
+  .cmp td.c{padding-bottom:8px}
+  .cmp td.ax{padding:10px 12px;border-left:1px solid var(--accent-line)}
+  .cmp td.mk::before{content:attr(data-h);display:block;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2);margin:8px 0 2px}
+}
+
+/* ---------- process ---------- */
+.psteps{border-top:1px solid var(--line);margin-top:52px}
+.pstep{display:grid;grid-template-columns:120px minmax(0,1fr);gap:28px;padding:34px 0;border-bottom:1px solid var(--line)}
+.pstep .no{color:var(--accent);font-size:11px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
+.pstep h3{font-size:clamp(20px,2.4vw,27px);margin-bottom:12px}
+.pstep p{color:var(--muted);line-height:1.8;max-width:64ch;font-size:15px}
+@media(max-width:760px){.pstep{grid-template-columns:1fr;gap:10px}}
+.side{border-top:1px solid var(--line-2);padding-top:8px}
+.side h3{font-size:22px;margin:16px 0 10px}
+.side p{color:var(--muted);line-height:1.75;font-size:14px}
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.kv .k{color:var(--muted);font-weight:300;flex:1}
+.kv .v{font-variant-numeric:tabular-nums;text-align:right;color:var(--ink)}
+.side+.side{margin-top:44px}
+
+/* ---------- FAQ ---------- */
+.qa{border-top:1px solid var(--line);margin-top:52px}
+.qa details{border-bottom:1px solid var(--line)}
+.qa summary{list-style:none;cursor:pointer;padding:24px 0;display:flex;gap:22px;align-items:baseline;font-family:var(--display);font-weight:300;font-size:clamp(18px,2.2vw,23px);letter-spacing:-.01em;color:var(--ink)}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary .no{font-family:var(--sans);color:var(--accent);font-size:10.5px;letter-spacing:.26em;font-variant-numeric:tabular-nums;flex:none;min-width:24px}
+.qa summary .ar{margin-left:auto;color:var(--accent);transition:transform .22s var(--ease);flex:none}
+.qa details[open] summary .ar{transform:rotate(90deg)}
+.qa .ans{padding:0 0 26px 62px;color:var(--muted);line-height:1.85;font-size:15px;max-width:72ch;font-weight:300}
+@media(max-width:600px){.qa .ans{padding-left:0}}
+
+/* ---------- request ---------- */
+.req-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:64px;align-items:start;margin-top:52px}
+@media(max-width:960px){.req-grid{grid-template-columns:1fr;gap:44px}}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:600px){.f2{grid-template-columns:1fr}}
+.form{display:flex;flex-direction:column;gap:22px}
+.ack{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);line-height:1.65}
+.ack input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent)}
+.req-side{border-top:1px solid var(--line-2);padding-top:8px;position:sticky;top:110px}
+@media(max-width:960px){.req-side{position:static}}
+.req-side h3{font-size:22px;margin:16px 0 4px}
+.req-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 20px;padding:18px 0;border-bottom:1px solid var(--line);align-items:center}
+.req-line .nm{font-family:var(--display);font-weight:300;font-size:19px;letter-spacing:-.01em;color:var(--ink)}
+.req-line .sub{font-size:11.5px;color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
+.req-line .ctl{display:flex;align-items:center;gap:14px;justify-content:flex-end}
+.req-line .amt{font-variant-numeric:tabular-nums;font-weight:500;color:var(--ink);min-width:110px;text-align:right}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line-2)}
+.qty button{width:32px;height:32px;display:grid;place-items:center;color:var(--muted)}
+.qty button:hover{color:var(--ink);background:rgba(242,237,229,.05)}
+.qty span{min-width:32px;text-align:center;font-size:13px;font-variant-numeric:tabular-nums}
+.qty .ic{font-size:12px}
+.link-x{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)}
+.link-x:hover{color:var(--err)}
+.req-empty{padding:26px 0;border-bottom:1px solid var(--line);color:var(--muted);font-size:14px;line-height:1.7}
+.req-total{padding:16px 0;display:flex;flex-direction:column;gap:8px}
+
+/* ---------- sticky request bar ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(7,6,5,.86);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--accent-line);
+  transform:translateY(110%);transition:transform .45s var(--ease)}
+.bar.on{transform:none}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px}
+.bar .s{display:flex;gap:22px;align-items:baseline;font-variant-numeric:tabular-nums}
+.bar .s b{font-family:var(--display);font-weight:400;font-size:18px;color:var(--ink)}
+.bar .s span{color:var(--muted);font-size:12px}
+@media(max-width:520px){.bar .s span:last-child{display:none}}
+
+/* ---------- footer ---------- */
+.site-foot{border-top:1px solid var(--line);padding:56px 0 40px;color:var(--muted);font-size:12.5px;line-height:1.7}
+.site-foot .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:34px}
+.site-foot .cols h4{font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2);margin-bottom:14px;font-weight:500}
+.site-foot a:hover{color:var(--ink)}
+.site-foot .cols ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.site-foot .legal{margin-top:40px;padding-top:22px;border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:11px;color:var(--muted-2)}
+@media(max-width:800px){.site-foot .cols{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.site-foot .cols{grid-template-columns:1fr}}
+
+/* ---------- reveal (from a visible resting state) ---------- */
+.reveal{transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.js .reveal:not(.in){opacity:.42;transform:translateY(14px)}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal:not(.in){opacity:1;transform:none}
+  *,*::before,*::after{transition-duration:.001ms!important;animation-duration:.001ms!important}
+}
+@media print{
+  .ribbon,.site-nav,.bar,.hero-bg,.site-foot,.no-print{display:none!important}
+  html,body{background:#F2EDE5;color:#141210}
+  :root{--bg:#F2EDE5;--ink:#141210;--muted:#5a544c;--muted-2:#7a7268;--line:rgba(20,18,16,.16);--line-2:rgba(20,18,16,.32);--accent:#7C4C24;--accent-bright:#7C4C24}
+  .js .reveal:not(.in){opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="wm" viewBox="0 0 582 70"><path fill-rule="evenodd" d="M175 42 175 42.8 189.8 57.2 191 59.5 199.2 67.8 212.8 67.5 212.8 66.2 191 44.5 188.8 41.2 187.2 41 182.5 36 181.2 36Z M170.8 42.2 164.5 36 161.2 37 132 66.2 132 67.5 145.5 67.8Z M497 2.2 497.2 67.8 508.8 66.5 508.2 20.8 539 59 569.2 19.8 570 67.5 581.8 66.8 580.5 2 569.2 2 539.5 41 508.5 2Z M280.2 2 279 3.2 279 66.5 280.2 67.8 290.5 67.8 290.8 2.2Z M211.5 2 198.2 2 181.8 18.5 180.8 20.2 175 25.2 175 26.5 181.2 32.8 182.5 32.8 211.8 3.5Z M0 67.8 11.5 67.8 40.8 16.8 68 66.5 82 67 45.5 2 35 2.2Z M132 2 162.2 32.8 163.5 32.8 169.8 26.8 167.8 23.2 146.5 2Z M395 70.3A35.2 42.7 89.9 1 0 394.8 -0.2A35.2 42.7 89.9 1 0 395 70.3Z M394.5 58.7A23.8 29.8 91.1 1 0 395.4 11.2A23.8 29.8 91.1 1 0 394.5 58.7Z"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16M13 5l7 7-7 7"/></symbol>
+<symbol id="i-wa" viewBox="0 0 24 24"><path d="M3.4 20.6 4.9 16A8.4 8.4 0 1 1 8 19.1z"/><path d="M9 9.4c.4 2.6 3 5.2 5.6 5.6l1.2-1.6 2 1-.6 1.7c-2.9.9-7.9-4.1-7-7l1.7-.6z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M8.2 12.2l2.8 2.8 5-5.4"/></symbol>
+<symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.6 3.4v6L4.4 19a1.6 1.6 0 0 0 1.4 2.4h12.4A1.6 1.6 0 0 0 19.6 19l-5.2-9.6v-6"/><path d="M8.4 3.4h7.2M6.6 14.4h10.8"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3.4h8l4 4v13.2H6z"/><path d="M14 3.4v4h4"/><path d="M9 12.4h6M9 16h6"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2.6 6.4h11v10.2h-11z"/><path d="M13.6 10h4l3 3.2v3.4h-7z"/><circle cx="7" cy="18.4" r="1.9"/><circle cx="17" cy="18.4" r="1.9"/></symbol>
+<symbol id="i-basket" viewBox="0 0 24 24"><path d="M3.4 9.4h17.2l-1.6 10H5z"/><path d="M8.4 9.4 12 3.6l3.6 5.8"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M5.6 5.6 18.4 18.4M18.4 5.6 5.6 18.4"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.4v11.2M7.6 10.2 12 14.6l4.4-4.4"/><path d="M5 16.6v3.8h14v-3.8"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M3.6 7.4 12 3.2l8.4 4.2v9.2L12 20.8l-8.4-4.2z"/><path d="M3.6 7.4 12 11.6l8.4-4.2M12 11.6v9.2"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 6.8V12l3.4 2"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M13 8l3 3"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="i-caret" viewBox="0 0 24 24"><path d="M9.5 5 16.5 12l-7 7"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.6" cy="10.6" r="6.6"/><path d="M15.4 15.4 21 21"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.4 21.4 20H2.6z"/><path d="M12 9.6v4M12 16.6h.01"/></symbol>
+<symbol id="i-building" viewBox="0 0 24 24"><path d="M4.4 20.4V4.6h9.2v15.8"/><path d="M13.6 9.6h6v10.8"/><path d="M7.4 8h3.2M7.4 12h3.2M7.4 16h3.2M16 13h1M16 16.6h1"/><path d="M2.6 20.4h18.8"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.6 2.6 2.6 14.6 0 17.2M12 3.4c-2.6 2.6-2.6 14.6 0 17.2"/></symbol>
+</defs></svg>
+
+<a class="sr-only" href="#main" data-t="skip">Langsung ke konten</a>
+<div class="ribbon" data-t="ribbon"><b>RUO</b> · Hanya untuk riset · riset laboratorium in-vitro saja</div>
+
+<nav class="site-nav" id="nav" aria-label="Site">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand" aria-label="AXIOM"><svg class="wm-sv" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><use href="#wm"/></svg></a>
+    <div class="nav-links" id="site-links">
+      <a href="#catalogue" data-t="nav_catalogue">Katalog</a>
+      <a href="#standard" data-t="nav_standard">Standar</a>
+      <a href="#process" data-t="nav_process">Proses</a>
+      <a href="#faq">FAQ</a>
+      <a href="#request" data-t="nav_request">Minta penawaran</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Bahasa · Language">
+        <button type="button" data-lang="id" class="on" aria-pressed="true">ID</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a href="#request" class="btn btn-sm nav-cta" data-t="nav_request">Minta penawaran</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="site-links"><svg class="ic"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+<!-- ------------------------------------------------------------- hero -->
+<section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"><canvas id="field"></canvas></div>
+  <div class="hero-scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-in">
+      <span class="kicker" data-t="hero_kicker">Peptide Science · Jakarta · Indonesia</span>
+      <h1 data-t="hero_h1">Peptida riset terverifikasi, <em>kini hadir di Indonesia.</em></h1>
+      <p class="lead" data-t="hero_lead">Peptida research-grade untuk riset metabolik, faktor pertumbuhan, perbaikan jaringan, neuro, energi seluler, imun, reproduktif, dan longevitas. Setiap lot diverifikasi HPLC/MS pada ≥ 98%, disertai Certificate of Analysis, dan dikirim dalam rantai dingin ke seluruh Indonesia. Hanya untuk keperluan riset.</p>
+      <div class="hero-cta">
+        <a href="#request" class="btn btn-solid" data-t="hero_cta1">Minta penawaran</a>
+        <a href="#catalogue" class="tlink"><span data-t="hero_cta2">Lihat katalog</span> <svg class="ic ar"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <div class="trust">
+      <div><div class="t"><svg class="ic"><use href="#i-flask"/></svg><span data-t="trust1_t">Teruji, bukan diklaim</span></div><p data-t="trust1_b">HPLC/MS pada setiap lot, ambang kemurnian ≥ 98%.</p></div>
+      <div><div class="t"><svg class="ic"><use href="#i-file"/></svg><span data-t="trust2_t">Terdokumentasi</span></div><p data-t="trust2_b">Certificate of Analysis menyertai setiap lot yang dikirim.</p></div>
+      <div><div class="t"><svg class="ic"><use href="#i-truck"/></svg><span data-t="trust3_t">Rantai dingin</span></div><p data-t="trust3_b">Suhu terkendali, bersegel anti-rusak, ke seluruh Indonesia.</p></div>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div class="wrap">
+      <div class="m"><div class="k" data-t="meta_lots">Lot</div><div class="v mono-n">52</div></div>
+      <div class="m"><div class="k" data-t="meta_pathways">Jalur riset</div><div class="v mono-n">8</div></div>
+      <div class="m"><div class="k" data-t="meta_purity">Ambang kemurnian</div><div class="v mono-n">≥ 98%</div></div>
+      <div class="m"><div class="k" data-t="meta_price">Daftar harga · IDR</div><div class="v mono-n">V1.0</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 01 standard -->
+<section class="band" id="standard">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">01</span>
+      <div>
+        <span class="kicker k" data-t="s1_kicker">Posisi</span>
+        <h2 data-t="s1_h2">Terdokumentasi, <em>bukan dijanjikan.</em></h2>
+        <p data-t="s1_body">Klinik yang pernah membeli vial tanpa verifikasi tidak perlu dibujuk. Yang dibutuhkan adalah dokumennya. AXIOM memasok peptida riset dari satu katalog, dengan satu harga per lot, dan hasil analisis sudah di tangan sebelum penawaran ditulis.</p>
+      </div>
+    </div>
+    <div class="sp-44"></div>
+    <div class="split reveal">
+      <div>
+        <span class="kicker" data-t="v_kicker">Verifikasi</span>
+        <h3 style="font-size:clamp(24px,2.8vw,34px);margin-top:14px" data-t="v_title">Diverifikasi sebelum dicantumkan.</h3>
+        <div class="stmts" style="margin-top:34px">
+          <div class="stmt"><span class="idx">01</span><div><h3 data-t="v1_t">HPLC / MS pada setiap lot</h3><p data-t="v1_b">Setiap lot peptida dianalisis dengan kromatografi cair kinerja tinggi dan spektrometri massa untuk memastikan identitas dan kemurnian pada atau di atas 98%. Lot yang tidak memenuhi ambang tidak dicantumkan.</p></div></div>
+          <div class="stmt"><span class="idx">02</span><div><h3 data-t="v2_t">Certificate of Analysis per lot</h3><p data-t="v2_b">Sertifikat menyatakan senyawa, kode lot, metode, angka kemurnian, dan tanggal. Sertifikat menyertai lot dan diarsipkan bersama pesanan.</p></div></div>
+          <div class="stmt"><span class="idx">03</span><div><h3 data-t="v3_t">Rantai dingin sampai ke pintu</h3><p data-t="v3_b">Lot liofilisasi disimpan pada −20 °C dan dikirim pada 2–8 °C, dalam kemasan pelindung bersegel anti-rusak, dengan kode lot pada setiap unit.</p></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="coa" aria-label="Certificate of Analysis specimen layout">
+          <div class="hd">
+            <svg class="wm-sv" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><use href="#wm"/></svg>
+            <span class="tag" data-t="coa_kicker">Contoh tata letak</span>
+          </div>
+          <div class="title">Certificate of Analysis</div>
+          <dl class="rows">
+            <div class="r"><dt data-t="coa_compound">Senyawa</dt><dd data-t="coa_compound_v">Sesuai label lot</dd></div>
+            <div class="r"><dt data-t="coa_lot">Kode lot</dt><dd class="mono-n">AX-••••-••</dd></div>
+            <div class="r"><dt data-t="coa_method">Metode</dt><dd>HPLC / MS</dd></div>
+            <div class="r"><dt data-t="coa_purity">Kemurnian</dt><dd class="big" data-t="coa_purity_v">≥ 98,0 %</dd></div>
+            <div class="r"><dt data-t="coa_mass">Massa teramati</dt><dd data-t="coa_mass_v">Diukur, bukan disalin</dd></div>
+            <div class="r"><dt data-t="coa_issued">Diterbitkan</dt><dd data-t="coa_issued_v">Tanggal analisis lot</dd></div>
+          </dl>
+          <div class="stamp" data-t="coa_stamp">Research<br>use only</div>
+          <div class="ft"><span>AXIOM · Jakarta</span><span data-t="coa_ft">Diarsipkan bersama pesanan</span></div>
+        </div>
+        <p class="note" style="margin-top:18px" data-t="coa_note">Angka pada sertifikat adalah angka lot yang disebutkan. Cocokkan kode lot pada sertifikat dengan label vial; sertifikat tanpa kode lot tidak menjelaskan apa pun.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 02 catalogue -->
+<section class="band" id="catalogue">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">02</span>
+      <div>
+        <span class="kicker k" data-t="s2_kicker">Daftar harga · V1.0 · IDR</span>
+        <h2 data-t="s2_h2">Satu harga per lot. <em>Sama untuk setiap akun.</em></h2>
+        <p data-t="s2_body">Tidak ada tingkatan, tidak ada negosiasi. Angka di sini adalah angka pada penawaran, pesanan, dan invoice, dibekukan pada penawaran saat dikirim. Pen injeksi reusable, BAC water, dan research kit sudah termasuk pada setiap lot.</p>
+      </div>
+    </div>
+
+    <div class="tools">
+      <div class="chips" id="chips" role="group" aria-label="Pathway"></div>
+      <div class="field search">
+        <label for="q" data-t="search_l">Cari senyawa</label>
+        <input id="q" type="search" autocomplete="off" placeholder="BPC, NAD, Reta…">
+      </div>
+      <div class="cnt mono-n" id="cnt" aria-live="polite"></div>
+    </div>
+
+    <div class="tblwrap">
+      <table class="tbl" id="tbl">
+        <caption class="sr-only" data-t="s2_caption">Daftar harga AXIOM</caption>
+        <thead><tr>
+          <th scope="col" data-t="col_compound">Senyawa</th>
+          <th scope="col" data-t="col_class">Kelas</th>
+          <th scope="col" data-t="col_lot">Lot</th>
+          <th scope="col" class="n" data-t="col_price">Harga</th>
+          <th scope="col" class="n"><span class="sr-only" data-t="col_add">Tambah ke permintaan</span></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="cat-foot">
+      <p class="note" data-t="cat_note">Harga per 8 September 2026, dalam rupiah, dapat berubah. Harga pada penawaran yang sudah dikirim tidak berubah selama 7 hari. Pengiriman dihitung per kiriman dan ditampilkan pada penawaran.</p>
+      <a class="tlink" href="../business-proposal/AXIOM-Price-List.pdf" download><svg class="ic ar"><use href="#i-download"/></svg> <span data-t="pdf">Unduh daftar harga (PDF)</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 03 presentation -->
+<section class="band" id="presentation">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">03</span>
+      <div>
+        <span class="kicker k" data-t="s3_kicker">Presentasi</span>
+        <h2 data-t="s3_h2">Satu standar. <em>Satu presentasi.</em></h2>
+        <p data-t="s3_body">Setiap lot dikirim sebagai vial liofilisasi tersegel dengan kode lot pada unitnya, bersama pen injeksi reusable, BAC water, dan research kit. Certificate of Analysis ada di dalam kotak.</p>
+      </div>
+    </div>
+    <div class="grid g4 reveal">
+      <div class="cell"><svg class="ic"><use href="#i-flask"/></svg><h3 data-t="a1_t">Vial</h3><p data-t="a1_b">Liofilisasi, tersegel, kode lot pada setiap unit.</p></div>
+      <div class="cell"><svg class="ic"><use href="#i-pen"/></svg><h3 data-t="a2_t">Pen injeksi reusable</h3><p data-t="a2_b">Termasuk dalam harga setiap lot.</p></div>
+      <div class="cell"><svg class="ic"><use href="#i-box"/></svg><h3 data-t="a3_t">BAC water + research kit</h3><p data-t="a3_b">Termasuk pada setiap kiriman.</p></div>
+      <div class="cell"><svg class="ic"><use href="#i-file"/></svg><h3 data-t="a4_t">Certificate of Analysis</h3><p data-t="a4_b">Di dalam kotak, diarsipkan bersama pesanan.</p></div>
+    </div>
+    <div class="handling reveal">
+      <div>
+        <span class="kicker" data-t="h_kicker">Penanganan laboratorium</span>
+        <p class="note" style="margin-top:12px" data-t="h_note">Ini adalah penanganan untuk kerja in-vitro, bukan panduan penggunaan.</p>
+      </div>
+      <p data-t="h_body">Disediakan dalam bentuk liofilisasi (beku-kering). Simpan tersegel pada −20 °C dan lindungi dari cahaya. Untuk kerja in-vitro, rekonstitusi dengan air steril atau bakteriostatik yang dialirkan perlahan menuruni dinding vial — jangan dikocok; putar perlahan hingga larut. Dinginkan (2–8 °C) setelah rekonstitusi dan hindari siklus beku–cair berulang.</p>
+    </div>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 04 comparison -->
+<section class="band" id="compare">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">04</span>
+      <div>
+        <span class="kicker k" data-t="s4_kicker">Standar</span>
+        <h2 data-t="s4_h2">Standar baru untuk peptida <em>di Indonesia.</em></h2>
+        <p data-t="s4_body">Transparansi, verifikasi, dan dokumentasi pada setiap lot. Bukan sekadar klaim.</p>
+      </div>
+    </div>
+    <div class="tblwrap reveal">
+      <table class="cmp" id="cmp">
+        <thead><tr><th data-t="cmp_c">Kriteria</th><th class="ax">AXIOM</th><th data-t="cmp_m">Umumnya di pasar</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 05 process -->
+<section class="band" id="process">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">05</span>
+      <div>
+        <span class="kicker k" data-t="s5_kicker">Dari permintaan sampai ke pintu</span>
+        <h2 data-t="s5_h2">Empat langkah, <em>masing-masing tercatat.</em></h2>
+        <p data-t="s5_body">Apa yang terjadi setelah permintaan, berapa biaya pengiriman, dan bagaimana pembayaran dilakukan.</p>
+      </div>
+    </div>
+    <div class="split reveal">
+      <div class="psteps" style="margin-top:52px">
+        <div class="pstep"><span class="no">01</span><div><h3 data-t="p1_t">Permintaan</h3><p data-t="p1_b">Pilih lot dari katalog dan kirim permintaan lewat WhatsApp. Pada saat itu juga permintaan masuk ke alur kerja AXIOM sebagai catatan bernomor, bukan pesan yang menunggu dibaca.</p></div></div>
+        <div class="pstep"><span class="no">02</span><div><h3 data-t="p2_t">Penawaran</h3><p data-t="p2_b">AXIOM menghargai permintaan dari satu daftar harga dan mengirim penawaran. Penawaran berlaku 7 hari sejak hari dikirim, dan harga di dalamnya tidak berubah selama masa itu.</p></div></div>
+        <div class="pstep"><span class="no">03</span><div><h3 data-t="p3_t">Penerimaan, invoice, dan pembayaran</h3><p data-t="p3_b">Menerima penawaran membuat pesanan dan invoice-nya sekaligus. Pembayaran melalui transfer bank dalam rupiah, sebelum pengiriman. Invoice adalah dokumen pajak Indonesia.</p></div></div>
+        <div class="pstep"><span class="no">04</span><div><h3 data-t="p4_t">Pengiriman dan sampai ke pintu</h3><p data-t="p4_b">Setelah pembayaran tercatat, pesanan dikemas. Lot peptida dikirim dingin, bersama Certificate of Analysis, dalam kemasan bersegel anti-rusak, dengan nomor resi.</p></div></div>
+      </div>
+      <div style="margin-top:52px">
+        <div class="side">
+          <span class="kicker" data-t="d_kicker">Pengiriman</span>
+          <h3 data-t="d_title">Dihitung per kiriman, ditampilkan sebelum Anda berkomitmen.</h3>
+          <p data-t="d_rule">Rp 100.000 per tiga unit per tujuan, maksimal Rp 300.000 per tujuan.</p>
+          <div style="margin-top:14px">
+            <div class="kv"><span class="k">Jabodetabek</span><span class="v mono-n" data-t="d_z1">2 hari kerja</span></div>
+            <div class="kv"><span class="k" data-t="d_z2k">Jawa (luar Jabodetabek)</span><span class="v mono-n" data-t="d_z2">3 hari kerja · tarif menyusul</span></div>
+            <div class="kv"><span class="k" data-t="d_z3k">Luar Jawa</span><span class="v mono-n" data-t="d_z3">4 hari kerja · tarif menyusul</span></div>
+            <div class="kv"><span class="k" data-t="d_cut">Batas pesanan hari yang sama</span><span class="v mono-n" data-t="d_cut_v">Dingin 15.00 · Ambien 17.00 WIB</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <span class="kicker" data-t="pay_kicker">Pembayaran</span>
+          <h3 data-t="pay_title">Transfer bank, sebelum pengiriman.</h3>
+          <p data-t="pay_body">Pembayaran melalui transfer bank dalam rupiah ke rekening yang tercantum pada invoice. Pengiriman mengikuti pembayaran yang tercatat, tidak pernah mendahuluinya.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 06 who -->
+<section class="band" id="who">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">06</span>
+      <div>
+        <span class="kicker k" data-t="s6_kicker">Kepatuhan</span>
+        <h2 data-t="s6_h2">Apa yang dipasok AXIOM, <em>dan kepada siapa.</em></h2>
+        <p data-t="s6_body">Klinik, laboratorium, peneliti, dan pembeli institusi di Indonesia. Edukasi terbuka untuk umum; transaksi menyusul setelah pernyataan pengakuan tercatat.</p>
+      </div>
+    </div>
+    <div class="grid g4 reveal">
+      <div class="cell"><span class="no">01</span><h3 data-t="n1_t">Hanya untuk keperluan riset</h3><p data-t="n1_b">Peptida ditujukan semata-mata untuk riset laboratorium dan ilmiah in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, dan bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan.</p></div>
+      <div class="cell"><span class="no">02</span><h3 data-t="n2_t">Tanpa panduan penggunaan</h3><p data-t="n2_b">AXIOM tidak memberikan, menyimpan, atau menghasilkan panduan dosis, pemberian, atau penggunaan dalam bentuk apa pun. Katalog hanya menjelaskan identitas, penanganan, dan verifikasi.</p></div>
+      <div class="cell"><span class="no">03</span><h3 data-t="n3_t">Yurisdiksi</h3><p data-t="n3_b">Beberapa senyawa dikendalikan atau diatur di wilayah tertentu. Pembeli sepenuhnya bertanggung jawab atas legalitas impor, kepemilikan, dan penanganan. AXIOM tidak membuat pernyataan legalitas di wilayah mana pun.</p></div>
+      <div class="cell"><span class="no">04</span><h3 data-t="n4_t">Pernyataan pengakuan</h3><p data-t="n4_b">Transaksi peptida memerlukan pernyataan pengakuan yang tercatat: berusia 18 tahun atau lebih, dan seorang peneliti berkualifikasi atau pembeli institusi. Pernyataan ini berversi, bertanda waktu, dan berlaku dua belas bulan.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 07 faq -->
+<section class="band" id="faq">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">07</span>
+      <div>
+        <span class="kicker k">FAQ</span>
+        <h2 data-t="s7_h2">Pertanyaan yang diajukan <em>sebelum pesanan pertama.</em></h2>
+        <p data-t="s7_body">Penanganan, verifikasi, pengiriman, pembayaran, dan aturan riset, dijawab sebelum pesanan pertama.</p>
+      </div>
+    </div>
+    <div class="qa reveal" id="qa"></div>
+    <p class="note" style="margin-top:22px" data-t="faq_note">Konten ini menjelaskan identitas, penanganan, dan verifikasi. Bukan saran medis, bukan panduan penggunaan.</p>
+  </div>
+</section>
+
+<!-- --------------------------------------------------------- 08 request -->
+<section class="band" id="request">
+  <div class="wrap">
+    <div class="shead duo reveal">
+      <span class="no">08</span>
+      <div>
+        <span class="kicker k" data-t="s8_kicker">Permintaan</span>
+        <h2 data-t="s8_h2">Sampaikan apa yang <em>dibutuhkan laboratorium Anda.</em></h2>
+        <p data-t="s8_body">Pilih lot dari katalog, lengkapi data, dan kirim lewat WhatsApp. Permintaan menjadi catatan bernomor; penawaran menyusul, dihargai dari daftar yang sama dengan yang Anda baca di sini, dan berlaku 7 hari.</p>
+      </div>
+    </div>
+    <div class="req-grid">
+      <form class="form" id="reqForm" novalidate>
+        <div class="f2">
+          <div class="field"><label for="f_name"><span data-t="f_name">Nama</span> <span class="req">*</span></label><input id="f_name" name="name" autocomplete="name"><div class="err" id="e_name"></div></div>
+          <div class="field"><label for="f_org" data-t="f_org">Klinik atau institusi</label><input id="f_org" name="org" autocomplete="organization"><div class="err"></div></div>
+        </div>
+        <div class="f2">
+          <div class="field"><label for="f_wa">WhatsApp</label><input id="f_wa" name="wa" inputmode="tel" autocomplete="tel" placeholder="+62"><div class="err" id="e_contact"></div></div>
+          <div class="field"><label for="f_email">Email</label><input id="f_email" name="email" type="email" autocomplete="email"><div class="err"></div></div>
+        </div>
+        <p class="note" data-t="f_hint">WhatsApp atau email wajib diisi.</p>
+        <div class="field"><label for="f_role" data-t="f_role">Peran</label><input id="f_role" name="role" data-tp="f_role_p" placeholder="Dokter · Manajer klinik · Peneliti"><div class="err"></div></div>
+        <div class="field"><label for="f_msg" data-t="f_msg">Catatan</label><textarea id="f_msg" name="msg"></textarea><div class="err"></div></div>
+        <label class="ack">
+          <input type="checkbox" id="f_ack">
+          <span><span data-t="f_ack">Saya berusia 18 tahun ke atas dan seorang peneliti berkualifikasi atau pembeli institusi. Saya memahami peptida dipasok hanya untuk riset laboratorium in-vitro dan tidak ada panduan penggunaan yang diberikan.</span><div class="err" id="e_ack" style="margin-top:6px"></div></span>
+        </label>
+        <div style="display:flex;gap:26px;align-items:center;flex-wrap:wrap">
+          <button type="submit" class="btn btn-solid"><svg class="ic"><use href="#i-wa"/></svg> <span data-t="f_submit">Kirim lewat WhatsApp</span></button>
+          <span class="note" data-t="f_privacy">Data Anda ditangani sesuai UU PDP dan digunakan untuk menjawab permintaan ini.</span>
+        </div>
+      </form>
+      <aside class="req-side">
+        <span class="kicker" data-t="r_kicker">Lot yang diminta</span>
+        <div id="lines"></div>
+        <div class="req-total">
+          <div class="kv" style="border:none;padding:6px 0"><span class="k" data-t="r_goods">Barang</span><span class="v mono-n" id="goods">Rp 0</span></div>
+          <p class="note" data-t="r_delivery">Pengiriman dihitung per kiriman dan ditampilkan pada penawaran. PPN mengikuti invoice.</p>
+        </div>
+        <div class="sp-24"></div>
+        <p class="ruo" data-t="ruo_box"><b>RUO</b> · Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="bar" id="bar" aria-live="polite">
+  <div class="wrap">
+    <div class="s"><b id="barN">0 lot</b><span id="barT">Rp 0</span></div>
+    <a href="#request" class="btn btn-sm btn-solid" data-t="bar_cta">Lanjut ke permintaan</a>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <svg class="wm-sv" viewBox="0 0 582 70" role="img" aria-label="AXIOM"><use href="#wm"/></svg>
+        <p style="margin-top:18px;max-width:52ch" data-t="boilerplate">AXIOM adalah rumah performa manusia dan longevitas yang berbasis di Jakarta, Indonesia. Peptida riset di bawah satu standar: terverifikasi, terdokumentasi, bersumber benar. Peptida hanya untuk keperluan riset, in-vitro. Harga dalam IDR.</p>
+        <p style="margin-top:14px"><a href="https://wa.me/628128573396" class="tlink" rel="noopener" target="_blank"><svg class="ic ar"><use href="#i-wa"/></svg> <span>WhatsApp · +62 812 857 3396</span></a></p>
+      </div>
+      <div>
+        <h4 data-t="nav_catalogue">Katalog</h4>
+        <ul>
+          <li><a href="#catalogue" data-t="f_l1">Daftar harga</a></li>
+          <li><a href="../business-proposal/AXIOM-Price-List.pdf" download data-t="f_l2">Daftar harga (PDF)</a></li>
+          <li><a href="#request" data-t="f_l3">Permintaan</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-t="nav_standard">Standar</h4>
+        <ul>
+          <li><a href="#standard" data-t="f_l4">Verifikasi</a></li>
+          <li><a href="#presentation" data-t="f_l5">Presentasi dan penanganan</a></li>
+          <li><a href="#process" data-t="nav_process">Proses</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-t="f_contact">Kontak</h4>
+        <ul>
+          <li data-t="f_hours">Senin–Sabtu · 09.00–18.00 WIB</li>
+          <li>Jakarta, Indonesia</li>
+          <li><a href="#who" data-t="f_l6">Kepatuhan</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ruo" style="margin-top:34px" data-t="ruo_full"><b>RUO</b> · Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, dan bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan. Pembeli sepenuhnya bertanggung jawab untuk memastikan hukum yang berlaku bagi mereka.</div>
+    <div class="legal">
+      <span>© 2026 AXIOM · Jakarta</span>
+      <span data-t="documented">Terdokumentasi, bukan dijanjikan.</span>
+      <span class="mono-n">AXIOM-WEB-2026.09 · V1.0</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+/* =============================================================== data
+   Prices: AXIOM Price List V1.0 (business-proposal/AXIOM-Price-List.pdf).
+   Pathway names are research-neutral (platform prompt §11). IDR. */
+const WA = '628128573396';
+const PW = [
+  {no:'01',en:'Metabolic',id:'Metabolik',sen:'Incretin-pathway and metabolic research compounds.',sid:'Senyawa riset jalur inkretin dan metabolik.'},
+  {no:'02',en:'Growth Factors',id:'Faktor Pertumbuhan',sen:'Secretagogues and growth-factor analogues for somatotropic-axis research.',sid:'Sekretagog dan analog faktor pertumbuhan untuk riset sumbu somatotropik.'},
+  {no:'03',en:'Tissue Repair',id:'Perbaikan Jaringan',sen:'Cytoprotective and regenerative peptides for tissue-repair research models.',sid:'Peptida sitoprotektif dan regeneratif untuk model riset perbaikan jaringan.'},
+  {no:'04',en:'Neuro',id:'Neuro',sen:'Neuroactive peptides for cognition and neuroprotection research.',sid:'Peptida neuroaktif untuk riset kognisi dan neuroproteksi.'},
+  {no:'05',en:'Cellular Energy',id:'Energi Seluler',sen:'Mitochondrial and energy-metabolism research compounds.',sid:'Senyawa riset metabolisme energi dan mitokondria.'},
+  {no:'06',en:'Immune',id:'Imun',sen:'Thymic and immunomodulatory research peptides.',sid:'Peptida riset timus dan imunomodulasi.'},
+  {no:'07',en:'Reproductive',id:'Reproduktif',sen:'Gonadotropins and hormonal-axis research compounds.',sid:'Gonadotropin dan senyawa riset sumbu hormonal.'},
+  {no:'08',en:'Longevity',id:'Longevitas',sen:'Cellular-ageing and redox research compounds.',sid:'Senyawa riset penuaan seluler dan redoks.'},
+];
+// [pathway index, compound, lot, price IDR, class EN, class ID]
+const LOTS = [
+  [0,'Cagrilintide','10 mg',3000000,'Long-acting amylin analogue','Analog amilin kerja panjang'],
+  [0,'Retatrutide','5 mg',2700000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','10 mg',3100000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','15 mg',3500000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','20 mg',3900000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','30 mg',5100000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','60 mg',8300000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Tirzepatide','10 mg',2400000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
+  [0,'Tirzepatide','30 mg',3800000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
+  [0,'Tirzepatide','40 mg',4500000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
+  [1,'CJC-1295 (No DAC) + Ipamorelin','10 mg',3000000,'GHRH analogue + GH secretagogue','Analog GHRH + sekretagog GH'],
+  [1,'CJC-1295 (No DAC) + Ipamorelin','20 mg',4300000,'GHRH analogue + GH secretagogue','Analog GHRH + sekretagog GH'],
+  [1,'HGH 191AA (Somatropin)','36 IU',3200000,'Recombinant somatropin','Somatropin rekombinan'],
+  [1,'HGH 191AA (Somatropin)','40 IU',3600000,'Recombinant somatropin','Somatropin rekombinan'],
+  [1,'Ipamorelin','10 mg',2800000,'GH secretagogue pentapeptide','Pentapeptida sekretagog GH'],
+  [1,'Ipamorelin + Tesamorelin','18 mg',5000000,'GH secretagogue + GHRH analogue blend','Campuran sekretagog GH + analog GHRH'],
+  [1,'Tesamorelin','10 mg',3600000,'GHRH analogue','Analog GHRH'],
+  [1,'Tesamorelin','20 mg',4700000,'GHRH analogue','Analog GHRH'],
+  [2,'BPC-157','10 mg',2700000,'Synthetic pentadecapeptide','Pentadekapeptida sintetis'],
+  [2,'BPC-157 + TB-500 (Wolverine)','20 mg',3900000,'Repair research blend','Campuran riset perbaikan jaringan'],
+  [2,'GHK-Cu','50 mg',2100000,'Copper tripeptide','Tripeptida tembaga'],
+  [2,'GHK-Cu','100 mg',2300000,'Copper tripeptide','Tripeptida tembaga'],
+  [2,'KPV','10 mg',2600000,'α-MSH tripeptide','Tripeptida α-MSH'],
+  [2,'KLOW (BPC+TB+GHK+KPV)','80 mg',4400000,'Multi-peptide blend','Campuran multi-peptida'],
+  [2,'LL-37','5 mg',3000000,'Cathelicidin fragment','Fragmen cathelicidin'],
+  [2,'Peg MGF','2 mg',3100000,'PEGylated IGF-1 splice variant','Varian splice IGF-1 ter-PEG'],
+  [2,'TB-500','10 mg',2900000,'Thymosin β4 fragment','Fragmen thymosin β4'],
+  [3,'Adamax','10 mg',3100000,'Stabilised Semax analogue','Analog Semax terstabilisasi'],
+  [3,'Cerebrolysin','60 mg',3000000,'Neuropeptide preparation','Preparat neuropeptida'],
+  [3,'Pinealon','20 mg',3600000,'Peptide bioregulator','Peptida bioregulator'],
+  [3,'Selank','10 mg',2300000,'Tuftsin analogue','Analog tuftsin'],
+  [3,'Semax','10 mg',2300000,'ACTH(4-10) analogue','Analog ACTH(4-10)'],
+  [3,'Selank + Semax','20 mg',3200000,'Blend of two heptapeptides','Campuran dua heptapeptida'],
+  [4,'5-Amino-1MQ','50 mg',3200000,'NNMT inhibitor','Inhibitor NNMT'],
+  [4,'AICAR','50 mg',3000000,'AMP analogue nucleoside (acadesine)','Nukleosida analog AMP (acadesine)'],
+  [4,'L-Carnitine (Injectable)','5000 mg',3000000,'Quaternary ammonium compound (injectable solution)','Senyawa amonium kuaterner (larutan injeksi)'],
+  [4,'MOTS-c','10 mg',2400000,'Mitochondrial-derived peptide','Peptida turunan mitokondria'],
+  [4,'MOTS-c','40 mg',4300000,'Mitochondrial-derived peptide','Peptida turunan mitokondria'],
+  [4,'SLU-PP-332 (Injectable)','5 mg',2700000,'ERRα agonist','Agonis ERRα'],
+  [5,'Thymosin Alpha-1','10 mg',3600000,'Thymic peptide','Peptida timus'],
+  [6,'HCG','10000 IU',3000000,'Gonadotropin','Gonadotropin'],
+  [6,'HMG','75 IU',2700000,'Menopausal gonadotropin','Gonadotropin menopause'],
+  [6,'Kisspeptin','10 mg',3200000,'Kisspeptin decapeptide','Dekapeptida kisspeptin'],
+  [6,'Oxytocin Acetate','10 mg',3000000,'Nonapeptide hormone','Hormon nonapeptida'],
+  [6,'PT-141','10 mg',2600000,'Melanocortin agonist (Bremelanotide)','Agonis melanokortin (Bremelanotide)'],
+  [7,'DSIP','5 mg',2100000,'Delta Sleep-Inducing Peptide','Delta Sleep-Inducing Peptide'],
+  [7,'DSIP','10 mg',2600000,'Delta Sleep-Inducing Peptide','Delta Sleep-Inducing Peptide'],
+  [7,'Epithalon','50 mg',3400000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [7,'Humanin','10 mg',4500000,'Mitochondrial-derived 24-amino-acid peptide','Peptida turunan mitokondria 24 asam amino'],
+  [7,'NAD+','500 mg',2600000,'Redox coenzyme','Koenzim redoks'],
+  [7,'NAD+','1000 mg',3000000,'Redox coenzyme','Koenzim redoks'],
+  [7,'SS-31','50 mg',4500000,'Tetrapeptide (elamipretide)','Tetrapeptida (elamipretide)'],
+].map((r,i)=>({i,pw:r[0],name:r[1],dose:r[2],price:r[3],cen:r[4],cid:r[5]}));
+
+/* =============================================================== copy */
+const T = {
+id:{
+  skip:'Langsung ke konten',
+  ribbon:'<b>RUO</b> · Hanya untuk riset · riset laboratorium in-vitro saja',
+  nav_catalogue:'Katalog',nav_standard:'Standar',nav_process:'Proses',nav_request:'Minta penawaran',
+  hero_kicker:'Peptide Science · Jakarta · Indonesia',
+  hero_h1:'Peptida riset terverifikasi, <em>kini hadir di Indonesia.</em>',
+  hero_lead:'Peptida research-grade untuk riset metabolik, faktor pertumbuhan, perbaikan jaringan, neuro, energi seluler, imun, reproduktif, dan longevitas. Setiap lot diverifikasi HPLC/MS pada ≥ 98%, disertai Certificate of Analysis, dan dikirim dalam rantai dingin ke seluruh Indonesia. Hanya untuk keperluan riset.',
+  hero_cta1:'Minta penawaran',hero_cta2:'Lihat katalog',
+  trust1_t:'Teruji, bukan diklaim',trust1_b:'HPLC/MS pada setiap lot, ambang kemurnian ≥ 98%.',
+  trust2_t:'Terdokumentasi',trust2_b:'Certificate of Analysis menyertai setiap lot yang dikirim.',
+  trust3_t:'Rantai dingin',trust3_b:'Suhu terkendali, bersegel anti-rusak, ke seluruh Indonesia.',
+  meta_lots:'Lot',meta_pathways:'Jalur riset',meta_purity:'Ambang kemurnian',meta_price:'Daftar harga · IDR',
+  s1_kicker:'Posisi',s1_h2:'Terdokumentasi, <em>bukan dijanjikan.</em>',
+  s1_body:'Klinik yang pernah membeli vial tanpa verifikasi tidak perlu dibujuk. Yang dibutuhkan adalah dokumennya. AXIOM memasok peptida riset dari satu katalog, dengan satu harga per lot, dan hasil analisis sudah di tangan sebelum penawaran ditulis.',
+  v_kicker:'Verifikasi',v_title:'Diverifikasi sebelum dicantumkan.',
+  v1_t:'HPLC / MS pada setiap lot',v1_b:'Setiap lot peptida dianalisis dengan kromatografi cair kinerja tinggi dan spektrometri massa untuk memastikan identitas dan kemurnian pada atau di atas 98%. Lot yang tidak memenuhi ambang tidak dicantumkan.',
+  v2_t:'Certificate of Analysis per lot',v2_b:'Sertifikat menyatakan senyawa, kode lot, metode, angka kemurnian, dan tanggal. Sertifikat menyertai lot dan diarsipkan bersama pesanan.',
+  v3_t:'Rantai dingin sampai ke pintu',v3_b:'Lot liofilisasi disimpan pada −20 °C dan dikirim pada 2–8 °C, dalam kemasan pelindung bersegel anti-rusak, dengan kode lot pada setiap unit.',
+  coa_kicker:'Contoh tata letak',coa_compound:'Senyawa',coa_compound_v:'Sesuai label lot',coa_lot:'Kode lot',coa_method:'Metode',coa_purity:'Kemurnian',coa_purity_v:'≥ 98,0 %',
+  coa_mass:'Massa teramati',coa_mass_v:'Diukur, bukan disalin',coa_issued:'Diterbitkan',coa_issued_v:'Tanggal analisis lot',coa_stamp:'Research<br>use only',coa_ft:'Diarsipkan bersama pesanan',
+  coa_note:'Angka pada sertifikat adalah angka lot yang disebutkan. Cocokkan kode lot pada sertifikat dengan label vial; sertifikat tanpa kode lot tidak menjelaskan apa pun.',
+  s2_kicker:'Daftar harga · V1.0 · IDR',s2_h2:'Satu harga per lot. <em>Sama untuk setiap akun.</em>',
+  s2_body:'Tidak ada tingkatan, tidak ada negosiasi. Angka di sini adalah angka pada penawaran, pesanan, dan invoice, dibekukan pada penawaran saat dikirim. Pen injeksi reusable, BAC water, dan research kit sudah termasuk pada setiap lot.',
+  s2_caption:'Daftar harga AXIOM',search_l:'Cari senyawa',chip_all:'Semua jalur',
+  col_compound:'Senyawa',col_class:'Kelas',col_lot:'Lot',col_price:'Harga',col_add:'Tambah ke permintaan',
+  add:'Tambah',added:'Ditambahkan',none:'Tidak ada lot yang cocok.',showing:'{n} dari {t} lot',
+  cat_note:'Harga per 8 September 2026, dalam rupiah, dapat berubah. Harga pada penawaran yang sudah dikirim tidak berubah selama 7 hari. Pengiriman dihitung per kiriman dan ditampilkan pada penawaran.',
+  pdf:'Unduh daftar harga (PDF)',
+  s3_kicker:'Presentasi',s3_h2:'Satu standar. <em>Satu presentasi.</em>',
+  s3_body:'Setiap lot dikirim sebagai vial liofilisasi tersegel dengan kode lot pada unitnya, bersama pen injeksi reusable, BAC water, dan research kit. Certificate of Analysis ada di dalam kotak.',
+  a1_t:'Vial',a1_b:'Liofilisasi, tersegel, kode lot pada setiap unit.',
+  a2_t:'Pen injeksi reusable',a2_b:'Termasuk dalam harga setiap lot.',
+  a3_t:'BAC water + research kit',a3_b:'Termasuk pada setiap kiriman.',
+  a4_t:'Certificate of Analysis',a4_b:'Di dalam kotak, diarsipkan bersama pesanan.',
+  h_kicker:'Penanganan laboratorium',h_note:'Ini adalah penanganan untuk kerja in-vitro, bukan panduan penggunaan.',
+  h_body:'Disediakan dalam bentuk liofilisasi (beku-kering). Simpan tersegel pada −20 °C dan lindungi dari cahaya. Untuk kerja in-vitro, rekonstitusi dengan air steril atau bakteriostatik yang dialirkan perlahan menuruni dinding vial — jangan dikocok; putar perlahan hingga larut. Dinginkan (2–8 °C) setelah rekonstitusi dan hindari siklus beku–cair berulang.',
+  s4_kicker:'Standar',s4_h2:'Standar baru untuk peptida <em>di Indonesia.</em>',s4_body:'Transparansi, verifikasi, dan dokumentasi pada setiap lot. Bukan sekadar klaim.',
+  cmp_c:'Kriteria',cmp_m:'Umumnya di pasar',
+  cmp:[
+    ['Pendekatan','Sourcing → verifikasi → dokumentasi → distribusi','Reseller; dokumentasi mengikuti pemasok'],
+    ['Certificate of Analysis','Per lot, di dalam kotak, diarsipkan bersama pesanan','Tidak selalu tersedia, sulit diverifikasi'],
+    ['Yang diuji','Identitas (MS) dan kemurnian (HPLC), ambang ≥ 98%','Sering hanya kemurnian; identitas tidak dikonfirmasi'],
+    ['Harga','Satu daftar, satu harga per lot, dibekukan pada penawaran','Bervariasi per pembeli, dinegosiasikan di chat'],
+    ['Rantai dingin','Disimpan −20 °C, dikirim 2–8 °C, bersegel anti-rusak','Suhu ruang, tanpa segel'],
+    ['Catatan','Permintaan → penawaran → pesanan → invoice pajak, satu nomor','Percakapan tanpa catatan'],
+    ['Panduan penggunaan','Tidak diberikan. Hanya untuk riset.','Bervariasi'],
+  ],
+  s5_kicker:'Dari permintaan sampai ke pintu',s5_h2:'Empat langkah, <em>masing-masing tercatat.</em>',s5_body:'Apa yang terjadi setelah permintaan, berapa biaya pengiriman, dan bagaimana pembayaran dilakukan.',
+  p1_t:'Permintaan',p1_b:'Pilih lot dari katalog dan kirim permintaan lewat WhatsApp. Pada saat itu juga permintaan masuk ke alur kerja AXIOM sebagai catatan bernomor, bukan pesan yang menunggu dibaca.',
+  p2_t:'Penawaran',p2_b:'AXIOM menghargai permintaan dari satu daftar harga dan mengirim penawaran. Penawaran berlaku 7 hari sejak hari dikirim, dan harga di dalamnya tidak berubah selama masa itu.',
+  p3_t:'Penerimaan, invoice, dan pembayaran',p3_b:'Menerima penawaran membuat pesanan dan invoice-nya sekaligus. Pembayaran melalui transfer bank dalam rupiah, sebelum pengiriman. Invoice adalah dokumen pajak Indonesia.',
+  p4_t:'Pengiriman dan sampai ke pintu',p4_b:'Setelah pembayaran tercatat, pesanan dikemas. Lot peptida dikirim dingin, bersama Certificate of Analysis, dalam kemasan bersegel anti-rusak, dengan nomor resi.',
+  d_kicker:'Pengiriman',d_title:'Dihitung per kiriman, ditampilkan sebelum Anda berkomitmen.',d_rule:'Rp 100.000 per tiga unit per tujuan, maksimal Rp 300.000 per tujuan.',
+  d_z1:'2 hari kerja',d_z2k:'Jawa (luar Jabodetabek)',d_z2:'3 hari kerja · tarif menyusul',d_z3k:'Luar Jawa',d_z3:'4 hari kerja · tarif menyusul',d_cut:'Batas pesanan hari yang sama',d_cut_v:'Dingin 15.00 · Ambien 17.00 WIB',
+  pay_kicker:'Pembayaran',pay_title:'Transfer bank, sebelum pengiriman.',pay_body:'Pembayaran melalui transfer bank dalam rupiah ke rekening yang tercantum pada invoice. Pengiriman mengikuti pembayaran yang tercatat, tidak pernah mendahuluinya.',
+  s6_kicker:'Kepatuhan',s6_h2:'Apa yang dipasok AXIOM, <em>dan kepada siapa.</em>',s6_body:'Klinik, laboratorium, peneliti, dan pembeli institusi di Indonesia. Edukasi terbuka untuk umum; transaksi menyusul setelah pernyataan pengakuan tercatat.',
+  n1_t:'Hanya untuk keperluan riset',n1_b:'Peptida ditujukan semata-mata untuk riset laboratorium dan ilmiah in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, dan bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan.',
+  n2_t:'Tanpa panduan penggunaan',n2_b:'AXIOM tidak memberikan, menyimpan, atau menghasilkan panduan dosis, pemberian, atau penggunaan dalam bentuk apa pun. Katalog hanya menjelaskan identitas, penanganan, dan verifikasi.',
+  n3_t:'Yurisdiksi',n3_b:'Beberapa senyawa dikendalikan atau diatur di wilayah tertentu. Pembeli sepenuhnya bertanggung jawab atas legalitas impor, kepemilikan, dan penanganan. AXIOM tidak membuat pernyataan legalitas di wilayah mana pun.',
+  n4_t:'Pernyataan pengakuan',n4_b:'Transaksi peptida memerlukan pernyataan pengakuan yang tercatat: berusia 18 tahun atau lebih, dan seorang peneliti berkualifikasi atau pembeli institusi. Pernyataan ini berversi, bertanda waktu, dan berlaku dua belas bulan.',
+  s7_h2:'Pertanyaan yang diajukan <em>sebelum pesanan pertama.</em>',s7_body:'Penanganan, verifikasi, pengiriman, pembayaran, dan aturan riset, dijawab sebelum pesanan pertama.',
+  faq:[
+    ['Apakah peptida AXIOM terdaftar BPOM?','Tidak. Peptida dipasok semata-mata untuk riset laboratorium in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, tidak didaftarkan sebagai produk tersebut, dan bukan untuk konsumsi manusia atau hewan. Baca Certificate of Analysis dan pemberitahuan riset sebelum membeli.'],
+    ['Kemurnian apa yang dipegang AXIOM?','Setiap lot peptida dianalisis dengan HPLC / MS untuk memastikan identitas dan kemurnian pada atau di atas 98%. Certificate of Analysis menyertai setiap lot. Lot yang tidak memenuhi ambang tidak dicantumkan.'],
+    ['Bagaimana lot peptida disimpan dan ditangani?','Sebagai praktik laboratorium: disediakan liofilisasi, disimpan tersegel pada −20 °C dan terlindung dari cahaya; setelah rekonstitusi untuk kerja in-vitro, didinginkan pada 2–8 °C dan siklus beku–cair berulang dihindari. Ini bukan panduan penggunaan.'],
+    ['Bagaimana pengiriman dilakukan?','Lot peptida dikirim dengan suhu terkendali dalam kemasan bersegel anti-rusak. Biaya pengiriman dihitung per kiriman, Rp 100.000 per tiga unit per tujuan dan maksimal Rp 300.000 per tujuan untuk Jabodetabek; tarif tujuan lain dinyatakan pada penawaran.'],
+    ['Bagaimana pembayaran dilakukan?','Melalui transfer bank dalam rupiah, sebelum pengiriman. Menerima penawaran membuat pesanan dan invoice-nya sekaligus; invoice adalah dokumen pajak Indonesia.'],
+    ['Berapa lama penawaran berlaku?','7 hari sejak hari dikirim. Harga pada penawaran yang sudah dikirim tidak berubah selama masa itu.'],
+    ['Untuk siapa AXIOM memasok?','Klinik, laboratorium, peneliti, dan pembeli institusi berusia 18 tahun ke atas yang mencatat pernyataan pengakuan. Bukan untuk anak-anak, dan bukan untuk penggunaan di luar riset in-vitro.'],
+    ['Apakah AXIOM memberikan panduan penggunaan?','Tidak. AXIOM tidak memberikan panduan dosis, pemberian, atau penggunaan dalam bentuk apa pun, melalui saluran mana pun. Katalog hanya menjelaskan identitas, penanganan, dan verifikasi.'],
+    ['Bagaimana kebijakan pengembalian?','Pesanan dapat dibatalkan sebelum pengiriman dan pembatalannya tercatat. Lot rantai dingin yang sudah meninggalkan AXIOM tidak dapat dikembalikan, karena riwayat penyimpanannya tidak lagi dapat diverifikasi. Lot yang tiba rusak atau salah kirim ditangani per kasus; hubungi AXIOM di WhatsApp dengan nomor pesanan.'],
+    ['Bagaimana cara membaca Certificate of Analysis?','Sertifikat menyebut satu senyawa dan satu lot; kode lot pada sertifikat harus sama dengan kode pada label vial. HPLC melaporkan berapa banyak sampel yang merupakan senyawa yang disebut, dan MS memastikan identitasnya berdasarkan massa. Sebuah angka hanya sebaik metode dan tanggal di sampingnya.'],
+  ],
+  faq_note:'Konten ini menjelaskan identitas, penanganan, dan verifikasi. Bukan saran medis, bukan panduan penggunaan.',
+  s8_kicker:'Permintaan',s8_h2:'Sampaikan apa yang <em>dibutuhkan laboratorium Anda.</em>',
+  s8_body:'Pilih lot dari katalog, lengkapi data, dan kirim lewat WhatsApp. Permintaan menjadi catatan bernomor; penawaran menyusul, dihargai dari daftar yang sama dengan yang Anda baca di sini, dan berlaku 7 hari.',
+  f_name:'Nama',f_org:'Klinik atau institusi',f_hint:'WhatsApp atau email wajib diisi.',f_role:'Peran',f_role_p:'Dokter · Manajer klinik · Peneliti',f_msg:'Catatan',
+  f_ack:'Saya berusia 18 tahun ke atas dan seorang peneliti berkualifikasi atau pembeli institusi. Saya memahami peptida dipasok hanya untuk riset laboratorium in-vitro dan tidak ada panduan penggunaan yang diberikan.',
+  f_submit:'Kirim lewat WhatsApp',f_privacy:'Data Anda ditangani sesuai UU PDP dan digunakan untuk menjawab permintaan ini.',
+  err_name:'Nama wajib diisi.',err_contact:'Isi WhatsApp atau email.',err_ack:'Pernyataan pengakuan diperlukan untuk transaksi peptida.',
+  r_kicker:'Lot yang diminta',r_empty:'Belum ada lot. Tambahkan dari katalog.',r_open:'Buka katalog',r_goods:'Barang',
+  r_delivery:'Pengiriman dihitung per kiriman dan ditampilkan pada penawaran. PPN mengikuti invoice.',
+  remove:'Hapus',fewer:'Kurangi satu',more:'Tambah satu',
+  ruo_box:'<b>RUO</b> · Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan.',
+  bar_cta:'Lanjut ke permintaan',bar_n:'{n} lot',
+  boilerplate:'AXIOM adalah rumah performa manusia dan longevitas yang berbasis di Jakarta, Indonesia. Peptida riset di bawah satu standar: terverifikasi, terdokumentasi, bersumber benar. Peptida hanya untuk keperluan riset, in-vitro. Harga dalam IDR.',
+  f_l1:'Daftar harga',f_l2:'Daftar harga (PDF)',f_l3:'Permintaan',f_l4:'Verifikasi',f_l5:'Presentasi dan penanganan',f_l6:'Kepatuhan',f_contact:'Kontak',f_hours:'Senin–Sabtu · 09.00–18.00 WIB',
+  ruo_full:'<b>RUO</b> · Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, dan bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan. Pembeli sepenuhnya bertanggung jawab untuk memastikan hukum yang berlaku bagi mereka.',
+  documented:'Terdokumentasi, bukan dijanjikan.',
+  wa:{title:'Permintaan penawaran · AXIOM',name:'Nama',org:'Klinik/Institusi',role:'Peran',email:'Email',lots:'Lot yang diminta',goods:'Subtotal barang',none:'Belum memilih lot; mohon informasi katalog.',note:'Catatan',ack:'Pernyataan: 18+, peneliti berkualifikasi / pembeli institusi',close:'Hanya untuk keperluan riset. Riset laboratorium in-vitro saja.'},
+},
+en:{
+  skip:'Skip to the content',
+  ribbon:'<b>RUO</b> · Research Use Only · in-vitro laboratory research only',
+  nav_catalogue:'Catalogue',nav_standard:'The standard',nav_process:'Process',nav_request:'Request a quote',
+  hero_kicker:'Peptide Science · Jakarta · Indonesia',
+  hero_h1:'Verified research peptides, <em>now in Indonesia.</em>',
+  hero_lead:'Research-grade peptides across metabolic, growth-factor, tissue-repair, neuro, cellular-energy, immune, reproductive and longevity pathways. Every lot HPLC/MS verified at ≥ 98%, documented with a Certificate of Analysis, dispatched cold across Indonesia. Research Use Only.',
+  hero_cta1:'Request a quote',hero_cta2:'See the catalogue',
+  trust1_t:'Tested, not claimed',trust1_b:'HPLC/MS on every lot, purity threshold ≥ 98%.',
+  trust2_t:'Documented',trust2_b:'A Certificate of Analysis travels with every lot dispatched.',
+  trust3_t:'Cold chain',trust3_b:'Temperature-managed, tamper-evident, across Indonesia.',
+  meta_lots:'Lots',meta_pathways:'Research pathways',meta_purity:'Purity threshold',meta_price:'Price list · IDR',
+  s1_kicker:'Position',s1_h2:'Documented, <em>not promised.</em>',
+  s1_body:'A clinic that has bought an unverified vial once does not need persuading. It needs the document. AXIOM supplies research peptides from one catalogue, at one price per lot, with the analysis in hand before the quote is written.',
+  v_kicker:'Verification',v_title:'Verified before it is listed.',
+  v1_t:'HPLC / MS on every lot',v1_b:'Every peptide lot is analysed by high-performance liquid chromatography and mass spectrometry to confirm identity and a purity at or above 98%. A lot that does not meet the threshold is not listed.',
+  v2_t:'A Certificate of Analysis per lot',v2_b:'The certificate states the compound, the lot code, the method, the purity figure and the date. It travels with the lot and is filed against the order.',
+  v3_t:'Cold chain to the door',v3_b:'Lyophilised lots are held at −20 °C and moved at 2–8 °C, in protective, tamper-evident packaging, with the lot code on every unit.',
+  coa_kicker:'Specimen layout',coa_compound:'Compound',coa_compound_v:'As on the lot label',coa_lot:'Lot code',coa_method:'Method',coa_purity:'Purity',coa_purity_v:'≥ 98.0 %',
+  coa_mass:'Observed mass',coa_mass_v:'Measured, not copied',coa_issued:'Issued',coa_issued_v:'Date of the lot\'s analysis',coa_stamp:'Research<br>use only',coa_ft:'Filed against the order',
+  coa_note:'The figures on a certificate are those of the lot named. Match the lot code on the certificate to the vial label; a certificate without a lot code describes nothing in particular.',
+  s2_kicker:'Price list · V1.0 · IDR',s2_h2:'One price per lot. <em>The same for every account.</em>',
+  s2_body:'There are no tiers and no negotiation. The number here is the number on the quote, the order and the invoice, frozen onto the quote the moment it is sent. The reusable injection pen, BAC water and a research kit are included with every lot.',
+  s2_caption:'AXIOM price list',search_l:'Search by compound',chip_all:'All pathways',
+  col_compound:'Compound',col_class:'Class',col_lot:'Lot',col_price:'Price',col_add:'Add to the request',
+  add:'Add',added:'Added',none:'No lot matches.',showing:'{n} of {t} lots',
+  cat_note:'Prices as at 8 September 2026, in rupiah, subject to change. The prices on a sent quote do not move for 7 days. Delivery is charged per consignment and shown on the quote.',
+  pdf:'Download the price list (PDF)',
+  s3_kicker:'Presentation',s3_h2:'One standard. <em>One presentation.</em>',
+  s3_body:'Every lot ships as a sealed lyophilised vial with its lot code on the unit, with a reusable injection pen, BAC water and a research kit. The Certificate of Analysis is in the box.',
+  a1_t:'Vial',a1_b:'Lyophilised, sealed, lot code on every unit.',
+  a2_t:'Reusable injection pen',a2_b:'Included in the price of every lot.',
+  a3_t:'BAC water + research kit',a3_b:'Included with every shipment.',
+  a4_t:'Certificate of Analysis',a4_b:'In the box, filed against the order.',
+  h_kicker:'Laboratory handling',h_note:'This is handling for in-vitro work. It is not usage guidance.',
+  h_body:'Supplied lyophilised (freeze-dried). Store sealed at −20 °C and protect from light. For in-vitro work, reconstitute with sterile or bacteriostatic water added slowly down the vial wall — do not shake; swirl until dissolved. Refrigerate (2–8 °C) once reconstituted and avoid repeated freeze–thaw.',
+  s4_kicker:'The standard',s4_h2:'A new standard for peptides <em>in Indonesia.</em>',s4_body:'Transparency, verification and documentation on every lot. Not a claim.',
+  cmp_c:'Criterion',cmp_m:'Common in the market',
+  cmp:[
+    ['Approach','Sourcing → verification → documentation → distribution','Reseller; documentation as supplied'],
+    ['Certificate of Analysis','Per lot, in the box, filed against the order','Not always available, hard to verify'],
+    ['What is tested','Identity (MS) and purity (HPLC), ≥ 98% threshold','Often purity alone; identity unconfirmed'],
+    ['Price','One list, one price per lot, frozen on the quote','Varies by buyer, negotiated in chat'],
+    ['Cold chain','Held at −20 °C, moved at 2–8 °C, tamper-evident','Ambient, unsealed'],
+    ['Record','Request → quote → order → tax invoice, one number','A conversation, no record'],
+    ['Usage guidance','None. Research Use Only.','Varies'],
+  ],
+  s5_kicker:'From enquiry to doorstep',s5_h2:'Four steps, <em>each one a record.</em>',s5_body:'What happens after the request, what delivery costs, and how payment works.',
+  p1_t:'Request',p1_b:'Pick lots from the catalogue and send the request over WhatsApp. It enters AXIOM\'s pipeline the same moment as a numbered record, not a message waiting to be read.',
+  p2_t:'Quote',p2_b:'AXIOM prices the request from the one price list and sends a quote. It is valid for 7 days from the day it is sent, and the prices on it do not move in that window.',
+  p3_t:'Acceptance, invoice and payment',p3_b:'Accepting the quote creates the order and its invoice together. Payment is by bank transfer in IDR, before dispatch. The invoice is an Indonesian tax document.',
+  p4_t:'Dispatch and doorstep',p4_b:'Once payment is recorded the order is packed. Peptide lots travel cold, with the Certificate of Analysis, in tamper-evident packaging, with a tracking number.',
+  d_kicker:'Delivery',d_title:'Charged per consignment, shown before you commit.',d_rule:'Rp 100.000 per three units per destination, capped at Rp 300.000 per destination.',
+  d_z1:'2 working days',d_z2k:'Java (outside Jabodetabek)',d_z2:'3 working days · rate on request',d_z3k:'Outside Java',d_z3:'4 working days · rate on request',d_cut:'Same-day cut-off',d_cut_v:'Cold 15.00 · Ambient 17.00 WIB',
+  pay_kicker:'Payment',pay_title:'Bank transfer, before dispatch.',pay_body:'Payment is by bank transfer in Indonesian rupiah to the account named on the invoice. Dispatch follows the recorded payment, never precedes it.',
+  s6_kicker:'Compliance',s6_h2:'What AXIOM supplies, <em>and to whom.</em>',s6_body:'Clinics, laboratories, researchers and institutional buyers in Indonesia. Education is public; commerce follows a recorded acknowledgement.',
+  n1_t:'Research Use Only',n1_b:'Peptides are intended exclusively for in-vitro laboratory and scientific research. They are not drugs, food, cosmetics or supplements, and not for human or veterinary consumption, diagnosis or treatment.',
+  n2_t:'No usage guidance',n2_b:'AXIOM does not provide, store or generate dosing, administration or usage guidance of any kind. The catalogue describes identity, handling and verification only.',
+  n3_t:'Jurisdiction',n3_b:'Several compounds are controlled or regulated in some territories. Buyers are solely responsible for the legality of import, possession and handling. AXIOM makes no representation of legality in any territory.',
+  n4_t:'The acknowledgement',n4_b:'Peptide commerce requires a recorded acknowledgement: eighteen or older, and a qualified researcher or institutional buyer. It is versioned, timestamped and valid for twelve months.',
+  s7_h2:'The questions asked <em>before the first order.</em>',s7_body:'Handling, verification, delivery, payment and the research-use rules, answered before the first order.',
+  faq:[
+    ['Are AXIOM peptides registered with BPOM?','No. Peptides are supplied exclusively for in-vitro laboratory research. They are not drugs, food, cosmetics or supplements, are not registered as such, and are not for human or veterinary consumption. Read the Certificate of Analysis and the research-use notice before buying.'],
+    ['What purity does AXIOM hold?','Every peptide lot is analysed by HPLC / MS to confirm identity and a purity at or above 98%. A Certificate of Analysis accompanies each lot. A lot that does not meet the threshold is not listed.'],
+    ['How are peptide lots stored and handled?','As laboratory practice: supplied lyophilised, stored sealed at −20 °C and protected from light; once reconstituted for in-vitro work, refrigerated at 2–8 °C with repeated freeze–thaw avoided. This is not usage guidance.'],
+    ['How does delivery work?','Peptide lots are dispatched temperature-managed in tamper-evident packaging. Delivery is charged per consignment, Rp 100.000 per three units per destination and capped at Rp 300.000 per destination for Jabodetabek; other destinations are rated on the quote.'],
+    ['How is payment made?','By bank transfer in Indonesian rupiah, before dispatch. Accepting a quote creates the order and its invoice together; the invoice is an Indonesian tax document.'],
+    ['How long is a quote valid?','7 days from the day it is sent. The prices on a sent quote do not move in that window.'],
+    ['Who does AXIOM supply?','Clinics, laboratories, researchers and institutional buyers aged eighteen or over who record the acknowledgement. Not for minors, and not for any use outside in-vitro research.'],
+    ['Does AXIOM provide usage guidance?','No. AXIOM does not provide dosing, administration or usage guidance of any kind, in any channel. The catalogue describes identity, handling and verification only.'],
+    ['What is the return policy?','An order may be cancelled before dispatch and the cancellation is recorded. Cold-chain lots that have left AXIOM cannot be returned, because their storage history can no longer be verified. A lot that arrives damaged or mis-shipped is handled case by case; contact AXIOM on WhatsApp with the order number.'],
+    ['How do I read a Certificate of Analysis?','The certificate names one compound and one lot; the lot code on it must match the code on the vial label. HPLC reports how much of the sample is the named compound, and MS confirms its identity by mass. A figure is only as good as the method and the date beside it.'],
+  ],
+  faq_note:'This content describes identity, handling and verification. It is not medical advice and not usage guidance.',
+  s8_kicker:'Request',s8_h2:'Tell us what <em>the laboratory needs.</em>',
+  s8_body:'Pick lots from the catalogue, fill in the details and send it over WhatsApp. The request becomes a numbered record; a quote follows, priced from the same list you read here, valid for 7 days.',
+  f_name:'Name',f_org:'Clinic or institution',f_hint:'WhatsApp or email is required.',f_role:'Role',f_role_p:'Physician · Clinic manager · Researcher',f_msg:'Notes',
+  f_ack:'I am eighteen or older and a qualified researcher or institutional buyer. I understand peptides are supplied for in-vitro laboratory research only and that no usage guidance is provided.',
+  f_submit:'Send over WhatsApp',f_privacy:'Your details are handled under UU PDP and used to answer this request.',
+  err_name:'Name is required.',err_contact:'Enter WhatsApp or email.',err_ack:'The acknowledgement is required for peptide commerce.',
+  r_kicker:'Lots requested',r_empty:'No lots yet. Add them from the catalogue.',r_open:'Open the catalogue',r_goods:'Goods',
+  r_delivery:'Delivery is charged per consignment and shown on the quote. VAT follows the invoice.',
+  remove:'Remove',fewer:'One fewer',more:'One more',
+  ruo_box:'<b>RUO</b> · Research Use Only. Intended exclusively for in-vitro laboratory research. Not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided.',
+  bar_cta:'Continue to the request',bar_n:'{n} lots',
+  boilerplate:'AXIOM is a human-performance and longevity house based in Jakarta, Indonesia. Research peptides under one standard: verified, documented, sourced right. Peptides are Research Use Only, in-vitro. Prices in IDR.',
+  f_l1:'Price list',f_l2:'Price list (PDF)',f_l3:'Request',f_l4:'Verification',f_l5:'Presentation and handling',f_l6:'Compliance',f_contact:'Contact',f_hours:'Monday–Saturday · 09.00–18.00 WIB',
+  ruo_full:'<b>RUO</b> · Research Use Only. Intended exclusively for in-vitro laboratory research. Peptides are not drugs, food, cosmetics or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Buyers are solely responsible for confirming the laws that apply to them.',
+  documented:'Documented, not promised.',
+  wa:{title:'Quote request · AXIOM',name:'Name',org:'Clinic/Institution',role:'Role',email:'Email',lots:'Lots requested',goods:'Goods subtotal',none:'No lots selected; catalogue information requested.',note:'Notes',ack:'Acknowledgement: 18+, qualified researcher / institutional buyer',close:'Research Use Only. In-vitro laboratory research only.'},
+}};
+
+/* =============================================================== state */
+let lang = 'id';
+try { const s = localStorage.getItem('axiom.lang'); if (s === 'en' || s === 'id') lang = s; } catch {}
+const basket = new Map(); // lot index -> qty
+try { const b = JSON.parse(localStorage.getItem('axiom.request') || '[]'); for (const [i,q] of b) if (LOTS[i] && q > 0) basket.set(+i, Math.min(99, +q)); } catch {}
+let pathway = -1, q = '';
+
+const $ = s => document.querySelector(s);
+const t = k => T[lang][k];
+const idr = n => 'Rp ' + n.toLocaleString('id-ID');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const persist = () => { try { localStorage.setItem('axiom.request', JSON.stringify([...basket])); } catch {} };
+
+/* =============================================================== i18n */
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-t]').forEach(el => { const v = t(el.dataset.t); if (typeof v === 'string') el.innerHTML = v; });
+  document.querySelectorAll('[data-tp]').forEach(el => { el.placeholder = t(el.dataset.tp); });
+  document.querySelectorAll('.lang button').forEach(b => { const on = b.dataset.lang === lang; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  document.title = lang === 'id' ? 'AXIOM Peptide Science' : 'AXIOM Peptide Science';
+  renderChips(); renderRows(); renderCmp(); renderFaq(); renderLines(); renderBar();
+}
+document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
+  lang = b.dataset.lang; try { localStorage.setItem('axiom.lang', lang); } catch {} applyLang();
+}));
+
+/* =============================================================== catalogue */
+function renderChips() {
+  const counts = PW.map((_, i) => LOTS.filter(l => l.pw === i).length);
+  const chips = [`<button type="button" class="chip${pathway === -1 ? ' on' : ''}" data-pw="-1" aria-pressed="${pathway === -1}">${t('chip_all')}<span class="n">${LOTS.length}</span></button>`]
+    .concat(PW.map((p, i) => `<button type="button" class="chip${pathway === i ? ' on' : ''}" data-pw="${i}" aria-pressed="${pathway === i}">${p.no} ${lang === 'id' ? p.id : p.en}<span class="n">${counts[i]}</span></button>`));
+  $('#chips').innerHTML = chips.join('');
+}
+$('#chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  pathway = +b.dataset.pw; renderChips(); renderRows();
+});
+$('#q').addEventListener('input', e => { q = e.target.value.trim().toLowerCase(); renderRows(); });
+
+function renderRows() {
+  const shown = LOTS.filter(l => (pathway === -1 || l.pw === pathway) && (!q || l.name.toLowerCase().includes(q) || l.dose.toLowerCase().includes(q) || l.cen.toLowerCase().includes(q) || l.cid.toLowerCase().includes(q)));
+  let html = '', lastPw = -1, lastName = '';
+  for (const l of shown) {
+    if (l.pw !== lastPw) {
+      const p = PW[l.pw];
+      html += `<tr class="grp"><td colspan="5"><span class="no mono-n">${p.no}</span>${lang === 'id' ? p.id : p.en}<span class="sm">${lang === 'id' ? p.sid : p.sen}</span></td></tr>`;
+      lastPw = l.pw; lastName = '';
+    }
+    const first = l.name !== lastName; lastName = l.name;
+    const on = basket.has(l.i);
+    html += `<tr>
+      <td class="k">${first ? esc(l.name) : '<span class="dim-2">·</span>'}</td>
+      <td>${first ? esc(lang === 'id' ? l.cid : l.cen) : ''}</td>
+      <td class="id">${l.dose}</td>
+      <td class="n money">${idr(l.price)}</td>
+      <td class="act"><button type="button" class="add${on ? ' on' : ''}" data-i="${l.i}" aria-pressed="${on}" aria-label="${t(on ? 'added' : 'add')} · ${esc(l.name)} ${l.dose}"><svg class="ic"><use href="#${on ? 'i-check' : 'i-plus'}"/></svg><span class="lbl">${t(on ? 'added' : 'add')}</span></button></td>
+    </tr>`;
+  }
+  if (!shown.length) html = `<tr class="empty"><td colspan="5">${t('none')}</td></tr>`;
+  $('#rows').innerHTML = html;
+  $('#cnt').textContent = t('showing').replace('{n}', shown.length).replace('{t}', LOTS.length);
+}
+$('#rows').addEventListener('click', e => {
+  const b = e.target.closest('.add'); if (!b) return;
+  const i = +b.dataset.i;
+  if (basket.has(i)) basket.delete(i); else basket.set(i, 1);
+  persist(); renderRows(); renderLines(); renderBar();
+});
+
+/* =============================================================== comparison + faq */
+function renderCmp() {
+  $('#cmp tbody').innerHTML = t('cmp').map(r => `<tr><td class="c">${r[0]}</td><td class="ax">${r[1]}</td><td class="mk" data-h="${esc(t('cmp_m'))}">${r[2]}</td></tr>`).join('');
+}
+function renderFaq() {
+  const open = [...document.querySelectorAll('#qa details')].map(d => d.open);
+  $('#qa').innerHTML = t('faq').map((f, i) => `<details${open[i] ? ' open' : ''}><summary><span class="no">${String(i + 1).padStart(2, '0')}</span>${f[0]}<svg class="ic ar"><use href="#i-caret"/></svg></summary><div class="ans">${f[1]}</div></details>`).join('');
+}
+
+/* =============================================================== request */
+const total = () => [...basket].reduce((s, [i, n]) => s + LOTS[i].price * n, 0);
+const units = () => [...basket].reduce((s, [, n]) => s + n, 0);
+function renderLines() {
+  const box = $('#lines');
+  if (!basket.size) {
+    box.innerHTML = `<div class="req-empty">${t('r_empty')}<br><a href="#catalogue" class="tlink" style="margin-top:12px">${t('r_open')} <svg class="ic ar"><use href="#i-arrow"/></svg></a></div>`;
+  } else {
+    box.innerHTML = [...basket].map(([i, n]) => { const l = LOTS[i]; return `<div class="req-line">
+      <div><div class="nm">${esc(l.name)}</div><div class="sub">${l.dose} · ${idr(l.price)}</div></div>
+      <div class="ctl">
+        <span class="qty"><button type="button" data-d="-1" data-i="${i}" aria-label="${t('fewer')}"><svg class="ic"><use href="#i-minus"/></svg></button><span class="mono-n">${n}</span><button type="button" data-d="1" data-i="${i}" aria-label="${t('more')}"><svg class="ic"><use href="#i-plus"/></svg></button></span>
+        <span class="amt">${idr(l.price * n)}</span>
+        <button type="button" class="link-x" data-x="${i}">${t('remove')}</button>
+      </div></div>`; }).join('');
+  }
+  $('#goods').textContent = idr(total());
+}
+$('#lines').addEventListener('click', e => {
+  const d = e.target.closest('[data-d]'), x = e.target.closest('[data-x]');
+  if (d) { const i = +d.dataset.i, n = (basket.get(i) || 0) + (+d.dataset.d); if (n <= 0) basket.delete(i); else basket.set(i, Math.min(99, n)); }
+  else if (x) basket.delete(+x.dataset.x);
+  else return;
+  persist(); renderRows(); renderLines(); renderBar();
+});
+function renderBar() {
+  const n = units();
+  $('#bar').classList.toggle('on', n > 0);
+  $('#barN').textContent = t('bar_n').replace('{n}', n);
+  $('#barT').textContent = idr(total());
+}
+
+$('#reqForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#f_name').value.trim(), org = $('#f_org').value.trim(), wa = $('#f_wa').value.trim(),
+        email = $('#f_email').value.trim(), role = $('#f_role').value.trim(), msg = $('#f_msg').value.trim(), ack = $('#f_ack').checked;
+  let ok = true;
+  $('#e_name').textContent = name ? '' : (ok = false, t('err_name'));
+  $('#e_contact').textContent = (wa || email) ? '' : (ok = false, t('err_contact'));
+  $('#e_ack').textContent = ack ? '' : (ok = false, t('err_ack'));
+  if (!ok) return;
+  const w = t('wa');
+  const lines = [...basket].map(([i, n]) => { const l = LOTS[i]; return `- ${l.name} · ${l.dose} × ${n} · ${idr(l.price * n)}`; });
+  const body = [
+    w.title, '',
+    `${w.name}: ${name}`, org ? `${w.org}: ${org}` : null, role ? `${w.role}: ${role}` : null, email ? `${w.email}: ${email}` : null, '',
+    `${w.lots}:`, ...(lines.length ? lines : [w.none]),
+    lines.length ? `${w.goods}: ${idr(total())}` : null, '',
+    msg ? `${w.note}: ${msg}` : null, msg ? '' : null,
+    `${w.ack} — ✓`, w.close,
+  ].filter(x => x !== null).join('\n');
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(body)}`, '_blank', 'noopener');
+});
+
+/* =============================================================== nav */
+const nav = $('#nav'); let last = window.scrollY;
+window.addEventListener('scroll', () => { const y = window.scrollY; nav.classList.toggle('nav-hidden', y > last && y > 120); last = y; }, { passive: true });
+const toggle = $('#navToggle'), links = $('#site-links');
+toggle.addEventListener('click', () => { const open = links.classList.toggle('open'); toggle.setAttribute('aria-expanded', open); toggle.innerHTML = `<svg class="ic"><use href="#${open ? 'i-x' : 'i-menu'}"/></svg>`; });
+links.addEventListener('click', e => { if (e.target.closest('a')) { links.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); toggle.innerHTML = '<svg class="ic"><use href="#i-menu"/></svg>'; } });
+const secs = [...document.querySelectorAll('main section[id]')];
+const navA = [...links.querySelectorAll('a')];
+const spy = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) navA.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id)); }), { rootMargin: '-40% 0px -55% 0px' });
+secs.forEach(s => spy.observe(s));
+
+/* =============================================================== reveal */
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rev = [...document.querySelectorAll('.reveal')];
+if (reduce || !('IntersectionObserver' in window)) rev.forEach(el => el.classList.add('in'));
+else {
+  const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  rev.forEach(el => { const r = el.getBoundingClientRect(); if (r.top < window.innerHeight) el.classList.add('in'); else io.observe(el); });
+}
+
+/* =============================================================== hero field — copper points drifting in a slow flow (brand asset, 2D) */
+(function field() {
+  const c = $('#field'); if (!c || reduce) return;
+  const ctx = c.getContext('2d'); if (!ctx) return;
+  let w, h, dpr, pts = [], raf, t0 = performance.now();
+  const N = () => Math.min(520, Math.round((w * h) / 4200));
+  function size() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    const r = c.parentElement.getBoundingClientRect(); w = r.width; h = r.height;
+    c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    pts = Array.from({ length: N() }, () => ({ x: Math.random() * w, y: Math.random() * h, s: .6 + Math.random() * 1.6, p: Math.random() * 6.283, v: .12 + Math.random() * .3, k: Math.random() }));
+  }
+  function frame(now) {
+    const tt = (now - t0) / 1000;
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const p of pts) {
+      const a = Math.sin(p.y * .0035 + tt * .18 + p.p) * 1.2 + Math.cos(p.x * .0028 - tt * .11) * .9;
+      p.x += Math.cos(a) * p.v; p.y += Math.sin(a) * p.v - .05;
+      if (p.x < -10) p.x = w + 10; if (p.x > w + 10) p.x = -10; if (p.y < -10) p.y = h + 10; if (p.y > h + 10) p.y = -10;
+      const glow = .35 + .65 * (.5 + .5 * Math.sin(tt * .8 + p.p));
+      const fade = Math.min(1, Math.max(0, (p.x / w - .28) * 1.8));
+      if (fade <= 0) continue;
+      const col = p.k > .75 ? `rgba(231,177,115,${.55 * glow * fade})` : `rgba(200,138,78,${.38 * glow * fade})`;
+      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, 6.283); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    raf = requestAnimationFrame(frame);
+  }
+  size(); window.addEventListener('resize', size);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else raf = requestAnimationFrame(frame); });
+  raf = requestAnimationFrame(frame);
+})();
+
+applyLang();
+</script>
+</body>
+</html>

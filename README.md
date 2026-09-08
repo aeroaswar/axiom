@@ -34,6 +34,7 @@ src/components/document/  the one A4 document template: invoice, credit note, qu
 scripts/gates/         the gate suite (sql · copy lint · greps · i18n · references) and the runner
 tests/e2e/             the browser gates (Playwright)
 messages/{id,en}/      catalogues per surface, merged at request time; Indonesian is the default locale
+site-redesign/         static marketing site (single HTML, ID/EN) after the Continue Longevity structure, priced from the V1.0 price list PDF
 ```
 
 ## The rules the code enforces
