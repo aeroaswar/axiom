@@ -504,7 +504,7 @@ p{font-weight:300}
     <div class="hero-in">
       <span class="kicker hero-kicker" data-t="hero_kicker">Peptide Science · Jakarta · Indonesia</span>
       <h1 data-t="hero_h1">Peptida riset terverifikasi, <em>kini hadir di Indonesia.</em></h1>
-      <p class="lead" data-t="hero_lead">Peptida research-grade untuk riset metabolik, faktor pertumbuhan, perbaikan jaringan, neuro, energi seluler, imun, reproduktif, dan longevitas. Setiap lot diverifikasi HPLC/MS pada ≥ 98%, disertai Certificate of Analysis, dan dikirim dalam rantai dingin ke seluruh Indonesia. Hanya untuk keperluan riset.</p>
+      <p class="lead" data-t="hero_lead">Peptida research-grade untuk riset metabolik, faktor pertumbuhan, perbaikan jaringan, neuro, energi seluler, imun, reproduktif, longevitas, dan bioregulator. Setiap lot diverifikasi HPLC/MS pada ≥ 98%, disertai Certificate of Analysis, dan dikirim dalam rantai dingin ke seluruh Indonesia. Hanya untuk keperluan riset.</p>
       <div class="hero-cta">
         <a href="#request" class="btn btn-solid" data-t="hero_cta1">Minta penawaran</a>
         <a href="#catalogue" class="tlink"><span data-t="hero_cta2">Lihat katalog</span> <svg class="ic ar"><use href="#i-arrow"/></svg></a>
@@ -518,8 +518,8 @@ p{font-weight:300}
   </div>
   <div class="hero-meta">
     <div class="wrap">
-      <div class="m" style="--i:0"><div class="k" data-t="meta_lots">Lot</div><div class="v mono-n" data-count="52">52</div></div>
-      <div class="m" style="--i:1"><div class="k" data-t="meta_pathways">Jalur riset</div><div class="v mono-n" data-count="8">8</div></div>
+      <div class="m" style="--i:0"><div class="k" data-t="meta_lots">Lot</div><div class="v mono-n" data-count="79">79</div></div>
+      <div class="m" style="--i:1"><div class="k" data-t="meta_pathways">Jalur riset</div><div class="v mono-n" data-count="9">9</div></div>
       <div class="m" style="--i:2"><div class="k" data-t="meta_purity">Ambang kemurnian</div><div class="v mono-n" data-count="98" data-prefix="≥ " data-suffix="%">≥ 98%</div></div>
       <div class="m" style="--i:3"><div class="k" data-t="meta_price">Daftar harga · IDR</div><div class="v mono-n">V1.0</div></div>
     </div>
@@ -609,8 +609,8 @@ p{font-weight:300}
     </div>
 
     <div class="cat-foot">
-      <p class="note" data-t="cat_note">Harga per 8 September 2026, dalam rupiah, dapat berubah. Harga pada penawaran yang sudah dikirim tidak berubah selama 7 hari. Pengiriman dihitung per kiriman dan ditampilkan pada penawaran.</p>
-      <a class="tlink" href="../business-proposal/AXIOM-Price-List.pdf" download><svg class="ic ar"><use href="#i-download"/></svg> <span data-t="pdf">Unduh daftar harga (PDF)</span></a>
+      <p class="note" data-t="cat_note">Harga per 9 September 2026, dalam rupiah, dapat berubah. Harga pada penawaran yang sudah dikirim tidak berubah selama 7 hari. Pengiriman dihitung per kiriman dan ditampilkan pada penawaran.</p>
+      <a class="tlink" href="AXIOM-Price-List.pdf" download><svg class="ic ar"><use href="#i-download"/></svg> <span data-t="pdf">Unduh daftar harga (PDF)</span></a>
     </div>
   </div>
 </section>
@@ -807,7 +807,7 @@ p{font-weight:300}
         <h4 data-t="nav_catalogue">Katalog</h4>
         <ul>
           <li><a href="#catalogue" data-t="f_l1">Daftar harga</a></li>
-          <li><a href="../business-proposal/AXIOM-Price-List.pdf" download data-t="f_l2">Daftar harga (PDF)</a></li>
+          <li><a href="AXIOM-Price-List.pdf" download data-t="f_l2">Daftar harga (PDF)</a></li>
           <li><a href="#request" data-t="f_l3">Permintaan</a></li>
         </ul>
       </div>
@@ -841,7 +841,7 @@ p{font-weight:300}
 <script>
 document.documentElement.classList.add('js');
 /* =============================================================== data
-   Prices: AXIOM Price List V1.0 (business-proposal/AXIOM-Price-List.pdf).
+   Prices: AXIOM Price List V1.0, 79 lots (site-redesign/AXIOM-Price-List.pdf), the same figures as supabase/seed.sql.
    Pathway names are research-neutral (platform prompt §11). IDR. */
 const WA = '628128573396';
 const PW = [
@@ -853,61 +853,89 @@ const PW = [
   {no:'06',en:'Immune',id:'Imun',sen:'Thymic and immunomodulatory research peptides.',sid:'Peptida riset timus dan imunomodulasi.'},
   {no:'07',en:'Reproductive',id:'Reproduktif',sen:'Gonadotropins and hormonal-axis research compounds.',sid:'Gonadotropin dan senyawa riset sumbu hormonal.'},
   {no:'08',en:'Longevity',id:'Longevitas',sen:'Cellular-ageing and redox research compounds.',sid:'Senyawa riset penuaan seluler dan redoks.'},
+  {no:'09',en:'Bioregulators',id:'Bioregulator',sen:'Short peptide bioregulators of the Khavinson family.',sid:'Peptida bioregulator pendek keluarga Khavinson.'},
 ];
 // [pathway index, compound, lot, price IDR, class EN, class ID]
 const LOTS = [
-  [0,'Cagrilintide','10 mg',3000000,'Long-acting amylin analogue','Analog amilin kerja panjang'],
-  [0,'Retatrutide','5 mg',2700000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
-  [0,'Retatrutide','10 mg',3100000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
-  [0,'Retatrutide','15 mg',3500000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
-  [0,'Retatrutide','20 mg',3900000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
-  [0,'Retatrutide','30 mg',5100000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
-  [0,'Retatrutide','60 mg',8300000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
-  [0,'Tirzepatide','10 mg',2400000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
-  [0,'Tirzepatide','30 mg',3800000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
-  [0,'Tirzepatide','40 mg',4500000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
-  [1,'CJC-1295 (No DAC) + Ipamorelin','10 mg',3000000,'GHRH analogue + GH secretagogue','Analog GHRH + sekretagog GH'],
-  [1,'CJC-1295 (No DAC) + Ipamorelin','20 mg',4300000,'GHRH analogue + GH secretagogue','Analog GHRH + sekretagog GH'],
-  [1,'HGH 191AA (Somatropin)','36 IU',3200000,'Recombinant somatropin','Somatropin rekombinan'],
-  [1,'HGH 191AA (Somatropin)','40 IU',3600000,'Recombinant somatropin','Somatropin rekombinan'],
-  [1,'Ipamorelin','10 mg',2800000,'GH secretagogue pentapeptide','Pentapeptida sekretagog GH'],
-  [1,'Ipamorelin + Tesamorelin','18 mg',5000000,'GH secretagogue + GHRH analogue blend','Campuran sekretagog GH + analog GHRH'],
-  [1,'Tesamorelin','10 mg',3600000,'GHRH analogue','Analog GHRH'],
-  [1,'Tesamorelin','20 mg',4700000,'GHRH analogue','Analog GHRH'],
-  [2,'BPC-157','10 mg',2700000,'Synthetic pentadecapeptide','Pentadekapeptida sintetis'],
-  [2,'BPC-157 + TB-500 (Wolverine)','20 mg',3900000,'Repair research blend','Campuran riset perbaikan jaringan'],
-  [2,'GHK-Cu','50 mg',2100000,'Copper tripeptide','Tripeptida tembaga'],
-  [2,'GHK-Cu','100 mg',2300000,'Copper tripeptide','Tripeptida tembaga'],
-  [2,'KPV','10 mg',2600000,'α-MSH tripeptide','Tripeptida α-MSH'],
-  [2,'KLOW (BPC+TB+GHK+KPV)','80 mg',4400000,'Multi-peptide blend','Campuran multi-peptida'],
-  [2,'LL-37','5 mg',3000000,'Cathelicidin fragment','Fragmen cathelicidin'],
-  [2,'Peg MGF','2 mg',3100000,'PEGylated IGF-1 splice variant','Varian splice IGF-1 ter-PEG'],
-  [2,'TB-500','10 mg',2900000,'Thymosin β4 fragment','Fragmen thymosin β4'],
-  [3,'Adamax','10 mg',3100000,'Stabilised Semax analogue','Analog Semax terstabilisasi'],
-  [3,'Cerebrolysin','60 mg',3000000,'Neuropeptide preparation','Preparat neuropeptida'],
-  [3,'Pinealon','20 mg',3600000,'Peptide bioregulator','Peptida bioregulator'],
-  [3,'Selank','10 mg',2300000,'Tuftsin analogue','Analog tuftsin'],
-  [3,'Semax','10 mg',2300000,'ACTH(4-10) analogue','Analog ACTH(4-10)'],
-  [3,'Selank + Semax','20 mg',3200000,'Blend of two heptapeptides','Campuran dua heptapeptida'],
-  [4,'5-Amino-1MQ','50 mg',3200000,'NNMT inhibitor','Inhibitor NNMT'],
-  [4,'AICAR','50 mg',3000000,'AMP analogue nucleoside (acadesine)','Nukleosida analog AMP (acadesine)'],
-  [4,'L-Carnitine (Injectable)','5000 mg',3000000,'Quaternary ammonium compound (injectable solution)','Senyawa amonium kuaterner (larutan injeksi)'],
-  [4,'MOTS-c','10 mg',2400000,'Mitochondrial-derived peptide','Peptida turunan mitokondria'],
-  [4,'MOTS-c','40 mg',4300000,'Mitochondrial-derived peptide','Peptida turunan mitokondria'],
-  [4,'SLU-PP-332 (Injectable)','5 mg',2700000,'ERRα agonist','Agonis ERRα'],
-  [5,'Thymosin Alpha-1','10 mg',3600000,'Thymic peptide','Peptida timus'],
-  [6,'HCG','10000 IU',3000000,'Gonadotropin','Gonadotropin'],
-  [6,'HMG','75 IU',2700000,'Menopausal gonadotropin','Gonadotropin menopause'],
-  [6,'Kisspeptin','10 mg',3200000,'Kisspeptin decapeptide','Dekapeptida kisspeptin'],
-  [6,'Oxytocin Acetate','10 mg',3000000,'Nonapeptide hormone','Hormon nonapeptida'],
-  [6,'PT-141','10 mg',2600000,'Melanocortin agonist (Bremelanotide)','Agonis melanokortin (Bremelanotide)'],
-  [7,'DSIP','5 mg',2100000,'Delta Sleep-Inducing Peptide','Delta Sleep-Inducing Peptide'],
-  [7,'DSIP','10 mg',2600000,'Delta Sleep-Inducing Peptide','Delta Sleep-Inducing Peptide'],
-  [7,'Epithalon','50 mg',3400000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
-  [7,'Humanin','10 mg',4500000,'Mitochondrial-derived 24-amino-acid peptide','Peptida turunan mitokondria 24 asam amino'],
-  [7,'NAD+','500 mg',2600000,'Redox coenzyme','Koenzim redoks'],
-  [7,'NAD+','1000 mg',3000000,'Redox coenzyme','Koenzim redoks'],
-  [7,'SS-31','50 mg',4500000,'Tetrapeptide (elamipretide)','Tetrapeptida (elamipretide)'],
+  [0,'AOD-9604','5 mg',2700000,'hGH fragment 176-191 analogue','Analog fragmen hGH 176-191'],
+  [0,'Cagrilintide','10 mg',2700000,'Long-acting amylin analogue','Analog amilin kerja panjang'],
+  [0,'Retatrutide','10 mg',2700000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','20 mg',3600000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','30 mg',4900000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','40 mg',6400000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Retatrutide','60 mg',8500000,'Triple GIP/GLP-1/glucagon agonist','Triple GIP/GLP-1/glucagon agonist'],
+  [0,'Tirzepatide','10 mg',2200000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
+  [0,'Tirzepatide','30 mg',3500000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
+  [0,'Tirzepatide','40 mg',4000000,'Dual GIP/GLP-1 receptor agonist','Dual GIP/GLP-1 receptor agonist'],
+  [1,'CJC-1295 (No DAC) + Ipamorelin','10 mg',2700000,'GHRH analogue + GH secretagogue','Analog GHRH + sekretagog GH'],
+  [1,'CJC-1295 (No DAC) + Ipamorelin','20 mg',3800000,'GHRH analogue + GH secretagogue','Analog GHRH + sekretagog GH'],
+  [1,'CJC-1295 (With DAC)','5 mg',2900000,'GHRH analogue with drug-affinity complex','Analog GHRH dengan drug-affinity complex'],
+  [1,'HGH 191AA (Somatropin)','36 IU',2800000,'Recombinant somatropin','Somatropin rekombinan'],
+  [1,'HGH 191AA (Somatropin)','40 IU',3000000,'Recombinant somatropin','Somatropin rekombinan'],
+  [1,'IGF-1 LR3','1 mg',3800000,'IGF-1 analogue','Analog IGF-1'],
+  [1,'Ipamorelin','10 mg',2500000,'GH secretagogue pentapeptide','Pentapeptida sekretagog GH'],
+  [1,'Ipamorelin + Tesamorelin','18 mg',4500000,'GH secretagogue + GHRH analogue blend','Campuran sekretagog GH + analog GHRH'],
+  [1,'Sermorelin','10 mg',3100000,'GHRH(1-29) analogue','Analog GHRH(1-29)'],
+  [1,'Tesamorelin','10 mg',2300000,'GHRH analogue','Analog GHRH'],
+  [1,'Tesamorelin','20 mg',3300000,'GHRH analogue','Analog GHRH'],
+  [2,'AHK-Cu','100 mg',2500000,'Copper tripeptide','Tripeptida tembaga'],
+  [2,'ARA-290','10 mg',2800000,'EPO-derived peptide (Cibinetide)','Peptida turunan EPO (Cibinetide)'],
+  [2,'ARA-290','50 mg',4100000,'EPO-derived peptide (Cibinetide)','Peptida turunan EPO (Cibinetide)'],
+  [2,'BPC-157','10 mg',1600000,'Synthetic pentadecapeptide','Pentadekapeptida sintetis'],
+  [2,'BPC-157 + TB-500 (Wolverine)','20 mg',2900000,'Repair research blend','Campuran riset perbaikan jaringan'],
+  [2,'GHK-Cu','50 mg',2600000,'Copper tripeptide','Tripeptida tembaga'],
+  [2,'GHK-Cu','100 mg',5000000,'Copper tripeptide','Tripeptida tembaga'],
+  [2,'KPV','10 mg',2300000,'α-MSH tripeptide','Tripeptida α-MSH'],
+  [2,'KLOW (BPC+TB+GHK+KPV)','80 mg',5800000,'Multi-peptide blend','Campuran multi-peptida'],
+  [2,'LL-37','5 mg',2700000,'Cathelicidin fragment','Fragmen cathelicidin'],
+  [2,'Peg MGF','2 mg',2800000,'PEGylated IGF-1 splice variant','Varian splice IGF-1 ter-PEG'],
+  [2,'SNAP-8','10 mg',2500000,'Acetyl octapeptide-3','Asetil oktapeptida-3'],
+  [2,'TB-500','10 mg',1800000,'Thymosin β4 fragment','Fragmen thymosin β4'],
+  [3,'Adamax','10 mg',2800000,'Stabilised Semax analogue','Analog Semax terstabilisasi'],
+  [3,'Cerebrolysin','80 mg',2700000,'Neuropeptide preparation','Preparat neuropeptida'],
+  [3,'Dihexa','10 mg',3500000,'HGF-mimetic oligopeptide','Oligopeptida mimetik HGF'],
+  [3,'Pinealon','20 mg',3300000,'Peptide bioregulator','Peptida bioregulator'],
+  [3,'Selank','10 mg',2100000,'Tuftsin analogue','Analog tuftsin'],
+  [3,'Semax','10 mg',2100000,'ACTH(4-10) analogue','Analog ACTH(4-10)'],
+  [3,'Selank + Semax','20 mg',3900000,'Blend of two heptapeptides','Campuran dua heptapeptida'],
+  [3,'VIP (Vasoactive Intestinal Peptide)','10 mg',3300000,'28-amino-acid neuropeptide','Neuropeptida 28 asam amino'],
+  [4,'5-Amino-1MQ','50 mg',2900000,'NNMT inhibitor','Inhibitor NNMT'],
+  [4,'AICAR','50 mg',2700000,'AMP analogue nucleoside (acadesine)','Nukleosida analog AMP (acadesine)'],
+  [4,'L-Carnitine (Injectable)','5000 mg',2700000,'Quaternary ammonium compound (injectable solution)','Senyawa amonium kuaterner (larutan injeksi)'],
+  [4,'LC216 Lipo-B (Injectable)','10 mL',2700000,'Lipotropic injectable blend, composition per lot CoA','Campuran lipotropik injeksi, komposisi per CoA lot'],
+  [4,'LC526 Fat Blaster (Injectable)','10 mL',2700000,'Lipotropic injectable blend, composition per lot CoA','Campuran lipotropik injeksi, komposisi per CoA lot'],
+  [4,'MOTS-c','10 mg',2200000,'Mitochondrial-derived peptide','Peptida turunan mitokondria'],
+  [4,'MOTS-c','40 mg',3800000,'Mitochondrial-derived peptide','Peptida turunan mitokondria'],
+  [4,'SLU-PP-332 (Injectable)','5 mg',2400000,'ERRα agonist','Agonis ERRα'],
+  [5,'Thymalin','10 mg',2500000,'Thymic peptide preparation','Preparat peptida timus'],
+  [5,'Thymosin Alpha-1','10 mg',3300000,'Thymic peptide','Peptida timus'],
+  [6,'HCG','10000 IU',2700000,'Gonadotropin','Gonadotropin'],
+  [6,'HMG','75 IU',2400000,'Menopausal gonadotropin','Gonadotropin menopause'],
+  [6,'Kisspeptin','10 mg',2900000,'Kisspeptin decapeptide','Dekapeptida kisspeptin'],
+  [6,'Melanotan II','10 mg',1900000,'α-MSH analogue','Analog α-MSH'],
+  [6,'Oxytocin Acetate','10 mg',2700000,'Nonapeptide hormone','Hormon nonapeptida'],
+  [6,'PT-141','10 mg',2300000,'Melanocortin agonist (Bremelanotide)','Agonis melanokortin (Bremelanotide)'],
+  [7,'DSIP','5 mg',1900000,'Delta Sleep-Inducing Peptide','Delta Sleep-Inducing Peptide'],
+  [7,'DSIP','10 mg',2300000,'Delta Sleep-Inducing Peptide','Delta Sleep-Inducing Peptide'],
+  [7,'Epithalon','50 mg',3100000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [7,'FOXO4-DRI','10 mg',4600000,'D-retro-inverso FOXO4 peptide','Peptida FOXO4 D-retro-inverso'],
+  [7,'Glutathione','1500 mg',2300000,'Tripeptide antioxidant','Tripeptida antioksidan'],
+  [7,'Humanin','10 mg',4000000,'Mitochondrial-derived 24-amino-acid peptide','Peptida turunan mitokondria 24 asam amino'],
+  [7,'NAD+','500 mg',2300000,'Redox coenzyme','Koenzim redoks'],
+  [7,'NAD+','1000 mg',3700000,'Redox coenzyme','Koenzim redoks'],
+  [7,'SS-31','50 mg',4000000,'Tetrapeptide (elamipretide)','Tetrapeptida (elamipretide)'],
+  [8,'Bronchogen','20 mg',3300000,'Khavinson tetrapeptide (Ala-Glu-Asp-Leu)','Tetrapeptida Khavinson (Ala-Glu-Asp-Leu)'],
+  [8,'Cardiogen','20 mg',3300000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [8,'Cartalax','20 mg',3500000,'Peptide bioregulator','Peptida bioregulator'],
+  [8,'Chonluten','20 mg',3300000,'Khavinson tripeptide','Tripeptida Khavinson'],
+  [8,'Cortagen','20 mg',3300000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [8,'Crystagen','20 mg',3300000,'Khavinson tripeptide','Tripeptida Khavinson'],
+  [8,'Livagen','20 mg',3300000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [8,'Ovagen','20 mg',3300000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [8,'Pancragen','20 mg',3300000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [8,'Prostamax','20 mg',3300000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [8,'Testagen','20 mg',3300000,'Khavinson tetrapeptide','Tetrapeptida Khavinson'],
+  [8,'Vesugen','20 mg',3300000,'Khavinson tripeptide','Tripeptida Khavinson'],
 ].map((r,i)=>({i,pw:r[0],name:r[1],dose:r[2],price:r[3],cen:r[4],cid:r[5]}));
 
 /* =============================================================== copy */
@@ -918,7 +946,7 @@ id:{
   nav_catalogue:'Katalog',nav_standard:'Standar',nav_process:'Proses',nav_request:'Minta penawaran',
   hero_kicker:'Peptide Science · Jakarta · Indonesia',
   hero_h1:'Peptida riset terverifikasi, <em>kini hadir di Indonesia.</em>',
-  hero_lead:'Peptida research-grade untuk riset metabolik, faktor pertumbuhan, perbaikan jaringan, neuro, energi seluler, imun, reproduktif, dan longevitas. Setiap lot diverifikasi HPLC/MS pada ≥ 98%, disertai Certificate of Analysis, dan dikirim dalam rantai dingin ke seluruh Indonesia. Hanya untuk keperluan riset.',
+  hero_lead:'Peptida research-grade untuk riset metabolik, faktor pertumbuhan, perbaikan jaringan, neuro, energi seluler, imun, reproduktif, longevitas, dan bioregulator. Setiap lot diverifikasi HPLC/MS pada ≥ 98%, disertai Certificate of Analysis, dan dikirim dalam rantai dingin ke seluruh Indonesia. Hanya untuk keperluan riset.',
   hero_cta1:'Minta penawaran',hero_cta2:'Lihat katalog',
   trust1_t:'Teruji, bukan diklaim',trust1_b:'HPLC/MS pada setiap lot, ambang kemurnian ≥ 98%.',
   trust2_t:'Terdokumentasi',trust2_b:'Certificate of Analysis menyertai setiap lot yang dikirim.',
@@ -1001,7 +1029,7 @@ id:{
   f_l1:'Daftar harga',f_l2:'Daftar harga (PDF)',f_l3:'Permintaan',f_l4:'Verifikasi',f_l5:'Presentasi dan penanganan',f_l6:'Kepatuhan',f_contact:'Kontak',f_hours:'Senin–Sabtu · 09.00–18.00 WIB',
   ruo_full:'<b>RUO</b> · Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, dan bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan. Pembeli sepenuhnya bertanggung jawab untuk memastikan hukum yang berlaku bagi mereka.',
   documented:'Terdokumentasi, bukan dijanjikan.',
-  tick:['HPLC / MS pada setiap lot','Ambang kemurnian ≥ 98%','Certificate of Analysis per lot','Disimpan −20 °C · dikirim 2–8 °C','8 jalur riset · 52 lot','Satu harga per lot, sama untuk setiap akun','Hanya untuk keperluan riset · in-vitro','Jakarta · pengiriman ke seluruh Indonesia'],
+  tick:['HPLC / MS pada setiap lot','Ambang kemurnian ≥ 98%','Certificate of Analysis per lot','Disimpan −20 °C · dikirim 2–8 °C','9 jalur riset · 79 lot','Satu harga per lot, sama untuk setiap akun','Hanya untuk keperluan riset · in-vitro','Jakarta · pengiriman ke seluruh Indonesia'],
   live_now:'Sekarang {t} WIB',live_cold:'pesanan dingin hari ini masih {left}',live_amb:'pesanan ambien hari ini masih {left}',live_closed:'batas hari ini lewat · dikirim hari kerja berikutnya',live_sun:'Minggu · pengiriman dilanjutkan Senin',live_h:'j',live_m:'m',
   theme:'Tema',added_toast:'Ditambahkan · {name} {dose}',removed_toast:'Dihapus · {name} {dose}',
   wa:{title:'Permintaan penawaran · AXIOM',name:'Nama',org:'Klinik/Institusi',role:'Peran',email:'Email',lots:'Lot yang diminta',goods:'Subtotal barang',none:'Belum memilih lot; mohon informasi katalog.',note:'Catatan',ack:'Pernyataan: 18+, peneliti berkualifikasi / pembeli institusi',close:'Hanya untuk keperluan riset. Riset laboratorium in-vitro saja.'},
@@ -1012,7 +1040,7 @@ en:{
   nav_catalogue:'Catalogue',nav_standard:'The standard',nav_process:'Process',nav_request:'Request a quote',
   hero_kicker:'Peptide Science · Jakarta · Indonesia',
   hero_h1:'Verified research peptides, <em>now in Indonesia.</em>',
-  hero_lead:'Research-grade peptides across metabolic, growth-factor, tissue-repair, neuro, cellular-energy, immune, reproductive and longevity pathways. Every lot HPLC/MS verified at ≥ 98%, documented with a Certificate of Analysis, dispatched cold across Indonesia. Research Use Only.',
+  hero_lead:'Research-grade peptides across metabolic, growth-factor, tissue-repair, neuro, cellular-energy, immune, reproductive, longevity and bioregulator pathways. Every lot HPLC/MS verified at ≥ 98%, documented with a Certificate of Analysis, dispatched cold across Indonesia. Research Use Only.',
   hero_cta1:'Request a quote',hero_cta2:'See the catalogue',
   trust1_t:'Tested, not claimed',trust1_b:'HPLC/MS on every lot, purity threshold ≥ 98%.',
   trust2_t:'Documented',trust2_b:'A Certificate of Analysis travels with every lot dispatched.',
@@ -1032,7 +1060,7 @@ en:{
   s2_caption:'AXIOM price list',search_l:'Search by compound',chip_all:'All pathways',
   col_compound:'Compound',col_class:'Class',col_lot:'Lot',col_price:'Price',col_add:'Add to the request',
   add:'Add',added:'Added',none:'No lot matches.',showing:'{n} of {t} lots',
-  cat_note:'Prices as at 8 September 2026, in rupiah, subject to change. The prices on a sent quote do not move for 7 days. Delivery is charged per consignment and shown on the quote.',
+  cat_note:'Prices as at 9 September 2026, in rupiah, subject to change. The prices on a sent quote do not move for 7 days. Delivery is charged per consignment and shown on the quote.',
   pdf:'Download the price list (PDF)',
   s3_kicker:'Presentation',s3_h2:'One standard. <em>One presentation.</em>',
   s3_body:'Every lot ships as a sealed lyophilised vial with its lot code on the unit, with a reusable injection pen, BAC water and a research kit. The Certificate of Analysis is in the box.',
@@ -1095,7 +1123,7 @@ en:{
   f_l1:'Price list',f_l2:'Price list (PDF)',f_l3:'Request',f_l4:'Verification',f_l5:'Presentation and handling',f_l6:'Compliance',f_contact:'Contact',f_hours:'Monday–Saturday · 09.00–18.00 WIB',
   ruo_full:'<b>RUO</b> · Research Use Only. Intended exclusively for in-vitro laboratory research. Peptides are not drugs, food, cosmetics or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Buyers are solely responsible for confirming the laws that apply to them.',
   documented:'Documented, not promised.',
-  tick:['HPLC / MS on every lot','Purity threshold ≥ 98%','A Certificate of Analysis per lot','Held at −20 °C · moved at 2–8 °C','8 research pathways · 52 lots','One price per lot, the same for every account','Research Use Only · in-vitro','Jakarta · delivery across Indonesia'],
+  tick:['HPLC / MS on every lot','Purity threshold ≥ 98%','A Certificate of Analysis per lot','Held at −20 °C · moved at 2–8 °C','9 research pathways · 79 lots','One price per lot, the same for every account','Research Use Only · in-vitro','Jakarta · delivery across Indonesia'],
   live_now:'Now {t} WIB',live_cold:'{left} left for today\'s cold dispatch',live_amb:'{left} left for today\'s ambient dispatch',live_closed:'today\'s cut-off has passed · next working day',live_sun:'Sunday · dispatch resumes Monday',live_h:'h',live_m:'m',
   theme:'Theme',added_toast:'Added · {name} {dose}',removed_toast:'Removed · {name} {dose}',
   wa:{title:'Quote request · AXIOM',name:'Name',org:'Clinic/Institution',role:'Role',email:'Email',lots:'Lots requested',goods:'Goods subtotal',none:'No lots selected; catalogue information requested.',note:'Notes',ack:'Acknowledgement: 18+, qualified researcher / institutional buyer',close:'Research Use Only. In-vitro laboratory research only.'},
