@@ -16,17 +16,45 @@
    One visual world: onyx ground, bone ink, bronze accent. Painted explicitly.
    ================================================================== */
 :root{
-  --bg:#070605; --ink:#F2EDE5; --muted:#9C9488; --muted-2:#6A635A;
-  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
-  --accent:#C88A4E; --accent-bright:#E7B173; --accent-deep:#7C4C24;
-  --accent-soft:rgba(200,138,78,.14); --accent-line:rgba(200,138,78,.34);
-  --accent-grad:linear-gradient(120deg,#E7B173 0%,#C88A4E 46%,#9A5F2C 100%);
-  --glass-accent:rgba(200,138,78,.10);
-  --ok:#8FA37E; --err:#B0553B;
+  /* light: bone paper, the print palette of the AXIOM site, as the default */
+  --bg:#F2EDE5; --bg-rgb:242,237,229; --ink:#141210; --muted:#5A544C; --muted-2:#8A8278;
+  --line:rgba(20,18,16,.14); --line-2:rgba(20,18,16,.3); --line-soft:rgba(20,18,16,.07);
+  --accent:#9A5F2C; --accent-bright:#C88A4E; --accent-deep:#7C4C24;
+  --accent-soft:rgba(200,138,78,.16); --accent-line:rgba(154,95,44,.42);
+  --accent-grad:linear-gradient(120deg,#C88A4E 0%,#9A5F2C 46%,#7C4C24 100%);
+  --on-accent:#FBF8F3; --glass-accent:rgba(200,138,78,.12);
+  --paper:#FBF8F3; --shadow-card:0 24px 60px rgba(60,40,20,.18);
+  --ribbon-bg:#141210; --ribbon-fg:#B9B0A3; --ribbon-b:#F2EDE5;
+  --ok:#5F7A4E; --err:#A34A32;
   --display:"Jost","Century Gothic",system-ui,sans-serif;
   --sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   --maxw:1280px; --pad:34px;
   --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:light;
+}
+/* onyx: the AXIOM dark world, on a dark system preference unless light is chosen, and whenever dark is chosen */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#070605; --bg-rgb:7,6,5; --ink:#F2EDE5; --muted:#9C9488; --muted-2:#6A635A;
+  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
+  --accent:#C88A4E; --accent-bright:#E7B173; --accent-deep:#7C4C24;
+  --accent-soft:rgba(200,138,78,.14); --accent-line:rgba(200,138,78,.34);
+  --accent-grad:linear-gradient(120deg,#E7B173 0%,#C88A4E 46%,#9A5F2C 100%);
+  --on-accent:#0a0704; --glass-accent:rgba(200,138,78,.10);
+  --paper:#F2EDE5; --shadow-card:0 30px 70px rgba(0,0,0,.55);
+  --ribbon-bg:#000; --ribbon-fg:#9C9488; --ribbon-b:#F2EDE5;
+  --ok:#8FA37E; --err:#B0553B;
+  color-scheme:dark;
+} }
+:root[data-theme="dark"]{
+  --bg:#070605; --bg-rgb:7,6,5; --ink:#F2EDE5; --muted:#9C9488; --muted-2:#6A635A;
+  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
+  --accent:#C88A4E; --accent-bright:#E7B173; --accent-deep:#7C4C24;
+  --accent-soft:rgba(200,138,78,.14); --accent-line:rgba(200,138,78,.34);
+  --accent-grad:linear-gradient(120deg,#E7B173 0%,#C88A4E 46%,#9A5F2C 100%);
+  --on-accent:#0a0704; --glass-accent:rgba(200,138,78,.10);
+  --paper:#F2EDE5; --shadow-card:0 30px 70px rgba(0,0,0,.55);
+  --ribbon-bg:#000; --ribbon-fg:#9C9488; --ribbon-b:#F2EDE5;
+  --ok:#8FA37E; --err:#B0553B;
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -37,7 +65,7 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:0}
 input,select,textarea{font:inherit;color:inherit;border-radius:0}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
-::selection{background:var(--accent);color:#0a0704}
+::selection{background:var(--accent);color:var(--on-accent)}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 [hidden]{display:none!important}
 .wm-sv{height:22px;width:auto;display:block;fill:var(--ink);flex:none}
@@ -57,12 +85,12 @@ p{font-weight:300}
 .tag{font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
 
 /* ---------- ribbon + nav ---------- */
-.ribbon{position:relative;z-index:5;background:#000;color:var(--muted);border-bottom:1px solid var(--line);
+.ribbon{position:relative;z-index:5;background:var(--ribbon-bg);color:var(--ribbon-fg);border-bottom:1px solid var(--line);
   font-size:10px;letter-spacing:.26em;text-transform:uppercase;text-align:center;padding:9px 12px;font-weight:500}
-.ribbon b{color:var(--ink);font-weight:600}
-.site-nav{position:sticky;top:0;z-index:50;background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);transition:transform .45s var(--ease)}
+.ribbon b{color:var(--ribbon-b);font-weight:600}
+.site-nav{position:sticky;top:0;z-index:50;background:rgba(var(--bg-rgb),.8);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);transition:transform .45s var(--ease)}
 .site-nav.nav-hidden{transform:translateY(-100%)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-nav{background:#0a0806}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.site-nav{background:var(--bg)}}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:76px;gap:20px}
 .brand{display:flex;align-items:center;gap:12px}
 .nav-links{display:flex;gap:30px;align-items:center;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
@@ -71,12 +99,12 @@ p{font-weight:300}
 .nav-right{display:flex;align-items:center;gap:18px}
 .lang{display:inline-flex;border:1px solid var(--line);font-size:10px;letter-spacing:.16em;font-weight:500}
 .lang button{padding:8px 10px;color:var(--muted-2);transition:.18s}
-.lang button.on{background:var(--ink);color:#000}
+.lang button.on{background:var(--ink);color:var(--bg)}
 .lang button:not(.on):hover{color:var(--ink)}
 .nav-toggle{display:none;border:1px solid var(--line-2);color:var(--ink);width:44px;height:44px;place-items:center}
 .nav-toggle .ic{font-size:20px}
 @media(max-width:960px){
-  .nav-links{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:#0a0806;border-bottom:1px solid var(--line);padding:8px 0;display:none}
+  .nav-links{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0;display:none}
   .nav-links.open{display:flex}
   .nav-links a{padding:14px var(--pad);border-top:1px solid var(--line-soft)}
   .nav-toggle{display:grid}
@@ -88,9 +116,9 @@ p{font-weight:300}
 /* ---------- buttons / links / chips ---------- */
 .btn{font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:15px 26px;border:1px solid var(--line-2);background:transparent;color:var(--ink);
   cursor:pointer;transition:.24s var(--ease);display:inline-flex;align-items:center;justify-content:center;gap:10px;white-space:nowrap}
-.btn:hover{background:var(--accent);color:#0a0704;border-color:var(--accent)}
-.btn-solid{background:var(--accent);border-color:var(--accent);color:#0a0704}
-.btn-solid:hover{background:var(--accent-bright);border-color:var(--accent-bright);color:#0a0704}
+.btn:hover{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn-solid{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-solid:hover{background:var(--accent-bright);border-color:var(--accent-bright);color:var(--on-accent)}
 .btn-sm{padding:10px 16px;font-size:10px}
 .btn[disabled]{opacity:.5;cursor:default}
 .tlink{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:9px;position:relative;padding-bottom:6px}
@@ -101,25 +129,25 @@ p{font-weight:300}
 .tlink:hover .ar{transform:translateX(4px)}
 .chip{font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:9px 14px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);transition:.18s;white-space:nowrap}
 .chip:hover{border-color:var(--line-2);color:var(--ink)}
-.chip.on{background:var(--ink);color:#000;border-color:var(--ink)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chip .n{color:inherit;opacity:.6;margin-left:6px;font-variant-numeric:tabular-nums}
 
 /* ---------- hero ---------- */
 .hero{position:relative;padding:104px 0 0;overflow:hidden;border-bottom:1px solid var(--line)}
 .hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 70% at 78% 26%,rgba(200,138,78,.18),transparent 62%),radial-gradient(50% 60% at 14% 96%,rgba(124,76,36,.12),transparent 62%)}
 .hero-bg canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.hero-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(100deg,rgba(7,6,5,.92) 0%,rgba(7,6,5,.82) 36%,rgba(7,6,5,.42) 60%,rgba(7,6,5,0) 84%)}
+.hero-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(100deg,rgba(var(--bg-rgb),.92) 0%,rgba(var(--bg-rgb),.82) 36%,rgba(var(--bg-rgb),.42) 60%,rgba(var(--bg-rgb),0) 84%)}
 .hero .wrap{position:relative;z-index:2}
 .hero-in{max-width:900px}
 .hero h1{font-size:clamp(36px,5.6vw,74px);line-height:1.02;margin-top:14px;max-width:16ch}
 .hero .lead{margin-top:30px;max-width:58ch}
 .hero-cta{display:flex;gap:34px;align-items:center;margin-top:44px;flex-wrap:wrap}
 .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:64px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
-.trust>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 22px 24px;background:rgba(7,6,5,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.trust>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 22px 24px;background:rgba(var(--bg-rgb),.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .trust .t{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:400;font-size:17px;color:var(--ink)}
 .trust .t .ic{color:var(--accent);font-size:18px}
 .trust p{color:var(--muted);font-size:13px;line-height:1.65;margin-top:8px}
-.hero-meta{margin-top:0;border-top:1px solid var(--line);position:relative;z-index:2;background:rgba(7,6,5,.6)}
+.hero-meta{margin-top:0;border-top:1px solid var(--line);position:relative;z-index:2;background:rgba(var(--bg-rgb),.6)}
 .hero-meta .wrap{display:flex;flex-wrap:wrap}
 .hero-meta .m{flex:1;min-width:150px;padding:22px 26px 24px 0;border-right:1px solid var(--line-soft)}
 .hero-meta .m:last-child{border-right:none}
@@ -128,7 +156,7 @@ p{font-weight:300}
 @media(max-width:900px){.trust{grid-template-columns:1fr}}
 @media(max-width:680px){
   .hero{padding-top:56px}.hero-cta{gap:22px}
-  .hero-scrim{background:linear-gradient(180deg,rgba(7,6,5,.5) 0%,rgba(7,6,5,.85) 60%,var(--bg) 100%)}
+  .hero-scrim{background:linear-gradient(180deg,rgba(var(--bg-rgb),.5) 0%,rgba(var(--bg-rgb),.85) 60%,var(--bg) 100%)}
   .hero-meta .wrap{display:grid;grid-template-columns:1fr 1fr}
   .hero-meta .m{padding:16px 16px 16px 0;border-bottom:1px solid var(--line-soft)}
   .hero-meta .m:nth-child(2n){border-right:none;padding-left:16px}
@@ -167,8 +195,9 @@ p{font-weight:300}
 @media(max-width:600px){.stmt{grid-template-columns:1fr;gap:8px}}
 
 /* ---------- CoA specimen ---------- */
-.coa{border:1px solid var(--line-2);background:var(--ink);color:#141210;padding:30px 30px 26px;position:relative;font-family:var(--sans);
-  box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.coa{border:1px solid var(--line-2);background:var(--paper);color:#141210;padding:30px 30px 26px;position:relative;font-family:var(--sans);
+  box-shadow:var(--shadow-card);transform-style:preserve-3d;transition:transform .5s var(--ease),box-shadow .5s var(--ease);animation:float 7s ease-in-out infinite}
+.coa.tilting{transition:transform .12s linear}
 .coa::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--accent-grad)}
 .coa .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:16px;border-bottom:1px solid rgba(20,18,16,.18)}
 .coa .hd .wm-sv{fill:#141210;height:16px}
@@ -201,7 +230,9 @@ p{font-weight:300}
 .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
 .tbl th{text-align:left;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:18px 14px 12px;border-bottom:1px solid var(--line-2);white-space:nowrap}
 .tbl th.n,.tbl td.n{text-align:right}
-.tbl td{padding:14px 14px;border-bottom:1px solid var(--line);font-weight:300;color:var(--muted);vertical-align:middle}
+.tbl td{padding:14px 14px;border-bottom:1px solid var(--line);font-weight:300;color:var(--muted);vertical-align:middle;transition:background .3s var(--ease)}
+.tbl tbody tr:not(.grp):hover td{background:linear-gradient(90deg,var(--accent-soft),transparent 70%)}
+.tbl tr.flash td{animation:flash 1.1s var(--ease)}
 .tbl td.k{color:var(--ink);font-weight:400}
 .tbl td.k small{display:block;color:var(--muted);font-size:12px;font-weight:300;margin-top:3px}
 .tbl td.id{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
@@ -212,7 +243,7 @@ p{font-weight:300}
 .tbl td.act{text-align:right;white-space:nowrap;width:1%}
 .tbl .add{border:1px solid var(--line-2);padding:8px 12px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:7px;transition:.18s var(--ease)}
 .tbl .add:hover{border-color:var(--accent);color:var(--accent-bright)}
-.tbl .add.on{background:var(--accent);border-color:var(--accent);color:#0a0704}
+.tbl .add.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .tbl tr.empty td{padding:34px 14px;color:var(--muted-2)}
 @media(max-width:640px){.tbl{font-size:12.5px}.tbl th:nth-child(2),.tbl td:nth-child(2){display:none}.tbl td,.tbl th{padding-left:6px;padding-right:6px}
   .tbl .add{padding:8px 9px}.tbl .add .lbl{display:none}.tbl tr.grp td{font-size:19px;padding-top:28px}.tbl td.money{font-size:12.5px}}
@@ -307,7 +338,7 @@ p{font-weight:300}
 .req-total{padding:16px 0;display:flex;flex-direction:column;gap:8px}
 
 /* ---------- sticky request bar ---------- */
-.bar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(7,6,5,.86);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--accent-line);
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(var(--bg-rgb),.86);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-top:1px solid var(--accent-line);
   transform:translateY(110%);transition:transform .45s var(--ease)}
 .bar.on{transform:none}
 .bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px}
@@ -326,12 +357,83 @@ p{font-weight:300}
 @media(max-width:800px){.site-foot .cols{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.site-foot .cols{grid-template-columns:1fr}}
 
+/* ---------- theme toggle ---------- */
+.theme{width:36px;height:36px;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:.2s}
+.theme:hover{color:var(--ink);border-color:var(--line-2)}
+.theme .ic{font-size:16px}
+.theme .moon{display:none}
+:root[data-theme="dark"] .theme .sun{display:none}
+:root[data-theme="dark"] .theme .moon{display:block}
+
+/* ---------- scroll progress ---------- */
+.progress{position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--accent-grad);transition:width .15s linear;pointer-events:none}
+
+/* ---------- hero entrance ---------- */
+.hero h1 .w{display:inline-block;animation:rise .9s var(--ease) both;animation-delay:calc(var(--i)*60ms)}
+/* the gradient lives on each word: a clipped background does not paint through transformed children */
+.hero h1 em{background:none;-webkit-text-fill-color:inherit;color:inherit}
+.hero h1 em .w{background:var(--accent-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding-bottom:.06em}
+.hero .hero-kicker{animation:fade .8s var(--ease) both}
+.hero .lead{animation:fade .9s var(--ease) .5s both}
+.hero .hero-cta{animation:fade .9s var(--ease) .7s both}
+.hero .trust>div{animation:fade .9s var(--ease) both;animation-delay:calc(.9s + var(--i)*110ms)}
+.hero-meta .m{animation:fade .9s var(--ease) both;animation-delay:calc(1.2s + var(--i)*90ms)}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes flash{0%{background:var(--accent-soft)}100%{background:transparent}}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,138,78,.45)}70%{box-shadow:0 0 0 7px rgba(200,138,78,0)}}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- ticker: the standard, in motion ---------- */
+.ticker{position:relative;z-index:2;overflow:hidden;border-top:1px solid var(--line);background:var(--bg)}
+.ticker .track{display:flex;width:max-content;animation:tick 46s linear infinite}
+.ticker:hover .track{animation-play-state:paused}
+.ticker .it{display:flex;align-items:center;gap:26px;padding:12px 0 12px 26px;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);white-space:nowrap;font-weight:500}
+.ticker .it::after{content:"";width:5px;height:5px;background:var(--accent);flex:none}
+
+/* ---------- staggered reveal of children ---------- */
+.stagger>*{transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.js .stagger:not(.in)>*{opacity:.35;transform:translateY(14px)}
+.stagger>:nth-child(1){transition-delay:0ms}.stagger>:nth-child(2){transition-delay:70ms}.stagger>:nth-child(3){transition-delay:140ms}
+.stagger>:nth-child(4){transition-delay:210ms}.stagger>:nth-child(5){transition-delay:280ms}.stagger>:nth-child(6){transition-delay:350ms}
+.stagger>:nth-child(7){transition-delay:420ms}.stagger>:nth-child(8){transition-delay:490ms}.stagger>:nth-child(n+9){transition-delay:560ms}
+
+/* ---------- cells that answer the pointer ---------- */
+.cell{position:relative;transition:transform .3s var(--ease),background .3s var(--ease)}
+.cell::before{content:"";position:absolute;top:-1px;left:-1px;right:-1px;height:1px;background:var(--accent-grad);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.65,0,.35,1)}
+.cell:hover{transform:translateY(-3px);background:linear-gradient(180deg,var(--accent-soft),transparent 62%)}
+.cell:hover::before{transform:scaleX(1)}
+
+/* ---------- process: the line draws as each step arrives ---------- */
+.psteps{position:relative}
+.pstep{position:relative}
+.pstep::before{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--line)}
+.pstep::after{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform 1s var(--ease)}
+.pstep.on::after{transform:scaleY(1)}
+.pstep .no{transition:color .5s}
+.pstep.on .no{color:var(--accent-bright)}
+.psteps{padding-left:22px}
+
+/* ---------- live cut-off line ---------- */
+.live{display:flex;gap:10px;align-items:center;margin-top:14px;font-variant-numeric:tabular-nums}
+.live .dot{width:6px;height:6px;background:var(--ok);flex:none;animation:pulse 2.2s ease-out infinite}
+.live.closed .dot{background:var(--muted-2);animation:none}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:var(--pad);bottom:84px;z-index:70;background:var(--ink);color:var(--bg);padding:12px 16px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;
+  transform:translateY(16px);opacity:0;transition:.4s var(--ease);pointer-events:none;max-width:calc(100vw - 2*var(--pad))}
+.toast.on{transform:none;opacity:1}
+.bar .s b.bump{animation:bump .4s var(--ease)}
+
 /* ---------- reveal (from a visible resting state) ---------- */
 .reveal{transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .js .reveal:not(.in){opacity:.42;transform:translateY(14px)}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .js .reveal:not(.in){opacity:1;transform:none}
+  .js .reveal:not(.in),.js .stagger:not(.in)>*{opacity:1;transform:none}
+  .coa,.ticker .track,.live .dot,.hero h1 .w,.hero .lead,.hero .hero-cta,.hero .trust>div,.hero-meta .m{animation:none!important}
   *,*::before,*::after{transition-duration:.001ms!important;animation-duration:.001ms!important}
 }
 @media print{
@@ -381,6 +483,7 @@ p{font-weight:300}
       <a href="#request" data-t="nav_request">Minta penawaran</a>
     </div>
     <div class="nav-right">
+      <button type="button" class="theme" id="themeBtn" aria-label="Tema · Theme"><svg class="ic sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg><svg class="ic moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
       <div class="lang" role="group" aria-label="Bahasa · Language">
         <button type="button" data-lang="id" class="on" aria-pressed="true">ID</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -388,6 +491,7 @@ p{font-weight:300}
       <a href="#request" class="btn btn-sm nav-cta" data-t="nav_request">Minta penawaran</a>
       <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="site-links"><svg class="ic"><use href="#i-menu"/></svg></button>
     </div>
+    <div class="progress" id="prog"></div>
   </div>
 </nav>
 
@@ -398,7 +502,7 @@ p{font-weight:300}
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hero-in">
-      <span class="kicker" data-t="hero_kicker">Peptide Science · Jakarta · Indonesia</span>
+      <span class="kicker hero-kicker" data-t="hero_kicker">Peptide Science · Jakarta · Indonesia</span>
       <h1 data-t="hero_h1">Peptida riset terverifikasi, <em>kini hadir di Indonesia.</em></h1>
       <p class="lead" data-t="hero_lead">Peptida research-grade untuk riset metabolik, faktor pertumbuhan, perbaikan jaringan, neuro, energi seluler, imun, reproduktif, dan longevitas. Setiap lot diverifikasi HPLC/MS pada ≥ 98%, disertai Certificate of Analysis, dan dikirim dalam rantai dingin ke seluruh Indonesia. Hanya untuk keperluan riset.</p>
       <div class="hero-cta">
@@ -407,19 +511,20 @@ p{font-weight:300}
       </div>
     </div>
     <div class="trust">
-      <div><div class="t"><svg class="ic"><use href="#i-flask"/></svg><span data-t="trust1_t">Teruji, bukan diklaim</span></div><p data-t="trust1_b">HPLC/MS pada setiap lot, ambang kemurnian ≥ 98%.</p></div>
-      <div><div class="t"><svg class="ic"><use href="#i-file"/></svg><span data-t="trust2_t">Terdokumentasi</span></div><p data-t="trust2_b">Certificate of Analysis menyertai setiap lot yang dikirim.</p></div>
-      <div><div class="t"><svg class="ic"><use href="#i-truck"/></svg><span data-t="trust3_t">Rantai dingin</span></div><p data-t="trust3_b">Suhu terkendali, bersegel anti-rusak, ke seluruh Indonesia.</p></div>
+      <div style="--i:0"><div class="t"><svg class="ic"><use href="#i-flask"/></svg><span data-t="trust1_t">Teruji, bukan diklaim</span></div><p data-t="trust1_b">HPLC/MS pada setiap lot, ambang kemurnian ≥ 98%.</p></div>
+      <div style="--i:1"><div class="t"><svg class="ic"><use href="#i-file"/></svg><span data-t="trust2_t">Terdokumentasi</span></div><p data-t="trust2_b">Certificate of Analysis menyertai setiap lot yang dikirim.</p></div>
+      <div style="--i:2"><div class="t"><svg class="ic"><use href="#i-truck"/></svg><span data-t="trust3_t">Rantai dingin</span></div><p data-t="trust3_b">Suhu terkendali, bersegel anti-rusak, ke seluruh Indonesia.</p></div>
     </div>
   </div>
   <div class="hero-meta">
     <div class="wrap">
-      <div class="m"><div class="k" data-t="meta_lots">Lot</div><div class="v mono-n">52</div></div>
-      <div class="m"><div class="k" data-t="meta_pathways">Jalur riset</div><div class="v mono-n">8</div></div>
-      <div class="m"><div class="k" data-t="meta_purity">Ambang kemurnian</div><div class="v mono-n">≥ 98%</div></div>
-      <div class="m"><div class="k" data-t="meta_price">Daftar harga · IDR</div><div class="v mono-n">V1.0</div></div>
+      <div class="m" style="--i:0"><div class="k" data-t="meta_lots">Lot</div><div class="v mono-n" data-count="52">52</div></div>
+      <div class="m" style="--i:1"><div class="k" data-t="meta_pathways">Jalur riset</div><div class="v mono-n" data-count="8">8</div></div>
+      <div class="m" style="--i:2"><div class="k" data-t="meta_purity">Ambang kemurnian</div><div class="v mono-n" data-count="98" data-prefix="≥ " data-suffix="%">≥ 98%</div></div>
+      <div class="m" style="--i:3"><div class="k" data-t="meta_price">Daftar harga · IDR</div><div class="v mono-n">V1.0</div></div>
     </div>
   </div>
+  <div class="ticker" aria-hidden="true"><div class="track" id="tickerTrack"></div></div>
 </section>
 
 <!-- --------------------------------------------------------- 01 standard -->
@@ -438,7 +543,7 @@ p{font-weight:300}
       <div>
         <span class="kicker" data-t="v_kicker">Verifikasi</span>
         <h3 style="font-size:clamp(24px,2.8vw,34px);margin-top:14px" data-t="v_title">Diverifikasi sebelum dicantumkan.</h3>
-        <div class="stmts" style="margin-top:34px">
+        <div class="stmts stagger" style="margin-top:34px">
           <div class="stmt"><span class="idx">01</span><div><h3 data-t="v1_t">HPLC / MS pada setiap lot</h3><p data-t="v1_b">Setiap lot peptida dianalisis dengan kromatografi cair kinerja tinggi dan spektrometri massa untuk memastikan identitas dan kemurnian pada atau di atas 98%. Lot yang tidak memenuhi ambang tidak dicantumkan.</p></div></div>
           <div class="stmt"><span class="idx">02</span><div><h3 data-t="v2_t">Certificate of Analysis per lot</h3><p data-t="v2_b">Sertifikat menyatakan senyawa, kode lot, metode, angka kemurnian, dan tanggal. Sertifikat menyertai lot dan diarsipkan bersama pesanan.</p></div></div>
           <div class="stmt"><span class="idx">03</span><div><h3 data-t="v3_t">Rantai dingin sampai ke pintu</h3><p data-t="v3_b">Lot liofilisasi disimpan pada −20 °C dan dikirim pada 2–8 °C, dalam kemasan pelindung bersegel anti-rusak, dengan kode lot pada setiap unit.</p></div></div>
@@ -521,7 +626,7 @@ p{font-weight:300}
         <p data-t="s3_body">Setiap lot dikirim sebagai vial liofilisasi tersegel dengan kode lot pada unitnya, bersama pen injeksi reusable, BAC water, dan research kit. Certificate of Analysis ada di dalam kotak.</p>
       </div>
     </div>
-    <div class="grid g4 reveal">
+    <div class="grid g4 reveal stagger">
       <div class="cell"><svg class="ic"><use href="#i-flask"/></svg><h3 data-t="a1_t">Vial</h3><p data-t="a1_b">Liofilisasi, tersegel, kode lot pada setiap unit.</p></div>
       <div class="cell"><svg class="ic"><use href="#i-pen"/></svg><h3 data-t="a2_t">Pen injeksi reusable</h3><p data-t="a2_b">Termasuk dalam harga setiap lot.</p></div>
       <div class="cell"><svg class="ic"><use href="#i-box"/></svg><h3 data-t="a3_t">BAC water + research kit</h3><p data-t="a3_b">Termasuk pada setiap kiriman.</p></div>
@@ -551,7 +656,7 @@ p{font-weight:300}
     <div class="tblwrap reveal">
       <table class="cmp" id="cmp">
         <thead><tr><th data-t="cmp_c">Kriteria</th><th class="ax">AXIOM</th><th data-t="cmp_m">Umumnya di pasar</th></tr></thead>
-        <tbody></tbody>
+        <tbody class="stagger"></tbody>
       </table>
     </div>
   </div>
@@ -569,7 +674,7 @@ p{font-weight:300}
       </div>
     </div>
     <div class="split reveal">
-      <div class="psteps" style="margin-top:52px">
+      <div class="psteps stagger" style="margin-top:52px">
         <div class="pstep"><span class="no">01</span><div><h3 data-t="p1_t">Permintaan</h3><p data-t="p1_b">Pilih lot dari katalog dan kirim permintaan lewat WhatsApp. Pada saat itu juga permintaan masuk ke alur kerja AXIOM sebagai catatan bernomor, bukan pesan yang menunggu dibaca.</p></div></div>
         <div class="pstep"><span class="no">02</span><div><h3 data-t="p2_t">Penawaran</h3><p data-t="p2_b">AXIOM menghargai permintaan dari satu daftar harga dan mengirim penawaran. Penawaran berlaku 7 hari sejak hari dikirim, dan harga di dalamnya tidak berubah selama masa itu.</p></div></div>
         <div class="pstep"><span class="no">03</span><div><h3 data-t="p3_t">Penerimaan, invoice, dan pembayaran</h3><p data-t="p3_b">Menerima penawaran membuat pesanan dan invoice-nya sekaligus. Pembayaran melalui transfer bank dalam rupiah, sebelum pengiriman. Invoice adalah dokumen pajak Indonesia.</p></div></div>
@@ -586,6 +691,7 @@ p{font-weight:300}
             <div class="kv"><span class="k" data-t="d_z3k">Luar Jawa</span><span class="v mono-n" data-t="d_z3">4 hari kerja · tarif menyusul</span></div>
             <div class="kv"><span class="k" data-t="d_cut">Batas pesanan hari yang sama</span><span class="v mono-n" data-t="d_cut_v">Dingin 15.00 · Ambien 17.00 WIB</span></div>
           </div>
+          <p class="note live" id="live"><span class="dot"></span><span id="liveTxt"></span></p>
         </div>
         <div class="side">
           <span class="kicker" data-t="pay_kicker">Pembayaran</span>
@@ -608,7 +714,7 @@ p{font-weight:300}
         <p data-t="s6_body">Klinik, laboratorium, peneliti, dan pembeli institusi di Indonesia. Edukasi terbuka untuk umum; transaksi menyusul setelah pernyataan pengakuan tercatat.</p>
       </div>
     </div>
-    <div class="grid g4 reveal">
+    <div class="grid g4 reveal stagger">
       <div class="cell"><span class="no">01</span><h3 data-t="n1_t">Hanya untuk keperluan riset</h3><p data-t="n1_b">Peptida ditujukan semata-mata untuk riset laboratorium dan ilmiah in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, dan bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan.</p></div>
       <div class="cell"><span class="no">02</span><h3 data-t="n2_t">Tanpa panduan penggunaan</h3><p data-t="n2_b">AXIOM tidak memberikan, menyimpan, atau menghasilkan panduan dosis, pemberian, atau penggunaan dalam bentuk apa pun. Katalog hanya menjelaskan identitas, penanganan, dan verifikasi.</p></div>
       <div class="cell"><span class="no">03</span><h3 data-t="n3_t">Yurisdiksi</h3><p data-t="n3_b">Beberapa senyawa dikendalikan atau diatur di wilayah tertentu. Pembeli sepenuhnya bertanggung jawab atas legalitas impor, kepemilikan, dan penanganan. AXIOM tidak membuat pernyataan legalitas di wilayah mana pun.</p></div>
@@ -628,7 +734,7 @@ p{font-weight:300}
         <p data-t="s7_body">Penanganan, verifikasi, pengiriman, pembayaran, dan aturan riset, dijawab sebelum pesanan pertama.</p>
       </div>
     </div>
-    <div class="qa reveal" id="qa"></div>
+    <div class="qa reveal stagger" id="qa"></div>
     <p class="note" style="margin-top:22px" data-t="faq_note">Konten ini menjelaskan identitas, penanganan, dan verifikasi. Bukan saran medis, bukan panduan penggunaan.</p>
   </div>
 </section>
@@ -681,6 +787,7 @@ p{font-weight:300}
 </section>
 </main>
 
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="bar" id="bar" aria-live="polite">
   <div class="wrap">
     <div class="s"><b id="barN">0 lot</b><span id="barT">Rp 0</span></div>
@@ -894,6 +1001,9 @@ id:{
   f_l1:'Daftar harga',f_l2:'Daftar harga (PDF)',f_l3:'Permintaan',f_l4:'Verifikasi',f_l5:'Presentasi dan penanganan',f_l6:'Kepatuhan',f_contact:'Kontak',f_hours:'Senin–Sabtu · 09.00–18.00 WIB',
   ruo_full:'<b>RUO</b> · Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Peptida bukan obat, makanan, kosmetik, atau suplemen, dan bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan. Pembeli sepenuhnya bertanggung jawab untuk memastikan hukum yang berlaku bagi mereka.',
   documented:'Terdokumentasi, bukan dijanjikan.',
+  tick:['HPLC / MS pada setiap lot','Ambang kemurnian ≥ 98%','Certificate of Analysis per lot','Disimpan −20 °C · dikirim 2–8 °C','8 jalur riset · 52 lot','Satu harga per lot, sama untuk setiap akun','Hanya untuk keperluan riset · in-vitro','Jakarta · pengiriman ke seluruh Indonesia'],
+  live_now:'Sekarang {t} WIB',live_cold:'pesanan dingin hari ini masih {left}',live_amb:'pesanan ambien hari ini masih {left}',live_closed:'batas hari ini lewat · dikirim hari kerja berikutnya',live_sun:'Minggu · pengiriman dilanjutkan Senin',live_h:'j',live_m:'m',
+  theme:'Tema',added_toast:'Ditambahkan · {name} {dose}',removed_toast:'Dihapus · {name} {dose}',
   wa:{title:'Permintaan penawaran · AXIOM',name:'Nama',org:'Klinik/Institusi',role:'Peran',email:'Email',lots:'Lot yang diminta',goods:'Subtotal barang',none:'Belum memilih lot; mohon informasi katalog.',note:'Catatan',ack:'Pernyataan: 18+, peneliti berkualifikasi / pembeli institusi',close:'Hanya untuk keperluan riset. Riset laboratorium in-vitro saja.'},
 },
 en:{
@@ -985,8 +1095,22 @@ en:{
   f_l1:'Price list',f_l2:'Price list (PDF)',f_l3:'Request',f_l4:'Verification',f_l5:'Presentation and handling',f_l6:'Compliance',f_contact:'Contact',f_hours:'Monday–Saturday · 09.00–18.00 WIB',
   ruo_full:'<b>RUO</b> · Research Use Only. Intended exclusively for in-vitro laboratory research. Peptides are not drugs, food, cosmetics or supplements, and not for human or veterinary consumption, diagnosis, or treatment. No dosing or usage guidance is provided. Buyers are solely responsible for confirming the laws that apply to them.',
   documented:'Documented, not promised.',
+  tick:['HPLC / MS on every lot','Purity threshold ≥ 98%','A Certificate of Analysis per lot','Held at −20 °C · moved at 2–8 °C','8 research pathways · 52 lots','One price per lot, the same for every account','Research Use Only · in-vitro','Jakarta · delivery across Indonesia'],
+  live_now:'Now {t} WIB',live_cold:'{left} left for today\'s cold dispatch',live_amb:'{left} left for today\'s ambient dispatch',live_closed:'today\'s cut-off has passed · next working day',live_sun:'Sunday · dispatch resumes Monday',live_h:'h',live_m:'m',
+  theme:'Theme',added_toast:'Added · {name} {dose}',removed_toast:'Removed · {name} {dose}',
   wa:{title:'Quote request · AXIOM',name:'Name',org:'Clinic/Institution',role:'Role',email:'Email',lots:'Lots requested',goods:'Goods subtotal',none:'No lots selected; catalogue information requested.',note:'Notes',ack:'Acknowledgement: 18+, qualified researcher / institutional buyer',close:'Research Use Only. In-vitro laboratory research only.'},
 }};
+
+/* =============================================================== theme: light by default, onyx by choice */
+const root = document.documentElement;
+let theme = 'light';
+try { const s = localStorage.getItem('axiom.theme'); if (s === 'dark' || s === 'light') theme = s; } catch {}
+root.dataset.theme = theme;
+const isLight = () => root.dataset.theme !== 'dark';
+document.getElementById('themeBtn').addEventListener('click', () => {
+  theme = isLight() ? 'dark' : 'light'; root.dataset.theme = theme;
+  try { localStorage.setItem('axiom.theme', theme); } catch {}
+});
 
 /* =============================================================== state */
 let lang = 'id';
@@ -996,6 +1120,7 @@ try { const b = JSON.parse(localStorage.getItem('axiom.request') || '[]'); for (
 let pathway = -1, q = '';
 
 const $ = s => document.querySelector(s);
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const t = k => T[lang][k];
 const idr = n => 'Rp ' + n.toLocaleString('id-ID');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1007,9 +1132,64 @@ function applyLang() {
   document.querySelectorAll('[data-t]').forEach(el => { const v = t(el.dataset.t); if (typeof v === 'string') el.innerHTML = v; });
   document.querySelectorAll('[data-tp]').forEach(el => { el.placeholder = t(el.dataset.tp); });
   document.querySelectorAll('.lang button').forEach(b => { const on = b.dataset.lang === lang; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
-  document.title = lang === 'id' ? 'AXIOM Peptide Science' : 'AXIOM Peptide Science';
+  $('#themeBtn').setAttribute('aria-label', t('theme'));
+  wrapHero(); renderTicker(); renderLive();
   renderChips(); renderRows(); renderCmp(); renderFaq(); renderLines(); renderBar();
 }
+
+/* =============================================================== hero: words arrive one by one, figures count up */
+let heroPlayed = false;
+function wrapHero() {
+  const h = $('.hero h1');
+  let i = 0;
+  const walk = node => {
+    if (node.nodeType === 3) {
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+        const w = document.createElement('span'); w.className = 'w'; w.style.setProperty('--i', i++); w.textContent = part; frag.appendChild(w);
+      });
+      node.replaceWith(frag);
+    } else if (node.nodeType === 1) [...node.childNodes].forEach(walk);
+  };
+  [...h.childNodes].forEach(walk);
+  if (heroPlayed) h.querySelectorAll('.w').forEach(w => w.style.animation = 'none');
+  heroPlayed = true;
+}
+(function countUp() {
+  if (reduce) return;
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const end = +el.dataset.count, pre = el.dataset.prefix || '', suf = el.dataset.suffix || '', t0 = performance.now(), dur = 1400 + Math.random() * 300;
+    const step = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = pre + Math.round(end * e) + suf; if (k < 1) requestAnimationFrame(step); };
+    setTimeout(() => requestAnimationFrame(step), 900);
+  });
+})();
+function renderTicker() {
+  const items = t('tick').map(x => `<span class="it">${x}</span>`).join('');
+  $('#tickerTrack').innerHTML = items + items;
+}
+
+/* =============================================================== live: Jakarta time against the same-day cut-offs */
+function jakarta() {
+  const p = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false, weekday: 'short' }).formatToParts(new Date());
+  const g = k => p.find(x => x.type === k)?.value || '';
+  return { h: +g('hour') % 24, m: +g('minute'), wd: g('weekday') };
+}
+function renderLive() {
+  const { h, m, wd } = jakarta();
+  const now = t('live_now').replace('{t}', `${String(h).padStart(2, '0')}.${String(m).padStart(2, '0')}`);
+  const left = (H) => { const d = H * 60 - (h * 60 + m); return `${Math.floor(d / 60)} ${t('live_h')} ${d % 60} ${t('live_m')}`; };
+  const mins = h * 60 + m;
+  let msg, open = true;
+  if (wd === 'Sun') { msg = t('live_sun'); open = false; }
+  else if (mins < 15 * 60) msg = t('live_cold').replace('{left}', left(15));
+  else if (mins < 17 * 60) msg = t('live_amb').replace('{left}', left(17));
+  else { msg = t('live_closed'); open = false; }
+  $('#liveTxt').textContent = `${now} · ${msg}`;
+  $('#live').classList.toggle('closed', !open);
+}
+setInterval(renderLive, 30000);
 document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
   lang = b.dataset.lang; try { localStorage.setItem('axiom.lang', lang); } catch {} applyLang();
 }));
@@ -1050,11 +1230,16 @@ function renderRows() {
   $('#rows').innerHTML = html;
   $('#cnt').textContent = t('showing').replace('{n}', shown.length).replace('{t}', LOTS.length);
 }
+let toastT = 0;
+function toast(msg) { const el = $('#toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 2200); }
 $('#rows').addEventListener('click', e => {
   const b = e.target.closest('.add'); if (!b) return;
-  const i = +b.dataset.i;
-  if (basket.has(i)) basket.delete(i); else basket.set(i, 1);
+  const i = +b.dataset.i, l = LOTS[i], had = basket.has(i);
+  if (had) basket.delete(i); else basket.set(i, 1);
   persist(); renderRows(); renderLines(); renderBar();
+  toast(t(had ? 'removed_toast' : 'added_toast').replace('{name}', l.name).replace('{dose}', l.dose));
+  const row = b.closest('tr'); if (row) { row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1100); }
+  const n = $('#barN'); n.classList.remove('bump'); void n.offsetWidth; n.classList.add('bump');
 });
 
 /* =============================================================== comparison + faq */
@@ -1121,8 +1306,19 @@ $('#reqForm').addEventListener('submit', e => {
 });
 
 /* =============================================================== nav */
-const nav = $('#nav'); let last = window.scrollY;
-window.addEventListener('scroll', () => { const y = window.scrollY; nav.classList.toggle('nav-hidden', y > last && y > 120); last = y; }, { passive: true });
+const nav = $('#nav'); let last = window.scrollY; const prog = $('#prog');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY; nav.classList.toggle('nav-hidden', y > last && y > 120); last = y;
+  const max = document.documentElement.scrollHeight - window.innerHeight; prog.style.width = (max > 0 ? Math.min(100, y / max * 100) : 0) + '%';
+}, { passive: true });
+const stepIO = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) en.target.classList.add('on'); }), { threshold: .45 });
+document.querySelectorAll('.pstep').forEach(s => stepIO.observe(s));
+/* the CoA specimen turns toward the pointer */
+(function tilt() {
+  const c = $('.coa'); if (!c || reduce) return;
+  c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.classList.add('tilting'); c.style.transform = `perspective(900px) rotateX(${-y * 7}deg) rotateY(${x * 9}deg)`; });
+  c.addEventListener('pointerleave', () => { c.classList.remove('tilting'); c.style.transform = ''; });
+})();
 const toggle = $('#navToggle'), links = $('#site-links');
 toggle.addEventListener('click', () => { const open = links.classList.toggle('open'); toggle.setAttribute('aria-expanded', open); toggle.innerHTML = `<svg class="ic"><use href="#${open ? 'i-x' : 'i-menu'}"/></svg>`; });
 links.addEventListener('click', e => { if (e.target.closest('a')) { links.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); toggle.innerHTML = '<svg class="ic"><use href="#i-menu"/></svg>'; } });
@@ -1132,8 +1328,7 @@ const spy = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersect
 secs.forEach(s => spy.observe(s));
 
 /* =============================================================== reveal */
-const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const rev = [...document.querySelectorAll('.reveal')];
+const rev = [...document.querySelectorAll('.reveal, .stagger')];
 if (reduce || !('IntersectionObserver' in window)) rev.forEach(el => el.classList.add('in'));
 else {
   const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
@@ -1144,26 +1339,33 @@ else {
 (function field() {
   const c = $('#field'); if (!c || reduce) return;
   const ctx = c.getContext('2d'); if (!ctx) return;
-  let w, h, dpr, pts = [], raf, t0 = performance.now();
+  let w, h, dpr, pts = [], raf, t0 = performance.now(), px = -1e4, py = -1e4;
+  c.parentElement.parentElement.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; }, { passive: true });
+  c.parentElement.parentElement.addEventListener('pointerleave', () => { px = py = -1e4; });
   const N = () => Math.min(520, Math.round((w * h) / 4200));
   function size() {
     dpr = Math.min(2, window.devicePixelRatio || 1);
     const r = c.parentElement.getBoundingClientRect(); w = r.width; h = r.height;
     c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    pts = Array.from({ length: N() }, () => ({ x: Math.random() * w, y: Math.random() * h, s: .6 + Math.random() * 1.6, p: Math.random() * 6.283, v: .12 + Math.random() * .3, k: Math.random() }));
+    pts = Array.from({ length: N() }, () => ({ x: Math.random() * w, y: Math.random() * h, s: .8 + Math.random() * 1.9, p: Math.random() * 6.283, v: .12 + Math.random() * .3, k: Math.random() }));
   }
   function frame(now) {
     const tt = (now - t0) / 1000;
     ctx.clearRect(0, 0, w, h);
-    ctx.globalCompositeOperation = 'lighter';
+    const light = isLight();
+    ctx.globalCompositeOperation = light ? 'multiply' : 'lighter';
     for (const p of pts) {
       const a = Math.sin(p.y * .0035 + tt * .18 + p.p) * 1.2 + Math.cos(p.x * .0028 - tt * .11) * .9;
       p.x += Math.cos(a) * p.v; p.y += Math.sin(a) * p.v - .05;
+      const dx = p.x - px, dy = p.y - py, d = Math.hypot(dx, dy);
+      if (d < 170 && d > .5) { const k = (1 - d / 170) * 1.9; p.x += -dy / d * k + dx / d * k * .35; p.y += dx / d * k + dy / d * k * .35; }
       if (p.x < -10) p.x = w + 10; if (p.x > w + 10) p.x = -10; if (p.y < -10) p.y = h + 10; if (p.y > h + 10) p.y = -10;
       const glow = .35 + .65 * (.5 + .5 * Math.sin(tt * .8 + p.p));
       const fade = Math.min(1, Math.max(0, (p.x / w - .28) * 1.8));
       if (fade <= 0) continue;
-      const col = p.k > .75 ? `rgba(231,177,115,${.55 * glow * fade})` : `rgba(200,138,78,${.38 * glow * fade})`;
+      const col = light
+        ? (p.k > .75 ? `rgba(124,76,36,${.8 * glow * fade})` : `rgba(154,95,44,${.55 * glow * fade})`)
+        : (p.k > .75 ? `rgba(231,177,115,${.55 * glow * fade})` : `rgba(200,138,78,${.38 * glow * fade})`);
       ctx.fillStyle = col; ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, 6.283); ctx.fill();
     }
     ctx.globalCompositeOperation = 'source-over';
