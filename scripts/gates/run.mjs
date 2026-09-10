@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 const steps = [
   ['typecheck', 'pnpm', ['typecheck']],
+  ['unit · calendar feed', 'pnpm', ['test']],
   ['gates 9 · copy lint', 'node', ['scripts/gates/copy-lint.mjs']],
   ['gates 1 · 13 · greps', 'node', ['scripts/gates/grep.mjs']],
   ['gate 17 · bilingual', 'node', ['scripts/gates/i18n.mjs']],

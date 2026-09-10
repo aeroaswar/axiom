@@ -535,6 +535,23 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
   .f3{grid-template-columns:1fr 1fr}
 }
 
+/* the protocol card, printed. Same document frame as an invoice; a card carries no money, so the
+   priced table is replaced by one block per compound. This block must stay above the Alive banner:
+   src/lib/pdf.ts builds the print stylesheet by slicing app.css between that comment and this
+   section's opening one, and anything below it is simply not in the printed file. */
+.d-blocks{display:grid;gap:14px;margin-top:6px}
+.d-block{border:1px solid var(--line);padding:14px 16px}
+.d-block.muted{opacity:.6}
+.d-block-h{display:flex;gap:10px;align-items:baseline;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line-soft)}
+.d-block-h b{font-family:var(--display);font-weight:400;font-size:14px}
+.d-block-h span{font-size:9.5px;color:var(--muted-2);letter-spacing:.1em}
+.d-block-n{margin:0 0 8px;font-size:10.5px;color:var(--muted);line-height:1.55}
+.d-qr{display:flex;flex-direction:column;align-items:center;gap:8px;margin:18px 0 8px}
+.d-qr svg{width:150px;height:150px}
+.d-qr .d-qr-bg{fill:var(--paper)}
+.d-qr rect:not(.d-qr-bg){fill:var(--paper-ink)}
+.d-qr span{font-size:9px;letter-spacing:.24em;color:var(--muted-2)}
+
 /* ==================================================================
    Alive — the motion vocabulary (master prompt §7). One ease, four budgets:
    micro 220 ms · reveal 700 ms · draw 950 ms · stagger 65 ms. Moves stay

@@ -622,6 +622,107 @@
         "t1": "{ref}",
         "t2": "{account}"
       }
+    },
+    "protocols": {
+      "title": "Kartu protokol",
+      "new": "Terbitkan kartu",
+      "empty": "Belum ada kartu protokol.",
+      "no_title": "Tanpa judul",
+      "note": "Satu kartu per klien. Kode QR menunjuk ke kartu, bukan menyimpan isinya, sehingga senyawa dapat ditambahkan tanpa mencetak ulang.",
+      "items_n": "{n} senyawa",
+      "revoke": "Tarik kartu",
+      "revoked": "Kartu ditarik.",
+      "state": {
+        "draft": "Draf",
+        "issued": "Terbit",
+        "revoked": "Ditarik"
+      },
+      "chips": {
+        "all": "Semua",
+        "issued": "Terbit",
+        "revoked": "Ditarik",
+        "empty": "Tanpa senyawa"
+      },
+      "cols": {
+        "account": "Akun",
+        "card": "Kartu",
+        "study": "Studi",
+        "compounds": "Senyawa",
+        "issued": "Terbit",
+        "state": "Status"
+      },
+      "new_form": {
+        "title": "Terbitkan kartu protokol",
+        "note": "Kartu diterbitkan atas nama akun dan mencatat jadwal yang disusun AXIOM untuknya.",
+        "none_eligible": "Belum ada akun dengan pernyataan pengakuan periset yang berlaku.",
+        "account": "Akun",
+        "choose": "Pilih akun",
+        "account_hint": "Hanya akun dengan pernyataan pengakuan yang berlaku.",
+        "study": "Studi",
+        "subject": "Nama pada kartu",
+        "subject_hint": "Kosongkan untuk memakai nama akun. Nama ini dibekukan saat kartu terbit.",
+        "locale": "Bahasa kartu",
+        "locale_id": "Indonesia",
+        "locale_en": "Inggris",
+        "locale_hint": "Bahasa kartu mengikuti baris ini, bukan preferensi peranti yang memindai.",
+        "starts_on": "Mulai",
+        "submit": "Terbitkan"
+      },
+      "sheet": {
+        "account": "Akun",
+        "study": "Studi",
+        "state": "Status",
+        "locale": "Bahasa",
+        "compounds": "Senyawa pada kartu",
+        "no_items": "Belum ada senyawa pada kartu ini.",
+        "add": "Tambah senyawa",
+        "history": "Riwayat",
+        "qr": "Kode QR",
+        "qr_note": "Cetak kode ini pada kemasan. Kode tidak berubah meski isi kartu berubah.",
+        "open_card": "Buka kartu",
+        "qr_svg": "Unduh QR",
+        "print": "Cetak kartu",
+        "ics": "Unduh kalender",
+        "subscribe_url": "Tautan langganan kalender"
+      },
+      "item": {
+        "compound": "Senyawa",
+        "choose": "Pilih senyawa",
+        "brief": "Ringkasan",
+        "amount": "Takaran",
+        "route": "Jalur",
+        "freq": "Pengulangan",
+        "freq_once": "Sekali",
+        "freq_daily": "Harian",
+        "freq_weekly": "Mingguan",
+        "freq_monthly": "Bulanan",
+        "every_n": "Setiap",
+        "byday": "Hari",
+        "byday_hint": "Untuk pengulangan mingguan. Kosongkan untuk mengikuti hari mulai.",
+        "at_time": "Pukul",
+        "reminder": "Pengingat (menit)",
+        "starts_on": "Mulai",
+        "ends_on": "Sampai",
+        "occurrences": "Jumlah kejadian",
+        "occurrences_hint": "Diabaikan bila tanggal akhir diisi.",
+        "lot": "Lot",
+        "no_lot": "Tanpa lot",
+        "add": "Tambahkan",
+        "save": "Simpan",
+        "added": "Senyawa ditambahkan.",
+        "saved": "Baris disimpan.",
+        "end": "Hentikan",
+        "ended": "Dihentikan",
+        "ended_note": "Baris ini dihentikan dan tetap tercatat. Kalender yang berlangganan menerima pembatalannya.",
+        "ended_msg": "Senyawa dihentikan."
+      },
+      "events": {
+        "issued": "Kartu terbit",
+        "item_added": "Senyawa ditambahkan",
+        "item_changed": "Baris diubah",
+        "item_ended": "Senyawa dihentikan",
+        "revoked": "Kartu ditarik"
+      }
     }
   }
 }

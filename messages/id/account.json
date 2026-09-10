@@ -335,7 +335,22 @@
       "removed": "Terhapus.",
       "empty": "Belum ada yang bisa diminta.",
       "ack_both": "Kedua pernyataan diperlukan sebelum dapat dicatat.",
-      "site_name": "Alamat memerlukan nama."
+      "site_name": "Alamat memerlukan nama.",
+      "protocol_added": "Senyawa ditambahkan ke kartu.",
+      "protocol_ended": "Senyawa dihentikan."
+    },
+    "protocols": {
+      "title": "Kartu protokol",
+      "kicker": "{count} kartu",
+      "empty": "Belum ada kartu protokol untuk akun ini.",
+      "note": "Kartu diterbitkan AXIOM. Anda dapat menambahkan senyawa yang sudah dikirimkan kepada Anda.",
+      "items_n": "{n} senyawa",
+      "add": {
+        "title": "Tambah senyawa",
+        "submit": "Tambahkan ke kartu",
+        "nothing_ordered": "Belum ada senyawa peptida pada pesanan akun ini.",
+        "note": "Pilihan terbatas pada senyawa yang sudah dikirimkan kepada akun ini."
+      }
     }
   }
 }

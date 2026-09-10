@@ -95,7 +95,8 @@
     "owner": "Pemilik",
     "ops": "Ops",
     "client": "Klien",
-    "clinic": "Klinik"
+    "clinic": "Klinik",
+    "protocols": "Kartu protokol"
   },
   "states": {
     "quote": {

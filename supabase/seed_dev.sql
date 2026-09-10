@@ -178,3 +178,46 @@ insert into public.coa_documents (variant_id, lot_code, file_path, issued_at, me
 select id, 'AX-2606-BPC10', 'coa/sample-bpc-157-10mg.pdf', now()::date - 90, 'HPLC / MS', 99.2, true from public.product_variants where sku = 'bpc10';
 
 select set_config('request.jwt.claims', '', true);
+
+-- an address on file for the accounts that have a member, so the card's sign-in link has somewhere
+-- to go; Studio Longa is deliberately left without one, which is the case the card must handle
+update public.accounts set email = 'regenera.director@axiom.local' where name = 'Klinik Regenera';
+update public.accounts set email = 'prasetyo@axiom.local'          where name = 'Dr. Prasetyo Lab';
+update public.accounts set email = 'ivan@axiom.local'              where name = 'Ivan Wijaya';
+
+-- protocol cards, made through the real functions so every seeded state is one the rules produce.
+-- The dosing here is per-client operational data, which is the whole point of decision 12: it lives
+-- in protocol_items and in no catalogue, no message file and no line of src/.
+do $$
+declare pid uuid; reg uuid; iv uuid; lot uuid;
+begin
+  perform set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-000000000001","role":"authenticated"}', true);
+  select id into reg from public.accounts where name = 'Klinik Regenera';
+  select id into iv  from public.accounts where name = 'Ivan Wijaya';
+
+  -- a lot and its certificate, so one card line carries a real lot rather than the sample
+  insert into public.lots (variant_id, lot_code, received_at, expires_at)
+  select id, 'AX-2609-RETA10', current_date - 30, current_date + 540 from public.product_variants where sku = 'reta10'
+  returning id into lot;
+  insert into public.coa_documents (variant_id, lot_id, lot_code, file_path, issued_at, method, purity_pct)
+  select variant_id, id, lot_code, 'coa/sample-bpc-157-10mg.pdf', current_date - 25, 'HPLC / MS', 98.7 from public.lots where id = lot;
+
+  pid := axiom.issue_protocol(reg, 'Recovery study', null, 'id', current_date - 14);
+  update public.protocols set code = 'DEV0REGENERA0001' where id = pid;   -- a stable code for the gates
+  perform axiom.add_protocol_item(pid, (select id from public.product_variants where sku = 'reta10'), lot,
+    'Fase awal, ditinjau tiap dua minggu.', '0,25 mL', 'SC', 'weekly', 1, array['MO','TH'], '08:00', current_date - 14, null, null, 30);
+  perform axiom.add_protocol_item(pid, (select id from public.product_variants where sku = 'bpc10'), null,
+    'Bersama fase awal.', '0,5 mL', 'SC', 'daily', 1, '{}', '20:00', current_date - 7, null, null, 15);
+
+  pid := axiom.issue_protocol(iv, 'Skin study', null, 'en', current_date - 30);
+  update public.protocols set code = 'DEV0EVANW0000002' where id = pid;
+  perform axiom.add_protocol_item(pid, (select id from public.product_variants where sku = 'ghk100'), null,
+    'Topical arm.', '1 mL', 'Topical', 'weekly', 2, array['SA'], '19:00', current_date - 30, current_date + 60, null, 60);
+
+  -- a withdrawn card, so the gates can prove a printed square stops resolving
+  pid := axiom.issue_protocol(reg, 'Closed study', null, 'id', current_date - 120);
+  update public.protocols set code = 'DEV0WTHDRAWN0003' where id = pid;
+  perform axiom.revoke_protocol(pid);
+end $$;
+
+select set_config('request.jwt.claims', '', true);
