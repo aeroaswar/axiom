@@ -43,7 +43,11 @@ export function asAnon<T>(fn: (tx: Tx) => Promise<T>) {
   return withRls({ uid: null }, fn);
 }
 
-/** Service access. Only for reading a profile to establish a session and for admin scripts. */
+/**
+ * Service access. For reading a profile to establish a session, for admin scripts, and for reading
+ * the email address a protocol card's sign-in link is sent to — that one address must come from the
+ * account's own row rather than from a public page, and no browser session may read it (decision 12).
+ */
 export async function asService<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
   return sql().begin(async tx => {
     await tx.unsafe(`set local role service_role`);

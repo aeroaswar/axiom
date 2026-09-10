@@ -28,6 +28,7 @@
     "next": "15.3.2",
     "next-intl": "^4.1.0",
     "postgres": "^3.4.5",
+    "qrcode-generator": "^2.0.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "three": "0.143.0",

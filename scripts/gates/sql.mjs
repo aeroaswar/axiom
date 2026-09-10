@@ -531,6 +531,146 @@ console.log('Gate S15: payment and void are recorded only by the functions that 
   });
 }
 
+console.log('Gate S16: a protocol card is read by its code and by nothing else');
+{
+  // The QR encodes a URL carrying `code`. Everything an anonymous holder can reach must come
+  // through axiom.protocol_card; the tables themselves are not theirs to select from, empty or not.
+  const [v] = await sql`select id::text from public.product_variants where sku = 'reta10'`;
+  await rollback(async tx => {
+    await become(tx, OWNER);
+    const [{ issue_protocol: pid }] = await tx`select axiom.issue_protocol(${REGENERA}::uuid, 'Gate S16')`;
+    const [p] = await tx`select code, number from public.protocols where id = ${pid}::uuid`;
+    await tx`select axiom.add_protocol_item(${pid}::uuid, ${v.id}::uuid, null, 'gate', 'x', 'y',
+      'weekly'::public.recur_freq, 1, array['MO'], '08:00'::time, null, null, null, 30)`;
+    ok(/^AX-PC-\d{4}-\d{4}$/.test(p.number), `the card carries a speakable number (${p.number})`);
+    // Crockford base32: no I, L, O or U, so nothing in it can be misheard when it is read out.
+    ok(/^[0-9A-HJKMNP-TV-Z]{16}$/.test(p.code), `and a separate 80-bit code, the only thing in the QR (${p.code})`);
+
+    await become(tx, null);
+    const [{ protocol_card: card }] = await tx`select axiom.protocol_card(${p.code})`;
+    ok(card !== null && card.items.length === 1, 'anon: an issued code resolves to the card');
+    ok(card.subject === 'Klinik Regenera', "and carries the client's name");
+    // axiom.protocol_card is `security definer`, so RLS does not apply inside it and every column
+    // it returns is one it chose. v_catalogue's price_idr is visible to the definer and gated for
+    // the caller: a `select *` in that body would publish the peptide price list to any holder.
+    const flat = JSON.stringify(card);
+    ok(!/price|cost|idr|margin/i.test(flat), 'and no price, cost or margin field anywhere in the payload');
+    ok(!/"code"/.test(flat), 'nor the code back again, which belongs only in the URL that fetched it');
+
+    await expectError(tx, sp => sp`select count(*) from public.protocols`, 'anon: protocols is refused, not empty', /permission denied/i);
+    await expectError(tx, sp => sp`select count(*) from public.protocol_items`, 'anon: protocol_items is refused', /permission denied/i);
+    await expectError(tx, sp => sp`select count(*) from public.protocol_events`, 'anon: protocol_events is refused', /permission denied/i);
+
+    const [{ protocol_card: unknown }] = await tx`select axiom.protocol_card('not-a-real-code0')`;
+    ok(unknown === null, 'an unknown code resolves to nothing');
+
+    // Withdrawing is how a printed square is taken out of service; the code stays valid input.
+    await become(tx, OWNER);
+    await tx`select axiom.revoke_protocol(${pid}::uuid)`;
+    await become(tx, null);
+    const [{ protocol_card: revoked }] = await tx`select axiom.protocol_card(${p.code})`;
+    ok(revoked === null, 'and a withdrawn card stops resolving for the code already in the field');
+  });
+}
+
+console.log('Gate S17: who may write a card, and through which door');
+{
+  const [v] = await sql`select id::text from public.product_variants where sku = 'reta10'`;
+  const [noAck] = await sql`select id::text, name from public.accounts where not axiom.account_has_ack(id) limit 1`;
+  await rollback(async tx => {
+    await become(tx, OWNER);
+    // The gate that decides whether a peptide has a price decides whether it has a card.
+    await expectError(tx, sp => sp`select axiom.issue_protocol(${noAck.id}::uuid)`,
+      `an account without a current acknowledgement gets no card (${noAck.name})`, /acknowledgement/i);
+
+    const [{ issue_protocol: pid }] = await tx`select axiom.issue_protocol(${REGENERA}::uuid, 'Gate S17')`;
+    // Every write goes through a function, so protocol_events cannot be sidestepped by a direct
+    // UPDATE — not by ops, not by the owner. There is no write policy on any of the three tables.
+    await expectError(tx, sp => sp`insert into public.protocols (account_id, subject_label) values (${REGENERA}::uuid, 'forged')`,
+      'owner: a direct insert into protocols is refused', /permission denied/i);
+    // Not merely invisible: the default privileges in auth_stub.sql (and in Supabase itself) hand
+    // `authenticated` INSERT/UPDATE/DELETE on any table created later, and row-level security would
+    // then turn a forged write into a silent zero-row no-op. 0008 revokes them, so it is refused.
+    await expectError(tx, sp => sp`update public.protocols set subject_label = 'forged' where id = ${pid}::uuid`,
+      'owner: a direct update of protocols is refused, not silently dropped', /permission denied/i);
+    await expectError(tx, sp => sp`delete from public.protocol_items`,
+      'owner: a direct delete of protocol lines is refused', /permission denied/i);
+    await expectError(tx, sp => sp`insert into public.protocol_events (protocol_id, actor_label, kind) values (${pid}::uuid, 'someone else', 'issued')`,
+      'owner: an event cannot be forged', /permission denied/i);
+
+    // A lot id rides in from a form field exactly as a site id did before 0007, and inside a
+    // definer function no policy would catch one belonging to a different compound.
+    await expectError(tx, sp => sp`select axiom.add_protocol_item(${pid}::uuid, ${v.id}::uuid, gen_random_uuid())`,
+      'a line cannot name a lot of another compound', /not a lot of this compound/i);
+    // byday goes into an RRULE, which is not a quoted value and cannot be escaped on the way out.
+    await expectError(tx, sp => sp`select axiom.add_protocol_item(${pid}::uuid, ${v.id}::uuid, null, '', null, null,
+      'weekly'::public.recur_freq, 1, array[E'MO\r\nDTSTART:19700101'])`,
+      'nor write a line of its own into the calendar feed', /byday/i);
+
+    await become(tx, OPS);
+    await expectError(tx, sp => sp`select axiom.protocol_writable(${pid}::uuid)`,
+      'ops: the internal authority helper is not reachable', /permission denied/i);
+    // It returns the client's email address, so no browser session may call it at all — the
+    // magic-link action reads it server-side under asService.
+    await expectError(tx, sp => sp`select * from axiom.protocol_contact('anything')`,
+      'ops: the card’s contact address is not reachable from a session', /permission denied/i);
+
+    await become(tx, IVAN);
+    // Counted against this card, not against the table: the fixtures seed Ivan a card of his own,
+    // and an assertion on a total would pass or fail on how many cards happen to be seeded.
+    const seen = await tx`select count(*)::int n from public.protocols where id = ${pid}::uuid`;
+    ok(seen[0].n === 0, "another account's client does not see this card");
+    const mine = await tx`select count(*)::int n from public.protocols`;
+    ok(mine[0].n > 0, `while still reading its own (${mine[0].n})`);
+    await expectError(tx, sp => sp`select axiom.add_protocol_item(${pid}::uuid, ${v.id}::uuid)`,
+      'and cannot append a compound to it', /belongs to another account/i);
+    await expectError(tx, sp => sp`select axiom.revoke_protocol(${pid}::uuid)`,
+      'and cannot withdraw it', /only AXIOM/i);
+
+    // The account's own members do append — that is the point of the card.
+    await become(tx, REGENERA_DIRECTOR);
+    const owned = await tx`select count(*)::int n from public.protocols where id = ${pid}::uuid`;
+    ok(owned[0].n === 1, 'the owning account reads this card');
+    const [{ add_protocol_item: item }] = await tx`select axiom.add_protocol_item(${pid}::uuid, ${v.id}::uuid, null, 'own')`;
+    ok(item !== null, 'and appends a compound to it');
+    await expectError(tx, sp => sp`select axiom.revoke_protocol(${pid}::uuid)`,
+      'but withdrawing the card stays AXIOM’s', /only AXIOM/i);
+
+    const ev = await tx`select kind from public.protocol_events where protocol_id = ${pid}::uuid order by id`;
+    ok(ev.map(e => e.kind).join(',') === 'issued,item_added', `every write left its own event (${ev.map(e => e.kind).join(' → ')})`);
+  });
+}
+
+console.log('Gate S18: a calendar subscriber is told when the card changed');
+{
+  const [v] = await sql`select id::text from public.product_variants where sku = 'reta10'`;
+  await rollback(async tx => {
+    await become(tx, OWNER);
+    const [{ issue_protocol: pid }] = await tx`select axiom.issue_protocol(${REGENERA}::uuid, 'Gate S18')`;
+    const [{ add_protocol_item: item }] = await tx`select axiom.add_protocol_item(${pid}::uuid, ${v.id}::uuid)`;
+    const before = await tx`select ics_seq from public.protocols where id = ${pid}::uuid`;
+    // A subscribed calendar that already holds an event ignores a replacement carrying the same
+    // SEQUENCE, and a feed whose ETag has not moved is not re-fetched at all. Both counters are
+    // bumped by trigger rather than by each writer, so a direct staff UPDATE cannot forget.
+    await tx`select axiom.update_protocol_item(${item}::uuid, null, 'edited')`;
+    const after = await tx`select ics_seq from public.protocols where id = ${pid}::uuid`;
+    const [it] = await tx`select seq from public.protocol_items where id = ${item}::uuid`;
+    ok(after[0].ics_seq > before[0].ics_seq, `editing a line moves the feed's ETag (${before[0].ics_seq} → ${after[0].ics_seq})`);
+    ok(it.seq === 1, `and the line's own VEVENT SEQUENCE (0 → ${it.seq})`);
+    await tx`select axiom.end_protocol_item(${item}::uuid)`;
+    const gone = await tx`select ics_seq from public.protocols where id = ${pid}::uuid`;
+    ok(gone[0].ics_seq > after[0].ics_seq, 'and so does ending one');
+    // A subscribed calendar keeps an event it simply stops being told about. Ending a compound
+    // therefore keeps the line in the payload, flagged, so the feed can carry STATUS:CANCELLED —
+    // deleting the row would leave the client being reminded of it for good.
+    const [p] = await tx`select code from public.protocols where id = ${pid}::uuid`;
+    await become(tx, null);
+    const [{ protocol_card: card }] = await tx`select axiom.protocol_card(${p.code})`;
+    ok(card.items.length === 1 && card.items[0].active === false && card.items[0].ended_at !== null,
+      'an ended compound stays in the feed, flagged, so the calendar can be told to drop it');
+  });
+}
+
 await sql.end();
 console.log(`\n${passes} passed, ${failures} failed`);
 process.exit(failures ? 1 : 0);

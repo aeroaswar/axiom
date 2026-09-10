@@ -37,6 +37,9 @@ export async function attempt<T = void>(
 
 export const str = (form: FormData, key: string) => String(form.get(key) ?? '').trim();
 export const bool = (form: FormData, key: string) => form.get(key) != null;
+/** A repeated field — a set of checkboxes, such as the weekdays a schedule lands on. `str()` reads
+ *  only the first, which silently drops every day but one. */
+export const list = (form: FormData, key: string) => form.getAll(key).map(String).filter(Boolean);
 export const int = (form: FormData, key: string, fallback = 0) => {
   const n = Number(String(form.get(key) ?? '').replace(/[^\d-]/g, ''));
   return Number.isFinite(n) ? n : fallback;

@@ -9,8 +9,10 @@ import { idr } from '@/lib/money';
  */
 export type DocLine = { ix?: string; title: string; sub?: string; qty?: number; unit?: number | bigint | null; total?: number | bigint | null; is_peptide?: boolean; group?: boolean };
 export type DocKV = { k: string; v: string };
+/** One compound on a protocol card: a heading and its own key/value rows, not a priced line. */
+export type DocBlock = { title: string; sub?: string; rows: DocKV[]; note?: string; muted?: boolean };
 export type DocumentData = {
-  kind: 'invoice' | 'credit_note' | 'quote' | 'price_list';
+  kind: 'invoice' | 'credit_note' | 'quote' | 'price_list' | 'protocol_card';
   title: string;                      // 'Invoice' · 'Quotation' · 'Price list'
   number: string;
   meta: DocKV[];                      // issued, due, reference…
@@ -19,6 +21,11 @@ export type DocumentData = {
   parties: { billedTo: { name: string; lines: string }; issuedBy: { name: string; lines: string }; details: DocKV[] };
   headings: { ix: string; item: string; qty: string; unit: string; amount: string };
   lines: DocLine[];
+  /** The protocol card's body. A card carries no money, so it has blocks instead of priced lines. */
+  blocks?: DocBlock[];
+  /** The card's QR, as the module matrix rather than markup: the template draws it, so the one
+   *  document renderer still emits every element it prints and nothing is injected as raw HTML. */
+  qr?: { modules: boolean[][]; caption: string } | null;
   totals: DocKV[];
   grand?: DocKV | null;
   payment?: { label: string; lines: string[] } | null;
@@ -52,7 +59,28 @@ export function AxiomDocument({ d }: { d: DocumentData }) {
           <div><span className="lab">{d.columns.b}</span><div className="nm">{d.parties.issuedBy.name}</div><div className="sm">{d.parties.issuedBy.lines}</div></div>
           <div><span className="lab">{d.columns.c}</span>{d.parties.details.map(x => <div className="d-kv" key={x.k}><span>{x.k}</span><span>{x.v}</span></div>)}</div>
         </div>
-        <table className="d-tbl">
+        {d.kind === 'protocol_card' ? (
+          <div className="d-blocks">
+            {(d.blocks ?? []).map((b, i) => (
+              <div className={`d-block${b.muted ? ' muted' : ''}`} key={i}>
+                <div className="d-block-h"><b>{b.title}</b>{b.sub ? <span>{b.sub}</span> : null}</div>
+                {b.note ? <p className="d-block-n">{b.note}</p> : null}
+                {b.rows.map(r => <div className="d-kv" key={r.k}><span>{r.k}</span><span>{r.v}</span></div>)}
+              </div>
+            ))}
+            {d.qr ? (
+              <div className="d-qr">
+                <svg viewBox={`0 0 ${d.qr.modules.length + 8} ${d.qr.modules.length + 8}`} shapeRendering="crispEdges" role="img" aria-label={d.qr.caption}>
+                  <rect className="d-qr-bg" width="100%" height="100%" />
+                  {d.qr.modules.flatMap((row, y) => row.map((on, x) => on
+                    ? <rect key={`${x}-${y}`} x={x + 4} y={y + 4} width={1} height={1} /> : null))}
+                </svg>
+                <span>{d.qr.caption}</span>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        <table className="d-tbl" hidden={d.kind === 'protocol_card'}>
           <thead><tr><th className="ix">{d.headings.ix}</th><th>{d.headings.item}</th><th className="n">{d.headings.qty}</th><th className="n">{d.headings.unit}</th><th className="n">{d.headings.amount}</th></tr></thead>
           <tbody>
             {d.lines.map((l, i) => l.group ? (

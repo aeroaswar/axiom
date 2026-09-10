@@ -37,6 +37,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Database — migrate and seed (identical migrations to Supabase)
         run: pnpm db:reset
+      - name: Unit gates — the calendar feed
+        run: pnpm test
       - name: Static gates — typecheck, copy lint (9), greps (1, 13), bilingual (17)
         run: pnpm typecheck && pnpm gates:lint && pnpm gates:grep && node scripts/gates/i18n.mjs
       - name: Database gates — 2, 2b, 3, 4, 5, 6, 11, 12, 14, 22, RLS on every table

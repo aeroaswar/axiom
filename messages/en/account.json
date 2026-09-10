@@ -335,7 +335,22 @@
       "removed": "Removed.",
       "empty": "There is nothing to ask for yet.",
       "ack_both": "Both statements are needed before the acknowledgement can be recorded.",
-      "site_name": "An address needs a name."
+      "site_name": "An address needs a name.",
+      "protocol_added": "Compound added to the card.",
+      "protocol_ended": "Compound ended."
+    },
+    "protocols": {
+      "title": "Protocol cards",
+      "kicker": "{count} cards",
+      "empty": "No protocol card for this account yet.",
+      "note": "Cards are issued by AXIOM. You can add a compound that has already been sent to you.",
+      "items_n": "{n} compounds",
+      "add": {
+        "title": "Add a compound",
+        "submit": "Add to the card",
+        "nothing_ordered": "No peptide has been ordered on this account yet.",
+        "note": "The choice is limited to compounds already sent to this account."
+      }
     }
   }
 }

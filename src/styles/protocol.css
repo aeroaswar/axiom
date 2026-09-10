@@ -1,0 +1,62 @@
+/* ==================================================================
+   The protocol card — the one screen a client opens from a vial box.
+   Read on a phone, in a treatment room, often one-handed: one column
+   at every width, generous tap targets, nothing that needs a hover.
+   ================================================================== */
+.pc{max-width:640px;margin:0 auto;padding:0 20px}
+.pc-empty{padding-block:96px;text-align:center}
+.pc-empty h1{font-family:var(--display);font-weight:300;font-size:24px;margin:0 0 10px}
+.pc-empty p{color:var(--muted);margin:0}
+
+.pc-head{padding-block:36px 24px;border-bottom:1px solid var(--line)}
+.pc-wm{width:112px;height:auto;fill:var(--ink);opacity:.9;display:block}
+.pc-title{margin:22px 0 4px;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
+.pc-subject{margin:0;font-family:var(--display);font-weight:300;font-size:clamp(26px,7vw,36px);line-height:1.1}
+.pc-sub{margin:8px 0 0;color:var(--muted)}
+.pc-meta{margin-top:20px}
+
+.pc-sec{padding-block:28px;border-bottom:1px solid var(--line)}
+.pc-sec>h2{margin:0 0 16px;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);font-weight:400}
+
+.pc-kv{margin:0;display:grid;gap:8px}
+.pc-kv>div{display:flex;gap:14px;align-items:baseline;justify-content:space-between}
+.pc-kv dt{color:var(--muted);font-size:12px;flex:0 0 auto}
+.pc-kv dd{margin:0;text-align:right;font-size:14px}
+
+.pc-item{padding:18px;margin-bottom:14px;background:var(--glass-2);border:1px solid var(--glass-line);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur)}
+.pc-item>header{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:12px}
+.pc-item h3{margin:0;font-family:var(--display);font-weight:400;font-size:19px;flex:1 1 auto}
+.pc-sku{color:var(--muted-2);font-size:12px}
+.pc-brief{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.55}
+.pc-tag{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--warn);
+  border:1px solid var(--line-2);padding:2px 8px}
+/* An ended compound stays on the card: it is part of the record, and its cancellation is what
+   takes it off the client's calendar. It is dimmed, not hidden. */
+.pc-item.is-ended{opacity:.58}
+
+.pc-coa{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.pc-coa h4{margin:0 0 10px;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted-2);font-weight:400}
+.pc-none{margin:0;color:var(--muted-2);font-size:13px}
+.pc-note{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.6}
+.pc-ok{margin:0 0 14px;color:var(--ok);font-size:13px}
+
+.pc-link{display:inline-block;margin-top:12px;color:var(--accent);font-size:13px;text-decoration:none;
+  border-bottom:1px solid var(--accent-line);padding-bottom:2px}
+.pc-link:hover{color:var(--accent-bright)}
+.pc-actions{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 14px}
+.pc-btn{display:inline-block;padding:13px 20px;background:var(--accent-soft);color:var(--accent-bright);
+  border:1px solid var(--accent-line);font-size:13px;letter-spacing:.06em;text-decoration:none;cursor:pointer;
+  font-family:inherit}
+.pc-btn:hover{background:var(--glass-accent)}
+.pc-btn[disabled]{opacity:.5;cursor:default}
+.pc-btn-quiet{background:transparent;color:var(--ink);border-color:var(--line-2)}
+
+/* The square must be dark-on-light whatever the page around it is doing: a scanner reads contrast,
+   not a theme. It carries its own paper rather than inheriting the card's ink. */
+.pc-qr{display:flex;justify-content:center}
+.pc-qr-svg{width:196px;height:196px;background:var(--paper);padding:0}
+.pc-qr-svg path{fill:var(--paper-ink)}
+
+.pc-foot{padding-block:24px 56px;color:var(--muted-2);font-size:12px;line-height:1.65}
+.pc-foot p{margin:0}

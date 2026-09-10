@@ -622,6 +622,107 @@
         "t1": "{ref}",
         "t2": "{account}"
       }
+    },
+    "protocols": {
+      "title": "Protocol cards",
+      "new": "Issue a card",
+      "empty": "No protocol card yet.",
+      "no_title": "Untitled",
+      "note": "One card per client. The QR points at the card rather than carrying it, so a compound can be added without reprinting anything.",
+      "items_n": "{n} compounds",
+      "revoke": "Withdraw the card",
+      "revoked": "Card withdrawn.",
+      "state": {
+        "draft": "Draft",
+        "issued": "Issued",
+        "revoked": "Withdrawn"
+      },
+      "chips": {
+        "all": "All",
+        "issued": "Issued",
+        "revoked": "Withdrawn",
+        "empty": "No compound"
+      },
+      "cols": {
+        "account": "Account",
+        "card": "Card",
+        "study": "Study",
+        "compounds": "Compounds",
+        "issued": "Issued",
+        "state": "State"
+      },
+      "new_form": {
+        "title": "Issue a protocol card",
+        "note": "A card is issued to an account and records the schedule AXIOM has set out for it.",
+        "none_eligible": "No account holds a current qualified-researcher acknowledgement.",
+        "account": "Account",
+        "choose": "Choose an account",
+        "account_hint": "Only accounts with a current acknowledgement.",
+        "study": "Study",
+        "subject": "Name on the card",
+        "subject_hint": "Leave blank to use the account name. It is frozen when the card is issued.",
+        "locale": "Card language",
+        "locale_id": "Indonesian",
+        "locale_en": "English",
+        "locale_hint": "The card reads in this language, not in the preference of whatever phone scans it.",
+        "starts_on": "Starts",
+        "submit": "Issue"
+      },
+      "sheet": {
+        "account": "Account",
+        "study": "Study",
+        "state": "State",
+        "locale": "Language",
+        "compounds": "Compounds on the card",
+        "no_items": "No compound on this card yet.",
+        "add": "Add a compound",
+        "history": "History",
+        "qr": "QR code",
+        "qr_note": "Print this on the packaging. It does not change when the card does.",
+        "open_card": "Open the card",
+        "qr_svg": "Download the QR",
+        "print": "Print the card",
+        "ics": "Download the calendar",
+        "subscribe_url": "Calendar subscription link"
+      },
+      "item": {
+        "compound": "Compound",
+        "choose": "Choose a compound",
+        "brief": "Brief",
+        "amount": "Amount",
+        "route": "Route",
+        "freq": "Repeats",
+        "freq_once": "Once",
+        "freq_daily": "Daily",
+        "freq_weekly": "Weekly",
+        "freq_monthly": "Monthly",
+        "every_n": "Every",
+        "byday": "Days",
+        "byday_hint": "For a weekly repeat. Leave empty to follow the start day.",
+        "at_time": "At",
+        "reminder": "Reminder (minutes)",
+        "starts_on": "Starts",
+        "ends_on": "Until",
+        "occurrences": "Number of occurrences",
+        "occurrences_hint": "Ignored when an end date is set.",
+        "lot": "Lot",
+        "no_lot": "No lot",
+        "add": "Add",
+        "save": "Save",
+        "added": "Compound added.",
+        "saved": "Line saved.",
+        "end": "End",
+        "ended": "Ended",
+        "ended_note": "This line has ended and stays on the record. A subscribed calendar receives its cancellation.",
+        "ended_msg": "Compound ended."
+      },
+      "events": {
+        "issued": "Card issued",
+        "item_added": "Compound added",
+        "item_changed": "Line changed",
+        "item_ended": "Compound ended",
+        "revoked": "Card withdrawn"
+      }
     }
   }
 }
