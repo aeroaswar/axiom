@@ -243,7 +243,7 @@ en: {
   coa_tag:'Certificate of Analysis · specimen', coa_title:'Retatrutide · 10 mg', coa_lot:'Lot code', coa_lot_v:'As on the vial label', coa_method:'Method', coa_purity:'Purity', coa_mass:'Observed mass', coa_mass_v:'Measured, not copied', coa_issued:'Issued', coa_issued_v:'Date of the lot\'s analysis', coa_ruo:'Research Use Only', coa_ex:'Specimen layout', coa_stamp:'Research<br>use only',
   arr_h2:'What arrives.', arr_p:'Included with every cold-chain consignment.',
   o1:'Box', o1s:'Sealed · lot label', o2:'Case', o2s:'Pen · needles · BAC water', o3:'Pen', o3s:'Disposable · included', o4:'Mailer', o4s:'2 to 8 °C · temperature log', o5:'Tote', o5s:'Carries the mailer',
-  pw_h2:'Nine research pathways.', pw_p:'79 lots, one price each, the same for every account. Open a pathway to see its lots and prices.', pw_all:'Full price list', pw_pdf:'Price list PDF', lots:'{n} lots', pw_photo_t:'79 lots, one list', pw_photo_s:'Prices in rupiah, V1.0',
+  pw_h2:'Nine research pathways.', pw_p:'79 lots, one price each, the same for every account. Open a pathway to see its lots and prices.', pw_all:'Full price list', pw_pdf:'Price list PDF', lots:'{n} lots', pw_all_u:'lots', pw_all_t:'The full list', pw_all_s:'Rupiah · V1.0',
   pr_h2:'From request to bench.',
   s1_t:'Request', s1_p:'Pick lots, send the request on WhatsApp.', s2_t:'Quote', s2_p:'A written quote within one working day, prices frozen for 7 days.', s3_t:'Verify and pay', s3_p:'The lot\'s certificate is shared on request. Bank transfer in rupiah, before dispatch.', s4_t:'Cold dispatch', s4_p:'Packed at 2 to 8 °C with a temperature log, tracked to your door.',
   d_k:'Delivery', d_v:'Jabodetabek 2 · Java 3 · outside Java 4 working days', d_p:'Rp 100.000 per three units per destination, capped at Rp 300.000. Shown on the quote before you commit.',
@@ -281,7 +281,7 @@ id: {
   coa_tag:'Certificate of Analysis · contoh', coa_title:'Retatrutide · 10 mg', coa_lot:'Kode lot', coa_lot_v:'Sesuai label vial', coa_method:'Metode', coa_purity:'Kemurnian', coa_mass:'Massa teramati', coa_mass_v:'Diukur, bukan disalin', coa_issued:'Diterbitkan', coa_issued_v:'Tanggal analisis lot', coa_ruo:'Hanya untuk riset', coa_ex:'Contoh tata letak', coa_stamp:'Research<br>use only',
   arr_h2:'Yang tiba.', arr_p:'Termasuk pada setiap kiriman rantai dingin.',
   o1:'Kotak', o1s:'Tersegel · label lot', o2:'Case', o2s:'Pen · jarum · BAC water', o3:'Pen', o3s:'Sekali pakai · termasuk', o4:'Mailer', o4s:'2 sampai 8 °C · catatan suhu', o5:'Tote', o5s:'Membawa mailer',
-  pw_h2:'Sembilan jalur riset.', pw_p:'79 lot, satu harga per lot, sama untuk setiap akun. Buka satu jalur untuk melihat lot dan harganya.', pw_all:'Daftar harga lengkap', pw_pdf:'PDF daftar harga', lots:'{n} lot', pw_photo_t:'79 lot, satu daftar', pw_photo_s:'Harga dalam rupiah, V1.0',
+  pw_h2:'Sembilan jalur riset.', pw_p:'79 lot, satu harga per lot, sama untuk setiap akun. Buka satu jalur untuk melihat lot dan harganya.', pw_all:'Daftar harga lengkap', pw_pdf:'PDF daftar harga', lots:'{n} lot', pw_all_u:'lot', pw_all_t:'Daftar lengkap', pw_all_s:'Rupiah · V1.0',
   pr_h2:'Dari permintaan ke meja riset.',
   s1_t:'Permintaan', s1_p:'Pilih lot, kirim permintaan lewat WhatsApp.', s2_t:'Penawaran', s2_p:'Penawaran tertulis dalam satu hari kerja, harga dibekukan 7 hari.', s3_t:'Verifikasi dan bayar', s3_p:'Sertifikat lot dibagikan atas permintaan. Transfer bank dalam rupiah, sebelum pengiriman.', s4_t:'Kirim dingin', s4_p:'Dikemas pada 2 sampai 8 °C dengan catatan suhu, dilacak sampai tujuan.',
   d_k:'Pengiriman', d_v:'Jabodetabek 2 · Jawa 3 · luar Jawa 4 hari kerja', d_p:'Rp 100.000 per tiga unit per tujuan, maksimal Rp 300.000. Ditampilkan pada penawaran sebelum Anda berkomitmen.',
@@ -314,7 +314,7 @@ id: {
 function renderTiles() {
   const el = $('#tiles'); if (!el) return;
   const counts = PW.map((_, i) => LOTS.filter(l => l.pw === i).length);
-  el.innerHTML = `<a class="tile photo" href="price-list.html"><img src="assets/img/bench.jpg" alt="" loading="lazy"><div class="in"><h3>${t('pw_photo_t')}</h3><div class="ct"><span>${t('pw_photo_s')}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></div></a>`
+  el.innerHTML = `<a class="tile all" href="price-list.html"><div><span class="fig">${LOTS.length}<small>${t('pw_all_u')}</small></span><h3>${t('pw_all_t')}</h3></div><div class="ct"><span>${t('pw_all_s')}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`
     + PW.map((p, i) => `<a class="tile" href="price-list.html#pw-${p.slug}"><div><span class="no">${p.no}</span><h3>${pick(p.en, p.id)}</h3></div><div class="ct"><span>${t('lots').replace('{n}', counts[i])}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`).join('');
 }
 /* ---- cold-chain trace: -20 °C in store, then the 2 to 8 °C transit corridor */

@@ -226,10 +226,12 @@ h1 em,h2 em{font-style:normal;color:var(--accent)}
 .tile .ct{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
 .tile .ct .ar{color:var(--accent);transition:transform .24s}
 .tile:hover .ct .ar{transform:translateX(4px)}
-.tile.photo{background:var(--onyx);color:var(--onyx-ink);padding:0;overflow:hidden}
-.tile.photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:.85}
-.tile.photo .in{position:relative;padding:26px 24px 24px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg,rgba(11,9,8,0) 30%,rgba(11,9,8,.85));gap:10px}
-.tile.photo h3{font-size:21px}.tile.photo .ct{color:var(--onyx-muted)}
+.tile.all{background:var(--onyx);color:var(--onyx-ink);border-right-color:var(--onyx);border-bottom-color:var(--onyx)}
+.tile.all .fig{font-family:var(--display);font-weight:400;font-size:clamp(36px,3.6vw,50px);line-height:1;letter-spacing:-.02em;color:var(--accent-bright);font-variant-numeric:tabular-nums;display:block}
+.tile.all .fig small{font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-left:9px;color:var(--onyx-muted)}
+.tile.all h3{color:var(--onyx-ink);font-size:20px;margin-top:12px}
+.tile.all .ct{color:var(--onyx-muted)}
+.tile.all:hover{background:#12100E}
 @media(max-width:1100px){.tiles{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.tiles{grid-template-columns:1fr}.tile{min-height:0}}
 
