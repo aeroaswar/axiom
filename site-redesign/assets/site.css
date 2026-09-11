@@ -278,27 +278,6 @@ h1 em,h2 em{font-style:normal;color:var(--accent)}
 .live{display:flex;gap:10px;align-items:center;margin-top:12px;font-variant-numeric:tabular-nums;font-size:13.5px;color:var(--ink);font-weight:500}
 .live .dot{width:7px;height:7px;background:var(--ok);flex:none;animation:pulse 2.2s ease-out infinite}
 .live.closed .dot{background:var(--muted-2);animation:none}
-/* ---------- cold chain: the temperature trace, not a photo ---------- */
-.chain-in{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:56px;align-items:center}
-.chain-txt .kicker{display:block;margin-bottom:16px}
-.chain-txt h2{font-size:clamp(28px,3.4vw,44px)}
-.chain-txt p{color:var(--bd-muted);font-size:15.5px;line-height:1.75;margin-top:16px;max-width:44ch}
-.chain-fig{min-width:0}
-.chain-fig figcaption{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:14px;
-  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--bd-muted)}
-.trace{width:100%;height:auto;display:block}
-.trace .corr{fill:var(--inv-accent-soft)}
-.trace .corrline{stroke:var(--bd-accent);opacity:.55;stroke-width:1;stroke-dasharray:3 4}
-.trace .grid{stroke:var(--bd-line);stroke-width:1}
-.trace .split{stroke:var(--bd-line);stroke-width:1;stroke-dasharray:2 5}
-.trace .ln{fill:none;stroke:var(--bd-accent);stroke-width:2.6;stroke-dasharray:1200;stroke-dashoffset:0;stroke-linejoin:round;stroke-linecap:round}
-.trace .dot{fill:var(--bd-accent)}
-.trace .ax{fill:var(--bd-muted);font-size:13px;text-anchor:end;font-variant-numeric:tabular-nums}
-.trace .st{fill:var(--bd-muted);font-size:12.5px;letter-spacing:.08em;font-weight:500}
-.trace .st.end{text-anchor:end}
-@media(max-width:900px){.chain-in{grid-template-columns:1fr;gap:36px;padding-top:56px;padding-bottom:56px}}
-@media(max-width:560px){.trace .ax{font-size:16px}.trace .st{font-size:15px}}
-
 /* ---------- FAQ ---------- */
 .qa{border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:0 60px;align-items:start}
 @media(max-width:820px){.qa{grid-template-columns:1fr;gap:0}}
@@ -444,10 +423,6 @@ body.has-bar .site-foot{padding-bottom:110px}
 .band.inv .btn{border-color:var(--inv-line);color:var(--inv-ink)}
 .band.inv .btn:hover{background:var(--inv-accent);color:var(--inv-bg);border-color:var(--inv-accent)}
 
-/* the trace draws itself once, the way a logger writes it */
-.js .chain-fig:not(.in) .trace .ln{stroke-dashoffset:1200}
-.chain-fig.in .trace .ln{stroke-dashoffset:0;transition:stroke-dashoffset 2.2s var(--ease) .15s}
-
 /* ---------- reveal (from a visible resting state) ---------- */
 .reveal{transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .js .reveal:not(.in){opacity:.42;transform:translateY(14px)}
@@ -460,7 +435,6 @@ body.has-bar .site-foot{padding-bottom:110px}
   html{scroll-behavior:auto}
   .js .reveal:not(.in),.js .stagger:not(.in)>*{opacity:1;transform:none}
   .coa,.ticker .track,.live .dot,.hero h1 .w,.hero .lead,.hero .row,.hero .img img{animation:none!important}
-  .js .chain-fig:not(.in) .trace .ln,.chain-fig .trace .ln{stroke-dashoffset:0!important}
   *,*::before,*::after{transition-duration:.001ms!important;animation-duration:.001ms!important}
 }
 @media print{

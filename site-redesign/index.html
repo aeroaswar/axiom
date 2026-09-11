@@ -150,21 +150,8 @@
   </div>
 </section>
 
-<section class="band inv chain" id="coldchain">
-  <div class="wrap chain-in">
-    <div class="chain-txt">
-      <span class="kicker" data-t="cc_k">Cold chain from Jakarta</span>
-      <h2 data-t="cc_h2">Held at -20 °C. Moved at 2 to 8 °C.</h2>
-      <p data-t="cc_p">Lots stay frozen until the day they leave. Inside the mailer they run in the 2 to 8 °C corridor, and the logger that records it travels in the box.</p>
-    </div>
-    <figure class="chain-fig reveal">
-      <div id="ccTrace"></div>
-      <figcaption><span data-t="cc_spec">Specimen trace</span><span data-t="cc_corridor">Shaded band: 2 to 8 °C</span></figcaption>
-    </figure>
-  </div>
-</section>
 
-<section class="band short" id="faq">
+<section class="band alt short" id="faq">
   <div class="wrap">
     <div class="head reveal"><h2 data-t="faq_h2">Questions.</h2></div>
     <div class="qa" id="qa"></div>
@@ -254,10 +241,6 @@ en: {
   d_k:'Delivery', d_v:'Jabodetabek 2 · Java 3 · outside Java 4 working days', d_p:'Rp 100.000 per three units per destination, capped at Rp 300.000. Shown on the quote before you commit.',
   c_k:'Same-day cut-off', c_v:'Cold 15.00 · Ambient 17.00 WIB',
   p_k:'Payment', p_v:'Bank transfer, rupiah', p_p:'To the account named on the invoice. Dispatch follows the recorded payment, never precedes it.',
-  cc_k:'Cold chain from Jakarta', cc_h2:'Held at -20 °C. Moved at 2 to 8 °C.',
-  cc_p:'Lots stay frozen until the day they leave. Inside the mailer they run in the 2 to 8 °C corridor, and the logger that records it travels in the box.',
-  cc_cold:'Cold room', cc_packed:'Packed', cc_deliv:'Delivered', cc_spec:'Specimen trace', cc_corridor:'Shaded band: 2 to 8 °C',
-  cc_alt:'Temperature trace: a flat line at -20 °C in the cold room, rising once packed into the shaded 2 to 8 °C corridor and staying inside it until delivery.',
   faq_h2:'Questions.',
   faq:[
     ['Who can order?','Clinics, laboratories, institutions and qualified researchers, eighteen or older. Each request carries a recorded acknowledgement that the lots are for in-vitro laboratory research only.'],
@@ -292,10 +275,6 @@ id: {
   d_k:'Pengiriman', d_v:'Jabodetabek 2 · Jawa 3 · luar Jawa 4 hari kerja', d_p:'Rp 100.000 per tiga unit per tujuan, maksimal Rp 300.000. Ditampilkan pada penawaran sebelum Anda berkomitmen.',
   c_k:'Batas pesanan hari yang sama', c_v:'Dingin 15.00 · Ambien 17.00 WIB',
   p_k:'Pembayaran', p_v:'Transfer bank, rupiah', p_p:'Ke rekening yang tertera pada invoice. Pengiriman mengikuti pembayaran yang tercatat, tidak pernah mendahuluinya.',
-  cc_k:'Rantai dingin dari Jakarta', cc_h2:'Disimpan pada -20 °C. Dikirim pada 2 sampai 8 °C.',
-  cc_p:'Lot tetap beku sampai hari pengirimannya. Di dalam mailer suhunya berjalan pada koridor 2 sampai 8 °C, dan alat pencatat suhu ikut di dalam kotak.',
-  cc_cold:'Ruang dingin', cc_packed:'Dikemas', cc_deliv:'Tiba', cc_spec:'Contoh rekaman', cc_corridor:'Pita berarsir: 2 sampai 8 °C',
-  cc_alt:'Rekaman suhu: garis datar pada -20 °C di ruang dingin, naik setelah dikemas ke koridor berarsir 2 sampai 8 °C dan bertahan di dalamnya sampai tiba.',
   faq_h2:'Pertanyaan.',
   faq:[
     ['Siapa yang bisa memesan?','Klinik, laboratorium, institusi, dan peneliti berkualifikasi berusia 18 tahun ke atas. Setiap permintaan membawa pernyataan tercatat bahwa lot hanya untuk riset laboratorium in-vitro.'],
@@ -321,30 +300,6 @@ function renderTiles() {
   const counts = PW.map((_, i) => LOTS.filter(l => l.pw === i).length);
   el.innerHTML = PW.map((p, i) => `<a class="tile" href="price-list.html#pw-${p.slug}"><div><span class="no">${p.no}</span><h3>${pick(p.en, p.id)}</h3></div><div class="ct"><span>${t('lots').replace('{n}', counts[i])}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`).join('')
     + `<a class="tile all" href="price-list.html"><div><span class="fig">${LOTS.length}<small>${t('pw_all_u')}</small></span><h3>${t('pw_all_t')}</h3></div><div class="ct"><span>${t('pw_all_s')}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`;
-}
-/* ---- cold-chain trace: -20 °C in store, then the 2 to 8 °C transit corridor */
-function renderChain() {
-  const el = $('#ccTrace'); if (!el) return;
-  const y = c => (340 - (c + 25) * (290 / 37)).toFixed(1);
-  const pts = [[70,-20],[150,-20],[230,-19.7],[310,-20],[330,-20],[352,-14],[368,-4],[382,2.4],[392,5],
-               [440,5.4],[500,4.2],[560,5.9],[620,3.5],[680,5],[740,6.5],[800,4],[860,5.3],[920,4.5],[970,5]]
-              .map(([x, c]) => x + ',' + y(c)).join(' ');
-  el.innerHTML = `<svg viewBox="0 0 1000 420" class="trace" role="img" aria-label="${esc(t('cc_alt'))}">
-    <rect x="70" y="${y(8)}" width="900" height="${(y(2) - y(8)).toFixed(1)}" class="corr"/>
-    <line x1="70" y1="${y(8)}" x2="970" y2="${y(8)}" class="corrline"/>
-    <line x1="70" y1="${y(2)}" x2="970" y2="${y(2)}" class="corrline"/>
-    <line x1="70" y1="${y(-20)}" x2="970" y2="${y(-20)}" class="grid"/>
-    <line x1="330" y1="54" x2="330" y2="356" class="split"/>
-    <polyline points="${pts}" class="ln"/>
-    <circle cx="200" cy="${y(-20)}" r="4.5" class="dot"/>
-    <circle cx="680" cy="${y(5)}" r="4.5" class="dot"/>
-    <text x="62" y="${(+y(8) + 4).toFixed(1)}" class="ax">8 °C</text>
-    <text x="62" y="${(+y(2) + 4).toFixed(1)}" class="ax">2 °C</text>
-    <text x="62" y="${(+y(-20) + 4).toFixed(1)}" class="ax">-20 °C</text>
-    <text x="70" y="384" class="st">${esc(t('cc_cold'))}</text>
-    <text x="344" y="384" class="st">${esc(t('cc_packed'))}</text>
-    <text x="970" y="384" class="st end">${esc(t('cc_deliv'))}</text>
-  </svg>`;
 }
 /* ---- FAQ */
 function renderFaq() {
@@ -388,7 +343,7 @@ form.addEventListener('submit', e => {
 ['f_name', 'f_email'].forEach(id => $('#' + id).addEventListener('input', () => { $('#e_' + id.slice(2)).textContent = ''; }));
 $('#f_ack').addEventListener('change', () => { $('#e_ack').textContent = ''; });
 
-window.onLang = () => { renderTiles(); renderChain(); renderFaq(); renderLines(); wrapHero(); };
+window.onLang = () => { renderTiles(); renderFaq(); renderLines(); wrapHero(); };
 window.onBasket = renderLines;
 applyLang(); countUp();
 </script>
