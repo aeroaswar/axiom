@@ -22,10 +22,10 @@ def data_uri(p):
     return f"data:{mime};base64,{base64.b64encode(open(full, 'rb').read()).decode()}"
 
 FONT_LINK = '<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">'
-FONT_LINK_TEST = ('<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Inter:wght@400;500;600'
-    '&family=Geist:wght@400;500;600;700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600'
-    '&family=Schibsted+Grotesk:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700'
-    '&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">')
+FONT_LINK_TEST = ('<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300..700'
+    '&family=Geist:wght@300..700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Instrument+Sans:wght@400..700'
+    '&family=Inter:wght@300..700&family=Jost:wght@300..700&family=Newsreader:opsz,wght@6..72,300..700'
+    '&family=Schibsted+Grotesk:wght@400..700&display=swap" rel="stylesheet">')
 
 for page, name in (('index.html', 'axiom-home.html'), ('price-list.html', 'axiom-prices.html')):
     s = read(page)
