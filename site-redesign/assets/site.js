@@ -10,7 +10,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 
 /* ---------------- theme */
 const root = document.documentElement;
-let theme = 'light';
+let theme = (window.AXIOM_LEAD === 'dark') ? 'dark' : 'light';
 try { const s = localStorage.getItem('axiom.theme'); if (s === 'dark' || s === 'light') theme = s; } catch {}
 root.dataset.theme = theme;
 const isLight = () => root.dataset.theme !== 'dark';

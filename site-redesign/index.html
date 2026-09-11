@@ -67,7 +67,7 @@
 
 <div class="ticker" aria-hidden="true"><div class="track" id="tickerTrack"></div></div>
 
-<section class="band" id="standard">
+<section class="band tall" id="standard">
   <div class="wrap">
     <div class="std">
       <div>
@@ -98,23 +98,23 @@
   </div>
 </section>
 
-<section class="band" id="arrives">
+<section class="band inv short" id="arrives">
   <div class="wrap">
     <div class="head reveal">
       <h2 data-t="arr_h2">What arrives.</h2>
       <p data-t="arr_p">Included with every cold-chain consignment.</p>
     </div>
-    <div class="strip stagger">
+  </div>
+  <div class="strip stagger">
       <figure class="obj"><img src="assets/img/box.jpg" alt="AXIOM box, sealed and lot-labelled" loading="lazy"><figcaption class="cap"><b data-t="o1">Box</b><span data-t="o1s">Sealed · lot label</span></figcaption></figure>
       <figure class="obj"><img src="assets/img/case.jpg" alt="AXIOM box with the pen case open beside it" loading="lazy"><figcaption class="cap"><b data-t="o2">Case</b><span data-t="o2s">Pen · needles · BAC water</span></figcaption></figure>
       <figure class="obj"><img src="assets/img/pen.jpg" alt="The AXIOM disposable pen" loading="lazy"><figcaption class="cap"><b data-t="o3">Pen</b><span data-t="o3s">Disposable · included</span></figcaption></figure>
       <figure class="obj"><img src="assets/img/mailer.jpg" alt="Insulated AXIOM mailer" loading="lazy"><figcaption class="cap"><b data-t="o4">Mailer</b><span data-t="o4s">2 to 8 °C · temperature log</span></figcaption></figure>
       <figure class="obj"><img src="assets/img/tote.jpg" alt="AXIOM tote bag" loading="lazy"><figcaption class="cap"><b data-t="o5">Tote</b><span data-t="o5s">Carries the mailer</span></figcaption></figure>
     </div>
-  </div>
 </section>
 
-<section class="band" id="pathways">
+<section class="band alt" id="pathways">
   <div class="wrap">
     <div class="head reveal">
       <h2 data-t="pw_h2">Nine research pathways.</h2>
@@ -128,15 +128,20 @@
   </div>
 </section>
 
-<section class="band" id="process">
-  <div class="wrap">
-    <div class="head reveal"><h2 data-t="pr_h2">From request to bench.</h2></div>
+<section class="band tall" id="process">
+  <div class="wrap proc">
+    <div class="proc-head reveal">
+      <span class="kicker" data-t="pr_k">Process</span>
+      <h2 data-t="pr_h2">From request to bench.</h2>
+    </div>
     <div class="steps">
       <div class="step"><div class="no">01</div><h3 data-t="s1_t">Request</h3><p data-t="s1_p">Pick lots, send the request on WhatsApp.</p></div>
       <div class="step"><div class="no">02</div><h3 data-t="s2_t">Quote</h3><p data-t="s2_p">A written quote within one working day, prices frozen for 7 days.</p></div>
       <div class="step"><div class="no">03</div><h3 data-t="s3_t">Verify and pay</h3><p data-t="s3_p">The lot's certificate is shared on request. Bank transfer in rupiah, before dispatch.</p></div>
       <div class="step"><div class="no">04</div><h3 data-t="s4_t">Cold dispatch</h3><p data-t="s4_p">Packed at 2 to 8 °C with a temperature log, tracked to your door.</p></div>
     </div>
+  </div>
+  <div class="wrap">
     <div class="facts stagger">
       <div class="fact"><div class="k" data-t="d_k">Delivery</div><div class="v" data-t="d_v">Jabodetabek 2 · Java 3 · outside Java 4 working days</div><p data-t="d_p">Rp 100.000 per three units per destination, capped at Rp 300.000. Shown on the quote before you commit.</p></div>
       <div class="fact"><div class="k" data-t="c_k">Same-day cut-off</div><div class="v" data-t="c_v">Cold 15.00 · Ambient 17.00 WIB</div><div class="live" id="live"><span class="dot"></span><span id="liveTxt"></span></div></div>
@@ -145,28 +150,28 @@
   </div>
 </section>
 
-<section class="chain" id="coldchain">
+<section class="band inv chain" id="coldchain">
   <div class="wrap chain-in">
     <div class="chain-txt">
       <span class="kicker" data-t="cc_k">Cold chain from Jakarta</span>
       <h2 data-t="cc_h2">Held at -20 °C. Moved at 2 to 8 °C.</h2>
       <p data-t="cc_p">Lots stay frozen until the day they leave. Inside the mailer they run in the 2 to 8 °C corridor, and the logger that records it travels in the box.</p>
     </div>
-    <figure class="chain-fig">
+    <figure class="chain-fig reveal">
       <div id="ccTrace"></div>
       <figcaption><span data-t="cc_spec">Specimen trace</span><span data-t="cc_corridor">Shaded band: 2 to 8 °C</span></figcaption>
     </figure>
   </div>
 </section>
 
-<section class="band" id="faq">
+<section class="band short" id="faq">
   <div class="wrap">
     <div class="head reveal"><h2 data-t="faq_h2">Questions.</h2></div>
     <div class="qa" id="qa"></div>
   </div>
 </section>
 
-<section class="band" id="request">
+<section class="band bronze tall" id="request">
   <div class="wrap">
     <div class="req-grid">
       <div>
@@ -244,7 +249,7 @@ en: {
   arr_h2:'What arrives.', arr_p:'Included with every cold-chain consignment.',
   o1:'Box', o1s:'Sealed · lot label', o2:'Case', o2s:'Pen · needles · BAC water', o3:'Pen', o3s:'Disposable · included', o4:'Mailer', o4s:'2 to 8 °C · temperature log', o5:'Tote', o5s:'Carries the mailer',
   pw_h2:'Nine research pathways.', pw_p:'79 lots, one price each, the same for every account. Open a pathway to see its lots and prices.', pw_all:'Full price list', pw_pdf:'Price list PDF', lots:'{n} lots', pw_all_u:'lots', pw_all_t:'The full list', pw_all_s:'Rupiah · V1.0',
-  pr_h2:'From request to bench.',
+  pr_k:'Process', pr_h2:'From request to bench.',
   s1_t:'Request', s1_p:'Pick lots, send the request on WhatsApp.', s2_t:'Quote', s2_p:'A written quote within one working day, prices frozen for 7 days.', s3_t:'Verify and pay', s3_p:'The lot\'s certificate is shared on request. Bank transfer in rupiah, before dispatch.', s4_t:'Cold dispatch', s4_p:'Packed at 2 to 8 °C with a temperature log, tracked to your door.',
   d_k:'Delivery', d_v:'Jabodetabek 2 · Java 3 · outside Java 4 working days', d_p:'Rp 100.000 per three units per destination, capped at Rp 300.000. Shown on the quote before you commit.',
   c_k:'Same-day cut-off', c_v:'Cold 15.00 · Ambient 17.00 WIB',
@@ -282,7 +287,7 @@ id: {
   arr_h2:'Yang tiba.', arr_p:'Termasuk pada setiap kiriman rantai dingin.',
   o1:'Kotak', o1s:'Tersegel · label lot', o2:'Case', o2s:'Pen · jarum · BAC water', o3:'Pen', o3s:'Sekali pakai · termasuk', o4:'Mailer', o4s:'2 sampai 8 °C · catatan suhu', o5:'Tote', o5s:'Membawa mailer',
   pw_h2:'Sembilan jalur riset.', pw_p:'79 lot, satu harga per lot, sama untuk setiap akun. Buka satu jalur untuk melihat lot dan harganya.', pw_all:'Daftar harga lengkap', pw_pdf:'PDF daftar harga', lots:'{n} lot', pw_all_u:'lot', pw_all_t:'Daftar lengkap', pw_all_s:'Rupiah · V1.0',
-  pr_h2:'Dari permintaan ke meja riset.',
+  pr_k:'Proses', pr_h2:'Dari permintaan ke meja riset.',
   s1_t:'Permintaan', s1_p:'Pilih lot, kirim permintaan lewat WhatsApp.', s2_t:'Penawaran', s2_p:'Penawaran tertulis dalam satu hari kerja, harga dibekukan 7 hari.', s3_t:'Verifikasi dan bayar', s3_p:'Sertifikat lot dibagikan atas permintaan. Transfer bank dalam rupiah, sebelum pengiriman.', s4_t:'Kirim dingin', s4_p:'Dikemas pada 2 sampai 8 °C dengan catatan suhu, dilacak sampai tujuan.',
   d_k:'Pengiriman', d_v:'Jabodetabek 2 · Jawa 3 · luar Jawa 4 hari kerja', d_p:'Rp 100.000 per tiga unit per tujuan, maksimal Rp 300.000. Ditampilkan pada penawaran sebelum Anda berkomitmen.',
   c_k:'Batas pesanan hari yang sama', c_v:'Dingin 15.00 · Ambien 17.00 WIB',
@@ -314,8 +319,8 @@ id: {
 function renderTiles() {
   const el = $('#tiles'); if (!el) return;
   const counts = PW.map((_, i) => LOTS.filter(l => l.pw === i).length);
-  el.innerHTML = `<a class="tile all" href="price-list.html"><div><span class="fig">${LOTS.length}<small>${t('pw_all_u')}</small></span><h3>${t('pw_all_t')}</h3></div><div class="ct"><span>${t('pw_all_s')}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`
-    + PW.map((p, i) => `<a class="tile" href="price-list.html#pw-${p.slug}"><div><span class="no">${p.no}</span><h3>${pick(p.en, p.id)}</h3></div><div class="ct"><span>${t('lots').replace('{n}', counts[i])}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`).join('');
+  el.innerHTML = PW.map((p, i) => `<a class="tile" href="price-list.html#pw-${p.slug}"><div><span class="no">${p.no}</span><h3>${pick(p.en, p.id)}</h3></div><div class="ct"><span>${t('lots').replace('{n}', counts[i])}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`).join('')
+    + `<a class="tile all" href="price-list.html"><div><span class="fig">${LOTS.length}<small>${t('pw_all_u')}</small></span><h3>${t('pw_all_t')}</h3></div><div class="ct"><span>${t('pw_all_s')}</span><svg class="ic ar"><use href="#i-arrow"/></svg></div></a>`;
 }
 /* ---- cold-chain trace: -20 °C in store, then the 2 to 8 °C transit corridor */
 function renderChain() {
