@@ -5,14 +5,14 @@ Inlines assets/site.css, assets/*.js and assets/img/* (as data URIs) into each p
 cross-links so the two published pages point at each other, and strips the document skeleton the
 Artifact tool adds itself. Usage:
 
-  python3 build.py OUT_DIR [--home URL] [--prices URL] [--pdf URL] [--lead light|dark]
+  python3 build.py OUT_DIR [--home URL] [--prices URL] [--pdf URL] [--lead light|dark] [--fonts test]
 """
 import base64, mimetypes, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 out = sys.argv[1]
 opts = dict(zip(sys.argv[2::2], sys.argv[3::2]))
-home_url = opts.get('--home', 'index.html'); prices_url = opts.get('--prices', 'price-list.html'); pdf_url = opts.get('--pdf', 'AXIOM-Price-List.pdf'); lead = opts.get('--lead', 'light')
+home_url = opts.get('--home', 'index.html'); prices_url = opts.get('--prices', 'price-list.html'); pdf_url = opts.get('--pdf', 'AXIOM-Price-List.pdf'); lead = opts.get('--lead', 'light'); fonts = opts.get('--fonts', '')
 os.makedirs(out, exist_ok=True)
 
 def read(p): return open(os.path.join(HERE, p), encoding='utf-8').read()
@@ -21,8 +21,17 @@ def data_uri(p):
     mime = mimetypes.guess_type(full)[0] or 'application/octet-stream'
     return f"data:{mime};base64,{base64.b64encode(open(full, 'rb').read()).decode()}"
 
+FONT_LINK = '<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">'
+FONT_LINK_TEST = ('<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Inter:wght@400;500;600'
+    '&family=Geist:wght@400;500;600;700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600'
+    '&family=Schibsted+Grotesk:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700'
+    '&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">')
+
 for page, name in (('index.html', 'axiom-home.html'), ('price-list.html', 'axiom-prices.html')):
     s = read(page)
+    if fonts == 'test':
+        s = s.replace(FONT_LINK, FONT_LINK_TEST)
+        s = s.replace('</body>', '<script>\n' + read('assets/fonttest.js') + '\n</script>\n</body>')
     if lead == 'dark':
         s = s.replace('<script src="assets/catalogue.js"></script>', '<script>window.AXIOM_LEAD="dark"</script>\n<script src="assets/catalogue.js"></script>')
     s = re.sub(r'<link rel="stylesheet" href="assets/site.css">', lambda m: '<style>\n' + read('assets/site.css') + '\n</style>', s)
