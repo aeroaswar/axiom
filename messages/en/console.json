@@ -483,7 +483,10 @@
         "cutoff_cold": "Cold chain · HH:MM",
         "cutoff_ambient": "Ambient · HH:MM",
         "submit": "Save settings",
-        "saved": "Settings saved. The public site has been revalidated."
+        "saved": "Settings saved. The public site has been revalidated.",
+        "subscribe": "Subscribe & Save",
+        "tier": "Every {days} days · % off",
+        "renewal_lead_days": "Raise renewals · days before due"
       },
       "zones": {
         "title": "Delivery zones",
@@ -523,7 +526,9 @@
       "flow_sub": "The flow, from quote request to reorder",
       "settings_page": "Settings",
       "settings_sub": "Profile, language, site, team",
-      "sign_out": "Sign out"
+      "sign_out": "Sign out",
+      "subscriptions": "Subscriptions",
+      "subscriptions_sub": "{count, plural, =0 {no plans} one {# plan} other {# plans}} · {due, plural, =0 {none due} one {# renewal due} other {# renewals due}}"
     },
     "search": {
       "title": "Search",
@@ -621,7 +626,40 @@
       "unknown": {
         "t1": "{ref}",
         "t2": "{account}"
+      },
+      "renewal_due": {
+        "t1": "Renewal due · {account}",
+        "t2": "{lot} · due {date} · raise the quote"
+      },
+      "renewal_overdue": {
+        "t1": "Renewal overdue · {account}",
+        "t2": "{lot} · was due {date} · raise the quote"
       }
+    },
+    "subscriptions": {
+      "title": "Subscriptions",
+      "kicker": "Delivery plans",
+      "lead": "One row per plan. A renewal is raised here as a quote request, then priced and sent like any other; payment advances the plan.",
+      "empty": "No plan yet.",
+      "due": "Renewals due",
+      "all": "All plans",
+      "col_account": "Account",
+      "col_lot": "Lot",
+      "col_plan": "Plan",
+      "col_next": "Next delivery",
+      "col_state": "State",
+      "col_renewal": "Renewal",
+      "every": "Every {days} d · −{pct}%",
+      "raise": "Raise renewal quote",
+      "raised": "Renewal quote raised. Price it and send it from Orders & quotes.",
+      "open_quote": "Quote {number}",
+      "no_quote": "No open renewal",
+      "state_active": "Active",
+      "state_paused": "Paused",
+      "state_cancelled": "Cancelled",
+      "overdue": "overdue",
+      "site": "to {site}",
+      "last_order": "last {number}"
     }
   }
 }

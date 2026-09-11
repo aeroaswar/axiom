@@ -90,13 +90,11 @@ export default async function StandardPage({ params }: { params: Promise<{ local
                     {coa.purity_pct !== null ? <div className="r"><dt>{t('coa_purity')}</dt><dd className="mono-n">{pct(coa.purity_pct, 2)}</dd></div> : null}
                     {coa.issued_at ? <div className="r"><dt>{t('coa_issued')}</dt><dd className="mono-n">{fmtLong(coa.issued_at, locale)}</dd></div> : null}
                   </dl>
-                  {coaFile ? (
-                    <p style={{ marginTop: 20 }}>
-                      <a className="tlink" href="/api/coa"><Icon name="download" /> {t('coa_download')}</a>
-                    </p>
-                  ) : (
-                    <p className="note" style={{ marginTop: 16 }}>{t('coa_file_pending')}</p>
-                  )}
+                  <div className="acts" style={{ marginTop: 20 }}>
+                    <Link className="tlink" href={`/coas/${coa.id}`}>{t('coa_view')} <Icon name="arrow" className="ar" /></Link>
+                    {coaFile ? <a className="tlink" href="/api/coa"><Icon name="download" /> {t('coa_download')}</a> : null}
+                    <Link className="tlink" href="/coas">{t('coa_library')} <Icon name="arrow" className="ar" /></Link>
+                  </div>
                 </>
               ) : (
                 <p className="note">{t('coa_none')}</p>

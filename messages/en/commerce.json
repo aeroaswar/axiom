@@ -142,7 +142,10 @@
       "moved": "{from} → {to}",
       "ev_new": "new",
       "ev_accepted": "accepted",
-      "ev_quote": "quote"
+      "ev_quote": "quote",
+      "plan": "every {days} d · −{pct}%",
+      "plan_pending": "every {days} d · −{pct}% at send",
+      "list": "list {price}"
     },
     "quote": {
       "kicker": "Quote",

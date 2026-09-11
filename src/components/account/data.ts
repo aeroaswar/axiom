@@ -97,6 +97,7 @@ export type Line = {
   id: string; sku: string; slug: string; name: string; dose: string; content: string; kind: string;
   qty: number; unit_price_idr: string | null; line_total_idr: string | null;
   site_id: string | null; site_name: string | null; is_cold_chain: boolean;
+  interval_days: number | null; list_price_idr: string | null; discount_pct: string;
 };
 
 export type DeliveryLeg = { site_id: string | null; site_name: string; zone: string; units: number; charge_idr: number | null };
@@ -142,7 +143,8 @@ export async function orderByNumber(uid: string, accountId: string, number: stri
     const lines = await tx<Line[]>`
       select oi.id::text as id, v.sku, p.slug, p.name, v.dose, v.content, p.kind::text as kind, oi.qty,
              oi.unit_price_idr::text as unit_price_idr, oi.line_total_idr::text as line_total_idr,
-             oi.site_id::text as site_id, coalesce(oi.site_name, s.name) as site_name, v.is_cold_chain
+             oi.site_id::text as site_id, coalesce(oi.site_name, s.name) as site_name, v.is_cold_chain,
+             oi.interval_days, oi.list_price_idr::text as list_price_idr, oi.discount_pct::text as discount_pct
       from public.order_items oi
       join public.product_variants v on v.id = oi.variant_id
       join public.products p on p.id = v.product_id
@@ -171,7 +173,8 @@ export async function quoteByNumber(uid: string, accountId: string, number: stri
     const lines = await tx<Line[]>`
       select qi.id::text as id, v.sku, p.slug, p.name, v.dose, v.content, p.kind::text as kind, qi.qty,
              qi.unit_price_idr::text as unit_price_idr, qi.line_total_idr::text as line_total_idr,
-             qi.site_id::text as site_id, s.name as site_name, v.is_cold_chain
+             qi.site_id::text as site_id, s.name as site_name, v.is_cold_chain,
+             qi.interval_days, qi.list_price_idr::text as list_price_idr, qi.discount_pct::text as discount_pct
       from public.quote_items qi
       join public.product_variants v on v.id = qi.variant_id
       join public.products p on p.id = v.product_id
@@ -188,8 +191,8 @@ export async function quoteByNumber(uid: string, accountId: string, number: stri
 
 /** The lines of a quote, as a fresh request would ask for them again. */
 export async function quoteLinesForRequest(uid: string, accountId: string, number: string) {
-  return withRls({ uid }, tx => tx<{ sku: string; qty: number; site_id: string | null }[]>`
-    select v.sku, qi.qty, qi.site_id::text as site_id
+  return withRls({ uid }, tx => tx<{ sku: string; qty: number; site_id: string | null; interval_days: number | null }[]>`
+    select v.sku, qi.qty, qi.site_id::text as site_id, qi.interval_days
     from public.quotes q
     join public.quote_items qi on qi.quote_id = q.id
     join public.product_variants v on v.id = qi.variant_id
@@ -199,8 +202,8 @@ export async function quoteLinesForRequest(uid: string, accountId: string, numbe
 /** The lines of a past order, as a reorder would ask for them again: same lots, same destinations. */
 export async function orderLinesForReorder(uid: string, accountId: string, number: string) {
   return withRls({ uid }, async tx => {
-    const rows = await tx<{ sku: string; qty: number; site_id: string | null }[]>`
-      select v.sku, oi.qty, oi.site_id::text as site_id
+    const rows = await tx<{ sku: string; qty: number; site_id: string | null; interval_days: number | null }[]>`
+      select v.sku, oi.qty, oi.site_id::text as site_id, oi.interval_days
       from public.orders o
       join public.order_items oi on oi.order_id = o.id
       join public.product_variants v on v.id = oi.variant_id
@@ -316,7 +319,7 @@ export async function accountEvents(uid: string) {
       ? await tx<{ id: string; number: string }[]>`select id::text as id, number from public.quotes where id = any(${quoteIds}::uuid[])`
       : [];
     const numbers = new Map([...orders, ...quotes].map(r => [r.id, r.number]));
-    return rows.map(r => ({ ...r, href: r.subject_type === 'quote' ? `/account/quotes/${numbers.get(r.subject_id) ?? ''}` : `/account/orders/${numbers.get(r.subject_id) ?? ''}` }));
+    return rows.map(r => ({ ...r, href: r.subject_type === 'quote' ? `/account/quotes/${numbers.get(r.subject_id) ?? ''}` : r.subject_type === 'subscription' ? '/account/subscriptions' : `/account/orders/${numbers.get(r.subject_id) ?? ''}` }));
   });
 }
 

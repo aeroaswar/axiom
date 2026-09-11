@@ -244,8 +244,8 @@ export default async function CompoundPage({ params }: { params: Promise<{ local
               <p>{t('commerce_lead')}</p>
               {!anyPrice ? <p>{t('commerce_gated')}</p> : null}
               <div className="acts" style={{ marginTop: 32 }}>
-                <Link href="/request" className="btn btn-solid">{t('request_basket')}</Link>
-                <Link href="/price-list" className="tlink">{tn('price_list')} <Icon name="arrow" className="ar" /></Link>
+                <Link href={`/products/${c.slug}`} className="btn btn-solid">{t('order_cta')}</Link>
+                <Link href="/request" className="tlink">{t('request_basket')} <Icon name="arrow" className="ar" /></Link>
               </div>
             </div>
             <div>

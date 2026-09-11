@@ -11,11 +11,11 @@ import { pgMessage } from '@/lib/db';
 
 async function basketLines(): Promise<Line[]> {
   const basket = await getBasket();
-  return basket.items.map(i => ({ sku: i.sku, qty: i.qty, site_id: i.site_id }));
+  return basket.items.map(i => ({ sku: i.sku, qty: i.qty, site_id: i.site_id, interval_days: i.interval_days }));
 }
 
 async function emptyBasket(lines: Line[]) {
-  for (const l of lines) await setBasketLine(l.sku, 0, l.site_id);
+  for (const l of lines) await setBasketLine(l.sku, 0, l.site_id, l.interval_days ?? null);
 }
 
 export type RequestState = { error: string | null };
@@ -49,12 +49,15 @@ export async function submitPublicLead(_prev: RequestState | null, form: FormDat
   const whatsapp = String(form.get('whatsapp') ?? '').trim();
   if (!name) return { error: 'name' };
   if (!email && !whatsapp) return { error: 'contact' };
+  // The declaration is required when a research compound is on the request; the database is the
+  // one that knows the kinds, so it decides and its refusal is shown.
+  const ack = form.get('ack') != null;
   const lines = await basketLines();
   if (!lines.length) return { error: 'empty' };
   const key = await anonKey(false);
   try {
     await submitPublicRequest(
-      { name, clinic: String(form.get('clinic') ?? '').trim() || null, role: String(form.get('role') ?? '').trim() || null, email: email || null, whatsapp: whatsapp || null },
+      { name, clinic: String(form.get('clinic') ?? '').trim() || null, role: String(form.get('role') ?? '').trim() || null, email: email || null, whatsapp: whatsapp || null, ack },
       lines,
       String(form.get('locale') ?? 'id'),
       key,

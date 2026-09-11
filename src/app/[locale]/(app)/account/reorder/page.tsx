@@ -60,6 +60,9 @@ export default async function ReorderPage() {
         <p style={{ marginTop: 14 }}>
           <Link className="tlink" href="/account/basket">{t('from_basket')} <Icon name="arrow" /></Link>
         </p>
+        <p style={{ marginTop: 10 }}>
+          <Link className="tlink" href="/account/subscriptions">{t('plans_link')} <Icon name="arrow" /></Link>
+        </p>
         <RuoNote />
       </Sheet>
     </>

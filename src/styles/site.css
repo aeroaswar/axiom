@@ -423,3 +423,145 @@
   .site .shead.duo>div>h2{grid-column:1;grid-row:2;max-width:16ch}
   .site .shead.duo>div>p{grid-column:2;grid-row:1/3;margin-top:0;max-width:46ch}
 }
+
+/* ==================================================================
+   The storefront — shop grid, product page, the purchase box, the
+   certificate library. Same tokens, square corners, hairline depth.
+   The screenshot's red ring is the house bronze; its pill is a chip.
+   ================================================================== */
+
+/* ---------- shop toolbar: tabs, pathway chips, search, sort — every one a link or a GET form ---------- */
+.site .shop-tools{display:flex;flex-direction:column;gap:18px;padding:26px 0 22px;border-bottom:1px solid var(--line)}
+.site .tabs{display:flex;gap:0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.site .tabs::-webkit-scrollbar{display:none}
+.site .tabs a{padding:12px 18px 14px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--muted);white-space:nowrap;position:relative;transition:color .2s}
+.site .tabs a::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--accent);transform:scaleX(0);transition:transform .3s var(--ease)}
+.site .tabs a:hover{color:var(--ink)}
+.site .tabs a.on{color:var(--ink)}.site .tabs a.on::after{transform:scaleX(1)}
+.site .tools-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+.site .tools-row .field{flex:0 0 auto;min-width:200px}
+.site .tools-row .grow{flex:1 1 260px}
+.site .tools-row .cnt{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-variant-numeric:tabular-nums;white-space:nowrap;padding-bottom:11px;margin-left:auto}
+.site .tools-row .btn{padding:11px 16px}
+.site .chips a.chip{display:inline-flex;align-items:center}
+.site .chip.on{background:var(--ink);color:#000;border-color:var(--ink)}
+
+/* ---------- shop card: the whole card is the link; the size chips and the tag are read-only ---------- */
+.site .pcard.shop{min-height:206px;padding:22px 22px 20px}
+.site .pcard.shop .tag{position:absolute;top:14px;right:14px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-line);padding:4px 8px;background:var(--accent-soft)}
+.site .pcard.shop .tag.out{color:var(--muted);border-color:var(--line);background:transparent}
+.site .pcard.shop .nm{padding-right:96px}
+.site .pcard.shop .pr{margin-top:auto;padding-top:18px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.site .pcard.shop .pr small{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.site .pcard.shop .doses{margin-top:12px;padding-top:0}
+.site .pcard.shop.out .nm,.site .pcard.shop.out .pr{color:var(--muted)}
+.site .pcard.shop .go{position:absolute;right:20px;bottom:20px;color:var(--accent);opacity:0;transform:translateX(-6px);transition:.24s var(--ease)}
+.site .pcard.shop:hover .go{opacity:1;transform:none}
+.site .pcard.shop .img{width:100%;aspect-ratio:4/3;margin-bottom:16px;background:linear-gradient(160deg,rgba(242,237,229,.05),rgba(200,138,78,.08));border:1px solid var(--line-soft);display:grid;place-items:center;color:var(--accent);overflow:hidden}
+.site .pcard.shop .img .ic-sv{font-size:28px;opacity:.7}
+.site .pcard.shop .img img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- product page ---------- */
+.site .prod{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-areas:"head buy" "body buy";column-gap:64px;row-gap:0;align-items:start;padding:56px 0 72px}
+.site .prod>*{min-width:0}
+.site .prod-main{grid-area:head}.site .prod .buy{grid-area:buy}.site .prod-body{grid-area:body;padding-top:34px}
+@media(max-width:960px){.site .prod{grid-template-columns:1fr;grid-template-areas:"head" "buy" "body";row-gap:36px;padding:36px 0 56px}.site .prod-body{padding-top:0}.site .prod-fig{display:none}}
+.site .prod-head h1{font-size:clamp(34px,4.6vw,58px);line-height:1.03;margin-top:10px}
+.site .prod-head .cls{color:var(--muted);font-size:15px;margin-top:14px;font-weight:300;max-width:56ch}
+.site .prod-fig{margin-top:30px;aspect-ratio:4/3;border:1px solid var(--line);background:linear-gradient(160deg,rgba(242,237,229,.045),rgba(200,138,78,.09) 70%,rgba(124,76,36,.12));display:grid;place-items:center;position:relative;overflow:hidden}
+.site .prod-fig .ic-sv{font-size:44px;color:var(--accent);opacity:.75}
+.site .prod-fig img{width:100%;height:100%;object-fit:cover}
+.site .prod-fig .lab{position:absolute;left:16px;bottom:14px;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2)}
+.site .prod-sec{border-top:1px solid var(--line);padding:34px 0 8px}
+.site .prod-sec h2{font-size:clamp(20px,2.2vw,26px);margin-bottom:16px}
+.site .prod-sec .cp-body p{color:var(--muted);line-height:1.8;font-size:14.5px;max-width:64ch}
+.site .prod-sec .cp-body p+p{margin-top:14px}
+
+/* the purchase box: sticky on desktop, first in the flow on a phone */
+.site .buy{position:sticky;top:96px;border:1px solid var(--line);background:rgba(242,237,229,.014);padding:26px 26px 24px}
+@media(max-width:960px){.site .buy{position:static}}
+.site .buy .lab{display:block;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:12px}
+.site .sizes{display:flex;flex-wrap:wrap;gap:8px}
+.site .size{font-family:var(--sans);font-size:14px;font-weight:400;color:var(--ink);background:transparent;border:1px solid var(--line-2);padding:14px 18px;min-width:78px;cursor:pointer;transition:.2s var(--ease);font-variant-numeric:tabular-nums;position:relative;text-align:center;line-height:1.2}
+.site .size:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+.site .size.on{border-color:var(--accent);color:var(--accent-bright);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.site .size.out{color:var(--muted-2);cursor:not-allowed;border-color:var(--line);
+  background:repeating-linear-gradient(135deg,transparent 0 6px,var(--line-soft) 6px 7px)}
+.site .size.out .d{text-decoration:line-through}
+.site .size.out .so{display:block;font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;margin-top:4px;text-decoration:none;color:var(--muted-2)}
+.site .size:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+.site .price-big{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:26px 0 6px;font-variant-numeric:tabular-nums}
+.site .price-big .now{font-family:var(--display);font-weight:300;font-size:clamp(34px,4vw,46px);letter-spacing:-.01em;line-height:1;color:var(--ink)}
+.site .price-big .strike{font-family:var(--display);font-weight:300;font-size:18px;color:var(--muted-2);text-decoration:line-through}
+.site .price-big .per{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.site .avail-line{font-size:12px;color:var(--muted);margin-bottom:22px;display:flex;align-items:center;gap:8px}
+.site .avail-line .dot{width:5px;height:5px;background:var(--ok);flex:none}
+.site .avail-line.none .dot{background:var(--err)}.site .avail-line.low .dot{background:var(--warn)}
+.site .opts{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.site .opt{display:grid;grid-template-columns:22px minmax(0,1fr);gap:14px;align-items:start;border:1px solid var(--line);padding:16px 18px;cursor:pointer;transition:.2s var(--ease);background:transparent;text-align:left;color:var(--ink);width:100%;font-family:var(--sans)}
+.site .opt:hover{border-color:var(--line-2);background:rgba(242,237,229,.02)}
+.site .opt.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.site .opt .rad{width:18px;height:18px;border:1px solid var(--line-2);display:grid;place-items:center;margin-top:1px;transition:.2s}
+.site .opt .rad::after{content:"";width:8px;height:8px;background:var(--accent);transform:scale(0);transition:transform .2s var(--ease)}
+.site .opt.on .rad{border-color:var(--accent)}.site .opt.on .rad::after{transform:scale(1)}
+.site .opt .t{font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.site .opt .t .chip{padding:5px 9px;font-size:9px;background:var(--accent);color:#0a0704;border-color:var(--accent)}
+.site .opt .s{font-size:12.5px;color:var(--muted);margin-top:5px;font-weight:300;line-height:1.5;font-variant-numeric:tabular-nums}
+.site .opt input{position:absolute;opacity:0;width:0;height:0}
+.site .freq-box{border:1px solid var(--line);border-top:none;padding:18px 18px 16px;background:rgba(242,237,229,.012)}
+.site .freq{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:420px){.site .freq{grid-template-columns:1fr}}
+.site .freq button{border:1px solid var(--line-2);background:transparent;color:var(--ink);padding:12px 10px;cursor:pointer;transition:.2s var(--ease);font-family:var(--sans);text-align:left}
+.site .freq button:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+.site .freq button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.site .freq .e{display:block;font-size:13.5px;font-weight:500;font-variant-numeric:tabular-nums}
+.site .freq .sv{display:block;font-size:11px;color:var(--accent-bright);margin-top:4px;font-weight:500}
+.site .buy-foot{display:flex;gap:14px;align-items:stretch;margin-top:22px;flex-wrap:wrap}
+.site .buy-foot .qty{height:48px}.site .buy-foot .qty button{width:44px;height:46px}.site .buy-foot .qty span{min-width:40px;font-size:14px}
+.site .buy-foot .btn{flex:1 1 200px;padding:0 24px;min-height:48px}
+.site .buy .how{margin-top:20px;padding-top:16px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--muted);line-height:1.65}
+.site .buy .how b{color:var(--ink);font-weight:500;display:block;margin-bottom:4px;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.site .buy .go-basket{margin-top:14px}
+
+/* ---------- certificate library ---------- */
+.site .coa-tbl td.lot{font-variant-numeric:tabular-nums;letter-spacing:.04em;color:var(--ink)}
+.site .coa-tbl td.pur{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:500}
+.site .coa-tbl .chip.sample{padding:4px 8px;font-size:8.5px;margin-left:8px;vertical-align:middle}
+.site .coa-tbl tr.rowlink td{cursor:pointer;transition:background .2s}
+.site .coa-tbl tr.rowlink:hover td{background:rgba(200,138,78,.06)}
+.site .coa-tbl a.lk{color:var(--ink)}
+.site .coa-tbl a.lk:hover{color:var(--accent-bright)}
+.site .coa-view{padding:44px 0 64px}
+.site .coa-frame{background:var(--bg);border:1px solid var(--line);overflow-x:auto;padding:0}
+.site .coa-frame .inv-doc{margin:0 auto;box-shadow:none;border:none;max-width:794px}
+.site .coa-acts{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin:22px 0 28px}
+
+/* ---------- home: the catalogue band and the plan explainer ---------- */
+.site .cat-chips{display:flex;gap:8px;flex-wrap:wrap;margin:30px 0 28px}
+.site .plan-steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:48px}
+.site .plan-steps>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 28px 32px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.site .plan-steps .no{color:var(--accent);font-size:10px;letter-spacing:.3em;font-variant-numeric:tabular-nums}
+.site .plan-steps h3{font-size:22px}
+.site .plan-steps p{color:var(--muted);line-height:1.7;font-size:14px}
+.site .plan-steps .tiers{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:10px}
+.site .plan-steps .tiers span{border:1px solid var(--accent-line);padding:8px 12px;font-size:12px;font-variant-numeric:tabular-nums;color:var(--ink);background:var(--accent-soft)}
+.site .plan-steps .tiers span b{color:var(--accent-bright);font-weight:500;margin-left:6px}
+@media(max-width:900px){.site .plan-steps{grid-template-columns:1fr}}
+.site .merch-band{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:56px;align-items:center}
+@media(max-width:900px){.site .merch-band{grid-template-columns:1fr;gap:34px}}
+.site .merch-band .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;border:1px solid var(--line);background:var(--line)}
+.site .merch-band .strip a{background:var(--bg);aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:10px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:10px;transition:.2s var(--ease)}
+.site .merch-band .strip a .ic-sv{font-size:22px;color:var(--accent)}
+.site .merch-band .strip a:hover{background:var(--accent-soft);color:var(--ink)}
+@media(max-width:600px){.site .merch-band .strip{grid-template-columns:repeat(3,1fr)}.site .merch-band .strip a:nth-child(n+4){display:none}}
+
+/* ---------- request: the plan per line, the declaration ---------- */
+.site .req-line .plan{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright);margin-top:6px;font-weight:500}
+.site .req-line .plan .was{color:var(--muted-2);text-decoration:line-through;letter-spacing:0;text-transform:none;font-weight:300;margin-left:8px}
+.site .planfield{margin-top:12px;max-width:260px}
+.site .check{display:grid;grid-template-columns:20px minmax(0,1fr);gap:12px;align-items:start;font-size:13px;color:var(--muted);line-height:1.6;cursor:pointer;margin-top:22px}
+.site .check input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent)}
+.site .check b{color:var(--ink);font-weight:400}
+
+/* the account link and the cart badge share a row on the phone nav */
+.site .nav-links a.on::before{content:none}

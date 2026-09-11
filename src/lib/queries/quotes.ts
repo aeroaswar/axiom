@@ -24,6 +24,7 @@ export type QuoteLine = {
   unit_price_idr: string; line_total_idr: string; frozen: boolean;
   site_id: string | null; site_name: string | null; zone: string | null;
   available: number;
+  interval_days: number | null; list_price_idr: string | null; discount_pct: string;
 };
 
 export type SiteOption = { id: string; name: string; zone: string; priced: boolean; is_default: boolean };
@@ -67,7 +68,10 @@ export async function quoteBody(uid: string, q: QuoteDetail) {
              (coalesce(qi.unit_price_idr, v.price_idr) * qi.qty)::text as line_total_idr,
              qi.unit_price_idr is not null as frozen,
              qi.site_id::text as site_id, st.name as site_name, st.zone::text as zone,
-             (axiom.available(qi.variant_id) + case when ${q.state}::text = 'sent' then qi.qty else 0 end) as available
+             (axiom.available(qi.variant_id) + case when ${q.state}::text = 'sent' then qi.qty else 0 end) as available,
+             qi.interval_days, coalesce(qi.list_price_idr, v.price_idr)::text as list_price_idr,
+             case when qi.unit_price_idr is not null then qi.discount_pct
+                  when p.kind = 'peptide' then axiom.plan_discount_pct(qi.interval_days) else 0 end::text as discount_pct
       from public.quote_items qi
       join public.product_variants v on v.id = qi.variant_id
       join public.products p on p.id = v.product_id

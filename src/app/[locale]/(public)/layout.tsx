@@ -11,12 +11,13 @@ export default async function PublicLayout({ children, params }: { children: Rea
   const tc = await getTranslations('common');
   const ts = await getTranslations('site.common');
   const settings = await getSettings();
+  // Four doors: the shop, the merch, the guide, the certificates. The standard, the process, the
+  // FAQ and the price list live in the footer so the bar stays one line at every width.
   const links = [
-    { href: '/compounds', label: t('compounds') },
-    { href: '/price-list', label: t('price_list') },
-    { href: '/standard', label: t('standard') },
-    { href: '/process', label: t('process') },
-    { href: '/faq', label: t('faq') },
+    { href: '/products', label: t('shop') },
+    { href: '/merch', label: t('merch') },
+    { href: '/compounds', label: t('guide') },
+    { href: '/coas', label: t('coas') },
   ];
   return (
     <Messages only={[...CORE, 'site']}>

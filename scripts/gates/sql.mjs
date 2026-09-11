@@ -118,7 +118,17 @@ await as(OPS, async tx => {
 await as(OWNER, async tx => { const r = await tx`select supplier_cost_idr from public.v_pricing limit 1`; ok(r.length === 1, 'owner reads cost'); });
 
 console.log('Gate 6: acknowledgement gates commerce, education stays public');
-await as(SENOPATI, async tx => {
+// `site_settings.price_visibility` is the one switch. The gate proves the gated mode inside its own
+// transaction (the setting is flipped as the schema owner, then the caller is adopted, then rolled
+// back) so it holds whatever the seed's live value is; the live value is proved separately below.
+async function gated(uid, fn) {
+  return rollback(async tx => {
+    await tx`update public.site_settings set value = '"acknowledged"'::jsonb where key = 'price_visibility'`;
+    await become(tx, uid);
+    return fn(tx);
+  });
+}
+await gated(SENOPATI, async tx => {
   const [s] = await tx`select axiom.ack_state_for('10000000-0000-4000-8000-000000000004'::uuid) st`;
   ok(s.st === 'lapsed', `Senopati acknowledgement is ${s.st}`);
   const pv = await tx`select v.price_idr from public.product_variants v join public.products p on p.id = v.product_id where p.kind = 'peptide'`;
@@ -141,12 +151,20 @@ await as(REGENERA_DIRECTOR, async tx => {
   const qi = await tx`select count(*)::int n from public.quote_items`;
   ok(qi[0].n > 0, `current account reads its quote lines (${qi[0].n})`);
 });
-await as(null, async tx => {
+await gated(null, async tx => {
   const cat = await tx`select price_idr from public.v_catalogue where kind = 'peptide'`;
   ok(cat.length === 79 && cat.every(r => r.price_idr === null), 'anon (gated): guide rows without prices');
   const pv = await tx`select v.id, p.kind from public.product_variants v join public.products p on p.id = v.product_id`;
-  ok(pv.length === 8 && pv.every(r => r.kind !== 'peptide'), `anon reads only the 8 non-peptide variant rows directly (${pv.length})`);
+  ok(pv.length === 8 && pv.every(r => r.kind !== 'peptide'), `anon (gated) reads only the 8 non-peptide variant rows directly (${pv.length})`);
 });
+{
+  const [live] = await sql`select value #>> '{}' as v from public.site_settings where key = 'price_visibility'`;
+  await as(null, async tx => {
+    const cat = await tx`select price_idr from public.v_catalogue where kind = 'peptide'`;
+    const priced = cat.filter(r => r.price_idr !== null).length;
+    ok(live.v === 'open' ? priced === 79 : priced === 0, `anon (live: ${live.v}): ${priced} of ${cat.length} peptide prices visible`);
+  });
+}
 
 console.log('Gate 11: payment gates dispatch');
 await as(OPS, async tx => {
@@ -530,6 +548,112 @@ console.log('Gate S15: payment and void are recorded only by the functions that 
     ok(after.paid && after.paid_ref === 'TRF GATE-S15', 'axiom.mark_paid still records the payment');
   });
 }
+
+console.log('Gate S16: a plan line freezes list, percentage and net at send, and the order copies them');
+await as(OWNER, async tx => {
+  const [{ price_idr: list }] = await tx`select price_idr from public.product_variants where sku = 'reta10'`;
+  const [{ plan_discount_pct: pct }] = await tx`select axiom.plan_discount_pct(30)`;
+  ok(Number(pct) > 0, `the 30-day tier is a database rule (${pct}%)`);
+  const [{ new_quote: q }] = await tx`select axiom.new_quote(${REGENERA}::uuid, ${tx.json([{ sku: 'reta10', qty: 2, site_id: KBY, interval_days: 30 }, { sku: 'reta10', qty: 1, site_id: KBY }])})`;
+  const before = await tx`select unit_price_idr, list_price_idr, discount_pct, interval_days from public.quote_items where quote_id = ${q}::uuid order by interval_days nulls first`;
+  ok(before.every(r => r.unit_price_idr === null), 'nothing is priced before send');
+  await tx`select axiom.send_quote(${q}::uuid)`;
+  const lines = await tx`select unit_price_idr::text u, list_price_idr::text l, discount_pct::text d, interval_days i from public.quote_items where quote_id = ${q}::uuid order by interval_days nulls first`;
+  const once = lines[0], plan = lines[1];
+  const expected = Math.round((Number(list) * (1 - Number(pct) / 100)) / 1000) * 1000;
+  ok(once.i === null && Number(once.u) === Number(list) && Number(once.d) === 0, 'the one-time line is at list');
+  ok(plan.i === 30 && Number(plan.l) === Number(list) && Number(plan.d) === Number(pct) && Number(plan.u) === expected, `the plan line is list less ${pct}% to the nearest thousand (${plan.u})`);
+  const [{ accept_quote: o }] = await tx`select axiom.accept_quote(${q}::uuid)`;
+  const [ol] = await tx`select unit_price_idr::text u, list_price_idr::text l, discount_pct::text d, interval_days i from public.order_items where order_id = ${o}::uuid and interval_days = 30`;
+  ok(ol && Number(ol.u) === expected && Number(ol.l) === Number(list) && Number(ol.d) === Number(pct), 'the order line carries the frozen list, percentage and net');
+  const [ii] = await tx`select spec from public.invoice_items where invoice_id = (select id from public.invoices where order_id = ${o}::uuid) and spec like '%30 d%'`;
+  ok(!!ii, `the invoice line names the plan (${ii?.spec})`);
+  await tx`update public.site_settings set value = '{"30":40,"60":12,"90":10}'::jsonb where key = 'subscribe_tiers'`;
+  const [after] = await tx`select unit_price_idr::text u from public.order_items where order_id = ${o}::uuid and interval_days = 30`;
+  ok(Number(after.u) === expected, 'a later change to the tier never touches an accepted order');
+});
+
+console.log('Gate S17: payment starts the plan, a renewal is one per period, and payment advances it');
+await as(OWNER, async tx => {
+  const [{ new_quote: q }] = await tx`select axiom.new_quote(${REGENERA}::uuid, ${tx.json([{ sku: 'cjc10', qty: 1, site_id: KMG, interval_days: 60 }])})`;
+  await tx`select axiom.send_quote(${q}::uuid)`;
+  const [{ accept_quote: o }] = await tx`select axiom.accept_quote(${q}::uuid)`;
+  const none = await tx`select id from public.subscriptions where last_order_id = ${o}::uuid`;
+  ok(none.length === 0, 'acceptance alone starts no plan');
+  await tx`select axiom.mark_paid(${o}::uuid, 'TRF S17')`;
+  const [s] = await tx`select id, state, interval_days, next_due_at > now() + interval '59 days' as ahead from public.subscriptions where last_order_id = ${o}::uuid`;
+  ok(s && s.state === 'active' && s.interval_days === 60 && s.ahead, 'payment starts an active plan due one interval on');
+  // the clock is moved as the schema owner: a plan's row is not writable by anyone directly
+  await tx.unsafe('reset role');
+  await tx`update public.subscriptions set next_due_at = now() - interval '1 day' where id = ${s.id}::uuid`;
+  await become(tx, OWNER);
+  const due = await tx`select id from axiom.renewals_due() where id = ${s.id}::uuid`;
+  ok(due.length === 1, 'a plan past its date is a renewal due');
+  const [{ raise_renewal: rq }] = await tx`select axiom.raise_renewal(${s.id}::uuid)`;
+  const [rqs] = await tx`select state, subscription_id::text sid from public.quotes where id = ${rq}::uuid`;
+  ok(rqs.state === 'requested' && rqs.sid === s.id, 'the renewal is a requested quote naming its plan');
+  await expectError(tx, sp => sp`select axiom.raise_renewal(${s.id}::uuid)`, 'a second renewal for the same period is refused', /already open/i);
+  const gone = await tx`select id from axiom.renewals_due() where id = ${s.id}::uuid`;
+  ok(gone.length === 0, 'with a renewal open the plan is no longer due');
+  await tx`select axiom.send_quote(${rq}::uuid)`;
+  const [{ accept_quote: ro }] = await tx`select axiom.accept_quote(${rq}::uuid)`;
+  await tx`select axiom.mark_paid(${ro}::uuid, 'TRF S17-2')`;
+  const [adv] = await tx`select next_due_at > now() + interval '59 days' as ahead, renewal_quote_id, last_order_id::text lo from public.subscriptions where id = ${s.id}::uuid`;
+  ok(adv.ahead && adv.renewal_quote_id === null && adv.lo === ro, 'paying the renewal advances the date and closes the open renewal');
+  const plans = await tx`select count(*)::int n from public.subscriptions where account_id = ${REGENERA}::uuid and variant_id = (select id from public.product_variants where sku = 'cjc10') and state <> 'cancelled'`;
+  ok(plans[0].n === 1, `still one plan for the lot, not two (${plans[0].n})`);
+});
+
+console.log('Gate S18: a plan is for research compounds only');
+await as(OWNER, async tx => {
+  const [c] = await tx`select axiom.cart_for('gate-s18-anon-key-000001', ${REGENERA}::uuid) as id`;
+  await expectError(tx, sp => sp`select axiom.cart_set(${c.id}::uuid, null, 'tee', 1, null, 30)`, 'a plan on apparel is refused at the basket', /research compounds only/i);
+  await expectError(tx, sp => sp`select axiom.cart_set(${c.id}::uuid, null, 'reta10', 1, null, 45)`, 'an interval outside the tiers is refused', /unknown delivery plan/i);
+  await expectError(tx, sp => sp`select axiom.new_quote(${REGENERA}::uuid, ${sp.json([{ sku: 'mask', qty: 1, interval_days: 30 }])})`, 'and on a quote line', /research compounds only/i);
+  await tx`select axiom.cart_set(${c.id}::uuid, null, 'reta10', 1, null, 30)`;
+  await tx`select axiom.cart_set(${c.id}::uuid, null, 'reta10', 2, null, null)`;
+  const rows = await tx`select qty, interval_days from axiom.cart_items_for(${c.id}::uuid, null) order by interval_days nulls first`;
+  ok(rows.length === 2 && rows[0].interval_days === null && rows[1].interval_days === 30, 'the same lot once and on a plan is two basket lines');
+});
+
+console.log('Gate S19: the plan is the account’s own to skip, pause, resume, cancel; never another’s');
+{
+  const [s] = await sql`select id::text id from public.subscriptions where account_id = ${REGENERA}::uuid and state = 'active' limit 1`;
+  await as(IVAN, async tx => {
+    await expectError(tx, sp => sp`select axiom.subscription_skip(${s.id}::uuid)`, "another account's plan cannot be skipped", /privilege|permission/i);
+    const seen = await tx`select id from public.subscriptions where id = ${s.id}::uuid`;
+    ok(seen.length === 0, "and is not even readable");
+  });
+  await as(REGENERA_DIRECTOR, async tx => {
+    const [b] = await tx`select next_due_at from public.subscriptions where id = ${s.id}::uuid`;
+    await tx`select axiom.subscription_skip(${s.id}::uuid)`;
+    const [a] = await tx`select next_due_at, state from public.subscriptions where id = ${s.id}::uuid`;
+    ok(new Date(a.next_due_at) > new Date(b.next_due_at), 'skip moves the next date on');
+    await tx`select axiom.subscription_pause(${s.id}::uuid)`;
+    await expectError(tx, sp => sp`select axiom.subscription_skip(${s.id}::uuid)`, 'a paused plan cannot skip', /active plan/i);
+    await tx`select axiom.subscription_resume(${s.id}::uuid)`;
+    await tx`select axiom.subscription_set_interval(${s.id}::uuid, 90)`;
+    const [c] = await tx`select interval_days, discount_pct::text d, state from public.subscriptions where id = ${s.id}::uuid`;
+    ok(c.state === 'active' && c.interval_days === 90 && Number(c.d) > 0, 'resume and a new interval take');
+    await tx`select axiom.subscription_cancel(${s.id}::uuid)`;
+    await expectError(tx, sp => sp`select axiom.subscription_resume(${s.id}::uuid)`, 'a cancelled plan stays cancelled', /cancelled/i);
+    const direct = await tx`update public.subscriptions set state = 'active' where id = ${s.id}::uuid returning id`;
+    ok(direct.length === 0, 'and cannot be written directly: no policy admits the write');
+  });
+}
+
+console.log('Gate S20: the certificate library shows published rows only');
+await as(null, async tx => {
+  const rows = await tx`select is_sample, is_public from public.coa_documents`;
+  ok(rows.length > 0 && rows.every(r => r.is_sample || r.is_public), `anon reads ${rows.length} certificates, every one published or the sample`);
+});
+await as(OPS, async tx => {
+  const [c] = await tx`select id from public.coa_documents where not is_public and not is_sample limit 1`;
+  ok(!!c, 'staff read the unpublished one');
+  await tx`select axiom.publish_coa(${c.id}::uuid, true)`;
+  const [p] = await tx`select is_public, published_at from public.coa_documents where id = ${c.id}::uuid`;
+  ok(p.is_public && p.published_at, 'publishing stamps the date');
+});
 
 await sql.end();
 console.log(`\n${passes} passed, ${failures} failed`);

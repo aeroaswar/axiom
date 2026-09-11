@@ -173,8 +173,35 @@ begin
   perform axiom.send_quote(q); perform axiom.mark_quote_lost(q);
 end $$;
 
--- one sample CoA, published on the standard page
-insert into public.coa_documents (variant_id, lot_code, file_path, issued_at, method, purity_pct, is_sample)
-select id, 'AX-2606-BPC10', 'coa/sample-bpc-157-10mg.pdf', now()::date - 90, 'HPLC / MS', 99.2, true from public.product_variants where sku = 'bpc10';
+-- the certificate library: published certificates for a spread of lots (the sample itself is seeded
+-- by seed.sql); one filed but unpublished, so the Console has something to publish
+insert into public.coa_documents (variant_id, lot_code, file_path, issued_at, method, purity_pct, is_sample, is_public, published_at)
+select v.id, c.lot, 'coa/' || v.sku || '-' || lower(c.lot) || '.pdf', now()::date - c.age, 'HPLC / MS', c.purity, false, c.pub, case when c.pub then now() - make_interval(days => c.age) end
+from (values ('reta10', 'AX-2607-RETA10', 62, 99.4, true), ('reta20', 'AX-2607-RETA20', 62, 99.1, true), ('tirz10', 'AX-2608-TIRZ10', 40, 98.9, true),
+             ('ghk100', 'AX-2608-GHK100', 38, 99.6, true), ('cjc10', 'AX-2609-CJC10', 12, 99.0, true), ('mots10', 'AX-2609-MOTS10', 9, 98.7, true),
+             ('nad500', 'AX-2609-NAD500', 4, 99.3, false)) as c(sku, lot, age, purity, pub)
+join public.product_variants v on v.sku = c.sku;
+
+-- two plans through the spine: Regenera on Retatrutide every 30 days, paid twice and due now;
+-- Ivan on GHK-Cu every 60 days, paused. Both begin as a paid order carrying the plan.
+do $$
+declare q uuid; o uuid; s uuid; reg uuid := '10000000-0000-4000-8000-000000000001'; ivan uuid := '10000000-0000-4000-8000-000000000005';
+        kby uuid := '20000000-0000-4000-8000-000000000001';
+begin
+  q := axiom.new_quote(reg, jsonb_build_array(jsonb_build_object('sku','reta20','qty',1,'site_id',kby,'interval_days',30)));
+  perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2608-0131'); perform axiom.advance_order(o, 'Paxel', 'PX-0131'); perform axiom.advance_order(o);
+  update public.orders set placed_at = now() - interval '33 days', delivered_at = now() - interval '31 days' where id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '33 days', now() - interval '26 days', now() - interval '33 days');
+  select id into s from public.subscriptions where account_id = reg and last_order_id = o;
+  update public.subscriptions set started_at = now() - interval '33 days', next_due_at = now() - interval '3 days' where id = s;
+
+  q := axiom.new_quote(ivan, jsonb_build_array(jsonb_build_object('sku','ghk100','qty',1,'interval_days',60)));
+  perform axiom.send_quote(q); o := axiom.accept_quote(q); perform axiom.mark_paid(o, 'TRF 2608-0146'); perform axiom.advance_order(o, 'Paxel', 'PX-0146'); perform axiom.advance_order(o);
+  update public.orders set placed_at = now() - interval '20 days', delivered_at = now() - interval '18 days' where id = o;
+  perform pg_temp.backdate_invoices(o, now() - interval '20 days', now() - interval '13 days', now() - interval '20 days');
+  select id into s from public.subscriptions where account_id = ivan and last_order_id = o;
+  update public.subscriptions set started_at = now() - interval '20 days', next_due_at = now() + interval '40 days' where id = s;
+  perform axiom.subscription_pause(s);
+end $$;
 
 select set_config('request.jwt.claims', '', true);

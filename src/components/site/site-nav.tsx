@@ -30,7 +30,7 @@ export function SiteNav({ links, labels }: { links: { href: string; label: strin
         </Link>
         <div className={`nav-links${open ? ' open' : ''}`} id="site-links">
           {links.map(l => (
-            <Link key={l.href} href={l.href} className={pathname.startsWith(l.href) ? 'on' : ''}>{l.label}</Link>
+            <Link key={l.href} href={l.href} className={pathname === l.href || pathname.startsWith(l.href + '/') ? 'on' : ''}>{l.label}</Link>
           ))}
           <Link href="/account" className="nav-account-m">{labels.account}</Link>
           <Link href={pathname} locale={other} className="lang" aria-label={labels.language} hrefLang={other}>{other.toUpperCase()}</Link>

@@ -33,7 +33,7 @@ export default async function RequestSent({ params, searchParams }: {
   // A compliance-clean handover: the reference, the lots, and the research-use notice. No dose
   // guidance, no price — pricing and sending a quote remain AXIOM's act.
   const waText = isQuote && quote
-    ? [t('wa_intro', { number: quote }), ...lines.map(l => t('wa_line', { name: l.name, dose: l.dose, qty: l.qty })), t('wa_close')].join('\n')
+    ? [t('wa_intro', { number: quote }), ...lines.map(l => t('wa_line', { name: l.name, dose: l.dose, qty: l.qty }) + (l.interval_days ? ` · ${t('wa_plan', { days: l.interval_days })}` : '')), t('wa_close')].join('\n')
     : t('wa_close');
   const waHref = `https://wa.me/${settings.whatsapp.number}?text=${encodeURIComponent(waText)}`;
 
@@ -64,14 +64,14 @@ export default async function RequestSent({ params, searchParams }: {
                 {lines.map((l, i) => (
                   <div className="r" key={`${l.name}${l.dose}${i}`}>
                     <dt>{l.dose}</dt>
-                    <dd>{l.name} <span className="dim-2 mono-n">× {l.qty}</span></dd>
+                    <dd>{l.name} <span className="dim-2 mono-n">× {l.qty}</span>{l.interval_days ? <span className="dim-2"> · {t('plan_every', { days: l.interval_days })}</span> : null}</dd>
                   </div>
                 ))}
               </dl>
             ) : null}
             <div className="ruo" style={{ marginTop: 24 }}>{pick(locale, settings.ruo_notice.en, settings.ruo_notice.id)}</div>
             <div className="sp-24" />
-            <Link href="/compounds" className="tlink">{tn('compounds')} <Icon name="arrow" className="ar" /></Link>
+            <Link href="/products" className="tlink">{tn('shop')} <Icon name="arrow" className="ar" /></Link>
           </div>
         </div>
       </div>

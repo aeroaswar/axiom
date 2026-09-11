@@ -6,7 +6,7 @@ every assumption here. Each is one setting or one flag; none needs a rewrite to 
 
 | # | Decision | Taken as | Where it lives |
 |---|---|---|---|
-| 1 | Public price list open or gated | **Gated**: identity and research public, prices after the acknowledgement | `site_settings.price_visibility` = `acknowledged` (Console → Settings) |
+| 1 | Public price list open or gated | **Open** since the storefront (was gated): every lot priced for every reader; the acknowledgement is still required before AXIOM sends a peptide quote, and the research-use notice stays on every peptide surface. Gate 6 and the site smoke read the setting and assert whichever mode is live. | `site_settings.price_visibility` = `open` (Console → Settings) |
 | 2 | How much of the guide is written at launch | **Identity-only pages for every compound**, published. No research section renders anywhere because no citation could be verified from this environment (PubMed, DOI and Crossref are blocked by the proxy). The migrated `window.REFERENCE` mechanism texts are held as drafts in `products.research_en` and render only once a `product_references` row resolves. | `products.is_published`, `product_references`; gate 8 |
 | 3 | Basket sign-in | **No** sign-in to assemble and request; **yes** to see a peptide price | `axiom.submit_public_request`, `v_catalogue` |
 | 4 | One deployment or two | **One** Next.js app, three surfaces by route and role | repository layout |
@@ -19,9 +19,24 @@ every assumption here. Each is one setting or one flag; none needs a rewrite to 
 | 11 | CoA publication | One sample CoA row seeded and shown on The standard; the PDF file itself is not in the repository | `coa_documents.is_sample` |
 
 Sibling prompt §12 items with a stated default: pen Rp 600.000 current; devices/apparel cost assumed
-(flagged `cost_assumed`); 45 % reporting floor; no discounts or tiers anywhere; cut-off 15.00 cold /
-17.00 ambient WIB; reorder nudges owner-triggered; acknowledgement valid twelve months for every
-account type; no partial payment.
+(flagged `cost_assumed`); 45 % reporting floor; cut-off 15.00 cold / 17.00 ambient WIB; reorder
+nudges owner-triggered; acknowledgement valid twelve months for every account type; no partial
+payment. **"No discounts or tiers anywhere" is superseded** by the storefront's one exception below.
+
+## The storefront (migration 0008)
+
+The public site is a shop: `/products` (every lot, one card per compound, filters as URL parameters),
+`/products/[slug]` for every kind, `/merch`, `/coas` (the certificate library) and `/coas/[id]` (one
+certificate on the document template, PDF from the same markup). Decisions taken with the owner:
+
+| # | Decision | Taken as | Where it lives |
+|---|---|---|---|
+| 12 | One-time or a delivery plan | A line carries `interval_days` (30 / 60 / 90) from basket to quote to order. The discount is a database rule: `site_settings.subscribe_tiers` (15 / 12 / 10 %), applied by `axiom.send_quote` at the moment prices freeze, rounded to the nearest Rp 1.000; `list_price_idr` and `discount_pct` are frozen beside the net `unit_price_idr`. Peptides only; a plan on a device or apparel is refused at the basket. | `0008_subscriptions.sql`, Console → Settings |
+| 13 | What a subscription is | A paid plan line becomes a `subscriptions` row with a next-due date. AXIOM raises the next quote (`axiom.raise_renewal`, one per period), the client accepts and pays as usual, and payment advances the date. Skip, pause, resume, cancel and a change of interval are the client's. No card is stored; nothing is charged automatically. | `public.subscriptions`, Account → Subscriptions, Console → Subscriptions |
+| 14 | Reorder nudge versus plan | An account with a live plan gets the renewal event, not the reorder nudge. | `axiom.events()`, `withReorderDue` |
+| 15 | The declaration on the public request | A research compound on a signed-out request needs the reader's research-use declaration (`leads.ruo_declared_at`). The formal acknowledgement is still recorded in the account, and `send_quote` still refuses without it. | `axiom.submit_public_request` |
+| 16 | Certificate publication | A certificate row may be published per lot (`coa_documents.is_public`); the library lists the published rows and the sample. The rendered certificate states only what the row holds. Production seeds one sample row; the file itself is filed under `public/coa` when storage lands. | `axiom.publish_coa`, `/coas` |
+| 17 | Product photography | None in the repository. Cards and product pages render a tinted tile with the pathway's mark until `public/products/<slug>.jpg` exists. | `shop-card.tsx`, `products/[slug]` |
 
 ## Owner fields still marked « »
 

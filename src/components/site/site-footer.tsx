@@ -2,6 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { Wordmark } from '@/components/shell/sprite';
 
+/** Second-tier navigation: the standard, the process, the price list and the legal pages live here
+ *  so the bar above can stay four doors wide. Every link is a destination; nothing decorative. */
 export async function SiteFooter({ whatsapp }: { whatsapp: { number: string; display: string } }) {
   const t = await getTranslations('nav');
   const tc = await getTranslations('common');
@@ -16,18 +18,22 @@ export async function SiteFooter({ whatsapp }: { whatsapp: { number: string; dis
             <p style={{ marginTop: 14 }}><a href={`https://wa.me/${whatsapp.number}`} className="tlink">{tc('whatsapp')} · {whatsapp.display}</a></p>
           </div>
           <div>
-            <h4>{t('compounds')}</h4>
+            <h4>{t('shop')}</h4>
             <ul>
-              <li><Link href="/compounds">{t('compounds')}</Link></li>
+              <li><Link href="/products">{t('shop')}</Link></li>
+              <li><Link href="/merch">{t('merch')}</Link></li>
               <li><Link href="/price-list">{t('price_list')}</Link></li>
               <li><Link href="/request">{t('request')}</Link></li>
+              <li><Link href="/account">{t('account')}</Link></li>
             </ul>
           </div>
           <div>
             <h4>{t('standard')}</h4>
             <ul>
-              <li><Link href="/standard">{t('standard')}</Link></li>
+              <li><Link href="/compounds">{t('guide')}</Link></li>
+              <li><Link href="/coas">{t('coas')}</Link></li>
               <li><Link href="/how-to-read-a-coa">{t('coa')}</Link></li>
+              <li><Link href="/standard">{t('standard')}</Link></li>
               <li><Link href="/process">{t('process')}</Link></li>
               <li><Link href="/faq">{t('faq')}</Link></li>
             </ul>
@@ -37,8 +43,8 @@ export async function SiteFooter({ whatsapp }: { whatsapp: { number: string; dis
             <ul>
               <li><Link href="/terms">{t('terms')}</Link></li>
               <li><Link href="/privacy">{t('privacy')}</Link></li>
+              <li><Link href="/legal">{t('legal')}</Link></li>
               <li><Link href="/contact">{t('contact')}</Link></li>
-              <li><Link href="/account">{t('account')}</Link></li>
             </ul>
           </div>
         </div>

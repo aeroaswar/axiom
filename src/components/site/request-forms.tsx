@@ -27,7 +27,7 @@ export function AccountRequestForm({ account }: { account: string }) {
 
 /** Signed out: the same request, plus who is asking. Nothing peptide-priced is shown until the
  *  acknowledgement is recorded — this form is what starts that. */
-export function LeadRequestForm() {
+export function LeadRequestForm({ needsAck }: { needsAck: boolean }) {
   const t = useTranslations('site.request');
   const tc = useTranslations('common');
   const locale = useLocale();
@@ -61,6 +61,15 @@ export function LeadRequestForm() {
         </div>
       </div>
       <p className="note" style={{ marginTop: 18 }}>{t('contact_hint')}</p>
+      {needsAck ? (
+        <>
+          <label className="check" htmlFor="rq-ack">
+            <input id="rq-ack" type="checkbox" name="ack" value="1" required />
+            <span><b>{t('ack_label')}</b></span>
+          </label>
+          <p className="note" style={{ marginTop: 10 }}>{t('ack_note')}</p>
+        </>
+      ) : null}
       {state?.error && state.error !== 'name' ? <p className="field" style={{ marginTop: 12 }}><span className="err">{t('error')}</span></p> : null}
       <div className="acts" style={{ marginTop: 30 }}>
         <Submit label={t('send')} busy={t('submitting')} />

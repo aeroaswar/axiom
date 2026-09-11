@@ -24,7 +24,7 @@ const ok = (name, cond, detail = '') => {
 };
 
 const ROUTES = [
-  '/', '/compounds', '/compounds/metabolic', '/price-list', '/standard',
+  '/', '/products', '/products/retatrutide', '/products/logo-cap', '/merch', '/coas', '/compounds', '/compounds/metabolic', '/price-list', '/standard',
   '/how-to-read-a-coa', '/process', '/faq', '/contact', '/terms', '/privacy', '/legal', '/request',
 ];
 
@@ -78,7 +78,7 @@ for (const width of [390, 1440]) {
   }
   ok(`${width}px no uncaught page errors`, errors.length === 0, errors.slice(0, 2).join(' | '));
   // screenshots for the design review
-  for (const [name, route] of [['home', '/'], ['compounds', '/compounds'], ['pathway', '/compounds/metabolic'], ['compound', compoundHref], ['price-list', '/price-list'], ['standard', '/standard'], ['process', '/process'], ['faq', '/faq'], ['request', '/request'], ['terms', '/terms']]) {
+  for (const [name, route] of [['home', '/'], ['shop', '/products'], ['product', '/products/retatrutide'], ['merch', '/merch'], ['coas', '/coas'], ['compounds', '/compounds'], ['pathway', '/compounds/metabolic'], ['compound', compoundHref], ['price-list', '/price-list'], ['standard', '/standard'], ['process', '/process'], ['faq', '/faq'], ['request', '/request'], ['terms', '/terms']]) {
     if (!route) continue;
     await go(page, `${BASE}${route}`, 'networkidle').catch(() => {});
     if (width === 1440) {
@@ -141,7 +141,7 @@ for (const width of [390, 1440]) {
 {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
-  const peptidePages = ['/compounds', '/compounds/metabolic', compoundHref, '/price-list'];
+  const peptidePages = ['/compounds', '/compounds/metabolic', compoundHref, '/price-list', '/products', '/products/retatrutide'];
   for (const route of peptidePages) {
     const res = await go(page, `${BASE}${route}`);
     const html = await res.text();
@@ -153,17 +153,19 @@ for (const width of [390, 1440]) {
   const dev = await go(page, `${BASE}/products/red-light-therapy-mask`);
   ok('a device page may carry Product markup', /"@type":"Product"/.test(await dev.text()));
 
-  // zero rupiah figures for anonymous eyes on any peptide surface
-  for (const route of ['/compounds/metabolic', compoundHref]) {
-    await go(page, `${BASE}${route}`);
-    const money = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
-    ok(`no rupiah figure for anon on ${route}`, money.length === 0, money.slice(0, 3).join(', '));
-  }
-  // the price list shows devices and apparel openly and peptides gated
+  // `site_settings.price_visibility` is the one switch; the price list says which mode is live
   await go(page, `${BASE}/price-list`);
   const money = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []).length);
   const gated = await page.locator('table.tbl .gated').count();
-  ok('price list: peptide prices gated, device prices open', gated > 70 && money > 0 && money < 20, `${gated} gated cells, ${money} figures`);
+  const open = gated === 0;
+  ok(open ? 'price list: every lot priced (site set open)' : 'price list: peptide prices gated, device prices open',
+    open ? money > 80 : (gated > 70 && money > 0 && money < 20), `${gated} gated cells, ${money} figures`);
+  for (const route of ['/compounds/metabolic', compoundHref, '/products/retatrutide']) {
+    await go(page, `${BASE}${route}`);
+    const figures = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
+    ok(open ? `rupiah figures for anon on ${route} (site set open)` : `no rupiah figure for anon on ${route}`,
+      open ? figures.length > 0 : figures.length === 0, figures.slice(0, 3).join(', '));
+  }
 
   // and the anonymous browser never asks for prices
   const calls = [];
@@ -309,9 +311,14 @@ for (const width of [390, 1440]) {
     const priceCalls = [];
     page.on('request', r => { if (r.url().includes('/api/prices')) priceCalls.push(r.url()); });
     let signedIn = null;
+    // the checks below need an account, not a staff session: the row names its role
+    await go(page, `${BASE}/price-list`);
+    const openSite = (await page.locator('table.tbl .gated').count()) === 0;
+    await go(page, `${BASE}/sign-in`);
     for (let i = 0; i < count; i++) {
       const row = forms.nth(i);
       const who = (await row.innerText()).split('\n')[0];
+      if (/^(owner|ops)$/i.test((await row.locator('.chip').innerText().catch(() => '')).trim())) continue;
       await row.locator('button[type="submit"]').click();
       await page.waitForURL(/\/(account|console)/, { timeout: 20000 }).catch(() => {});
       await go(page, `${BASE}/price-list`, 'networkidle');
@@ -320,7 +327,7 @@ for (const width of [390, 1440]) {
       if (money > 60) { signedIn = { who, money }; break; }
       await go(page, `${BASE}/sign-in`);
     }
-    ok('a session asks the server for its prices', priceCalls.length > 0, `${priceCalls.length} calls`);
+    ok(openSite ? 'an open site needs no price call from the browser' : 'a session asks the server for its prices', openSite || priceCalls.length > 0, `${priceCalls.length} calls`);
     ok('an acknowledged account sees peptide prices', !!signedIn, signedIn ? `${signedIn.who}: ${signedIn.money} figures` : 'no seeded account has a current acknowledgement');
 
     // a basket with more than one destination shows the split before it is submitted

@@ -1,6 +1,6 @@
 'use server';
 import { revalidatePath } from 'next/cache';
-import { addBasketLine, setBasketLine } from '@/lib/basket';
+import { addBasketLine, planOf, setBasketLine, setBasketPlan } from '@/lib/basket';
 
 // The public site's only writes: the basket. Every one of them is a form post to a server action,
 // so the control is a real button, works without JavaScript, and the basket still lives in the
@@ -12,7 +12,7 @@ export async function addToBasketAction(_prev: BasketResult | null, form: FormDa
   const sku = String(form.get('sku') ?? '');
   const delta = Number(form.get('delta') ?? 1);
   if (!sku) return { ok: false, qty: 0, at: Date.now() };
-  const qty = await addBasketLine(sku, Number.isFinite(delta) ? delta : 1);
+  const qty = await addBasketLine(sku, Number.isFinite(delta) ? delta : 1, planOf(form.get('interval_days')));
   return { ok: true, qty, at: Date.now() };
 }
 
@@ -22,7 +22,7 @@ export async function setBasketLineAction(form: FormData): Promise<void> {
   const qty = Number(form.get('qty') ?? 0);
   const siteRaw = String(form.get('site_id') ?? '');
   if (!sku) return;
-  await setBasketLine(sku, Number.isFinite(qty) ? Math.max(qty, 0) : 0, siteRaw || null);
+  await setBasketLine(sku, Number.isFinite(qty) ? Math.max(qty, 0) : 0, siteRaw || null, planOf(form.get('interval_days')));
   revalidatePath('/request');
 }
 
@@ -33,7 +33,10 @@ export async function updateBasketLineAction(_prev: BasketResult | null, form: F
   const siteRaw = String(form.get('site_id') ?? '');
   if (!sku) return { ok: false, qty: 0, at: Date.now() };
   const next = Number.isFinite(qty) ? Math.max(qty, 0) : 0;
-  await setBasketLine(sku, next, siteRaw || null);
+  const plan = planOf(form.get('interval_days'));
+  // a plan change on the request page moves the line rather than writing a second one
+  if (form.has('from_interval_days')) await setBasketPlan(sku, next, siteRaw || null, planOf(form.get('from_interval_days')), plan);
+  else await setBasketLine(sku, next, siteRaw || null, plan);
   revalidatePath('/request');
   return { ok: true, qty: next, at: Date.now() };
 }
