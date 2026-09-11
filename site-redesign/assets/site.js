@@ -157,6 +157,15 @@ setInterval(renderLive, 30000);
   }
   const stepIO = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) en.target.classList.add('on'); }), { threshold: .5 });
   $$('.step').forEach(s => stepIO.observe(s));
+  const tiles = $('#tiles');
+  if (tiles && !reduce && matchMedia('(hover:hover)').matches) {
+    tiles.addEventListener('pointermove', e => {
+      const t = e.target.closest('.tile'); if (!t) return;
+      const r = t.getBoundingClientRect();
+      t.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      t.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  }
   const c = $('.coa');
   if (c && !reduce) {
     c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.classList.add('tilting'); c.style.transform = `perspective(900px) rotateX(${-y * 7}deg) rotateY(${x * 9}deg)`; });
@@ -173,13 +182,15 @@ function wrapHero() {
       node.textContent.split(/(\s+)/).forEach(part => {
         if (!part) return;
         if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-        const w = document.createElement('span'); w.className = 'w'; w.style.setProperty('--i', i++); w.textContent = part; frag.appendChild(w);
+        const w = document.createElement('span'); w.className = 'w';
+        const inner = document.createElement('i'); inner.style.setProperty('--i', i++); inner.textContent = part;
+        w.appendChild(inner); frag.appendChild(w);
       });
       node.replaceWith(frag);
     } else if (node.nodeType === 1) [...node.childNodes].forEach(walk);
   };
   [...h.childNodes].forEach(walk);
-  if (heroPlayed) h.querySelectorAll('.w').forEach(w => w.style.animation = 'none');
+  if (heroPlayed) h.querySelectorAll('.w>i').forEach(el => el.style.animation = 'none');
   heroPlayed = true;
 }
 function countUp() {
