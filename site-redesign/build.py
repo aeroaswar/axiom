@@ -21,7 +21,7 @@ def data_uri(p):
     mime = mimetypes.guess_type(full)[0] or 'application/octet-stream'
     return f"data:{mime};base64,{base64.b64encode(open(full, 'rb').read()).decode()}"
 
-FONT_LINK = '<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">'
+FONT_LINK = '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400&display=swap" rel="stylesheet">'
 FONT_LINK_TEST = ('<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300..700'
     '&family=Geist:wght@300..700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Instrument+Sans:wght@400..700'
     '&family=Inter:wght@300..700&family=Jost:wght@300..700&family=Newsreader:opsz,wght@6..72,300..700'
