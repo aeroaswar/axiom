@@ -4,7 +4,7 @@ import { idr } from '@/lib/money';
 import { fromPrice, pick, soldOut, type Compound } from '@/lib/site/catalogue';
 import { AddToBasket } from './add-to-basket';
 import { SaveHeart } from './save-heart';
-import { Vial } from './vial';
+import { ProductImage } from './product-image';
 
 /**
  * One compound, one card, in the shape the reference uses: the image with the bookmark over it,
@@ -31,7 +31,7 @@ export async function ShopCard({ c, locale, purity, ruo, index }: {
       {first ? <SaveHeart sku={first.sku} /> : null}
       {peptide && !out ? <span className="tag">{t('plan_tag')}</span> : null}
       <Link href={`/products/${c.slug}`} className="img lk" aria-label={c.name}>
-        <Vial name={c.name} dose={first?.dose} purity={purity} kind={c.kind} size="card" ruo={ruo} />
+        <ProductImage slug={c.slug} name={c.name} dose={first?.dose} purity={purity} kind={c.kind} size="card" ruo={ruo} />
       </Link>
       <div className="body">
         <div className="row">

@@ -177,20 +177,14 @@
 .site-foot .legal{margin-top:40px;padding-top:22px;border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:11px;color:var(--muted-2)}
 @media(max-width:800px){.site-foot .cols{grid-template-columns:1fr 1fr}}
 
-/* ---------- reveal / stagger (700 ms · 65 ms · ≤ 18 px) ---------- */
-.site .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.site .reveal.in{opacity:1;transform:none}
-.site .stagger>*{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:calc(var(--i,0)*65ms)}
-.site .stagger.in>*{opacity:1;transform:none}
+/* ---------- motion: the reveals live in the components; this is the reduced-motion floor ---------- */
 @media(prefers-reduced-motion:reduce){
-  .site .reveal,.site .stagger>*{opacity:1!important;transform:none!important;transition:none!important}
   html{scroll-behavior:auto}
   .site *,.site *::before,.site *::after{transition-duration:.001ms!important;animation-duration:.001ms!important}
 }
 
 /* ---------- print: paper palette for the price list and documents; the invoice is the exception ---------- */
 @media print{
-  .site .reveal,.site .stagger>*{opacity:1!important;transform:none!important}
   .site{--bg:#F2EDE5;--ink:#141210;--muted:#5a544c;--muted-2:#7a7268;--line:rgba(20,18,16,.16);--line-2:rgba(20,18,16,.32);--accent:#7C4C24;--accent-bright:#7C4C24}
   .site-nav,.site-foot,.site .no-print{display:none!important}
   .site{background:var(--bg);color:var(--ink)}
@@ -207,18 +201,6 @@
 .site-main{flex:1;min-width:0;display:flex;flex-direction:column}
 /* a page that does not build its own band still gets the container */
 .site-main>.sec{max-width:var(--maxw);margin-left:auto;margin-right:auto;padding-left:var(--pad);padding-right:var(--pad);width:100%}
-
-/* ---------- stagger delays (65 ms), no cloning of server children ---------- */
-.site .stagger>:nth-child(1){transition-delay:0ms}
-.site .stagger>:nth-child(2){transition-delay:65ms}
-.site .stagger>:nth-child(3){transition-delay:130ms}
-.site .stagger>:nth-child(4){transition-delay:195ms}
-.site .stagger>:nth-child(5){transition-delay:260ms}
-.site .stagger>:nth-child(6){transition-delay:325ms}
-.site .stagger>:nth-child(7){transition-delay:390ms}
-.site .stagger>:nth-child(8){transition-delay:455ms}
-.site .stagger>:nth-child(9){transition-delay:520ms}
-.site .stagger>:nth-child(n+10){transition-delay:585ms}
 
 /* ---------- band: a full-bleed section with its own hairline top ---------- */
 .site .band{border-top:1px solid var(--line);position:relative}
@@ -611,11 +593,31 @@
 .site .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
 .site .badge{display:inline-flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid var(--line);font-size:11.5px;color:var(--muted);background:rgba(242,237,229,.02);white-space:nowrap}
 .site .badge .ic-sv{color:var(--accent);font-size:15px}
-.site .hero-vials{display:flex;align-items:flex-end;justify-content:center;gap:22px;padding:20px 0 24px;position:relative}
-.site .hero-vials .vial.flank{margin-bottom:-8px;opacity:.92}
+.site .hero-vials{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:8px 0 16px;position:relative;min-width:0}
+.site .hero-flank{display:flex;gap:18px;justify-content:center;width:100%}
+.site .hero-flank .flank{display:block;flex:0 1 46%;max-width:280px;opacity:.9;transition:opacity .3s var(--ease),transform .5s var(--ease)}
+.site .hero-flank .flank:hover{opacity:1;transform:translateY(-3px)}
+.site .hero-flank .flank .vial{display:block;margin:0 auto}
+/* the 3D pen sits over its still; the still stays for crawlers, reduced motion and no WebGL */
+.site .pen3d{position:relative;width:100%;max-width:640px;aspect-ratio:1672/940}
+.site .pen3d-still{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .9s var(--ease)}
+.site .pen3d.live .pen3d-still{opacity:0}
+.site .pen3d-canvas{position:absolute;inset:-12% 0;z-index:1;opacity:0;transition:opacity .9s var(--ease);pointer-events:none}
+.site .pen3d.live .pen3d-canvas{opacity:1}
+.site .pen3d-canvas canvas{display:block;width:100%!important;height:100%!important}
+/* the rendered pen, wherever a product shows its image */
+/* the image keeps its own ratio (a percentage height inside an aspect-ratio box resolves against
+   the wrong block in Chromium), and each tile takes the same ratio, so the two coincide */
+.site img.pen,.site .pcard.shop2 .img img.pen,.site .coa-card .thumb img.pen,.site .prod-fig img.pen{display:block;position:static;width:100%;height:auto;aspect-ratio:1672/940;object-fit:cover;user-select:none;background:#0b0a09}
+.site .pcard.shop2 .img:has(img.pen){display:block;aspect-ratio:1672/940;background:#0b0a09}
+.site .pcard.shop2 .img img.pen{transition:transform .7s var(--ease)}
+.site .pcard.shop2:hover .img img.pen{transform:scale(1.04)}
+.site .coa-card .thumb:has(img.pen){display:block;height:auto;aspect-ratio:1672/940;background:#0b0a09}
+.site .prod-fig:has(img.pen){display:block;aspect-ratio:1672/940;background:#0b0a09}
+.site .hero-flank .flank img.pen{border:1px solid var(--line)}
 .site .hero-vials::after{content:"";position:absolute;left:10%;right:10%;bottom:8px;height:40px;background:radial-gradient(50% 50% at 50% 50%,rgba(200,138,78,.16),transparent 70%);pointer-events:none}
-@media(max-width:960px){.site .hero-grid{grid-template-columns:1fr;gap:26px}.site .hero-vials{gap:14px;padding:6px 0 10px}.site .hero-vials .vial.hero{--vw:120px;--vh:230px}.site .hero-vials .vial.card{--vw:92px;--vh:176px}}
-@media(max-width:680px){.site .hero.split-hero{padding-top:44px}.site .hero-vials .vial.flank{display:none}}
+@media(max-width:960px){.site .hero-grid{grid-template-columns:1fr;gap:26px}.site .hero-vials{gap:14px;padding:6px 0 10px}.site .hero-vials .vial.hero{--vw:120px;--vh:230px}.site .hero-vials .vial.card{--vw:92px;--vh:176px}.site .pen3d{max-width:520px}}
+@media(max-width:680px){.site .hero.split-hero{padding-top:44px}.site .hero-flank{display:none}}
 
 /* ---------- feature strip ---------- */
 .site .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:8px}

@@ -121,7 +121,10 @@ for (const width of [390, 1440]) {
   // the router state names the path the page was rendered for: the build-time prerender knows the
   // default locale's unprefixed path, an on-demand render the prefixed one. Same page, so the
   // locale segment is dropped before comparing.
-  const routed = s => s.replace(/\\"c\\":\[\\"\\",\\"(id|en)\\",/g, '\\"c\\":[\\"\\",');
+  const routed = s => s
+    .replace(/\\"c\\":\[\\"\\",\\"(id|en)\\",/g, '\\"c\\":[\\"\\",')
+    // a page first rendered for a prefetch carries the prefetch marker in its recorded path
+    .replace(/\?_rsc=[A-Za-z0-9]+/g, '');
   // the dev server streams its flight chunks in whatever order they resolve, so compare the
   // document byte for byte and the chunks as a set
   const CHUNK = /<script>self\.__next_f\.push\(.*?\)<\/script>/gs;

@@ -5,7 +5,7 @@ import { pct } from '@/lib/money';
 import { fmtLong } from '@/lib/domain/dates';
 import type { Coa } from '@/lib/site/catalogue';
 import { CopyButton } from './copy-button';
-import { Vial } from './vial';
+import { ProductImage } from './product-image';
 
 export type CoaQuery = { q?: string };
 
@@ -44,7 +44,7 @@ export async function CoaCards({ rows, q, locale, total, compounds, method, thre
             <article className="coa-card" key={r.id} data-lot={r.lot_code ?? ''}>
               <div className="top">
                 <Link href={`/coas/${r.id}`} className="thumb" aria-label={r.product ?? t('doc_title')}>
-                  <Vial name={r.product ?? ''} dose={r.dose} purity={purityLabel} kind={r.kind ?? 'peptide'} size="thumb" />
+                  <ProductImage slug={r.slug ?? ''} name={r.product ?? ''} dose={r.dose} purity={purityLabel} kind={r.kind ?? 'peptide'} size="thumb" ruo={ruo} />
                 </Link>
                 <div>
                   <div className="ttl">

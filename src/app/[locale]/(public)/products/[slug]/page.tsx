@@ -7,7 +7,7 @@ import { Reveal } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
 import { BuyBox } from '@/components/site/buy-box';
 import { ShopCard } from '@/components/site/shop-card';
-import { Vial } from '@/components/site/vial';
+import { ProductImage } from '@/components/site/product-image';
 import { getCatalogue, getCoasForProduct, getCompound, getPublishedSlugs, groupCompounds, pick } from '@/lib/site/catalogue';
 import { alternates, breadcrumbLd, describe, productLd } from '@/lib/site/seo';
 import { getPlanTiers, getSettings } from '@/lib/settings';
@@ -94,7 +94,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
             {cls ? <p className="cls">{cls}</p> : null}
           </div>
           <div className="prod-fig" aria-hidden="true">
-            <Vial name={p.name} dose={variants[0]?.dose} purity={threshold} kind={p.kind} size="hero" ruo={ruoShort} />
+            <ProductImage slug={p.slug} name={p.name} dose={variants[0]?.dose} purity={threshold} kind={p.kind} size="hero" ruo={ruoShort} priority />
             <span className="lab">{variants[0]?.content}</span>
           </div>
         </div>

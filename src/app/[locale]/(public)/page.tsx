@@ -6,7 +6,8 @@ import { HeroMount } from '@/components/site/hero-mount';
 import { Reveal, Stagger } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
 import { ShopCard } from '@/components/site/shop-card';
-import { Vial } from '@/components/site/vial';
+import { ProductImage } from '@/components/site/product-image';
+import { PenHero } from '@/components/site/pen-hero';
 import { getCatalogue, getCoas, getCounts, getPathways, groupCompounds, pick } from '@/lib/site/catalogue';
 import { alternates, organizationLd } from '@/lib/site/seo';
 import { getPlanTiers, getSettings } from '@/lib/settings';
@@ -74,9 +75,15 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </div>
           </div>
           <div className="hero-vials">
-            {featured[1] ? <Vial name={featured[1].name} dose={featured[1].variants[0]?.dose} purity={threshold} size="card" ruo={ruoShort} /> : null}
-            {featured[0] ? <Vial name={featured[0].name} dose={featured[0].variants[featured[0].variants.length - 1]?.dose} purity={threshold} size="hero" ruo={ruoShort} /> : null}
-            {featured[2] ? <Vial name={featured[2].name} dose={featured[2].variants[0]?.dose} purity={threshold} size="card" ruo={ruoShort} /> : null}
+            {featured[0] ? (
+              <PenHero label={{ name: featured[0].name, qty: featured[0].variants[0]?.dose ?? undefined, wordmark: 'AXIOM', ruo: ruoShort, purity: threshold }}>
+                <ProductImage slug={featured[0].slug} name={featured[0].name} dose={featured[0].variants[0]?.dose} purity={threshold} ruo={ruoShort} size="hero" priority />
+              </PenHero>
+            ) : null}
+            <div className="hero-flank">
+              {featured[1] ? <Link href={`/products/${featured[1].slug}`} className="flank" aria-label={featured[1].name}><ProductImage slug={featured[1].slug} name={featured[1].name} dose={featured[1].variants[0]?.dose} purity={threshold} ruo={ruoShort} size="card" /></Link> : null}
+              {featured[2] ? <Link href={`/products/${featured[2].slug}`} className="flank" aria-label={featured[2].name}><ProductImage slug={featured[2].slug} name={featured[2].name} dose={featured[2].variants[0]?.dose} purity={threshold} ruo={ruoShort} size="card" /></Link> : null}
+            </div>
           </div>
         </div>
       </section>
