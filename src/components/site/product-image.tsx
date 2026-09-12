@@ -1,21 +1,13 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import manifest from '../../../public/products/manifest.json';
 import { Vial } from './vial';
 
 // The product image: the rendered pen when the catalogue holds one for the slug (built by
-// scripts/pens/build.py into public/products), otherwise the tile the row draws for itself.
-// The set of rendered slugs is read once per server process.
-const DIR = path.join(process.cwd(), 'public', 'products');
+// scripts/pens/build.py into public/products, listed in its manifest so a serverless build needs
+// no directory read), otherwise the tile the row draws for itself.
 const WIDTHS = [400, 800, 1280] as const;
-let rendered: Set<string> | null = null;
+const rendered = new Set<string>(manifest.slugs);
 
-export function renderedSlugs(): Set<string> {
-  if (rendered) return rendered;
-  try {
-    rendered = new Set(fs.readdirSync(DIR).filter(f => f.endsWith(`-${WIDTHS[0]}.webp`)).map(f => f.replace(/-\d+\.webp$/, '')));
-  } catch { rendered = new Set(); }
-  return rendered;
-}
+export function renderedSlugs(): Set<string> { return rendered; }
 
 export function penSrc(slug: string, width: (typeof WIDTHS)[number] = 800): string { return `/products/${slug}-${width}.webp`; }
 

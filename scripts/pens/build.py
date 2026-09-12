@@ -180,6 +180,8 @@ def main():
                 sheet.paste(t, (x + (tw - t.width) // 2, y + 6))
                 d.text((x + 10, y + 262), f"{start + i + 1:02d}  {row['name']}", font=ImageFont.truetype(str(FONTS / 'InstrumentSans-Regular.ttf'), 16), fill=(20, 20, 20))
             sheet.save(ROOT / f"sheet-{start + 1:02d}-{start + len(sub):02d}.jpg", quality=90)
+    # the manifest is what the site reads: a directory listing is not available to a serverless build
+    (out / "manifest.json").write_text(json.dumps({"widths": list(WIDTHS), "slugs": sorted(r["slug"] for r, _ in tiles)}, indent=0) + "\n")
     print(f"DONE {len(tiles)} pens → {out}")
 
 
