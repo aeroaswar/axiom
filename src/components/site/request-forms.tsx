@@ -64,7 +64,10 @@ export function LeadRequestForm({ needsAck }: { needsAck: boolean }) {
   return (
     <form
       action={action} noValidate
-      onBlur={e => { if ((e.target as HTMLElement).matches('input')) setErrors(check(e.currentTarget, false)); }}
+      // a message appears when a field is left and goes away as it is corrected, never on leaving a
+      // field: clearing on blur would move the page under a click that is already in flight
+      onBlur={e => { if ((e.target as HTMLElement).matches('input')) { const found = check(e.currentTarget, false); setErrors(x => ({ ...x, ...found })); } }}
+      onInput={e => { const found = check(e.currentTarget, true); setErrors(x => ({ name: found.name && x.name, email: found.email && x.email, wa: found.wa && x.wa, ack: found.ack && x.ack })); }}
       onSubmit={e => {
         const found = check(e.currentTarget, true);
         setErrors(found);
