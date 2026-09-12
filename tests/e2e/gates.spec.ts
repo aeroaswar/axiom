@@ -308,17 +308,36 @@ test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan pr
       page.locator('.buy').getByRole('button', { name: /Add to basket|Tambah ke keranjang/ }).click(),
     ]);
     await expect(page.locator('[data-added="1"]')).toBeVisible();
+    // the mini basket opens on the add and shows the line at the plan price
+    await expect(page.locator('.mini')).toBeVisible();
+    await expect(page.locator('.mini .mini-line.new .amt')).toContainText(net);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.mini')).toHaveCount(0);
     await page.goto('/request');
+    // the basket states the flow and the tax treatment, and the line carries the plan
+    await expect(page.locator('.flow li.now')).toHaveCount(1);
     const line = page.locator('.req-line[data-plan]:not([data-plan=""])');
     expect(await line.count()).toBe(1);
     await expect(line.locator('.plan')).toContainText(/%/);
     await expect(line.locator('.amt')).toHaveText(net);
-    // the declaration is asked for on a research compound and the request lands
+    // each field says what is wrong: nothing filled → the name, the contact and the declaration
+    await page.getByRole('button', { name: /Request a quote|Minta penawaran/ }).click();
+    await expect(page.locator('#rq-name-err')).toBeVisible();
+    await expect(page.locator('#rq-email-err')).toBeVisible();
+    await expect(page.locator('#rq-ack-err')).toBeVisible();
     await page.fill('#rq-name', 'Gate 23');
+    await page.fill('#rq-email', 'not-an-address');
+    await page.getByRole('button', { name: /Request a quote|Minta penawaran/ }).click();
+    await expect(page.locator('#rq-name-err')).toHaveCount(0);
+    await expect(page.locator('#rq-email-err')).toBeVisible();
+    // the declaration is asked for on a research compound and the request lands with a reference
     await page.fill('#rq-email', 'gate23@example.test');
     await page.check('#rq-ack');
-    await page.getByRole('button', { name: /Send the request|Kirim permintaan/ }).click();
-    await page.waitForURL(/request\/sent/);
+    await page.getByRole('button', { name: /Request a quote|Minta penawaran/ }).click();
+    await page.waitForURL(/request\/sent\?.*quote=/);
+    await expect(page.locator('h1')).toContainText(/Q-|\d/);
+    await expect(page.locator('.flow li.done')).toHaveCount(1);
+    await expect(page.locator('a[href^="https://wa.me"]').first()).toHaveAttribute('href', /quote|Q-|%20/);
     // a lot with nothing available offers a notice, not an Add
     await page.goto('/products/tb-500');
     expect(await page.locator('.buy button[type="submit"]').count()).toBe(0);
@@ -333,13 +352,21 @@ test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan pr
     await expect(card).toBeVisible();
     const sku = await card.locator('.save input[name="sku"]').getAttribute('value');
     expect(sku).toBeTruthy();
-    // Add posts the first available size, quantity one, one-time, straight from the grid
+    // Add opens the card's chooser on a compound with a plan or several sizes: pick a plan, then
+    // Add posts the chosen size and interval from the grid; the mini basket opens on it
+    await card.locator('.add button[type="submit"]').click();
+    await expect(card.locator('.qa-panel')).toBeVisible();
+    const plans = card.locator('.qa-panel .plans button');
+    if (await plans.count()) await plans.last().click();
     await Promise.all([
       page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
-      card.locator('.add button[type="submit"]').click(),
+      card.locator('[data-qa-add]').click(),
     ]);
     await expect(card.locator('[data-added="1"]')).toBeVisible();
+    await expect(page.locator('.mini')).toBeVisible();
     await expect(page.locator('[data-basket-count]').first()).toHaveText(/^[1-9]\d*$/);
+    await page.locator('.mini [aria-label]').first().click();
+    await expect(page.locator('.mini')).toHaveCount(0);
     // the bookmark is a form: pressed after the post, counted in the nav, and the filter shows the card
     await Promise.all([
       page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
@@ -358,6 +385,9 @@ test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan pr
     await expect(page.locator('[data-saved-count]').first()).toHaveText('');
     await page.goto('/products?saved=1');
     expect(await page.locator('.pcard.shop2').count()).toBe(0);
+    // an empty result offers a way out
+    await page.goto('/products?q=zzqx');
+    await expect(page.locator('.empty a.btn')).toHaveAttribute('href', /\/products$/);
   });
   test('the certificate library finds a lot by its code, opens the certificate and its PDF', async ({ page, context }) => {
     await page.goto('/coas');

@@ -8,10 +8,10 @@ import { JsonLd } from '@/components/site/json-ld';
 import { BuyBox } from '@/components/site/buy-box';
 import { ShopCard } from '@/components/site/shop-card';
 import { ProductImage } from '@/components/site/product-image';
-import { getCatalogue, getCoasForProduct, getCompound, getPublishedSlugs, groupCompounds, pick } from '@/lib/site/catalogue';
+import { getCatalogue, getCoas, getCoasForProduct, getCompound, getDeliveryZones, getPublishedSlugs, groupCompounds, pick } from '@/lib/site/catalogue';
 import { alternates, breadcrumbLd, describe, productLd } from '@/lib/site/seo';
 import { getPlanTiers, getSettings } from '@/lib/settings';
-import { pct } from '@/lib/money';
+import { idr, pct } from '@/lib/money';
 import { fmtLong } from '@/lib/domain/dates';
 
 export const revalidate = 60;
@@ -53,7 +53,14 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
   const tn = await getTranslations('nav');
   const ts = await getTranslations('site.common');
   const tc = await getTranslations('common');
-  const [settings, tiers, coas, rows] = await Promise.all([getSettings(), getPlanTiers(), getCoasForProduct(p.id), getCatalogue()]);
+  const [settings, tiers, coas, rows, zones, allCoas] = await Promise.all([getSettings(), getPlanTiers(), getCoasForProduct(p.id), getCatalogue(), getDeliveryZones(), getCoas()]);
+  // the price is stated with what it excludes: PPN at the seeded rate, and the delivery charge of
+  // the nearest zone with a published rate, per consignment
+  const ppn = Number(settings.ppn_rate);
+  const zone = zones.find(z => z.per_three_idr !== null);
+  const priceNote = zone ? t('price_note', { ppn, per: idr(zone.per_three_idr), zone: pick(locale, zone.label_en, zone.label_id), days: zone.eta_days }) : '';
+  const certified = new Set(allCoas.filter(c => !c.is_sample && c.slug).map(c => c.slug as string));
+  const published = coas.filter(c => !c.is_sample).length;
   const here = `/products/${slug}`;
   const peptide = p.kind === 'peptide';
   const cls = pick(locale, p.compound_class_en, p.compound_class_id);
@@ -102,10 +109,18 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
         <BuyBox
           name={p.name} kind={p.kind}
           variants={variants.map(v => ({ sku: v.sku, dose: v.dose, content: v.content, price_idr: v.price_idr, available: v.available, is_cold_chain: v.is_cold_chain }))}
-          tiers={tiers} initialSku={askedSku} basketHref="/request" whatsapp={settings.whatsapp.number}
+          tiers={tiers} initialSku={askedSku} basketHref="/request" whatsapp={settings.whatsapp.number} priceNote={priceNote} locale={locale}
         />
 
         <div className="prod-body">
+          {peptide ? (
+            <nav className="prod-tabs" aria-label={t('on_page')}>
+              <a href="#about">{t('about')}</a>
+              <a href="#handling">{t('handling')}</a>
+              <a href="#coa">{t('tab_coa')} <span className="n">{published}</span></a>
+              <Link href={`/compounds/${p.pathway.slug}/${p.slug}`}>{t('tab_guide')} <Icon name="arrow" className="ar" /></Link>
+            </nav>
+          ) : null}
           <div className="prod-sec" id="about">
             <h2>{t('about')}</h2>
             <div className="cp-body">{identity ? <p>{identity}</p> : null}</div>
@@ -170,7 +185,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
               <Link href={{ pathname: '/products', query: { pathway: p.pathway.slug } }} className="tlink">{tn('shop')} <Icon name="arrow" className="ar" /></Link>
             </Reveal>
             <div className="pgrid cards">
-              {related.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
+              {related.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} ppn={ppn} certified={certified.has(c.slug)} />)}
             </div>
           </div>
         </section>

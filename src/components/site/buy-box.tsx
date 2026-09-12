@@ -6,7 +6,8 @@ import { Link } from '@/i18n/navigation';
 import { Icon } from '@/components/shell/sprite';
 import { idr, planNet } from '@/lib/money';
 import { addToBasketAction, type BasketResult } from '@/app/[locale]/(public)/actions';
-import { BASKET_EVENT } from './basket-badge';
+import { ADDED_EVENT, BASKET_EVENT } from './basket-badge';
+import { addDays, fmtLong, now } from '@/lib/domain/dates';
 
 /**
  * The purchase box on a product page: the size chips, the price, one-time or a delivery plan, the
@@ -30,11 +31,15 @@ function Submit({ label, busy, done, disabled }: { label: string; busy: string; 
   );
 }
 
-export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, whatsapp }: {
+export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, whatsapp, priceNote, locale }: {
   name: string; kind: 'peptide' | 'device' | 'apparel'; variants: BuyVariant[]; tiers: BuyTier[]; initialSku?: string;
-  basketHref: string; whatsapp: string;
+  basketHref: string; whatsapp: string; priceNote: string; locale: string;
 }) {
   const t = useTranslations('site.product');
+  // the next delivery dates are the device's today plus the interval: read after mount so the
+  // server's HTML and the client's first paint agree
+  const [today, setToday] = useState<Date | null>(null);
+  useEffect(() => { setToday(now()); }, []);
   const firstOpen = variants.find(v => v.available > 0) ?? variants[0];
   const [sku, setSku] = useState(() => {
     const asked = variants.find(v => v.sku === initialSku);
@@ -48,7 +53,11 @@ export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, wh
   const [doneKey, setDoneKey] = useState<string | null>(null);
   const selectionKey = `${sku}|${plan}|${days}|${qty}`;
   useEffect(() => {
-    if (state?.ok) { window.dispatchEvent(new Event(BASKET_EVENT)); setDoneKey(selectionKey); }
+    if (state?.ok) {
+      window.dispatchEvent(new Event(BASKET_EVENT));
+      window.dispatchEvent(new CustomEvent(ADDED_EVENT, { detail: { sku, plan: plan === 'sub' && canPlan && tier ? tier.days : null } }));
+      setDoneKey(selectionKey);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.at, state?.ok]);
 
@@ -96,6 +105,7 @@ export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, wh
         {list !== null && net !== null && net !== list ? <span className="strike">{idr(list)}</span> : null}
         {v ? <span className="per">{t('per', { dose: v.dose })}</span> : null}
       </div>
+      {list !== null ? <p className="price-note">{priceNote}</p> : null}
       <div className={`avail-line${out ? ' none' : v && v.available <= 3 ? ' low' : ''}`}>
         <span className="dot" />
         {out ? t('none_left') : v && v.available <= 3 ? t('low', { count: v.available }) : t('available', { count: v?.available ?? 0 })}
@@ -130,6 +140,11 @@ export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, wh
                   </button>
                 ))}
               </div>
+              {tier && today ? (
+                <p className="freq-dates">
+                  {t.rich('freq_dates', { days: tier.days, d1: fmtLong(addDays(today, tier.days), locale), d2: fmtLong(addDays(today, tier.days * 2), locale), b: c => <b>{c}</b> })}
+                </p>
+              ) : null}
             </div>
           ) : null}
         </>

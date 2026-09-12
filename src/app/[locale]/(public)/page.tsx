@@ -46,6 +46,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   featured.length = Math.min(featured.length, 8);
   const merch = groupCompounds(rows.filter(r => r.kind === 'apparel'));
   const latestCoa = coas.find(c => !c.is_sample) ?? coas[0] ?? null;
+  const certified = new Set(coas.filter(c => !c.is_sample && c.slug).map(c => c.slug as string));
+  const ppn = Number(settings.ppn_rate);
   const [t1, t2, t3] = tiers;
   const ruoShort = tc('ruo_short');
 
@@ -106,7 +108,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </Reveal>
           <div className="sp-44" />
           <Stagger className="pgrid cards">
-            {featured.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
+            {featured.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} ppn={ppn} certified={certified.has(c.slug)} />)}
           </Stagger>
           <div className="sp-44" />
           <div className="acts" style={{ justifyContent: 'center' }}>

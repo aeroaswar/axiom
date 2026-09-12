@@ -19,10 +19,13 @@ export function shopHref(q: ShopQuery, patch: Partial<ShopQuery>): { pathname: s
   return Object.keys(next).length ? { pathname: '/products', query: next } : { pathname: '/products' };
 }
 
-export async function ShopFilters({ q, pathways, count, total, savedCount, locale }: { q: ShopQuery; pathways: Pathway[]; count: number; total: number; savedCount: number; locale: string }) {
+export async function ShopFilters({ q, pathways, count, shown, total, savedCount, locale, suggestions }: {
+  q: ShopQuery; pathways: Pathway[]; count: number; shown: number; total: number; savedCount: number; locale: string; suggestions: string[];
+}) {
   const t = await getTranslations('site.shop');
   const research = pathways.filter(p => p.kind === 'peptide');
   const none = !q.kind && !q.pathway && !q.saved;
+  const filtered = Boolean(q.q || q.kind || q.pathway || q.saved);
   return (
     <>
       <form className="ptool" method="get" action="/products" role="search">
@@ -31,7 +34,8 @@ export async function ShopFilters({ q, pathways, count, total, savedCount, local
         {q.saved ? <input type="hidden" name="saved" value="1" /> : null}
         <label className="search" htmlFor="shop-q">
           <Icon name="search" />
-          <input id="shop-q" name="q" type="search" defaultValue={q.q ?? ''} placeholder={t('search_placeholder')} aria-label={t('search')} autoComplete="off" />
+          <input id="shop-q" name="q" type="search" defaultValue={q.q ?? ''} placeholder={t('search_placeholder')} aria-label={t('search')} autoComplete="off" list="shop-sugg" />
+          <datalist id="shop-sugg">{suggestions.map(x => <option key={x} value={x} />)}</datalist>
           <button type="submit">{t('search_btn')}</button>
         </label>
         <div className="sortwrap">
@@ -44,7 +48,11 @@ export async function ShopFilters({ q, pathways, count, total, savedCount, local
           </select>
           <button type="submit" className="btn btn-sm sr-only sr-only-focusable">{t('sort')}</button>
         </div>
-        <span className="cnt" data-rows={count}>{t('showing', { count })}{count !== total ? ` · ${total}` : ''}{q.q ? ` · “${q.q}”` : ''}</span>
+        <span className="cnt" data-rows={count}>
+          <span>{shown < count ? t('showing_of', { shown, count }) : t('showing', { count })}{q.q ? ` · “${q.q}”` : ''}</span>
+          {filtered ? <Link href="/products" className="clear">{t('clear')}</Link> : null}
+          <Link href="/price-list" className="tlink pl">{t('price_list_link')} <Icon name="arrow" className="ar" /></Link>
+        </span>
       </form>
       <nav className="pills" aria-label={t('pathways')}>
         <Link href={shopHref(q, { kind: undefined, pathway: undefined, saved: undefined })} className={`chip${none ? ' on' : ''}`}>{t('all_products')}</Link>

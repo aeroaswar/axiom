@@ -3,6 +3,7 @@ import { Messages, CORE } from '@/i18n/provider';
 import { SiteNav } from '@/components/site/site-nav';
 import { SiteFooter } from '@/components/site/site-footer';
 import { MotionRoot } from '@/components/site/motion';
+import { MiniBasket } from '@/components/site/mini-basket';
 import { getSettings } from '@/lib/settings';
 
 export default async function PublicLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
@@ -26,10 +27,11 @@ export default async function PublicLayout({ children, params }: { children: Rea
     <div className="site">
       <a className="skip" href="#main">{ts('skip')}</a>
       <div className="ribbon"><b>RUO</b> · {tc('ruo_short')}</div>
-      <SiteNav links={links} labels={{ request: t('request'), account: t('account'), signIn: tc('sign_in'), menu: 'Menu', language: tc('language'), search: t('search'), saved: t('saved') }} />
+      <SiteNav links={links} labels={{ request: t('basket'), account: t('account'), signIn: tc('sign_in'), menu: 'Menu', language: tc('language'), search: t('search'), saved: t('saved') }} />
       <main id="main" className="site-main">{children}</main>
       <SiteFooter whatsapp={settings.whatsapp} />
       <MotionRoot />
+      <MiniBasket ppn={Number(settings.ppn_rate)} />
     </div>
     </Messages>
   );

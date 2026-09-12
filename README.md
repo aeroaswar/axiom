@@ -33,7 +33,8 @@ src/lib/domain/        next-action, cut-off, dates — one implementation per ru
 src/components/document/  the one A4 document template: invoice, credit note, quote, price list
 scripts/gates/         the gate suite (sql · copy lint · greps · i18n · references) and the runner
 scripts/pens/          the pen catalogue: blank pen + wordmark + rows → public/products/<slug>-{400,800,1280}.webp
-src/components/site/   the storefront pieces; pen-3d / motion / reveal carry the three.js and GSAP motion layer
+src/components/site/   the storefront pieces; pen-3d / motion / reveal carry the three.js and GSAP motion layer;
+                       quick-add / mini-basket / flow-strip carry the quote-first flow on the cards and the basket
 tests/e2e/             the browser gates (Playwright)
 messages/{id,en}/      catalogues per surface, merged at request time; Indonesian is the default locale
 ```

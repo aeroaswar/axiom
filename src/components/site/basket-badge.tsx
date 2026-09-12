@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 
 export const BASKET_EVENT = 'axiom:basket';
+/** Fired after a line is added, with `{ sku, plan }` in `detail`; the mini basket opens on it. */
+export const ADDED_EVENT = 'axiom:added';
 
 /** Line count of the basket, read from the cookie-backed cart via the API. */
 export function BasketBadge() {

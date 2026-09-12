@@ -23,7 +23,7 @@ export async function SiteFooter({ whatsapp }: { whatsapp: { number: string; dis
               <li><Link href="/products">{t('shop')}</Link></li>
               <li><Link href="/merch">{t('merch')}</Link></li>
               <li><Link href="/price-list">{t('price_list')}</Link></li>
-              <li><Link href="/request">{t('request')}</Link></li>
+              <li><Link href="/request">{t('basket')}</Link></li>
               <li><Link href="/account">{t('account')}</Link></li>
             </ul>
           </div>

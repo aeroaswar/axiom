@@ -55,16 +55,19 @@ export async function submitPublicLead(_prev: RequestState | null, form: FormDat
   const lines = await basketLines();
   if (!lines.length) return { error: 'empty' };
   const key = await anonKey(false);
+  let number = '';
   try {
-    await submitPublicRequest(
+    ({ quoteNumber: number } = await submitPublicRequest(
       { name, clinic: String(form.get('clinic') ?? '').trim() || null, role: String(form.get('role') ?? '').trim() || null, email: email || null, whatsapp: whatsapp || null, ack },
       lines,
       String(form.get('locale') ?? 'id'),
       key,
-    );
+    ));
   } catch (e) {
     return { error: pgMessage(e) };
   }
-  redirect({ href: { pathname: '/request/sent', query: { received: '1' } }, locale: localeOf(form) });
+  // the quote number is the guest's reference: it is on the confirmation, in the WhatsApp handoff
+  // and on the quote AXIOM sends, so the three can be matched without an account
+  redirect({ href: { pathname: '/request/sent', query: { received: '1', quote: number } }, locale: localeOf(form) });
   return { error: null };
 }

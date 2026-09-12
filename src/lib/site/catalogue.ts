@@ -38,7 +38,7 @@ export type CompoundFull = Compound & {
 };
 
 export type CatalogueRow = Variant & {
-  product_id: string; slug: string; name: string; kind: Kind; product_sort: number;
+  product_id: string; slug: string; name: string; kind: Kind; product_sort: number; synonyms: string[];
   compound_class_en: string | null; compound_class_id: string | null;
   pathway_no: string; pathway_slug: string; pathway_en: string; pathway_id_name: string; pathway_kind: Kind; pathway_sort: number;
 };
@@ -66,6 +66,7 @@ function rowsOf(raw: Raw[]): CatalogueRow[] {
   return raw.map(r => ({
     ...variantOf(r),
     product_id: String(r.product_id), slug: String(r.slug), name: String(r.name), kind: r.kind as Kind, product_sort: Number(r.product_sort ?? 0),
+    synonyms: Array.isArray(r.synonyms) ? (r.synonyms as string[]) : [],
     compound_class_en: (r.compound_class_en as string | null) ?? null, compound_class_id: (r.compound_class_id as string | null) ?? null,
     pathway_no: String(r.pathway_no), pathway_slug: String(r.pathway_slug), pathway_en: String(r.pathway_en), pathway_id_name: String(r.pathway_id_name),
     pathway_kind: r.pathway_kind as Kind, pathway_sort: Number(r.pathway_sort ?? 0),
@@ -104,7 +105,7 @@ export function groupCompounds(rows: CatalogueRow[]): Compound[] {
     let c = map.get(r.product_id);
     if (!c) {
       c = {
-        id: r.product_id, slug: r.slug, name: r.name, kind: r.kind, synonyms: [], sort: r.product_sort,
+        id: r.product_id, slug: r.slug, name: r.name, kind: r.kind, synonyms: r.synonyms ?? [], sort: r.product_sort,
         compound_class_en: r.compound_class_en, compound_class_id: r.compound_class_id,
         molecular_class_en: null, molecular_class_id: null, cas_no: null,
         pathway: { id: 0, no: r.pathway_no, slug: r.pathway_slug, kind: r.pathway_kind, name_en: r.pathway_en, name_id: r.pathway_id_name, summary_en: '', summary_id: '' },
@@ -280,8 +281,12 @@ export function filterShop(rows: CatalogueRow[], query: ShopQuery, savedSkus: st
   if (query.kind === 'peptide' || query.kind === 'device' || query.kind === 'apparel') r = r.filter(x => x.kind === query.kind);
   if (query.pathway) r = r.filter(x => x.pathway_slug === query.pathway);
   if (query.q) {
-    const needle = query.q.trim().toLowerCase();
-    if (needle) r = r.filter(x => x.name.toLowerCase().includes(needle) || x.sku.toLowerCase().includes(needle) || (x.compound_class_en ?? '').toLowerCase().includes(needle) || (x.compound_class_id ?? '').toLowerCase().includes(needle));
+    // every word must match somewhere: the name, a synonym or abbreviation, the class, the sku or the dose
+    const words = query.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (words.length) r = r.filter(x => {
+      const hay = [x.name, x.sku, x.dose, x.compound_class_en ?? '', x.compound_class_id ?? '', x.pathway_en, x.pathway_id_name, ...x.synonyms].join(' | ').toLowerCase();
+      return words.every(w => hay.includes(w));
+    });
   }
   const compounds = groupCompounds(r);
   const from = (c: Compound) => c.variants.reduce<number | null>((m, v) => (v.price_idr === null ? m : m === null ? v.price_idr : Math.min(m, v.price_idr)), null);

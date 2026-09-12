@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation';
 import { Icon } from '@/components/shell/sprite';
 import { QtyControl, RemoveLine, DestinationSelect, PlanSelect } from '@/components/site/basket-controls';
 import { AccountRequestForm, LeadRequestForm } from '@/components/site/request-forms';
+import { FlowStrip } from '@/components/site/flow-strip';
 import { getBasket } from '@/lib/basket';
 import { getSession } from '@/lib/auth';
 import { getDeliveryZones, getRowsForSkus, pick } from '@/lib/site/catalogue';
@@ -65,12 +66,13 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
   const base = zones.find(z => z.per_three_idr !== null);
   const per = base ? idr(base.per_three_idr) : '—';
   const cap = base ? idr(base.cap_idr) : '—';
+  const ppn = Number(settings.ppn_rate);
 
   return (
     <>
       <section className="page-hero">
         <div className="wrap">
-          <div className="crumbs"><span><Link href="/">{ts('home')}</Link></span><span>{tn('request')}</span></div>
+          <div className="crumbs"><span><Link href="/">{ts('home')}</Link></span><span>{tn('basket')}</span></div>
           <span className="kicker">{t('kicker')}</span>
           <h1 style={{ marginTop: 14 }}>{t('title')}</h1>
           <p className="lead">{t('lead')}</p>
@@ -85,10 +87,12 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
               <p className="lead" style={{ marginTop: 16 }}>{t('empty_body')}</p>
               <div className="acts" style={{ marginTop: 32 }}>
                 <Link href="/products" className="btn btn-solid">{t('empty_cta')}</Link>
-                <Link href="/price-list" className="tlink">{t('empty_prices')} <Icon name="arrow" className="ar" /></Link>
+                <Link href="/compounds" className="tlink">{t('empty_guide')} <Icon name="arrow" className="ar" /></Link>
               </div>
             </div>
           ) : (
+            <>
+            <FlowStrip at={1} />
             <div className="req-grid">
               {/* ------------------------------------------------------- the lines */}
               <div>
@@ -122,6 +126,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
                     );
                   })}
                 </div>
+                {priced.length ? <p className="note" style={{ marginTop: 16 }}>{t('tax_line', { ppn })}</p> : null}
               </div>
 
               {/* ------------------------------------------------------ the summary */}
@@ -154,6 +159,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
                 </p>
               </aside>
             </div>
+            </>
           )}
         </div>
       </section>
