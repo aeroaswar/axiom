@@ -59,7 +59,9 @@
     "merch": "Merch",
     "guide": "Compound guide",
     "coas": "Certificates",
-    "subscriptions": "Subscriptions"
+    "subscriptions": "Subscriptions",
+    "search": "Search the catalogue",
+    "saved": "Saved"
   },
   "auth": {
     "title": "Sign in",

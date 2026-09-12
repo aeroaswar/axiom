@@ -18,13 +18,14 @@ export default async function PublicLayout({ children, params }: { children: Rea
     { href: '/merch', label: t('merch') },
     { href: '/compounds', label: t('guide') },
     { href: '/coas', label: t('coas') },
+    { href: '/contact', label: t('contact') },
   ];
   return (
     <Messages only={[...CORE, 'site']}>
     <div className="site">
       <a className="skip" href="#main">{ts('skip')}</a>
       <div className="ribbon"><b>RUO</b> · {tc('ruo_short')}</div>
-      <SiteNav links={links} labels={{ request: t('request'), account: t('account'), signIn: tc('sign_in'), menu: 'Menu', language: tc('language') }} />
+      <SiteNav links={links} labels={{ request: t('request'), account: t('account'), signIn: tc('sign_in'), menu: 'Menu', language: tc('language'), search: t('search'), saved: t('saved') }} />
       <main id="main" className="site-main">{children}</main>
       <SiteFooter whatsapp={settings.whatsapp} />
     </div>

@@ -54,7 +54,7 @@
 .site .tlink::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--line-2);transition:background .24s}
 .site .tlink:hover::after{background:var(--accent)}
 .site .tlink:hover{color:var(--accent-bright)}
-.site .tlink .ar{transition:transform .24s;color:var(--accent)}
+.site .tlink .ar{transition:transform .24s;color:var(--accent);transform:none}
 .site .tlink:hover .ar{transform:translateX(4px)}
 .site .chip{font-family:var(--sans);font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:9px 14px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);transition:.18s;white-space:nowrap}
 .site .chip:hover{border-color:var(--line-2);color:var(--ink)}
@@ -565,3 +565,149 @@
 
 /* the account link and the cart badge share a row on the phone nav */
 .site .nav-links a.on::before{content:none}
+
+/* ==================================================================
+   The Peptora pass — the same tokens, Peptora's placements: a vial as
+   the product image, a split hero, a feature strip, a card with its
+   own Add, the products toolbar, the certificate cards.
+   ================================================================== */
+
+/* ---------- the vial: a product image built from the tokens ---------- */
+.site .vial{position:relative;display:inline-flex;flex-direction:column;align-items:center;--vw:128px;--vh:222px;width:var(--vw);height:var(--vh);flex:none}
+.site .vial.hero{--vw:172px;--vh:318px}
+.site .vial.thumb{--vw:76px;--vh:140px}
+.site .vial .v-cap{width:62%;height:10%;background:linear-gradient(180deg,#3a3129,#1d1813);border:1px solid rgba(242,237,229,.18);border-bottom:none;flex:none}
+.site .vial .v-collar{width:70%;height:7%;background:linear-gradient(180deg,#9a9086,#c8c0b4 40%,#7d746a);flex:none}
+.site .vial .v-body{position:relative;width:78%;flex:1;border:1px solid rgba(242,237,229,.22);border-top:none;background:linear-gradient(90deg,rgba(242,237,229,.10),rgba(242,237,229,.03) 35%,rgba(242,237,229,.02) 60%,rgba(242,237,229,.12));overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.site .vial .v-glass{position:absolute;inset:0;background:linear-gradient(180deg,rgba(242,237,229,.08),transparent 30%),linear-gradient(90deg,transparent 8%,rgba(242,237,229,.14) 12%,transparent 18%);pointer-events:none}
+.site .vial .v-label{position:relative;margin:0 4% 9%;padding:9px 8px 8px;background:linear-gradient(160deg,#171310,#0c0a08);border:1px solid rgba(242,237,229,.12);display:flex;flex-direction:column;gap:5px;min-height:52%;font-family:var(--sans)}
+.site .vial .v-name{font-weight:600;font-size:10px;letter-spacing:.01em;color:var(--ink);line-height:1.2;padding-right:12px;overflow-wrap:break-word;hyphens:auto}
+.site .vial .v-dose{align-self:flex-start;font-size:8.5px;letter-spacing:.06em;padding:2px 6px;background:var(--accent);color:#0a0704;font-weight:600;font-variant-numeric:tabular-nums}
+.site .vial .v-pur{align-self:flex-start;font-size:7.5px;letter-spacing:.08em;padding:2px 6px;border:1px solid var(--accent-line);color:var(--accent-bright);margin-top:auto;white-space:nowrap}
+.site .vial .v-ruo{font-size:6.5px;letter-spacing:.06em;color:var(--muted-2);line-height:1.2}
+.site .vial .v-wm{position:absolute;right:5px;top:8px;bottom:8px;writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--display);font-size:9px;letter-spacing:.34em;color:var(--muted);text-indent:.34em}
+.site .vial.hero .v-label{min-height:44%;padding:12px 11px 11px;gap:7px}.site .vial.hero .v-name{font-size:15px;padding-right:16px}.site .vial.hero .v-dose{font-size:10px}.site .vial.hero .v-pur{font-size:9px}.site .vial.hero .v-ruo{font-size:7.5px}.site .vial.hero .v-wm{font-size:11px;right:7px}
+.site .vial.thumb .v-label{padding:6px 5px 5px;gap:3px}.site .vial.thumb .v-name{font-size:8px;padding-right:9px}.site .vial.thumb .v-dose{font-size:6.5px;padding:1px 4px}.site .vial.thumb .v-pur,.site .vial.thumb .v-ruo{display:none}.site .vial.thumb .v-wm{font-size:6.5px;right:3px}
+.site .vial .v-shadow{position:absolute;left:8%;right:8%;bottom:-6px;height:10px;background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,.6),transparent 70%);filter:blur(2px)}
+.site .vial-tile{display:grid;place-items:center;width:140px;height:140px;color:var(--accent);font-size:44px;flex:none}
+.site .vial-tile.thumb{width:76px;height:76px;font-size:28px}
+
+/* ---------- nav: the icon cluster ---------- */
+.site .nav-right{gap:8px}
+.site .nav-ic{display:grid;place-items:center;width:40px;height:40px;color:var(--muted);transition:color .2s,background .2s;position:relative;text-decoration:none}
+.site .nav-ic:hover{color:var(--ink);background:rgba(242,237,229,.05)}
+.site .nav-ic .ic-sv{font-size:18px}
+.site .nav-ic .cnt{position:absolute;top:4px;right:2px;font-size:9px;font-variant-numeric:tabular-nums;color:var(--accent-bright);font-weight:600;min-width:12px;text-align:center}
+.site .nav-ic .cnt:empty{display:none}
+.site .nav-account{margin-left:8px}
+@media(max-width:520px){.site .nav-ic{width:36px}.site .nav-right{gap:2px}}
+
+/* ---------- hero: the split ---------- */
+.site .hero.split-hero{padding:72px 0 30px;min-height:auto}
+.site .hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px;align-items:center;max-width:none}
+.site .hero-grid h1{font-size:clamp(40px,5.6vw,78px);line-height:1.0;margin-top:14px}
+.site .hero-grid h1 .l{display:block}
+.site .hero-grid .lead{margin-top:26px;max-width:52ch}
+.site .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+.site .badge{display:inline-flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid var(--line);font-size:11.5px;color:var(--muted);background:rgba(242,237,229,.02);white-space:nowrap}
+.site .badge .ic-sv{color:var(--accent);font-size:15px}
+.site .hero-vials{display:flex;align-items:flex-end;justify-content:center;gap:22px;padding:20px 0 24px;position:relative}
+.site .hero-vials .vial.flank{margin-bottom:-8px;opacity:.92}
+.site .hero-vials::after{content:"";position:absolute;left:10%;right:10%;bottom:8px;height:40px;background:radial-gradient(50% 50% at 50% 50%,rgba(200,138,78,.16),transparent 70%);pointer-events:none}
+@media(max-width:960px){.site .hero-grid{grid-template-columns:1fr;gap:26px}.site .hero-vials{gap:14px;padding:6px 0 10px}.site .hero-vials .vial.hero{--vw:120px;--vh:230px}.site .hero-vials .vial.card{--vw:92px;--vh:176px}}
+@media(max-width:680px){.site .hero.split-hero{padding-top:44px}.site .hero-vials .vial.flank{display:none}}
+
+/* ---------- feature strip ---------- */
+.site .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:8px}
+.site .feat{background:var(--bg);padding:28px 26px 26px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.site .feat .ic-sv{font-size:26px;color:var(--accent)}
+.site .feat h3{font-family:var(--sans);font-weight:500;font-size:15px;letter-spacing:0}
+.site .feat p{color:var(--muted);font-size:13px;line-height:1.65}
+@media(max-width:800px){.site .feats{grid-template-columns:1fr}}
+
+/* ---------- centred section head (featured, certificates) ---------- */
+.site .chead{text-align:center;max-width:64ch;margin:0 auto}
+.site .chead h2{font-size:clamp(30px,4vw,52px);line-height:1.05}
+.site .chead .lead{margin:16px auto 0;text-align:center}
+.site .chead .pill{display:inline-flex;align-items:center;gap:9px;margin-top:20px;padding:9px 16px;border:1px solid var(--accent-line);background:var(--accent-soft);font-size:12px;color:var(--ink)}
+.site .chead .pill .ic-sv{color:var(--ok);font-size:14px}
+
+/* ---------- product card, Peptora shape ---------- */
+.site .pgrid.cards{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;border:none}
+.site .pcard.shop2{position:relative;border:1px solid var(--line);background:rgba(242,237,229,.014);padding:0;display:flex;flex-direction:column;transition:.24s var(--ease);min-height:0;overflow:visible}
+.site .pcard.shop2::before{content:none}
+.site .pcard.shop2:hover{border-color:var(--accent-line);transform:translateY(-3px);background:rgba(242,237,229,.02)}
+.site .pcard.shop2 .img{display:grid;place-items:center;aspect-ratio:1/1;background:radial-gradient(70% 60% at 50% 100%,rgba(200,138,78,.14),transparent 70%),linear-gradient(180deg,rgba(242,237,229,.035),rgba(242,237,229,.012));border-bottom:1px solid var(--line);position:relative;overflow:hidden;margin:0;aspect-ratio:1/1;width:100%}
+.site .pcard.shop2 .img img{width:100%;height:100%;object-fit:cover}
+.site .pcard.shop2 .lk{position:static;color:inherit}
+.site .pcard.shop2 .lk::after{content:"";position:absolute;inset:0}
+.site .pcard.shop2 .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:14px}
+.site .pcard.shop2 .row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.site .pcard.shop2 .nm{font-family:var(--sans);font-weight:500;font-size:15px;margin:0;letter-spacing:0;line-height:1.3;padding:0}
+.site .pcard.shop2 .cls{font-size:12px;color:var(--muted);margin-top:4px;font-weight:300;line-height:1.45}
+.site .pcard.shop2 .pr{margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-end;flex:none;font-family:var(--display);font-size:19px;font-weight:300;font-variant-numeric:tabular-nums}
+.site .pcard.shop2 .pr small{font-family:var(--sans);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-weight:500;margin-bottom:3px}
+.site .pcard.shop2 .add{position:relative;z-index:1}
+.site .pcard.shop2 .add form{display:block}
+.site .pcard.shop2 .add .btn{width:100%;padding:13px 16px}
+.site .pcard.shop2 .add .btn[disabled]{opacity:1;color:var(--muted-2);border-color:var(--line);background:transparent;cursor:default}
+.site .pcard.shop2 .add .btn[disabled]:hover{background:transparent;color:var(--muted-2)}
+.site .pcard.shop2 .save{position:absolute;top:12px;right:12px;z-index:1}
+.site .pcard.shop2 .save button{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--line-2);background:rgba(7,6,5,.5);color:var(--muted);backdrop-filter:blur(6px);cursor:pointer;transition:.2s}
+.site .pcard.shop2 .save button:hover{color:var(--ink);border-color:var(--accent-line)}
+.site .pcard.shop2 .save button.on{color:var(--accent-bright);border-color:var(--accent-line)}
+.site .pcard.shop2 .save .ic-sv{font-size:15px}
+.site .pcard.shop2 .tag{position:absolute;top:14px;left:14px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent-line);padding:4px 8px;background:rgba(7,6,5,.55);z-index:1}
+.site .pcard.shop2.out .img{opacity:.55}
+.site .pcard.shop2.out .nm{color:var(--muted)}
+
+/* ---------- products toolbar, Peptora order ---------- */
+.site .ptool{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap;margin-top:34px}
+.site .ptool .search{flex:1 1 320px;display:flex;align-items:center;gap:10px;border:1px solid var(--line-2);padding:0 14px;height:48px}
+.site .ptool .search .ic-sv{color:var(--muted-2);font-size:16px;flex:none}
+.site .ptool .search input{flex:1;border:none;background:transparent;color:var(--ink);font-size:14px;outline:none;height:100%;min-width:0}
+.site .ptool .search input::placeholder{color:var(--muted-2)}
+.site .ptool .search button{border:none;background:transparent;color:var(--accent);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;cursor:pointer;padding:0 4px;height:100%}
+.site .ptool .sortwrap{display:flex;align-items:center;gap:12px;margin-left:auto}
+.site .ptool .sortwrap label{font-size:12px;color:var(--muted);white-space:nowrap}
+.site .ptool .sortwrap select{height:48px;border:1px solid var(--line-2);background:transparent;color:var(--ink);padding:0 36px 0 14px;font-size:13.5px;color-scheme:dark;min-width:190px}
+.site .ptool .cnt{width:100%;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.site .pills{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 30px}
+.site .pills .chip{padding:11px 16px}
+
+/* ---------- certificate cards ---------- */
+.site .coa-search{margin:34px auto 0;max-width:960px;border:1px solid var(--line);background:rgba(242,237,229,.014);padding:14px;display:flex;gap:12px;flex-wrap:wrap}
+.site .coa-search .search{flex:1 1 320px;display:flex;align-items:center;gap:10px;border:1px solid var(--line-2);padding:0 14px;height:52px}
+.site .coa-search .search .ic-sv{color:var(--muted-2);font-size:16px;flex:none}
+.site .coa-search .search input{flex:1;border:none;background:transparent;color:var(--ink);font-size:14px;outline:none;height:100%;min-width:0}
+.site .coa-search .search input::placeholder{color:var(--muted-2)}
+.site .coa-search .btn{height:52px;padding:0 26px}
+.site .coa-count{margin-top:34px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.site .coa-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:16px}
+@media(max-width:900px){.site .coa-grid{grid-template-columns:1fr}}
+.site .coa-card{border:1px solid var(--line);background:rgba(242,237,229,.014);padding:24px;display:flex;flex-direction:column;gap:18px;transition:border-color .24s}
+.site .coa-card:hover{border-color:var(--accent-line)}
+.site .coa-card .top{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:start}
+.site .coa-card .thumb{width:130px;height:150px;display:grid;place-items:center;background:radial-gradient(70% 60% at 50% 100%,rgba(200,138,78,.14),transparent 70%),linear-gradient(180deg,rgba(242,237,229,.035),rgba(242,237,229,.012));border:1px solid var(--line-soft)}
+.site .coa-card .ttl{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.site .coa-card h3{font-family:var(--sans);font-weight:500;font-size:20px;letter-spacing:0;line-height:1.2}
+.site .coa-card .sub{font-size:13px;color:var(--muted);margin-top:4px}
+.site .coa-card .vbadge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--accent-line);color:var(--accent-bright);font-size:9px;letter-spacing:.22em;text-transform:uppercase;padding:5px 9px;white-space:nowrap;flex:none}
+.site .coa-card .vbadge .ic-sv{font-size:12px}
+.site .coa-card .fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-top:16px}
+.site .coa-card .f .k{display:block;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2);font-weight:500;margin-bottom:5px}
+.site .coa-card .f .v{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:8px}
+.site .coa-card .f .v.lot{letter-spacing:.04em}
+.site .coa-card .f .v.pur{color:var(--ok);font-weight:500;font-size:17px}
+.site .coa-card .copy{border:none;background:transparent;color:var(--muted-2);cursor:pointer;display:grid;place-items:center;width:24px;height:24px;transition:color .2s}
+.site .coa-card .copy:hover{color:var(--accent-bright)}
+.site .coa-card .copy .ic-sv{font-size:13px}
+.site .coa-card .vt{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2);font-weight:500}
+.site .coa-card .chips{display:flex;gap:8px;flex-wrap:wrap;padding:8px 0 0;border:none}
+.site .coa-card .chips .chip{display:inline-flex;align-items:center;gap:7px;text-transform:none;letter-spacing:0;font-size:12px;padding:7px 11px;cursor:default;color:var(--ink)}
+.site .coa-card .chips .chip .ic-sv{color:var(--ok);font-size:12px}
+.site .coa-card .doc{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.site .coa-card .doc .ic-sv{color:var(--accent);font-size:13px}
+.site .coa-card .acts{display:flex;gap:12px;align-items:stretch}
+.site .coa-card .acts .btn-solid{flex:1}
+@media(max-width:560px){.site .coa-card .top{grid-template-columns:1fr}.site .coa-card .thumb{width:100%;height:120px}}

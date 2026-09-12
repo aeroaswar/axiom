@@ -305,7 +305,7 @@ test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan pr
     await expect(page.locator('.price-big .strike')).toHaveText(list);
     await Promise.all([
       page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
-      page.getByRole('button', { name: /Add to basket|Tambah ke keranjang/ }).click(),
+      page.locator('.buy').getByRole('button', { name: /Add to basket|Tambah ke keranjang/ }).click(),
     ]);
     await expect(page.locator('[data-added="1"]')).toBeVisible();
     await page.goto('/request');
@@ -327,11 +327,55 @@ test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan pr
     await page.goto('/products/logo-cap');
     expect(await page.locator('.opts').count()).toBe(0);
   });
-  test('the certificate library opens a certificate and its PDF', async ({ page, context }) => {
+  test('the shop card adds from the grid, the bookmark filters the shop, and the nav badges follow', async ({ page }) => {
+    await page.goto('/products');
+    const card = page.locator('.pcard.shop2:not(.out)').first();
+    await expect(card).toBeVisible();
+    const sku = await card.locator('.save input[name="sku"]').getAttribute('value');
+    expect(sku).toBeTruthy();
+    // Add posts the first available size, quantity one, one-time, straight from the grid
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      card.locator('.add button[type="submit"]').click(),
+    ]);
+    await expect(card.locator('[data-added="1"]')).toBeVisible();
+    await expect(page.locator('[data-basket-count]').first()).toHaveText(/^[1-9]\d*$/);
+    // the bookmark is a form: pressed after the post, counted in the nav, and the filter shows the card
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      card.locator('.save button').click(),
+    ]);
+    await expect(card.locator('.save button')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-saved-count]').first()).toHaveText('1');
+    await page.goto('/products?saved=1');
+    expect(await page.locator('.pcard.shop2').count()).toBe(1);
+    await expect(page.locator(`.pcard.shop2 .save input[value="${sku}"]`)).toHaveCount(1);
+    // pressing it again clears the list and the filter is empty
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      page.locator('.pcard.shop2 .save button').first().click(),
+    ]);
+    await expect(page.locator('[data-saved-count]').first()).toHaveText('');
+    await page.goto('/products?saved=1');
+    expect(await page.locator('.pcard.shop2').count()).toBe(0);
+  });
+  test('the certificate library finds a lot by its code, opens the certificate and its PDF', async ({ page, context }) => {
     await page.goto('/coas');
-    const rows = page.locator('table.coa-tbl tbody tr');
-    expect(await rows.count()).toBeGreaterThan(0);
-    const href = await page.locator('table.coa-tbl a.lk').first().getAttribute('href');
+    const cards = page.locator('.coa-card');
+    const total = await cards.count();
+    expect(total).toBeGreaterThan(0);
+    expect(Number(await page.locator('.coa-count').getAttribute('data-rows'))).toBe(total);
+    const lot = await cards.first().getAttribute('data-lot');
+    expect(lot).toBeTruthy();
+    // the search is one GET form: the lot code narrows the library to that certificate
+    await page.fill('#coa-q', lot!);
+    await page.locator('.coa-search button[type="submit"]').click();
+    await page.waitForURL(/[?&]q=/);
+    const found = await page.locator('.coa-card').count();
+    expect(found).toBeGreaterThan(0);
+    expect(found).toBeLessThan(total + 1);
+    expect(await page.locator(`.coa-card[data-lot="${lot}"]`).count()).toBe(found);
+    const href = await page.locator('.coa-card h3 a').first().getAttribute('href');
     await page.goto(href!);
     await expect(page.locator('[data-coa]')).toBeVisible();
     const pdf = await page.locator('a.btn.btn-solid').first().getAttribute('href');

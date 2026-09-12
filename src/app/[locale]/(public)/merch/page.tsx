@@ -6,6 +6,7 @@ import { JsonLd } from '@/components/site/json-ld';
 import { ShopCard } from '@/components/site/shop-card';
 import { Stagger } from '@/components/site/reveal';
 import { getCatalogue, groupCompounds } from '@/lib/site/catalogue';
+import { getSettings } from '@/lib/settings';
 import { alternates, breadcrumbLd } from '@/lib/site/seo';
 
 export const revalidate = 60;
@@ -23,7 +24,9 @@ export default async function MerchPage({ params }: { params: Promise<{ locale: 
   const t = await getTranslations('site.merch');
   const tn = await getTranslations('nav');
   const ts = await getTranslations('site.common');
-  const rows = await getCatalogue();
+  const [rows, settings, tc] = await Promise.all([getCatalogue(), getSettings(), getTranslations('common')]);
+  const threshold = `≥ ${settings.verification.purity_threshold_pct}%`;
+  const ruoShort = tc('ruo_short');
   const apparel = groupCompounds(rows.filter(r => r.kind === 'apparel'));
   const devices = groupCompounds(rows.filter(r => r.kind === 'device'));
   return (
@@ -40,8 +43,8 @@ export default async function MerchPage({ params }: { params: Promise<{ locale: 
       <section className="band" style={{ borderTop: 'none' }}>
         <div className="wrap" style={{ paddingTop: 44 }}>
           {apparel.length ? (
-            <Stagger className="pgrid">
-              {apparel.map(c => <ShopCard key={c.slug} c={c} locale={locale} image />)}
+            <Stagger className="pgrid cards">
+              {apparel.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
             </Stagger>
           ) : <p className="lead">{t('empty')}</p>}
           {devices.length ? (
@@ -51,8 +54,8 @@ export default async function MerchPage({ params }: { params: Promise<{ locale: 
                 <h2 style={{ fontSize: 'clamp(22px,2.6vw,30px)' }}>{t('devices')}</h2>
                 <Link href={{ pathname: '/products', query: { kind: 'device' } }} className="tlink">{tn('shop')} <Icon name="arrow" className="ar" /></Link>
               </div>
-              <div className="pgrid">
-                {devices.map(c => <ShopCard key={c.slug} c={c} locale={locale} image />)}
+              <div className="pgrid cards">
+                {devices.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
               </div>
             </>
           ) : null}

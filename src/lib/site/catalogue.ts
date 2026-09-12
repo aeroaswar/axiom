@@ -270,12 +270,13 @@ export async function getCoasForProduct(productId: string): Promise<Coa[]> {
 }
 
 // ---------------------------------------------------------------- the shop
-export type ShopQuery = { kind?: string; pathway?: string; q?: string; sort?: string };
+export type ShopQuery = { kind?: string; pathway?: string; q?: string; sort?: string; saved?: string };
 
 /** The shop's grid: compounds filtered by kind, pathway and a name search, sorted as asked. Every
  *  filter is a URL parameter, so a chip is a link and the result is server-rendered. */
-export function filterShop(rows: CatalogueRow[], query: ShopQuery): Compound[] {
+export function filterShop(rows: CatalogueRow[], query: ShopQuery, savedSkus: string[] = []): Compound[] {
   let r = rows;
+  if (query.saved) { const set = new Set(savedSkus); const products = new Set(rows.filter(x => set.has(x.sku)).map(x => x.product_id)); r = r.filter(x => products.has(x.product_id)); }
   if (query.kind === 'peptide' || query.kind === 'device' || query.kind === 'apparel') r = r.filter(x => x.kind === query.kind);
   if (query.pathway) r = r.filter(x => x.pathway_slug === query.pathway);
   if (query.q) {

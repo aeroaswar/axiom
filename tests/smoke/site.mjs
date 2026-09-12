@@ -118,16 +118,22 @@ for (const width of [390, 1440]) {
     .replace(/\$ACTION_[A-Z_]*:\d+/g, '$ACTION')
     .replace(/k\d{6,}/g, 'k')
     .replace(/\\"[A-Za-z0-9_-]{21}\\"/g, '\\"tok\\"');
+  // the router state names the path the page was rendered for: the build-time prerender knows the
+  // default locale's unprefixed path, an on-demand render the prefixed one. Same page, so the
+  // locale segment is dropped before comparing.
+  const routed = s => s.replace(/\\"c\\":\[\\"\\",\\"(id|en)\\",/g, '\\"c\\":[\\"\\",');
   // the dev server streams its flight chunks in whatever order they resolve, so compare the
   // document byte for byte and the chunks as a set
   const CHUNK = /<script>self\.__next_f\.push\(.*?\)<\/script>/gs;
   const doc = s => strip(s).replace(CHUNK, '');
-  const chunks = s => (strip(s).match(CHUNK) || []).slice().sort();
+  const chunks = s => (routed(strip(s)).match(CHUNK) || []).slice().sort();
   const sa = doc(ha), sb = doc(hb);
   let at = 0; while (at < Math.min(sa.length, sb.length) && sa[at] === sb[at]) at++;
   const ca = chunks(ha), cb = chunks(hb);
   ok('crawler HTML is the anonymous HTML', sa === sb, sa === sb ? `${sa.length} bytes` : `diverges at ${at}: ${JSON.stringify(sa.slice(at, at + 60))} vs ${JSON.stringify(sb.slice(at, at + 60))}`);
-  ok('crawler gets the same server payload', ca.length === cb.length && ca.join('') === cb.join(''), `${ca.length} vs ${cb.length} chunks`);
+  const ja = ca.join(''), jb = cb.join('');
+  let ct = 0; while (ct < Math.min(ja.length, jb.length) && ja[ct] === jb[ct]) ct++;
+  ok('crawler gets the same server payload', ja === jb, ja === jb ? `${ca.length} chunks` : `${ca.length} vs ${cb.length} chunks, diverge at ${ct}: ${JSON.stringify(ja.slice(Math.max(0, ct - 60), ct + 80))} vs ${JSON.stringify(jb.slice(Math.max(0, ct - 60), ct + 80))}`);
   // and the education itself, as text, after both pages have settled
   await a.waitForLoadState('networkidle'); await b.waitForLoadState('networkidle');
   const ta = await a.evaluate(() => document.getElementById('main')?.innerText ?? '');

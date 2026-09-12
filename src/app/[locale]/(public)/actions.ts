@@ -1,6 +1,7 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { addBasketLine, planOf, setBasketLine, setBasketPlan } from '@/lib/basket';
+import { getSaved, setSaved } from '@/components/account/saved';
 
 // The public site's only writes: the basket. Every one of them is a form post to a server action,
 // so the control is a real button, works without JavaScript, and the basket still lives in the
@@ -39,4 +40,15 @@ export async function updateBasketLineAction(_prev: BasketResult | null, form: F
   else await setBasketLine(sku, next, siteRaw || null, plan);
   revalidatePath('/request');
   return { ok: true, qty: next, at: Date.now() };
+}
+
+/** The bookmark on a card. Cookie-backed, so it works signed out; the account's Saved page reads it. */
+export async function toggleSavedAction(_prev: { saved: boolean } | null, form: FormData): Promise<{ saved: boolean }> {
+  const sku = String(form.get('sku') ?? '').trim();
+  if (!sku) return { saved: false };
+  const list = await getSaved();
+  const has = list.includes(sku);
+  await setSaved(has ? list.filter(s => s !== sku) : [...list, sku]);
+  revalidatePath('/', 'layout');
+  return { saved: !has };
 }

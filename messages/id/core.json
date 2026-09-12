@@ -59,7 +59,9 @@
     "merch": "Merch",
     "guide": "Panduan senyawa",
     "coas": "Sertifikat",
-    "subscriptions": "Langganan"
+    "subscriptions": "Langganan",
+    "search": "Cari di katalog",
+    "saved": "Tersimpan"
   },
   "auth": {
     "title": "Masuk",

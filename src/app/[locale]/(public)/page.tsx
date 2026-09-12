@@ -6,6 +6,7 @@ import { HeroMount } from '@/components/site/hero-mount';
 import { Reveal, Stagger } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
 import { ShopCard } from '@/components/site/shop-card';
+import { Vial } from '@/components/site/vial';
 import { getCatalogue, getCoas, getCounts, getPathways, groupCompounds, pick } from '@/lib/site/catalogue';
 import { alternates, organizationLd } from '@/lib/site/seo';
 import { getPlanTiers, getSettings } from '@/lib/settings';
@@ -41,9 +42,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const featured: typeof compounds = [];
   for (const p of research) { const c = compounds.find(x => x.pathway.slug === p.slug && !featured.includes(x)); if (c) featured.push(c); }
   for (const c of compounds) { if (featured.length >= 8) break; if (!featured.includes(c)) featured.push(c); }
+  featured.length = Math.min(featured.length, 8);
   const merch = groupCompounds(rows.filter(r => r.kind === 'apparel'));
   const latestCoa = coas.find(c => !c.is_sample) ?? coas[0] ?? null;
   const [t1, t2, t3] = tiers;
+  const ruoShort = tc('ruo_short');
 
   return (
     <>
@@ -51,53 +54,56 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <HeroMount />
 
       {/* ------------------------------------------------------------- hero */}
-      <section className="hero">
-        <div className="wrap hero-in">
-          <span className="kicker">{t('kicker')}</span>
-          <h1>{tc('tagline')}</h1>
-          <p className="lead">{t('lead')}</p>
-          <div className="hero-cta">
-            <Link href="/products" className="btn btn-solid">{t('cta_shop')}</Link>
-            <Link href="/compounds" className="tlink">{t('cta_guide')} <Icon name="arrow" className="ar" /></Link>
+      <section className="hero split-hero">
+        <div className="wrap hero-grid">
+          <div>
+            <span className="kicker">{t('kicker')}</span>
+            <h1>
+              <span className="l">{t('hero_l1')}</span>
+              <span className="l">{t('hero_l2')} <em>{t('hero_em')}</em></span>
+            </h1>
+            <p className="lead">{t('lead')}</p>
+            <div className="hero-cta">
+              <Link href="/products" className="btn btn-solid">{t('cta_shop')} <Icon name="arrow" /></Link>
+              <Link href="/coas" className="btn">{t('cta_coas')}</Link>
+            </div>
+            <div className="badges">
+              <span className="badge"><Icon name="check" />{t('badge_purity', { threshold })}</span>
+              <span className="badge"><Icon name="flask" />{t('badge_tested', { method })}</span>
+              <span className="badge"><Icon name="truck" />{t('badge_cold')}</span>
+            </div>
           </div>
-        </div>
-        <div className="hero-meta">
-          <div className="wrap">
-            <div className="m"><div className="k">{t('meta_compounds')}</div><div className="v mono-n">{counts.compounds}</div></div>
-            <div className="m"><div className="k">{t('meta_lots')}</div><div className="v mono-n">{counts.lots}</div></div>
-            <div className="m"><div className="k">{t('meta_pathways')}</div><div className="v mono-n">{counts.pathways}</div></div>
-            <div className="m"><div className="k">{t('meta_purity')}</div><div className="v mono-n">{threshold}</div></div>
+          <div className="hero-vials">
+            {featured[1] ? <Vial name={featured[1].name} dose={featured[1].variants[0]?.dose} purity={threshold} size="card" ruo={ruoShort} /> : null}
+            {featured[0] ? <Vial name={featured[0].name} dose={featured[0].variants[featured[0].variants.length - 1]?.dose} purity={threshold} size="hero" ruo={ruoShort} /> : null}
+            {featured[2] ? <Vial name={featured[2].name} dose={featured[2].variants[0]?.dose} purity={threshold} size="card" ruo={ruoShort} /> : null}
           </div>
         </div>
       </section>
 
-      {/* ---------------------------------------------------------- catalog */}
-      <section className="band" id="catalog">
-        <div className="wrap">
-          <Reveal as="div" className="shead duo">
-            <span className="no">01</span>
-            <div>
-              <span className="kicker k">{t('cat_kicker')}</span>
-              <h2>{t('cat_title')}</h2>
-              <p>{t('cat_body')}</p>
-            </div>
+      {/* ------------------------------------------------------- feature strip */}
+      <section className="wrap" style={{ paddingBottom: 8 }}>
+        <Stagger className="feats">
+          <div className="feat"><Icon name="truck" /><h3>{t('feat_1_t')}</h3><p>{t('feat_1_b')}</p></div>
+          <div className="feat"><Icon name="receipt" /><h3>{t('feat_2_t')}</h3><p>{t('feat_2_b')}</p></div>
+          <div className="feat"><Icon name="flask" /><h3>{t('feat_3_t', { method })}</h3><p>{t('feat_3_b', { threshold })}</p></div>
+        </Stagger>
+      </section>
+
+      {/* ---------------------------------------------------------- featured */}
+      <section className="band" id="catalog" style={{ borderTop: 'none' }}>
+        <div className="wrap" style={{ paddingTop: 72 }}>
+          <Reveal as="div" className="chead">
+            <h2>{t('featured_title')} <em>{t('featured_em')}</em></h2>
+            <p className="lead">{t('featured_sub')} {tc('compounds', { count: counts.compounds })} · {tc('lots', { count: counts.lots })}.</p>
           </Reveal>
-          <Stagger className="cat-chips">
-            <Link href="/products" className="chip on">{t('cat_all')}</Link>
-            {research.map(p => (
-              <Link key={p.slug} href={{ pathname: '/products', query: { pathway: p.slug } }} className="chip">
-                <span className="mono-n" style={{ marginRight: 8, opacity: .6 }}>{p.no}</span>{pick(locale, p.name_en, p.name_id)}
-              </Link>
-            ))}
-          </Stagger>
-          <span className="tag">{t('cat_featured')}</span>
-          <div className="sp-24" />
-          <Stagger className="pgrid">
-            {featured.map(c => <ShopCard key={c.slug} c={c} locale={locale} />)}
+          <div className="sp-44" />
+          <Stagger className="pgrid cards">
+            {featured.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
           </Stagger>
           <div className="sp-44" />
-          <div className="acts">
-            <Link href="/products" className="btn btn-solid">{t('cat_open')}</Link>
+          <div className="acts" style={{ justifyContent: 'center' }}>
+            <Link href="/products" className="btn btn-solid">{t('featured_all')}</Link>
             <Link href="/price-list" className="tlink">{tn('price_list')} <Icon name="arrow" className="ar" /></Link>
           </div>
         </div>
@@ -145,7 +151,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <section className="band" id="standard">
         <div className="wrap">
           <Reveal as="div" className="shead duo">
-            <span className="no">03</span>
+            <span className="no">02</span>
             <div>
               <span className="kicker k">{t('std_kicker')}</span>
               <h2>{t('std_title')}</h2>
@@ -220,7 +226,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <section className="band" id="next">
         <div className="wrap">
           <Reveal as="div" className="shead">
-            <span className="no">04</span>
+            <span className="no">03</span>
             <div>
               <span className="kicker k">{t('cta_kicker')}</span>
               <div className="cta-band"><h2>{t('cta_title')}</h2></div>

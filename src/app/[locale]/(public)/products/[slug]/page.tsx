@@ -7,6 +7,7 @@ import { Reveal } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
 import { BuyBox } from '@/components/site/buy-box';
 import { ShopCard } from '@/components/site/shop-card';
+import { Vial } from '@/components/site/vial';
 import { getCatalogue, getCoasForProduct, getCompound, getPublishedSlugs, groupCompounds, pick } from '@/lib/site/catalogue';
 import { alternates, breadcrumbLd, describe, productLd } from '@/lib/site/seo';
 import { getPlanTiers, getSettings } from '@/lib/settings';
@@ -60,6 +61,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
   const identity = pick(locale, p.identity_en, p.identity_id);
   const handling = pick(locale, p.handling_en, p.handling_id) || pick(locale, settings.handling_baseline.en, settings.handling_baseline.id);
   const threshold = `≥ ${settings.verification.purity_threshold_pct}%`;
+  const ruoShort = tc('ruo_short');
   const related = groupCompounds(rows.filter(r => r.pathway_slug === p.pathway.slug && r.slug !== p.slug)).slice(0, 4);
   const variants = p.variants.slice().sort((a, b) => a.sort - b.sort);
   const askedSku = Array.isArray(sp.sku) ? sp.sku[0] : sp.sku;
@@ -92,7 +94,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
             {cls ? <p className="cls">{cls}</p> : null}
           </div>
           <div className="prod-fig" aria-hidden="true">
-            <Icon name={icon} />
+            <Vial name={p.name} dose={variants[0]?.dose} purity={threshold} kind={p.kind} size="hero" ruo={ruoShort} />
             <span className="lab">{variants[0]?.content}</span>
           </div>
         </div>
@@ -167,8 +169,8 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
               <h2>{t('related', { pathway: pathwayName })}</h2>
               <Link href={{ pathname: '/products', query: { pathway: p.pathway.slug } }} className="tlink">{tn('shop')} <Icon name="arrow" className="ar" /></Link>
             </Reveal>
-            <div className="pgrid">
-              {related.map(c => <ShopCard key={c.slug} c={c} locale={locale} />)}
+            <div className="pgrid cards">
+              {related.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
             </div>
           </div>
         </section>

@@ -612,8 +612,9 @@ await as(OWNER, async tx => {
   await expectError(tx, sp => sp`select axiom.new_quote(${REGENERA}::uuid, ${sp.json([{ sku: 'mask', qty: 1, interval_days: 30 }])})`, 'and on a quote line', /research compounds only/i);
   await tx`select axiom.cart_set(${c.id}::uuid, null, 'reta10', 1, null, 30)`;
   await tx`select axiom.cart_set(${c.id}::uuid, null, 'reta10', 2, null, null)`;
-  const rows = await tx`select qty, interval_days from axiom.cart_items_for(${c.id}::uuid, null) order by interval_days nulls first`;
-  ok(rows.length === 2 && rows[0].interval_days === null && rows[1].interval_days === 30, 'the same lot once and on a plan is two basket lines');
+  // the account's basket persists across runs, so only the lot this gate set is counted
+  const rows = await tx`select qty, interval_days from axiom.cart_items_for(${c.id}::uuid, null) where sku = 'reta10' order by interval_days nulls first`;
+  ok(rows.length === 2 && rows[0].interval_days === null && rows[0].qty === 2 && rows[1].interval_days === 30 && rows[1].qty === 1, 'the same lot once and on a plan is two basket lines');
 });
 
 console.log('Gate S19: the plan is the account’s own to skip, pause, resume, cancel; never another’s');
