@@ -82,10 +82,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 <ProductImage slug={featured[0].slug} name={featured[0].name} dose={featured[0].variants[0]?.dose} purity={threshold} ruo={ruoShort} size="hero" priority />
               </PenHero>
             ) : null}
-            <div className="hero-flank">
-              {featured[1] ? <Link href={`/products/${featured[1].slug}`} className="flank" aria-label={featured[1].name}><ProductImage slug={featured[1].slug} name={featured[1].name} dose={featured[1].variants[0]?.dose} purity={threshold} ruo={ruoShort} size="card" /></Link> : null}
-              {featured[2] ? <Link href={`/products/${featured[2].slug}`} className="flank" aria-label={featured[2].name}><ProductImage slug={featured[2].slug} name={featured[2].name} dose={featured[2].variants[0]?.dose} purity={threshold} ruo={ruoShort} size="card" /></Link> : null}
-            </div>
           </div>
         </div>
       </section>
