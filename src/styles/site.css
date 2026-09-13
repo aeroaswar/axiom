@@ -513,10 +513,18 @@
 .site .coa-tbl tr.rowlink:hover td{background:rgba(200,138,78,.06)}
 .site .coa-tbl a.lk{color:var(--ink)}
 .site .coa-tbl a.lk:hover{color:var(--accent-bright)}
-.site .coa-view{padding:44px 0 64px}
+.site .coa-view{padding-block:44px 64px}
 .site .coa-view{background:radial-gradient(60% 50% at 50% 0,rgba(200,138,78,.07),transparent 70%)}
-.site .coa-frame{background:rgba(242,237,229,.055);border:1px solid var(--line-2);box-shadow:0 1px 0 rgba(242,237,229,.08) inset,0 34px 90px rgba(0,0,0,.6);overflow-x:auto;padding:0}
-.site .coa-frame .inv-doc{margin:0 auto;box-shadow:none;border:none;max-width:794px;background:transparent}
+/* the certificate reads as the A4 page it is: the sheet itself is the raised object, lifted off the
+   black ground, at 794 x 1123. The frame around it only scrolls it on a narrow screen. */
+.site .coa-frame{overflow-x:auto;padding:0 0 6px}
+.site .coa-frame .inv-doc{margin:0 auto;max-width:794px;background-color:rgba(242,237,229,.055);
+  border:1px solid var(--line-2);box-shadow:0 1px 0 rgba(242,237,229,.08) inset,0 34px 90px rgba(0,0,0,.6)}
+/* a phone reads the sheet reflowed, not sideways: the right-aligned document cells may wrap here */
+@media(max-width:680px){
+  .site .coa-frame .d-tbl .n{white-space:normal;padding-left:10px}
+  .site .coa-frame .d-tbl th{letter-spacing:.12em}
+}
 .site .coa-acts{display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin:22px 0 28px}
 
 /* ---------- home: the catalogue band and the plan explainer ---------- */
