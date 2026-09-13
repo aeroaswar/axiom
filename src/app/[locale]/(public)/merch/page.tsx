@@ -44,7 +44,7 @@ export default async function MerchPage({ params }: { params: Promise<{ locale: 
         <div className="wrap" style={{ paddingTop: 44 }}>
           {apparel.length ? (
             <Stagger className="pgrid cards">
-              {apparel.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} ppn={Number(settings.ppn_rate)} />)}
+              {apparel.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
             </Stagger>
           ) : <p className="lead">{t('empty')}</p>}
           {devices.length ? (
@@ -55,7 +55,7 @@ export default async function MerchPage({ params }: { params: Promise<{ locale: 
                 <Link href={{ pathname: '/products', query: { kind: 'device' } }} className="tlink">{tn('shop')} <Icon name="arrow" className="ar" /></Link>
               </div>
               <div className="pgrid cards">
-                {devices.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} ppn={Number(settings.ppn_rate)} />)}
+                {devices.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} />)}
               </div>
             </>
           ) : null}

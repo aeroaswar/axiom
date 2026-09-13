@@ -43,7 +43,6 @@ export default async function ShopPage({ params, searchParams }: { params: Param
   const compounds = filterShop(rows, q, saved);
   const threshold = `≥ ${settings.verification.purity_threshold_pct}%`;
   const ruoShort = (await getTranslations('common'))('ruo_short');
-  const ppn = Number(settings.ppn_rate);
   // the grid opens one page deep; "Show more" is a link that asks for the next page, so the URL
   // is still the page and the filters stay within reach on a phone
   const PAGE = 24;
@@ -79,7 +78,7 @@ export default async function ShopPage({ params, searchParams }: { params: Param
           ) : (
             <>
               <div className="pgrid cards" data-scope="shop">
-                {shown.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} ppn={ppn} certified={certified.has(c.slug)} />)}
+                {shown.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} certified={certified.has(c.slug)} />)}
               </div>
               {shown.length < compounds.length ? (
                 <div className="acts more">

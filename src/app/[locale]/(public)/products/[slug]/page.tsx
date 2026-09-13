@@ -54,11 +54,10 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
   const ts = await getTranslations('site.common');
   const tc = await getTranslations('common');
   const [settings, tiers, coas, rows, zones, allCoas] = await Promise.all([getSettings(), getPlanTiers(), getCoasForProduct(p.id), getCatalogue(), getDeliveryZones(), getCoas()]);
-  // the price is stated with what it excludes: PPN at the seeded rate, and the delivery charge of
+  // the price is stated with the delivery charge of
   // the nearest zone with a published rate, per consignment
-  const ppn = Number(settings.ppn_rate);
   const zone = zones.find(z => z.per_three_idr !== null);
-  const priceNote = zone ? t('price_note', { ppn, per: idr(zone.per_three_idr), zone: pick(locale, zone.label_en, zone.label_id), days: zone.eta_days }) : '';
+  const priceNote = zone ? t('price_note', { per: idr(zone.per_three_idr), zone: pick(locale, zone.label_en, zone.label_id), days: zone.eta_days }) : '';
   const certified = new Set(allCoas.filter(c => !c.is_sample && c.slug).map(c => c.slug as string));
   // the dispatch cut-off is a rule in settings; a cold-chain lot closes at the cold cut-off
   const cold = p.variants.some(v => v.is_cold_chain);
@@ -189,7 +188,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
               <Link href={{ pathname: '/products', query: { pathway: p.pathway.slug } }} className="tlink">{tn('shop')} <Icon name="arrow" className="ar" /></Link>
             </Reveal>
             <div className="pgrid cards">
-              {related.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} ppn={ppn} certified={certified.has(c.slug)} />)}
+              {related.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} certified={certified.has(c.slug)} />)}
             </div>
           </div>
         </section>

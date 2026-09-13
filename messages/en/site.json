@@ -255,7 +255,6 @@
       "wa_plan": "every {days} days",
       "sub_lines": "Lines on a plan are quoted at the plan price and start a subscription once the first delivery is paid.",
       "empty_guide": "Browse the compound guide",
-      "tax_line": "Prices excl. PPN {ppn}%. PPN is itemised on the quote.",
       "err_name": "Your name is needed on the quote.",
       "err_contact": "Give an email or a WhatsApp number.",
       "err_email": "That does not look like an email address.",
@@ -516,7 +515,6 @@
       "search_all": "Search all products",
       "none_title": "Nothing matches{q}.",
       "none_scope": " in this selection",
-      "tax_note": "excl. PPN",
       "certified": "Certificate published",
       "price_list_link": "Printable price list",
       "qa_size": "Vial size",
@@ -526,8 +524,7 @@
       "qa_every": "Every {days} d",
       "qa_add": "Add",
       "qa_cancel": "Cancel",
-      "qa_sold_out": "Sold out",
-      "qa_tax": "Excl. PPN {ppn}%"
+      "qa_sold_out": "Sold out"
     },
     "product": {
       "meta_title": "{name} · {cls} · Shop",
@@ -581,7 +578,7 @@
       "guide": "Read the compound guide",
       "consumer_note": "Devices and apparel are ordinary consumer products. They are priced openly and can be requested without an acknowledgement.",
       "back": "Shop",
-      "price_note": "Excl. PPN {ppn}% · delivery from {per} per consignment ({zone}, {days, plural, one {# day} other {# days}})",
+      "price_note": "Delivery from {per} per consignment ({zone}, {days, plural, one {# day} other {# days}})",
       "freq_dates": "First delivery once the quote is paid. Then a fresh quote every {days} days: if paid today, around <b>{d1}</b> and <b>{d2}</b>. Skip, pause or cancel from your account.",
       "on_page": "On this page",
       "tab_coa": "Certificates",
@@ -692,7 +689,7 @@
       "once": "one-time",
       "every": "every {days} days · {pct}% off",
       "goods": "Goods",
-      "note": "Excl. PPN {ppn}% and delivery. A priced quote follows the request; nothing is charged until you accept it.",
+      "note": "Delivery is added. A priced quote follows the request; nothing is charged until you accept it.",
       "view": "View basket",
       "keep": "Keep shopping",
       "empty": "The basket is empty."

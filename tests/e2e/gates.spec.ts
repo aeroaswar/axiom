@@ -318,7 +318,7 @@ test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan pr
     await page.keyboard.press('Escape');
     await expect(page.locator('.mini')).toHaveCount(0);
     await page.goto('/request');
-    // the basket states the flow and the tax treatment, and the line carries the plan
+    // the basket states the flow, and the line carries the plan
     await expect(page.locator('.flow li.now')).toHaveCount(1);
     const line = page.locator('.req-line[data-plan]:not([data-plan=""])');
     expect(await line.count()).toBe(1);

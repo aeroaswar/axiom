@@ -25,7 +25,7 @@ function Submit({ label, busy, done, className, qa, onClick }: { label: React.Re
   );
 }
 
-export function QuickAdd({ kind, variants, tiers, ppn, initialSku }: { kind: 'peptide' | 'device' | 'apparel'; variants: QuickVariant[]; tiers: QuickTier[]; ppn: number; initialSku: string }) {
+export function QuickAdd({ kind, variants, tiers, initialSku }: { kind: 'peptide' | 'device' | 'apparel'; variants: QuickVariant[]; tiers: QuickTier[]; initialSku: string }) {
   const t = useTranslations('site.shop');
   const canPlan = kind === 'peptide' && tiers.length > 0;
   const chooser = canPlan || variants.length > 1;
@@ -102,7 +102,6 @@ export function QuickAdd({ kind, variants, tiers, ppn, initialSku }: { kind: 'pe
             <span className="qa-price">
               <span className="mono-n">{net === null ? '—' : idr(net)}</span>
               {tier && v.price_idr !== null ? <s>{idr(v.price_idr)}</s> : null}
-              <small>{t('qa_tax', { ppn })}</small>
             </span>
             {v.available > 0 && net !== null
               ? <Submit className="btn btn-sm btn-solid" busy={t('adding')} done={false} label={t('qa_add')} qa />

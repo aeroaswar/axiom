@@ -727,7 +727,6 @@
 
 /* ---------- the price, stated with what it excludes ---------- */
 .site .price-note{font-size:12px;color:var(--muted);margin:0 0 18px;line-height:1.5;font-variant-numeric:tabular-nums}
-.site .pcard.shop2 .pr .tax{margin:3px 0 0;font-size:8.5px;letter-spacing:.16em}
 .site .coa-mark{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ok);font-weight:500}
 .site .coa-mark .ic-sv{font-size:11px}
 .site .freq-dates{font-size:12px;color:var(--muted);margin:14px 0 0;line-height:1.55;font-variant-numeric:tabular-nums}

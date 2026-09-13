@@ -255,7 +255,6 @@
       "wa_plan": "setiap {days} hari",
       "sub_lines": "Baris dengan rencana ditawarkan pada harga rencana dan menjadi langganan setelah pengiriman pertama dibayar.",
       "empty_guide": "Jelajahi panduan senyawa",
-      "tax_line": "Harga belum termasuk PPN {ppn}%. PPN dirinci pada penawaran.",
       "err_name": "Nama Anda diperlukan pada penawaran.",
       "err_contact": "Berikan email atau nomor WhatsApp.",
       "err_email": "Itu tidak terlihat seperti alamat email.",
@@ -516,7 +515,6 @@
       "search_all": "Cari di semua produk",
       "none_title": "Tidak ada yang cocok{q}.",
       "none_scope": " dalam pilihan ini",
-      "tax_note": "belum termasuk PPN",
       "certified": "Sertifikat terbit",
       "price_list_link": "Daftar harga cetak",
       "qa_size": "Ukuran vial",
@@ -526,8 +524,7 @@
       "qa_every": "Tiap {days} hr",
       "qa_add": "Tambah",
       "qa_cancel": "Batal",
-      "qa_sold_out": "Habis",
-      "qa_tax": "Belum termasuk PPN {ppn}%"
+      "qa_sold_out": "Habis"
     },
     "product": {
       "meta_title": "{name} · {cls} · Toko",
@@ -581,7 +578,7 @@
       "guide": "Baca panduan senyawa",
       "consumer_note": "Perangkat dan apparel adalah produk konsumen biasa. Harganya terbuka dan dapat diminta tanpa pernyataan.",
       "back": "Toko",
-      "price_note": "Belum termasuk PPN {ppn}% · pengiriman mulai {per} per kiriman ({zone}, {days} hari)",
+      "price_note": "Pengiriman mulai {per} per kiriman ({zone}, {days} hari)",
       "freq_dates": "Pengiriman pertama setelah penawaran dibayar. Lalu penawaran baru setiap {days} hari: jika dibayar hari ini, sekitar <b>{d1}</b> dan <b>{d2}</b>. Lewati, jeda atau batalkan dari akun Anda.",
       "on_page": "Di halaman ini",
       "tab_coa": "Sertifikat",
@@ -692,7 +689,7 @@
       "once": "sekali beli",
       "every": "setiap {days} hari · diskon {pct}%",
       "goods": "Barang",
-      "note": "Belum termasuk PPN {ppn}% dan pengiriman. Penawaran berharga menyusul permintaan; tidak ada yang ditagih sampai Anda menyetujuinya.",
+      "note": "Pengiriman ditambahkan. Penawaran berharga menyusul permintaan; tidak ada yang ditagih sampai Anda menyetujuinya.",
       "view": "Lihat keranjang",
       "keep": "Lanjut belanja",
       "empty": "Keranjang kosong."

@@ -14,7 +14,7 @@ type Line = { sku: string; qty: number; plan: number | null; pct: number; name: 
  * back from the server (`/api/basket?detail=1`), so what it shows is what was written, never what
  * the click assumed. Closes on its buttons, the overlay, Escape, a navigation, or after a while.
  */
-export function MiniBasket({ ppn }: { ppn: number }) {
+export function MiniBasket() {
   const t = useTranslations('site.mini');
   const [open, setOpen] = useState(false);
   const [lines, setLines] = useState<Line[]>([]);
@@ -61,7 +61,7 @@ export function MiniBasket({ ppn }: { ppn: number }) {
         </div>
         <div className="mini-foot">
           <div className="kv"><span className="k">{t('goods')}</span><span className="v">{idr(goods)}</span></div>
-          <p className="note">{t('note', { ppn })}</p>
+          <p className="note">{t('note')}</p>
           <div className="acts">
             <Link href="/request" className="btn btn-solid" onClick={close}>{t('view')} <Icon name="arrow" /></Link>
             <button type="button" className="btn" onClick={close}>{t('keep')}</button>

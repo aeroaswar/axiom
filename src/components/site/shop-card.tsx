@@ -16,9 +16,9 @@ import { ProductImage } from './product-image';
  * appears only where a certificate for the compound is published. Sold out when every lot of the
  * compound has nothing available.
  */
-export async function ShopCard({ c, locale, purity, ruo, index, tiers = [], ppn, certified = false }: {
+export async function ShopCard({ c, locale, purity, ruo, index, tiers = [], certified = false }: {
   c: Compound; locale: string; purity: string; ruo: string; index?: number;
-  tiers?: { days: number; pct: number }[]; ppn: number; certified?: boolean;
+  tiers?: { days: number; pct: number }[]; certified?: boolean;
 }) {
   const t = await getTranslations('site.shop');
   const from = fromPrice(c);
@@ -49,7 +49,6 @@ export async function ShopCard({ c, locale, purity, ruo, index, tiers = [], ppn,
               <>
                 <small>{c.variants.length > 1 ? t('from', { price: '' }).trim() : ' '}</small>
                 <span className="mono-n">{idr(from)}</span>
-                <small className="tax">{t('tax_note')}</small>
               </>
             )}
           </span>
@@ -59,7 +58,7 @@ export async function ShopCard({ c, locale, purity, ruo, index, tiers = [], ppn,
             <button type="button" className="btn btn-sm" disabled>{out ? t('sold_out_btn') : t('view')}</button>
           ) : (
             <QuickAdd
-              kind={c.kind} initialSku={first.sku} ppn={ppn} tiers={peptide ? tiers : []}
+              kind={c.kind} initialSku={first.sku} tiers={peptide ? tiers : []}
               variants={c.variants.map(v => ({ sku: v.sku, dose: v.dose, price_idr: v.price_idr, available: v.available }))}
             />
           )}

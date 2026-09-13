@@ -31,7 +31,7 @@ export default async function PublicLayout({ children, params }: { children: Rea
       <main id="main" className="site-main">{children}</main>
       <SiteFooter whatsapp={settings.whatsapp} />
       <MotionRoot />
-      <MiniBasket ppn={Number(settings.ppn_rate)} />
+      <MiniBasket />
     </div>
     </Messages>
   );

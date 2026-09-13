@@ -66,7 +66,6 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
   const base = zones.find(z => z.per_three_idr !== null);
   const per = base ? idr(base.per_three_idr) : '—';
   const cap = base ? idr(base.cap_idr) : '—';
-  const ppn = Number(settings.ppn_rate);
   const cutTime = settings.cutoff.cold.replace(':', '.');
 
   return (
@@ -127,7 +126,6 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
                     );
                   })}
                 </div>
-                {priced.length ? <p className="note" style={{ marginTop: 16 }}>{t('tax_line', { ppn })}</p> : null}
               </div>
 
               {/* ------------------------------------------------------ the summary */}
