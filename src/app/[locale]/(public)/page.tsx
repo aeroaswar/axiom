@@ -5,9 +5,14 @@ import { Icon } from '@/components/shell/sprite';
 import { HeroMount } from '@/components/site/hero-mount';
 import { Reveal, Stagger } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
-import { getCounts, getPathways, pick } from '@/lib/site/catalogue';
+import { ShopCard } from '@/components/site/shop-card';
+import { ProductImage } from '@/components/site/product-image';
+import { PenHero } from '@/components/site/pen-hero';
+import { getCatalogue, getCoas, getCounts, getPathways, groupCompounds, pick } from '@/lib/site/catalogue';
 import { alternates, organizationLd } from '@/lib/site/seo';
-import { getSettings } from '@/lib/settings';
+import { getPlanTiers, getSettings } from '@/lib/settings';
+import { pct } from '@/lib/money';
+import { fmtLong } from '@/lib/domain/dates';
 
 export const revalidate = 60;
 
@@ -17,16 +22,33 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { title: t('title'), description: t('description'), alternates: alternates(locale, '/') };
 }
 
+/**
+ * The storefront's front door: the hero, the catalogue (the `#catalog` anchor the nav and the
+ * outside world point at), the plan, the standard with the certificate library, the merch, and the
+ * one call to action. Every figure on the page is derived — counts, tiers, the newest certificate —
+ * so the page can never claim what the database does not hold.
+ */
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('site.home');
   const tc = await getTranslations('common');
   const tn = await getTranslations('nav');
-  const [counts, pathways, settings] = await Promise.all([getCounts(), getPathways(), getSettings()]);
+  const [counts, pathways, settings, tiers, rows, coas] = await Promise.all([getCounts(), getPathways(), getSettings(), getPlanTiers(), getCatalogue(), getCoas()]);
   const research = pathways.filter(p => p.kind === 'peptide');
   const threshold = `≥ ${settings.verification.purity_threshold_pct}%`;
   const method = settings.verification.method;
+  // Eight compounds across the pathways: the first of each research pathway, then the next ones.
+  const compounds = groupCompounds(rows.filter(r => r.kind === 'peptide'));
+  const featured: typeof compounds = [];
+  for (const p of research) { const c = compounds.find(x => x.pathway.slug === p.slug && !featured.includes(x)); if (c) featured.push(c); }
+  for (const c of compounds) { if (featured.length >= 8) break; if (!featured.includes(c)) featured.push(c); }
+  featured.length = Math.min(featured.length, 8);
+  const merch = groupCompounds(rows.filter(r => r.kind === 'apparel'));
+  const latestCoa = coas.find(c => !c.is_sample) ?? coas[0] ?? null;
+  const certified = new Set(coas.filter(c => !c.is_sample && c.slug).map(c => c.slug as string));
+  const [t1, t2, t3] = tiers;
+  const ruoShort = tc('ruo_short');
 
   return (
     <>
@@ -34,45 +56,106 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <HeroMount />
 
       {/* ------------------------------------------------------------- hero */}
-      <section className="hero">
-        <div className="wrap hero-in">
-          <span className="kicker">{t('kicker')}</span>
-          <h1>{tc('tagline')}</h1>
-          <p className="lead">{t('lead')}</p>
-          <div className="hero-cta">
-            <Link href="/request" className="btn btn-solid">{t('cta_request')}</Link>
-            <Link href="/compounds" className="tlink">{t('cta_guide')} <Icon name="arrow" className="ar" /></Link>
-          </div>
-        </div>
-        <div className="hero-meta">
-          <div className="wrap">
-            <div className="m"><div className="k">{t('meta_compounds')}</div><div className="v mono-n">{counts.compounds}</div></div>
-            <div className="m"><div className="k">{t('meta_lots')}</div><div className="v mono-n">{counts.lots}</div></div>
-            <div className="m"><div className="k">{t('meta_pathways')}</div><div className="v mono-n">{counts.pathways}</div></div>
-            <div className="m"><div className="k">{t('meta_purity')}</div><div className="v mono-n">{threshold}</div></div>
-          </div>
-        </div>
-      </section>
-
-      {/* --------------------------------------------------------- 01 position */}
-      <section className="band" id="position">
-        <div className="wrap">
-          <Reveal as="div" className="shead duo">
-            <span className="no">{t('pos_no')}</span>
-            <div>
-              <span className="kicker k">{t('pos_kicker')}</span>
-              <h2>{t('pos_title')}</h2>
-              <p>{t('pos_body')}</p>
+      <section className="hero split-hero">
+        <div className="wrap hero-grid">
+          <div>
+            <span className="kicker">{t('kicker')}</span>
+            <h1>
+              <span className="l">{t('hero_l1')}</span>
+              <span className="l">{t('hero_l2')} <em>{t('hero_em')}</em></span>
+            </h1>
+            <p className="lead">{t('lead')}</p>
+            <div className="hero-cta">
+              <Link href="/products" className="btn btn-solid">{t('cta_shop')} <Icon name="arrow" /></Link>
+              <Link href="/coas" className="btn">{t('cta_coas')}</Link>
             </div>
-          </Reveal>
+            <div className="badges">
+              <span className="badge"><Icon name="check" />{t('badge_purity', { threshold })}</span>
+              <span className="badge"><Icon name="flask" />{t('badge_tested', { method })}</span>
+              <span className="badge"><Icon name="truck" />{t('badge_cold')}</span>
+            </div>
+          </div>
+          <div className="hero-vials">
+            {featured[0] ? (
+              <PenHero label={{ name: featured[0].name, qty: featured[0].variants[0]?.dose ?? undefined, wordmark: 'AXIOM', ruo: ruoShort, purity: threshold }}>
+                <ProductImage slug={featured[0].slug} name={featured[0].name} dose={featured[0].variants[0]?.dose} purity={threshold} ruo={ruoShort} size="hero" priority />
+              </PenHero>
+            ) : null}
+          </div>
         </div>
       </section>
 
-      {/* --------------------------------------------------------- 02 standard */}
+      {/* ------------------------------------------------------- feature strip */}
+      <section className="wrap" style={{ paddingBottom: 8 }}>
+        <Stagger className="feats">
+          <div className="feat"><Icon name="truck" /><h3>{t('feat_1_t')}</h3><p>{t('feat_1_b')}</p></div>
+          <div className="feat"><Icon name="receipt" /><h3>{t('feat_2_t')}</h3><p>{t('feat_2_b')}</p></div>
+          <div className="feat"><Icon name="flask" /><h3>{t('feat_3_t', { method })}</h3><p>{t('feat_3_b', { threshold })}</p></div>
+        </Stagger>
+      </section>
+
+      {/* ---------------------------------------------------------- featured */}
+      <section className="band" id="catalog" style={{ borderTop: 'none' }}>
+        <div className="wrap" style={{ paddingTop: 72 }}>
+          <Reveal as="div" className="chead">
+            <h2>{t('featured_title')} <em>{t('featured_em')}</em></h2>
+            <p className="lead">{t('featured_sub')} {tc('compounds', { count: counts.compounds })} · {tc('lots', { count: counts.lots })}.</p>
+          </Reveal>
+          <div className="sp-44" />
+          <Stagger className="pgrid cards">
+            {featured.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} certified={certified.has(c.slug)} />)}
+          </Stagger>
+          <div className="sp-44" />
+          <div className="acts" style={{ justifyContent: 'center' }}>
+            <Link href="/products" className="btn btn-solid">{t('featured_all')}</Link>
+            <Link href="/price-list" className="tlink">{tn('price_list')} <Icon name="arrow" className="ar" /></Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------- subscribe & save */}
+      {tiers.length ? (
+        <section className="band" id="subscribe">
+          <div className="wrap">
+            <Reveal as="div" className="shead duo">
+              <span className="no">02</span>
+              <div>
+                <span className="kicker k">{t('sub_kicker')}</span>
+                <h2>{t('sub_title')}</h2>
+                <p>{t('sub_body')}</p>
+              </div>
+            </Reveal>
+            <Stagger className="plan-steps">
+              <div>
+                <span className="no">01</span>
+                <h3>{t('sub_1_t')}</h3>
+                <p>{t('sub_1_b')}</p>
+              </div>
+              <div>
+                <span className="no">02</span>
+                <h3>{t('sub_2_t')}</h3>
+                <p>{t('sub_2_b', { d1: t1?.days ?? 0, d2: t2?.days ?? 0, d3: t3?.days ?? 0, p1: t1?.pct ?? 0, p2: t2?.pct ?? 0, p3: t3?.pct ?? 0 })}</p>
+                <div className="tiers">
+                  {tiers.map(x => <span key={x.days} className="mono-n">{tc('every_days', { days: x.days })}<b>{pct(x.pct, 0)}</b></span>)}
+                </div>
+              </div>
+              <div>
+                <span className="no">03</span>
+                <h3>{t('sub_3_t')}</h3>
+                <p>{t('sub_3_b')}</p>
+              </div>
+            </Stagger>
+            <div className="sp-44" />
+            <Link href="/products?kind=peptide" className="tlink">{t('sub_cta')} <Icon name="arrow" className="ar" /></Link>
+          </div>
+        </section>
+      ) : null}
+
+      {/* --------------------------------------------------------- the standard */}
       <section className="band" id="standard">
         <div className="wrap">
           <Reveal as="div" className="shead duo">
-            <span className="no">{t('std_no')}</span>
+            <span className="no">02</span>
             <div>
               <span className="kicker k">{t('std_kicker')}</span>
               <h2>{t('std_title')}</h2>
@@ -88,7 +171,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             <div className="stmt">
               <span className="idx">02</span>
               <div><h3>{t('std_coa_t')}</h3><p>{t('std_coa_b')}</p></div>
-              <div className="fig mono-n">{counts.lots}<small>{t('meta_lots')}</small></div>
+              <div className="fig mono-n">{coas.length}<small>{tn('coas')}</small></div>
             </div>
             <div className="stmt">
               <span className="idx">03</span>
@@ -96,78 +179,65 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </div>
           </Stagger>
           <div className="sp-44" />
-          <Link href="/standard" className="tlink">{t('std_link')} <Icon name="arrow" className="ar" /></Link>
-        </div>
-      </section>
-
-      {/* --------------------------------------------------------- 03 pillars */}
-      <section className="band" id="pillars">
-        <div className="wrap">
-          <Reveal as="div" className="shead duo">
-            <span className="no">{t('pil_no')}</span>
+          <Reveal as="div" className="split">
             <div>
-              <span className="kicker k">{t('pil_kicker')}</span>
-              <h2>{t('pil_title')}</h2>
-              <p>{t('pil_body')}</p>
-            </div>
-          </Reveal>
-
-          <Stagger className="pillars">
-            <div className="lead-cell">
-              <div>
-                <span className="no">01</span>
-                <h3>{t('pil_peptide')}</h3>
-                <p className="proof">{t('pil_peptide_proof', { compounds: counts.compounds, pathways: counts.pathways, lots: counts.lots })}</p>
-              </div>
-              <div style={{ marginTop: 26 }}>
-                <Link href="/compounds" className="tlink">{tn('compounds')} <Icon name="arrow" className="ar" /></Link>
+              <span className="kicker">{t('coa_kicker')}</span>
+              <h3 style={{ fontSize: 'clamp(22px,2.6vw,32px)', marginTop: 14 }}>{t('coa_title')}</h3>
+              <p className="lead" style={{ marginTop: 14 }}>{t('coa_body')}</p>
+              <div className="acts" style={{ marginTop: 26 }}>
+                <Link href="/coas" className="btn">{t('coa_link')}</Link>
+                <Link href="/how-to-read-a-coa" className="tlink">{t('coa_read')} <Icon name="arrow" className="ar" /></Link>
               </div>
             </div>
-            <div>
-              <span className="no">02</span>
-              <h3>{t('pil_therapy')}</h3>
-              <p className="proof">{t('pil_therapy_proof', { count: counts.devices })}</p>
-            </div>
-            <div>
-              <span className="no">03</span>
-              <h3>{t('pil_apparel')}</h3>
-              <p className="proof">{t('pil_apparel_proof', { count: counts.apparel })}</p>
-            </div>
-          </Stagger>
-
-          <div className="sp-44" />
-          <span className="kicker">{t('pil_pathways')}</span>
-          <div className="sp-24" />
-          <Stagger className="plist">
-            {research.map(p => (
-              <Link key={p.slug} href={`/compounds/${p.slug}`} className="prow">
-                <span className="no">{p.no}</span>
-                <span className="nm">{pick(locale, p.name_en, p.name_id)}</span>
-                <span className="sm">{pick(locale, p.summary_en, p.summary_id)}</span>
-                <span className="ct">
-                  <span className="mono-n">{p.compounds}</span>
-                  <Icon name="arrow" className="ar" />
-                </span>
+            {latestCoa ? (
+              <Link href={`/coas/${latestCoa.id}`} className="notice" style={{ display: 'block' }}>
+                <dl className="dl">
+                  <div className="r"><dt>{tn('coas')}</dt><dd>{latestCoa.product}{latestCoa.dose ? ` · ${latestCoa.dose}` : ''}</dd></div>
+                  <div className="r"><dt>{t('meta_lots')}</dt><dd className="mono-n">{latestCoa.lot_code}</dd></div>
+                  <div className="r"><dt>{t('meta_purity')}</dt><dd className="mono-n">{latestCoa.purity_pct === null ? '—' : pct(latestCoa.purity_pct, 2)}</dd></div>
+                  <div className="r"><dt>{method}</dt><dd>{latestCoa.issued_at ? fmtLong(new Date(latestCoa.issued_at), locale) : '—'}</dd></div>
+                </dl>
+                <span className="tlink" style={{ marginTop: 18 }}>{t('coa_link')} <Icon name="arrow" className="ar" /></span>
               </Link>
-            ))}
-          </Stagger>
+            ) : null}
+          </Reveal>
         </div>
       </section>
 
-      {/* --------------------------------------------------------- 04 next */}
+      {/* --------------------------------------------------------------- merch */}
+      {merch.length ? (
+        <section className="band" id="merch">
+          <div className="wrap">
+            <Reveal as="div" className="merch-band">
+              <div>
+                <span className="kicker">{t('merch_kicker')}</span>
+                <h2 style={{ fontSize: 'clamp(26px,3.2vw,40px)', marginTop: 14 }}>{t('merch_title')}</h2>
+                <p className="lead" style={{ marginTop: 16 }}>{t('merch_body')}</p>
+                <div className="sp-24" />
+                <Link href="/merch" className="tlink">{t('merch_link')} <Icon name="arrow" className="ar" /></Link>
+              </div>
+              <div className="strip">
+                {merch.slice(0, 5).map(c => (
+                  <Link key={c.slug} href={`/products/${c.slug}`}><Icon name="shirt" />{c.name}</Link>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      ) : null}
+
+      {/* ----------------------------------------------------------------- next */}
       <section className="band" id="next">
         <div className="wrap">
           <Reveal as="div" className="shead">
-            <span className="no">{t('cta_no')}</span>
+            <span className="no">03</span>
             <div>
               <span className="kicker k">{t('cta_kicker')}</span>
-              <div className="cta-band">
-                <h2>{t('cta_title')}</h2>
-              </div>
+              <div className="cta-band"><h2>{t('cta_title')}</h2></div>
               <p>{t('cta_body')}</p>
               <div className="acts" style={{ marginTop: 38 }}>
-                <Link href="/request" className="btn btn-solid">{t('cta_request_btn')}</Link>
-                <Link href="/price-list" className="tlink">{tn('price_list')} <Icon name="arrow" className="ar" /></Link>
+                <Link href="/products" className="btn btn-solid">{t('cta_shop_btn')}</Link>
+                <Link href="/request" className="tlink">{t('cta_request_btn')} <Icon name="arrow" className="ar" /></Link>
               </div>
             </div>
           </Reveal>

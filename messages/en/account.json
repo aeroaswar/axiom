@@ -21,7 +21,9 @@
       "basket_link": "{count, plural, =0 {Your basket is empty} one {# line in your basket} other {# lines in your basket}}",
       "basket_cta": "Open the basket",
       "shop_cta": "Browse the catalogue",
-      "error": "That did not go through: {message}"
+      "error": "That did not go through: {message}",
+      "plans": "{count, plural, one {# delivery plan} other {# delivery plans}}",
+      "plans_cta": "Open the plans"
     },
     "next": {
       "q_requested": "Being priced by AXIOM · asked {days, plural, =0 {today} =1 {yesterday} other {# days ago}}",
@@ -110,7 +112,9 @@
       "not_found": "That order is not on this account.",
       "peptide_lines_hidden": "Peptide lines are not shown while the account's qualified-researcher acknowledgement is not current.",
       "dispatched_label": "Dispatched",
-      "paid_label": "Paid, confirmed by AXIOM"
+      "paid_label": "Paid, confirmed by AXIOM",
+      "plan_line": "every {days} days · {pct}% off",
+      "list_was": "list {price}"
     },
     "quote": {
       "title": "Quote {number}",
@@ -221,7 +225,8 @@
       "one_tap": "Request again",
       "note": "A reorder is a quote request. AXIOM prices it at the current list and sends it on WhatsApp; accepting it places the order.",
       "from_basket": "Or request a quote from your basket",
-      "lines": "{count, plural, one {# line} other {# lines}} · {date}"
+      "lines": "{count, plural, one {# line} other {# lines}} · {date}",
+      "plans_link": "Or manage your delivery plans"
     },
     "profile": {
       "title": "Profile & invoices",
@@ -289,7 +294,8 @@
       "invoice_to_pay": "Invoice {ref} is due {date}",
       "invoice_overdue": "Invoice {ref} was due {date}",
       "order_packing": "Order {ref} is being packed",
-      "order_dispatched": "Order {ref} is on its way"
+      "order_dispatched": "Order {ref} is on its way",
+      "renewal_to_accept": "Renewal quote {ref} is waiting for your acceptance"
     },
     "search": {
       "title": "Search",
@@ -335,7 +341,40 @@
       "removed": "Removed.",
       "empty": "There is nothing to ask for yet.",
       "ack_both": "Both statements are needed before the acknowledgement can be recorded.",
-      "site_name": "An address needs a name."
+      "site_name": "An address needs a name.",
+      "skipped": "Skipped. The next delivery has moved on one interval.",
+      "paused": "Paused. Resume whenever you are ready.",
+      "resumed": "Resumed.",
+      "plan_cancelled": "The plan is cancelled.",
+      "interval_changed": "Interval changed. It applies from the next quote."
+    },
+    "subscriptions": {
+      "title": "Subscriptions",
+      "kicker": "Delivery plans",
+      "lead": "Each plan is one lot on a schedule. AXIOM raises the quote before each delivery; you accept and pay it as usual. Nothing is charged without you.",
+      "empty": "No plan yet. Choose Subscribe & Save on any research compound in the shop.",
+      "shop": "Open the shop",
+      "lot": "{name} · {dose} × {qty}",
+      "site": "to {site}",
+      "every": "Every {days} days · {pct}% off",
+      "next_due": "Next delivery {date}",
+      "next_due_past": "Delivery was due {date}",
+      "started": "since {date}",
+      "last_order": "last order {number}",
+      "renewal_open": "Renewal quote {number} is open",
+      "renewal_view": "Open the quote",
+      "state_active": "Active",
+      "state_paused": "Paused",
+      "state_cancelled": "Cancelled",
+      "skip": "Skip next delivery",
+      "pause": "Pause",
+      "resume": "Resume",
+      "cancel": "Cancel the plan",
+      "cancel_confirm": "Cancel this plan? A new one can be started from the shop at any time.",
+      "interval": "Interval",
+      "interval_change": "Change",
+      "interval_option": "Every {days} days · {pct}% off",
+      "note": "Skipping moves the next delivery one interval on. Pausing holds the plan until you resume it. Cancelling ends it; an open renewal quote is withdrawn."
     }
   }
 }

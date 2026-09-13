@@ -19,3 +19,7 @@ tsconfig.tsbuildinfo
 .q*.mjs
 .look.mjs
 .keys.mjs
+
+# pen catalogue build side-products (the WebP set in public/products is committed)
+scripts/pens/sheet-*.jpg
+public/products/png/

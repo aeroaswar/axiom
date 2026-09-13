@@ -2,7 +2,7 @@
 import { useActionState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { addToBasketAction, type BasketResult } from '@/app/[locale]/(public)/actions';
-import { BASKET_EVENT } from './basket-badge';
+import { ADDED_EVENT, BASKET_EVENT } from './basket-badge';
 
 function Submit({ label, busy, done, solid }: { label: string; busy: string; done: string; solid?: boolean }) {
   const { pending } = useFormStatus();
@@ -17,7 +17,8 @@ function Submit({ label, busy, done, solid }: { label: string; busy: string; don
 export function AddToBasket({ sku, label, busy, done, solid }: { sku: string; label: string; busy: string; done: string; solid?: boolean }) {
   const [state, action] = useActionState<BasketResult | null, FormData>(addToBasketAction, null);
   useEffect(() => {
-    if (state?.ok) window.dispatchEvent(new Event(BASKET_EVENT));
+    if (state?.ok) { window.dispatchEvent(new Event(BASKET_EVENT)); window.dispatchEvent(new CustomEvent(ADDED_EVENT, { detail: { sku, plan: null } })); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.at, state?.ok]);
   return (
     <form action={action}>

@@ -33,7 +33,11 @@
     "compounds": "{count} senyawa",
     "rate_pending": "Tarif menyusul",
     "prices_as_at": "Harga per {date}",
-    "pen_included": "Satu harga per lot, sama untuk setiap akun. Pen injeksi reusable sudah termasuk."
+    "pen_included": "Satu harga per lot, sama untuk setiap akun. Pen injeksi reusable sudah termasuk.",
+    "subscribe": "Langganan & Hemat",
+    "once": "Sekali beli",
+    "every_days": "Setiap {days} hari",
+    "pct_off": "Hemat {pct}%"
   },
   "nav": {
     "home": "Beranda",
@@ -50,7 +54,14 @@
     "console": "Console",
     "terms": "Ketentuan",
     "privacy": "Privasi",
-    "legal": "Legal"
+    "legal": "Legal",
+    "shop": "Toko",
+    "merch": "Merch",
+    "guide": "Panduan senyawa",
+    "coas": "Sertifikat",
+    "subscriptions": "Langganan",
+    "search": "Cari di katalog",
+    "saved": "Tersimpan"
   },
   "auth": {
     "title": "Masuk",
@@ -95,7 +106,9 @@
     "owner": "Pemilik",
     "ops": "Ops",
     "client": "Klien",
-    "clinic": "Klinik"
+    "clinic": "Klinik",
+    "subscriptions": "Langganan",
+    "renewals": "Perpanjangan"
   },
   "states": {
     "quote": {

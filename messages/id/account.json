@@ -21,7 +21,9 @@
       "basket_link": "{count, plural, =0 {Keranjang Anda kosong} other {# baris di keranjang Anda}}",
       "basket_cta": "Buka keranjang",
       "shop_cta": "Lihat katalog",
-      "error": "Belum berhasil: {message}"
+      "error": "Belum berhasil: {message}",
+      "plans": "{count} rencana pengiriman",
+      "plans_cta": "Buka rencana"
     },
     "next": {
       "q_requested": "Sedang dihitung AXIOM · diminta {days, plural, =0 {hari ini} =1 {kemarin} other {# hari lalu}}",
@@ -110,7 +112,9 @@
       "not_found": "Pesanan itu tidak ada pada akun ini.",
       "peptide_lines_hidden": "Baris peptida tidak ditampilkan selama pernyataan peneliti terkualifikasi pada akun ini belum berlaku.",
       "dispatched_label": "Dikirim",
-      "paid_label": "Dibayar, dikonfirmasi AXIOM"
+      "paid_label": "Dibayar, dikonfirmasi AXIOM",
+      "plan_line": "setiap {days} hari · hemat {pct}%",
+      "list_was": "daftar {price}"
     },
     "quote": {
       "title": "Penawaran {number}",
@@ -221,7 +225,8 @@
       "one_tap": "Minta lagi",
       "note": "Pemesanan ulang adalah permintaan penawaran. AXIOM menghitungnya dengan daftar harga yang berlaku dan mengirimkannya lewat WhatsApp; menyetujuinya berarti membuat pesanan.",
       "from_basket": "Atau minta penawaran dari keranjang Anda",
-      "lines": "{count, plural, other {# baris}} · {date}"
+      "lines": "{count, plural, other {# baris}} · {date}",
+      "plans_link": "Atau kelola rencana pengiriman Anda"
     },
     "profile": {
       "title": "Profil & faktur",
@@ -289,7 +294,8 @@
       "invoice_to_pay": "Faktur {ref} jatuh tempo {date}",
       "invoice_overdue": "Faktur {ref} jatuh tempo {date}",
       "order_packing": "Pesanan {ref} sedang dikemas",
-      "order_dispatched": "Pesanan {ref} dalam perjalanan"
+      "order_dispatched": "Pesanan {ref} dalam perjalanan",
+      "renewal_to_accept": "Penawaran perpanjangan {ref} menunggu persetujuan Anda"
     },
     "search": {
       "title": "Cari",
@@ -335,7 +341,40 @@
       "removed": "Terhapus.",
       "empty": "Belum ada yang bisa diminta.",
       "ack_both": "Kedua pernyataan diperlukan sebelum dapat dicatat.",
-      "site_name": "Alamat memerlukan nama."
+      "site_name": "Alamat memerlukan nama.",
+      "skipped": "Dilewati. Pengiriman berikutnya bergeser satu interval.",
+      "paused": "Dijeda. Lanjutkan kapan pun Anda siap.",
+      "resumed": "Dilanjutkan.",
+      "plan_cancelled": "Rencana dibatalkan.",
+      "interval_changed": "Interval diubah. Berlaku sejak penawaran berikutnya."
+    },
+    "subscriptions": {
+      "title": "Langganan",
+      "kicker": "Rencana pengiriman",
+      "lead": "Setiap rencana adalah satu lot dengan jadwal. AXIOM menerbitkan penawaran sebelum tiap pengiriman; Anda menerima dan membayarnya seperti biasa. Tidak ada yang ditagih tanpa Anda.",
+      "empty": "Belum ada rencana. Pilih Langganan & Hemat pada senyawa riset mana pun di toko.",
+      "shop": "Buka toko",
+      "lot": "{name} · {dose} × {qty}",
+      "site": "ke {site}",
+      "every": "Setiap {days} hari · hemat {pct}%",
+      "next_due": "Pengiriman berikutnya {date}",
+      "next_due_past": "Pengiriman jatuh tempo {date}",
+      "started": "sejak {date}",
+      "last_order": "pesanan terakhir {number}",
+      "renewal_open": "Penawaran perpanjangan {number} terbuka",
+      "renewal_view": "Buka penawaran",
+      "state_active": "Aktif",
+      "state_paused": "Dijeda",
+      "state_cancelled": "Dibatalkan",
+      "skip": "Lewati pengiriman berikutnya",
+      "pause": "Jeda",
+      "resume": "Lanjutkan",
+      "cancel": "Batalkan rencana",
+      "cancel_confirm": "Batalkan rencana ini? Rencana baru dapat dimulai dari toko kapan saja.",
+      "interval": "Interval",
+      "interval_change": "Ubah",
+      "interval_option": "Setiap {days} hari · hemat {pct}%",
+      "note": "Melewati menggeser pengiriman berikutnya satu interval. Menjeda menahan rencana sampai Anda melanjutkannya. Membatalkan mengakhirinya; penawaran perpanjangan yang terbuka ditarik."
     }
   }
 }

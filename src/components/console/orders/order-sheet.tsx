@@ -145,7 +145,7 @@ export async function OrderSheetBody({ order, lines, legs, events, margin, owner
           ) : null}
           {g.lines.map(l => (
             <div className="kv" key={l.id}>
-              <span className="k">{l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''} × {l.qty}</span>
+              <span className="k">{l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''} × {l.qty}{l.interval_days ? ` · ${t('plan', { days: l.interval_days, pct: Number(l.discount_pct) })}` : ''}</span>
               <span className="v">{idr(l.line_total_idr)}</span>
             </div>
           ))}

@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { idr } from '@/lib/money';
 
 // Static public pages render as anon, so every peptide price is absent from the HTML and the page
 // shows the gated line. When a session exists — and only then — this store asks the server for the
@@ -67,12 +66,4 @@ export function usePrices(skus: string[]): Record<string, number | null> {
   const out: Record<string, number | null> = {};
   for (const s of skus) out[s] = cache.get(s) ?? null;
   return out;
-}
-
-/** One price cell. Renders the server's gated markup until a session proves a price is allowed. */
-export function LivePrice({ sku, children }: { sku: string; children: React.ReactNode }) {
-  const prices = usePrices([sku]);
-  const v = prices[sku];
-  if (v === null || v === undefined) return <>{children}</>;
-  return <span className="mono-n">{idr(v)}</span>;
 }

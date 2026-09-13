@@ -82,6 +82,20 @@ export async function SettingsScreen({ session, map, zones, staff }: {
                   <input id="cutoff_ambient" name="cutoff_ambient" defaultValue={text(cutoff.ambient)} placeholder="17:00" />
                 </div>
               </div>
+              <div className="sec-h" style={{ marginTop: 16 }}><span className="kicker">{t('site.subscribe')}</span></div>
+              <div className="fgrid">
+                {['30', '60', '90'].map(d => (
+                  <div className="field" key={d}>
+                    <input type="hidden" name="tier_days" value={d} />
+                    <label htmlFor={`tier_pct_${d}`}>{t('site.tier', { days: d })}</label>
+                    <input id={`tier_pct_${d}`} name={`tier_pct_${d}`} type="number" min="0" max="90" step="0.5" defaultValue={numberOf(objOf(map.subscribe_tiers)[d], 0) || ''} />
+                  </div>
+                ))}
+                <div className="field">
+                  <label htmlFor="renewal_lead_days">{t('site.renewal_lead_days')}</label>
+                  <input id="renewal_lead_days" name="renewal_lead_days" type="number" min="0" step="1" defaultValue={numberOf(map.renewal_lead_days, 5)} />
+                </div>
+              </div>
               <label className="check"><input type="checkbox" name="delivery_in_dpp" defaultChecked={boolOf(map.delivery_in_dpp)} />{t('site.delivery_in_dpp')}</label>
               <label className="check"><input type="checkbox" name="paid_by_owner_only" defaultChecked={boolOf(map.paid_by_owner_only)} />{t('site.paid_by_owner_only')}</label>
 

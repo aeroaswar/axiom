@@ -5,12 +5,10 @@ import { Link } from '@/i18n/navigation';
 import { Icon } from '@/components/shell/sprite';
 import { Reveal } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
-import { LivePrice } from '@/components/site/prices';
 import { AddToBasket } from '@/components/site/add-to-basket';
 import { getCompound, getPublishedSlugs, pick } from '@/lib/site/catalogue';
 import { alternates, breadcrumbLd, definedTermLd, describe } from '@/lib/site/seo';
 import { getSettings } from '@/lib/settings';
-import { idr } from '@/lib/money';
 
 export const revalidate = 60;
 
@@ -54,7 +52,6 @@ export default async function CompoundPage({ params }: { params: Promise<{ local
   // no placeholder, no promise of research to come.
   const showResearch = c.reference_count > 0 && research.trim().length > 0;
   const threshold = `≥ ${settings.verification.purity_threshold_pct}%`;
-  const anyPrice = c.variants.some(v => v.price_idr !== null);
 
   // Section numerals follow what actually renders, so the page never skips a number.
   let n = 0;
@@ -132,7 +129,6 @@ export default async function CompoundPage({ params }: { params: Promise<{ local
                   <th scope="col">{tc('dose')}</th>
                   <th scope="col">{tc('presentation')}</th>
                   <th scope="col">{tc('availability')}</th>
-                  <th scope="col" className="n">{tc('price')}</th>
                   <th scope="col" className="n"><span className="sr-only">{tc('add')}</span></th>
                 </tr>
               </thead>
@@ -147,9 +143,6 @@ export default async function CompoundPage({ params }: { params: Promise<{ local
                         {v.available > 0 ? <span className="mono-n">{v.available}</span> : <span aria-hidden="true">—</span>}
                       </span>
                     </td>
-                    <td className={v.price_idr === null ? 'n gate' : 'n money'}>
-                      <LivePrice sku={v.sku}>{v.price_idr === null ? tc('gated_cell') : idr(v.price_idr)}</LivePrice>
-                    </td>
                     <td className="n">
                       <AddToBasket sku={v.sku} label={tc('add')} busy={tc('adding')} done={tc('added')} />
                     </td>
@@ -159,12 +152,6 @@ export default async function CompoundPage({ params }: { params: Promise<{ local
             </table>
           </div>
           {c.variants.some(v => v.available <= 0) ? <p className="note" style={{ marginTop: 16 }}>{tc('out')}</p> : null}
-          {!anyPrice ? (
-            <p className="gated" style={{ marginTop: 18 }}>
-              {tc('gated_line')}{' '}
-              <Link href={{ pathname: '/sign-in', query: { next: here } }}>{tc('gated_link')}</Link>
-            </p>
-          ) : null}
         </div>
       </section>
 
@@ -239,20 +226,11 @@ export default async function CompoundPage({ params }: { params: Promise<{ local
       <section className="cp-sec" id="request">
         <div className="wrap">
           <div className="hd"><span className="no">{nCommerce}</span><h2>{t('s6')}</h2></div>
-          <Reveal as="div" className="split wide">
-            <div className="cp-body">
-              <p>{t('commerce_lead')}</p>
-              {!anyPrice ? <p>{t('commerce_gated')}</p> : null}
-              <div className="acts" style={{ marginTop: 32 }}>
-                <Link href="/request" className="btn btn-solid">{t('request_basket')}</Link>
-                <Link href="/price-list" className="tlink">{tn('price_list')} <Icon name="arrow" className="ar" /></Link>
-              </div>
-            </div>
-            <div>
-              <p className="note">{tc('gated_line')}</p>
-              <p style={{ marginTop: 14 }}>
-                <Link href={{ pathname: '/sign-in', query: { next: here } }} className="tlink">{tc('sign_in')} <Icon name="arrow" className="ar" /></Link>
-              </p>
+          <Reveal as="div" className="cp-body">
+            <p>{t('commerce_lead')}</p>
+            <div className="acts" style={{ marginTop: 32 }}>
+              <Link href={`/products/${c.slug}`} className="btn btn-solid">{t('order_cta')}</Link>
+              <Link href="/request" className="tlink">{t('request_basket')} <Icon name="arrow" className="ar" /></Link>
             </div>
           </Reveal>
         </div>

@@ -5,24 +5,30 @@ import { Link } from '@/i18n/navigation';
 import { Icon } from '@/components/shell/sprite';
 import { Reveal } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
-import { AddToBasket } from '@/components/site/add-to-basket';
-import { getCompound, getPublishedSlugs, pick } from '@/lib/site/catalogue';
+import { BuyBox } from '@/components/site/buy-box';
+import { ShopCard } from '@/components/site/shop-card';
+import { ProductImage } from '@/components/site/product-image';
+import { getCatalogue, getCoas, getCoasForProduct, getCompound, getDeliveryZones, getPublishedSlugs, groupCompounds, pick } from '@/lib/site/catalogue';
 import { alternates, breadcrumbLd, describe, productLd } from '@/lib/site/seo';
-import { idr } from '@/lib/money';
+import { getPlanTiers, getSettings } from '@/lib/settings';
+import { idr, pct } from '@/lib/money';
+import { fmtLong } from '@/lib/domain/dates';
 
 export const revalidate = 60;
 
+type Params = Promise<{ locale: string; slug: string }>;
+
 export async function generateStaticParams() {
   const rows = await getPublishedSlugs();
-  return rows.filter(r => r.kind !== 'peptide').map(r => ({ slug: r.slug }));
+  return rows.map(r => ({ slug: r.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale, slug } = await params;
   const p = await getCompound(slug);
-  if (!p || p.kind === 'peptide') return {};
+  if (!p) return {};
   const cls = pick(locale, p.compound_class_en, p.compound_class_id) || pick(locale, p.pathway.name_en, p.pathway.name_id);
-  const t = await getTranslations({ locale, namespace: 'site.compound' });
+  const t = await getTranslations({ locale, namespace: 'site.product' });
   return {
     title: t('meta_title', { name: p.name, cls }),
     description: describe(pick(locale, p.identity_en, p.identity_id)),
@@ -30,110 +36,169 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+/**
+ * A product page for every kind. The purchase box is first on a phone and pinned beside the
+ * record on a desktop: the sizes, the price, one-time or a plan, the interval, the quantity, one
+ * button. Below it the record: identity, the details, handling, the published certificates and
+ * the rest of the pathway. Product structured data is emitted for a device or apparel only — a
+ * research compound is never presented to a shopping surface as a consumer good.
+ */
+export default async function ProductPage({ params, searchParams }: { params: Params; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
+  const sp = await searchParams;
   const p = await getCompound(slug);
-  // Peptides are education first and live in the guide. Only a device or a piece of apparel is a
-  // product page, and only a product page may carry Product structured data.
-  if (!p || p.kind === 'peptide') notFound();
-
-  const t = await getTranslations('site.products');
-  const tc = await getTranslations('site.common');
-  const tk = await getTranslations('site.compound');
+  if (!p) notFound();
+  const t = await getTranslations('site.product');
   const tn = await getTranslations('nav');
+  const ts = await getTranslations('site.common');
+  const tc = await getTranslations('common');
+  const [settings, tiers, coas, rows, zones, allCoas] = await Promise.all([getSettings(), getPlanTiers(), getCoasForProduct(p.id), getCatalogue(), getDeliveryZones(), getCoas()]);
+  // the price is stated with the delivery charge of
+  // the nearest zone with a published rate, per consignment
+  const zone = zones.find(z => z.per_three_idr !== null);
+  const priceNote = zone ? t('price_note', { per: idr(zone.per_three_idr), zone: pick(locale, zone.label_en, zone.label_id), days: zone.eta_days }) : '';
+  const certified = new Set(allCoas.filter(c => !c.is_sample && c.slug).map(c => c.slug as string));
+  // the dispatch cut-off is a rule in settings; a cold-chain lot closes at the cold cut-off
+  const cold = p.variants.some(v => v.is_cold_chain);
+  const cutTime = (cold ? settings.cutoff.cold : settings.cutoff.ambient).replace(':', '.');
+  const cutoffNote = cold ? t('cutoff_cold', { time: cutTime }) : t('cutoff_ambient', { time: cutTime });
+  const published = coas.filter(c => !c.is_sample).length;
   const here = `/products/${slug}`;
+  const peptide = p.kind === 'peptide';
   const cls = pick(locale, p.compound_class_en, p.compound_class_id);
   const pathwayName = pick(locale, p.pathway.name_en, p.pathway.name_id);
   const identity = pick(locale, p.identity_en, p.identity_id);
+  const handling = pick(locale, p.handling_en, p.handling_id) || pick(locale, settings.handling_baseline.en, settings.handling_baseline.id);
+  const threshold = `≥ ${settings.verification.purity_threshold_pct}%`;
+  const ruoShort = tc('ruo_short');
+  const related = groupCompounds(rows.filter(r => r.pathway_slug === p.pathway.slug && r.slug !== p.slug)).slice(0, 4);
+  const variants = p.variants.slice().sort((a, b) => a.sort - b.sort);
+  const askedSku = Array.isArray(sp.sku) ? sp.sku[0] : sp.sku;
+  const kicker = peptide ? t('kicker_peptide') : p.kind === 'device' ? t('kicker_device') : t('kicker_apparel');
+  const icon = peptide ? 'flask' : p.kind === 'device' ? 'sun' : 'shirt';
 
   return (
     <>
       <JsonLd
         data={[
-          breadcrumbLd(locale, [{ name: 'AXIOM', path: '/' }, { name: t('title'), path: '/compounds' }, { name: p.name, path: here }]),
-          productLd(locale, {
-            name: p.name,
-            description: describe(identity, 300),
-            path: here,
-            kind: p.kind,
-            offers: p.variants.map(v => ({ sku: v.sku, name: v.dose, price: v.price_idr, available: v.available })),
-          }),
+          breadcrumbLd(locale, [{ name: 'AXIOM', path: '/' }, { name: tn('shop'), path: '/products' }, { name: p.name, path: here }]),
+          ...(peptide ? [] : [productLd(locale, {
+            name: p.name, description: describe(identity, 300), path: here, kind: p.kind as 'device' | 'apparel',
+            offers: variants.map(v => ({ sku: v.sku, name: v.dose, price: v.price_idr, available: v.available })),
+          })]),
         ]}
       />
 
-      <section className="cp-head">
-        <div className="wrap">
-          <div className="crumbs">
-            <span><Link href="/">{tn('home')}</Link></span>
-            <span><Link href="/compounds">{t('title')}</Link></span>
-            <span>{p.name}</span>
-          </div>
-          <span className="kicker mono-n">{p.pathway.no} · {pathwayName}</span>
-          <h1>{p.name}</h1>
-          {cls ? <p className="cls">{cls}</p> : null}
-        </div>
-      </section>
-
-      <section className="cp-sec">
-        <div className="wrap">
-          <div className="hd"><span className="no">01</span><h2>{t('about')}</h2></div>
-          <Reveal as="div" className="split wide">
-            <div className="cp-body">{identity ? <p>{identity}</p> : null}</div>
-            <dl className="dl">
-              <div className="r"><dt>{tk('name')}</dt><dd>{p.name}</dd></div>
-              {cls ? <div className="r"><dt>{tk('cls')}</dt><dd>{cls}</dd></div> : null}
-              <div className="r"><dt>{t('options')}</dt><dd className="mono-n">{p.variants.length}</dd></div>
-            </dl>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="cp-sec" id="request">
-        <div className="wrap">
-          <div className="hd"><span className="no">02</span><h2>{t('options')}</h2></div>
-          <div className="tblwrap">
-            <table className="doses-tbl">
-              <caption className="sr-only">{t('options')}</caption>
-              <thead>
-                <tr>
-                  <th scope="col">{tc('option')}</th>
-                  <th scope="col">{tc('presentation')}</th>
-                  <th scope="col">{tc('availability')}</th>
-                  <th scope="col" className="n">{tc('price')}</th>
-                  <th scope="col" className="n"><span className="sr-only">{tc('add')}</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                {p.variants.map(v => (
-                  <tr key={v.variant_id}>
-                    <td className="dose">{v.dose}</td>
-                    <td>{v.content}</td>
-                    <td>
-                      <span className={`avail${v.available > 0 ? '' : ' none'}`}>
-                        <span className="dot" />
-                        {v.available > 0 ? <span className="mono-n">{v.available}</span> : <span aria-hidden="true">—</span>}
-                      </span>
-                    </td>
-                    <td className="n money">{v.price_idr === null ? tc('gated_cell') : idr(v.price_idr)}</td>
-                    <td className="n"><AddToBasket sku={v.sku} label={tc('add')} busy={tc('adding')} done={tc('added')} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <Reveal as="div" className="split wide" style={{ marginTop: 44 }}>
-            <div className="cp-body">
-              <p>{t('commerce_lead')}</p>
-              <div className="acts" style={{ marginTop: 32 }}>
-                <Link href="/request" className="btn btn-solid">{tk('request_basket')}</Link>
-                <Link href="/price-list" className="tlink">{tn('price_list')} <Icon name="arrow" className="ar" /></Link>
-              </div>
+      <section className="wrap prod">
+        <div className="prod-main">
+          <div className="prod-head">
+            <div className="crumbs">
+              <span><Link href="/">{ts('home')}</Link></span>
+              <span><Link href="/products">{tn('shop')}</Link></span>
+              <span><Link href={{ pathname: '/products', query: { pathway: p.pathway.slug } }}>{pathwayName}</Link></span>
+              <span>{p.name}</span>
             </div>
-            <div><p className="note">{t('consumer_note')}</p></div>
-          </Reveal>
+            <span className="kicker mono-n">{p.pathway.no} · {kicker}</span>
+            <h1>{p.name}</h1>
+            {cls ? <p className="cls">{cls}</p> : null}
+          </div>
+          <div className="prod-fig" aria-hidden="true">
+            <ProductImage slug={p.slug} name={p.name} dose={variants[0]?.dose} purity={threshold} kind={p.kind} size="hero" ruo={ruoShort} priority />
+            <span className="lab">{variants[0]?.content}</span>
+          </div>
+        </div>
+
+        <BuyBox
+          name={p.name} kind={p.kind}
+          variants={variants.map(v => ({ sku: v.sku, dose: v.dose, content: v.content, price_idr: v.price_idr, available: v.available, is_cold_chain: v.is_cold_chain }))}
+          tiers={tiers} initialSku={askedSku} basketHref="/request" whatsapp={settings.whatsapp.number} priceNote={priceNote} cutoffNote={cutoffNote} locale={locale}
+        />
+
+        <div className="prod-body">
+          {peptide ? (
+            <nav className="prod-tabs" aria-label={t('on_page')}>
+              <a href="#about">{t('about')}</a>
+              <a href="#handling">{t('handling')}</a>
+              <a href="#coa">{t('tab_coa')} <span className="n">{published}</span></a>
+              <Link href={`/compounds/${p.pathway.slug}/${p.slug}`}>{t('tab_guide')} <Icon name="arrow" className="ar" /></Link>
+            </nav>
+          ) : null}
+          <div className="prod-sec" id="about">
+            <h2>{t('about')}</h2>
+            <div className="cp-body">{identity ? <p>{identity}</p> : null}</div>
+            <dl className="dl" style={{ marginTop: 22 }}>
+              <div className="r"><dt>{t('name')}</dt><dd>{p.name}</dd></div>
+              {cls ? <div className="r"><dt>{t('cls')}</dt><dd>{cls}</dd></div> : null}
+              <div className="r"><dt>{t('pathway')}</dt><dd><Link href={peptide ? `/compounds/${p.pathway.slug}` : { pathname: '/products', query: { pathway: p.pathway.slug } }} className="tlink" style={{ paddingBottom: 2 }}>{p.pathway.no} · {pathwayName}</Link></dd></div>
+              <div className="r"><dt>{t('presentation')}</dt><dd>{variants[0]?.content}</dd></div>
+              {peptide ? <div className="r"><dt>{t('verification')}</dt><dd>{t('ver_value', { method: settings.verification.method, threshold })}</dd></div> : null}
+              {variants.some(v => v.is_cold_chain) ? <div className="r"><dt>{t('cold_chain')}</dt><dd>{tc('yes')}</dd></div> : null}
+            </dl>
+          </div>
+
+          {peptide ? (
+            <div className="prod-sec" id="handling">
+              <h2>{t('handling')}</h2>
+              <div className="cp-body">{handling.split('\n').filter(Boolean).map((x, i) => <p key={i}>{x}</p>)}</div>
+              <p className="note" style={{ marginTop: 14 }}>{t('handling_note')}</p>
+            </div>
+          ) : null}
+
+          {peptide ? (
+            <div className="prod-sec" id="coa">
+              <h2>{t('coa_title')}</h2>
+              <p className="note" style={{ marginBottom: 16 }}>{coas.length ? t('coa_lead') : t('coa_none')}</p>
+              {coas.length ? (
+                <div className="tblwrap">
+                  <table className="tbl coa-tbl">
+                    <tbody>
+                      {coas.map(c => (
+                        <tr key={c.id}>
+                          <td className="k">{c.dose}</td>
+                          <td className="lot">{c.lot_code}</td>
+                          <td className="n pur">{c.purity_pct === null ? '—' : pct(c.purity_pct, 2)}</td>
+                          <td className="n">{c.issued_at ? fmtLong(new Date(c.issued_at), locale) : '—'}</td>
+                          <td className="n"><Link href={`/coas/${c.id}`} className="tlink">{t('coa_view')} <Icon name="arrow" className="ar" /></Link></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : null}
+              <p style={{ marginTop: 16 }}><Link href="/coas" className="tlink">{t('coa_all')} <Icon name="arrow" className="ar" /></Link></p>
+            </div>
+          ) : (
+            <div className="prod-sec"><p className="note">{t('consumer_note')}</p></div>
+          )}
+
+          {peptide ? (
+            <div className="prod-sec">
+              <Link href={`/compounds/${p.pathway.slug}/${p.slug}`} className="tlink">{t('guide')} <Icon name="arrow" className="ar" /></Link>
+            </div>
+          ) : null}
         </div>
       </section>
+
+      {related.length ? (
+        <section className="band">
+          <div className="wrap">
+            <Reveal as="div" className="sec-head">
+              <h2>{t('related', { pathway: pathwayName })}</h2>
+              <Link href={{ pathname: '/products', query: { pathway: p.pathway.slug } }} className="tlink">{tn('shop')} <Icon name="arrow" className="ar" /></Link>
+            </Reveal>
+            <div className="pgrid cards">
+              {related.map(c => <ShopCard key={c.slug} c={c} locale={locale} purity={threshold} ruo={ruoShort} tiers={tiers} certified={certified.has(c.slug)} />)}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {peptide ? (
+        <section className="band tight">
+          <div className="wrap"><div className="ruo">{pick(locale, settings.ruo_notice.en, settings.ruo_notice.id)}</div></div>
+        </section>
+      ) : null}
     </>
   );
 }

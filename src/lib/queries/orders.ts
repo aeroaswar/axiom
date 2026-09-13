@@ -24,6 +24,7 @@ export type OrderLine = {
   id: string; variant_id: string; sku: string; name: string; kind: 'peptide' | 'device' | 'apparel';
   dose: string; qty: number; unit_price_idr: string; line_total_idr: string;
   site_id: string | null; site_name: string | null; zone: string | null;
+  interval_days: number | null; list_price_idr: string | null; discount_pct: string;
 };
 
 export type Leg = { site_id: string; site_name: string; zone: string; units: number; charge_idr: string | null; cap_idr: string | null; capped: boolean };
@@ -70,7 +71,8 @@ export async function orderBody(uid: string, order: OrderDetail) {
     lines: await tx<OrderLine[]>`
       select oi.id::text as id, oi.variant_id::text as variant_id, v.sku, p.name, p.kind, v.dose, oi.qty,
              oi.unit_price_idr::text as unit_price_idr, oi.line_total_idr::text as line_total_idr,
-             oi.site_id::text as site_id, coalesce(st.name, oi.site_name) as site_name, st.zone::text as zone
+             oi.site_id::text as site_id, coalesce(st.name, oi.site_name) as site_name, st.zone::text as zone,
+             oi.interval_days, oi.list_price_idr::text as list_price_idr, oi.discount_pct::text as discount_pct
       from public.order_items oi
       join public.product_variants v on v.id = oi.variant_id
       join public.products p on p.id = v.product_id

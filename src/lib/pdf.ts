@@ -27,11 +27,18 @@ const esc = (s: string) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '
 // `react-dom/server` is refused as a static import in every App Router server layer, route
 // handlers included, so it is pulled in at call time. That is what makes this the one renderer
 // the preview, the print view and the PDF can all share.
-export async function documentHtml(d: DocumentData, fontsHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap'): Promise<string> {
+const FONTS = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap';
+
+export async function documentHtml(d: DocumentData, fontsHref = FONTS): Promise<string> {
+  return elementHtml(createElement(AxiomDocument, { d }), d.number, d.lang, fontsHref);
+}
+
+/** Any document element (the invoice family, a certificate) as a standalone printable page. */
+export async function elementHtml(element: React.ReactElement, title: string, langIn: string, fontsHref = FONTS): Promise<string> {
   const { renderToStaticMarkup } = await import('react-dom/server');
-  const body = renderToStaticMarkup(createElement(AxiomDocument, { d }));
-  const lang = /^[a-z]{2}(-[A-Za-z0-9]{2,8})*$/.test(d.lang) ? d.lang : 'id';
-  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(d.number)}</title>
+  const body = renderToStaticMarkup(element);
+  const lang = /^[a-z]{2}(-[A-Za-z0-9]{2,8})*$/.test(langIn) ? langIn : 'id';
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><title>${esc(title)}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="${fontsHref}" rel="stylesheet">
 <style>${documentCss()}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -41,12 +48,16 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans)
 }
 
 export async function documentPdf(d: DocumentData): Promise<Buffer> {
+  return htmlPdf(await documentHtml(d));
+}
+
+export async function htmlPdf(html: string): Promise<Buffer> {
   const { chromium } = await import('playwright');
   const executablePath = process.env.PW_CHROMIUM || (fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
   const browser = await chromium.launch({ executablePath });
   try {
     const page = await browser.newPage();
-    await page.setContent(await documentHtml(d), { waitUntil: 'networkidle' });
+    await page.setContent(html, { waitUntil: 'networkidle' });
     await page.evaluate(() => (document as unknown as { fonts: { ready: Promise<unknown> } }).fonts.ready);
     const pdf = await page.pdf({ format: 'A4', printBackground: true, preferCSSPageSize: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
     return Buffer.from(pdf);

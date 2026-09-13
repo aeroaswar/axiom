@@ -483,7 +483,10 @@
         "cutoff_cold": "Rantai dingin · HH:MM",
         "cutoff_ambient": "Suhu ruang · HH:MM",
         "submit": "Simpan pengaturan",
-        "saved": "Pengaturan tersimpan. Situs publik telah direvalidasi."
+        "saved": "Pengaturan tersimpan. Situs publik telah direvalidasi.",
+        "subscribe": "Langganan & Hemat",
+        "tier": "Setiap {days} hari · % potongan",
+        "renewal_lead_days": "Terbitkan perpanjangan · hari sebelum tempo"
       },
       "zones": {
         "title": "Zona pengiriman",
@@ -523,7 +526,9 @@
       "flow_sub": "Alurnya, dari permintaan penawaran sampai pesan ulang",
       "settings_page": "Pengaturan",
       "settings_sub": "Profil, bahasa, situs, tim",
-      "sign_out": "Keluar"
+      "sign_out": "Keluar",
+      "subscriptions": "Langganan",
+      "subscriptions_sub": "{count} rencana · {due} perpanjangan jatuh tempo"
     },
     "search": {
       "title": "Cari",
@@ -621,7 +626,40 @@
       "unknown": {
         "t1": "{ref}",
         "t2": "{account}"
+      },
+      "renewal_due": {
+        "t1": "Perpanjangan jatuh tempo · {account}",
+        "t2": "{lot} · tempo {date} · terbitkan penawaran"
+      },
+      "renewal_overdue": {
+        "t1": "Perpanjangan lewat tempo · {account}",
+        "t2": "{lot} · tempo {date} · terbitkan penawaran"
       }
+    },
+    "subscriptions": {
+      "title": "Langganan",
+      "kicker": "Rencana pengiriman",
+      "lead": "Satu baris per rencana. Perpanjangan diterbitkan di sini sebagai permintaan penawaran, lalu diberi harga dan dikirim seperti biasa; pembayaran memajukan rencana.",
+      "empty": "Belum ada rencana.",
+      "due": "Perpanjangan jatuh tempo",
+      "all": "Semua rencana",
+      "col_account": "Akun",
+      "col_lot": "Lot",
+      "col_plan": "Rencana",
+      "col_next": "Pengiriman berikutnya",
+      "col_state": "Status",
+      "col_renewal": "Perpanjangan",
+      "every": "Setiap {days} hr · −{pct}%",
+      "raise": "Terbitkan penawaran perpanjangan",
+      "raised": "Penawaran perpanjangan diterbitkan. Beri harga dan kirim dari Pesanan & penawaran.",
+      "open_quote": "Penawaran {number}",
+      "no_quote": "Tidak ada perpanjangan terbuka",
+      "state_active": "Aktif",
+      "state_paused": "Dijeda",
+      "state_cancelled": "Dibatalkan",
+      "overdue": "lewat tempo",
+      "site": "ke {site}",
+      "last_order": "terakhir {number}"
     }
   }
 }
