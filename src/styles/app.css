@@ -517,7 +517,15 @@ button.chip:hover{color:var(--ink);border-color:var(--line-2)}
 .d-brand b{color:var(--ink);font-weight:500}
 .margin-box{border:1px solid var(--accent-line);background:var(--glass-accent);padding:14px 16px;margin-top:20px}
 .margin-box .kicker{margin-bottom:8px;display:block}
+/* a certificate: the same sheet, a specimen stamp across an illustrative one */
+.inv-doc .d-wm{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:0}
+.inv-doc .d-wm span{font-family:var(--display);font-weight:300;font-size:120px;letter-spacing:.3em;color:var(--accent);opacity:.09;transform:rotate(-28deg);white-space:nowrap;text-indent:.3em}
+.inv-doc .d-stamp{display:inline-block;border:1px solid var(--accent-line);color:var(--accent-bright);font-size:8.5px;letter-spacing:.3em;text-transform:uppercase;padding:6px 10px;margin-top:10px}
+.inv-doc .d-fig{font-family:var(--display);font-weight:300;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums}
+.d-tbl .ok{color:var(--ok)}
+.d-note{font-size:10px;color:var(--muted);line-height:1.6;margin-top:16px;font-weight:300;max-width:70ch}
 @container doc (max-width:560px){
+  .inv-doc .d-wm span{font-size:64px}
   .inv-doc{padding:24px 18px;min-height:0}
   .d-head{flex-direction:column;gap:16px}
   .d-head .rt{text-align:left}

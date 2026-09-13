@@ -42,7 +42,6 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                 <dd><a className="tlink" href={`https://wa.me/${settings.whatsapp.number}`}>{settings.whatsapp.display} <Icon name="arrow" className="ar" /></a></dd>
               </div>
               <div className="r"><dt>{t('hours')}</dt><dd className="mono-n">{t('hours_value')}</dd></div>
-              <div className="r"><dt>{t('location')}</dt><dd>{t('location_value')}</dd></div>
             </dl>
             <div>
               <span className="kicker">{t('request')}</span>

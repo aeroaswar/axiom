@@ -19,6 +19,7 @@ export async function AppShell({ surface, session, children }: { surface: Surfac
     [
       { href: '/console', icon: 'house', label: t('dashboard'), exact: true },
       { href: '/console/orders', icon: 'receipt', label: t('orders') },
+      { href: '/console/subscriptions', icon: 'reorder', label: t('subscriptions') },
       { href: '/console/catalogue', icon: 'flask', label: t('catalogue') },
       ...(owner ? [{ href: '/console/pricing', icon: 'tag', label: t('pricing') }] : []),
       { href: '/console/invoices', icon: 'file', label: t('invoices') },
@@ -38,7 +39,10 @@ export async function AppShell({ surface, session, children }: { surface: Surfac
       { href: '/account/shop', icon: 'squares', label: t('shop_tab') },
       { href: '/account/saved', icon: 'bookmark', label: t('saved') },
     ],
-    [{ href: '/account', icon: 'receipt', label: t('orders'), exact: true }],
+    [
+      { href: '/account', icon: 'receipt', label: t('orders'), exact: true },
+      { href: '/account/subscriptions', icon: 'reorder', label: t('subscriptions') },
+    ],
     [{ href: '/account/profile', icon: 'user', label: t('profile') }],
   ];
   const groups = surface === 'console' ? [t('operate'), t('relationships'), t('settings')] : [t('shop'), t('activity'), t('account')];

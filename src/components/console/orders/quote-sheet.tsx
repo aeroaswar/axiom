@@ -123,6 +123,7 @@ async function History({ events }: { events: EventRow[] }) {
 export async function QuoteBuilderBody(p: QuoteProps) {
   const t = await getTranslations('commerce.quote');
   const tb = await getTranslations('commerce.builder');
+  const to = await getTranslations('commerce.order');
   const L = await labels();
   const na = nextActionQ(view(p.quote, p.quoteDays));
   const b = sendBlockers(p.quote, p.lines, p.legs);
@@ -177,6 +178,7 @@ export async function QuoteBuilderBody(p: QuoteProps) {
           <div className="kv">
             <span className="k">
               {l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''}
+              {l.interval_days ? <span className="sub">{to(l.frozen ? 'plan' : 'plan_pending', { days: l.interval_days, pct: Number(l.discount_pct) })}</span> : null}
               {l.qty > l.available ? <span className="short">{t('short', { avail: l.available, want: l.qty })}</span> : null}
               {p.sites.length > 1 ? (
                 <SubmitOnChange id={`site-sel-${l.id}`} form={`site-${l.id}`} name="site_id"
@@ -254,6 +256,7 @@ export async function QuoteBuilderBody(p: QuoteProps) {
 export async function QuoteRecordBody(p: QuoteProps) {
   const t = await getTranslations('commerce.quote');
   const ts = await getTranslations('states');
+  const to = await getTranslations('commerce.order');
   const L = await labels();
   const v = view(p.quote, p.quoteDays);
   const s = quoteState(v);
@@ -304,7 +307,7 @@ export async function QuoteRecordBody(p: QuoteProps) {
       {p.lines.map(l => (
         <div className="kv" key={l.id}>
           <span className="k">
-            {l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''} × {l.qty}
+            {l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''} × {l.qty}{l.interval_days ? ` · ${to('plan', { days: l.interval_days, pct: Number(l.discount_pct) })}` : ''}
             {p.sites.length > 1 && l.site_name ? <span className="short tone-dim">{l.site_name}</span> : null}
           </span>
           <span className="v">{idr(l.line_total_idr)}</span>

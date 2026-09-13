@@ -29,6 +29,14 @@ export async function saveSiteSettings(_prev: ActionState, form: FormData): Prom
     await put(tx, 'quote_valid_days', int(form, 'quote_valid_days', 7));
     await put(tx, 'paid_by_owner_only', bool(form, 'paid_by_owner_only'));
     await put(tx, 'gm_floor_pct', Number(str(form, 'gm_floor_pct') || 0));
+    // the plan tiers: every interval named in the form, its percentage; a blank percentage drops the tier
+    const tiers: Record<string, number> = {};
+    for (const d of form.getAll('tier_days').map(String)) {
+      const pct = Number(str(form, `tier_pct_${d}`));
+      if (d && Number.isFinite(pct) && pct > 0) tiers[d] = pct;
+    }
+    await put(tx, 'subscribe_tiers', tiers);
+    await put(tx, 'renewal_lead_days', int(form, 'renewal_lead_days', 5));
     await put(tx, 'entity', {
       name: str(form, 'entity_name'), address: str(form, 'entity_address'),
       npwp: str(form, 'entity_npwp'), pkp: bool(form, 'entity_pkp'),

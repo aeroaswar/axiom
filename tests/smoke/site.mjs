@@ -24,7 +24,7 @@ const ok = (name, cond, detail = '') => {
 };
 
 const ROUTES = [
-  '/', '/compounds', '/compounds/metabolic', '/price-list', '/standard',
+  '/', '/products', '/products/retatrutide', '/products/logo-cap', '/merch', '/coas', '/compounds', '/compounds/metabolic', '/price-list', '/standard',
   '/how-to-read-a-coa', '/process', '/faq', '/contact', '/terms', '/privacy', '/legal', '/request',
 ];
 
@@ -78,7 +78,7 @@ for (const width of [390, 1440]) {
   }
   ok(`${width}px no uncaught page errors`, errors.length === 0, errors.slice(0, 2).join(' | '));
   // screenshots for the design review
-  for (const [name, route] of [['home', '/'], ['compounds', '/compounds'], ['pathway', '/compounds/metabolic'], ['compound', compoundHref], ['price-list', '/price-list'], ['standard', '/standard'], ['process', '/process'], ['faq', '/faq'], ['request', '/request'], ['terms', '/terms']]) {
+  for (const [name, route] of [['home', '/'], ['shop', '/products'], ['product', '/products/retatrutide'], ['merch', '/merch'], ['coas', '/coas'], ['compounds', '/compounds'], ['pathway', '/compounds/metabolic'], ['compound', compoundHref], ['price-list', '/price-list'], ['standard', '/standard'], ['process', '/process'], ['faq', '/faq'], ['request', '/request'], ['terms', '/terms']]) {
     if (!route) continue;
     await go(page, `${BASE}${route}`, 'networkidle').catch(() => {});
     if (width === 1440) {
@@ -118,16 +118,25 @@ for (const width of [390, 1440]) {
     .replace(/\$ACTION_[A-Z_]*:\d+/g, '$ACTION')
     .replace(/k\d{6,}/g, 'k')
     .replace(/\\"[A-Za-z0-9_-]{21}\\"/g, '\\"tok\\"');
+  // the router state names the path the page was rendered for: the build-time prerender knows the
+  // default locale's unprefixed path, an on-demand render the prefixed one. Same page, so the
+  // locale segment is dropped before comparing.
+  const routed = s => s
+    .replace(/\\"c\\":\[\\"\\",\\"(id|en)\\",/g, '\\"c\\":[\\"\\",')
+    // a page first rendered for a prefetch carries the prefetch marker in its recorded path
+    .replace(/\?_rsc=[A-Za-z0-9]+/g, '');
   // the dev server streams its flight chunks in whatever order they resolve, so compare the
   // document byte for byte and the chunks as a set
   const CHUNK = /<script>self\.__next_f\.push\(.*?\)<\/script>/gs;
   const doc = s => strip(s).replace(CHUNK, '');
-  const chunks = s => (strip(s).match(CHUNK) || []).slice().sort();
+  const chunks = s => (routed(strip(s)).match(CHUNK) || []).slice().sort();
   const sa = doc(ha), sb = doc(hb);
   let at = 0; while (at < Math.min(sa.length, sb.length) && sa[at] === sb[at]) at++;
   const ca = chunks(ha), cb = chunks(hb);
   ok('crawler HTML is the anonymous HTML', sa === sb, sa === sb ? `${sa.length} bytes` : `diverges at ${at}: ${JSON.stringify(sa.slice(at, at + 60))} vs ${JSON.stringify(sb.slice(at, at + 60))}`);
-  ok('crawler gets the same server payload', ca.length === cb.length && ca.join('') === cb.join(''), `${ca.length} vs ${cb.length} chunks`);
+  const ja = ca.join(''), jb = cb.join('');
+  let ct = 0; while (ct < Math.min(ja.length, jb.length) && ja[ct] === jb[ct]) ct++;
+  ok('crawler gets the same server payload', ja === jb, ja === jb ? `${ca.length} chunks` : `${ca.length} vs ${cb.length} chunks, diverge at ${ct}: ${JSON.stringify(ja.slice(Math.max(0, ct - 60), ct + 80))} vs ${JSON.stringify(jb.slice(Math.max(0, ct - 60), ct + 80))}`);
   // and the education itself, as text, after both pages have settled
   await a.waitForLoadState('networkidle'); await b.waitForLoadState('networkidle');
   const ta = await a.evaluate(() => document.getElementById('main')?.innerText ?? '');
@@ -141,7 +150,7 @@ for (const width of [390, 1440]) {
 {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
-  const peptidePages = ['/compounds', '/compounds/metabolic', compoundHref, '/price-list'];
+  const peptidePages = ['/compounds', '/compounds/metabolic', compoundHref, '/price-list', '/products', '/products/retatrutide'];
   for (const route of peptidePages) {
     const res = await go(page, `${BASE}${route}`);
     const html = await res.text();
@@ -153,17 +162,26 @@ for (const width of [390, 1440]) {
   const dev = await go(page, `${BASE}/products/red-light-therapy-mask`);
   ok('a device page may carry Product markup', /"@type":"Product"/.test(await dev.text()));
 
-  // zero rupiah figures for anonymous eyes on any peptide surface
-  for (const route of ['/compounds/metabolic', compoundHref]) {
-    await go(page, `${BASE}${route}`);
-    const money = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
-    ok(`no rupiah figure for anon on ${route}`, money.length === 0, money.slice(0, 3).join(', '));
-  }
-  // the price list shows devices and apparel openly and peptides gated
+  // `site_settings.price_visibility` is the one switch; the price list says which mode is live
   await go(page, `${BASE}/price-list`);
   const money = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []).length);
   const gated = await page.locator('table.tbl .gated').count();
-  ok('price list: peptide prices gated, device prices open', gated > 70 && money > 0 && money < 20, `${gated} gated cells, ${money} figures`);
+  const open = gated === 0;
+  ok(open ? 'price list: every lot priced (site set open)' : 'price list: peptide prices gated, device prices open',
+    open ? money > 80 : (gated > 70 && money > 0 && money < 20), `${gated} gated cells, ${money} figures`);
+  // the guide carries no price in either mode; the product page prices only when the site is open
+  for (const route of ['/compounds/metabolic', compoundHref]) {
+    await go(page, `${BASE}${route}`);
+    const figures = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
+    ok(`no rupiah figure on the guide at ${route}`, figures.length === 0, figures.slice(0, 3).join(', '));
+  }
+  {
+    const route = '/products/retatrutide';
+    await go(page, `${BASE}${route}`);
+    const figures = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
+    ok(open ? `rupiah figures for anon on ${route} (site set open)` : `no rupiah figure for anon on ${route}`,
+      open ? figures.length > 0 : figures.length === 0, figures.slice(0, 3).join(', '));
+  }
 
   // and the anonymous browser never asks for prices
   const calls = [];
@@ -309,9 +327,14 @@ for (const width of [390, 1440]) {
     const priceCalls = [];
     page.on('request', r => { if (r.url().includes('/api/prices')) priceCalls.push(r.url()); });
     let signedIn = null;
+    // the checks below need an account, not a staff session: the row names its role
+    await go(page, `${BASE}/price-list`);
+    const openSite = (await page.locator('table.tbl .gated').count()) === 0;
+    await go(page, `${BASE}/sign-in`);
     for (let i = 0; i < count; i++) {
       const row = forms.nth(i);
       const who = (await row.innerText()).split('\n')[0];
+      if (/^(owner|ops)$/i.test((await row.locator('.chip').innerText().catch(() => '')).trim())) continue;
       await row.locator('button[type="submit"]').click();
       await page.waitForURL(/\/(account|console)/, { timeout: 20000 }).catch(() => {});
       await go(page, `${BASE}/price-list`, 'networkidle');
@@ -320,7 +343,7 @@ for (const width of [390, 1440]) {
       if (money > 60) { signedIn = { who, money }; break; }
       await go(page, `${BASE}/sign-in`);
     }
-    ok('a session asks the server for its prices', priceCalls.length > 0, `${priceCalls.length} calls`);
+    ok(openSite ? 'an open site needs no price call from the browser' : 'a session asks the server for its prices', openSite || priceCalls.length > 0, `${priceCalls.length} calls`);
     ok('an acknowledged account sees peptide prices', !!signedIn, signedIn ? `${signedIn.who}: ${signedIn.money} figures` : 'no seeded account has a current acknowledgement');
 
     // a basket with more than one destination shows the split before it is submitted

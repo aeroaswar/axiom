@@ -136,7 +136,9 @@ export async function OrderScreen({ order, lines, legs, events, cutoff, bank, wh
                 </div>
                 {g.lines.map(l => (
                   <div className="kv" key={l.id}>
-                    <span className="k">{l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''} × {l.qty}</span>
+                    <span className="k">{l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''} × {l.qty}
+                      {l.interval_days ? <span className="sub">{t('order.plan_line', { days: l.interval_days, pct: Number(l.discount_pct) })}{l.list_price_idr && l.list_price_idr !== l.unit_price_idr ? ` · ${t('order.list_was', { price: idr(l.list_price_idr) })}` : ''}</span> : null}
+                    </span>
                     <span className="v">{idr(l.line_total_idr)}</span>
                   </div>
                 ))}

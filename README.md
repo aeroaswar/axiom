@@ -22,16 +22,19 @@ drops and re-creates the local database. With Docker, `supabase start` works the
 ## Layout
 
 ```
-supabase/migrations/   0001 schema · 0002 functions, triggers, views · 0003 row-level security
+supabase/migrations/   0001 schema · 0002 functions, triggers, views · 0003 row-level security · 0008 plans, subscriptions, certificates
 supabase/seed.sql      THE catalogue — the only file that may carry a price, a name or a dose
 supabase/seed_dev.sql  development fixtures, walked through the real functions
-src/app/[locale]/(public)   the site: /, /compounds, /price-list, /standard, /process, /faq, /request …
-src/app/[locale]/(app)/console   dashboard · orders & quotes · catalogue & stock · pricing · invoices · clients · content · settings
-src/app/[locale]/(app)/account   needs you / in progress / earlier · shop · basket · orders · quotes · saved · profile
+src/app/[locale]/(public)   the storefront: /, /products, /products/[slug], /merch, /coas, /compounds, /price-list, /standard, /request …
+src/app/[locale]/(app)/console   dashboard · orders & quotes · subscriptions · catalogue & stock · pricing · invoices · clients · content · settings
+src/app/[locale]/(app)/account   needs you / in progress / earlier · shop · basket · orders · quotes · subscriptions · saved · profile
 src/lib/db.ts          one pool; every request is a transaction that adopts the caller's role and claims (RLS applies)
 src/lib/domain/        next-action, cut-off, dates — one implementation per rule
 src/components/document/  the one A4 document template: invoice, credit note, quote, price list
 scripts/gates/         the gate suite (sql · copy lint · greps · i18n · references) and the runner
+scripts/pens/          the pen catalogue: blank pen + wordmark + rows → public/products/<slug>-{400,800,1280}.webp
+src/components/site/   the storefront pieces; pen-3d / motion / reveal carry the three.js and GSAP motion layer;
+                       quick-add / mini-basket / flow-strip carry the quote-first flow on the cards and the basket
 tests/e2e/             the browser gates (Playwright)
 messages/{id,en}/      catalogues per surface, merged at request time; Indonesian is the default locale
 ```
@@ -42,7 +45,8 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
   `v_catalogue`. A price changes once, by the owner, audited in `price_changes`, and the public site
   follows within the stated 60-second window.
 - **Education is public, commerce is gated.** The compound guide is identical for crawlers and
-  people. A peptide price, quote line or order line for an account without a current qualified-
+  people and carries no price: the price, the plan and the tax line live on the product page it
+  links to. A peptide quote line or order line for an account without a current qualified-
   researcher acknowledgement is absent from every entry point, because the database returns none.
 - **Cost is owner-only at the database.** `variant_costs` and the frozen cost snapshots raise for
   anyone else; an ops query is refused, not emptied.
@@ -52,6 +56,10 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
 - **Stock never lies.** An append-only ledger, a derived balance held above zero by a check
   constraint, reserved = sent quotes + undispatched orders, available is the only public figure.
 - **Delivery is per consignment**, one SQL function, shown before commitment.
+- **One-time or on a plan.** A research compound can be bought once or supplied every 30, 60 or 90
+  days at the tier in `site_settings.subscribe_tiers`; `axiom.send_quote` freezes the list price, the
+  percentage and the net price on the line. A paid plan line is a `subscriptions` row; AXIOM raises the
+  next quote from it and payment advances it. Nothing is charged automatically.
 - **Nothing is typed.** Dashboard, Today list, bell and badge derive from `axiom.events()`.
 - **No dosing, no claims.** A CI lint over every catalogue and content row; every research claim
   needs a PubMed ID or DOI that resolves, or it does not render.

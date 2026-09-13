@@ -52,6 +52,7 @@ export async function QuoteScreen({ quote, lines, legs, whatsapp, payDays, quote
               <span className="k">
                 {l.name}{l.kind === 'peptide' ? ` · ${l.dose}` : ''} × {l.qty}
                 {l.site_name ? <span className="sub">{t('order.destination', { site: l.site_name })}</span> : null}
+                {l.interval_days ? <span className="sub">{t('order.plan_line', { days: l.interval_days, pct: Number(l.discount_pct) })}{l.list_price_idr && l.unit_price_idr && l.list_price_idr !== l.unit_price_idr ? ` · ${t('order.list_was', { price: idr(l.list_price_idr) })}` : ''}</span> : null}
               </span>
               <span className="v">{l.unit_price_idr === null ? <span className="dim-2">{t('quote.priced_later')}</span> : idr(l.line_total_idr)}</span>
             </div>

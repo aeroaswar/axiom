@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { routing } from '@/i18n/routing';
-import { getPathways, getPublishedSlugs } from '@/lib/site/catalogue';
+import { getCoas, getPathways, getPublishedSlugs } from '@/lib/site/catalogue';
 import { absolute, localePath, siteUrl } from '@/lib/site/seo';
 
 export const revalidate = 60;
@@ -8,11 +8,14 @@ export const revalidate = 60;
 // Both locales, every indexable page, and the compound and pathway pages read from the database —
 // a compound that is unpublished never appears, and a renamed one cannot leave a stale entry.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [pathways, products] = await Promise.all([getPathways(), getPublishedSlugs()]);
+  const [pathways, products, coas] = await Promise.all([getPathways(), getPublishedSlugs(), getCoas()]);
   const base = siteUrl();
 
   const paths: { path: string; lastModified?: Date; priority: number; changeFrequency: 'daily' | 'weekly' | 'monthly' }[] = [
     { path: '/', priority: 1, changeFrequency: 'weekly' },
+    { path: '/products', priority: 0.95, changeFrequency: 'daily' },
+    { path: '/merch', priority: 0.7, changeFrequency: 'weekly' },
+    { path: '/coas', priority: 0.8, changeFrequency: 'weekly' },
     { path: '/compounds', priority: 0.9, changeFrequency: 'weekly' },
     { path: '/price-list', priority: 0.9, changeFrequency: 'daily' },
     { path: '/standard', priority: 0.8, changeFrequency: 'monthly' },
@@ -29,13 +32,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     paths.push({ path: `/compounds/${p.slug}`, priority: 0.8, changeFrequency: 'weekly' });
   }
   for (const p of products) {
-    paths.push({
-      path: p.kind === 'peptide' ? `/compounds/${p.pathway_slug}/${p.slug}` : `/products/${p.slug}`,
-      lastModified: new Date(p.updated_at),
-      priority: p.kind === 'peptide' ? 0.7 : 0.5,
-      changeFrequency: 'weekly',
-    });
+    // every product has a shop page; a research compound has its guide page as well
+    paths.push({ path: `/products/${p.slug}`, lastModified: new Date(p.updated_at), priority: 0.6, changeFrequency: 'weekly' });
+    if (p.kind === 'peptide') paths.push({ path: `/compounds/${p.pathway_slug}/${p.slug}`, lastModified: new Date(p.updated_at), priority: 0.7, changeFrequency: 'weekly' });
   }
+  for (const c of coas) paths.push({ path: `/coas/${c.id}`, lastModified: c.issued_at ? new Date(c.issued_at) : undefined, priority: 0.4, changeFrequency: 'monthly' });
 
   const entries: MetadataRoute.Sitemap = [];
   for (const e of paths) {

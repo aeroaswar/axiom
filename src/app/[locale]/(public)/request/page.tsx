@@ -2,15 +2,16 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { Icon } from '@/components/shell/sprite';
-import { QtyControl, RemoveLine, DestinationSelect } from '@/components/site/basket-controls';
+import { QtyControl, RemoveLine, DestinationSelect, PlanSelect } from '@/components/site/basket-controls';
 import { AccountRequestForm, LeadRequestForm } from '@/components/site/request-forms';
+import { FlowStrip } from '@/components/site/flow-strip';
 import { getBasket } from '@/lib/basket';
 import { getSession } from '@/lib/auth';
 import { getDeliveryZones, getRowsForSkus, pick } from '@/lib/site/catalogue';
 import { getAccountSites, getDeliveryForLines } from '@/lib/site/request';
 import { alternates, NOINDEX } from '@/lib/site/seo';
-import { getSettings } from '@/lib/settings';
-import { idr } from '@/lib/money';
+import { getPlanTiers, getSettings } from '@/lib/settings';
+import { idr, planNet } from '@/lib/money';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,44 +29,50 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
   const ts = await getTranslations('site.common');
   const tn = await getTranslations('nav');
 
-  const [session, basket, zones, settings] = await Promise.all([getSession(), getBasket(), getDeliveryZones(), getSettings()]);
+  const [session, basket, zones, settings, tiers] = await Promise.all([getSession(), getBasket(), getDeliveryZones(), getSettings(), getPlanTiers()]);
   const skus = basket.items.map(i => i.sku);
   const rows = await getRowsForSkus(session?.uid ?? null, skus);
   const bySku = new Map(rows.map(r => [r.sku, r]));
-  // one row per lot and destination: cart_items can hold several rows for the same lot because a
-  // NULL destination is distinct from itself in a unique index, so fold them before rendering.
-  const merged = new Map<string, { sku: string; qty: number; site_id: string | null }>();
+  // one row per lot, destination and plan: the same lot on a plan and once is two lines, because
+  // the two are priced differently.
+  const merged = new Map<string, { sku: string; qty: number; site_id: string | null; plan: number | null }>();
   for (const i of basket.items) {
-    const key = `${i.sku}:${i.site_id ?? ''}`;
+    const key = `${i.sku}:${i.site_id ?? ''}:${i.interval_days ?? 0}`;
     const at = merged.get(key);
     if (at) at.qty += i.qty;
-    else merged.set(key, { sku: i.sku, qty: i.qty, site_id: i.site_id });
+    else merged.set(key, { sku: i.sku, qty: i.qty, site_id: i.site_id, plan: i.interval_days ?? null });
   }
+  const pctFor = (days: number | null) => tiers.find(x => x.days === days)?.pct ?? 0;
   const lines = [...merged.values()]
     .map(i => ({ ...i, row: bySku.get(i.sku) }))
-    .filter(l => l.row);
+    .filter(l => l.row)
+    .map(l => ({ ...l, pct: l.row!.kind === 'peptide' ? pctFor(l.plan) : 0 }))
+    .map(l => ({ ...l, net: l.row!.price_idr === null ? null : planNet(l.row!.price_idr, l.pct) }));
+  const needsAck = lines.some(l => l.row!.kind === 'peptide');
+  const anyPlan = lines.some(l => l.plan);
 
   const sites = session?.uid && session.accountId ? await getAccountSites(session.uid, session.accountId) : [];
   const multiSite = sites.length > 1;
   const delivery = session?.uid && session.accountId && lines.length
-    ? await getDeliveryForLines(session.uid, session.accountId, lines.map(l => ({ sku: l.sku, qty: l.qty, site_id: l.site_id })))
+    ? await getDeliveryForLines(session.uid, session.accountId, lines.map(l => ({ sku: l.sku, qty: l.qty, site_id: l.site_id, interval_days: l.plan })))
     : [];
   const deliveryTotal = delivery.every(d => d.charge_idr !== null)
     ? delivery.reduce((a, d) => a + (d.charge_idr ?? 0), 0)
     : null;
 
-  const priced = lines.filter(l => l.row!.price_idr !== null);
-  const goods = priced.reduce((a, l) => a + (l.row!.price_idr as number) * l.qty, 0);
+  const priced = lines.filter(l => l.net !== null);
+  const goods = priced.reduce((a, l) => a + (l.net as number) * l.qty, 0);
   const partial = priced.length !== lines.length;
   const base = zones.find(z => z.per_three_idr !== null);
   const per = base ? idr(base.per_three_idr) : '—';
   const cap = base ? idr(base.cap_idr) : '—';
+  const cutTime = settings.cutoff.cold.replace(':', '.');
 
   return (
     <>
       <section className="page-hero">
         <div className="wrap">
-          <div className="crumbs"><span><Link href="/">{ts('home')}</Link></span><span>{tn('request')}</span></div>
+          <div className="crumbs"><span><Link href="/">{ts('home')}</Link></span><span>{tn('basket')}</span></div>
           <span className="kicker">{t('kicker')}</span>
           <h1 style={{ marginTop: 14 }}>{t('title')}</h1>
           <p className="lead">{t('lead')}</p>
@@ -79,31 +86,41 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
               <h2 style={{ fontSize: 'clamp(24px,3vw,36px)' }}>{t('empty_title')}</h2>
               <p className="lead" style={{ marginTop: 16 }}>{t('empty_body')}</p>
               <div className="acts" style={{ marginTop: 32 }}>
-                <Link href="/compounds" className="btn btn-solid">{t('empty_cta')}</Link>
-                <Link href="/price-list" className="tlink">{t('empty_prices')} <Icon name="arrow" className="ar" /></Link>
+                <Link href="/products" className="btn btn-solid">{t('empty_cta')}</Link>
+                <Link href="/compounds" className="tlink">{t('empty_guide')} <Icon name="arrow" className="ar" /></Link>
               </div>
             </div>
           ) : (
+            <>
+            <FlowStrip at={1} />
             <div className="req-grid">
               {/* ------------------------------------------------------- the lines */}
               <div>
                 <span className="kicker">{t('lines')}</span>
                 {multiSite ? <p className="note" style={{ marginTop: 12 }}>{t('sites_note')}</p> : null}
+                {anyPlan ? <p className="note" style={{ marginTop: 12 }}>{t('sub_lines')}</p> : null}
                 <div style={{ marginTop: 18, borderTop: '1px solid var(--line)' }}>
                   {lines.map(l => {
                     const r = l.row!;
                     const price = r.price_idr;
                     return (
-                      <div className="req-line" key={`${l.sku}:${l.site_id ?? ''}`}>
+                      <div className="req-line" key={`${l.sku}:${l.site_id ?? ''}:${l.plan ?? 0}`} data-plan={l.plan ?? ''}>
                         <div>
                           <div className="nm">{r.name}</div>
-                          <div className="sub">{r.dose} · {r.content}{price !== null ? ` · ${idr(price)}` : ''}</div>
-                          {multiSite ? <DestinationSelect sku={l.sku} qty={l.qty} siteId={l.site_id} sites={sites} /> : null}
+                          <div className="sub">{r.dose} · {r.content}{l.net !== null ? ` · ${idr(l.net)}` : ''}</div>
+                          {l.plan ? (
+                            <div className="plan">
+                              {t('plan_every', { days: l.plan })} · {t('plan_off', { pct: l.pct })}
+                              {price !== null && l.net !== price ? <span className="was">{t('list_was', { price: idr(price) })}</span> : null}
+                            </div>
+                          ) : null}
+                          {r.kind === 'peptide' && tiers.length ? <PlanSelect sku={l.sku} qty={l.qty} siteId={l.site_id} plan={l.plan} tiers={tiers} /> : null}
+                          {multiSite ? <DestinationSelect sku={l.sku} qty={l.qty} siteId={l.site_id} sites={sites} plan={l.plan} /> : null}
                         </div>
                         <div className="ctl">
-                          <QtyControl sku={l.sku} qty={l.qty} siteId={l.site_id} />
-                          <span className="amt">{price !== null ? idr(price * l.qty) : <span className="gated">{ts('gated_cell')}</span>}</span>
-                          <RemoveLine sku={l.sku} siteId={l.site_id} />
+                          <QtyControl sku={l.sku} qty={l.qty} siteId={l.site_id} plan={l.plan} />
+                          <span className="amt">{l.net !== null ? idr(l.net * l.qty) : <span className="gated">{ts('gated_cell')}</span>}</span>
+                          <RemoveLine sku={l.sku} siteId={l.site_id} plan={l.plan} />
                         </div>
                       </div>
                     );
@@ -119,6 +136,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
                 <div className="sp-24" />
                 <span className="kicker">{t('delivery')}</span>
                 <p className="note" style={{ marginTop: 12 }}>{t('delivery_lead', { per, cap })}</p>
+                <p className="cutoff-line" style={{ marginTop: 10 }}><Icon name="clock" /> {t('cutoff_line', { time: cutTime })}</p>
                 {delivery.length ? (
                   <div style={{ marginTop: 16 }}>
                     {delivery.map(d => (
@@ -132,7 +150,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
                 ) : null}
 
                 <div className="sp-44" />
-                {session?.accountId ? <AccountRequestForm account={session.name || tn('account')} /> : <LeadRequestForm />}
+                {session?.accountId ? <AccountRequestForm account={session.name || tn('account')} /> : <LeadRequestForm needsAck={needsAck} />}
 
                 <div className="sp-24" />
                 <div className="ruo">{pick(locale, settings.ruo_notice.en, settings.ruo_notice.id)}</div>
@@ -141,6 +159,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
                 </p>
               </aside>
             </div>
+            </>
           )}
         </div>
       </section>
