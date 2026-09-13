@@ -3,6 +3,10 @@
 import { connect } from '../db/lib.mjs';
 
 const sql = connect();
+// How many device and apparel lots the catalogue holds. Derived once, so a gate below asserts that
+// each view exposes exactly the catalogue's non-peptide rows, not a figure typed into this file.
+const [{ n: NON_PEPTIDE }] = await sql`select count(*)::int n from public.product_variants v
+  join public.products p on p.id = v.product_id where p.kind <> 'peptide' and p.is_published and v.is_active`;
 const OWNER = '00000000-0000-4000-8000-000000000001';
 const OPS = '00000000-0000-4000-8000-000000000002';
 const REGENERA_DIRECTOR = '00000000-0000-4000-8000-000000000011';
@@ -66,7 +70,7 @@ await as(OWNER, async tx => {
   ok((Number(t.margin) / Number(t.base) * 100).toFixed(1) === '97.1', 'markup 97.1%');
   ok(t.pen_ok, 'base − supplier = Rp 600.000 on every peptide lot');
   const [n] = await tx`select count(*)::int n from public.v_pricing where kind <> 'peptide'`;
-  ok(n.n === 8, `8 devices and apparel (${n.n})`);
+  ok(n.n === NON_PEPTIDE, `${NON_PEPTIDE} devices and apparel (${n.n})`);
   const counts = await tx`select pathway_no, count(*)::int n from public.v_pricing where kind = 'peptide' group by 1 order by 1`;
   ok(counts.map(c => c.n).join('/') === '10/11/13/8/8/2/6/9/12', `pathway counts ${counts.map(c => c.n).join('/')}`);
 });
@@ -136,7 +140,7 @@ await gated(SENOPATI, async tx => {
   const cat = await tx`select price_idr, name from public.v_catalogue where kind = 'peptide'`;
   ok(cat.length === 79 && cat.every(r => r.price_idr === null), `lapsed account: 79 guide rows, zero peptide prices via v_catalogue`);
   const app = await tx`select price_idr from public.v_catalogue where kind <> 'peptide'`;
-  ok(app.length === 8 && app.every(r => r.price_idr !== null), 'lapsed account: devices and apparel still priced');
+  ok(app.length === NON_PEPTIDE && app.every(r => r.price_idr !== null), `lapsed account: all ${NON_PEPTIDE} devices and apparel still priced (${app.length})`);
   const prod = await tx`select count(*)::int n from public.products where kind = 'peptide' and identity_en is not null`;
   ok(prod[0].n > 60, `lapsed account reads the compound guide in full (${prod[0].n} compounds)`);
 });
@@ -155,7 +159,7 @@ await gated(null, async tx => {
   const cat = await tx`select price_idr from public.v_catalogue where kind = 'peptide'`;
   ok(cat.length === 79 && cat.every(r => r.price_idr === null), 'anon (gated): guide rows without prices');
   const pv = await tx`select v.id, p.kind from public.product_variants v join public.products p on p.id = v.product_id`;
-  ok(pv.length === 8 && pv.every(r => r.kind !== 'peptide'), `anon (gated) reads only the 8 non-peptide variant rows directly (${pv.length})`);
+  ok(pv.length === NON_PEPTIDE && pv.every(r => r.kind !== 'peptide'), `anon (gated) reads only the ${NON_PEPTIDE} non-peptide variant rows directly (${pv.length})`);
 });
 {
   const [live] = await sql`select value #>> '{}' as v from public.site_settings where key = 'price_visibility'`;
