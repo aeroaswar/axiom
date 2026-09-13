@@ -28,8 +28,7 @@
     },
     "home": {
       "title": "Peptida riset, terapi dan apparel · AXIOM",
-      "description": "Peptida kelas riset dalam 79 lot, terapi cahaya merah klinis dan apparel dari satu katalog di Jakarta. Setiap lot diverifikasi kromatografi dan spektrometri massa, didokumentasikan dengan Certificate of Analysis, dikirim dingin. Sekali beli atau dengan rencana pengiriman.",
-      "kicker": "Jakarta · Indonesia",
+      "description": "Peptida kelas riset dalam 79 lot, terapi cahaya merah klinis dan apparel dari satu katalog. Setiap lot diverifikasi kromatografi dan spektrometri massa, didokumentasikan dengan Certificate of Analysis, dikirim dingin. Sekali beli atau dengan rencana pengiriman.",
       "lead": "Setiap lot didukung kromatografi dan spektrometri massa, dikirim bersama sertifikat lotnya, dan menempuh rantai dingin sampai pintu.",
       "cta_shop": "Belanja produk",
       "cta_guide": "Panduan senyawa",
@@ -273,7 +272,7 @@
       "next_3_t": "Pembayaran.",
       "next_3_b": "Tagihan dengan rincian bank menyusul setelah Anda menyetujui. Hanya transfer bank; tidak ada yang ditagih otomatis.",
       "next_4_t": "Pengiriman.",
-      "next_4_b": "Rantai dingin dari Jakarta setelah transfer diterima, terlacak sampai pintu. Baris rencana berulang dengan penawaran baru tiap periode; lewati, jeda atau batalkan kapan saja.",
+      "next_4_b": "Rantai dingin setelah transfer diterima, terlacak sampai pintu. Baris rencana berulang dengan penawaran baru tiap periode; lewati, jeda atau batalkan kapan saja.",
       "back_shop": "Kembali ke toko",
       "track": "Buka akun untuk melacaknya",
       "wa_ref": "Halo AXIOM, saya mengirim permintaan {number}. Mohon konfirmasi penawaran dan rincian pembayarannya.",
@@ -286,7 +285,7 @@
       "next_g3_t": "Pembayaran.",
       "next_g3_b": "Transfer bank ke rekening yang tertera pada penawaran. Kirim buktinya di chat; tidak ada yang ditagih otomatis.",
       "next_g4_t": "Pengiriman.",
-      "next_g4_b": "Dibayar sebelum {time} WIB pada hari kerja dikirim hari itu juga, rantai dingin dari Jakarta, terlacak sampai pintu."
+      "next_g4_b": "Dibayar sebelum {time} WIB pada hari kerja dikirim hari itu juga, rantai dingin, terlacak sampai pintu."
     },
     "standard": {
       "title": "Standar kami",
@@ -400,14 +399,12 @@
     },
     "contact": {
       "title": "Kontak",
-      "description": "Jalur langsung ke AXIOM di Jakarta: WhatsApp pada jam kerja, dan formulir permintaan untuk penawaran.",
+      "description": "Jalur langsung ke AXIOM: WhatsApp pada jam kerja, dan formulir permintaan untuk penawaran.",
       "kicker": "Kontak",
       "lead": "Satu tim, satu jalur. Penawaran melalui formulir permintaan agar tercatat; selebihnya cukup satu pesan.",
       "whatsapp": "WhatsApp",
       "hours": "Jam kerja",
       "hours_value": "Senin sampai Sabtu · 09.00 sampai 18.00 WIB",
-      "location": "Lokasi",
-      "location_value": "Jakarta, Indonesia",
       "request": "Penawaran",
       "request_body": "Susun keranjang dan kirim permintaan. Permintaan sampai ke tim sebagai catatan bernomor, sebelum percakapan dimulai.",
       "request_cta": "Buka permintaan"
@@ -455,7 +452,7 @@
       "kicker": "Data pribadi",
       "lead": "AXIOM memproses data pribadi berdasarkan Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP). Pemberitahuan ini menyatakan apa yang dikumpulkan, untuk apa, berapa lama, dan hak apa yang melekat padanya.",
       "h1": "1. Pengendali",
-      "b1": "Pengendali adalah entitas AXIOM yang tercantum pada invoice, Jakarta, Indonesia. Permintaan mengenai data pribadi dijawab melalui jalur WhatsApp di halaman kontak.",
+      "b1": "Pengendali adalah entitas AXIOM yang tercantum pada invoice. Permintaan mengenai data pribadi dijawab melalui jalur WhatsApp di halaman kontak.",
       "h2": "2. Apa yang dikumpulkan",
       "b2": "Nama, klinik atau institusi, jabatan, alamat email, dan nomor WhatsApp yang diberikan pada formulir permintaan atau saat masuk; isi penawaran, pesanan, dan invoice; alamat pengiriman lokasi-lokasi akun; dan catatan pernyataan pengakuan yang dijelaskan di bawah.",
       "h3": "3. Catatan pernyataan pengakuan adalah data pribadi",
@@ -598,7 +595,7 @@
     },
     "merch": {
       "title": "Merch",
-      "description": "Apparel dan perlengkapan harian AXIOM: performance tee, training hoodie, topi, botol baja dan duffel. Satu harga per item, dikirim bersama pesanan Anda.",
+      "description": "Apparel dan perlengkapan harian AXIOM: performance tee, training hoodie, topi dan duffel. Satu harga per item, dikirim bersama pesanan Anda.",
       "kicker": "Apparel dan perlengkapan harian",
       "lead": "Pakaian performa dan perlengkapan dengan tanda yang sama. Satu harga per item, harga terbuka, dikirim bersama pesanan lainnya.",
       "empty": "Belum ada yang terdaftar saat ini.",

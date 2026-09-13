@@ -50,7 +50,7 @@ export async function SiteFooter({ whatsapp }: { whatsapp: { number: string; dis
         </div>
         <div className="ruo" style={{ marginTop: 34 }}><b>RUO</b> · {tc('ruo_full')}</div>
         <div className="legal">
-          <span>© {year} AXIOM · Jakarta</span>
+          <span>© {year} AXIOM</span>
           <span>{tc('documented')}</span>
         </div>
       </div>

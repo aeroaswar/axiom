@@ -28,8 +28,7 @@
     },
     "home": {
       "title": "Research peptides, therapy and apparel · AXIOM",
-      "description": "Research-grade peptides in 79 lots, clinical red-light therapy and apparel from one Jakarta catalogue. Every lot verified by chromatography and mass spectrometry, documented with a Certificate of Analysis, shipped cold. One-time or on a delivery plan.",
-      "kicker": "Jakarta · Indonesia",
+      "description": "Research-grade peptides in 79 lots, clinical red-light therapy and apparel from one catalogue. Every lot verified by chromatography and mass spectrometry, documented with a Certificate of Analysis, shipped cold. One-time or on a delivery plan.",
       "lead": "Every lot is backed by chromatography and mass spectrometry, ships with its lot's certificate, and travels cold chain to the door.",
       "cta_shop": "Shop products",
       "cta_guide": "The compound guide",
@@ -273,7 +272,7 @@
       "next_3_t": "Payment.",
       "next_3_b": "An invoice with the bank details follows your acceptance. Bank transfer only; nothing is charged automatically.",
       "next_4_t": "Dispatch.",
-      "next_4_b": "Cold chain from Jakarta once the transfer clears, tracked to the door. A plan line repeats with a fresh quote each period; skip, pause or cancel any time.",
+      "next_4_b": "Cold chain once the transfer clears, tracked to the door. A plan line repeats with a fresh quote each period; skip, pause or cancel any time.",
       "back_shop": "Back to the shop",
       "track": "Open an account to track it",
       "wa_ref": "Hello AXIOM, I sent request {number}. Please confirm the quote and the payment details.",
@@ -286,7 +285,7 @@
       "next_g3_t": "Payment.",
       "next_g3_b": "Bank transfer to the account named on the quote. Send the proof in the chat; nothing is charged automatically.",
       "next_g4_t": "Dispatch.",
-      "next_g4_b": "Paid by {time} WIB on a working day ships the same day, cold chain from Jakarta, tracked to the door."
+      "next_g4_b": "Paid by {time} WIB on a working day ships the same day, cold chain, tracked to the door."
     },
     "standard": {
       "title": "The standard",
@@ -400,14 +399,12 @@
     },
     "contact": {
       "title": "Contact",
-      "description": "A direct line to AXIOM in Jakarta: WhatsApp in working hours, and the request form for quotes.",
+      "description": "A direct line to AXIOM: WhatsApp in working hours, and the request form for quotes.",
       "kicker": "Contact",
       "lead": "One team, one line. Quotes go through the request form so that they become a record; everything else is a message away.",
       "whatsapp": "WhatsApp",
       "hours": "Hours",
       "hours_value": "Monday to Saturday · 09.00 to 18.00 WIB",
-      "location": "Location",
-      "location_value": "Jakarta, Indonesia",
       "request": "Quotes",
       "request_body": "Assemble the basket and submit a request. It reaches the team as a record, with a number, before any conversation starts.",
       "request_cta": "Open the request"
@@ -455,7 +452,7 @@
       "kicker": "Personal data",
       "lead": "AXIOM processes personal data under Law No. 27 of 2022 on Personal Data Protection (UU PDP). This notice states what is collected, why, for how long, and the rights that attach to it.",
       "h1": "1. Controller",
-      "b1": "The controller is the AXIOM entity named on the invoice, Jakarta, Indonesia. Requests concerning personal data are answered through the WhatsApp line on the contact page.",
+      "b1": "The controller is the AXIOM entity named on the invoice. Requests concerning personal data are answered through the WhatsApp line on the contact page.",
       "h2": "2. What is collected",
       "b2": "Name, clinic or institution, role, email address and WhatsApp number, given on the request form or at sign-in; the contents of quotes, orders and invoices; the delivery addresses of an account's sites; and the acknowledgement record described below.",
       "h3": "3. The acknowledgement record is personal data",
@@ -598,7 +595,7 @@
     },
     "merch": {
       "title": "Merch",
-      "description": "AXIOM apparel and everyday carry: performance tee, training hoodie, cap, steel bottle and duffel. One price each, shipped with the rest of your order.",
+      "description": "AXIOM apparel and everyday carry: performance tee, training hoodie, cap and duffel. One price each, shipped with the rest of your order.",
       "kicker": "Apparel and everyday carry",
       "lead": "Performance wear and carry under the same mark. One price each, priced openly, shipped with the rest of the order.",
       "empty": "Nothing is listed right now.",

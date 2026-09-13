@@ -59,7 +59,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <section className="hero split-hero">
         <div className="wrap hero-grid">
           <div>
-            <span className="kicker">{t('kicker')}</span>
             <h1>
               <span className="l">{t('hero_l1')}</span>
               <span className="l">{t('hero_l2')} <em>{t('hero_em')}</em></span>

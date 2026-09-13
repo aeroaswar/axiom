@@ -90,7 +90,6 @@ insert into public.products (id, pathway_id, kind, slug, name, synonyms, compoun
   (md5('product:Performance Tee')::uuid, 11, 'apparel', 'performance-tee', 'Performance Tee', '{}', null, null, 'Dry-knit unisex performance tee.', 'Dry-knit unisex performance tee.', null, true, now(), 69),
   (md5('product:Training Hoodie')::uuid, 11, 'apparel', 'training-hoodie', 'Training Hoodie', '{}', null, null, 'Heavyweight unisex training hoodie.', 'Heavyweight unisex training hoodie.', null, true, now(), 70),
   (md5('product:Logo Cap')::uuid, 11, 'apparel', 'logo-cap', 'Logo Cap', '{}', null, null, 'Adjustable logo cap.', 'Adjustable logo cap.', null, true, now(), 71),
-  (md5('product:Steel Water Bottle')::uuid, 11, 'apparel', 'steel-water-bottle', 'Steel Water Bottle', '{}', null, null, 'Insulated 750 ml steel bottle.', 'Insulated 750 ml steel bottle.', null, true, now(), 72),
   (md5('product:Gym Duffel')::uuid, 11, 'apparel', 'gym-duffel', 'Gym Duffel', '{}', null, null, '45 L gym duffel.', '45 L gym duffel.', null, true, now(), 73);
 
 insert into public.product_variants (id, product_id, sku, dose, content, price_idr, is_cold_chain, sort) values
@@ -179,7 +178,6 @@ insert into public.product_variants (id, product_id, sku, dose, content, price_i
   (md5('variant:tee')::uuid, md5('product:Performance Tee')::uuid, 'tee', 'Dry-knit - Unisex', 'Apparel', 450000, false, 83),
   (md5('variant:hoodie')::uuid, md5('product:Training Hoodie')::uuid, 'hoodie', 'Heavyweight - Unisex', 'Apparel', 950000, false, 84),
   (md5('variant:cap')::uuid, md5('product:Logo Cap')::uuid, 'cap', 'Adjustable', 'Accessory', 350000, false, 85),
-  (md5('variant:bottle')::uuid, md5('product:Steel Water Bottle')::uuid, 'bottle', '750 ml - Insulated', 'Accessory', 400000, false, 86),
   (md5('variant:duffel')::uuid, md5('product:Gym Duffel')::uuid, 'duffel', '45 L', 'Accessory', 850000, false, 87);
 
 -- Cost basis (owner-only table). Peptides: supplier vial + the Rp 600.000 Reusable Injection Pen V2.
@@ -270,7 +268,6 @@ insert into public.variant_costs (variant_id, supplier_cost_idr, pen_cost_idr, c
   (md5('variant:tee')::uuid, 180000, 0, true),
   (md5('variant:hoodie')::uuid, 380000, 0, true),
   (md5('variant:cap')::uuid, 140000, 0, true),
-  (md5('variant:bottle')::uuid, 160000, 0, true),
   (md5('variant:duffel')::uuid, 340000, 0, true);
 
 insert into public.delivery_zones (zone, label_en, label_id, per_three_idr, cap_idr, eta_days) values

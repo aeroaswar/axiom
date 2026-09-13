@@ -10,7 +10,7 @@ import { elementHtml, htmlPdf } from '@/lib/pdf';
 export async function coaDocument(locale: string, coa: Coa): Promise<CoaDocData> {
   const [settings, t] = await Promise.all([getSettings(), getTranslations({ locale, namespace: 'site.coas' })]);
   const threshold = `≥ ${settings.verification.purity_threshold_pct}%`;
-  const entity = settings.entity && !/«/.test(settings.entity.name) ? settings.entity : { name: 'AXIOM', address: 'Jakarta' };
+  const entity = settings.entity && !/«/.test(settings.entity.name) ? settings.entity : { name: 'AXIOM', address: '' };
   return {
     title: t('doc_title'),
     specimen: coa.is_sample ? t('doc_specimen') : null,
