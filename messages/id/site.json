@@ -24,8 +24,7 @@
       "read_notice": "Pemberitahuan lengkap",
       "sign_in": "Masuk",
       "skip": "Lewati ke konten",
-      "per_unit": "Per unit",
-      "gated_short": "Setelah pernyataan"
+      "per_unit": "Per unit"
     },
     "home": {
       "title": "Peptida riset, terapi dan apparel · AXIOM",
@@ -140,8 +139,7 @@
       "related_lead": "Senyawa lain dalam jalur {pathway}.",
       "all_in_pathway": "Semua senyawa {pathway}",
       "commerce_lead": "Tambahkan lot ke keranjang dan minta penawaran. Penawaran dihargai dari daftar yang sama dengan halaman ini, dan pengirimannya tetap menjadi tindakan AXIOM.",
-      "commerce_gated": "Harga di halaman ini terbuka setelah pernyataan pengakuan: berusia delapan belas tahun atau lebih, dan seorang peneliti berkualifikasi atau pembeli institusi.",
-      "request_basket": "Buka permintaan",
+      "request_basket": "Buka keranjang",
       "jump": "Di halaman ini",
       "order_cta": "Pesan senyawa ini",
       "order_note": "Sekali beli, atau dengan rencana setiap 30, 60 atau 90 hari."

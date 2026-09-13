@@ -169,7 +169,14 @@ for (const width of [390, 1440]) {
   const open = gated === 0;
   ok(open ? 'price list: every lot priced (site set open)' : 'price list: peptide prices gated, device prices open',
     open ? money > 80 : (gated > 70 && money > 0 && money < 20), `${gated} gated cells, ${money} figures`);
-  for (const route of ['/compounds/metabolic', compoundHref, '/products/retatrutide']) {
+  // the guide carries no price in either mode; the product page prices only when the site is open
+  for (const route of ['/compounds/metabolic', compoundHref]) {
+    await go(page, `${BASE}${route}`);
+    const figures = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
+    ok(`no rupiah figure on the guide at ${route}`, figures.length === 0, figures.slice(0, 3).join(', '));
+  }
+  {
+    const route = '/products/retatrutide';
     await go(page, `${BASE}${route}`);
     const figures = await page.evaluate(() => (document.body.innerText.match(/Rp\s?\d[\d.]*/g) || []));
     ok(open ? `rupiah figures for anon on ${route} (site set open)` : `no rupiah figure for anon on ${route}`,

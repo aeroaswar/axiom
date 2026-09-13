@@ -24,8 +24,7 @@
       "read_notice": "The full notice",
       "sign_in": "Sign in",
       "skip": "Skip to the content",
-      "per_unit": "Per unit",
-      "gated_short": "After acknowledgement"
+      "per_unit": "Per unit"
     },
     "home": {
       "title": "Research peptides, therapy and apparel · AXIOM",
@@ -140,8 +139,7 @@
       "related_lead": "Other compounds in {pathway}.",
       "all_in_pathway": "All of {pathway}",
       "commerce_lead": "Add a lot to the basket and request a quote. The quote is priced from the same list as this page, and sending it remains AXIOM's act.",
-      "commerce_gated": "Prices on this page open after the acknowledgement: eighteen or older, and a qualified researcher or institutional buyer.",
-      "request_basket": "Open the request",
+      "request_basket": "Open the basket",
       "jump": "On this page",
       "order_cta": "Order this compound",
       "order_note": "One-time, or on a plan every 30, 60 or 90 days."

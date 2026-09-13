@@ -63,18 +63,22 @@ test.describe('Gate 10 · no consumer markup on peptide pages', () => {
 });
 
 test.describe('Gate 6 · acknowledgement gates commerce', () => {
-  test('anonymous visitor sees the guide; a peptide price only when the site is set open', async ({ page }) => {
+  test('anonymous visitor sees the guide without a price; the product page prices only when the site is set open', async ({ page }) => {
     // `site_settings.price_visibility` is the one switch. The price list says which mode is live:
-    // gated cells present means acknowledged, none means open. Either way the guide is public.
+    // gated cells present means acknowledged, none means open. Either way the guide is public, and
+    // it carries no price in either mode: the price lives on the product page it links to.
     await page.goto('/price-list');
     const gatedCells = await page.locator('table.tbl .gated').count();
     const path = await firstCompoundPath(page);
     await page.goto(path);
     await expect(page.locator('main')).toContainText(/HPLC/);
-    const priced = await page.locator('main').evaluate(el => /Rp\s?\d{1,3}(\.\d{3})+/.test(el.textContent || ''));
-    expect(priced).toBe(gatedCells === 0);
+    const money = /Rp\s?\d{1,3}(\.\d{3})+/;
+    expect(await page.locator('main').evaluate((el, re) => new RegExp(re).test(el.textContent || ''), money.source)).toBe(false);
     // the research-use notice is on the page in both modes
     await expect(page.locator('body')).toContainText(/Research Use Only|Hanya untuk keperluan riset/i);
+    await page.locator('main a[href*="/products/"]').first().click();
+    await page.waitForURL(/\/products\/[^/]+$/);
+    expect(await page.locator('main').evaluate((el, re) => new RegExp(re).test(el.textContent || ''), money.source)).toBe(gatedCells === 0);
   });
   test('a lapsed account reads the guide; it receives a peptide price only when the site is set open; a current one always does', async ({ page }) => {
     await page.goto('/price-list');

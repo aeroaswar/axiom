@@ -45,7 +45,8 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
   `v_catalogue`. A price changes once, by the owner, audited in `price_changes`, and the public site
   follows within the stated 60-second window.
 - **Education is public, commerce is gated.** The compound guide is identical for crawlers and
-  people. A peptide price, quote line or order line for an account without a current qualified-
+  people and carries no price: the price, the plan and the tax line live on the product page it
+  links to. A peptide quote line or order line for an account without a current qualified-
   researcher acknowledgement is absent from every entry point, because the database returns none.
 - **Cost is owner-only at the database.** `variant_costs` and the frozen cost snapshots raise for
   anyone else; an ops query is refused, not emptied.
