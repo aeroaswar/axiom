@@ -619,6 +619,13 @@
 .site .pcard.shop2:hover .img img.pen{transform:scale(1.04)}
 .site .coa-card .thumb:has(img.pen){display:block;height:auto;aspect-ratio:1672/940;background:#0b0a09}
 .site .prod-fig:has(img.pen){display:block;aspect-ratio:1672/940;background:#0b0a09}
+/* a photographed product is a square studio shot; the tile takes its shape the same way the pen does */
+.site img.shot,.site .pcard.shop2 .img img.shot,.site .coa-card .thumb img.shot,.site .prod-fig img.shot{display:block;position:static;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;user-select:none;background:#0b0a09}
+.site .pcard.shop2 .img:has(img.shot){display:block;aspect-ratio:1/1;background:#0b0a09}
+.site .pcard.shop2 .img img.shot{transition:transform .7s var(--ease)}
+.site .pcard.shop2:hover .img img.shot{transform:scale(1.04)}
+.site .coa-card .thumb:has(img.shot){display:block;height:auto;aspect-ratio:1/1;background:#0b0a09}
+.site .prod-fig:has(img.shot){display:block;aspect-ratio:1/1;background:#0b0a09}
 .site .hero-vials::after{content:"";position:absolute;left:10%;right:10%;bottom:8px;height:40px;background:radial-gradient(50% 50% at 50% 50%,rgba(200,138,78,.16),transparent 70%);pointer-events:none}
 @media(max-width:960px){.site .hero-grid{grid-template-columns:1fr;gap:26px}.site .hero-vials{gap:14px;padding:6px 0 10px}.site .hero-vials .vial.hero{--vw:120px;--vh:230px}.site .hero-vials .vial.card{--vw:92px;--vh:176px}.site .pen3d{max-width:520px}}
 @media(max-width:680px){.site .hero.split-hero{padding-top:44px}}
