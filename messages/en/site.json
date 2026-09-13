@@ -239,7 +239,7 @@
       "sent_body": "Your reference is {number}. AXIOM prices the request and sends the quote to your account within the working day, valid for {days, plural, one {# day} other {# days}} from the day it is sent.",
       "sent_account": "Open the account",
       "received_title": "Request {number} received.",
-      "received_body": "Your reference is {number}. AXIOM prices the request and sends the quote to the email or WhatsApp you gave, within the working day. Nothing is charged until you accept it.",
+      "received_body": "Your reference is {number}. Continue on WhatsApp: the team confirms the lines and the delivery address, sends the quote there and takes payment by bank transfer. Answered within the working day; nothing is charged until you confirm in the chat.",
       "received_sign_in": "Sign in",
       "wa_intro": "Quote request {number}",
       "wa_line": "{name} · {dose} × {qty}",
@@ -279,7 +279,17 @@
       "next_4_b": "Cold chain from Jakarta once the transfer clears, tracked to the door. A plan line repeats with a fresh quote each period; skip, pause or cancel any time.",
       "back_shop": "Back to the shop",
       "track": "Open an account to track it",
-      "wa_ref": "Hello AXIOM, I sent request {number}."
+      "wa_ref": "Hello AXIOM, I sent request {number}. Please confirm the quote and the payment details.",
+      "cutoff_line": "Paid by {time} WIB on a working day ships the same day, cold chain.",
+      "wa_go": "Continue on WhatsApp",
+      "next_g1_t": "WhatsApp.",
+      "next_g1_b": "Open the chat with your reference. The team confirms the lots, the quantities and where they ship.",
+      "next_g2_t": "The quote.",
+      "next_g2_b": "Itemised with PPN {ppn}% and delivery, sent in the chat, valid {days, plural, one {# day} other {# days}}. For a research compound the research-use acknowledgement is recorded first.",
+      "next_g3_t": "Payment.",
+      "next_g3_b": "Bank transfer to the account named on the quote. Send the proof in the chat; nothing is charged automatically.",
+      "next_g4_t": "Dispatch.",
+      "next_g4_b": "Paid by {time} WIB on a working day ships the same day, cold chain from Jakarta, tracked to the door."
     },
     "standard": {
       "title": "The standard",
@@ -577,7 +587,19 @@
       "freq_dates": "First delivery once the quote is paid. Then a fresh quote every {days} days: if paid today, around <b>{d1}</b> and <b>{d2}</b>. Skip, pause or cancel from your account.",
       "on_page": "On this page",
       "tab_coa": "Certificates",
-      "tab_guide": "Research guide"
+      "tab_guide": "Research guide",
+      "cutoff_cold": "Paid by {time} WIB on a working day ships the same day, cold chain.",
+      "cutoff_ambient": "Paid by {time} WIB on a working day ships the same day.",
+      "notice_title": "Tell me when it is back",
+      "notice_lead": "Leave an email or a WhatsApp number. AXIOM messages you when the lot is booked in; nothing else is sent.",
+      "notice_label": "Email or WhatsApp number",
+      "notice_placeholder": "name@lab.id or 08xx",
+      "notice_send": "Notify me",
+      "notice_sending": "Saving",
+      "notice_done": "Noted. AXIOM messages you when {name} {dose} is back.",
+      "notice_err_contact": "An email address or an Indonesian mobile number.",
+      "notice_err_server": "That did not save. Try again or ask on WhatsApp.",
+      "notice_wa": "Or ask on WhatsApp"
     },
     "merch": {
       "title": "Merch",

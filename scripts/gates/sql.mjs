@@ -656,6 +656,23 @@ await as(OPS, async tx => {
   ok(p.is_public && p.published_at, 'publishing stamps the date');
 });
 
+console.log('Gate S21: a sold-out lot takes a notice from anyone, and only staff read it');
+await as(null, async tx => {
+  await expectError(tx, sp => sp`select axiom.request_stock_notice('reta10', '', '')`, 'a notice needs a contact', /email or a whatsapp/i);
+  await expectError(tx, sp => sp`select axiom.request_stock_notice('no-such-sku', 'x@example.test', '')`, 'and a lot that exists', /unknown lot/i);
+  await expectError(tx, sp => sp`select id from public.stock_notices`, 'and anon cannot read the table at all', /permission denied/i);
+});
+// one transaction, two callers: anon files the ask, then staff read it back per lot
+await rollback(async tx => {
+  await become(tx, null);
+  const [n] = await tx`select axiom.request_stock_notice('reta10', 'x@example.test', '') as id`;
+  ok(!!n?.id, 'anon files a notice by email');
+  await tx.unsafe('reset role');
+  await become(tx, OPS);
+  const rows = await tx`select sku, asks from axiom.stock_notices_open()`;
+  ok(rows.some(r => r.sku === 'reta10' && Number(r.asks) >= 1), 'staff see the open asks per lot');
+});
+
 await sql.end();
 console.log(`\n${passes} passed, ${failures} failed`);
 process.exit(failures ? 1 : 0);

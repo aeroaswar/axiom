@@ -337,11 +337,22 @@ test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan pr
     await page.waitForURL(/request\/sent\?.*quote=/);
     await expect(page.locator('h1')).toContainText(/Q-|\d/);
     await expect(page.locator('.flow li.done')).toHaveCount(1);
-    await expect(page.locator('a[href^="https://wa.me"]').first()).toHaveAttribute('href', /quote|Q-|%20/);
+    await expect(page.locator('[data-wa-go]')).toHaveAttribute('href', /wa\.me.*(Q-|%20)/);
+    await expect(page.locator('[data-wa-go]')).toHaveClass(/btn-solid/);
     // a lot with nothing available offers a notice, not an Add
     await page.goto('/products/tb-500');
-    expect(await page.locator('.buy button[type="submit"]').count()).toBe(0);
-    await expect(page.locator('.buy a.btn')).toHaveAttribute('href', /wa\.me/);
+    expect(await page.locator('.buy .buy-form button[type="submit"]').count()).toBe(0);
+    await expect(page.locator('.buy [data-notify] a[href*="wa.me"]')).toBeVisible();
+    // the notice is a real form: a bad contact says so, a good one is saved and confirmed
+    await page.fill('.buy [data-notify] input[name="contact"]', 'not-a-contact');
+    await page.locator('.buy [data-notify] button[type="submit"]').click();
+    await expect(page.locator('.buy [data-notify] .err')).toBeVisible();
+    await page.fill('.buy [data-notify] input[name="contact"]', 'gate23@example.test');
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      page.locator('.buy [data-notify] button[type="submit"]').click(),
+    ]);
+    await expect(page.locator('.buy [data-notify] .ok-line')).toBeVisible();
     // a device offers no plan
     await page.goto('/products/logo-cap');
     expect(await page.locator('.opts').count()).toBe(0);

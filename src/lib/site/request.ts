@@ -66,3 +66,10 @@ export async function getQuoteLines(uid: string, number: string): Promise<QuoteL
     order by p.sort, v.sort`);
   return rows.map(r => ({ name: String(r.name), dose: String(r.dose), qty: Number(r.qty), interval_days: r.interval_days == null ? null : Number(r.interval_days) }));
 }
+
+/** A sold-out lot's "tell me when it is back": one row through axiom.request_stock_notice, anon. */
+export async function requestStockNotice(sku: string, email: string | null, whatsapp: string | null, locale: string): Promise<string> {
+  const [row] = await withRls({ uid: null }, tx => tx<{ request_stock_notice: string }[]>`
+    select axiom.request_stock_notice(${sku}, ${email}, ${whatsapp}, ${locale})`);
+  return row?.request_stock_notice ?? '';
+}

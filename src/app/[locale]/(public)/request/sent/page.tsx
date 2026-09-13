@@ -40,6 +40,8 @@ export default async function RequestSent({ params, searchParams }: {
   const isQuote = Boolean(number) && received !== '1';
   const lines = session?.uid && isQuote && number ? await getQuoteLines(session.uid, number) : [];
   const ppn = Number(settings.ppn_rate);
+  const cutTime = settings.cutoff.cold.replace(':', '.');
+  const guest = !isQuote;
   // A compliance-clean handover: the reference, the lots, and the research-use notice. No dose
   // guidance, no price — pricing and sending a quote remain AXIOM's act.
   const waText = number
@@ -58,8 +60,8 @@ export default async function RequestSent({ params, searchParams }: {
             {isQuote ? t('sent_body', { number, days: settings.quote_valid_days }) : t('received_body', { number })}
           </p>
           <div className="ref-acts">
+            <a className={`btn ${guest ? 'btn-solid' : 'btn-sm'}`} href={waHref} data-wa-go><Icon name="wa" /> {guest ? t('wa_go') : tc('whatsapp')}</a>
             {number ? <CopyButton value={number} label={t('copy_ref')} done={t('copied')} className="btn btn-sm" /> : null}
-            <a className="btn btn-sm" href={waHref}><Icon name="wa" /> {tc('whatsapp')}</a>
             <PrintButton label={t('save_copy')} />
           </div>
         </div>
@@ -92,7 +94,7 @@ export default async function RequestSent({ params, searchParams }: {
               <span className="kicker">{t('next_title')}</span>
               <ol className="next">
                 {([1, 2, 3, 4] as const).map(n => (
-                  <li key={n}><span><b>{t(`next_${n}_t`)}</b> {t(`next_${n}_b`, { ppn, days: settings.quote_valid_days })}</span></li>
+                  <li key={n}><span><b>{t(guest ? `next_g${n}_t` : `next_${n}_t`)}</b> {t(guest ? `next_g${n}_b` : `next_${n}_b`, { ppn, days: settings.quote_valid_days, time: cutTime })}</span></li>
                 ))}
               </ol>
               <div className="acts" style={{ marginTop: 28 }}>

@@ -60,6 +60,10 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
   const zone = zones.find(z => z.per_three_idr !== null);
   const priceNote = zone ? t('price_note', { ppn, per: idr(zone.per_three_idr), zone: pick(locale, zone.label_en, zone.label_id), days: zone.eta_days }) : '';
   const certified = new Set(allCoas.filter(c => !c.is_sample && c.slug).map(c => c.slug as string));
+  // the dispatch cut-off is a rule in settings; a cold-chain lot closes at the cold cut-off
+  const cold = p.variants.some(v => v.is_cold_chain);
+  const cutTime = (cold ? settings.cutoff.cold : settings.cutoff.ambient).replace(':', '.');
+  const cutoffNote = cold ? t('cutoff_cold', { time: cutTime }) : t('cutoff_ambient', { time: cutTime });
   const published = coas.filter(c => !c.is_sample).length;
   const here = `/products/${slug}`;
   const peptide = p.kind === 'peptide';
@@ -109,7 +113,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pa
         <BuyBox
           name={p.name} kind={p.kind}
           variants={variants.map(v => ({ sku: v.sku, dose: v.dose, content: v.content, price_idr: v.price_idr, available: v.available, is_cold_chain: v.is_cold_chain }))}
-          tiers={tiers} initialSku={askedSku} basketHref="/request" whatsapp={settings.whatsapp.number} priceNote={priceNote} locale={locale}
+          tiers={tiers} initialSku={askedSku} basketHref="/request" whatsapp={settings.whatsapp.number} priceNote={priceNote} cutoffNote={cutoffNote} locale={locale}
         />
 
         <div className="prod-body">

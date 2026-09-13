@@ -2,6 +2,8 @@
 import { revalidatePath } from 'next/cache';
 import { addBasketLine, planOf, setBasketLine, setBasketPlan } from '@/lib/basket';
 import { getSaved, setSaved } from '@/components/account/saved';
+import { requestStockNotice } from '@/lib/site/request';
+import { pgMessage } from '@/lib/db';
 
 // The public site's only writes: the basket. Every one of them is a form post to a server action,
 // so the control is a real button, works without JavaScript, and the basket still lives in the
@@ -51,4 +53,18 @@ export async function toggleSavedAction(_prev: { saved: boolean } | null, form: 
   await setSaved(has ? list.filter(s => s !== sku) : [...list, sku]);
   revalidatePath('/', 'layout');
   return { saved: !has };
+}
+
+/** "Tell me when it is back" on a sold-out lot. One field: an email address or an Indonesian mobile
+ *  number; the database validates the lot and keeps the row for staff. */
+export type NoticeResult = { ok: boolean; error: 'contact' | 'server' | null; at: number };
+export async function stockNoticeAction(_prev: NoticeResult | null, form: FormData): Promise<NoticeResult> {
+  const sku = String(form.get('sku') ?? '').trim();
+  const contact = String(form.get('contact') ?? '').trim();
+  const locale = String(form.get('locale') ?? 'id');
+  const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact) ? contact : null;
+  const wa = !email && /^(\+?62|0)8\d{7,12}$/.test(contact.replace(/[\s.-]/g, '')) ? contact.replace(/[\s.-]/g, '') : null;
+  if (!sku || (!email && !wa)) return { ok: false, error: 'contact', at: Date.now() };
+  try { await requestStockNotice(sku, email, wa, locale); } catch (e) { void pgMessage(e); return { ok: false, error: 'server', at: Date.now() }; }
+  return { ok: true, error: null, at: Date.now() };
 }

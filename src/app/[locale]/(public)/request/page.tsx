@@ -67,6 +67,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
   const per = base ? idr(base.per_three_idr) : '—';
   const cap = base ? idr(base.cap_idr) : '—';
   const ppn = Number(settings.ppn_rate);
+  const cutTime = settings.cutoff.cold.replace(':', '.');
 
   return (
     <>
@@ -137,6 +138,7 @@ export default async function RequestPage({ params }: { params: Promise<{ locale
                 <div className="sp-24" />
                 <span className="kicker">{t('delivery')}</span>
                 <p className="note" style={{ marginTop: 12 }}>{t('delivery_lead', { per, cap })}</p>
+                <p className="cutoff-line" style={{ marginTop: 10 }}><Icon name="clock" /> {t('cutoff_line', { time: cutTime })}</p>
                 {delivery.length ? (
                   <div style={{ marginTop: 16 }}>
                     {delivery.map(d => (

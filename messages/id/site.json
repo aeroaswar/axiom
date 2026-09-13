@@ -239,7 +239,7 @@
       "sent_body": "Referensi Anda {number}. AXIOM menetapkan harga permintaan dan mengirim penawaran ke akun Anda dalam hari kerja, berlaku {days} hari sejak hari dikirim.",
       "sent_account": "Buka akun",
       "received_title": "Permintaan {number} diterima.",
-      "received_body": "Referensi Anda {number}. AXIOM menetapkan harga permintaan dan mengirim penawaran ke email atau WhatsApp yang Anda berikan, dalam hari kerja. Tidak ada yang ditagih sampai Anda menyetujuinya.",
+      "received_body": "Referensi Anda {number}. Lanjutkan di WhatsApp: tim mengonfirmasi baris dan alamat pengiriman, mengirim penawaran di sana dan menerima pembayaran lewat transfer bank. Dijawab dalam hari kerja; tidak ada yang ditagih sampai Anda mengonfirmasi di chat.",
       "received_sign_in": "Masuk",
       "wa_intro": "Permintaan penawaran {number}",
       "wa_line": "{name} · {dose} × {qty}",
@@ -279,7 +279,17 @@
       "next_4_b": "Rantai dingin dari Jakarta setelah transfer diterima, terlacak sampai pintu. Baris rencana berulang dengan penawaran baru tiap periode; lewati, jeda atau batalkan kapan saja.",
       "back_shop": "Kembali ke toko",
       "track": "Buka akun untuk melacaknya",
-      "wa_ref": "Halo AXIOM, saya mengirim permintaan {number}."
+      "wa_ref": "Halo AXIOM, saya mengirim permintaan {number}. Mohon konfirmasi penawaran dan rincian pembayarannya.",
+      "cutoff_line": "Dibayar sebelum {time} WIB pada hari kerja dikirim hari itu juga, rantai dingin.",
+      "wa_go": "Lanjutkan di WhatsApp",
+      "next_g1_t": "WhatsApp.",
+      "next_g1_b": "Buka chat dengan referensi Anda. Tim mengonfirmasi lot, jumlah dan tujuan pengiriman.",
+      "next_g2_t": "Penawaran.",
+      "next_g2_b": "Dirinci dengan PPN {ppn}% dan pengiriman, dikirim di chat, berlaku {days} hari. Untuk senyawa riset, pernyataan pengakuan riset dicatat lebih dulu.",
+      "next_g3_t": "Pembayaran.",
+      "next_g3_b": "Transfer bank ke rekening yang tertera pada penawaran. Kirim buktinya di chat; tidak ada yang ditagih otomatis.",
+      "next_g4_t": "Pengiriman.",
+      "next_g4_b": "Dibayar sebelum {time} WIB pada hari kerja dikirim hari itu juga, rantai dingin dari Jakarta, terlacak sampai pintu."
     },
     "standard": {
       "title": "Standar kami",
@@ -577,7 +587,19 @@
       "freq_dates": "Pengiriman pertama setelah penawaran dibayar. Lalu penawaran baru setiap {days} hari: jika dibayar hari ini, sekitar <b>{d1}</b> dan <b>{d2}</b>. Lewati, jeda atau batalkan dari akun Anda.",
       "on_page": "Di halaman ini",
       "tab_coa": "Sertifikat",
-      "tab_guide": "Panduan riset"
+      "tab_guide": "Panduan riset",
+      "cutoff_cold": "Dibayar sebelum {time} WIB pada hari kerja dikirim hari itu juga, rantai dingin.",
+      "cutoff_ambient": "Dibayar sebelum {time} WIB pada hari kerja dikirim hari itu juga.",
+      "notice_title": "Beri tahu saya saat tersedia lagi",
+      "notice_lead": "Tinggalkan email atau nomor WhatsApp. AXIOM mengabari Anda saat lot masuk; tidak ada yang lain dikirim.",
+      "notice_label": "Email atau nomor WhatsApp",
+      "notice_placeholder": "nama@lab.id atau 08xx",
+      "notice_send": "Kabari saya",
+      "notice_sending": "Menyimpan",
+      "notice_done": "Tercatat. AXIOM mengabari Anda saat {name} {dose} tersedia lagi.",
+      "notice_err_contact": "Alamat email atau nomor seluler Indonesia.",
+      "notice_err_server": "Belum tersimpan. Coba lagi atau tanya di WhatsApp.",
+      "notice_wa": "Atau tanya di WhatsApp"
     },
     "merch": {
       "title": "Merch",

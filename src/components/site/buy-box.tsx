@@ -8,6 +8,7 @@ import { idr, planNet } from '@/lib/money';
 import { addToBasketAction, type BasketResult } from '@/app/[locale]/(public)/actions';
 import { ADDED_EVENT, BASKET_EVENT } from './basket-badge';
 import { addDays, fmtLong, now } from '@/lib/domain/dates';
+import { NotifyForm } from './notify-form';
 
 /**
  * The purchase box on a product page: the size chips, the price, one-time or a delivery plan, the
@@ -31,9 +32,9 @@ function Submit({ label, busy, done, disabled }: { label: string; busy: string; 
   );
 }
 
-export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, whatsapp, priceNote, locale }: {
+export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, whatsapp, priceNote, cutoffNote, locale }: {
   name: string; kind: 'peptide' | 'device' | 'apparel'; variants: BuyVariant[]; tiers: BuyTier[]; initialSku?: string;
-  basketHref: string; whatsapp: string; priceNote: string; locale: string;
+  basketHref: string; whatsapp: string; priceNote: string; cutoffNote: string; locale: string;
 }) {
   const t = useTranslations('site.product');
   // the next delivery dates are the device's today plus the interval: read after mount so the
@@ -73,7 +74,8 @@ export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, wh
   const added = !!state?.ok && doneKey === selectionKey;
 
   return (
-    <form action={action} className="buy" aria-label={t('add')}>
+    <div className="buy">
+    <form action={action} className="buy-form" aria-label={t('add')}>
       <input type="hidden" name="sku" value={v?.sku ?? ''} />
       <input type="hidden" name="delta" value={qty} />
       <input type="hidden" name="interval_days" value={plan === 'sub' && canPlan && tier ? tier.days : ''} />
@@ -110,8 +112,9 @@ export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, wh
         <span className="dot" />
         {out ? t('none_left') : v && v.available <= 3 ? t('low', { count: v.available }) : t('available', { count: v?.available ?? 0 })}
       </div>
+      {!out && cutoffNote ? <p className="cutoff-line"><Icon name="clock" /> {cutoffNote}</p> : null}
 
-      {canPlan ? (
+      {out ? null : canPlan ? (
         <>
           <div className="opts" role="radiogroup" aria-label={t('once_title')}>
             <button type="button" role="radio" aria-checked={plan === 'once'} className={`opt${plan === 'once' ? ' on' : ''}`} onClick={() => setPlan('once')}>
@@ -152,23 +155,23 @@ export function BuyBox({ name, kind, variants, tiers, initialSku, basketHref, wh
         <p className="note" style={{ marginBottom: 6 }}>{t('once_only')}</p>
       )}
 
-      <div className="buy-foot">
+      <div className="buy-foot" hidden={out}>
         <span className="qty" aria-label={t('qty')}>
           <button type="button" onClick={() => setQty(q => Math.max(1, q - 1))} aria-label="−"><Icon name="minus" /></button>
           <span className="tnum">{qty}</span>
           <button type="button" onClick={() => setQty(q => Math.min(99, q + 1))} aria-label="+"><Icon name="plus" /></button>
         </span>
-        {out ? (
-          <a className="btn" href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(t('notify_wa', { name, dose: v?.dose ?? '' }))}`}>{t('notify')}</a>
-        ) : (
+        {out ? null : (
           <Submit label={added ? t('added') : t('add')} busy={t('adding')} done={added} disabled={net === null} />
         )}
       </div>
       {added ? <p className="go-basket"><Link href={basketHref} className="tlink">{t('go_basket')} <Icon name="arrow" className="ar" /></Link></p> : null}
 
-      {canPlan ? (
+      {canPlan && !out ? (
         <div className="how"><b>{t('plan_how')}</b>{t('plan_how_body')}</div>
       ) : null}
     </form>
+    {out && v ? <NotifyForm sku={v.sku} name={name} dose={v.dose} whatsapp={whatsapp} /> : null}
+    </div>
   );
 }
