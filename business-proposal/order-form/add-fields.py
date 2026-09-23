@@ -4,7 +4,7 @@ Reads fields.json (written by build.cjs) and adds AcroForm fields over the
 page artwork, so the PDF can be filled on a phone (iOS Files / Books,
 Android Drive, Adobe Acrobat) and sent back:
   - a text field over every cream input box
-  - an mg / IU radio group on every order line
+  - an mg / IU / mL radio group on every order line
   - the research-use confirmation checkbox
 Requires: pip install pymupdf
 """
@@ -18,7 +18,7 @@ OUT = HERE.parent / "AXIOM-Order-Form.pdf"
 
 LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address",
           "ruo_confirm": "I confirm this order is for research use only"}
-PREFIX_LABELS = {"item": "Item / Compound", "amount": "Amount", "qty": "Quantity", "unit": "Unit (mg / IU)"}
+PREFIX_LABELS = {"item": "Item / Compound", "amount": "Amount", "qty": "Quantity", "unit": "Unit (mg / IU / mL)"}
 INK_ON_FIELD = (0.027, 0.024, 0.020)  # --bg, dark text on the cream box
 DOT = "0.906 0.694 0.451"             # --accent-bright, the selected radio dot
 TICK = "0.027 0.024 0.020"            # --bg, the tick drawn on the cream square
@@ -76,7 +76,7 @@ for f in spec["text"]:
     if f["center"]:
         doc.xref_set_key(annot.xref, "Q", "1")
 
-# ---- mg / IU radio groups (written directly: each option gets its own on-state name) ----
+# ---- mg / IU / mL radio groups (written directly: each option gets its own on-state name) ----
 groups = {}
 for r in spec["radio"]:
     groups.setdefault((r["page"], r["group"]), []).append(r)
@@ -140,4 +140,4 @@ doc.set_metadata({
 })
 doc.save(OUT, garbage=4, deflate=True)
 print(f"{OUT.name}: {len(doc)} page(s), {len(text_fields)} text fields, "
-      f"{len(groups)} mg/IU groups, {len(spec['check'])} checkbox")
+      f"{len(groups)} unit groups, {len(spec['check'])} checkbox")
