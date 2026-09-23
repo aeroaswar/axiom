@@ -1,0 +1,128 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>AXIOM Peptide Science — Order Form</title>
+<style>
+/*{{FONTS}}*/
+:root{--bg:#070605;--ink:#F2EDE5;--muted:#9C9488;--muted-2:#6A635A;--accent:#C88A4E;--accent-bright:#E7B173;--accent-deep:#7C4C24;--line:rgba(242,237,229,.12);--line-soft:rgba(242,237,229,.06);--accent-line:rgba(200,138,78,.34);--field:#F2EDE5;--display:"Jost","Century Gothic",system-ui,sans-serif;--sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box}
+/* Phone-proportioned page: opens fit-to-width on a phone with thumb-sized fields */
+@page{size:420px 900px;margin:0}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{position:relative;width:420px;height:900px;padding:30px 28px 24px;overflow:hidden;break-after:page;display:flex;flex-direction:column;background:
+   radial-gradient(70% 34% at 88% 4%,rgba(200,138,78,.18),transparent 62%),
+   radial-gradient(60% 30% at 20% 102%,rgba(124,76,36,.22),transparent 64%),
+   var(--bg)}
+.page:last-child{break-after:auto}
+.pl td.q,.pl td.p,.tab{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:18px}
+.mast-top{display:flex;justify-content:space-between;align-items:center}
+.mark{width:26px;height:auto;display:block}
+.kick{font-size:7.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.wm{display:block;width:230px;height:auto;margin:16px 0 8px}
+.sub{font-family:var(--display);font-weight:300;font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:var(--muted)}
+.title-row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:14px}
+.title-row h1{font-family:var(--display);font-weight:300;font-size:30px;line-height:1;margin:0;color:var(--ink)}
+.title-row .meta{font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:right;line-height:1.7}
+
+/* compact masthead for reference pages */
+.mast.slim{padding-bottom:14px;margin-bottom:16px}
+.mast.slim .wm{width:130px;margin:0}
+.mast.slim .title-row{margin-top:14px}
+.mast.slim h1{font-size:22px}
+
+/* ---------- form ---------- */
+.sec{margin-bottom:16px}
+.sh{display:flex;align-items:baseline;gap:9px;border-bottom:1px solid var(--accent-line);padding-bottom:6px;margin-bottom:12px}
+.sh .ix{font-family:var(--display);color:var(--accent);font-size:12px;font-weight:400}
+.sh h2{font-family:var(--display);font-weight:400;font-size:13px;margin:0;color:var(--ink);letter-spacing:.01em}
+.sh .hint{margin-left:auto;font-size:7.5px;color:var(--muted-2);letter-spacing:.04em}
+.fl{display:block;font-size:7.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 5px}
+.box{display:block;height:32px;background:var(--field);border-left:2px solid var(--accent);margin-bottom:9px}
+.box.tall{height:54px}
+.items{width:100%;border-collapse:collapse}
+.items th{text-align:left;font-size:7.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:0 0 5px}
+.items th.q,.items td.q{width:70px}
+.items td{padding:0 0 6px}
+.items td.n{width:20px;font-family:var(--display);color:var(--accent);font-size:11px;vertical-align:middle}
+.items td.q{padding-left:7px}
+.items .box{margin:0;height:30px}
+
+/* ---------- how to order ---------- */
+.steps{display:flex;gap:8px;margin-top:2px}
+.step{flex:1;border:1px solid var(--line);padding:7px 8px 8px;background:rgba(242,237,229,.02)}
+.step .k{font-family:var(--display);color:var(--accent);font-size:10px;float:right;line-height:1}
+.step b{display:block;font-weight:500;color:var(--ink);font-size:8.5px;letter-spacing:.02em;margin-bottom:2px}
+.step span.t{font-size:7.5px;color:var(--muted);line-height:1.45}
+.step .wa{color:var(--accent-bright)}
+
+/* ---------- price reference ---------- */
+.cat{margin:0 0 12px}
+.ch{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--accent-line);padding-bottom:5px;margin-bottom:2px}
+.ch .ix{font-family:var(--display);color:var(--accent);font-size:10.5px}
+.ch h3{font-family:var(--display);font-weight:400;font-size:11.5px;margin:0;color:var(--ink)}
+.pl{width:100%;border-collapse:collapse;font-size:9px}
+.pl td{padding:3.4px 2px;border-bottom:1px solid var(--line-soft);color:var(--muted)}
+.pl tr:last-child td{border-bottom:none}
+.pl td.c{color:var(--ink)}
+.pl td.q{width:62px;white-space:nowrap}
+.pl td.p{width:92px;text-align:right;color:var(--accent-bright);white-space:nowrap}
+
+/* ---------- footer ---------- */
+.spacer{flex:1}
+.ruo{border-top:1px solid var(--line-soft);padding-top:10px;font-size:6.8px;color:var(--muted-2);line-height:1.6;text-align:center}
+.foot{display:flex;justify-content:space-between;margin-top:8px;font-size:6.8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)}
+.foot .id{color:var(--muted)}
+</style></head><body>
+
+<!-- ============ PAGE 1 · ORDER FORM ============ -->
+<div class="page">
+  <header class="mast">
+    <div class="mast-top">
+      <div class="kick">Human Performance &amp; Longevity</div>
+      <svg class="mark" viewBox="131 0 83 70" aria-label="AXIOM mark"><path fill="#C88A4E" fill-rule="evenodd" d="{{X_PATH}}"/></svg>
+    </div>
+    <svg class="wm" viewBox="0 0 582 70" aria-label="AXIOM"><path fill="#F2EDE5" fill-rule="evenodd" d="{{WM_PATH}}"/></svg>
+    <div class="sub">Peptide Science</div>
+    <div class="title-row">
+      <h1>Order Form</h1>
+      <div class="meta">Research catalogue · IDR<br>Prices per price list v1.0</div>
+    </div>
+  </header>
+
+  <section class="sec">
+    <div class="sh"><span class="ix">01</span><h2>Your Details</h2></div>
+    <label class="fl">Name</label>
+    <span class="box" data-field="name"></span>
+    <label class="fl">Phone Number</label>
+    <span class="box" data-field="phone"></span>
+    <label class="fl">Address</label>
+    <span class="box tall" data-field="address" data-multiline="1"></span>
+  </section>
+
+  <section class="sec">
+    <div class="sh"><span class="ix">02</span><h2>Your Order</h2><span class="hint">Compound + lot, e.g. Retatrutide 10 mg</span></div>
+    <table class="items">
+      <thead><tr><th></th><th>Item</th><th class="q">Quantity</th></tr></thead>
+      <tbody>
+{{ITEM_ROWS}}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sec">
+    <div class="sh"><span class="ix">03</span><h2>How to Order</h2></div>
+    <div class="steps">
+      <div class="step"><span class="k">1</span><b>Fill in</b><span class="t">Tap each field. Items &amp; prices on pages 2–{{LAST_PAGE}}.</span></div>
+      <div class="step"><span class="k">2</span><b>Save</b><span class="t">Save or export the completed PDF.</span></div>
+      <div class="step"><span class="k">3</span><b>Send</b><span class="t">WhatsApp to <span class="wa">+62 812 857 3396</span>. We confirm the total.</span></div>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+  <div class="ruo">Research Use Only. For in-vitro laboratory research — not for human or veterinary use. Orders are confirmed by AXIOM before payment.</div>
+  <div class="foot"><span class="id">AX-OF-v1.0</span><span>Page 1 / {{LAST_PAGE}}</span></div>
+</div>
+
+{{PRICE_PAGES}}
+</body></html>
