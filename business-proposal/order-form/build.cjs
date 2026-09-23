@@ -20,7 +20,10 @@ const itemRows = Array.from({ length: ITEM_ROWS }, (_, i) => {
   const n = i + 1;
   return `        <tr><td class="n">${String(n).padStart(2, '0')}</td>` +
     `<td><span class="box" data-field="item_${n}"></span></td>` +
-    `<td class="s"><span class="box" data-field="mg_${n}" data-align="1"></span></td>` +
+    `<td class="s"><span class="box" data-field="amount_${n}" data-align="1" data-max="6"></span></td>` +
+    `<td class="u"><span class="unit">` +
+    ['mg', 'IU'].map(u => `<span class="opt" data-radio="unit_${n}" data-value="${u}"><span class="ring"></span>${u}</span>`).join('') +
+    `</span></td>` +
     `<td class="q"><span class="box" data-field="qty_${n}" data-align="1" data-max="3"></span></td></tr>`;
 }).join('\n');
 
@@ -54,11 +57,28 @@ fs.writeFileSync(outHtml, html);
     });
   });
 
+  // Radio options: the whole option cell is the tap target, the dot sits in the ring
+  const radios = await page.$$eval('[data-radio]', els => {
+    const pages = [...document.querySelectorAll('.page')];
+    return els.map(el => {
+      const pg = el.closest('.page');
+      const r = el.getBoundingClientRect(), pr = pg.getBoundingClientRect();
+      const ring = el.querySelector('.ring').getBoundingClientRect();
+      return {
+        group: el.dataset.radio, value: el.dataset.value, page: pages.indexOf(pg),
+        x: r.left - pr.left, y: r.top - pr.top, w: r.width, h: r.height,
+        cx: ring.left + ring.width / 2 - r.left, cy: ring.top + ring.height / 2 - r.top, rr: ring.width / 2,
+      };
+    });
+  });
+
   await page.pdf({ path: path.join(HERE, 'order-form.flat.pdf'), preferCSSPageSize: true, printBackground: true });
   await browser.close();
 
   const pt = v => +(v * PX_TO_PT).toFixed(2);
-  fs.writeFileSync(path.join(HERE, 'fields.json'), JSON.stringify(
-    fields.map(f => ({ ...f, x: pt(f.x), y: pt(f.y), w: pt(f.w), h: pt(f.h) })), null, 1));
-  console.log(`fields=${fields.length}`);
+  fs.writeFileSync(path.join(HERE, 'fields.json'), JSON.stringify({
+    text: fields.map(f => ({ ...f, x: pt(f.x), y: pt(f.y), w: pt(f.w), h: pt(f.h) })),
+    radio: radios.map(r => ({ ...r, x: pt(r.x), y: pt(r.y), w: pt(r.w), h: pt(r.h), cx: pt(r.cx), cy: pt(r.cy), rr: pt(r.rr) })),
+  }, null, 1));
+  console.log(`text fields=${fields.length} radio options=${radios.length}`);
 })().catch(e => { console.error(e); process.exit(1); });

@@ -31,13 +31,18 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
 .box.tall{height:68px;margin-bottom:0}
 .items{width:100%;border-collapse:collapse}
 .items th{text-align:left;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:0 0 7px}
-.items th.s,.items td.s{width:100px}
-.items th.s{text-transform:none;letter-spacing:.06em;font-size:12px}
-.items th.q,.items td.q{width:110px}
+.items th.s,.items td.s{width:92px}
+.items th.u,.items td.u{width:128px}
+.items th.q,.items td.q{width:92px}
 .items td{padding:0 0 8px}
 .items td.n{width:32px;font-family:var(--display);color:var(--accent);font-size:16px;vertical-align:middle}
-.items td.s,.items td.q,.items th.s,.items th.q{padding-left:10px}
+.items td.s,.items td.q,.items td.u,.items th.s,.items th.q,.items th.u{padding-left:10px}
 .items .box{margin:0;height:40px}
+/* mg / IU choice: the rings are artwork, the dots are the PDF radio buttons */
+.unit{display:flex;height:40px;border:1px solid rgba(242,237,229,.22)}
+.opt{flex:1;display:flex;align-items:center;gap:8px;padding-left:11px;font-size:13px;color:var(--ink);font-weight:400}
+.opt+.opt{border-left:1px solid rgba(242,237,229,.22)}
+.ring{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--accent);flex:none}
 
 /* ---------- how to order ---------- */
 .steps{display:flex;gap:12px}
@@ -73,9 +78,9 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
   </section>
 
   <section class="sec">
-    <div class="sh"><span class="ix">02</span><h2>Your Order</h2><span class="hint">e.g. Retatrutide · 10 mg · 2</span></div>
+    <div class="sh"><span class="ix">02</span><h2>Your Order</h2><span class="hint">e.g. Retatrutide · 10 · mg · 2 &nbsp;/&nbsp; HCG · 10000 · IU · 1</span></div>
     <table class="items">
-      <thead><tr><th></th><th>Item / Compound</th><th class="s">mg</th><th class="q">Quantity</th></tr></thead>
+      <thead><tr><th></th><th>Item / Compound</th><th class="s">Amount</th><th class="u">Unit</th><th class="q">Quantity</th></tr></thead>
       <tbody>
 {{ITEM_ROWS}}
       </tbody>
@@ -85,7 +90,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
   <section class="sec">
     <div class="sh"><span class="ix">03</span><h2>How to Order</h2></div>
     <div class="steps">
-      <div class="step"><span class="k">1</span><b>Fill in</b><span class="t">Tap each field and type your details and order.</span></div>
+      <div class="step"><span class="k">1</span><b>Fill in</b><span class="t">Tap each field to type, and tap mg or IU for each item.</span></div>
       <div class="step"><span class="k">2</span><b>Save</b><span class="t">Save or export the completed PDF.</span></div>
       <div class="step"><span class="k">3</span><b>Send</b><span class="t">WhatsApp it to <span class="wa">+62 812 857 3396</span>. We confirm the total.</span></div>
     </div>
