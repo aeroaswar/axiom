@@ -5,6 +5,7 @@ page artwork, so the PDF can be filled on a phone (iOS Files / Books,
 Android Drive, Adobe Acrobat) and sent back:
   - a text field over every cream input box
   - an mg / IU radio group on every order line
+  - the research-use confirmation checkbox
 Requires: pip install pymupdf
 """
 import json
@@ -15,10 +16,12 @@ import pymupdf
 HERE = Path(__file__).parent
 OUT = HERE.parent / "AXIOM-Order-Form.pdf"
 
-LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address"}
+LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address",
+          "ruo_confirm": "I confirm this order is for research use only"}
 PREFIX_LABELS = {"item": "Item / Compound", "amount": "Amount", "qty": "Quantity", "unit": "Unit (mg / IU)"}
 INK_ON_FIELD = (0.027, 0.024, 0.020)  # --bg, dark text on the cream box
 DOT = "0.906 0.694 0.451"             # --accent-bright, the selected radio dot
+TICK = "0.027 0.024 0.020"            # --bg, the tick drawn on the cream square
 ACCENT_BORDER = 3 * 0.75               # skip the 3px accent rule on the box's left edge
 RADIO_FLAGS = 1 << 15                  # Radio; no NoToggleToOff, so tapping the chosen unit clears it
 
@@ -102,6 +105,27 @@ for (pno, group), options in groups.items():
     annots = [a[0] for a in page.annot_xrefs()] + kids
     doc.xref_set_key(page.xref, "Annots", "[" + " ".join(f"{a} 0 R" for a in annots) + "]")
 
+# ---- checkboxes (field and widget in one object; the tick sits in the cream square) ----
+for c in spec["check"]:
+    page = doc[c["page"]]
+    H = page.rect.height
+    w, h = c["w"], c["h"]
+    x0, top, sz = c["sx"], h - c["sy"], c["size"]  # square's left edge and top, in widget space
+    pts = [(0.22, 0.52), (0.42, 0.30), (0.80, 0.74)]  # tick, as fractions of the square (y up)
+    path = " ".join(f"{x0 + px * sz:.2f} {top - sz + py * sz:.2f} {'m' if i == 0 else 'l'}" for i, (px, py) in enumerate(pts))
+    on = form_xobject(doc, w, h, f"q {TICK} RG 2.2 w 1 J 1 j {path} S Q")
+    off = form_xobject(doc, w, h, "")
+    xref = doc.get_new_xref()
+    doc.update_object(xref, (
+        f"<< /Type /Annot /Subtype /Widget /F 4 /P {page.xref} 0 R "
+        f"/FT /Btn /T ({c['name']}) /TU ({label_for(c['name'])}) /V /Off /AS /Off "
+        f"/Rect [{c['x']:.2f} {H - c['y'] - h:.2f} {c['x'] + w:.2f} {H - c['y']:.2f}] "
+        f"/MK << /CA (4) >> "
+        f"/AP << /N << /Yes {on} 0 R /Off {off} 0 R >> /D << /Yes {on} 0 R /Off {off} 0 R >> >> >>"))
+    new_fields.append(xref)
+    annots = [a[0] for a in page.annot_xrefs()] + [xref]
+    doc.xref_set_key(page.xref, "Annots", "[" + " ".join(f"{a} 0 R" for a in annots) + "]")
+
 cat = doc.pdf_catalog()
 doc.xref_set_key(cat, "AcroForm/Fields", "[" + " ".join(f"{x} 0 R" for x in text_fields + new_fields) + "]")
 # No NeedAppearances: it makes viewers redraw the mg / IU buttons in their own style.
@@ -115,4 +139,5 @@ doc.set_metadata({
     "producer": "AXIOM",
 })
 doc.save(OUT, garbage=4, deflate=True)
-print(f"{OUT.name}: {len(doc)} page(s), {len(text_fields)} text fields, {len(new_fields)} mg/IU groups")
+print(f"{OUT.name}: {len(doc)} page(s), {len(text_fields)} text fields, "
+      f"{len(groups)} mg/IU groups, {len(spec['check'])} checkbox")

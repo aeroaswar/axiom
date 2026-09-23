@@ -1,6 +1,6 @@
 // Builds the AXIOM order form (one A4 page).
 //   NODE_PATH="$(npm root -g)" node build.cjs && python3 add-fields.py
-// 1. Takes the brand fonts and wordmark from ../axiom-pricelist-print.html
+// 1. Takes the brand fonts, wordmark and compound names + sizes from ../axiom-pricelist-print.html
 // 2. Renders order-form.html → order-form.flat.pdf with Chromium
 // 3. Writes fields.json (PDF-point rects) for add-fields.py to make fillable
 const fs = require('fs');
@@ -16,6 +16,18 @@ const src = fs.readFileSync(PRICELIST, 'utf8');
 const fonts = src.match(/@font-face \{[\s\S]*?\}/g).join('\n');
 const wmPath = src.match(/viewBox="0 0 582 70"[^>]*><path[^>]* d="([^"]+)"/)[1];
 
+// Compound reference: every compound once, with its lot sizes (no prices), A–Z
+const lots = new Map();
+for (const m of src.matchAll(/<td class="c">([^<]+)<\/td><td class="q">([^<]+)<\/td>/g)) {
+  const [num, unit] = m[2].trim().split(/\s+/);
+  const e = lots.get(m[1]) || { nums: [], units: new Set() };
+  e.nums.push(num); e.units.add(unit);
+  lots.set(m[1], e);
+}
+const compounds = [...lots].sort(([a], [b]) => a.localeCompare(b, 'en', { sensitivity: 'base' }))
+  .map(([name, e]) => `      <div><span class="c">${name}</span><span class="z">${e.nums.join(' · ')} ${[...e.units].join('/')}</span></div>`)
+  .join('\n');
+
 const itemRows = Array.from({ length: ITEM_ROWS }, (_, i) => {
   const n = i + 1;
   return `        <tr><td class="n">${String(n).padStart(2, '0')}</td>` +
@@ -30,7 +42,8 @@ const itemRows = Array.from({ length: ITEM_ROWS }, (_, i) => {
 const html = fs.readFileSync(path.join(HERE, 'order-form.template.html'), 'utf8')
   .replace('/*{{FONTS}}*/', fonts)
   .replace('{{WM_PATH}}', wmPath)
-  .replace('{{ITEM_ROWS}}', itemRows);
+  .replace('{{ITEM_ROWS}}', itemRows)
+  .replace('{{COMPOUNDS}}', compounds);
 
 const outHtml = path.join(HERE, 'order-form.html');
 fs.writeFileSync(outHtml, html);
@@ -72,6 +85,21 @@ fs.writeFileSync(outHtml, html);
     });
   });
 
+  // Checkboxes: the whole row is the tap target, the tick lands in the cream square
+  const checks = await page.$$eval('[data-check]', els => {
+    const pages = [...document.querySelectorAll('.page')];
+    return els.map(el => {
+      const pg = el.closest('.page');
+      const r = el.getBoundingClientRect(), pr = pg.getBoundingClientRect();
+      const sq = el.querySelector('.sq').getBoundingClientRect();
+      return {
+        name: el.dataset.check, page: pages.indexOf(pg),
+        x: r.left - pr.left, y: r.top - pr.top, w: r.width, h: r.height,
+        sx: sq.left - r.left, sy: sq.top - r.top, size: sq.width,
+      };
+    });
+  });
+
   await page.pdf({ path: path.join(HERE, 'order-form.flat.pdf'), preferCSSPageSize: true, printBackground: true });
   await browser.close();
 
@@ -79,6 +107,7 @@ fs.writeFileSync(outHtml, html);
   fs.writeFileSync(path.join(HERE, 'fields.json'), JSON.stringify({
     text: fields.map(f => ({ ...f, x: pt(f.x), y: pt(f.y), w: pt(f.w), h: pt(f.h) })),
     radio: radios.map(r => ({ ...r, x: pt(r.x), y: pt(r.y), w: pt(r.w), h: pt(r.h), cx: pt(r.cx), cy: pt(r.cy), rr: pt(r.rr) })),
+    check: checks.map(c => ({ ...c, x: pt(c.x), y: pt(c.y), w: pt(c.w), h: pt(c.h), sx: pt(c.sx), sy: pt(c.sy), size: pt(c.size) })),
   }, null, 1));
-  console.log(`text fields=${fields.length} radio options=${radios.length}`);
+  console.log(`text fields=${fields.length} radio options=${radios.length} checkboxes=${checks.length} compounds=${lots.size}`);
 })().catch(e => { console.error(e); process.exit(1); });
