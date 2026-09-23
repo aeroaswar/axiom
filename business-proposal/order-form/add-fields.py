@@ -20,7 +20,7 @@ PREFIX_LABELS = {"item": "Item / Compound", "amount": "Amount", "qty": "Quantity
 INK_ON_FIELD = (0.027, 0.024, 0.020)  # --bg, dark text on the cream box
 DOT = "0.906 0.694 0.451"             # --accent-bright, the selected radio dot
 ACCENT_BORDER = 3 * 0.75               # skip the 3px accent rule on the box's left edge
-RADIO_FLAGS = (1 << 15) | (1 << 14)    # Radio + NoToggleToOff: exactly one unit once chosen
+RADIO_FLAGS = 1 << 15                  # Radio; no NoToggleToOff, so tapping the chosen unit clears it
 
 
 def label_for(name):
