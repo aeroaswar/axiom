@@ -1,7 +1,7 @@
-"""Reads price-list-source.pdf and writes compounds.json for build.cjs.
+"""Reads ../AXIOM-Price-List.pdf and writes compounds.json for build.cjs.
 
 Keeps each compound once with its lot sizes, in price-list order; prices are
-dropped. Re-run after dropping a newer price list PDF in place.
+dropped. Re-run after replacing that PDF with a newer price list.
 Requires: pip install pymupdf
 """
 import json
@@ -14,7 +14,7 @@ HERE = Path(__file__).parent
 LOT = re.compile(r"^(\d+(?:[.,]\d+)?)\s*(mg|IU|mL)$")
 PRICE = re.compile(r"^Rp\s?[\d.]+$")
 
-lines = [l.strip() for p in pymupdf.open(HERE / "price-list-source.pdf") for l in p.get_text().splitlines() if l.strip()]
+lines = [l.strip() for p in pymupdf.open(HERE.parent / "AXIOM-Price-List.pdf") for l in p.get_text().splitlines() if l.strip()]
 compounds = {}
 for name, lot, price in zip(lines, lines[1:], lines[2:]):
     m = LOT.match(lot)

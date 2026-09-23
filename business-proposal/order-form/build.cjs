@@ -18,7 +18,7 @@ const fonts = src.match(/@font-face \{[\s\S]*?\}/g).join('\n');
 const wmPath = src.match(/viewBox="0 0 582 70"[^>]*><path[^>]* d="([^"]+)"/)[1];
 
 // Compound reference: every compound once with its lot sizes (no prices), A–Z.
-// compounds.json comes from price-list-source.pdf via extract-compounds.py
+// compounds.json comes from ../AXIOM-Price-List.pdf via extract-compounds.py
 const lots = JSON.parse(fs.readFileSync(path.join(HERE, 'compounds.json'), 'utf8'));
 const compounds = [...lots].sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
   .map(c => `      <div><span class="c">${c.name.replace(/&/g, '&amp;')}</span><span class="z">${c.sizes.join(' · ')} ${c.units.join('/')}</span></div>`)
