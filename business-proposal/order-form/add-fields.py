@@ -15,17 +15,19 @@ OUT = HERE.parent / "AXIOM-Order-Form.pdf"
 
 LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address"}
 INK_ON_FIELD = (0.027, 0.024, 0.020)  # --bg, dark text on the cream box
-ACCENT_BORDER = 2 * 0.75               # skip the 2px accent rule on the box's left edge
+ACCENT_BORDER = 3 * 0.75               # skip the 3px accent rule on the box's left edge
 
 doc = pymupdf.open(HERE / "order-form.flat.pdf")
 fields = json.loads((HERE / "fields.json").read_text())
 
 for f in fields:
     page = doc[f["page"]]
-    rect = pymupdf.Rect(f["x"] + ACCENT_BORDER + 3, f["y"] + 1, f["x"] + f["w"] - 3, f["y"] + f["h"] - 1)
+    rect = pymupdf.Rect(f["x"] + ACCENT_BORDER + 5, f["y"] + 1, f["x"] + f["w"] - 5, f["y"] + f["h"] - 1)
     name = f["name"]
     if name.startswith("item_"):
-        label = f"Item {name.split('_')[1]}"
+        label = f"Item / Compound {name.split('_')[1]}"
+    elif name.startswith("mg_"):
+        label = f"mg {name.split('_')[1]}"
     elif name.startswith("qty_"):
         label = f"Quantity {name.split('_')[1]}"
     else:
@@ -37,7 +39,7 @@ for f in fields:
     w.field_label = label  # tooltip / accessible name
     w.rect = rect
     w.text_font = "Helv"
-    w.text_fontsize = 10 if f["multiline"] else 11
+    w.text_fontsize = 12 if f["multiline"] else 14
     w.text_color = INK_ON_FIELD
     w.border_width = 0
     w.fill_color = None     # the cream box is part of the page artwork
@@ -50,9 +52,9 @@ for f in fields:
         doc.xref_set_key(annot.xref, "Q", "1")
 
 doc.set_metadata({
-    "title": "AXIOM Peptide Science — Order Form",
+    "title": "AXIOM — Order Form",
     "author": "AXIOM",
-    "subject": "Order form · price list v1.0 · AX-OF-v1.0",
+    "subject": "Order form",
     "creator": "AXIOM",
     "producer": "AXIOM",
 })
