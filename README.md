@@ -46,8 +46,9 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
 Standalone files outside the app: the Next.js build, the site and the gates never touch them.
 
 - `label-builder/` — personalised box and carrying-case labels. Type a name, proof both labels,
-  print A4 multi-up sheets at true millimetre size. Fonts and wordmark are inlined, so it works
-  offline and opens straight from disk.
+  then print A4 multi-up sheets at true millimetre size, or switch to thermal roll: one mono label
+  per page at the label's own size, for a 4-inch direct-thermal printer such as the Xprinter
+  XP-420B. Fonts and wordmark are inlined, so it works offline and opens straight from disk.
 - `company-profile/` — the AXIOM company profile page.
 - `brand-book/` — the brand book and style guide.
 - `business-proposal/` — business proposal, GTM strategy, price lists and the fillable A4 order form.

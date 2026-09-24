@@ -151,6 +151,37 @@
 .cell .crops{ position:absolute; inset:0; overflow:visible; pointer-events:none; }
 .cell .crops line{ stroke:#9a9a9a; stroke-width:.25; }
 
+/* ── thermal roll ───────────────────────────────────────────── */
+/* Direct thermal prints black on white and nothing else: no fill, pure black,
+   and the name one weight up so its strokes stay two dots wide at 203 dpi. */
+.cw-mono{
+  --bg:#fff; --ink:#000; --muted:#000;
+  --accent:#000; --accent-line:#000; --line:#000;
+}
+.cw-mono .nm{ font-weight:400; }
+.rollprint{ display:none; }
+.rollpage{
+  width:var(--roll-w); height:var(--roll-h); overflow:hidden; line-height:0;
+  page-break-after:always; break-after:page;
+}
+.rollpage:last-child{ page-break-after:auto; break-after:auto; }
+.rollpage .label{ border-radius:0; }
+
+/* screen preview: labels on their liner, the way they come off the roll */
+.rolls{ display:flex; flex-wrap:wrap; gap:34px; align-items:flex-start; }
+.roll .liner{
+  background:#e6e0d4; padding:3mm 2.5mm; border-radius:2px;
+  display:flex; flex-direction:column; gap:3mm;
+}
+.roll .more{
+  margin-top:10px; font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--ui-muted-2);
+}
+
+/* one output mode at a time */
+body.mode-roll .sheet-only{ display:none !important; }
+body:not(.mode-roll) .roll-only{ display:none !important; }
+
 /* ── tool chrome (screen only) ──────────────────────────────── */
 html,body{margin:0;padding:0}
 body{
@@ -212,6 +243,9 @@ input[type=text]{ font-family:var(--display); letter-spacing:.06em; font-size:16
 }
 .note{ margin-top:14px; font-size:11.5px; line-height:1.6; color:var(--ui-muted-2); }
 .note b{ color:var(--ui-muted); font-weight:500; }
+.hint{ margin:9px 0 0; font-size:11.5px; line-height:1.5; color:var(--ui-muted-2); }
+.seg[aria-disabled=true]{ opacity:.35; pointer-events:none; }
+.rollbtns{ display:grid; gap:8px; }
 
 .stage{ padding:34px 40px 70px; min-width:0; }
 .stage h2{
@@ -244,8 +278,12 @@ input[type=text]{ font-family:var(--display); letter-spacing:.06em; font-size:16
   .sheets{ display:block; gap:0; }
   .sheetwrap{ border:0; overflow:visible; margin:0; padding:0; width:auto; height:auto; }
   .sheetwrap > .sheet{ transform:none; }
+  .rolls{ display:none !important; }
+  body.printing-roll .app{ display:none !important; }
+  body.printing-roll .rollprint{ display:block !important; }
 }
 </style>
+<style id="pagerule">@page{size:A4;margin:0}</style>
 </head>
 <body>
 
@@ -268,11 +306,20 @@ input[type=text]{ font-family:var(--display); letter-spacing:.06em; font-size:16
     </div>
 
     <div class="grp">
+      <span class="glabel">Output</span>
+      <div class="seg" id="mode">
+        <button type="button" data-mode="sheet" aria-pressed="true">A4 sheet</button>
+        <button type="button" data-mode="roll" aria-pressed="false">Thermal roll</button>
+      </div>
+    </div>
+
+    <div class="grp">
       <span class="glabel">Colourway</span>
       <div class="seg" id="cw">
         <button type="button" data-cw="bone" aria-pressed="true">Bone</button>
         <button type="button" data-cw="onyx" aria-pressed="false">Onyx</button>
       </div>
+      <p class="hint roll-only">Thermal prints black only, so roll labels are mono.</p>
     </div>
 
     <div class="grp">
@@ -290,7 +337,7 @@ input[type=text]{ font-family:var(--display); letter-spacing:.06em; font-size:16
       </div>
       <div class="row" style="margin-top:8px">
         <span class="u" data-u="pcs" style="flex:1"><input id="boxN" type="number" min="1" max="200" step="1" value="12"></span>
-        <button type="button" class="fill" data-fill="box">Fill sheet</button>
+        <button type="button" class="fill sheet-only" data-fill="box">Fill sheet</button>
       </div>
     </div>
 
@@ -302,11 +349,11 @@ input[type=text]{ font-family:var(--display); letter-spacing:.06em; font-size:16
       </div>
       <div class="row" style="margin-top:8px">
         <span class="u" data-u="pcs" style="flex:1"><input id="caseN" type="number" min="1" max="200" step="1" value="18"></span>
-        <button type="button" class="fill" data-fill="case">Fill sheet</button>
+        <button type="button" class="fill sheet-only" data-fill="case">Fill sheet</button>
       </div>
     </div>
 
-    <div class="grp">
+    <div class="grp sheet-only">
       <span class="glabel">Sheet</span>
       <div class="pair">
         <span class="u" data-u="margin"><input id="margin" type="number" min="0" max="30" step="1" value="10"></span>
@@ -317,8 +364,15 @@ input[type=text]{ font-family:var(--display); letter-spacing:.06em; font-size:16
       </label>
     </div>
 
-    <button type="button" class="print" id="print">Print sheets</button>
-    <p class="note">Two A4 pages — box labels, then case labels. In the print dialog set
+    <button type="button" class="print sheet-only" id="print">Print sheets</button>
+    <div class="rollbtns roll-only">
+      <button type="button" class="print" data-roll="box">Print box labels</button>
+      <button type="button" class="print" data-roll="case">Print case labels</button>
+    </div>
+    <p class="note roll-only">One label per page. Load the matching roll first, then in the
+      print dialog pick the Xprinter with <b>paper size = the label size</b> (add it once in the
+      driver's Printing Preferences), <b>Margins: None</b>, <b>Scale 100%</b>.</p>
+    <p class="note sheet-only">Two A4 pages — box labels, then case labels. In the print dialog set
       <b>Scale 100%</b>, <b>Margins: None</b> and <b>Background graphics: on</b>, or the
       millimetre sizes will not come out true.</p>
   </aside>
@@ -326,11 +380,16 @@ input[type=text]{ font-family:var(--display); letter-spacing:.06em; font-size:16
   <main class="stage">
     <h2>Proof <span id="proofDims"></span></h2>
     <div class="proofs" id="proofs"></div>
-    <h2>Sheets <span id="sheetDims"></span></h2>
-    <div class="sheets" id="sheets"></div>
+    <h2 class="sheet-only">Sheets <span id="sheetDims"></span></h2>
+    <div class="sheets sheet-only" id="sheets"></div>
+    <h2 class="roll-only">Roll <span>· one label per page</span></h2>
+    <div class="rolls roll-only" id="rolls"></div>
   </main>
 
 </div>
+
+<!-- what a thermal job prints: filled just before the dialog, emptied after -->
+<div class="rollprint" id="rollprint"></div>
 
 <script>
 (() => {
@@ -347,7 +406,7 @@ const state = {
   name: 'Aero Aswar', cw: 'bone',
   boxW: 70, boxH: 45, boxN: 12,
   caseW: 90, caseH: 25, caseN: 18,
-  margin: 10, gutter: 4, radius: 3, crops: true
+  margin: 10, gutter: 4, radius: 3, crops: true, mode: 'sheet'
 };
 
 /* ── persistence (everything but the name) ─────────────────── */
@@ -367,7 +426,7 @@ function load(){
 /* ── label construction ────────────────────────────────────── */
 function labelEl(kind){
   const el = document.createElement('div');
-  el.className = `label label--${kind} cw-${state.cw}`;
+  el.className = `label label--${kind} cw-${state.mode === 'roll' ? 'mono' : state.cw}`;
   el.innerHTML =
     '<div class="safe">' +
       '<svg class="mark" viewBox="0 0 582 70"><use href="#axm"/></svg>' +
@@ -534,8 +593,60 @@ function proofEl(kind, text, w, h){
   return box;
 }
 
+/* ── thermal roll ──────────────────────────────────────────── */
+function rollEl(kind, w, h, n, text){
+  const wrap = document.createElement('div');
+  wrap.className = 'roll';
+  const liner = document.createElement('div');
+  liner.className = 'liner';
+  for (let i = 0; i < Math.min(n, 3); i++){
+    const l = labelEl(kind);
+    l.querySelector('.nm').textContent = text;
+    liner.appendChild(l);
+  }
+  const more = document.createElement('div');
+  more.className = 'more';
+  more.textContent = `${kind === 'box' ? 'Box' : 'Case'} · ${w}×${h}mm roll · ${n} ${n === 1 ? 'label' : 'labels'}`;
+  wrap.append(liner, more);
+  return wrap;
+}
+
+function setPage(w, h){
+  $('#pagerule').textContent = w ? `@page{size:${w}mm ${h}mm;margin:0}` : '@page{size:A4;margin:0}';
+}
+
+// A roll carries one label size, so a thermal job is one kind: N pages, each
+// exactly one label. Built just before the dialog and torn down after it.
+let rollKind = null;
+function prepareRoll(kind){
+  const w = state[kind + 'W'], h = state[kind + 'H'];
+  const out = $('#rollprint');
+  out.style.setProperty('--roll-w', w + 'mm');
+  out.style.setProperty('--roll-h', h + 'mm');
+  const pages = [];
+  for (let i = 0; i < state[kind + 'N']; i++){
+    const pg = document.createElement('div');
+    pg.className = 'rollpage';
+    const l = labelEl(kind);
+    l.querySelector('.nm').textContent = fitted[kind];
+    pg.appendChild(l);
+    pages.push(pg);
+  }
+  out.replaceChildren(...pages);
+  setPage(w, h);
+  document.body.classList.add('printing-roll');
+  rollKind = kind;
+}
+function endRoll(){
+  rollKind = null;
+  document.body.classList.remove('printing-roll');
+  $('#rollprint').replaceChildren();
+  setPage();
+}
+
 /* ── render ────────────────────────────────────────────────── */
 let ready = false;
+const fitted = { box: '', case: '' };
 
 function render(){
   const root = document.documentElement.style;
@@ -551,8 +662,8 @@ function render(){
   const gauges = $('#gauges');
   gauges.replaceChildren(labelEl('box'), labelEl('case'));
 
-  const boxText = fit('box');
-  const caseText = fit('case');
+  const boxText = fitted.box = fit('box');
+  const caseText = fitted.case = fit('case');
 
   $('#proofs').replaceChildren(
     proofEl('box', boxText, state.boxW, state.boxH),
@@ -563,6 +674,11 @@ function render(){
   $('#sheets').replaceChildren(
     sheetEl('box', state.boxW, state.boxH, Math.min(state.boxN, gb.cap), boxText),
     sheetEl('case', state.caseW, state.caseH, Math.min(state.caseN, gc.cap), caseText)
+  );
+
+  $('#rolls').replaceChildren(
+    rollEl('box', state.boxW, state.boxH, state.boxN, boxText),
+    rollEl('case', state.caseW, state.caseH, state.caseN, caseText)
   );
 
   $('#proofDims').textContent =
@@ -582,6 +698,11 @@ function syncInputs(){
   $('#crops').checked = state.crops;
   for (const b of document.querySelectorAll('#cw button'))
     b.setAttribute('aria-pressed', String(b.dataset.cw === state.cw));
+  for (const b of document.querySelectorAll('#mode button'))
+    b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode));
+  const roll = state.mode === 'roll';
+  document.body.classList.toggle('mode-roll', roll);
+  $('#cw').setAttribute('aria-disabled', String(roll));
 }
 
 $('#name').addEventListener('input', e => { state.name = e.target.value; render(); });
@@ -613,6 +734,18 @@ for (const b of document.querySelectorAll('.fill')){
 }
 
 $('#print').addEventListener('click', () => window.print());
+
+$('#mode').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  state.mode = b.dataset.mode; syncInputs(); render();
+});
+
+for (const b of document.querySelectorAll('[data-roll]')){
+  b.addEventListener('click', () => { prepareRoll(b.dataset.roll); window.print(); });
+}
+// Ctrl+P in roll mode prints the box roll rather than an empty page
+window.addEventListener('beforeprint', () => { if (state.mode === 'roll' && !rollKind) prepareRoll('box'); });
+window.addEventListener('afterprint', () => { if (rollKind) endRoll(); });
 
 /* ── boot ──────────────────────────────────────────────────── */
 load();
