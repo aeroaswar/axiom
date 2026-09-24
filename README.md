@@ -100,6 +100,26 @@ On the clean sheet, a first sale runs in this order, each step in the Console:
 4. **New quote → send → accept** — acceptance issues the invoice; **mark paid** moves it to
    packing; dispatch and delivery close it.
 
+## Standalone invoice builder
+
+`invoice/axiom-invoice-a4.html` is a self-contained, dependency-free A4 invoice builder that
+predates the Console's invoicing and still runs from a file — useful for issuing an invoice
+without the app or a database. Open it in a browser, fill the form on the left, watch the
+sheet redraw on the right, then *Save as PDF* (paper A4, background graphics on; a one-page
+invoice prints correctly at any margin setting, set margins to None past that).
+
+Line items come from a dropdown of the full price list — 79 lots across the 9 pathways plus
+devices and apparel, 84 entries — generated from `invoice/AXIOM-Price-List-v1.0.pdf`, which
+is committed beside it. Shipping is Rp 100.000 per 3 units at an address, capped at
+Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to*, route each
+line item to one, and each carries its own amount, calculated by default and overridable.
+`invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to.
+
+This duplicates what `src/components/console/invoices/` and `src/lib/documents/` now do inside
+the app, and its catalogue is a second copy of prices that `supabase/seed.sql` owns, as are its
+delivery rates against the platform's per-consignment function. Treat the database as
+authoritative; retire this file once the Console covers the offline case.
+
 ## Production
 
 Supabase (Postgres, Auth magic link, Storage) + Vercel. Set `DATABASE_URL` to the project's direct
