@@ -1,0 +1,601 @@
+[
+ {
+  "name": "AOD-9604",
+  "sizes": [
+   "5"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Cagrilintide",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Retatrutide",
+  "sizes": [
+   "10",
+   "20",
+   "30",
+   "40",
+   "60"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Tirzepatide",
+  "sizes": [
+   "10",
+   "30",
+   "40"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "CJC-1295 (No DAC) + Ipamorelin",
+  "sizes": [
+   "10",
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "CJC-1295 (With DAC)",
+  "sizes": [
+   "5"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "HGH 191AA (Somatropin)",
+  "sizes": [
+   "36",
+   "40"
+  ],
+  "units": [
+   "IU"
+  ]
+ },
+ {
+  "name": "IGF-1 LR3",
+  "sizes": [
+   "1"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Ipamorelin",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Ipamorelin + Tesamorelin",
+  "sizes": [
+   "18"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Sermorelin",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Tesamorelin",
+  "sizes": [
+   "10",
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "AHK-Cu",
+  "sizes": [
+   "100"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "ARA-290",
+  "sizes": [
+   "10",
+   "50"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "BPC-157",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "BPC-157 + TB-500 (Wolverine)",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "GHK-Cu",
+  "sizes": [
+   "50",
+   "100"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "KPV",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "KLOW (BPC+TB+GHK+KPV)",
+  "sizes": [
+   "80"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "LL-37",
+  "sizes": [
+   "5"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Peg MGF",
+  "sizes": [
+   "2"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "SNAP-8",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "TB-500",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Adamax",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Cerebrolysin",
+  "sizes": [
+   "80"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Dihexa",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Pinealon",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Selank",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Semax",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Selank + Semax",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "VIP (Vasoactive Intestinal Peptide)",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "5-Amino-1MQ",
+  "sizes": [
+   "50"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "AICAR",
+  "sizes": [
+   "50"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "L-Carnitine (Injectable)",
+  "sizes": [
+   "5000"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "LC216 Lipo-B (Injectable)",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mL"
+  ]
+ },
+ {
+  "name": "LC526 Fat Blaster (Injectable)",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mL"
+  ]
+ },
+ {
+  "name": "MOTS-c",
+  "sizes": [
+   "10",
+   "40"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "SLU-PP-332 (Injectable)",
+  "sizes": [
+   "5"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Thymalin",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Thymosin Alpha-1",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "HCG",
+  "sizes": [
+   "10000"
+  ],
+  "units": [
+   "IU"
+  ]
+ },
+ {
+  "name": "HMG",
+  "sizes": [
+   "75"
+  ],
+  "units": [
+   "IU"
+  ]
+ },
+ {
+  "name": "Kisspeptin",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Melanotan II",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Oxytocin Acetate",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "PT-141",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "DSIP",
+  "sizes": [
+   "5",
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Epithalon",
+  "sizes": [
+   "50"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "FOXO4-DRI",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Glutathione",
+  "sizes": [
+   "1500"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Humanin",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "NAD+",
+  "sizes": [
+   "500",
+   "1000"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "SS-31",
+  "sizes": [
+   "50"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Bronchogen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Cardiogen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Cartalax",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Chonluten",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Cortagen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Crystagen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Livagen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Ovagen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Pancragen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Prostamax",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Testagen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Vesugen",
+  "sizes": [
+   "20"
+  ],
+  "units": [
+   "mg"
+  ]
+ }
+]

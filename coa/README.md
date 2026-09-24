@@ -1,13 +1,25 @@
 # AXIOM — Certificate of Analysis
 
-Print-ready A4 Certificate of Analysis in the AXIOM brand system. One self-contained
-HTML file, one lot per document.
+Print-ready A4 Certificates of Analysis in the AXIOM brand system — a builder that makes
+one, and the plain sheet it is built from. Each file is self-contained; one lot per
+document.
 
 - `builder/index.html` — **the COA builder.** Fill in the lot, sign it on screen, print
   it. Start here.
 - `index.html` — the plain certificate, driven by a `LOT` object in the file. Kept as
   the reference sheet and as a template you can hand-edit without the tool.
 - `AXIOM-COA-NAD-RT20250722.pdf` — the rendered certificate for the current lot.
+
+Both HTML files are published and open without cloning:
+
+| | |
+|---|---|
+| Builder | https://claude.ai/code/artifact/21677123-edd8-4c0b-bc92-5906a8167e5c |
+| Plain sheet | https://claude.ai/code/artifact/4bc7c338-eb89-4e9b-96f0-388a9a437c6b |
+
+The builder's **Read a report** step and its cloud register only exist in the published
+copy — the capabilities they need are not there when the file is opened from disk. Everything
+else works either way.
 
 ## The builder
 
@@ -42,7 +54,8 @@ the certificate itself, live. **Print / PDF** gives one A4 page.
   becomes a recall path: type an order reference, get the lot. In the published builder the
   register lives in the cloud and follows you across devices; opened from disk it falls back
   to this-device storage and says so. **Export register** is the backup and the bridge between
-  the two.
+  the two. The lot you are working on saves itself as you type, on that device only — it is a
+  draft, not a record, until you issue it.
 - **Signatures** — draw on the pad with a mouse, trackpad or finger, or upload a photo of
   a signature (the paper is dropped and the ink kept). The signature sits on the ruled
   line. Sign for AXIOM's own people only: never draw or upload someone else's signature,
@@ -57,9 +70,6 @@ the certificate itself, live. **Print / PDF** gives one A4 page.
   off the source report, never from a guess in the tool.
 - **Export sheet** writes a standalone, self-contained HTML certificate; **JSON** writes
   the lot record; **Import** reads either back (the exported sheet carries its own JSON).
-- **Saved lots** and the working draft live in `localStorage` on that one device. Nothing
-  is synced and nothing reaches Claude. Use JSON to move a lot between machines or to
-  keep an issued record in this repo.
 
 ## Issuing a COA by hand
 
@@ -103,12 +113,25 @@ having performed the tests.
 ## Conventions
 
 - **Doc ID** — `AXM-COA-<compound>-<batch>`, revision `R0`, `R1`, … on reissue.
-- **Signatures** — printed titles sit under ruled lines. Sign and stamp by hand on issue;
-  no facsimile signatures are generated.
+- **Signatures** — in the builder, sign on screen (or upload a photo of a signature) before
+  issuing. In `index.html`, the hand-edited sheet, printed titles sit under ruled lines and
+  nothing is signed for you — sign and stamp it by hand. Neither generates a signature for
+  someone who did not make one.
 - **Seal** — the AXIOM QA mark is drawn inline as SVG and picks up the batch and issue date
   automatically. It is AXIOM's own mark; do not substitute a supplier's seal.
 - Keep the original manufacturer report on file — the certificate says it is available
   on request.
+
+## How this sits next to the app
+
+The Next.js app in `src/` **serves** certificates; it does not make them. `coa_documents`
+indexes a published PDF (lot code, file path, method, purity) and `/api/coa` returns the
+sample one. This directory is the other half: where the PDF comes from.
+
+Keep the boundary. `coa_documents` is a publication index — one row per certificate anyone can
+fetch. The builder's register is the authoring record: draft and issued states, revisions,
+fingerprints, the warnings someone overrode, the shipments a lot went out on. Do not rebuild
+the second inside the app, and do not expect the first to remember how a certificate was made.
 
 ## Notes
 
