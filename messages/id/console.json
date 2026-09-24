@@ -1,0 +1,627 @@
+{
+  "console": {
+    "common": {
+      "save": "Simpan",
+      "cancel": "Batal",
+      "delete": "Hapus",
+      "add": "Tambah",
+      "back": "Kembali",
+      "close": "Tutup",
+      "saved": "Tersimpan.",
+      "refused": "Basis data menolak perubahan ini: {message}",
+      "owner_only": "Angka biaya dan margin hanya untuk pemilik. Hubungi pemilik.",
+      "yes": "Ya",
+      "no": "Tidak",
+      "none": "Tidak ada",
+      "by": "oleh {who}",
+      "variants": "{count} varian",
+      "lots": "{count} lot",
+      "orders": "{count} pesanan",
+      "open_all": "Buka daftar",
+      "view_all": "Semua"
+    },
+    "catalogue": {
+      "title": "Katalog & stok",
+      "chips": {
+        "all": "Semua pilar",
+        "peptide": "Sains peptida",
+        "therapy": "Terapi",
+        "apparel": "Apparel",
+        "stockout": "Stok habis"
+      },
+      "cols": {
+        "variant": "Varian",
+        "content": "Isi",
+        "price": "Harga",
+        "on_hand": "Di gudang",
+        "reserved": "Dipesan",
+        "available": "Tersedia"
+      },
+      "group": "{no} · {name} · {count} varian",
+      "note": "Di gudang adalah saldo buku besar pergerakan, bukan angka yang disimpan. Penawaran terkirim dan pesanan yang belum dikirim menahan barisnya; pengiriman mengeluarkannya dari buku besar; kedaluwarsa, kehilangan, dan pembatalan melepaskannya. Tidak ada yang tersedia menandai varian sebagai stok habis. Buka varian untuk mencatat pergerakan.",
+      "out": "Habis",
+      "left": "Sisa {n}",
+      "in_stock": "Tersedia",
+      "inactive": "Nonaktif",
+      "empty": "Tidak ada varian yang cocok dengan filter ini.",
+      "new": "Produk atau varian baru",
+      "new_kicker": "Katalog",
+      "sheet": {
+        "content": "Isi",
+        "price": "Harga jual",
+        "price_unset": "Belum diberi harga",
+        "set_in_pricing": "Atur di daftar harga",
+        "on_hand": "Di gudang · saldo buku besar",
+        "reserved": "Ditahan oleh penawaran terbuka dan pengemasan",
+        "available": "Tersedia untuk dijanjikan",
+        "threshold": "Ambang stok rendah",
+        "cold": "Rantai dingin",
+        "active": "Aktif",
+        "ambient": "Suhu ruang"
+      },
+      "movement": {
+        "title": "Catat pergerakan",
+        "delta": "Jumlah · negatif mengurangi stok",
+        "reason": "Alasan",
+        "reasons": {
+          "intake": "Penerimaan",
+          "adjust": "Penyesuaian",
+          "return": "Retur",
+          "loss": "Kehilangan",
+          "expiry": "Kedaluwarsa",
+          "sale": "Penjualan"
+        },
+        "ref": "Referensi",
+        "submit": "Catat",
+        "note": "Setiap pergerakan ditambahkan ke buku besar. Saldo diturunkan, tidak pernah disimpan. Pengiriman pesanan mencatat penjualannya secara otomatis. Buku besar menolak pergerakan yang membuat stok di gudang di bawah nol.",
+        "refused": "Buku besar menolak pergerakan: {message}",
+        "recorded": "Pergerakan tercatat."
+      },
+      "ledger": {
+        "title": "Buku besar · terbaru dahulu",
+        "empty": "Belum ada pergerakan tercatat."
+      },
+      "edit": {
+        "title": "Varian",
+        "dose": "Dosis",
+        "content": "Isi",
+        "cold": "Rantai dingin · tutup pada batas waktu dingin",
+        "threshold": "Ambang stok rendah",
+        "active": "Aktif · tampil di setiap permukaan",
+        "submit": "Simpan varian"
+      },
+      "product_form": {
+        "title": "Produk baru",
+        "pathway": "Jalur",
+        "name": "Nama",
+        "slug": "Slug",
+        "kind": "Jenis",
+        "kinds": {
+          "peptide": "Peptida",
+          "device": "Perangkat",
+          "apparel": "Apparel"
+        },
+        "submit": "Buat produk",
+        "note": "Produk adalah senyawa atau barang. Lot-nya adalah varian. Halaman panduannya tetap belum terbit sampai teksnya ditulis."
+      },
+      "variant_form": {
+        "title": "Varian baru",
+        "product": "Produk",
+        "sku": "SKU",
+        "dose": "Dosis",
+        "content": "Isi",
+        "submit": "Buat varian",
+        "note": "Harga dimulai dari Rp 0 dan tetap tersembunyi dari daftar harga publik sampai pemilik mengaturnya."
+      },
+      "ruo": "Hanya untuk keperluan riset. Riset laboratorium in-vitro saja. Tidak ada panduan dosis atau penggunaan yang diberikan."
+    },
+    "pricing": {
+      "title": "Daftar harga & margin",
+      "sub": "{count} lot · margin campuran {gm}",
+      "gated": "Angka biaya dan margin hanya untuk pemilik di tingkat basis data. Layar ini tidak tersedia untuk sesi ops.",
+      "kpis": {
+        "lots": "Lot",
+        "lots_def": "Sembilan jalur, vial + pen.",
+        "lots_tgt": "Ditambah {count} perangkat dan apparel",
+        "supplier": "Biaya pemasok",
+        "supplier_def": "Vial, satu untuk setiap lot.",
+        "supplier_tgt": "{pct} dari harga jual",
+        "base": "Harga dasar",
+        "base_def": "Biaya pemasok ditambah pen.",
+        "base_tgt": "Pen {amount}",
+        "selling": "Harga jual",
+        "selling_def": "Satu dari setiap lot pada harga daftar.",
+        "margin": "Margin",
+        "margin_def": "{amount} kotor atas barang, sebelum biaya operasional. Pengiriman tidak termasuk.",
+        "margin_tgt": "Markup {pct}",
+        "below": "Di bawah {floor}%",
+        "below_def": "Lot berharga di bawah ambang pelaporan. Perangkat dan apparel dikecualikan — biayanya masih asumsi.",
+        "thinnest": "Lot tertipis",
+        "widest": "Lot terlebar"
+      },
+      "how": {
+        "kicker": "Cara sebuah lot diberi harga",
+        "supplier": "Biaya pemasok",
+        "supplier_v": "vial, per lot",
+        "pen": "+ Pen injeksi",
+        "pen_v": "{amount} · Reusable Injection Pen V2",
+        "base": "= Harga dasar",
+        "base_v": "biaya lot untuk masuk ke faktur",
+        "selling": "Harga jual",
+        "selling_v": "ditetapkan per lot",
+        "margin": "Margin",
+        "margin_v": "harga jual dikurangi harga dasar · pengiriman tidak termasuk",
+        "note": "Vial dan pen sama-sama barang di faktur, sehingga yang tersisa adalah margin kotor murni atas barang. Tidak memuat biaya operasional dan tidak termasuk pengiriman, yang bersifat pass-through. Harga jual ditetapkan per lot, bukan diturunkan dari biaya — margin adalah hasil, bukan target."
+      },
+      "composition": {
+        "kicker": "Komposisi biaya · bagian dari harga jual",
+        "supplier": "Biaya pemasok",
+        "pens": "Pen injeksi",
+        "margin": "Margin"
+      },
+      "by_pathway": {
+        "kicker": "Per jalur · sembilan kategori",
+        "note": "Perangkat dan apparel diberi harga di luar buku ini",
+        "cols": {
+          "no": "No",
+          "pathway": "Jalur",
+          "lots": "Lot",
+          "supplier": "Pemasok",
+          "base": "Dasar",
+          "selling": "Jual",
+          "margin": "Margin",
+          "gm": "GM"
+        },
+        "total": "Semua jalur"
+      },
+      "chips": {
+        "all": "Semua lot",
+        "nonpeptide": "Perangkat & apparel",
+        "low": "Di bawah {floor}%"
+      },
+      "cols": {
+        "no": "No",
+        "variant": "Varian",
+        "content": "Isi",
+        "supplier": "Pemasok",
+        "pen": "Pen",
+        "base": "Dasar",
+        "selling": "Jual",
+        "margin": "Margin",
+        "gm": "GM"
+      },
+      "assumed": "asumsi",
+      "assumed_group": "Perangkat & apparel · biaya masih asumsi sampai biaya landed diterima · di luar penjumlahan",
+      "gm_chip": "GM {pct}",
+      "under_floor": "Di bawah ambang {floor}%",
+      "row_sub": "Dasar {base} · margin {margin}",
+      "empty": "Tidak ada lot yang cocok dengan filter ini.",
+      "sheet": {
+        "supplier": "Biaya pemasok",
+        "pen": "Pen injeksi",
+        "base": "Harga dasar · pemasok + pen",
+        "selling": "Harga jual",
+        "margin": "Margin atas barang · pengiriman tidak termasuk",
+        "price_title": "Tetapkan harga jual",
+        "price_label": "Harga jual · Rp",
+        "price_submit": "Tetapkan harga",
+        "price_note": "Teraudit: siapa, kapan, dari, ke. Daftar harga publik, halaman senyawa, dan halaman produk mengikuti dalam jendela revalidasi. Penawaran terkirim dan pesanan yang diterima tetap memakai harga yang diberikan.",
+        "price_set": "Harga ditetapkan. Situs publik telah direvalidasi.",
+        "cost_title": "Biaya pemasok",
+        "supplier_label": "Biaya pemasok · Rp",
+        "pen_label": "Pen injeksi · Rp",
+        "assumed_label": "Biaya masih asumsi · belum ada biaya landed",
+        "cost_submit": "Simpan biaya",
+        "cost_saved": "Biaya tersimpan.",
+        "audit_title": "Perubahan harga · siapa, kapan, dari, ke",
+        "audit_empty": "Belum ada perubahan harga tercatat untuk lot ini.",
+        "audit_row": "{from} → {to}"
+      }
+    },
+    "clients": {
+      "title": "Klien",
+      "chips": {
+        "all": "Semua",
+        "clinic": "Klinik",
+        "institution": "Institusi",
+        "individual": "Perorangan",
+        "attention": "Pernyataan jatuh tempo",
+        "reorder": "Pesan ulang jatuh tempo"
+      },
+      "cols": {
+        "account": "Akun",
+        "type": "Jenis",
+        "manager": "Manajer",
+        "lifetime": "Seumur hidup",
+        "orders": "Pesanan",
+        "next_reorder": "Pesan ulang berikutnya",
+        "ack": "Pernyataan"
+      },
+      "types": {
+        "individual": "Perorangan",
+        "clinic": "Klinik",
+        "institution": "Institusi"
+      },
+      "no_manager": "Belum ditugaskan",
+      "no_cadence": "Belum ada ritme",
+      "overdue": "Lewat {days} hr",
+      "due_today": "Jatuh tempo hari ini",
+      "due_in": "Jatuh tempo {days} hr lagi",
+      "reorder_sub": "pesan ulang {label}",
+      "ack": {
+        "current": "Berlaku",
+        "expiring": "Perbarui",
+        "lapsed": "Kedaluwarsa",
+        "none": "Hanya 18+"
+      },
+      "note": "Akun tanpa pernyataan peneliti berkualifikasi yang berlaku tidak dapat melihat atau ditawari baris peptida, dari titik masuk mana pun.",
+      "new": "Akun baru",
+      "empty": "Tidak ada akun yang cocok dengan filter ini.",
+      "sheet": {
+        "manager": "Manajer akun",
+        "lifetime": "Nilai seumur hidup · pesanan terkirim",
+        "orders": "Pesanan",
+        "cadence": "Ritme pesan ulang",
+        "cadence_derived": "{days} hr · median riwayat pesanan",
+        "cadence_agreed": "{days} hr · disepakati",
+        "cadence_none": "Riwayat belum cukup",
+        "next_reorder": "Pesan ulang berikutnya",
+        "ack": "Pernyataan",
+        "ack_valid_to": "berlaku hingga {date}",
+        "ack_expires": "berakhir {date}",
+        "ack_lapsed": "kedaluwarsa {date}",
+        "ack_none": "belum tercatat · hanya 18+",
+        "whatsapp": "WhatsApp",
+        "email": "Email",
+        "ack_lapsed_note": "Baris peptida disembunyikan dari akun ini dan tidak dapat ditawarkan sampai pernyataan peneliti berkualifikasi tercatat.",
+        "ack_expiring_note": "Pernyataan berada di bulan kedua belas. Baris peptida disembunyikan pada hari pernyataan kedaluwarsa.",
+        "message": "Pesan",
+        "nudge": "Ingatkan",
+        "request_renewal": "Minta pembaruan",
+        "request_ack": "Minta pernyataan",
+        "new_quote": "Penawaran baru"
+      },
+      "wa": {
+        "hello": "Halo {name}, ini AXIOM.",
+        "renewal": "Halo {name}, ini AXIOM. Pernyataan peneliti berkualifikasi pada akun Anda {state}. Memperbaruinya hanya butuh semenit di akun Anda: {url}. AXIOM memasok bahan untuk riset laboratorium in-vitro saja (Research Use Only); tidak ada panduan dosis atau penggunaan yang diberikan.",
+        "state_expiring": "berakhir pada {date}",
+        "state_lapsed": "kedaluwarsa pada {date}",
+        "state_none": "belum tercatat",
+        "nudge": "Halo {name}, ini AXIOM. Sudah {days} hari sejak pesanan terakhir Anda. Perlu kami siapkan baris yang biasa? Balas di sini dan kami kirimkan penawarannya. Research Use Only — riset laboratorium in-vitro."
+      },
+      "members": {
+        "title": "Anggota",
+        "primary": "Utama",
+        "member": "Anggota",
+        "role": "Peran",
+        "empty": "Belum ada anggota yang terhubung ke akun ini.",
+        "roles": {
+          "client": "Klien",
+          "clinic": "Klinik",
+          "ops": "Ops",
+          "owner": "Pemilik"
+        },
+        "change_role": "Ubah peran",
+        "owner_note": "Hanya pemilik yang dapat mengubah peran; basis data menolak yang lain.",
+        "role_changed": "Peran diubah."
+      },
+      "sites": {
+        "title": "Lokasi · tujuan pengiriman",
+        "add": "Tambah lokasi",
+        "name": "Nama",
+        "address": "Alamat",
+        "zone": "Zona",
+        "zones": {
+          "jabodetabek": "Jabodetabek",
+          "jawa": "Jawa (luar Jabodetabek)",
+          "luar_jawa": "Luar Jawa",
+          "other": "Lainnya"
+        },
+        "rate_pending": "tarif menyusul",
+        "default": "Utama",
+        "empty": "Belum ada lokasi. Penawaran memerlukannya.",
+        "saved": "Lokasi tersimpan.",
+        "deleted": "Lokasi dihapus."
+      },
+      "history": {
+        "quotes": "Penawaran",
+        "orders": "Pesanan",
+        "invoices": "Faktur terkirim",
+        "empty": "Belum ada.",
+        "delivery": "pengiriman {amount}"
+      },
+      "edit": {
+        "title": "Akun",
+        "name": "Nama",
+        "type": "Jenis",
+        "manager": "Manajer akun",
+        "whatsapp": "WhatsApp · angka dengan kode negara",
+        "email": "Email",
+        "cadence": "Ritme pesan ulang yang disepakati · hari",
+        "cadence_note": "Dipakai sampai akun memiliki tiga pesanan; setelah itu median jarak antar pesanan yang berlaku.",
+        "notes": "Catatan",
+        "submit": "Simpan akun",
+        "saved": "Akun tersimpan."
+      },
+      "new_form": {
+        "title": "Akun baru",
+        "kicker": "Klien",
+        "first_site": "Lokasi pertama",
+        "site_name": "Nama lokasi",
+        "submit": "Buat akun"
+      }
+    },
+    "content": {
+      "title": "Panduan senyawa",
+      "cols": {
+        "product": "Produk",
+        "pathway": "Jalur",
+        "kind": "Jenis",
+        "state": "Status",
+        "references": "Referensi",
+        "draft": "Riset"
+      },
+      "kinds": {
+        "peptide": "Peptida",
+        "device": "Perangkat",
+        "apparel": "Apparel"
+      },
+      "published": "Terbit",
+      "unpublished": "Belum terbit",
+      "draft_present": "Ada draf",
+      "no_research": "Belum ada teks riset",
+      "refs": "{count, plural, =0 {Tanpa referensi} other {# referensi}}",
+      "needs_refs": "Teks riset tanpa referensi",
+      "note": "Halaman senyawa memuat identitas, apa yang telah diteliti, penanganan, dan verifikasi. Teks riset tampil di situs publik hanya bila ada setidaknya satu referensi. Tidak ada yang tayang sebelum diterbitkan.",
+      "empty": "Tidak ada senyawa yang cocok dengan filter ini.",
+      "editor": {
+        "kicker": "Panduan senyawa",
+        "back": "Semua senyawa",
+        "name": "Nama",
+        "synonyms": "Sinonim · dipisah koma",
+        "compound_class_en": "Kelas senyawa · EN",
+        "compound_class_id": "Kelas senyawa · ID",
+        "molecular_class_en": "Kelas molekuler · EN",
+        "molecular_class_id": "Kelas molekuler · ID",
+        "cas": "Nomor CAS",
+        "cas_warning": "Masukkan nomor CAS hanya setelah diverifikasi terhadap registri. Jangan pernah ditebak atau dikira-kira. Kosong adalah benar bila tidak diketahui.",
+        "identity_en": "Identitas · EN",
+        "identity_id": "Identitas · ID",
+        "research_en": "Apa yang telah diteliti · EN",
+        "research_id": "Apa yang telah diteliti · ID",
+        "research_note": "Bahasa netral riset saja: telah diteliti untuk, diinvestigasi dalam model praklinis, in vitro. Setiap klaim memerlukan referensi di bawah. Tanpa dosis, jadwal, hasil pada manusia, atau perbandingan dengan obat.",
+        "handling_en": "Penanganan · EN",
+        "handling_id": "Penanganan · ID",
+        "handling_note": "Kosongkan untuk memakai baseline penanganan bersama.",
+        "submit": "Simpan teks",
+        "saved": "Teks tersimpan.",
+        "lint_title": "Tidak ada yang disimpan. Pemeriksa salinan menemukan:",
+        "lint": {
+          "avoid": "{field}: kata daftar hindari “{detail}”",
+          "exclamation": "{field}: tanda seru",
+          "dose": "{field}: pola dosis-dan-frekuensi",
+          "route": "{field}: rute pemberian yang terbaca sebagai penggunaan"
+        }
+      },
+      "references": {
+        "title": "Referensi",
+        "claim_key": "Kunci klaim",
+        "citation": "Sitasi",
+        "pubmed": "PubMed ID",
+        "doi": "DOI",
+        "url": "URL",
+        "add": "Tambah referensi",
+        "empty": "Belum ada referensi. Bagian riset tetap tersembunyi di situs publik.",
+        "need_one": "Referensi memerlukan PubMed ID atau DOI yang dapat dibuka.",
+        "added": "Referensi ditambahkan.",
+        "deleted": "Referensi dihapus."
+      },
+      "publish": {
+        "publish": "Terbitkan",
+        "unpublish": "Tarik",
+        "state_published": "Terbit {date}",
+        "state_unpublished": "Belum terbit · halaman publik tidak disajikan",
+        "refused": "Penerbitan ditolak selama ada teks riset tanpa referensi — situs publik juga tidak akan menampilkan bagian risetnya. Tambahkan referensi atau kosongkan teksnya.",
+        "done": "Diterbitkan.",
+        "undone": "Ditarik."
+      },
+      "preview": {
+        "title": "Pratinjau · sebagaimana halaman publik menampilkannya",
+        "identity": "Identitas",
+        "research": "Apa yang telah diteliti",
+        "research_hidden": "Bagian riset tidak ditampilkan: tidak ada referensi.",
+        "handling": "Penanganan",
+        "baseline": "baseline bersama",
+        "verification": "Verifikasi",
+        "verification_text": "Kemurnian dengan {method}, ambang {pct}%. Setiap lot disertai Certificate of Analysis.",
+        "lots": "Lot",
+        "class": "Kelas",
+        "molecular": "Kelas molekuler",
+        "cas": "CAS",
+        "synonyms": "Sinonim",
+        "ruo": "Hanya untuk keperluan riset. Ditujukan semata-mata untuk riset laboratorium in-vitro. Bukan untuk konsumsi manusia atau hewan, diagnosis, atau pengobatan. Tidak ada panduan dosis atau penggunaan yang diberikan."
+      }
+    },
+    "settings": {
+      "title": "Pengaturan",
+      "profile": {
+        "title": "Masuk sebagai",
+        "name": "Nama",
+        "role": "Peran",
+        "language": "Bahasa",
+        "submit": "Simpan profil",
+        "saved": "Profil tersimpan."
+      },
+      "sign_out": "Keluar",
+      "owner_note": "Pengaturan situs, zona pengiriman, dan tim hanya untuk pemilik.",
+      "site": {
+        "title": "Situs",
+        "price_visibility": "Visibilitas harga",
+        "visibility": {
+          "open": "Terbuka · harga publik",
+          "acknowledged": "Setelah pernyataan · harga tampil setelah pernyataan"
+        },
+        "ppn_rate": "Tarif PPN · %",
+        "delivery_in_dpp": "Pengiriman termasuk dalam DPP",
+        "payment_terms_days": "Jangka pembayaran · hari",
+        "quote_valid_days": "Masa berlaku penawaran · hari",
+        "paid_by_owner_only": "Hanya pemilik yang menandai faktur lunas",
+        "gm_floor_pct": "Ambang pelaporan GM · %",
+        "entity": "Badan hukum",
+        "entity_name": "Nama badan",
+        "entity_address": "Alamat",
+        "entity_npwp": "NPWP",
+        "entity_pkp": "Terdaftar PKP",
+        "bank": "Rekening bank",
+        "bank_bank": "Bank",
+        "bank_account_name": "Nama rekening",
+        "bank_account_no": "Nomor rekening",
+        "whatsapp": "Saluran WhatsApp",
+        "whatsapp_number": "Nomor · angka",
+        "whatsapp_display": "Tampilan",
+        "cutoff": "Batas waktu pengiriman",
+        "cutoff_cold": "Rantai dingin · HH:MM",
+        "cutoff_ambient": "Suhu ruang · HH:MM",
+        "submit": "Simpan pengaturan",
+        "saved": "Pengaturan tersimpan. Situs publik telah direvalidasi."
+      },
+      "zones": {
+        "title": "Zona pengiriman",
+        "zone": "Zona",
+        "per_three": "Per tiga unit · Rp",
+        "cap_per_destination": "Batas per tujuan · Rp",
+        "eta": "Estimasi · hari",
+        "note": "Kosongkan tarif untuk tarif menyusul. Penawaran yang memuat tujuan tanpa tarif tidak dapat dikirim.",
+        "submit": "Simpan zona",
+        "saved": "Zona tersimpan."
+      },
+      "staff": {
+        "title": "Tim",
+        "owner": "Pemilik · akses penuh",
+        "ops": "Ops · angka margin dan akuisisi disembunyikan",
+        "role": "Peran",
+        "submit": "Ubah peran",
+        "saved": "Peran diubah."
+      }
+    },
+    "more": {
+      "title": "Lainnya",
+      "operate": "Operasi",
+      "relationships": "Relasi",
+      "settings": "Pengaturan",
+      "catalogue": "Katalog & stok",
+      "catalogue_sub": "{count} varian · {stockouts, plural, =0 {semua tersedia} other {# tanpa stok tersedia}}",
+      "pricing": "Daftar harga & margin",
+      "pricing_sub": "{count} lot · margin di setiap lot",
+      "invoices": "Faktur",
+      "invoices_sub": "Piutang dan PDF",
+      "ack_due": "Pernyataan jatuh tempo",
+      "ack_due_sub": "{count, plural, =0 {Tidak ada akun yang perlu pembaruan} other {# akun perlu pembaruan}}",
+      "content": "Panduan senyawa",
+      "content_sub": "{published} dari {total} terbit",
+      "flow": "Bagaimana pesanan bergerak",
+      "flow_sub": "Alurnya, dari permintaan penawaran sampai pesan ulang",
+      "settings_page": "Pengaturan",
+      "settings_sub": "Profil, bahasa, situs, tim",
+      "sign_out": "Keluar"
+    },
+    "search": {
+      "title": "Cari",
+      "kicker": "Pencarian",
+      "results": "Hasil untuk “{q}”",
+      "hint": "Ketik minimal dua karakter. Penawaran, pesanan, akun, lot, dan faktur.",
+      "groups": {
+        "quotes": "Penawaran",
+        "orders": "Pesanan",
+        "accounts": "Akun",
+        "variants": "Daftar harga",
+        "invoices": "Faktur"
+      },
+      "empty": "Tidak ada yang cocok dengan “{q}”.",
+      "more": "+{count} lagi · persempit pencarian"
+    },
+    "notifications": {
+      "title": "Notifikasi",
+      "kicker": "Hari ini",
+      "empty": "Tidak ada yang membutuhkan Anda saat ini.",
+      "note": "Setiap butir di sini diturunkan dari pesanan, faktur, stok, dan akun apa adanya. Hilang dengan sendirinya begitu pekerjaan selesai.",
+      "open": "{count} terbuka"
+    },
+    "events": {
+      "quote_requested": {
+        "t1": "Permintaan penawaran {ref} perlu diberi harga",
+        "t2": "{account} · akun sedang menunggu"
+      },
+      "quote_awaiting_reply": {
+        "t1": "Penawaran {ref} menunggu balasan",
+        "t2": "{account} · {amount} · berlaku hingga {date}"
+      },
+      "quote_expired": {
+        "t1": "Penawaran {ref} kedaluwarsa",
+        "t2": "{account} · stok dilepas · kirim ulang atau tandai hilang"
+      },
+      "transfer_to_match": {
+        "t1": "Transfer perlu dicocokkan · {ref}",
+        "t2": "{account} · {amount} · pengemasan dimulai setelah cocok"
+      },
+      "invoice_overdue": {
+        "t1": "Faktur {ref} lewat jatuh tempo",
+        "t2": "{account} · {amount} · jatuh tempo {date}"
+      },
+      "order_awaiting_payment": {
+        "t1": "Pesanan {ref} menunggu pembayaran",
+        "t2": "{account} · {amount} · tidak ada yang dikemas sebelum pembayaran masuk"
+      },
+      "order_to_pack": {
+        "t1": "Pesanan {ref} perlu dikemas",
+        "t2": "{account} · {amount} · {chain}"
+      },
+      "cold": "rantai dingin",
+      "ambient": "suhu ruang",
+      "ack_expiring": {
+        "t1": "Pernyataan berakhir {date}",
+        "t2": "{account} · perbarui untuk mempertahankan baris peptida"
+      },
+      "ack_lapsed": {
+        "t1": "Pernyataan kedaluwarsa",
+        "t2": "{account} · baris peptida disembunyikan"
+      },
+      "reorder_overdue": {
+        "t1": "Pesan ulang lewat tempo · {account}",
+        "t2": "jatuh tempo {date}"
+      },
+      "reorder_due": {
+        "t1": "Pesan ulang jatuh tempo · {account}",
+        "t2": "jatuh tempo {date}"
+      },
+      "stockout": {
+        "t1": "{ref} · tidak ada yang tersedia",
+        "t2": "SKU {sku} · catat penerimaan"
+      },
+      "quote_to_accept": {
+        "t1": "Penawaran {ref} menunggu balasan Anda",
+        "t2": "{amount} · berlaku hingga {date}"
+      },
+      "request_being_priced": {
+        "t1": "Permintaan penawaran {ref} sedang diberi harga",
+        "t2": "AXIOM akan mengirimkannya lewat WhatsApp"
+      },
+      "invoice_to_pay": {
+        "t1": "{ref} menunggu pembayaran",
+        "t2": "{amount} · jatuh tempo {date}"
+      },
+      "order_packing": {
+        "t1": "{ref} sedang dikemas",
+        "t2": "{amount}"
+      },
+      "order_dispatched": {
+        "t1": "{ref} dalam perjalanan",
+        "t2": "{amount}"
+      },
+      "unknown": {
+        "t1": "{ref}",
+        "t2": "{account}"
+      }
+    }
+  }
+}

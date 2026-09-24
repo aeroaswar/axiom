@@ -1,0 +1,48 @@
+{
+  "name": "axiom-platform",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "db:reset": "node scripts/db/reset.mjs",
+    "db:migrate": "node scripts/db/migrate.mjs",
+    "db:seed": "node scripts/db/seed.mjs",
+    "gates": "node scripts/gates/run.mjs",
+    "gates:sql": "node scripts/gates/sql.mjs",
+    "gates:lint": "node scripts/gates/copy-lint.mjs",
+    "gates:grep": "node scripts/gates/grep.mjs",
+    "gates:refs": "node scripts/gates/references.mjs",
+    "gates:e2e": "playwright test",
+    "test": "vitest run",
+    "setup": "node scripts/setup.mjs"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.7",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.4",
+    "jose": "^5.9.6",
+    "next": "15.3.2",
+    "next-intl": "^4.1.0",
+    "postgres": "^3.4.5",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "three": "0.143.0",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/node": "^22.15.21",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "@types/three": "0.143.0",
+    "playwright": "^1.52.0",
+    "tailwindcss": "^4.1.7",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}
