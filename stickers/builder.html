@@ -246,7 +246,10 @@ button,input,select{font:inherit;color:inherit}
    0.18 mm. The micro-print goes from 1.4em/500 to 1.7em/600. The room comes
    from tightening the space around the rules, which keeps the tallest label
    (Retatrutide, with DOSE) inside the 16.8 mm content box. */
-[data-out="thermal"] .lbl__wm{width:14em}
+/* overflow:visible — the wordmark fills its 582 x 70 viewBox edge to edge
+   (the O touches top and bottom, the A and M the sides), so the stroke's
+   outer half would otherwise be clipped flat by the SVG viewport. */
+[data-out="thermal"] .lbl__wm{width:14em; overflow:visible}
 [data-out="thermal"] .lbl__wm path{stroke:currentColor; stroke-width:1.5; stroke-linejoin:round}
 [data-out="thermal"] .lbl__ruo{font-size:1.7em; font-weight:600}
 [data-out="thermal"] .lbl__rule--top{margin:.9mm 0 1.1mm}
