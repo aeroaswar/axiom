@@ -180,6 +180,29 @@ way forward rather than failing silently:
 
 The card's QR opens the guide as an ordinary web page, where neither limit applies.
 
+## Hosting
+
+The guide is a static site — `index.html`, `compounds.js` and `assets/` — so any
+static host works. It has to be hosted for customers anyway (the card's QR points
+at it), and it is the only way **Apple Calendar** works: the claude.ai preview
+blocks every download.
+
+- **Paths.** The card encodes `{base URL}/{slug}`, e.g. `…/tirzepatide`. The page
+  reads a known slug from the last path segment (as well as `?c=` and `#`), and
+  `vercel.json` rewrites a single-segment path to `index.html`; real files are
+  served first. Other hosts need the same one rewrite.
+- **What ships.** `.vercelignore` ships only the guide. `src/` holds the price
+  tables and must never be published; the card, the encoder and this README stay
+  in the repo.
+- **Indexing.** Every page is `noindex`, by header and by meta tag.
+
+**On Vercel:** Add New → Project → import `aeroaswar/axiom` → Root Directory
+`dosage-guide` → Framework Preset *Other*, no build command. Production deploys
+from the repo's default branch, which gains `dosage-guide/` when this work
+merges; until then, set Settings → Git → Production Branch to the branch that has
+it. Once live, put the site's address in the card's **Base URL** field
+(`card.html`) before printing, and check a code scans through to a compound.
+
 ## Evidence tiers
 
 The spine of the guide. Every dosing figure carries the tier it came from, and
