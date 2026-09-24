@@ -126,7 +126,7 @@ button,input,select{font:inherit;color:inherit}
   padding:9px 11px;font-size:12.5px;outline:none;width:100%}
 .f input:focus{border-color:var(--accent-line)}
 .f input::placeholder{color:var(--muted-2)}
-.f .hint{font-size:10px;color:var(--muted-2);line-height:1.6}
+.f .hint,.panel .hint{font-size:10px;color:var(--muted-2);line-height:1.6}
 .dose{display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:8px}
 .dose span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap}
 .dose input{text-align:center;font-variant-numeric:tabular-nums}
@@ -220,6 +220,33 @@ button,input,select{font:inherit;color:inherit}
   font-size:2.1mm;letter-spacing:.02em;font-variant-numeric:tabular-nums}
 .page[data-die="on"] .spec{display:block}
 
+/* ---------- thermal mode ----------
+   For a thermal-transfer roll printer: one colour, black on white label
+   stock, one 40 x 20 mm label per page. A thermal head is 1-bit, so every
+   tone is solid black (a grey prints as a dither pattern) and the hierarchy
+   the greys carried moves to weight instead. The compound stays at 400: it
+   is the largest type and already heavy enough, and at 500 the longest name
+   in the catalogue no longer fits at the autofit floor.
+   The hairlines are drawn as an SVG rect, 0.254 mm = 3 dots at 300 dpi, so
+   both print at the same weight. A CSS border or background is snapped to a
+   whole CSS pixel (0.265 mm = 3.1 dots) and lands on 3 or 4 dots depending on
+   where it falls; SVG geometry is not snapped, and it prints with "Background
+   graphics" off. The @page size is swapped by setOut(). */
+[data-out="thermal"] .lbl{--bg:#fff; --ink:#000; --muted:#000; --accent:#000}
+[data-out="thermal"] .lbl__rule{height:.254mm; flex:0 0 .254mm; background:none}
+.lbl__rule svg{display:none}
+[data-out="thermal"] .lbl__rule svg{display:block; width:100%; height:100%; overflow:visible}
+[data-out="thermal"] .lbl__k,
+[data-out="thermal"] .lbl__ruo{font-weight:500}
+[data-out="thermal"] .lbl__v,
+[data-out="thermal"] .lbl__note{font-weight:600}
+
+/* On screen the roll is white labels on a liner; in print each label is a page. */
+.roll{display:flex;flex-wrap:wrap;gap:14px;padding:18px;background:#DAD5CC;border-radius:6px;max-width:760px}
+.tbox{--z:2;position:relative;width:calc(40mm * var(--z));height:calc(20mm * var(--z));
+  border-radius:calc(2mm * var(--z));overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tbox > .lbl{position:absolute;top:0;left:0;transform:scale(var(--z));transform-origin:top left}
+
 @page{ size:A4 portrait; margin:0; }
 @media print{
   html,body{background:#fff}
@@ -235,6 +262,11 @@ button,input,select{font:inherit;color:inherit}
      spills a hair onto a phantom trailing page */
   .sheets > figure{break-after:page;break-inside:avoid;margin:0}
   .sheets > figure:last-of-type{break-after:auto}
+  [data-out="thermal"] .roll{display:block;padding:0;background:none;border-radius:0;max-width:none}
+  [data-out="thermal"] .tbox{width:40mm;height:20mm;border-radius:0;box-shadow:none;
+    break-after:page;break-inside:avoid}
+  [data-out="thermal"] .tbox:last-child{break-after:auto}
+  [data-out="thermal"] .tbox > .lbl{transform:none}
 }
 /* ============================================================
    AXIOM vial sticker — 20 x 40 mm, rounded corners
@@ -361,14 +393,28 @@ button,input,select{font:inherit;color:inherit}
     </div>
 
     <div>
-      <p class="kick">3 · Sheet density</p>
-      <div class="chips" id="dens"></div>
-      <p class="hint" id="densHint" style="margin:9px 0 0"></p>
-      <div class="chips" style="margin-top:12px">
-        <button class="chip" id="die" aria-pressed="false">Die lines for vendor</button>
+      <p class="kick">3 · Output</p>
+      <div class="chips" id="out">
+        <button class="chip" data-o="a4" aria-pressed="true">A4 sheet</button>
+        <button class="chip" data-o="thermal" aria-pressed="false">Thermal roll · 40 × 20</button>
       </div>
-      <p class="hint" style="margin:9px 0 0">Adds a magenta cut contour on the trim, 1&nbsp;mm
-        of bleed, and a spec line on each page. Turn off for printing at home.</p>
+      <div id="a4opts">
+        <p class="kick" style="margin:18px 0 10px">Sheet density</p>
+        <div class="chips" id="dens"></div>
+        <p class="hint" id="densHint" style="margin:9px 0 0"></p>
+        <div class="chips" style="margin-top:12px">
+          <button class="chip" id="die" aria-pressed="false">Die lines for vendor</button>
+        </div>
+        <p class="hint" style="margin:9px 0 0">Adds a magenta cut contour on the trim, 1&nbsp;mm
+          of bleed, and a spec line on each page. Turn off for printing at home.</p>
+      </div>
+      <div id="thopts" hidden>
+        <p class="hint" style="margin:10px 0 0">Black on white, one label per page, for a
+          thermal-transfer roll printer. Load 40&nbsp;×&nbsp;20&nbsp;mm synthetic (PP or PET) die-cut
+          labels and a resin ribbon, and set the same 40&nbsp;×&nbsp;20&nbsp;mm stock in the printer
+          driver. Use a 300&nbsp;dpi printer: at 203&nbsp;dpi the 4&nbsp;pt line and the wordmark
+          print ragged. Direct-thermal (no ribbon) fades and smears under an alcohol swab.</p>
+      </div>
     </div>
   </aside>
 
@@ -410,15 +456,19 @@ button,input,select{font:inherit;color:inherit}
         then use <b>Save as PDF</b> there. Your queue is rebuilt from scratch in the new tab, so
         re-add the compounds — or print from <code>stickers/builder.html</code> in the repo.
         <br><br>
-        In the print dialog: <b>Destination</b> Save as PDF · <b>Paper</b> A4 ·
-        <b>Scale</b> 100% · <b>Margins</b> None · <b>Background graphics ON</b>.
-        That last one matters — without it the onyx ground drops out and the labels
-        print as white boxes.
+        <span id="printHow"></span>
       </div>
       <div class="sheets" id="sheet"></div>
     </section>
 
-    <div class="note">
+    <div class="note" id="noteThermal" hidden>
+      <b>Before a roll.</b> Print one label first and check <i>Research use only</i>, the smallest
+      line at 4&nbsp;pt. If it breaks up, raise the printer's darkness (heat) a step rather than
+      the speed. The thermal version drops the bronze and the onyx ground: it is the working label,
+      not the brand-book stock. A label may not imply human dose or frequency; the DOSE row is a
+      pen-device calibration and is yours to leave off.
+    </div>
+    <div class="note" id="noteA4">
       <b>Before a run.</b> The sheet prints a solid ink flood so it proofs on white paper; the brand
       book specifies cold-foil bone-white on matte black polypropylene, so send the PDF to the vendor
       for real stock. <i>Research use only</i> sets at 4.0&nbsp;pt — check it on a physical proof.
@@ -928,6 +978,11 @@ const CATALOGUE = {
 /* Inline AXIOM wordmark — vector, from business-proposal/assets/logo/axiom-wordmark-white.svg */
 const WORDMARK = '<svg class="lbl__wm" viewBox="0 0 582 70" xmlns="http://www.w3.org/2000/svg" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M0 68 13.4 68 41 16.69 68.6 68 82 68 46.5 2 35.5 2Z M132 2 148.72 2 169.91 23.1 162.82 32.69ZM213 2 196.28 2 175.09 23.1 182.18 32.69ZM132 68 148.72 68 169.91 46.9 162.82 37.31ZM213 68 196.28 68 175.09 46.9 182.18 37.31Z M279.1 2 290.9 2 290.9 68 279.1 68Z M352.3 35A42.7 35 0 1 1 437.7 35A42.7 35 0 1 1 352.3 35ZM364.1 35A30.9 23.2 0 1 0 425.9 35A30.9 23.2 0 1 0 364.1 35Z M497 2 508.8 2 539.5 41 570.2 2 582 2 582 68 570.2 68 570.2 21.08 539.5 60.08 508.8 21.08 508.8 68 497 68Z"/></svg>';
 
+/* Thermal hairline, shown only in thermal mode. The rect is nudged down
+   0.005 mm (0.06 dot) so neither edge can sit exactly on a 300 dpi dot centre,
+   where the driver's rounding would decide between 2 and 3 rows. */
+const RULE = '<svg viewBox="0 0 368 2.54" preserveAspectRatio="none" aria-hidden="true"><rect y=".05" width="368" height="2.54" fill="#000"/></svg>';
+
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 /* Build one label. `dose` may be null — the DOSE band is then omitted
@@ -951,20 +1006,21 @@ function labelHTML(d){
     <span class="lbl__spacer"></span>
     <span class="lbl__note">${esc(d.note || 'HIGH PURITY')}</span>
   </div>
-  <div class="lbl__rule lbl__rule--top"></div>
+  <div class="lbl__rule lbl__rule--top">${RULE}</div>
   <div class="lbl__band lbl__band--b"><span class="lbl__compound">${esc(d.compound)}</span></div>
   ${field('c', 'QTY', d.qty)}
   ${d.dose ? field('d', 'DOSE', d.dose) : ''}
-  <div class="lbl__rule lbl__rule--bot"></div>
+  <div class="lbl__rule lbl__rule--bot">${RULE}</div>
   <div class="lbl__band lbl__band--e"><span class="lbl__ruo">Research use only</span></div>
 </div>`;
 }
 
 /* Shrink a band (size + tracking together, via --k) until it fits the
    36.8mm content box. The floor is set low enough for the longest name in
-   the catalogue — "CJC No DAC + Ipamorelin" — to stay inside the die line. */
+   the catalogue — "VIP (Vasoactive Intestinal Peptide)", which needs 0.49 —
+   to stay inside the die line. */
 function autofit(root){
-  const MIN = 0.55;
+  const MIN = 0.48;
   root.querySelectorAll('.lbl__band').forEach(band => {
     let k = 1;
     band.style.setProperty('--k', k);
@@ -993,6 +1049,14 @@ const DENSITIES = {
               hint:'5 &times; 14 at a 5&nbsp;mm page margin — the densest fit on A4. Send to a vendor for kiss-cutting; most office printers cannot hold a 5&nbsp;mm margin.' },
 };
 let densKey = 'standard', die = false;
+
+/* Output: 'a4' gangs labels onto A4; 'thermal' is one 40 x 20 mm label per
+   page for a roll printer. Remembered per browser, so a new tab opened for
+   printing comes up in the same mode. */
+let out = 'a4';
+try { if (localStorage.getItem('axiom.out') === 'thermal') out = 'thermal'; } catch (e) {}
+document.documentElement.dataset.out = out;
+const pageRule = document.head.appendChild(document.createElement('style'));
 const dens = () => DENSITIES[densKey];
 const perPage = () => dens().cols * dens().rows;
 
@@ -1120,6 +1184,36 @@ $('die').addEventListener('click', () => {
   renderSheet();
 });
 
+/* ---------- output ---------- */
+const PRINT_HOW = {
+  a4: `In the print dialog: <b>Destination</b> Save as PDF · <b>Paper</b> A4 ·
+    <b>Scale</b> 100% · <b>Margins</b> None · <b>Background graphics ON</b>.
+    That last one matters — without it the onyx ground drops out and the labels
+    print as white boxes.`,
+  thermal: `In the print dialog: <b>Destination</b> your thermal printer (or Save as PDF) ·
+    <b>Paper</b> 40 × 20 mm, the same stock set in the printer driver · <b>Scale</b> 100% ·
+    <b>Margins</b> None. Each label is its own page.`,
+};
+function setOut(o){
+  out = o;
+  document.documentElement.dataset.out = o;
+  [...$('out').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.o === o)));
+  $('a4opts').hidden = o !== 'a4';
+  $('thopts').hidden = o !== 'thermal';
+  $('noteA4').hidden = o !== 'a4';
+  $('noteThermal').hidden = o !== 'thermal';
+  pageRule.textContent = o === 'thermal' ? '@page{ size:40mm 20mm; margin:0; }' : '';
+  $('printHow').innerHTML = PRINT_HOW[o];
+  $('print').textContent = embedded
+    ? (o === 'thermal' ? 'Open in new tab to print' : 'Open in new tab for PDF')
+    : (o === 'thermal' ? 'Print labels' : 'Save as PDF');
+  try { localStorage.setItem('axiom.out', o); } catch (e) {}
+  preview(); renderQueue();
+}
+$('out').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (b) setOut(b.dataset.o);
+});
+
 /* ---------- queue ---------- */
 const used = () => queue.reduce((n, r) => n + r.copies, 0);
 
@@ -1153,7 +1247,10 @@ function renderQueue(){
 
   const n = used(), pp = perPage(), pages = Math.max(1, Math.ceil(n / pp));
   const spare = pages * pp - n;
-  $('qcount').innerHTML = n
+  $('qcount').innerHTML = out === 'thermal'
+    ? (n ? `${n} label${n === 1 ? '' : 's'} · one per page on a 40 × 20 mm roll`
+         : 'Nothing queued · one label per page')
+    : n
     ? `${n} label${n === 1 ? '' : 's'} · ${pages} page${pages === 1 ? '' : 's'} · ${pp}/page`
       + (spare ? ` · <span class="over">${spare} spare on the last page</span>` : '')
     : `Nothing queued · ${pp} labels per page`;
@@ -1166,6 +1263,14 @@ function renderSheet(){
   const d = dens(), pp = perPage();
   const flat = [];
   queue.forEach(r => { for (let i = 0; i < r.copies; i++) flat.push(r); });
+
+  if (out === 'thermal'){
+    $('sheet').innerHTML = `<div class="roll">${
+      flat.map(x => `<div class="tbox">${labelHTML(x)}</div>`).join('')}</div>`;
+    $('pageCount').textContent = `${flat.length} label${flat.length === 1 ? '' : 's'} on the roll`;
+    autofit($('sheet'));
+    return;
+  }
 
   const pages = Math.max(1, Math.ceil(flat.length / pp));
   let html = '';
@@ -1193,7 +1298,6 @@ function renderSheet(){
    4pt micro-print and turn the vector die contour into pixels. Print-to-PDF
    keeps real vector with the fonts embedded. */
 const embedded = window.self !== window.top;
-if (embedded) $('print').textContent = 'Open in new tab for PDF';
 
 $('print').addEventListener('click', () => {
   $('openLink').href = location.href;
@@ -1215,6 +1319,6 @@ $('fMg').value     = seedMem.mg;
 $('fCopies').value = 8;
 renderList(); preview();
 queue = [{ ...draft(), copies: 8 }];
-renderQueue();
+setOut(out);
 </script>
 </body></html>
