@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AXIOM package card — print</title>
+<!--
+  Print source for the package card. Open with ?mode=shop or ?mode=sheet and print to PDF
+  (background graphics on, margins none), or run the build script in print/README.md.
+
+  shop  — two pages, 101 × 71 mm: front, then back. Each is the 85 × 55 mm card with 3 mm
+          bleed and crop marks, for a print shop.
+  sheet — two A4 pages: ten fronts, then ten backs, on a centred 2 × 5 grid so the backs
+          land behind the fronts whichever edge the printer flips on. Cut on the marks.
+-->
+<style>
+@font-face{font-family:"Jost";src:local("Jost"),local("Jost Regular")}
+:root{
+  --onyx:#070605; --bone:#F2EDE5; --bronze:#C88A4E; --muted:#b9ad9c;
+  --cw:85mm; --ch:55mm; --bleed:3mm;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{font-family:"Jost","Century Gothic",Futura,"Helvetica Neue",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ---- The card. Content is positioned against the trim box; the background runs into the bleed. ---- */
+.card{position:relative;width:var(--cw);height:var(--ch);background:var(--onyx);color:var(--bone);overflow:hidden}
+.card.bleed{width:calc(var(--cw) + 2*var(--bleed));height:calc(var(--ch) + 2*var(--bleed))}
+.wash{position:absolute;inset:0;background:
+  radial-gradient(80% 120% at 100% 0%,rgba(200,138,78,.13),transparent 58%),
+  radial-gradient(60% 90% at 0% 100%,rgba(124,76,36,.10),transparent 62%)}
+.trim{position:absolute;inset:0}
+.card.bleed .trim{inset:var(--bleed)}
+
+/* Front: wordmark left; dotted QR right with its caption beneath. */
+.front .row{position:absolute;inset:5mm 5mm 5mm 7mm;display:flex;align-items:center;justify-content:space-between}
+.front .wm{width:30mm;height:auto;display:block}
+.front .qrcol{display:flex;flex-direction:column;align-items:center;gap:.6mm}
+.front .qr{width:27mm;height:27mm;line-height:0}
+.front .qr svg{width:100%;height:100%;display:block}
+.cap{font-size:2mm;font-weight:500;letter-spacing:.3em;padding-left:.3em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+/* Back: bronze keyline frame; storage in the centre. */
+.back .frame{position:absolute;inset:4mm;border:.2mm solid rgba(200,138,78,.6)}
+.back .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.back .lead{font-size:2.4mm;font-weight:500;letter-spacing:.42em;padding-left:.42em;text-transform:uppercase;color:var(--bronze)}
+.back .sub{margin-top:2.6mm;font-size:2mm;font-weight:500;letter-spacing:.24em;padding-left:.24em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- Pages ---- */
+.page{position:relative;page-break-after:always;break-after:page;overflow:hidden}
+.page:last-child{page-break-after:auto;break-after:auto}
+.mark{position:absolute;background:#000}
+
+/* shop: 101 × 71 mm = 5 mm mark margin + 3 mm bleed + 85 × 55 trim */
+.shop .page{width:101mm;height:71mm}
+.shop .card{position:absolute;left:5mm;top:5mm}
+
+/* sheet: A4, 2 × 5 grid of 85 × 55, centred → 20 mm side margins, 11 mm top and bottom */
+.sheet .page{width:210mm;height:297mm}
+.sheet .grid{position:absolute;left:20mm;top:11mm;display:grid;grid-template-columns:repeat(2,85mm);grid-auto-rows:55mm}
+
+@media screen{body{background:#555;padding:20px}.page{background:#fff;margin:0 auto 20px;box-shadow:0 4px 18px rgba(0,0,0,.4)}}
+</style>
+<style id="pagesize"></style>
+</head>
+<body>
+<div id="out"></div>
+<template id="wm-inline"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 582 70"><path fill="#F2EDE5" fill-rule="evenodd" d="M0 68 12.5 68 41 15 69.5 68 82 68 46.5 2 35.5 2Z M132 2 145.91 2 169.91 26.72 162.82 32.69ZM213 2 199.09 2 175.09 26.72 182.18 32.69ZM132 68 145.91 68 169.91 43.28 162.82 37.31ZM213 68 199.09 68 175.09 43.28 182.18 37.31Z M279.2 2 290.8 2 290.8 68 279.2 68Z M352.3 35A42.7 35 0 1 1 437.7 35A42.7 35 0 1 1 352.3 35ZM365.2 35A29.8 23.8 0 1 0 424.8 35A29.8 23.8 0 1 0 365.2 35Z M497 2 508.8 2 539.5 41 570.2 2 582 2 582 68 570.2 68 570.2 21 539.5 59 508.8 21 508.8 68 497 68Z"/></svg></template>
+<script src="../qr.js"></script>
+<script src="qrstyle.js"></script>
+<script>
+(function () {
+  "use strict";
+  var URL = "https://axiom-guide-weld.vercel.app";
+  var mode = (new URLSearchParams(location.search).get("mode") || "shop").toLowerCase();
+  var wm = "";
+
+  function front(bleed) {
+    var q = QRStyle.svg(URL, { ecl: "H", mod: "dot", eye: "round", color: "#F2EDE5" }).svg;
+    return '<div class="card front' + (bleed ? " bleed" : "") + '"><div class="wash"></div><div class="trim">' +
+      '<div class="row">' + wm.replace("<svg", '<svg class="wm"') +
+      '<div class="qrcol"><div class="qr">' + q + '</div><div class="cap">Scan for your guide</div></div></div></div></div>';
+  }
+  function back(bleed) {
+    return '<div class="card back' + (bleed ? " bleed" : "") + '"><div class="wash"></div><div class="trim">' +
+      '<div class="frame"></div><div class="mid"><div class="lead">Keep refrigerated</div>' +
+      '<div class="sub">Protect from light · Do not freeze</div></div></div></div>';
+  }
+  function line(x, y, w, h) { return '<i class="mark" style="left:' + x + 'mm;top:' + y + 'mm;width:' + w + 'mm;height:' + h + 'mm"></i>'; }
+
+  /* Crop marks sit outside the bleed: trim at 8 mm and 93/63 mm on a 101 × 71 page. */
+  function shopMarks() {
+    var t = .1, m = "", xs = [8, 93], ys = [8, 63];
+    xs.forEach(function (x) { m += line(x - t / 2, 0, t, 4.5) + line(x - t / 2, 66.5, t, 4.5); });
+    ys.forEach(function (y) { m += line(0, y - t / 2, 4.5, t) + line(96.5, y - t / 2, 4.5, t); });
+    return m;
+  }
+  /* Cut marks in the sheet margins, on every grid line. */
+  function sheetMarks() {
+    var t = .1, m = "";
+    [20, 105, 190].forEach(function (x) { m += line(x - t / 2, 4, t, 5) + line(x - t / 2, 288, t, 5); });
+    for (var r = 0; r <= 5; r++) { var y = 11 + 55 * r; m += line(13, y - t / 2, 5, t) + line(192, y - t / 2, 5, t); }
+    return m;
+  }
+
+  function render() {
+    var html = "";
+    if (mode === "sheet") {
+      document.body.className = "sheet";
+      document.getElementById("pagesize").textContent = "@page{size:A4;margin:0}";
+      [front, back].forEach(function (face) {
+        var cards = ""; for (var i = 0; i < 10; i++) cards += face(false);
+        html += '<div class="page">' + sheetMarks() + '<div class="grid">' + cards + "</div></div>";
+      });
+    } else {
+      document.body.className = "shop";
+      document.getElementById("pagesize").textContent = "@page{size:101mm 71mm;margin:0}";
+      html = '<div class="page">' + shopMarks() + front(true) + "</div>" +
+             '<div class="page">' + shopMarks() + back(true) + "</div>";
+    }
+    document.getElementById("out").innerHTML = html;
+    document.documentElement.setAttribute("data-ready", "1");
+  }
+
+  /* The wordmark is inlined (a copy of ../assets/axiom-wordmark-white.svg) so the page also prints from disk. */
+  wm = document.getElementById("wm-inline").innerHTML.trim();
+  render();
+})();
+</script>
+</body>
+</html>
