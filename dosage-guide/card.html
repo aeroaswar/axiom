@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AXIOM — Protocol Card</title>
+<meta name="description" content="Print-ready AXIOM card — 85 × 55 mm, wordmark and a QR that opens the compound guide." />
+<meta name="theme-color" content="#070605" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23070605'/%3E%3Cg stroke='%23C88A4E' stroke-width='6' stroke-linecap='round' fill='none'%3E%3Cpolyline points='24,74 38,26 52,74'/%3E%3Ccircle cx='70' cy='52' r='16'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#070605; --ink:#F2EDE5; --muted:#9c9488; --muted-2:#6a635a;
+  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22);
+  --accent:#C88A4E; --accent-bright:#E7B173;
+  --accent-line:rgba(200,138,78,.34);
+  --panel:#0d0b09;
+  --display:"Jost","Century Gothic",system-ui,sans-serif;
+  --sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+
+  /* Card geometry — trim 85 × 55 mm, 3 mm bleed, 5 mm safe margin */
+  --cw:85mm; --ch:55mm; --bleed:3mm; --safe:5mm;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0908;color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* ================= Control panel (screen only) ================= */
+.panel{
+  position:sticky;top:0;z-index:30;background:rgba(7,6,5,.92);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);padding:16px 22px;
+}
+.panel-in{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end}
+.mark{display:flex;align-items:center;padding-bottom:10px}
+.mark img{width:104px;height:auto;display:block}
+.ctl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ctl label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
+.ctl select,.ctl input{
+  background:var(--panel);border:1px solid var(--line);border-radius:3px;color:var(--ink);
+  font-family:var(--sans);font-size:13px;padding:9px 11px;min-width:150px;
+}
+.ctl select:focus,.ctl input:focus{outline:none;border-color:var(--accent-line)}
+.ctl.grow{flex:1;min-width:230px}
+.ctl.grow input{width:100%;min-width:0}
+.toggles{display:flex;gap:16px;padding-bottom:9px;flex-wrap:wrap}
+.tg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);cursor:pointer;user-select:none}
+.tg input{accent-color:var(--accent);width:14px;height:14px}
+.btn{
+  background:linear-gradient(120deg,#E7B173,#C88A4E 55%,#9A5F2C);color:#120c06;border:none;border-radius:3px;
+  font-family:var(--sans);font-weight:600;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  padding:11px 20px;cursor:pointer;
+}
+.btn:hover{filter:brightness(1.08)}
+.readout{font-size:11px;color:var(--muted-2);padding-bottom:11px;line-height:1.5;max-width:290px}
+.readout b{color:var(--muted);font-weight:500}
+.readout .warn{color:var(--accent-bright)}
+
+/* ================= Stage ================= */
+.stage{max-width:1180px;margin:0 auto;padding:44px 22px 90px;display:flex;flex-direction:column;gap:40px;align-items:flex-start}
+.sheet-label{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted-2);margin-bottom:14px}
+.preview{transform-origin:top left}
+.preview-box{position:relative}
+
+/* ================= The card ================= */
+.card{
+  position:relative;width:var(--cw);height:var(--ch);background:#070605;color:var(--ink);
+  overflow:hidden;flex:none;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+.card.bleedon{width:calc(var(--cw) + var(--bleed)*2);height:calc(var(--ch) + var(--bleed)*2)}
+.card-in{
+  position:absolute;inset:var(--safe);
+  display:flex;align-items:center;justify-content:space-between;gap:5mm;
+  font-size:2mm;line-height:1.4;
+}
+.card.bleedon .card-in{inset:calc(var(--safe) + var(--bleed))}
+
+/* Ambient bronze wash + engraved hairlines */
+.card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(80% 120% at 100% 0%, rgba(200,138,78,.13), transparent 58%),
+    radial-gradient(60% 90% at 0% 100%, rgba(124,76,36,.10), transparent 62%);
+}
+.card::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(242,237,229,.028) .06mm, transparent .06mm);
+  background-size:100% 1.4mm;
+}
+
+.wordmark{width:34mm;height:auto;display:block;flex:none}
+
+.qr-frame{position:relative;padding:1.6mm;background:#F2EDE5;border-radius:.6mm;flex:none}
+.qr-frame svg{display:block;width:var(--qr,24mm);height:var(--qr,24mm)}
+.qr-tick{position:absolute;width:1.8mm;height:1.8mm;border:.18mm solid var(--accent)}
+.qr-tick.tl{top:-1.1mm;left:-1.1mm;border-right:0;border-bottom:0}
+.qr-tick.tr{top:-1.1mm;right:-1.1mm;border-left:0;border-bottom:0}
+.qr-tick.bl{bottom:-1.1mm;left:-1.1mm;border-right:0;border-top:0}
+.qr-tick.br{bottom:-1.1mm;right:-1.1mm;border-left:0;border-top:0}
+
+/* --- Crop marks --- */
+.cropwrap{position:relative;flex:none}
+.crop{position:absolute;background:#6a635a;pointer-events:none}
+.cropwrap.on{padding:5mm}
+.cropwrap .card{position:relative}
+
+/* ================= Print ================= */
+@media print{
+  .panel,.stage>div>.sheet-label,.screen-only{display:none !important}
+  body{background:#fff}
+  .stage{padding:0;margin:0;max-width:none;gap:0;display:block}
+  .preview{transform:none !important}
+  .sheet{display:flex;flex-wrap:wrap;gap:0}
+  .page{page-break-after:always;break-after:page}
+  .page:last-child{page-break-after:auto;break-after:auto}
+  @page{size:A4;margin:8mm}
+}
+@media screen{ .sheet{display:flex;gap:9mm;flex-wrap:wrap} }
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="panel-in">
+    <div class="mark"><img src="assets/axiom-wordmark-white.svg" alt="AXIOM" /></div>
+
+    <div class="ctl">
+      <label for="c-compound">Compound</label>
+      <select id="c-compound"></select>
+    </div>
+
+    <div class="ctl grow">
+      <label for="c-base">Guide base URL</label>
+      <input id="c-base" type="text" value="https://axiom.id/g" spellcheck="false" />
+    </div>
+
+    <div class="ctl">
+      <label for="c-ecl">QR error correction</label>
+      <select id="c-ecl">
+        <option value="M">M — 15%</option>
+        <option value="Q" selected>Q — 25%</option>
+        <option value="H">H — 30%</option>
+      </select>
+    </div>
+
+    <div class="toggles">
+      <label class="tg"><input type="checkbox" id="c-bleed" /> Bleed + crop marks</label>
+      <label class="tg"><input type="checkbox" id="c-sheet" /> A4 sheet (10 up)</label>
+    </div>
+
+    <button class="btn" id="c-print">Print</button>
+    <div class="readout" id="c-readout"></div>
+  </div>
+</div>
+
+<div class="stage" id="stage"></div>
+
+<script src="qr.js"></script>
+<script src="compounds.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var QR_MM = 24;   /* printed QR side, excluding the light frame */
+
+  var els = {
+    compound: document.getElementById("c-compound"),
+    base: document.getElementById("c-base"),
+    ecl: document.getElementById("c-ecl"),
+    bleed: document.getElementById("c-bleed"),
+    sheet: document.getElementById("c-sheet"),
+    print: document.getElementById("c-print"),
+    readout: document.getElementById("c-readout"),
+    stage: document.getElementById("stage")
+  };
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  window.COMPOUNDS.forEach(function (c) {
+    var o = document.createElement("option");
+    o.value = c.slug; o.textContent = c.name;
+    els.compound.appendChild(o);
+  });
+
+  function payload(c) {
+    return els.base.value.trim().replace(/\/+$/, "") + "/" + c.slug;
+  }
+
+  function face(url) {
+    var qr = QR.svg(url, { ecl: els.ecl.value, quiet: 2, dark: "#070605", light: "none" });
+    return '<div class="card-in">' +
+      '<img class="wordmark" src="assets/axiom-wordmark-white.svg" alt="AXIOM" />' +
+      '<div class="qr-frame">' + qr +
+        '<i class="qr-tick tl"></i><i class="qr-tick tr"></i><i class="qr-tick bl"></i><i class="qr-tick br"></i>' +
+      "</div>" +
+    "</div>";
+  }
+
+  function cropMarks() {
+    var m = "";
+    [["top:0;left:0"], ["top:0;right:0"], ["bottom:0;left:0"], ["bottom:0;right:0"]].forEach(function (c) {
+      m += '<i class="crop" style="' + c[0] + ';width:.12mm;height:4mm"></i>';
+      m += '<i class="crop" style="' + c[0] + ';width:4mm;height:.12mm"></i>';
+    });
+    return m;
+  }
+
+  function cardEl(url) {
+    var bleed = els.bleed.checked;
+    return '<div class="cropwrap' + (bleed ? " on" : "") + '">' +
+      (bleed ? cropMarks() : "") +
+      '<div class="card' + (bleed ? " bleedon" : "") + '">' + face(url) + "</div></div>";
+  }
+
+  function render() {
+    var c = window.COMPOUNDS.filter(function (x) { return x.slug === els.compound.value; })[0];
+    if (!c) return;
+    var url = payload(c);
+
+    var info;
+    try { info = QR.encode(url, els.ecl.value); }
+    catch (e) {
+      els.readout.innerHTML = '<span class="warn">' + esc(e.message) + " Shorten the base URL.</span>";
+      return;
+    }
+
+    var mm = QR_MM / (info.size + 4);      /* module size, quiet zone included */
+    els.readout.innerHTML =
+      "Opens <b>" + esc(url) + "</b><br>" +
+      "QR <b>v" + info.version + "</b> · " + info.size + "×" + info.size + " modules · ECC <b>" + els.ecl.value + "</b><br>" +
+      (mm < 0.5
+        ? '<span class="warn">Module ' + mm.toFixed(2) + " mm — below the 0.5 mm print floor. Shorten the URL or lower the ECC level.</span>"
+        : "Module <b>" + mm.toFixed(2) + " mm</b> — within print tolerance.") +
+      "<br>Card <b>85 × 55 mm</b>" + (els.bleed.checked ? " + 3 mm bleed" : "");
+
+    var html;
+    if (els.sheet.checked) {
+      var cards = "";
+      for (var i = 0; i < 10; i++) cards += cardEl(url);
+      html = '<div class="page"><div class="sheet-label">A4 sheet — 10 up</div>' +
+        '<div class="preview-box"><div class="preview" data-zoom="1"><div class="sheet">' + cards + "</div></div></div></div>";
+    } else {
+      html = '<div class="page"><div class="sheet-label">Card — 85 × 55 mm</div>' +
+        '<div class="preview-box"><div class="preview" data-zoom="2.8"><div class="sheet">' + cardEl(url) + "</div></div></div></div>";
+    }
+    els.stage.innerHTML = html;
+    sizePreviews();
+  }
+
+  /* Scale each preview to fit the stage, and reserve its scaled footprint —
+     a transform does not affect layout, so the wrapper is sized by hand. */
+  function sizePreviews() {
+    var avail = els.stage.clientWidth;
+    Array.prototype.forEach.call(document.querySelectorAll(".preview"), function (p) {
+      var box = p.parentElement;
+      p.style.transform = "none";
+      box.style.width = ""; box.style.height = "";
+      var nat = p.getBoundingClientRect();
+      if (!nat.width) return;
+      var max = parseFloat(p.getAttribute("data-zoom")) || 2.8;
+      var zoom = Math.min(max, avail / nat.width);
+      p.style.transform = "scale(" + zoom + ")";
+      box.style.width = nat.width * zoom + "px";
+      box.style.height = nat.height * zoom + "px";
+    });
+  }
+
+  /* Print at true size: drop the preview scaling for the duration. */
+  function clearPreviewScaling() {
+    Array.prototype.forEach.call(document.querySelectorAll(".preview"), function (p) {
+      p.style.transform = "none";
+      p.parentElement.style.width = "";
+      p.parentElement.style.height = "";
+    });
+  }
+
+  ["change", "input"].forEach(function (evt) {
+    [els.compound, els.base, els.ecl, els.bleed, els.sheet].forEach(function (el) {
+      el.addEventListener(evt, render);
+    });
+  });
+  els.print.addEventListener("click", function () { window.print(); });
+  window.addEventListener("beforeprint", clearPreviewScaling);
+  window.addEventListener("afterprint", sizePreviews);
+  window.addEventListener("resize", sizePreviews);
+
+  render();
+})();
+</script>
+</body>
+</html>

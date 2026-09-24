@@ -1,0 +1,221 @@
+# -*- coding: utf-8 -*-
+"""Emit dosage-guide/compounds.js from the category tables."""
+import json, io, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from data1 import C1
+from data2 import C2
+from data3 import C3
+from data4 import C4, C5, C6
+from data5 import C7, C8, C9
+
+
+def default_time(when):
+    """Map the plain-language timing to a clock time for the calendar."""
+    w = when.lower()
+    if "sleep" in w or "bed" in w:            return "21:30"
+    # "Morning and evening" is a split dose — the first one is the morning.
+    if "morning" in w:                        return "08:00"
+    if "after training" in w:                 return "18:00"
+    if "training" in w:                       return "07:30"
+    if "evening" in w or "night" in w:        return "20:00"
+    return "09:00"
+
+
+# A dose stated in a protocol row: "2.5 mg once a week", or a range such as
+# "1–12 mg once a week". Increments ("+2.5 mg at a time") and weight-based
+# doses ("0.03 mg per kg") are not a figure the calculator can start from.
+DOSE_RE = re.compile(r"(?<![+\d.])(\d+(?:\.\d+)?)(?:\s*[–-]\s*(\d+(?:\.\d+)?))?\s*(mg|IU|mL)\b(?!\s*per\s*kg)")
+
+# A dose given another way — swallowed, or as a hospital drip — is not a dose
+# for an injection pen, however the number reads (AOD-9604's trial dose was a
+# tablet), so such rows never seed the pen's figures.
+OTHER_ROUTE_RE = re.compile(r"by mouth|tablet|oral|drip|infusion", re.I)
+
+def stated_doses(protocol, unit):
+    """Yield (row key, low, high) for every dose a protocol row states in `unit`."""
+    for k, v, _ in protocol:
+        if OTHER_ROUTE_RE.search(k + " " + v):
+            continue
+        for lo, hi, u in DOSE_RE.findall(v):
+            if u == unit:
+                yield k, float(lo), float(hi or lo)
+
+def basis(c, dose):
+    """Where the calculator's starting dose comes from.
+
+    Returns the protocol row it matches, so the page can say "the starting
+    dose above", or None when the page documents no dose to start from — in
+    which case the page labels the figure a placeholder rather than letting
+    it pass as a recommendation.
+
+    A pre-filled dose that disagrees with a dose the same page documents is
+    a contradiction, and fails the build.
+    """
+    rows = list(stated_doses(c["protocol"], c["unit"]))
+    for k, lo, hi in rows:
+        if lo <= dose <= hi:
+            return {"k": k, "range": lo != hi}
+    assert not rows, (c["slug"], f"pre-filled {dose} {c['unit']} contradicts {rows}")
+    return None
+
+
+# Round amounts for the dose buttons: 1, 2, 2.5 and 5 in every decade.
+PREFERRED = (1, 2, 2.5, 5)
+INCR_RE = re.compile(r"^\+(\d+(?:\.\d+)?)\s*(mg|IU|mL)\b")
+
+def ladder(lo, hi):
+    out = set()
+    for e in range(-3, 5):
+        for m in PREFERRED:
+            v = round(m * 10 ** e, 6)
+            if lo - 1e-9 <= v <= hi + 1e-9:
+                out.add(v)
+    return out
+
+def dose_options(c):
+    """The doses offered as one-tap buttons, each tagged with where it comes from.
+
+    Where the page documents doses, the buttons are exactly those: every
+    figure stated, the two ends of a stated range, and the steps of a stated
+    increment ("+2.5 mg at a time" between 2.5 mg and 15 mg). Nothing is filled
+    in between — a round number inside a trial's range is not a dose the trial
+    gave. The starting dose, where one is named, is flagged `start`. Where the
+    page documents none, they are a few round amounts around the compound's
+    scale, skewed low, and carry no basis: the page labels them quick picks,
+    not recommendations.
+    """
+    unit = c["unit"]
+    rows = list(stated_doses(c["protocol"], unit))
+    opts = {}
+    if rows:
+        for k, lo, hi in rows:
+            for v in {lo, hi}:
+                b = {"k": k, "range": lo != hi}
+                if "starting dose" in k.lower() and lo == hi:
+                    b["start"] = True
+                opts.setdefault(v, b)
+        # A stated increment fills in the steps between the stated doses.
+        exact = sorted(lo for _, lo, hi in rows if lo == hi)
+        for k, v, _ in c["protocol"]:
+            m = INCR_RE.match(v)
+            if m and m.group(2) == unit and len(exact) >= 2:
+                step, v = float(m.group(1)), exact[0]
+                while v <= exact[-1] + 1e-9:
+                    opts.setdefault(round(v, 6), {"k": k, "step": True})
+                    v += step
+    else:
+        p = c["dose"]
+        for v in ladder(p / 5, p * 2) | {p}:
+            opts[v] = None
+    for r in c.get("regimens", []):
+        opts.setdefault(r["dose"], basis(c, r["dose"]))
+    biggest = max(q for q, _, _ in c["sizes"])
+    whole = lambda v: int(v) if v == int(v) else v
+    out = [{"v": whole(v), "basis": opts[v]} for v in sorted(opts) if v <= biggest]
+    assert 1 <= len(out) <= 9, (c["slug"], [o["v"] for o in out])
+    return out
+
+ALL = C1 + C2 + C3 + C4 + C5 + C6 + C7 + C8 + C9
+
+# Category display order, matching the price list.
+ORDER = ["Weight Loss & GLP-1","Growth Hormone","Healing & Repair","Brain & Mood",
+         "Energy & Endurance","Immunity","Sexual Health","Longevity","Bioregulators"]
+ALL.sort(key=lambda c: (ORDER.index(c["cat"]), c["name"].lower()))
+
+slugs = [c["slug"] for c in ALL]
+assert len(slugs) == len(set(slugs)), "duplicate slug"
+for c in ALL:
+    basis(c, c["dose"])   # fails the build if the anchor dose contradicts the page
+    assert c["cat"] in ORDER, c["cat"]
+    assert len(c["days"]) == 7, c["slug"]
+    assert c["ev"] in ("label","trial","regional","preclinical"), c["slug"]
+    assert c["sizes"], c["slug"]
+    assert c["dose"] > 0, c["slug"]
+    # the default pen is the smallest size offered
+    smallest = min(c["sizes"], key=lambda s: s[0])
+    assert c["unit"] == smallest[1], (c["slug"], c["unit"], smallest[1])
+    assert c["dose"] <= smallest[0], (c["slug"], "dose exceeds smallest pen")
+
+def js(o):
+    return json.dumps(o, ensure_ascii=False)
+
+out = io.StringIO()
+out.write('''/* ------------------------------------------------------------------ *
+ * AXIOM — Compound Guide data
+ *
+ * Every compound in the AXIOM price list. Written in plain language: what
+ * it is, when to take it, what it is studied for, and — where one exists —
+ * the documented dose.
+ *
+ * HOW SURE ARE WE? Every dose carries one of four tags. This is the spine
+ * of the guide: it separates a documented regimen from a number somebody
+ * made up.
+ *
+ *   "label"       An approved medicine. The doses shown are the official
+ *                 ones, and the approval is named.
+ *   "trial"       Not approved, but tested in real human trials. The doses
+ *                 shown are what the trials used.
+ *   "regional"    Approved or sold in some countries only.
+ *   "preclinical" Lab and animal work only. NO human dose has been set, and
+ *                 the guide says so rather than inventing one.
+ *
+ * Nothing here is a prescription. Pen sizes come from the price list;
+ * prices are deliberately not included.
+ * ------------------------------------------------------------------ */
+window.COMPOUNDS = [
+''')
+
+for i, c in enumerate(ALL):
+    smallest = min(c["sizes"], key=lambda s: s[0])
+    o = {
+      "slug": c["slug"], "name": c["name"], "category": c["cat"],
+      "what": c["what"], "cls": c["cls"],
+      "halfLife": c["half"], "route": c["route"],
+      "cadence": c["cadence"], "days": c["days"], "cadenceNote": c["cadNote"],
+      "timing": {"when": c["when"], "food": c["food"], "note": c["timeNote"],
+                 "time": c.get("time") or default_time(c["when"])},
+      "perWeek": c["perWeek"],
+      "evidence": c["ev"], "evidenceNote": c["evNote"],
+      "protocol": [{"k": k, "v": v, "n": n} for k, v, n in c["protocol"]],
+      "benefits": c["benefits"],
+      "pen": {"qty": smallest[0], "unit": c["unit"]},
+      # One-tap dose buttons. Nothing is pre-selected on the page: the
+      # customer taps the dose they actually take.
+      "doseOptions": dose_options(c),
+      # Prices deliberately stay out of the shipped data — src/ keeps them as
+      # the record of the price list, but the guide does not show them.
+      "sizes": [{"qty": q, "unit": u} for q, u, _ in c["sizes"]],
+      "storage": c["storage"], "cautions": c["cautions"],
+    }
+    # Optional alternative schedules. Only emitted where a compound has more
+    # than one sensible way to spread the same weekly amount.
+    if c.get("regimens"):
+        rs = c["regimens"]
+        assert len(rs) > 1, c["slug"]
+        for r in rs:
+            assert len(r["days"]) == 7 and r["dose"] > 0, (c["slug"], r["id"])
+        o["regimens"] = [{"id": r["id"], "label": r["label"], "sub": r["sub"],
+                          "dose": r["dose"], "perWeek": r["perWeek"],
+                          "days": r["days"], "note": r["note"]} for r in rs]
+    out.write("  " + js(o) + ("," if i < len(ALL) - 1 else "") + "\n")
+
+out.write("""];
+
+/* Shared handling note — the pens arrive ready to use. */
+window.HANDLING = "Your pen arrives ready to use — the mixing water is already in it, so there is nothing to prepare. Keep it in the fridge, out of the light, and don't freeze it. Let it come to room temperature before you use it, and finish it within 28 days of the first dose.";
+
+window.EVIDENCE_META = {
+  label:       { label: "Approved medicine",        tone: "solid", blurb: "This is an approved medicine. The doses shown are the official ones." },
+  trial:       { label: "Studied in people",        tone: "mid",   blurb: "Not approved, but tested in real human trials. The doses shown are what those trials used — not an official regimen." },
+  regional:    { label: "Approved in some countries", tone: "mid", blurb: "Approved or sold in certain countries only. Check the position where you are." },
+  preclinical: { label: "Lab research only",        tone: "open",  blurb: "Only lab and animal studies exist. No human dose has been established, and this guide will not invent one." }
+};
+""")
+
+open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'compounds.js'), 'w').write(out.getvalue())
+
+from collections import Counter
+print("compounds:", len(ALL))
+for cat, n in Counter(c["cat"] for c in ALL).most_common():
+    print(f"  {cat:24} {n}")
+print("evidence:", dict(Counter(c["ev"] for c in ALL)))

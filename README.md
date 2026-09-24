@@ -100,6 +100,16 @@ On the clean sheet, a first sale runs in this order, each step in the Console:
 4. **New quote → send → accept** — acceptance issues the invoice; **mark paid** moves it to
    packing; dispatch and delivery close it.
 
+## Compound guide and pen card
+
+`dosage-guide/` is a static site, separate from the app: a print-ready 85 × 55 mm card carrying
+the wordmark and a QR, and the mobile-first guide the QR opens. It covers every lot in the price
+list — 79 lots across 65 compounds, a multi-size compound appearing as one page with a size chip
+per lot — with cadence, timing, documented doses, a tap-to-pick pen calculator, dose dates with
+Apple and Google Calendar export, and the evidence tier stated for every dosing figure. It is
+deployed as its own Vercel project with Root Directory `dosage-guide` and no build step; prices
+live only in `dosage-guide/src/`, which is never published. Details in `dosage-guide/README.md`.
+
 ## Standalone invoice builder
 
 `invoice/axiom-invoice-a4.html` is a self-contained, dependency-free A4 invoice builder that
