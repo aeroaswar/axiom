@@ -83,12 +83,15 @@ for (const [f, s] of Object.entries(read)) {
 console.log('Gate: the seeded sign-in is closed by the build, not by a runtime variable');
 {
   const auth = fs.readFileSync('src/lib/auth.ts', 'utf8');
-  const decl = /const DEV = process\.env\.(\w+) === 'dev';/.exec(auth);
-  if (!decl) fail('src/lib/auth.ts no longer declares the dev-auth switch in the shape this gate reads');
+  const decl = /const DEV = process\.env\.(\w+) === 'dev' && isLocalSite\(process\.env\.(\w+)\);/.exec(auth);
+  if (!decl) fail('src/lib/auth.ts no longer declares the dev-auth switch in the shape this gate reads (flag AND local site URL)');
   // Next inlines NEXT_PUBLIC_* at build time. Keyed on anything else, a deployed artifact could be
   // opened by setting a variable on the running instance — which is the whole point of the switch.
   else if (!decl[1].startsWith('NEXT_PUBLIC_')) fail(`the dev sign-in is keyed on ${decl[1]}, which is read at run time; it must be a NEXT_PUBLIC_ name so the build decides`);
-  else console.log(`  ✓ keyed on ${decl[1]}, inlined at build time`);
+  // The flag alone let a build made on purpose open the door. Requiring a local site URL — also
+  // inlined — shuts it on any build for a real domain.
+  else if (decl[2] !== 'NEXT_PUBLIC_SITE_URL') fail(`the dev sign-in's locality check reads ${decl[2]}; it must read NEXT_PUBLIC_SITE_URL, inlined at build time`);
+  else console.log(`  ✓ keyed on ${decl[1]} and a local ${decl[2]}, both inlined at build time`);
   if (!/if \(!DEV\) throw new Error\('dev sign-in is disabled'\);/.test(auth)) fail('devSignIn no longer refuses when the dev door is closed');
   else console.log('  ✓ devSignIn refuses when it is off');
   for (const f of ['.env.example', '.github/workflows/ci.yml']) {
