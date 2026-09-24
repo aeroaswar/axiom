@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 
 const ICONS: Record<string, string> = {
   quote_to_accept: 'send', request_being_priced: 'clock', invoice_to_pay: 'file',
-  invoice_overdue: 'file', order_packing: 'box', order_dispatched: 'truck',
+  invoice_overdue: 'file', order_packing: 'box', order_dispatched: 'truck', renewal_to_accept: 'reorder',
 };
 const KEYS = new Set(Object.keys(ICONS));
 

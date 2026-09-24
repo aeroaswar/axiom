@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   serverExternalPackages: ['postgres', 'playwright'],
+  // the document renderer reads its stylesheet from the source tree at request time; a serverless
+  // bundle only carries what the tracer is told about
+  outputFileTracingIncludes: { '/**': ['./src/styles/app.css', './src/app/globals.css'] },
   images: { formats: ['image/avif', 'image/webp'] },
   async headers() {
     // Content security policy: the only third parties the build loads are Google Fonts (the two

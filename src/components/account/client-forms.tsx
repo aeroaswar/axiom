@@ -8,7 +8,7 @@ import type { ActionState } from '@/components/console/shared/action-form';
 import {
   acceptQuoteAction, acknowledgeAction, addToBasketAction, cancelOrderAction, moveBasketLineAction,
   removeSiteAction, reorderAction, reportTransferAction, requestQuoteAction, saveMeAction,
-  requoteAction, saveSiteAction, setBasketLineAction, toggleSavedAction, type BasketResult,
+  requoteAction, saveSiteAction, setBasketLineAction, toggleSavedAction, planAction, type BasketResult,
 } from './actions';
 
 /**
@@ -346,3 +346,48 @@ function RemoveSite({ id, label }: { id: string; label: string }) {
   );
 }
 
+
+// ------------------------------------------------------------------ delivery plans
+
+/** One plan's controls: skip, pause or resume, cancel, and the interval. Each is its own form. */
+export function PlanControls({ id, state, intervalDays, tiers }: {
+  id: string; state: 'active' | 'paused' | 'cancelled'; intervalDays: number; tiers: { days: number; pct: number }[];
+}) {
+  const [state1, act1] = useActionState<ActionState, FormData>(planAction, null);
+  const [state2, act2] = useActionState<ActionState, FormData>(planAction, null);
+  const [state3, act3] = useActionState<ActionState, FormData>(planAction, null);
+  const [state4, act4] = useActionState<ActionState, FormData>(planAction, null);
+  const t = useTranslations('account.subscriptions');
+  const ta = useTranslations('account.action');
+  if (state === 'cancelled') return null;
+  const selId = `plan-int-${id}`;
+  return (
+    <div className="plan-controls">
+      <div className="hrow" style={{ gap: 10, flexWrap: 'wrap' }}>
+        {state === 'active' ? (
+          <form action={act1} className="actform">
+            <input type="hidden" name="id" value={id} /><input type="hidden" name="op" value="skip" />
+            <Submit label={t('skip')} busy={ta('working')} icon="reorder" />
+          </form>
+        ) : null}
+        <form action={act2} className="actform">
+          <input type="hidden" name="id" value={id} /><input type="hidden" name="op" value={state === 'active' ? 'pause' : 'resume'} />
+          <Submit label={state === 'active' ? t('pause') : t('resume')} busy={ta('working')} tone={state === 'paused' ? 'accent' : undefined} icon={state === 'active' ? 'clock' : 'check'} />
+        </form>
+        <form action={act3} className="actform" onSubmit={e => { if (!window.confirm(t('cancel_confirm'))) e.preventDefault(); }}>
+          <input type="hidden" name="id" value={id} /><input type="hidden" name="op" value="cancel" />
+          <button type="submit" className="tlink danger">{t('cancel')}</button>
+        </form>
+      </div>
+      <form action={act4} className="field destfield" style={{ marginTop: 12 }}>
+        <input type="hidden" name="id" value={id} /><input type="hidden" name="op" value="interval" />
+        <label htmlFor={selId}>{t('interval')}</label>
+        <select id={selId} name="interval_days" defaultValue={intervalDays} onChange={e => e.currentTarget.form?.requestSubmit()}>
+          {tiers.map(x => <option key={x.days} value={x.days}>{t('interval_option', { days: x.days, pct: x.pct })}</option>)}
+        </select>
+        <button type="submit" className="sr-only">{t('interval_change')}</button>
+      </form>
+      <Message state={state1} /><Message state={state2} /><Message state={state3} /><Message state={state4} />
+    </div>
+  );
+}

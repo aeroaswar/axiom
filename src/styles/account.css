@@ -167,3 +167,9 @@
   .app-root .doserow .a { grid-column: 1; justify-self: start; }
   .app-root .doserow .p { grid-column: 2; grid-row: 1; }
 }
+
+/* delivery plans: the row is not one link, because its controls are the point of the row */
+.app-root .plan-row .bd{gap:6px}
+.app-root .plan-controls{position:relative;z-index:1;margin-top:10px}
+.app-root .plan-controls .hrow .actform{margin:0}
+.app-root .plan-row.dim .t1,.app-root .plan-row.dim .t2{color:var(--muted-2)}

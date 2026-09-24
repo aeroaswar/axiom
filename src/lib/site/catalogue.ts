@@ -38,7 +38,7 @@ export type CompoundFull = Compound & {
 };
 
 export type CatalogueRow = Variant & {
-  product_id: string; slug: string; name: string; kind: Kind; product_sort: number;
+  product_id: string; slug: string; name: string; kind: Kind; product_sort: number; synonyms: string[];
   compound_class_en: string | null; compound_class_id: string | null;
   pathway_no: string; pathway_slug: string; pathway_en: string; pathway_id_name: string; pathway_kind: Kind; pathway_sort: number;
 };
@@ -66,6 +66,7 @@ function rowsOf(raw: Raw[]): CatalogueRow[] {
   return raw.map(r => ({
     ...variantOf(r),
     product_id: String(r.product_id), slug: String(r.slug), name: String(r.name), kind: r.kind as Kind, product_sort: Number(r.product_sort ?? 0),
+    synonyms: Array.isArray(r.synonyms) ? (r.synonyms as string[]) : [],
     compound_class_en: (r.compound_class_en as string | null) ?? null, compound_class_id: (r.compound_class_id as string | null) ?? null,
     pathway_no: String(r.pathway_no), pathway_slug: String(r.pathway_slug), pathway_en: String(r.pathway_en), pathway_id_name: String(r.pathway_id_name),
     pathway_kind: r.pathway_kind as Kind, pathway_sort: Number(r.pathway_sort ?? 0),
@@ -104,7 +105,7 @@ export function groupCompounds(rows: CatalogueRow[]): Compound[] {
     let c = map.get(r.product_id);
     if (!c) {
       c = {
-        id: r.product_id, slug: r.slug, name: r.name, kind: r.kind, synonyms: [], sort: r.product_sort,
+        id: r.product_id, slug: r.slug, name: r.name, kind: r.kind, synonyms: r.synonyms ?? [], sort: r.product_sort,
         compound_class_en: r.compound_class_en, compound_class_id: r.compound_class_id,
         molecular_class_en: null, molecular_class_id: null, cas_no: null,
         pathway: { id: 0, no: r.pathway_no, slug: r.pathway_slug, kind: r.pathway_kind, name_en: r.pathway_en, name_id: r.pathway_id_name, summary_en: '', summary_id: '' },
@@ -221,3 +222,83 @@ export async function getRowsForSkus(uid: string | null, skus: string[]): Promis
 /** Locale pick for the bilingual columns. */
 export const pick = (locale: string, en: string | null | undefined, id: string | null | undefined) =>
   (locale === 'id' ? (id || en) : (en || id)) ?? '';
+
+// ---------------------------------------------------------------- the certificate library
+export type Coa = {
+  id: string; lot_code: string | null; file_path: string; issued_at: string | null; method: string; purity_pct: number | null;
+  is_sample: boolean; is_public: boolean;
+  product: string | null; slug: string | null; dose: string | null; sku: string | null; kind: Kind | null;
+  pathway_no: string | null; pathway_slug: string | null; pathway_en: string | null; pathway_id: string | null;
+};
+
+function coaOf(r: Raw): Coa {
+  return {
+    id: String(r.id), lot_code: (r.lot_code as string | null) ?? null, file_path: String(r.file_path),
+    issued_at: r.issued_at ? new Date(r.issued_at as string).toISOString() : null, method: String(r.method), purity_pct: n(r.purity_pct),
+    is_sample: Boolean(r.is_sample), is_public: Boolean(r.is_public),
+    product: (r.product as string | null) ?? null, slug: (r.slug as string | null) ?? null, dose: (r.dose as string | null) ?? null,
+    sku: (r.sku as string | null) ?? null, kind: (r.kind as Kind | null) ?? null,
+    pathway_no: (r.pathway_no as string | null) ?? null, pathway_slug: (r.pathway_slug as string | null) ?? null,
+    pathway_en: (r.pathway_en as string | null) ?? null, pathway_id: (r.pathway_id as string | null) ?? null,
+  };
+}
+
+const COA = `
+  select d.id, d.lot_code, d.file_path, d.issued_at, d.method, d.purity_pct, d.is_sample, d.is_public,
+         p.name as product, p.slug, v.dose, v.sku, p.kind, pw.no as pathway_no, pw.slug as pathway_slug, pw.name_en as pathway_en, pw.name_id as pathway_id
+  from public.coa_documents d
+  left join public.product_variants v on v.id = d.variant_id
+  left join public.products p on p.id = v.product_id
+  left join public.pathways pw on pw.id = p.pathway_id`;
+
+/** Every certificate the policy lets an anonymous reader see: the published ones and the sample. */
+export async function getCoas(): Promise<Coa[]> {
+  const raw = await asAnon(tx => tx.unsafe(`${COA} order by d.issued_at desc nulls last, p.name, v.sort`) as unknown as Promise<Raw[]>);
+  return raw.map(coaOf);
+}
+
+/** One certificate by id; null when it is not published (the policy returns no row). */
+export async function getCoa(id: string): Promise<Coa | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  const raw = await asAnon(tx => tx.unsafe(`${COA} where d.id = $1::uuid`, [id]) as unknown as Promise<Raw[]>);
+  return raw[0] ? coaOf(raw[0]) : null;
+}
+
+/** The published certificates of one compound, newest first, for its product page. */
+export async function getCoasForProduct(productId: string): Promise<Coa[]> {
+  const raw = await asAnon(tx => tx.unsafe(`${COA} where p.id = $1::uuid order by d.issued_at desc nulls last`, [productId]) as unknown as Promise<Raw[]>);
+  return raw.map(coaOf);
+}
+
+// ---------------------------------------------------------------- the shop
+export type ShopQuery = { kind?: string; pathway?: string; q?: string; sort?: string; saved?: string };
+
+/** The shop's grid: compounds filtered by kind, pathway and a name search, sorted as asked. Every
+ *  filter is a URL parameter, so a chip is a link and the result is server-rendered. */
+export function filterShop(rows: CatalogueRow[], query: ShopQuery, savedSkus: string[] = []): Compound[] {
+  let r = rows;
+  if (query.saved) { const set = new Set(savedSkus); const products = new Set(rows.filter(x => set.has(x.sku)).map(x => x.product_id)); r = r.filter(x => products.has(x.product_id)); }
+  if (query.kind === 'peptide' || query.kind === 'device' || query.kind === 'apparel') r = r.filter(x => x.kind === query.kind);
+  if (query.pathway) r = r.filter(x => x.pathway_slug === query.pathway);
+  if (query.q) {
+    // every word must match somewhere: the name, a synonym or abbreviation, the class, the sku or the dose
+    const words = query.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (words.length) r = r.filter(x => {
+      const hay = [x.name, x.sku, x.dose, x.compound_class_en ?? '', x.compound_class_id ?? '', x.pathway_en, x.pathway_id_name, ...x.synonyms].join(' | ').toLowerCase();
+      return words.every(w => hay.includes(w));
+    });
+  }
+  const compounds = groupCompounds(r);
+  const from = (c: Compound) => c.variants.reduce<number | null>((m, v) => (v.price_idr === null ? m : m === null ? v.price_idr : Math.min(m, v.price_idr)), null);
+  if (query.sort === 'name') compounds.sort((a, b) => a.name.localeCompare(b.name));
+  else if (query.sort === 'price') compounds.sort((a, b) => (from(a) ?? Number.MAX_SAFE_INTEGER) - (from(b) ?? Number.MAX_SAFE_INTEGER));
+  else if (query.sort === 'price_desc') compounds.sort((a, b) => (from(b) ?? -1) - (from(a) ?? -1));
+  return compounds;
+}
+
+/** The lowest visible price among a compound's lots, or null when every lot is gated. */
+export const fromPrice = (c: Compound): number | null =>
+  c.variants.reduce<number | null>((m, v) => (v.price_idr === null ? m : m === null ? v.price_idr : Math.min(m, v.price_idr)), null);
+
+/** Sold out when every lot of the compound has nothing available. */
+export const soldOut = (c: Compound): boolean => c.variants.length > 0 && c.variants.every(v => v.available <= 0);

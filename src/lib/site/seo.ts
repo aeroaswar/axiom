@@ -43,7 +43,6 @@ export function organizationLd(locale: string, o: { name: string; description: s
     name: o.name,
     url: absolute(locale, '/'),
     description: o.description,
-    address: { '@type': 'PostalAddress', addressLocality: 'Jakarta', addressCountry: 'ID' },
     contactPoint: [{ '@type': 'ContactPoint', contactType: 'sales', telephone: `+${o.whatsapp}`, areaServed: 'ID', availableLanguage: ['id', 'en'] }],
     ...(o.sameAs?.length ? { sameAs: o.sameAs } : {}),
   };

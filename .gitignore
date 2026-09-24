@@ -19,3 +19,12 @@ tsconfig.tsbuildinfo
 .q*.mjs
 .look.mjs
 .keys.mjs
+
+# pen catalogue build side-products (the WebP set in public/products is committed)
+scripts/pens/sheet-*.jpg
+public/products/png/
+# the source photographs are the studio originals; the built webp set is what ships
+scripts/merch/src/*.jpg
+scripts/merch/src/*.jpeg
+scripts/merch/src/*.png
+scripts/merch/src/*.webp

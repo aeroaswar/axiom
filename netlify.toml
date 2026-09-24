@@ -1,0 +1,8 @@
+# Netlify: the Next.js runtime builds the app into functions; the database and the auth mode
+# arrive as environment variables on the site (see .env.example).
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

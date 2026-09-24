@@ -1,0 +1,20 @@
+{
+  "physical_label_mm": [
+    40,
+    20
+  ],
+  "physical_aspect_ratio": 2.0,
+  "rendered_label_box_px": [
+    724,
+    356,
+    360,
+    180
+  ],
+  "rendered_aspect_ratio": 2.0,
+  "sticker_outline": "none",
+  "sticker_differentiation": "black-tone and matte-finish contrast only",
+  "master_dimensions_px": [
+    1672,
+    940
+  ]
+}

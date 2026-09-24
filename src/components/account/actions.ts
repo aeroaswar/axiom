@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from '@/i18n/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { clientMeta } from '@/lib/auth';
-import { getBasket, setBasketLine } from '@/lib/basket';
+import { getBasket, planOf, setBasketLine, setBasketPlan } from '@/lib/basket';
 import { attempt, bool, int, str } from './act';
 import { accountSession, orderLinesForReorder, quoteLinesForRequest } from './data';
 import { getSaved, setSaved } from './saved';
@@ -58,7 +58,7 @@ export async function requestQuoteAction(_prev: ActionState, form: FormData): Pr
   const note = str(form, 'note');
   const locale = await getLocale();
   const basket = await getBasket();
-  const lines = basket.items.map(i => ({ sku: i.sku, qty: i.qty, site_id: i.site_id }));
+  const lines = basket.items.map(i => ({ sku: i.sku, qty: i.qty, site_id: i.site_id, interval_days: i.interval_days }));
   if (!lines.length) return { error: (await getTranslations('account.action'))('empty') };
   const res = await attempt<string | null>(async (tx, s) => {
     const [{ request_quote: id }] = await tx<{ request_quote: string }[]>`
@@ -67,7 +67,7 @@ export async function requestQuoteAction(_prev: ActionState, form: FormData): Pr
     return q?.number ?? null;
   }, 'requested');
   if (res.error) return res;
-  for (const l of lines) await setBasketLine(l.sku, 0, l.site_id);
+  for (const l of lines) await setBasketLine(l.sku, 0, l.site_id, l.interval_days);
   revalidatePath('/', 'layout');
   if (res.value) redirect({ href: `/account/quotes/${res.value}`, locale });
   return res;
@@ -122,7 +122,7 @@ export async function addToBasketAction(_prev: BasketResult | null, form: FormDa
   if (!sku) return { ok: false, qty: 0, at: Date.now() };
   const qty = Math.max(int(form, 'qty', 1), 1);
   const site = str(form, 'site_id');
-  await setBasketLine(sku, qty, site || null);
+  await setBasketLine(sku, qty, site || null, planOf(form.get('interval_days')));
   revalidatePath('/', 'layout');
   return { ok: true, qty, at: Date.now() };
 }
@@ -132,7 +132,9 @@ export async function setBasketLineAction(_prev: BasketResult | null, form: Form
   if (!sku) return { ok: false, qty: 0, at: Date.now() };
   const qty = Math.max(int(form, 'qty', 0), 0);
   const site = str(form, 'site_id');
-  await setBasketLine(sku, qty, site || null);
+  const plan = planOf(form.get('interval_days'));
+  if (form.has('from_interval_days')) await setBasketPlan(sku, qty, site || null, planOf(form.get('from_interval_days')), plan);
+  else await setBasketLine(sku, qty, site || null, plan);
   revalidatePath('/', 'layout');
   return { ok: true, qty, at: Date.now() };
 }
@@ -144,9 +146,10 @@ export async function moveBasketLineAction(_prev: BasketResult | null, form: For
   const qty = Math.max(int(form, 'qty', 0), 0);
   const from = str(form, 'from_site_id');
   const to = str(form, 'site_id');
+  const plan = planOf(form.get('interval_days'));
   if (from === to) return { ok: true, qty, at: Date.now() };
-  await setBasketLine(sku, 0, from || null);
-  await setBasketLine(sku, qty, to || null);
+  await setBasketLine(sku, 0, from || null, plan);
+  await setBasketLine(sku, qty, to || null, plan);
   revalidatePath('/', 'layout');
   return { ok: true, qty, at: Date.now() };
 }
@@ -215,4 +218,23 @@ export async function removeSiteAction(_prev: ActionState, form: FormData): Prom
   return attempt(async (tx, s) => {
     await tx`delete from public.account_sites where id = ${id}::uuid and account_id = ${s.accountId}::uuid`;
   }, 'removed');
+}
+
+// ------------------------------------------------------------------ delivery plans
+
+/** Skip, pause, resume, cancel or re-interval one plan. Each is one database function; the plan
+ *  must belong to the account, which the function checks before the frame opens. */
+export async function planAction(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const id = str(form, 'id');
+  const op = str(form, 'op');
+  const days = int(form, 'interval_days', 0);
+  const okKey = op === 'skip' ? 'skipped' : op === 'pause' ? 'paused' : op === 'resume' ? 'resumed' : op === 'cancel' ? 'plan_cancelled' : 'interval_changed';
+  return attempt(async tx => {
+    if (op === 'skip') await tx`select axiom.subscription_skip(${id}::uuid)`;
+    else if (op === 'pause') await tx`select axiom.subscription_pause(${id}::uuid)`;
+    else if (op === 'resume') await tx`select axiom.subscription_resume(${id}::uuid)`;
+    else if (op === 'cancel') await tx`select axiom.subscription_cancel(${id}::uuid)`;
+    else if (op === 'interval') await tx`select axiom.subscription_set_interval(${id}::uuid, ${days})`;
+    else throw new Error('unknown plan action');
+  }, okKey);
 }

@@ -8,7 +8,7 @@ import { withRls } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-type Counts = { variants: number; stockouts: number; lots: number; ack_due: number; products: number; published: number };
+type Counts = { variants: number; stockouts: number; lots: number; ack_due: number; products: number; published: number; plans: number; due: number };
 
 /**
  * The phone's fifth tab. Nothing in the Console may exist only behind the desktop rail, so every
@@ -29,7 +29,9 @@ export default async function MorePage() {
         where p.kind = 'peptide' and v.is_active) as lots,
       (select count(*)::int from public.accounts a where axiom.ack_state_for(a.id) <> 'current') as ack_due,
       (select count(*)::int from public.products) as products,
-      (select count(*)::int from public.products where is_published) as published`);
+      (select count(*)::int from public.products where is_published) as published,
+      (select count(*)::int from public.subscriptions where state <> 'cancelled') as plans,
+      (select count(*)::int from axiom.renewals_due()) as due`);
 
   const row = (href: string, icon: string, title: string, sub: string) => (
     <Link className="row" href={href} key={href}>
@@ -46,6 +48,7 @@ export default async function MorePage() {
         <div>
           <div className="sec-h"><span className="kicker">{t('operate')}</span></div>
           <div className="rows">
+            {row('/console/subscriptions', 'reorder', t('subscriptions'), t('subscriptions_sub', { count: c.plans, due: c.due }))}
             {row('/console/catalogue', 'flask', t('catalogue'), t('catalogue_sub', { count: c.variants, stockouts: c.stockouts }))}
             {owner ? row('/console/pricing', 'tag', t('pricing'), t('pricing_sub', { count: c.lots })) : null}
             {row('/console/invoices', 'file', t('invoices'), t('invoices_sub'))}

@@ -6,6 +6,7 @@ import { nextAction, nextActionQ } from '@/lib/domain/next-action';
 import { rv } from '@/components/console/shared/reveal';
 import type { CutoffSetting } from '@/lib/domain/cutoff';
 import { pipeline, withReorderDue, type OrderRow, type QuoteRow } from './data';
+import { subscriptionsFor } from '@/lib/queries/subscriptions';
 import { chipToneFor, naValues, orderView, quoteView, StateChip } from './ui';
 import { ReorderButton } from './client-forms';
 
@@ -29,8 +30,10 @@ export async function AccountHome({ uid, accountId, cutoff, basketCount }: {
 }) {
   const t = await getTranslations('account');
   const locale = await getLocale();
-  const { orders: raw, quotes, cadence } = await pipeline(uid, accountId);
-  const orders = withReorderDue(raw, cadence);
+  const [{ orders: raw, quotes, cadence }, plans] = await Promise.all([pipeline(uid, accountId), subscriptionsFor(uid, accountId)]);
+  const livePlans = plans.filter(p => p.state !== 'cancelled').length;
+  // a live plan carries its own date; the reorder nudge is for accounts without one
+  const orders = withReorderDue(raw, livePlans ? null : cadence);
 
   const quoteItem = (q: QuoteRow): Item => {
     const na = nextActionQ(quoteView(q));
@@ -133,6 +136,13 @@ export async function AccountHome({ uid, accountId, cutoff, basketCount }: {
         {basketCount ? <Link className="btn btn-sm" href="/account/basket">{t('home.basket_cta')}</Link> : null}
         <Link className="btn btn-sm" href="/account/shop">{t('home.shop_cta')}</Link>
       </div>
+      {livePlans ? (
+        <div className="basketbar rv" style={rv(4)}>
+          <span className="note">{t('home.plans', { count: livePlans })}</span>
+          <span className="sp" />
+          <Link className="btn btn-sm" href="/account/subscriptions">{t('home.plans_cta')}</Link>
+        </div>
+      ) : null}
     </>
   );
 }

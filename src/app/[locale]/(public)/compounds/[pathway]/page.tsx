@@ -5,10 +5,8 @@ import { Link } from '@/i18n/navigation';
 import { Icon } from '@/components/shell/sprite';
 import { Stagger } from '@/components/site/reveal';
 import { JsonLd } from '@/components/site/json-ld';
-import { LivePrice } from '@/components/site/prices';
 import { getCompoundsInPathway, getPathway, getPathways, pick } from '@/lib/site/catalogue';
 import { alternates, breadcrumbLd, definedTermSetLd, describe } from '@/lib/site/seo';
-import { idr } from '@/lib/money';
 
 export const revalidate = 60;
 
@@ -37,7 +35,6 @@ export default async function PathwayPage({ params }: { params: Promise<{ locale
   if (!p || p.kind !== 'peptide') notFound();
   const [compounds, pathways] = await Promise.all([getCompoundsInPathway(pathway), getPathways()]);
   const t = await getTranslations('site.compounds');
-  const tc = await getTranslations('site.common');
   const tn = await getTranslations('nav');
   const name = pick(locale, p.name_en, p.name_id);
   const others = pathways.filter(x => x.kind === 'peptide' && x.slug !== p.slug);
@@ -74,8 +71,6 @@ export default async function PathwayPage({ params }: { params: Promise<{ locale
         <div className="wrap">
           <Stagger className="pgrid">
             {compounds.map((c, i) => {
-              const open = c.variants.filter(v => v.price_idr !== null).map(v => v.price_idr as number);
-              const from = open.length ? Math.min(...open) : null;
               return (
                 <Link key={c.slug} href={`/compounds/${p.slug}/${c.slug}`} className="pcard">
                   <span className="no mono-n">{String(i + 1).padStart(2, '0')}</span>
@@ -84,13 +79,6 @@ export default async function PathwayPage({ params }: { params: Promise<{ locale
                   <span className="doses">
                     {c.variants.map(v => <span className="dose" key={v.variant_id}>{v.dose}</span>)}
                   </span>
-                  {from !== null ? (
-                    <span className="pr">{idr(from)}</span>
-                  ) : (
-                    <span className="gated" style={{ marginTop: 12 }}>
-                      <LivePrice sku={c.variants[0]?.sku ?? ''}>{tc('gated_short')}</LivePrice>
-                    </span>
-                  )}
                 </Link>
               );
             })}

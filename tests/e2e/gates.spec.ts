@@ -50,23 +50,39 @@ test.describe('Gate 7 · education is not cloaked', () => {
 
 test.describe('Gate 10 · no consumer markup on peptide pages', () => {
   test('no Product or Offer JSON-LD on a compound page or the price list', async ({ page }) => {
-    for (const path of [await firstCompoundPath(page), '/price-list', '/compounds']) {
+    for (const path of [await firstCompoundPath(page), '/price-list', '/compounds', '/products', '/products/retatrutide']) {
       await page.goto(path);
       const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
       for (const block of ld) expect(block, `${path} carries Product/Offer markup`).not.toMatch(/"@type"\s*:\s*"(Product|Offer|AggregateOffer)"/);
     }
+    // a device is an ordinary consumer product and may carry it
+    await page.goto('/products/red-light-therapy-mask');
+    const ld = await page.locator('script[type="application/ld+json"]').allTextContents();
+    expect(ld.some(b => /"@type"\s*:\s*"Product"/.test(b))).toBe(true);
   });
 });
 
 test.describe('Gate 6 · acknowledgement gates commerce', () => {
-  test('anonymous visitor sees the guide but no peptide price', async ({ page }) => {
+  test('anonymous visitor sees the guide without a price; the product page prices only when the site is set open', async ({ page }) => {
+    // `site_settings.price_visibility` is the one switch. The price list says which mode is live:
+    // gated cells present means acknowledged, none means open. Either way the guide is public, and
+    // it carries no price in either mode: the price lives on the product page it links to.
+    await page.goto('/price-list');
+    const gatedCells = await page.locator('table.tbl .gated').count();
     const path = await firstCompoundPath(page);
     await page.goto(path);
     await expect(page.locator('main')).toContainText(/HPLC/);
-    const priced = await page.locator('main').evaluate(el => /Rp\s?\d{1,3}(\.\d{3})+/.test(el.textContent || ''));
-    expect(priced).toBe(false);
+    const money = /Rp\s?\d{1,3}(\.\d{3})+/;
+    expect(await page.locator('main').evaluate((el, re) => new RegExp(re).test(el.textContent || ''), money.source)).toBe(false);
+    // the research-use notice is on the page in both modes
+    await expect(page.locator('body')).toContainText(/Research Use Only|Hanya untuk keperluan riset/i);
+    await page.locator('main a[href*="/products/"]').first().click();
+    await page.waitForURL(/\/products\/[^/]+$/);
+    expect(await page.locator('main').evaluate((el, re) => new RegExp(re).test(el.textContent || ''), money.source)).toBe(gatedCells === 0);
   });
-  test('a lapsed account reads the guide but receives no peptide price; a current one does', async ({ page }) => {
+  test('a lapsed account reads the guide; it receives a peptide price only when the site is set open; a current one always does', async ({ page }) => {
+    await page.goto('/price-list');
+    const open = (await page.locator('table.tbl .gated').count()) === 0;
     await signIn(page, SENOPATI, '/account/shop');
     await page.goto('/account/shop');
     const cards = page.locator('.pcard');
@@ -76,7 +92,7 @@ test.describe('Gate 6 · acknowledgement gates commerce', () => {
     const peptidePrices = page.locator('[data-kind="peptide"] .pr');
     expect(await peptidePrices.count()).toBeGreaterThan(20);
     const peptidePriced = await page.evaluate(() => Array.from(document.querySelectorAll('[data-kind="peptide"] .pr')).some(el => /Rp\s?\d/.test(el.textContent || '')));
-    expect(peptidePriced).toBe(false);
+    expect(peptidePriced).toBe(open);
     await page.goto('/sign-in?next=/account/shop');
     await signIn(page, REGENERA, '/account/shop');
     await page.goto('/account/shop');
@@ -86,7 +102,7 @@ test.describe('Gate 6 · acknowledgement gates commerce', () => {
 });
 
 test.describe('Gate 15 · 16 · both surfaces render, one nav per width', () => {
-  const publicPaths = ['/', '/compounds', '/price-list', '/standard', '/how-to-read-a-coa', '/process', '/faq', '/request', '/en', '/en/price-list'];
+  const publicPaths = ['/', '/products', '/products/retatrutide', '/products/logo-cap', '/merch', '/coas', '/compounds', '/price-list', '/standard', '/how-to-read-a-coa', '/process', '/faq', '/request', '/en', '/en/products', '/en/price-list'];
   for (const path of publicPaths) {
     test(`public ${path} has no horizontal scroll`, async ({ page }) => {
       await page.goto(path);
@@ -95,7 +111,7 @@ test.describe('Gate 15 · 16 · both surfaces render, one nav per width', () => 
   }
   test('console: rail above 1024 px, tab bar below, never both', async ({ page }) => {
     await signIn(page, OWNER, '/console');
-    for (const path of ['/console', '/console/orders', '/console/catalogue', '/console/pricing', '/console/invoices', '/console/clients', '/console/content', '/console/settings']) {
+    for (const path of ['/console', '/console/orders', '/console/subscriptions', '/console/catalogue', '/console/pricing', '/console/invoices', '/console/clients', '/console/content', '/console/settings']) {
       await page.goto(path);
       expect(await noHorizontalScroll(page), `${path} scrolls horizontally`).toBe(true);
       const rail = await page.locator('.rail').isVisible();
@@ -108,7 +124,7 @@ test.describe('Gate 15 · 16 · both surfaces render, one nav per width', () => 
   });
   test('account: rail above 1024 px, tab bar below, never both', async ({ page }) => {
     await signIn(page, REGENERA, '/account');
-    for (const path of ['/account', '/account/shop', '/account/saved', '/account/profile']) {
+    for (const path of ['/account', '/account/shop', '/account/subscriptions', '/account/saved', '/account/profile']) {
       await page.goto(path);
       expect(await noHorizontalScroll(page), `${path} scrolls horizontally`).toBe(true);
       const rail = await page.locator('.rail').isVisible();
@@ -276,6 +292,141 @@ test.describe('Ops', () => {
     expect(await page.locator('nav a[href*="/console/pricing"]').count()).toBe(0);
     await page.goto('/console/orders');
     await expect(page.locator('body')).not.toContainText(/Application error|Internal Server Error/);
+  });
+});
+
+test.describe('Gate 23 · the storefront: one-time or on a plan, and the plan price is the quote price', () => {
+  test('a size, a plan and an interval reach the request at the plan price; a sold-out lot cannot be added', async ({ page }) => {
+    await page.goto('/products/retatrutide');
+    await page.getByRole('radio', { name: '20 mg' }).click();
+    const list = await page.locator('.price-big .now').innerText();
+    await page.getByRole('radio', { name: /Subscribe|Langganan/ }).click();
+    const tiers = page.locator('.freq button');
+    expect(await tiers.count()).toBeGreaterThan(0);
+    await tiers.first().click();
+    const net = await page.locator('.price-big .now').innerText();
+    expect(net).not.toBe(list);
+    await expect(page.locator('.price-big .strike')).toHaveText(list);
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      page.locator('.buy').getByRole('button', { name: /Add to basket|Tambah ke keranjang/ }).click(),
+    ]);
+    await expect(page.locator('[data-added="1"]')).toBeVisible();
+    // the mini basket opens on the add and shows the line at the plan price
+    await expect(page.locator('.mini')).toBeVisible();
+    await expect(page.locator('.mini .mini-line.new .amt')).toContainText(net);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.mini')).toHaveCount(0);
+    await page.goto('/request');
+    // the basket states the flow, and the line carries the plan
+    await expect(page.locator('.flow li.now')).toHaveCount(1);
+    const line = page.locator('.req-line[data-plan]:not([data-plan=""])');
+    expect(await line.count()).toBe(1);
+    await expect(line.locator('.plan')).toContainText(/%/);
+    await expect(line.locator('.amt')).toHaveText(net);
+    // each field says what is wrong: nothing filled → the name, the contact and the declaration
+    await page.getByRole('button', { name: /Request a quote|Minta penawaran/ }).click();
+    await expect(page.locator('#rq-name-err')).toBeVisible();
+    await expect(page.locator('#rq-email-err')).toBeVisible();
+    await expect(page.locator('#rq-ack-err')).toBeVisible();
+    await page.fill('#rq-name', 'Gate 23');
+    await page.fill('#rq-email', 'not-an-address');
+    await page.getByRole('button', { name: /Request a quote|Minta penawaran/ }).click();
+    await expect(page.locator('#rq-name-err')).toHaveCount(0);
+    await expect(page.locator('#rq-email-err')).toBeVisible();
+    // the declaration is asked for on a research compound and the request lands with a reference
+    await page.fill('#rq-email', 'gate23@example.test');
+    await page.check('#rq-ack');
+    await page.getByRole('button', { name: /Request a quote|Minta penawaran/ }).click();
+    await page.waitForURL(/request\/sent\?.*quote=/);
+    await expect(page.locator('h1')).toContainText(/Q-|\d/);
+    await expect(page.locator('.flow li.done')).toHaveCount(1);
+    await expect(page.locator('[data-wa-go]')).toHaveAttribute('href', /wa\.me.*(Q-|%20)/);
+    await expect(page.locator('[data-wa-go]')).toHaveClass(/btn-solid/);
+    // a lot with nothing available offers a notice, not an Add
+    await page.goto('/products/tb-500');
+    expect(await page.locator('.buy .buy-form button[type="submit"]').count()).toBe(0);
+    await expect(page.locator('.buy [data-notify] a[href*="wa.me"]')).toBeVisible();
+    // the notice is a real form: a bad contact says so, a good one is saved and confirmed
+    await page.fill('.buy [data-notify] input[name="contact"]', 'not-a-contact');
+    await page.locator('.buy [data-notify] button[type="submit"]').click();
+    await expect(page.locator('.buy [data-notify] .err')).toBeVisible();
+    await page.fill('.buy [data-notify] input[name="contact"]', 'gate23@example.test');
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      page.locator('.buy [data-notify] button[type="submit"]').click(),
+    ]);
+    await expect(page.locator('.buy [data-notify] .ok-line')).toBeVisible();
+    // a device offers no plan
+    await page.goto('/products/logo-cap');
+    expect(await page.locator('.opts').count()).toBe(0);
+  });
+  test('the shop card adds from the grid, the bookmark filters the shop, and the nav badges follow', async ({ page }) => {
+    await page.goto('/products');
+    const card = page.locator('.pcard.shop2:not(.out)').first();
+    await expect(card).toBeVisible();
+    const sku = await card.locator('.save input[name="sku"]').getAttribute('value');
+    expect(sku).toBeTruthy();
+    // Add opens the card's chooser on a compound with a plan or several sizes: pick a plan, then
+    // Add posts the chosen size and interval from the grid; the mini basket opens on it
+    await card.locator('.add button[type="submit"]').click();
+    await expect(card.locator('.qa-panel')).toBeVisible();
+    const plans = card.locator('.qa-panel .plans button');
+    if (await plans.count()) await plans.last().click();
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      card.locator('[data-qa-add]').click(),
+    ]);
+    await expect(card.locator('[data-added="1"]')).toBeVisible();
+    await expect(page.locator('.mini')).toBeVisible();
+    await expect(page.locator('[data-basket-count]').first()).toHaveText(/^[1-9]\d*$/);
+    await page.locator('.mini [aria-label]').first().click();
+    await expect(page.locator('.mini')).toHaveCount(0);
+    // the bookmark is a form: pressed after the post, counted in the nav, and the filter shows the card
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      card.locator('.save button').click(),
+    ]);
+    await expect(card.locator('.save button')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('[data-saved-count]').first()).toHaveText('1');
+    await page.goto('/products?saved=1');
+    expect(await page.locator('.pcard.shop2').count()).toBe(1);
+    await expect(page.locator(`.pcard.shop2 .save input[value="${sku}"]`)).toHaveCount(1);
+    // pressing it again clears the list and the filter is empty
+    await Promise.all([
+      page.waitForResponse(r => r.request().method() === 'POST' && r.status() < 400),
+      page.locator('.pcard.shop2 .save button').first().click(),
+    ]);
+    await expect(page.locator('[data-saved-count]').first()).toHaveText('');
+    await page.goto('/products?saved=1');
+    expect(await page.locator('.pcard.shop2').count()).toBe(0);
+    // an empty result offers a way out
+    await page.goto('/products?q=zzqx');
+    await expect(page.locator('.empty a.btn')).toHaveAttribute('href', /\/products$/);
+  });
+  test('the certificate library finds a lot by its code, opens the certificate and its PDF', async ({ page, context }) => {
+    await page.goto('/coas');
+    const cards = page.locator('.coa-card');
+    const total = await cards.count();
+    expect(total).toBeGreaterThan(0);
+    expect(Number(await page.locator('.coa-count').getAttribute('data-rows'))).toBe(total);
+    const lot = await cards.first().getAttribute('data-lot');
+    expect(lot).toBeTruthy();
+    // the search is one GET form: the lot code narrows the library to that certificate
+    await page.fill('#coa-q', lot!);
+    await page.locator('.coa-search button[type="submit"]').click();
+    await page.waitForURL(/[?&]q=/);
+    const found = await page.locator('.coa-card').count();
+    expect(found).toBeGreaterThan(0);
+    expect(found).toBeLessThan(total + 1);
+    expect(await page.locator(`.coa-card[data-lot="${lot}"]`).count()).toBe(found);
+    const href = await page.locator('.coa-card h3 a').first().getAttribute('href');
+    await page.goto(href!);
+    await expect(page.locator('[data-coa]')).toBeVisible();
+    const pdf = await page.locator('a.btn.btn-solid').first().getAttribute('href');
+    const res = await context.request.get(pdf!);
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('application/pdf');
   });
 });
 
