@@ -174,3 +174,25 @@ tr.sel td { background: var(--glass-accent); }
 .nxt-act .btn-accent { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
 .nxt-act .btn-accent:hover { background: var(--accent-bright); border-color: var(--accent-bright); color: var(--bg); }
 .nxt-act .btn-accent[disabled] { background: transparent; color: var(--muted-2); border-color: var(--line); }
+
+/* ------------------------------------------------------------------ protocol cards
+   One expandable block per compound on a card, and the weekday picker its schedule needs.
+   The QR keeps its own paper: a scanner reads contrast, not the console's theme. */
+.itemcard { border: 1px solid var(--line); padding: 14px; margin-bottom: 10px; }
+.itemcard > summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; list-style: none; }
+.itemcard > summary::-webkit-details-marker { display: none; }
+.itemcard > summary .t1 { font-size: 14px; flex: 1 1 auto; }
+.itemcard > summary .t2 { font-size: 11px; color: var(--muted-2); }
+.itemcard[open] > summary { margin-bottom: 14px; border-bottom: 1px solid var(--line-soft); padding-bottom: 10px; }
+.itemcard.is-ended { opacity: .6; }
+
+.daypick { display: flex; flex-wrap: wrap; gap: 6px; }
+.daybox { position: relative; }
+.daybox input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.daybox span { display: block; padding: 7px 11px; border: 1px solid var(--line-2); font-size: 11.5px; color: var(--muted); }
+.daybox input:checked + span { border-color: var(--accent-line); background: var(--accent-soft); color: var(--accent-bright); }
+.daybox input:focus-visible + span { outline: 1px solid var(--accent); outline-offset: 2px; }
+
+.qrbox { display: flex; justify-content: center; padding: 16px 0; }
+.qr-svg { width: 168px; height: 168px; background: var(--paper); }
+.qr-svg path { fill: var(--paper-ink); }

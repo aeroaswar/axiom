@@ -2,9 +2,11 @@ import { getRequestConfig } from 'next-intl/server';
 import { hasLocale } from 'next-intl';
 import { routing } from './routing';
 
-// Message catalogues are split per surface (core · site · console · account) and merged here, so
-// every user-facing string still resolves through one i18n layer. Gate 17 checks both locales.
-const parts = ['core', 'site', 'console', 'commerce', 'account'] as const;
+// Message catalogues are split per surface (core · site · console · commerce · account ·
+// protocol) and merged here, so every user-facing string still resolves through one i18n layer.
+// Gate 17 checks both locales — but it reads every file in the directory, while this list is fixed,
+// so a catalogue added here and not there resolves nowhere and no gate says so. Add to both.
+const parts = ['core', 'site', 'console', 'commerce', 'account', 'protocol'] as const;
 
 async function load(locale: string) {
   const merged: Record<string, unknown> = {};

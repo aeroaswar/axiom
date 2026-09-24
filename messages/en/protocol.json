@@ -1,0 +1,79 @@
+{
+  "protocol": {
+    "card": {
+      "title": "Protocol card",
+      "for": "Issued to",
+      "number": "Card number",
+      "issued": "Issued",
+      "updated": "Updated",
+      "compounds": "Compounds",
+      "empty": "No compound has been added to this card yet.",
+      "guide": "Compound guide",
+      "not_found_title": "This card is not available",
+      "not_found_body": "The link is no longer valid, or the card has been withdrawn. Contact AXIOM for a current card.",
+      "notice": "This card records a schedule AXIOM issued to the account named above, for that account's own research use. It is not medical advice and it is not a prescription. Handling and storage follow the compound guide.",
+      "issued_by": "Issued by"
+    },
+    "item": {
+      "brief": "Brief",
+      "amount": "Amount",
+      "route": "Route",
+      "schedule": "Schedule",
+      "lot": "Lot",
+      "pack": "Presentation",
+      "ended": "Ended",
+      "ended_on": "Ended {date}"
+    },
+    "coa": {
+      "title": "Certificate of analysis",
+      "lot": "Lot",
+      "purity": "Purity",
+      "method": "Method",
+      "issued": "Issued",
+      "none": "The certificate for this lot is not filed yet.",
+      "open": "Open the certificate"
+    },
+    "schedule": {
+      "once": "Once",
+      "daily": "Every day",
+      "weekly": "Every week",
+      "monthly": "Every month",
+      "every_n_days": "Every {n} days",
+      "every_n_weeks": "Every {n} weeks",
+      "every_n_months": "Every {n} months",
+      "on_days": "on {days}",
+      "at_time": "at {time} WIB",
+      "from": "from {date}",
+      "until": "until {date}",
+      "count": "{n} times in all",
+      "day": {
+        "su": "Sun",
+        "mo": "Mon",
+        "tu": "Tue",
+        "we": "Wed",
+        "th": "Thu",
+        "fr": "Fri",
+        "sa": "Sat"
+      }
+    },
+    "calendar": {
+      "name": "AXIOM protocol",
+      "title": "Calendar",
+      "subscribe": "Subscribe to the calendar",
+      "subscribe_note": "Subscribing keeps a calendar following this card: a compound added later appears without anyone re-scanning the code. Apple Calendar refreshes within hours; Google Calendar refreshes on its own schedule, which can take considerably longer.",
+      "copy_link": "Copy the subscription link",
+      "download": "Download the calendar file",
+      "download_note": "The download is a copy as it stands. After a compound is added, download it again.",
+      "google": "Add to Google Calendar"
+    },
+    "edit": {
+      "title": "Adding a compound",
+      "body": "AXIOM sends a sign-in link to the email address on file for this account. That link opens the card for editing.",
+      "send": "Send the link",
+      "sending": "Sending",
+      "sent": "If this account has an email address on file, a link is on its way there.",
+      "no_contact": "This account has no email address on file. Contact AXIOM on WhatsApp.",
+      "whatsapp": "Contact AXIOM"
+    }
+  }
+}

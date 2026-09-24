@@ -37,6 +37,7 @@ const nextConfig: NextConfig = {
     ];
     return [
       { source: '/:path*', headers: secure },
+      { source: '/k/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }] },
       { source: '/:surface(console|account|request|sign-in)/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
       { source: '/:surface(console|account|request|sign-in)', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },
       { source: '/:locale(en|id)/:surface(console|account|request|sign-in)/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },

@@ -43,5 +43,8 @@ export const int = (form: FormData, key: string, fallback = 0) => {
   return Number.isFinite(n) ? n : fallback;
 };
 export const bool = (form: FormData, key: string) => form.get(key) != null;
+/** A repeated field — a set of checkboxes, such as the weekdays a schedule lands on. `str()` reads
+ *  only the first, which silently drops every day but one. */
+export const list = (form: FormData, key: string) => form.getAll(key).map(String).filter(Boolean);
 /** Rupiah entered by hand: `1.600.000`, `1600000`, `Rp 1 600 000` all mean the same integer. */
 export const money = (form: FormData, key: string) => BigInt(String(form.get(key) ?? '0').replace(/[^\d]/g, '') || '0');

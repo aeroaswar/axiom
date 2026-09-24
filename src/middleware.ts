@@ -13,6 +13,11 @@ export default function middleware(req: NextRequest) {
   // The Supabase Auth callback is not a page and has no locale: next-intl would rewrite
   // /auth/callback to /id/auth/callback, where no route exists, and sign-in would 404.
   if (pathname.startsWith('/auth/')) return NextResponse.next();
+  // A protocol card is locale-free for the same reason and one more: its language is frozen on the
+  // row when AXIOM issues it, so it must not be resolved from the holder's `axiom_locale` cookie —
+  // that would hand an Indonesian client's card to an English-preferring phone in English. It also
+  // keeps one printed pointer to exactly one URL.
+  if (pathname.startsWith('/k/')) return NextResponse.next();
   const bare = pathname.replace(/^\/(en|id)(?=\/|$)/, '');
   const authed = /^\/(console|account)(\/|$)/.test(bare);
   if (authed) {

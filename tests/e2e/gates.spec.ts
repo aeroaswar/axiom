@@ -286,5 +286,118 @@ test('shared basket merges into the account on sign-in', async ({ page }) => {
   await expect(page.locator('main')).toBeVisible();
 });
 
+test.describe('Protocol card', () => {
+  // Seeded in supabase/seed_dev.sql. The codes are stable so a gate can hold one the way a printed
+  // vial box does.
+  const CARD = 'DEV0REGENERA0001';
+  const WITHDRAWN = 'DEV0WTHDRAWN0003';
+  const UNKNOWN = 'DEV0000000000009';
+
+  test('a scan opens the card, names the client, and carries no price', async ({ page }) => {
+    const res = await page.goto(`/k/${CARD}`);
+    expect(res?.status()).toBe(200);
+    await expect(page.locator('.pc-subject')).toContainText('Klinik Regenera');
+    expect(await page.locator('.pc-item').count()).toBeGreaterThan(0);
+    // Peptide prices are gated on an acknowledgement everywhere else; a card holder is anonymous,
+    // and axiom.protocol_card is a definer function, so this is the check that it names its columns.
+    const priced = await page.locator('body').evaluate(el => /Rp\s?\d{1,3}(\.\d{3})+/.test(el.textContent || ''));
+    expect(priced).toBe(false);
+  });
+
+  test('the card is never indexed and never crawled', async ({ page }) => {
+    const res = await page.goto(`/k/${CARD}`);
+    expect(res?.headers()['x-robots-tag']).toContain('noindex');
+    const robots = await (await page.request.get('/robots.txt')).text();
+    expect(robots).toContain('/k/');
+  });
+
+  test('a withdrawn card and an unknown code are the same 404', async ({ page }) => {
+    const a = await page.request.get(`/k/${WITHDRAWN}`);
+    const b = await page.request.get(`/k/${UNKNOWN}`);
+    expect(a.status()).toBe(404);
+    expect(b.status()).toBe(404);
+  });
+
+  test('the card reads in the language it was issued in, not the browser’s', async ({ page }) => {
+    // Every Playwright context sends Accept-Language: en-US, which sends the rest of the site to
+    // /en/. This card's locale is 'id' on its own row, and that is what must win — otherwise a
+    // clinic manager's phone preference would rewrite a client's card.
+    await page.goto(`/k/${CARD}`);
+    expect(await page.locator('html').getAttribute('lang')).toBe('id');
+    expect(new URL(page.url()).pathname).toBe(`/k/${CARD}`);
+  });
+
+  test('the calendar feed is a calendar, and answers a conditional request', async ({ page }) => {
+    const url = `/api/protocol/${CARD}/calendar.ics`;
+    const res = await page.request.get(url);
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('text/calendar');
+    const body = await res.text();
+    expect(body.startsWith('BEGIN:VCALENDAR')).toBe(true);
+    expect(body).toContain('TZID:Asia/Jakarta');
+    expect(body).toContain('RRULE:');
+    // Every line within 75 octets, or Apple Calendar discards the file without a word.
+    for (const line of body.split('\r\n')) expect(Buffer.byteLength(line, 'utf8')).toBeLessThanOrEqual(75);
+
+    const etag = res.headers()['etag'];
+    expect(etag).toBeTruthy();
+    const again = await page.request.get(url, { headers: { 'If-None-Match': etag } });
+    expect(again.status()).toBe(304);
+
+    const download = await page.request.get(`${url}?download=1`);
+    expect(download.headers()['content-disposition']).toContain('attachment');
+  });
+
+  test('the QR is served without a lookup, and a withdrawn card still has one', async ({ page }) => {
+    // The square is a pure function of the code. A database read here would make this route an
+    // oracle for which codes exist; the card page is the only place that may be observable.
+    for (const code of [CARD, WITHDRAWN]) {
+      const res = await page.request.get(`/api/protocol/${code}/qr`);
+      expect(res.status()).toBe(200);
+      expect(res.headers()['content-type']).toContain('image/svg+xml');
+    }
+  });
+
+  test('the printable card needs a session, and only the right one', async ({ page, browser }) => {
+    expect((await page.request.get(`/api/documents/protocol/${CARD}`)).status()).toBe(401);
+
+    const other = await browser.newContext();
+    const op = await other.newPage();
+    await signIn(op, 'Ivan', '/account');
+    expect((await other.request.get(`/api/documents/protocol/${CARD}`)).status()).toBe(404);
+    await other.close();
+
+    await signIn(page, OWNER, '/console');
+    const ok = await page.request.get(`/api/documents/protocol/${CARD}`);
+    expect(ok.status()).toBe(200);
+    expect(ok.headers()['content-type']).toContain('application/pdf');
+  });
+
+  test('the only thing to do on a scanned card is ask for a link — there is no field to type into', async ({ page }) => {
+    await page.goto(`/k/${CARD}`);
+    // The address the link goes to is the one on the account's row. A card that accepted an email
+    // would be a way to phish one, and a way to find out which addresses exist.
+    expect(await page.locator('input[type="email"], input[name*="mail"]').count()).toBe(0);
+    await expect(page.locator('.pc-edit button')).toBeVisible();
+  });
+
+  test('a client adds a compound to its own card and the calendar follows', async ({ page }) => {
+    const before = await (await page.request.get(`/api/protocol/${CARD}/calendar.ics`)).text();
+    const beforeEvents = (before.match(/BEGIN:VEVENT/g) ?? []).length;
+
+    await signIn(page, REGENERA, '/account/protocols');
+    await page.locator('.rows .row').first().click();
+    await page.waitForSelector('select[name="variant_id"]');
+    await page.locator('select[name="variant_id"]').selectOption({ index: 1 });
+    await page.locator('input[name="amount"]').first().fill('one vial');
+    await page.getByRole('button', { name: /Add to the card|Tambahkan ke kartu/ }).click();
+    await expect(page.locator('.formfoot .msg.ok')).toBeVisible({ timeout: 15000 });
+
+    // The QR never changed; the card behind it did. That is the whole design.
+    const after = await (await page.request.get(`/api/protocol/${CARD}/calendar.ics`)).text();
+    expect((after.match(/BEGIN:VEVENT/g) ?? []).length).toBe(beforeEvents + 1);
+  });
+});
+
 export {};
 export type { BrowserContext };

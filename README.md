@@ -30,6 +30,8 @@ src/app/[locale]/(app)/console   dashboard · orders & quotes · catalogue & sto
 src/app/[locale]/(app)/account   needs you / in progress / earlier · shop · basket · orders · quotes · saved · profile
 src/lib/db.ts          one pool; every request is a transaction that adopts the caller's role and claims (RLS applies)
 src/lib/domain/        next-action, cut-off, dates — one implementation per rule
+src/lib/protocol/      the protocol card: QR modules, the RFC 5545 feed, one read model
+src/app/k/[code]       the card a QR opens — locale-free, noindex, read-only
 src/components/document/  the one A4 document template: invoice, credit note, quote, price list
 scripts/gates/         the gate suite (sql · copy lint · greps · i18n · references) and the runner
 tests/e2e/             the browser gates (Playwright)
@@ -55,6 +57,9 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
 - **Nothing is typed.** Dashboard, Today list, bell and badge derive from `axiom.events()`.
 - **No dosing, no claims.** A CI lint over every catalogue and content row; every research claim
   needs a PubMed ID or DOI that resolves, or it does not render.
+  A **protocol card** is the one place a dose is written down, per client, by AXIOM, gated on the
+  same acknowledgement as a price — never in the catalogue, in copy or in code. Decision 12 in
+  `docs/DECISIONS.md` states that boundary and what it costs.
 
 ## Production
 

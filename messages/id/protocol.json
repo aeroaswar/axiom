@@ -1,0 +1,79 @@
+{
+  "protocol": {
+    "card": {
+      "title": "Kartu protokol",
+      "for": "Diterbitkan untuk",
+      "number": "Nomor kartu",
+      "issued": "Diterbitkan",
+      "updated": "Diperbarui",
+      "compounds": "Senyawa",
+      "empty": "Belum ada senyawa pada kartu ini.",
+      "guide": "Panduan senyawa",
+      "not_found_title": "Kartu ini tidak tersedia",
+      "not_found_body": "Tautan sudah tidak berlaku, atau kartu telah ditarik. Hubungi AXIOM untuk kartu yang berlaku.",
+      "notice": "Kartu ini mencatat jadwal yang diterbitkan AXIOM untuk akun yang disebutkan di atas, bagi keperluan risetnya sendiri. Ini bukan nasihat medis dan bukan resep. Penanganan dan penyimpanan mengikuti panduan senyawa.",
+      "issued_by": "Diterbitkan oleh"
+    },
+    "item": {
+      "brief": "Ringkasan",
+      "amount": "Takaran",
+      "route": "Jalur",
+      "schedule": "Jadwal",
+      "lot": "Lot",
+      "pack": "Kemasan",
+      "ended": "Dihentikan",
+      "ended_on": "Dihentikan {date}"
+    },
+    "coa": {
+      "title": "Sertifikat analisis",
+      "lot": "Lot",
+      "purity": "Kemurnian",
+      "method": "Metode",
+      "issued": "Terbit",
+      "none": "Sertifikat untuk lot ini belum diarsipkan.",
+      "open": "Buka sertifikat"
+    },
+    "schedule": {
+      "once": "Sekali",
+      "daily": "Setiap hari",
+      "weekly": "Setiap minggu",
+      "monthly": "Setiap bulan",
+      "every_n_days": "Setiap {n} hari",
+      "every_n_weeks": "Setiap {n} minggu",
+      "every_n_months": "Setiap {n} bulan",
+      "on_days": "pada {days}",
+      "at_time": "pukul {time} WIB",
+      "from": "mulai {date}",
+      "until": "sampai {date}",
+      "count": "sebanyak {n} kali",
+      "day": {
+        "su": "Min",
+        "mo": "Sen",
+        "tu": "Sel",
+        "we": "Rab",
+        "th": "Kam",
+        "fr": "Jum",
+        "sa": "Sab"
+      }
+    },
+    "calendar": {
+      "name": "Protokol AXIOM",
+      "title": "Kalender",
+      "subscribe": "Berlangganan kalender",
+      "subscribe_note": "Berlangganan membuat kalender tetap mengikuti kartu ini: senyawa yang ditambahkan kemudian muncul tanpa perlu memindai ulang. Apple Calendar menyegarkan dalam hitungan jam; Google Calendar menyegarkan menurut jadwalnya sendiri, yang dapat memakan waktu lebih lama.",
+      "copy_link": "Salin tautan langganan",
+      "download": "Unduh berkas kalender",
+      "download_note": "Berkas unduhan adalah salinan saat ini. Setelah ada senyawa baru, unduh ulang.",
+      "google": "Tambahkan ke Google Calendar"
+    },
+    "edit": {
+      "title": "Menambah senyawa",
+      "body": "AXIOM mengirim tautan masuk ke alamat surel yang tercatat pada akun ini. Tautan itu membuka kartu untuk disunting.",
+      "send": "Kirim tautan",
+      "sending": "Mengirim",
+      "sent": "Jika akun ini memiliki alamat surel yang tercatat, tautan sedang dikirim ke sana.",
+      "no_contact": "Akun ini belum memiliki alamat surel yang tercatat. Hubungi AXIOM lewat WhatsApp.",
+      "whatsapp": "Hubungi AXIOM"
+    }
+  }
+}

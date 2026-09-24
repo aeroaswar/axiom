@@ -95,7 +95,8 @@
     "owner": "Owner",
     "ops": "Ops",
     "client": "Client",
-    "clinic": "Clinic"
+    "clinic": "Clinic",
+    "protocols": "Protocol cards"
   },
   "states": {
     "quote": {
