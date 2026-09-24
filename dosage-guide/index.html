@@ -620,6 +620,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     document.getElementById("f-compound").addEventListener("change", function () {
       var slug = this.value;
       if (param("c")) location.search = "?c=" + encodeURIComponent(slug);
+      else if (pathSlug() && !location.hash) location.href = encodeURIComponent(slug);   /* sibling path */
       else location.hash = encodeURIComponent(slug);
     });
 
@@ -971,8 +972,16 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
   /* ---------------- Route ----------------
      Slug comes from ?c= on a hosted site, or from the hash when the page is
      opened somewhere that cannot change the query string. */
+  /* The card's QR encodes {base URL}/{slug}, so a hosted guide is reached at
+     a path like /tirzepatide. Only a known slug counts, so the page still
+     works wherever else it is served from. */
+  function pathSlug() {
+    var seg = decodeURIComponent(location.pathname.replace(/\/+$/, "").split("/").pop() || "");
+    return window.COMPOUNDS.some(function (x) { return x.slug === seg; }) ? seg : null;
+  }
+
   function route() {
-    var slug = param("c") || decodeURIComponent(location.hash.replace(/^#/, ""));
+    var slug = param("c") || decodeURIComponent(location.hash.replace(/^#/, "")) || pathSlug();
     var found = slug && window.COMPOUNDS.filter(function (x) { return x.slug === slug; })[0];
     if (found) renderCompound(found);
     else renderIndex();
