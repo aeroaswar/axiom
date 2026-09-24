@@ -26,9 +26,16 @@ def default_time(when):
 # doses ("0.03 mg per kg") are not a figure the calculator can start from.
 DOSE_RE = re.compile(r"(?<![+\d.])(\d+(?:\.\d+)?)(?:\s*[–-]\s*(\d+(?:\.\d+)?))?\s*(mg|IU|mL)\b(?!\s*per\s*kg)")
 
+# A dose given another way — swallowed, or as a hospital drip — is not a dose
+# for an injection pen, however the number reads (AOD-9604's trial dose was a
+# tablet), so such rows never seed the pen's figures.
+OTHER_ROUTE_RE = re.compile(r"by mouth|tablet|oral|drip|infusion", re.I)
+
 def stated_doses(protocol, unit):
     """Yield (row key, low, high) for every dose a protocol row states in `unit`."""
     for k, v, _ in protocol:
+        if OTHER_ROUTE_RE.search(k + " " + v):
+            continue
         for lo, hi, u in DOSE_RE.findall(v):
             if u == unit:
                 yield k, float(lo), float(hi or lo)
@@ -68,9 +75,11 @@ def ladder(lo, hi):
 def dose_options(c):
     """The doses offered as one-tap buttons, each tagged with where it comes from.
 
-    Where the page documents doses, the buttons are exactly those doses — the
-    stated figures, round steps inside a stated range, and the steps of a
-    stated increment ("+2.5 mg at a time" between 2.5 mg and 15 mg). Where the
+    Where the page documents doses, the buttons are exactly those: every
+    figure stated, the two ends of a stated range, and the steps of a stated
+    increment ("+2.5 mg at a time" between 2.5 mg and 15 mg). Nothing is filled
+    in between — a round number inside a trial's range is not a dose the trial
+    gave. The starting dose, where one is named, is flagged `start`. Where the
     page documents none, they are a few round amounts around the compound's
     scale, skewed low, and carry no basis: the page labels them quick picks,
     not recommendations.
@@ -80,9 +89,11 @@ def dose_options(c):
     opts = {}
     if rows:
         for k, lo, hi in rows:
-            vals = {lo} if lo == hi else ({lo, hi} | ladder(lo, hi))
-            for v in vals:
-                opts.setdefault(v, {"k": k, "range": lo != hi})
+            for v in {lo, hi}:
+                b = {"k": k, "range": lo != hi}
+                if "starting dose" in k.lower() and lo == hi:
+                    b["start"] = True
+                opts.setdefault(v, b)
         # A stated increment fills in the steps between the stated doses.
         exact = sorted(lo for _, lo, hi in rows if lo == hi)
         for k, v, _ in c["protocol"]:

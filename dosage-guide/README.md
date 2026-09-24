@@ -113,19 +113,44 @@ human dose has been set, so a row of buttons could easily read as a recommended
 range. `gen.py` builds each page's buttons from its own Doses rows, and the line
 under them says which kind the tapped one is:
 
-- **Where the page documents doses, the buttons are exactly those** — stated
-  figures, round steps inside a stated range, and the steps of a stated
-  increment. Tirzepatide gets its label titration, 2.5 → 15 mg in 2.5 mg steps;
-  HGH gets 0.2–1 IU; SS-31 gets its single 40 mg trial dose. Tapping one names its
-  source: *"5 mg matches “After 4 weeks” in the doses above."*
+- **Where the page documents doses, the buttons are exactly those** — every
+  stated figure, the two ends of a stated range, and the steps of a stated
+  increment. Nothing is filled in between: a round number inside a trial's range
+  is not a dose the trial gave. Retatrutide gets its trial steps 1, 2, 4, 6, 9 and
+  12 mg; tirzepatide its label titration, 2.5 → 15 mg in 2.5 mg steps; HGH its
+  label start of 0.45–0.9 IU. Tapping one names its source: *"5 mg matches
+  “After 4 weeks” in the doses above."*
+- **The starting dose is marked *Start*** where the page names one — retatrutide
+  2 mg, cagrilintide 0.25 mg, tirzepatide 2.5 mg, HGH 0.6 IU — and before a tap
+  the line says *"Just starting? The one marked Start is where the documented
+  schedule begins."*
 - **Where it documents none, they are four or five round amounts** (1, 2, 2.5 and
   5 in each decade) around the compound's scale, skewed low, and the page says what
   they are before and after a tap: *"No human dose has been set for this, so these
   are quick picks, not recommendations."*
 - A typed amount reads *"Worked out at the dose you entered."*
 
-Ten compounds get documented buttons; the other 55 get quick picks. The build
+Nine compounds get documented buttons; the other 56 get quick picks. The build
 fails if a compound's anchor dose contradicts a dose its own page states.
+
+**Where the documented doses come from** (checked September 2026 against the
+trials and labels themselves):
+
+| Compound | Source | First weeks | Then |
+| --- | --- | --- | --- |
+| Retatrutide | Phase 3 TRIUMPH (Lilly); phase 2, *NEJM* 2023 | 2 mg weekly, weeks 1–4 | 4 → 6 → 9 → 12 mg, a step every 4 weeks. Phase 2 also ran a flat 1 mg group, and starting at 2 mg rather than 4 mg cut stomach side effects |
+| Cagrilintide | Phase 3 REDEFINE 1 | 0.25 mg weekly, weeks 1–4 | 0.5 → 1 → 1.7 → 2.4 mg, a step every 4 weeks |
+| Tirzepatide | Zepbound label | 2.5 mg weekly, weeks 1–4 | 5 mg, then +2.5 mg no sooner than every 4 weeks, to 15 mg |
+| HGH (somatropin) | Genotropin label, adult deficiency | ~0.2 mg (0.6 IU) a day; range 0.15–0.3 mg (0.45–0.9 IU) | +0.1–0.2 mg a day every 1–2 months, by IGF-1. 1 mg = 3 IU |
+| Tesamorelin | Egrifta label | 2 mg a day from day 1 | No build-up. Egrifta SV (1.4 mg) and WR (1.28 mg) are reformulations and don't carry over |
+| SS-31 (elamipretide) | Forzinity label — FDA accelerated approval, 19 Sep 2025, Barth syndrome ≥30 kg | 40 mg a day from day 1 | No build-up |
+| ARA-290 | Sarcoidosis nerve-pain trial | 1, 4 or 8 mg a day from day 1 | 28 days |
+| PT-141 | Vyleesi label | 1.75 mg when needed | At most 1 a day, 8 a month |
+| Thymosin α1 | Zadaxin, hepatitis B | 1.6 mg twice a week from day 1 | About 6 months |
+
+AOD-9604's weight-loss trials gave it **by mouth** (1 mg tablets), so that figure
+is shown but never becomes a pen button: a dose swallowed is not a dose injected.
+`gen.py` skips any row about another route (by mouth, tablet, drip, infusion).
 
 Prices are deliberately not shown and are not in the shipped data. The source
 tables under `src/` keep them as the record of the price list, so `src/` is a
@@ -216,7 +241,7 @@ with a number.
 | **Approved in some countries** | Approved or sold in certain countries only. |
 | **Lab research only** | Lab and animal work only. No human dose has been set, and none is invented. |
 
-Across the 65 compounds: 9 are approved medicines, 10 have real human trial data,
+Across the 65 compounds: 10 are approved medicines, 9 have real human trial data,
 21 are approved or sold in some countries only, and 25 rest on lab and animal work
 alone. That last group is where the guide says *no human dose has been set* rather
 than printing a number.
@@ -260,9 +285,10 @@ A protocol row reading *Not set*, *Not established* or *None* renders in the mut
 no schedule.
 
 `gen.py` derives `doseOptions` from the protocol rows: every dose they state in
-the compound's unit, round steps inside a stated range, and the steps of a
-stated increment (`+2.5 mg at a time`); per-kg doses are skipped. Each option
-carries the row it came from as `basis`. With no stated dose, it lays four or five round
+the compound's unit, the two ends of a stated range, and the steps of a stated
+increment (`+2.5 mg at a time`); per-kg doses and rows about another route (by
+mouth, tablet, drip, infusion) are skipped. Each option carries the row it came
+from as `basis`, with `start: true` on a row named "Starting dose". With no stated dose, it lays four or five round
 amounts around the source table's `dose` (from a fifth of it to twice it) with
 `basis: null`, which the page labels quick picks. **If a row states a dose and the
 table's `dose` or a regimen's dose matches none of them, the build fails**, so a
@@ -277,7 +303,8 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
 - Cards rendered to print PDFs, rasterised at 300 dpi, and decoded back to the exact expected URL, with the wordmark confirmed present in each.
 - All 65 compound pages checked for correct dose counts, schedule length, size chips and layout, with no horizontal overflow at phone width.
-- **Every dose button tapped against every pen button** — 359 combinations across all 65 pages — for the dose count, the highlighted buttons and the line naming the dose's source (documented or quick pick). Also checked: nothing pre-picked except single-size pens, a typed dose clears the buttons, Retatrutide's schedule switch taps its own dose, the compound list opens the chosen page, and a part-used pen of 0.3 mg at 0.1 mg gives 3 doses, not the 2 that floating-point division would.
+- **The nine documented compounds pinned to their sources**: each page's buttons and its Start button checked against the table above, and AOD-9604 checked to offer quick picks rather than its tablet dose.
+- **Every dose button tapped against every pen button** — 364 combinations across all 65 pages — for the dose count, the highlighted buttons and the line naming the dose's source (documented or quick pick). Also checked: nothing pre-picked except single-size pens, a typed dose clears the buttons, Retatrutide's schedule switch taps its own dose, the compound list opens the chosen page, and a part-used pen of 0.3 mg at 0.1 mg gives 3 doses, not the 2 that floating-point division would.
 - Every lot in the price list PDF matched against `compounds.js` by name *and* size: 79/79, so no lot is missing a page and no size chip is offered that isn't a real lot. Four names differ in presentation only and are mapped deliberately — the price list's `CJC-1295 (No DAC) + Ipamorelin`, `VIP (Vasoactive Intestinal Peptide)`, `SLU-PP-332 (Injectable)` and `PT-141` appear here as `CJC-1295 + Ipamorelin`, `VIP`, `SLU-PP-332` and `PT-141 (Bremelanotide)`.
 - **Calendar export checked on all 62 scheduled compounds** plus Retatrutide twice weekly and a 500-dose run: each Apple file parses with the `icalendar` library as one event with a reminder; its rule, expanded with `dateutil`, gives exactly the doses in the pen on the dates the page shows; and the Google link's rule produces the identical dates. Line length, CRLF and absent `METHOD` checked on every file.
 - The Apple button checked in a sandboxed frame that blocks downloads (nothing gets through, the panel appears, and *Open this page directly* opens an unframed copy), and under iPhone Safari, iPhone Instagram and Android browser identities for the right guidance. Not testable from here: a real iPhone's Calendar hand-off, and the live claude.ai viewer's own frame rules.

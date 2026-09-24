@@ -150,6 +150,8 @@ h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
 .pick:hover{border-color:var(--line-2)}
 .pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .pick.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
+.pick{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2}
+.pick-tag{font-family:var(--sans);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-top:3px}
 .other{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12.5px;color:var(--muted-2)}
 .other label{flex:none}
 .other input{
@@ -492,7 +494,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           '<div class="step"><div class="step-k"><i>3</i>How much is each dose?</div>' +
             '<div class="picks" id="dose-picks">' + c.doseOptions.map(function (o) {
               return '<button class="pick" data-dose="' + o.v + '" type="button">' +
-                fmtNum(o.v) + " " + unit + "</button>";
+                fmtNum(o.v) + " " + unit +
+                (o.basis && o.basis.start ? '<span class="pick-tag">Start</span>' : "") + "</button>";
             }).join("") + "</div>" +
             '<div class="other"><label for="f-dose">Or another amount</label>' +
               '<input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="">' +
@@ -665,8 +668,10 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       var unit = esc(c.pen.unit), o = d > 0 ? optionFor(d) : null, b = o && o.basis;
       var text, cls = "basis";
       if (!(d > 0)) {
+        var hasStart = c.doseOptions.some(function (o) { return o.basis && o.basis.start; });
         text = documented
-          ? "The buttons are the doses documented above. Tap the one you take."
+          ? "The buttons are the doses documented above. Tap the one you take." +
+            (hasStart ? " <b>Just starting?</b> The one marked Start is where the documented schedule begins." : "")
           : "<b>No human dose has been set for this</b>, so these are quick picks, not recommendations. " +
             "Tap the amount you take, or type your own.";
       } else if (!o) {
