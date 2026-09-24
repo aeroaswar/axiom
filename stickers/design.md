@@ -125,9 +125,9 @@ yourself reaching for a gradient here, don't.
 ### The wordmark
 
 Inlined as an SVG path from `../business-proposal/assets/logo/axiom-wordmark-white.svg`
-(`viewBox="0 0 582 70"`, 813 bytes) with `fill="currentColor"` so it inherits `--ink`. Inlining
-keeps it true vector at 9 mm, keeps both HTML files self-contained, and avoids the per-directory
-asset duplication seen across `../company-profile/assets/` and `../business-proposal/assets/`.
+(`viewBox="0 0 582 70"`, 586 bytes — the clean redraw from PR #24) with `fill="currentColor"` so it
+inherits `--ink`. Inlining keeps it true vector at 9 mm, keeps each HTML file self-contained, and
+avoids the per-directory asset duplication seen across `../company-profile/assets/` and `../business-proposal/assets/`.
 
 ---
 
