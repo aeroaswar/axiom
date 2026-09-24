@@ -36,16 +36,13 @@
   display:flex; flex-direction:column;
 }
 
-/* ── Status stamp ─────────────────────────────────────────────────────────── */
-.stamp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  pointer-events:none;overflow:hidden}
-.stamp span{transform:rotate(-24deg);font-family:var(--display);font-weight:600;
-  font-size:44px;letter-spacing:.14em;text-transform:uppercase;text-align:center;
-  padding:14px 34px;border:4px solid currentColor;border-radius:6px;line-height:1.1;
-  max-width:80%}
-.stamp.draft span{color:rgba(141,141,141,.32)}
-.stamp.superseded span{color:rgba(58,58,58,.26);font-size:34px}
-.stamp.void span{color:rgba(163,80,60,.34);font-size:38px}
+/* ── Rubber stamps ────────────────────────────────────────────────────────── */
+:root{ --ink-blue:#27437E; --ink-red:#A5372C; --ink-black:#2C2C31; }
+.stamp-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.stamp-layer svg{position:absolute;left:50%;top:47%;height:auto;overflow:visible}
+.stamp-layer.draft{color:var(--ink-blue)}
+.stamp-layer.superseded{color:var(--ink-black)}
+.stamp-layer.void{color:var(--ink-red)}
 
 /* ── Masthead ─────────────────────────────────────────────────────────────── */
 .mast{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
@@ -126,7 +123,7 @@
 /* ── Attestation ──────────────────────────────────────────────────────────── */
 .attest{margin-top:auto;padding-top:18px;display:flex;gap:22px;align-items:flex-end;
   break-inside:avoid;page-break-inside:avoid}
-.seal{flex:none;width:27mm;height:27mm;color:var(--onyx)}
+.seal{flex:none;width:27mm;height:27mm;color:var(--ink-blue);overflow:visible}
 .sigs{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 /* The ruled line doubles as the signature well, so ink sits ON the line. */
 .sig .line{border-bottom:1px solid var(--onyx);height:30px;display:flex;
@@ -766,7 +763,9 @@ const blankLot = () => ({
   conclusion:"This product conforms with enterprise standards and qualifications.",
   tests:[], signatories: BLANK_SIGS(),
   /* record state — a lot is a draft until it is issued */
-  status:"draft", issuedAt:"", fingerprint:"", supersedes:"", supersededBy:"", voidReason:""
+  status:"draft", issuedAt:"", fingerprint:"", supersedes:"", supersededBy:"", voidReason:"",
+  /* where the stamps land — presentation, not content */
+  stampSeed: newStampSeed()
 });
 
 /* ── The sheet ────────────────────────────────────────────────────────────── */
@@ -779,43 +778,146 @@ function overallVerdict(lot){
   const v = (lot.tests || []).map(rowVerdict);
   return v.includes("fail") ? "fail" : "pass";
 }
+/* ── Rubber-stamp ink ───────────────────────────────────────────────────────
+   A stamp is pressed, not printed: it lands at an angle, off-centre, harder on
+   one side, and the rubber leaves pores and a soft edge. Every impression is
+   drawn from the lot's stampSeed — random per certificate, but identical each
+   time that certificate is shown, reopened or printed. */
+function fnv(str){
+  let h = 0x811c9dc5;
+  for (const c of String(str)){ h ^= c.codePointAt(0); h = Math.imul(h, 0x01000193); }
+  return h >>> 0;
+}
+function prng(seed){                         /* mulberry32 */
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const between = (r, lo, hi) => lo + r() * (hi - lo);
+/* Never quite square — a hand does not stamp at 0°. */
+const tilt = (r, min, max) => (r() < .5 ? -1 : 1) * between(r, min, max);
+const newStampSeed = () => String(Math.floor(Math.random() * 2147483647));
+
+/* upm = SVG user units per millimetre, so the grain is the same physical size
+   on any stamp. `g` is the rubber: pore size (mm), how much ink drops out, and
+   how far the pressure falls off across the face. */
+const GRAIN = {
+  block: { pore: .42, voids: 1.45, light: [.45, .7] },   /* DRAFT · VOID · SUPERSEDED */
+  seal:  { pore: .30, voids: 1.18, light: [.62, .84] }   /* small type must survive  */
+};
+function inkDefs(id, r, upm, g){
+  const seed  = Math.floor(r() * 9999);
+  const pore  = (1 / (g.pore * upm)).toFixed(4);
+  const warp  = (1 / (7.5 * upm)).toFixed(4);
+  const press = Math.round(r() * 360);
+  const light = between(r, g.light[0], g.light[1]).toFixed(2);
+  return `<filter id="${id}-f" x="-6%" y="-6%" width="112%" height="112%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="${pore}" numOctaves="2" seed="${seed}" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  5.2 0 0 0 -${g.voids}" result="pores"/>
+      <feComposite in="SourceGraphic" in2="pores" operator="in" result="inked"/>
+      <feTurbulence type="fractalNoise" baseFrequency="${warp}" numOctaves="2" seed="${seed + 11}" result="warp"/>
+      <feDisplacementMap in="inked" in2="warp" scale="${(0.34 * upm).toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+      <feGaussianBlur in="rough" stdDeviation="${(0.05 * upm).toFixed(3)}"/>
+    </filter>
+    <linearGradient id="${id}-g" gradientTransform="rotate(${press} .5 .5)">
+      <stop offset="0" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="${light}"/>
+    </linearGradient>
+    <mask id="${id}-m" maskContentUnits="objectBoundingBox">
+      <rect width="1" height="1" fill="url(#${id}-g)"/>
+    </mask>`;
+}
+
 function seal(lot){
-  return `<svg class="seal" viewBox="0 0 200 200" role="img" aria-label="AXIOM Quality Assurance seal">
+  const r = prng(fnv(lot.stampSeed + "|seal"));
+  const turn = tilt(r, 4, 15).toFixed(1);
+  const dx = between(r, -1.2, 1.2).toFixed(2), dy = between(r, -1.2, 1.2).toFixed(2);
+  const ink = between(r, .82, .92).toFixed(2);
+  return `<svg class="seal" viewBox="0 0 200 200" role="img" aria-label="AXIOM Quality Assurance seal"
+      style="transform:translate(${dx}mm,${dy}mm) rotate(${turn}deg);opacity:${ink}">
       <defs>
         <path id="sealTop" fill="none" d="M 26 100 A 74 74 0 0 1 174 100"/>
         <path id="sealBot" fill="none" d="M 26 100 A 74 74 0 0 0 174 100"/>
+        ${inkDefs("sealInk", r, 200 / 27, GRAIN.seal)}
       </defs>
-      <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="2.6"/>
-      <circle cx="100" cy="100" r="88" fill="none" stroke="#C4A882" stroke-width="1.1"/>
-      <circle cx="100" cy="100" r="54" fill="none" stroke="#C4A882" stroke-width="1"/>
-      <circle cx="19" cy="100" r="2.4" fill="#C4A882"/>
-      <circle cx="181" cy="100" r="2.4" fill="#C4A882"/>
-      <text font-family="Inter Tight, Inter, sans-serif" font-size="12" font-weight="500"
-            letter-spacing="2.2" fill="currentColor">
-        <textPath href="#sealTop" startOffset="50%" text-anchor="middle">AXIOM · QUALITY ASSURANCE</textPath>
-      </text>
-      <text font-family="Inter Tight, Inter, sans-serif" font-size="9.5" font-weight="400"
-            letter-spacing="2.4" fill="#8D8D8D">
-        <textPath href="#sealBot" startOffset="50%" text-anchor="middle">LOT VERIFIED · JAKARTA</textPath>
-      </text>
-      <path d="M100 62 L121 104 L79 104 Z" fill="none" stroke="currentColor" stroke-width="3.4"/>
-      <text x="100" y="124" text-anchor="middle" font-family="Inter Tight, Inter, sans-serif"
-            font-size="12" font-weight="500" letter-spacing="1.2" fill="currentColor">${esc(lot.batch)}</text>
-      <text x="100" y="138" text-anchor="middle" font-family="Inter Tight, Inter, sans-serif"
-            font-size="8.6" font-weight="400" letter-spacing="1.5" fill="#8D8D8D">${esc(fmtDate(lot.issued).toUpperCase())}</text>
+      <g filter="url(#sealInk-f)" mask="url(#sealInk-m)">
+        <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="3.4"/>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <circle cx="100" cy="100" r="54" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <circle cx="19" cy="100" r="2.8" fill="currentColor"/>
+        <circle cx="181" cy="100" r="2.8" fill="currentColor"/>
+        <text font-family="Inter Tight, Inter, sans-serif" font-size="12.5" font-weight="600"
+              letter-spacing="2.2" fill="currentColor">
+          <textPath href="#sealTop" startOffset="50%" text-anchor="middle">AXIOM · QUALITY ASSURANCE</textPath>
+        </text>
+        <text font-family="Inter Tight, Inter, sans-serif" font-size="9.8" font-weight="500"
+              letter-spacing="2.4" fill="currentColor">
+          <textPath href="#sealBot" startOffset="50%" text-anchor="middle">LOT VERIFIED · JAKARTA</textPath>
+        </text>
+        <path d="M100 60 L122 105 L78 105 Z" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linejoin="round"/>
+        <text x="100" y="125" text-anchor="middle" font-family="Inter Tight, Inter, sans-serif"
+              font-size="12.5" font-weight="600" letter-spacing="1.2" fill="currentColor">${esc(lot.batch)}</text>
+        <text x="100" y="139" text-anchor="middle" font-family="Inter Tight, Inter, sans-serif"
+              font-size="9" font-weight="500" letter-spacing="1.5" fill="currentColor">${esc(fmtDate(lot.issued).toUpperCase())}</text>
+      </g>
     </svg>`;
 }
 /* Anything not "issued" is stamped, so a printed draft can never pass for a
    certificate and a withdrawn one says so on its face. */
 const STAMPS = {
-  draft:      l => "Draft — not issued",
-  superseded: l => "Superseded" + (l.supersededBy ? " by " + l.supersededBy : ""),
-  void:       l => "Void" + (l.voidReason ? " — " + l.voidReason : "")
+  draft:      l => ({ word: "Draft",      sub: "Not issued" }),
+  superseded: l => ({ word: "Superseded", sub: l.supersededBy ? "By " + l.supersededBy : "" }),
+  void:       l => ({ word: "Void",       sub: l.voidReason || "" })
 };
 function stamp(lot){
   const make = STAMPS[lot.status];
   if (!make) return "";
-  return `<div class="stamp ${esc(lot.status)}"><span>${esc(make(lot))}</span></div>`;
+  const { word, sub } = make(lot);
+  const label = word + (sub ? " — " + sub : "");
+  const r = prng(fnv(lot.stampSeed + "|" + lot.status));
+
+  /* Size the rubber to its words (millimetres; 1 SVG unit = 1 mm). A long word
+     is cut smaller rather than widening the stamp across the sheet, and each line
+     gets an exact textLength, so the letters can never cross the border. */
+  const est = (n, fs, ls) => n * (fs * .64 + ls) - ls;
+  const fit = (text, fs, ls, max) => {
+    const w = est(text.length, fs, ls);
+    return w > max ? { fs: fs * max / w, ls: ls * max / w, w: max } : { fs, ls, w };
+  };
+  let line = String(sub).toUpperCase();
+  if (line.length > 40) line = line.slice(0, 39) + "…";
+  const big = fit(word.toUpperCase(), 17, 2.4, 108);
+  const small = line ? fit(line, 5.2, 1.1, 108) : { fs: 0, ls: 0, w: 0 };
+  const W = Math.max(80, big.w + 30, small.w + 30);
+  const H = line ? 44 : 34;
+  /* caps centred in their band: above the rule, and between the rule and the frame */
+  const wordY = (line ? (3.7 + 28.6) / 2 : H / 2) + big.fs * .365;
+  const lineY = (28.6 + H - 3.7) / 2 + small.fs * .365;
+
+  const turn = tilt(r, 7, 21).toFixed(1);
+  const dx = between(r, -9, 9).toFixed(1), dy = between(r, -16, 16).toFixed(1);
+  const ink = between(r, .5, .62).toFixed(2);
+  return `<div class="stamp-layer ${esc(lot.status)}">
+    <svg viewBox="0 0 ${W.toFixed(1)} ${H}" role="img" aria-label="${esc(label)}"
+         style="width:${W.toFixed(1)}mm;transform:translate(-50%,-50%) translate(${dx}mm,${dy}mm) rotate(${turn}deg);opacity:${ink}">
+      <defs>${inkDefs("stampInk", r, 1, GRAIN.block)}</defs>
+      <g filter="url(#stampInk-f)" mask="url(#stampInk-m)" fill="none" stroke="currentColor">
+        <rect x="1.2" y="1.2" width="${(W - 2.4).toFixed(1)}" height="${H - 2.4}" rx="3.2" stroke-width="1.7"/>
+        <rect x="3.7" y="3.7" width="${(W - 7.4).toFixed(1)}" height="${H - 7.4}" rx="1.8" stroke-width=".45"/>
+        <text x="${(W / 2).toFixed(1)}" y="${wordY.toFixed(2)}" text-anchor="middle" fill="currentColor" stroke="none"
+              textLength="${big.w.toFixed(1)}" lengthAdjust="spacingAndGlyphs"
+              font-family="Inter Tight, Inter, sans-serif" font-weight="600" font-size="${big.fs.toFixed(2)}" letter-spacing="${big.ls.toFixed(2)}">${esc(word.toUpperCase())}</text>
+        ${line ? `<line x1="10" x2="${(W - 10).toFixed(1)}" y1="28.6" y2="28.6" stroke-width=".45"/>
+        <text x="${(W / 2).toFixed(1)}" y="${lineY.toFixed(2)}" text-anchor="middle" fill="currentColor" stroke="none"
+              textLength="${small.w.toFixed(1)}" lengthAdjust="spacingAndGlyphs"
+              font-family="Inter Tight, Inter, sans-serif" font-weight="600" font-size="${small.fs.toFixed(2)}" letter-spacing="${small.ls.toFixed(2)}">${esc(line)}</text>` : ""}
+      </g>
+    </svg>
+  </div>`;
 }
 /* A3F29C4177B0 → A3F2 9C41 77B0 */
 const fpGroups = fp => String(fp).slice(0, 12).toUpperCase().replace(/(.{4})(?=.)/g, "$1 ");
@@ -937,6 +1039,9 @@ function normalise(d){
     sig: /^data:image\//.test((sigs[i] || {}).sig || "") ? sigs[i].sig : ""
   }));
   for (const k of Object.keys(out)) if (typeof base[k] === "string") out[k] = String(out[k] ?? "");
+  /* A record from before stamps had seeds gets one derived from its identity,
+     so reopening it never re-stamps it at a new angle. */
+  if (!d.stampSeed) out.stampSeed = String(fnv((d.docId || "") + "|" + (d.rev || "R0") + "|" + (d.batch || "")));
   return out;
 }
 const saveDraft = debounce(() => {
@@ -1331,7 +1436,7 @@ const STATUS_LABEL = { draft:"Draft", issued:"Issued", superseded:"Superseded", 
    SHA-256 over the record with its keys sorted, so the same lot always hashes
    the same. Register bookkeeping is excluded — the hash covers the certificate,
    not its filing. */
-const FP_SKIP = new Set(["status","issuedAt","fingerprint","supersedes","supersededBy","voidReason"]);
+const FP_SKIP = new Set(["status","issuedAt","fingerprint","supersedes","supersededBy","voidReason","stampSeed"]);
 function canonical(v){
   if (Array.isArray(v)) return "[" + v.map(canonical).join(",") + "]";
   if (v && typeof v === "object")
@@ -1476,7 +1581,7 @@ function nextRev(rev){
 async function reviseLot(){
   LOT = normalise(Object.assign({}, LOT, {
     status: "draft", rev: nextRev(LOT.rev), issuedAt: "", fingerprint: "",
-    supersedes: LOT.rev, supersededBy: "", voidReason: "",
+    supersedes: LOT.rev, supersededBy: "", voidReason: "", stampSeed: newStampSeed(),
     issued: new Date().toISOString().slice(0, 10)
   }));
   bootRail(); renderPreview();

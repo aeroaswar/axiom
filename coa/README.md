@@ -35,8 +35,10 @@ the certificate itself, live. **Print / PDF** gives one A4 page.
   verdict logic parses survive. A banner stays up until you confirm you have checked the
   values against the report. The section is hidden when the file is opened from disk, where
   the capability does not exist — everything else still works there.
-- **The record lifecycle** — a lot is a **draft** until you press Issue. A draft prints with a
-  diagonal *Draft — not issued* watermark, so it can never be mistaken for a certificate. On
+- **The record lifecycle** — a lot is a **draft** until you press Issue. A draft carries a rubber
+  *DRAFT — NOT ISSUED* stamp across the results, so it can never be mistaken for a
+  certificate; superseded and void records carry their own (*SUPERSEDED — BY R2*, *VOID* with
+  its reason). On
   Issue the lot is frozen (every field, row and pad goes read-only), stamped with a SHA-256
   fingerprint, and written to the register. To change an issued lot you **Revise** it, which
   opens R+1 as a fresh draft and marks the previous revision *superseded* once the new one is
@@ -119,6 +121,15 @@ having performed the tests.
   someone who did not make one.
 - **Seal** — the AXIOM QA mark is drawn inline as SVG and picks up the batch and issue date
   automatically. It is AXIOM's own mark; do not substitute a supplier's seal.
+- **Stamps look pressed, not printed.** The seal and the status stamps are one stamp-pad ink
+  each (blue for the seal and DRAFT, black for SUPERSEDED, red for VOID), with rubber grain,
+  a rough edge and one side pressed harder than the other — an SVG filter, so it survives into
+  the PDF. Each lands at its own tilt and offset, drawn from a seed on the lot: random per
+  certificate, but identical every time that certificate is reopened or printed, and it does
+  not move while you type. A revision is a new impression. The seed is presentation, not
+  content, so it is left out of the fingerprint — records issued before stamps had seeds keep
+  their fingerprints, and get a seed derived from their identity. Change the ink in the
+  `--ink-*` tokens.
 - Keep the original manufacturer report on file — the certificate says it is available
   on request.
 

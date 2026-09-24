@@ -158,7 +158,8 @@ tbody tr:last-child td{border-bottom:1.2px solid var(--onyx)}
 /* ── Attestation ──────────────────────────────────────────────────────────── */
 .attest{margin-top:auto;padding-top:18px;display:flex;gap:22px;align-items:flex-end;
   break-inside:avoid;page-break-inside:avoid}
-.seal{flex:none;width:27mm;height:27mm;color:var(--onyx)}
+.seal{flex:none;width:27mm;height:27mm;color:var(--ink-blue);overflow:visible}
+:root{--ink-blue:#27437E}
 .sigs{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .sig .line{border-bottom:1px solid var(--onyx);height:30px}
 .sig .role{font-size:7.2px;letter-spacing:.18em;text-transform:uppercase;
@@ -326,6 +327,98 @@ const LOT = {
 };
 
 /* ── Render ───────────────────────────────────────────────────────────────── */
+/* ── Rubber-stamp ink ───────────────────────────────────────────────────────
+   A stamp is pressed, not printed: it lands at an angle, off-centre, harder on
+   one side, and the rubber leaves pores and a soft edge. Every impression is
+   drawn from the lot's stampSeed — random per certificate, but identical each
+   time that certificate is shown, reopened or printed. */
+function fnv(str){
+  let h = 0x811c9dc5;
+  for (const c of String(str)){ h ^= c.codePointAt(0); h = Math.imul(h, 0x01000193); }
+  return h >>> 0;
+}
+function prng(seed){                         /* mulberry32 */
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const between = (r, lo, hi) => lo + r() * (hi - lo);
+/* Never quite square — a hand does not stamp at 0°. */
+const tilt = (r, min, max) => (r() < .5 ? -1 : 1) * between(r, min, max);
+const newStampSeed = () => String(Math.floor(Math.random() * 2147483647));
+
+/* upm = SVG user units per millimetre, so the grain is the same physical size
+   on any stamp. `g` is the rubber: pore size (mm), how much ink drops out, and
+   how far the pressure falls off across the face. */
+const GRAIN = {
+  block: { pore: .42, voids: 1.45, light: [.45, .7] },   /* DRAFT · VOID · SUPERSEDED */
+  seal:  { pore: .30, voids: 1.18, light: [.62, .84] }   /* small type must survive  */
+};
+function inkDefs(id, r, upm, g){
+  const seed  = Math.floor(r() * 9999);
+  const pore  = (1 / (g.pore * upm)).toFixed(4);
+  const warp  = (1 / (7.5 * upm)).toFixed(4);
+  const press = Math.round(r() * 360);
+  const light = between(r, g.light[0], g.light[1]).toFixed(2);
+  return `<filter id="${id}-f" x="-6%" y="-6%" width="112%" height="112%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="${pore}" numOctaves="2" seed="${seed}" result="grain"/>
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  5.2 0 0 0 -${g.voids}" result="pores"/>
+      <feComposite in="SourceGraphic" in2="pores" operator="in" result="inked"/>
+      <feTurbulence type="fractalNoise" baseFrequency="${warp}" numOctaves="2" seed="${seed + 11}" result="warp"/>
+      <feDisplacementMap in="inked" in2="warp" scale="${(0.34 * upm).toFixed(2)}" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+      <feGaussianBlur in="rough" stdDeviation="${(0.05 * upm).toFixed(3)}"/>
+    </filter>
+    <linearGradient id="${id}-g" gradientTransform="rotate(${press} .5 .5)">
+      <stop offset="0" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="${light}"/>
+    </linearGradient>
+    <mask id="${id}-m" maskContentUnits="objectBoundingBox">
+      <rect width="1" height="1" fill="url(#${id}-g)"/>
+    </mask>`;
+}
+
+/* Same impression the builder gives this lot: its seed is derived from the
+   lot's identity exactly as the builder derives one for a record without a seed. */
+function sealSVG(lot){
+  const stampSeed = String(fnv(lot.docId + "|" + lot.rev + "|" + lot.batch));
+  const r = prng(fnv(stampSeed + "|seal"));
+  const turn = tilt(r, 4, 15).toFixed(1);
+  const dx = between(r, -1.2, 1.2).toFixed(2), dy = between(r, -1.2, 1.2).toFixed(2);
+  const ink = between(r, .82, .92).toFixed(2);
+  return `<svg class="seal" viewBox="0 0 200 200" role="img" aria-label="AXIOM Quality Assurance seal"
+      style="transform:translate(${dx}mm,${dy}mm) rotate(${turn}deg);opacity:${ink}">
+      <defs>
+        <path id="sealTop" fill="none" d="M 26 100 A 74 74 0 0 1 174 100"/>
+        <path id="sealBot" fill="none" d="M 26 100 A 74 74 0 0 0 174 100"/>
+        ${inkDefs("sealInk", r, 200 / 27, GRAIN.seal)}
+      </defs>
+      <g filter="url(#sealInk-f)" mask="url(#sealInk-m)">
+        <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="3.4"/>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <circle cx="100" cy="100" r="54" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <circle cx="19" cy="100" r="2.8" fill="currentColor"/>
+        <circle cx="181" cy="100" r="2.8" fill="currentColor"/>
+        <text font-family="Inter Tight, Inter, sans-serif" font-size="12.5" font-weight="600"
+              letter-spacing="2.2" fill="currentColor">
+          <textPath href="#sealTop" startOffset="50%" text-anchor="middle">AXIOM · QUALITY ASSURANCE</textPath>
+        </text>
+        <text font-family="Inter Tight, Inter, sans-serif" font-size="9.8" font-weight="500"
+              letter-spacing="2.4" fill="currentColor">
+          <textPath href="#sealBot" startOffset="50%" text-anchor="middle">LOT VERIFIED · JAKARTA</textPath>
+        </text>
+        <path d="M100 60 L122 105 L78 105 Z" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linejoin="round"/>
+        <text x="100" y="125" text-anchor="middle" font-family="Inter Tight, Inter, sans-serif"
+              font-size="12.5" font-weight="600" letter-spacing="1.2" fill="currentColor">${esc(lot.batch)}</text>
+        <text x="100" y="139" text-anchor="middle" font-family="Inter Tight, Inter, sans-serif"
+              font-size="9" font-weight="500" letter-spacing="1.5" fill="currentColor">${esc(lot.issued.toUpperCase())}</text>
+      </g>
+    </svg>`;
+}
+
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;" }[c]));
 /* Subscript the digit runs in a molecular formula: C21H27… → C<sub>21</sub>H<sub>27</sub>… */
@@ -372,6 +465,7 @@ $("conclusion").textContent = LOT.conclusion;
 
 $("sealBatch").textContent = LOT.batch;
 $("sealDate").textContent  = LOT.issued.toUpperCase();
+document.querySelector(".seal").outerHTML = sealSVG(LOT);
 
 $("sigs").innerHTML = LOT.signatories.map(s =>
   '<div class="sig"><div class="line"></div>' +
