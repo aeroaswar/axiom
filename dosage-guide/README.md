@@ -49,7 +49,7 @@ Per compound, in order:
 5. **Doses** — the documented rows, each with its provenance.
 6. **Watch out for** — placed before the calculator, so the cautions are read
    before the first dose rather than after the benefits and the storage notes.
-7. **Your pen** — the calculator and the sizes AXIOM sells.
+7. **Your pen** — four taps: compound, pen, dose, schedule.
 8. **Your dose dates** — every dose in the pen on real dates, with calendar export.
 9. **What it is used for**, **Looking after it**, and scope.
 
@@ -82,35 +82,50 @@ and four days apart whether it starts on Monday or Saturday. Picking a start dat
 in the calculator shifts the pattern the same way, so the strip and the date never
 disagree.
 
-### Pen calculator
+### Pen calculator — four taps
 
 Pens ship ready to use — the mixing water is already in the stated quantity — so
 there is nothing to dilute and no draw volume to compute. It works in whatever
 unit the compound is sold in: mg, IU or mL.
 
-Inputs: quantity in the pen, size of each dose, doses per week, date of the first
-dose, and the time of day — pre-filled from the compound's own timing guidance
-("Before sleep" gives 21:30, "Morning" 08:00) and editable. Outputs: **doses in
-the pen**, quantity, each dose, each week, how long the pen lasts, and the date
-of the last dose.
+The customer works top to bottom, mostly by tapping:
 
-Tap a size chip to load that pen size, which makes it easy to see which size
-actually fits a protocol. It flags a dose bigger than the pen holds, and a
-remainder too small for another full dose.
+1. **Compound** — a list of all 65, grouped as on the index. Changing it opens
+   that compound's page.
+2. **Which pen do you have?** — one button per size AXIOM sells. *Or how much is
+   left* takes a part-used pen.
+3. **How much is each dose?** — one button per dose (below). *Or another amount*
+   takes anything else.
+4. **How often, and from when** — doses per week, the time of day (pre-filled from
+   the compound's own timing guidance: "Before sleep" gives 21:30, "Morning"
+   08:00) and the first dose date.
 
-**Where the starting dose comes from.** The calculator needs a figure to work
-with, and on most pages the Doses section above says no human dose has been
-set. So one line under the fields always says what the pre-filled figure is:
+**Nothing is pre-picked** except a pen that only comes in one size, since that is
+the only one the customer can have. The dose is always the customer's own tap.
+Until both pen and dose are chosen the results read *"Pick your pen and your dose
+to see how many doses you have and the dates they fall on."* Then: **doses in the
+pen**, quantity, each dose, each week, how long the pen lasts, and the date of
+the last dose. It flags a dose bigger than the pen holds, and a remainder too
+small for another full dose.
 
-- where the page documents a dose, it names it — *"Starts at 2.5 mg — the
-  starting dose above"*, or *"within the trial range above"* for a range;
-- where it documents none, it says so — *"0.25 mg is only a placeholder so the
-  sums work. This page gives no dose to start from — put in your own."*
+**Where the dose buttons come from.** On most pages the Doses section says no
+human dose has been set, so a row of buttons could easily read as a recommended
+range. `gen.py` builds each page's buttons from its own Doses rows, and the line
+under them says which kind the tapped one is:
 
-Change the dose and the line becomes *"Worked out at the dose you entered."* Ten
-compounds start from a documented dose; the other 55 are marked placeholders.
-Without this, a page would print *Human dose: Not set* and then, directly below,
-*40 doses in this pen at 0.25 mg* — a recommendation it had just declined to make.
+- **Where the page documents doses, the buttons are exactly those** — stated
+  figures, round steps inside a stated range, and the steps of a stated
+  increment. Tirzepatide gets its label titration, 2.5 → 15 mg in 2.5 mg steps;
+  HGH gets 0.2–1 IU; SS-31 gets its single 40 mg trial dose. Tapping one names its
+  source: *"5 mg matches “After 4 weeks” in the doses above."*
+- **Where it documents none, they are four or five round amounts** (1, 2, 2.5 and
+  5 in each decade) around the compound's scale, skewed low, and the page says what
+  they are before and after a tap: *"No human dose has been set for this, so these
+  are quick picks, not recommendations."*
+- A typed amount reads *"Worked out at the dose you entered."*
+
+Ten compounds get documented buttons; the other 55 get quick picks. The build
+fails if a compound's anchor dose contradicts a dose its own page states.
 
 Prices are deliberately not shown and are not in the shipped data. The source
 tables under `src/` keep them as the record of the price list, so `src/` is a
@@ -118,16 +133,23 @@ build input — it does not need to be deployed with the pages.
 
 ### Dose dates and calendar export
 
-Every dose in the pen is projected onto real dates, through to the last one. Two
-ways to get them into a calendar:
+Every dose in the pen is projected onto real dates, through to the last one (the
+page shows the first 120). Two buttons put the run into a calendar, and **both
+add the identical thing: one repeating event at the chosen time, covering every
+dose in the pen**. Deleting that one event removes the whole run.
 
-- **Download .ics** — one 30-minute event per dose at the chosen time, named
-  with the compound and dose, each carrying the timing note. Imports into Apple
-  Calendar, Google Calendar and Outlook.
-- **Google Calendar** — a plain link that opens one repeating event, the weekly
-  pattern expressed as an `RRULE` with a `COUNT` matching the doses in the pen.
-  It needs no file at all, which makes it the route that works on a phone or
-  inside a sandbox.
+- **Apple Calendar** — a calendar file. Safari on iPhone, iPad and Mac offers to
+  add it straight to Calendar; Outlook and most other calendar apps open the
+  same file. It carries a reminder at dose time (`VALARM`), because an imported
+  file otherwise never alerts.
+- **Google Calendar** — a plain link that opens the event ready to save. It needs
+  no file, so it works from anywhere a link opens, and Google adds the account's
+  default reminder itself.
+
+The two share one recurrence rule — `RRULE:FREQ=WEEKLY;BYDAY=…;COUNT=<doses in the
+pen>` — so they can never disagree. The event's `UID` is stable for the same
+compound, start and time, so adding the same run twice updates it rather than
+duplicating it.
 
 RFC 5545 is strict in ways that quietly break Apple Calendar, so the writer
 handles all three:
@@ -143,9 +165,20 @@ Times are written as **floating local** (`DTSTART:20260901T213000` — no `Z`, n
 want for a personal reminder: 21:30 stays 21:30 after a flight, and the file
 needs no `VTIMEZONE` block.
 
-Where a sandbox blocks downloads the button shows the file's text instead. That
-copy goes through the clipboard API rather than the textarea, because a textarea
-normalises CRLF to LF and would hand over a file the format does not allow.
+**Where the Apple file cannot be handed over**, the button says so and offers a
+way forward rather than failing silently:
+
+- **Inside a preview frame** — such as the claude.ai artifact viewer, which blocks
+  downloads — it offers *Open this page directly*, which opens the same page on
+  its own where the download works, and points to Google Calendar. On a computer,
+  the file's text can also be copied (through the clipboard API, because a
+  textarea would turn the required CRLF into LF). The viewer's sanctioned
+  download route does not accept calendar files, so no in-frame fix exists.
+- **Inside another app's built-in browser on iPhone** (Instagram, Facebook, LINE,
+  the Google app), which cannot pass files to Calendar, it explains how to open
+  the page in Safari.
+
+The card's QR opens the guide as an ordinary web page, where neither limit applies.
 
 ## Evidence tiers
 
@@ -185,9 +218,8 @@ each entry looks like this, and both pages pick up a new one with no other chang
   evidenceNote: "…",
   protocol: [{ k: "Human dose", v: "Not set", n: "…" }],
   benefits: ["…"],
-  pen: { qty: 10, dose: 0.5, unit: "mg",       // unit: mg | IU | mL
-         basis: null },                       // derived by gen.py: the protocol row
-                                              // `dose` comes from, or null if none
+  pen: { qty: 10, unit: "mg" },                // unit: mg | IU | mL
+  doseOptions: [{ v: 0.5, basis: null }, …],    // derived by gen.py (see below)
   // optional — omit unless there is genuinely more than one way to schedule it
   regimens: [
     { id: "weekly", label: "Once a week", sub: "2 mg in one go",
@@ -204,11 +236,14 @@ A protocol row reading *Not set*, *Not established* or *None* renders in the mut
 "no figure" style. A compound with an all-zero `days` array is episodic and gets
 no schedule.
 
-`gen.py` derives each pen's `basis` — the protocol row its `dose` comes from —
-by matching `dose` against the figures the protocol rows state in the same unit
-(ranges included; increments and per-kg doses are skipped). **If a row states a
-dose and `dose` matches none of them, the build fails**, because the calculator
-would contradict the page it sits on. Regimen doses are checked the same way.
+`gen.py` derives `doseOptions` from the protocol rows: every dose they state in
+the compound's unit, round steps inside a stated range, and the steps of a
+stated increment (`+2.5 mg at a time`); per-kg doses are skipped. Each option
+carries the row it came from as `basis`. With no stated dose, it lays four or five round
+amounts around the source table's `dose` (from a fifth of it to twice it) with
+`basis: null`, which the page labels quick picks. **If a row states a dose and the
+table's `dose` or a regimen's dose matches none of them, the build fails**, so a
+compound's figures can never contradict its own page.
 
 ## Verification
 
@@ -219,9 +254,10 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
 - Cards rendered to print PDFs, rasterised at 300 dpi, and decoded back to the exact expected URL, with the wordmark confirmed present in each.
 - All 65 compound pages checked for correct dose counts, schedule length, size chips and layout, with no horizontal overflow at phone width.
-- Every page's starting-dose line checked against its data: the 10 documented doses name the row they come from, the 55 placeholders say so, editing the dose switches the line, and Retatrutide's two schedules each carry their own.
+- **Every dose button tapped against every pen button** — 359 combinations across all 65 pages — for the dose count, the highlighted buttons and the line naming the dose's source (documented or quick pick). Also checked: nothing pre-picked except single-size pens, a typed dose clears the buttons, Retatrutide's schedule switch taps its own dose, the compound list opens the chosen page, and a part-used pen of 0.3 mg at 0.1 mg gives 3 doses, not the 2 that floating-point division would.
 - Every lot in the price list PDF matched against `compounds.js` by name *and* size: 79/79, so no lot is missing a page and no size chip is offered that isn't a real lot. Four names differ in presentation only and are mapped deliberately — the price list's `CJC-1295 (No DAC) + Ipamorelin`, `VIP (Vasoactive Intestinal Peptide)`, `SLU-PP-332 (Injectable)` and `PT-141` appear here as `CJC-1295 + Ipamorelin`, `VIP`, `SLU-PP-332` and `PT-141 (Bremelanotide)`.
-- The generated `.ics` validated for all 62 scheduled compounds — 1199 events — against line length, CRLF, absent `METHOD` and round-trip parsing with the `icalendar` library.
+- **Calendar export checked on all 62 scheduled compounds** plus Retatrutide twice weekly and a 500-dose run: each Apple file parses with the `icalendar` library as one event with a reminder; its rule, expanded with `dateutil`, gives exactly the doses in the pen on the dates the page shows; and the Google link's rule produces the identical dates. Line length, CRLF and absent `METHOD` checked on every file.
+- The Apple button checked in a sandboxed frame that blocks downloads (nothing gets through, the panel appears, and *Open this page directly* opens an unframed copy), and under iPhone Safari, iPhone Instagram and Android browser identities for the right guidance. Not testable from here: a real iPhone's Calendar hand-off, and the live claude.ai viewer's own frame rules.
 - Printed geometry measured off the PDF: 85.0 × 55.0 mm trim, 91.0 × 60.9 mm with bleed, 10-up sheet at 170 × 275 mm.
 
 ## Scope
