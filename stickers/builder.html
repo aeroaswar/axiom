@@ -247,7 +247,7 @@ button,input,select{font:inherit;color:inherit}
    goes from 1.4em/500 to 1.7em/600. The room comes
    from tightening the space around the rules, which keeps the tallest label
    (Retatrutide, with DOSE) inside the 16.8 mm content box. */
-[data-out="thermal"] .lbl__wm{width:14em}
+[data-out="thermal"] .lbl__wm{width:14em; height:calc(14em * 70 / 582)}
 [data-out="thermal"] .lbl__ruo{font-size:1.7em; font-weight:600}
 [data-out="thermal"] .lbl__rule--top{margin:.9mm 0 1.1mm}
 [data-out="thermal"] .lbl__rule--bot{margin:1mm 0 .8mm}
@@ -313,7 +313,11 @@ button,input,select{font:inherit;color:inherit}
 
 /* --- band A — brand bar ------------------------------------ */
 .lbl__band--a{align-items:center}
-.lbl__wm{display:block; width:9em; height:auto}
+/* Height is set, not left to height:auto, and overflow is visible: the O
+   overshoots the other letters by 2 units top and bottom, filling the
+   582 x 70 viewBox edge to edge, and a viewer that sizes the SVG box a
+   touch short would otherwise clip it flat at the cap line. */
+.lbl__wm{display:block; width:9em; height:calc(9em * 70 / 582); overflow:visible}
 .lbl__note{
   font-weight:500; font-size:1.5em; letter-spacing:.14em;
   text-transform:uppercase; color:var(--accent);
