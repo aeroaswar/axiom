@@ -6,7 +6,7 @@
       "account": "Account",
       "items": "Items",
       "next": "Next",
-      "total": "Total",
+      "total": "Total · excl. PPN",
       "state": "State",
       "more": "+{n}",
       "foot_open": "All open and recent",

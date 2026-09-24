@@ -651,7 +651,7 @@
       "quote": "Quote",
       "next": "Next",
       "stage": "Stage",
-      "empty": "No enquiries at this stage.",
+      "empty": "No enquiries at this stage. Leads come in through the request form on the public site; a client added here in the Console is already a client.",
       "f_all": "All",
       "stages": {
         "new": "New",

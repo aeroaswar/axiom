@@ -651,7 +651,7 @@
       "quote": "Penawaran",
       "next": "Berikutnya",
       "stage": "Tahap",
-      "empty": "Tidak ada permintaan di tahap ini.",
+      "empty": "Tidak ada permintaan di tahap ini. Lead masuk lewat form permintaan di situs publik; klien yang ditambahkan langsung di Console sudah terhitung klien.",
       "f_all": "Semua",
       "stages": {
         "new": "Baru",

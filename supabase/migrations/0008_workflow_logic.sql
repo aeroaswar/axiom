@@ -250,7 +250,11 @@ begin
       union all
       select 'stock-'||s.variant_id, 'stockout', 'warn', 'variant', s.variant_id, p.name || ' ' || v.dose, null::bigint, null::timestamptz, jsonb_build_object('sku', v.sku)
       from axiom.stock_all s join public.product_variants v on v.id = s.variant_id join public.products p on p.id = v.product_id
-      where v.is_active and s.on_hand - s.reserved <= 0;
+      -- A line that has never been stocked is not out of stock, it is not stocked yet: on a clean
+      -- sheet that would be every line in the book, burying the day's real work. The catalogue's
+      -- stockout filter still shows them; the feed speaks only of lines that had stock and ran out.
+      where v.is_active and s.on_hand - s.reserved <= 0
+        and exists (select 1 from public.stock_movements m where m.variant_id = s.variant_id);
   else
     return query
       select 'q-accept-'||q.id, 'quote_to_accept', 'warn', 'quote', q.id, q.number, (select sum(line_total_idr)::bigint from public.quote_items where quote_id = q.id), q.sent_at + interval '7 days', '{}'::jsonb

@@ -76,12 +76,17 @@ select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000
 -- stock intake: a spread across the book, a few deliberate stockouts and low lines
 insert into public.stock_movements (variant_id, delta, reason, ref, actor_id)
 select v.id,
-       case v.sku when 'tb500' then 0 when 'ta1' then 0 when 'epi50' then 0 when 'mat' then 2 when 'legs' then 3 when 'mask' then 4
+       case v.sku when 'tb500' then 4 when 'ta1' then 4 when 'epi50' then 4 when 'mat' then 2 when 'legs' then 3 when 'mask' then 4
                   when 'reta30' then 6 when 'reta60' then 2 when 'tirz40' then 5 when 'ipatesa18' then 3 when 'huma10' then 3 when 'duffel' then 9
                   else case when p.kind = 'peptide' then 6 + (v.sort * 7) % 22 else 20 + (v.sort * 5) % 40 end end,
        'intake', 'Opening stock', '00000000-0000-4000-8000-000000000001'
-from public.product_variants v join public.products p on p.id = v.product_id
-where v.sku not in ('tb500','ta1','epi50');
+from public.product_variants v join public.products p on p.id = v.product_id;
+
+-- The deliberate stockouts had stock and sold through it, which is what a stockout is; a line never
+-- stocked is not one, and the feed does not count it.
+insert into public.stock_movements (variant_id, delta, reason, ref, actor_id)
+select v.id, -4, 'sale', 'Sold through before cut-over', '00000000-0000-4000-8000-000000000001'
+from public.product_variants v where v.sku in ('tb500','ta1','epi50');
 
 -- Fixtures age the record after the fact: every state below was produced by the real functions and
 -- only the clock is moved. Migration 0007 froze `paid_at` on an issued invoice behind the frame the
