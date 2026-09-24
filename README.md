@@ -15,8 +15,10 @@ repository, where the work had accumulated across several unmerged topic branche
 - `dosage-guide/` — the AXIOM protocol card and the compound guide it opens. A
   print-ready 85 × 55 mm card carrying the wordmark and a locally generated QR,
   and a mobile-first guide covering cadence, when to apply, documented protocol,
-  a dose-and-supply calculator and studied benefits — with the evidence tier
-  stated for every dosing figure.
+  a dose-and-supply calculator, dose dates with calendar export, and studied
+  benefits — with the evidence tier stated for every dosing figure. Covers every
+  lot in the price list: 79 lots across 65 compounds, the multi-size compounds
+  appearing as one page with a size chip per lot.
 - `archive/premium-hero/` — an earlier iteration of the product site (peptides-only
   catalogue, root-level layout), superseded by `website/`. Migrated from
   `claude/axiom-premium-hero-uzxjp4` and kept for reference.

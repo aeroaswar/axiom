@@ -5,8 +5,8 @@ A card that carries nothing but the wordmark and a QR, and the guide it opens.
 | File | What it is |
 | --- | --- |
 | `card.html` | Print-ready card — 85 × 55 mm, AXIOM wordmark left, QR right, nothing else. Pick a compound, set the URL, print. |
-| `index.html` | What the QR opens. Mobile-first guide to every compound in the price list: what it is, how often, when in the day, the documented doses, a pen calculator, a dose schedule with calendar export, storage and cautions. |
-| `compounds.js` | The data behind both. One entry per compound. |
+| `index.html` | What the QR opens. Mobile-first guide to every lot in the price list — 79 lots across 65 compounds: what it is, how often, when in the day, the documented doses, a pen calculator, a dose schedule with calendar export, storage and cautions. |
+| `compounds.js` | The data behind both. One entry per compound, carrying every size that compound is sold in. |
 | `qr.js` | Self-contained QR encoder. No CDN, no network — the card generates its own code. |
 | `src/` | The compound tables and the script that generates `compounds.js`. Edit these, then run `python3 src/gen.py`. |
 | `assets/axiom-wordmark-white.svg` | The AXIOM wordmark, copied from `business-proposal/assets/logo/`. |
@@ -28,10 +28,17 @@ Point the base URL at wherever the guide is hosted.
 
 ## The guide
 
-All 65 compounds from the AXIOM price list, across nine categories, written in
-plain language — the audience is the person holding the pen, not a pharmacologist.
+Every lot in the AXIOM price list, across nine categories, written in plain
+language — the audience is the person holding the pen, not a pharmacologist.
 Each compound leads with a sentence saying what it actually does; the technical
 class sits underneath in small type.
+
+**Two counts, both correct.** The price list has **79 lots**; the guide has **65
+pages**. A compound sold in more than one size is one page with a size chip per
+lot, and ten compounds are sold in several sizes — 14 lots more than there are
+pages. Retatrutide alone is five of the 79 (10, 20, 30, 40 and 60 mg). The index
+states both counts, derived from `compounds.js` rather than hardcoded, so the
+line stays true when the catalogue changes.
 
 Per compound, in order:
 
@@ -186,6 +193,7 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
 - Cards rendered to print PDFs, rasterised at 300 dpi, and decoded back to the exact expected URL, with the wordmark confirmed present in each.
 - All 65 compound pages checked for correct dose counts, schedule length, size chips and layout.
+- Every lot in the price list PDF matched against `compounds.js` by name *and* size: 79/79, so no lot is missing a page and no size chip is offered that isn't a real lot. Four names differ in presentation only and are mapped deliberately — the price list's `CJC-1295 (No DAC) + Ipamorelin`, `VIP (Vasoactive Intestinal Peptide)`, `SLU-PP-332 (Injectable)` and `PT-141` appear here as `CJC-1295 + Ipamorelin`, `VIP`, `SLU-PP-332` and `PT-141 (Bremelanotide)`.
 - The generated `.ics` validated for all 62 scheduled compounds — 1201 events — against line length, CRLF, absent `METHOD` and round-trip parsing with the `icalendar` library.
 - Printed geometry measured off the PDF: 85.0 × 55.0 mm trim, 91.0 × 60.9 mm with bleed, 10-up sheet at 170 × 275 mm.
 
