@@ -31,10 +31,18 @@ const DEV = process.env.NEXT_PUBLIC_AUTH_MODE === 'dev';
 const COOKIE = 'axiom_session';
 const FALLBACK_SECRET = 'axiom-dev-secret';
 
-/** The key the dev cookie is signed with. A published default may never sign a real session. */
+/**
+ * The key the dev cookie is signed with. A published default may never sign a real session.
+ *
+ * This refuses in every production build, dev door or not. It once carried a `!DEV` term, which
+ * waived the check in exactly the build where it matters: a production artifact built with the
+ * dev door open would sign sessions with FALLBACK_SECRET, a constant published in this repository,
+ * so anyone could forge a session for any user. CI (`ci-secret`) and `pnpm setup` both supply an
+ * AUTH_SECRET other than this fallback, so the only build this now stops is the dangerous one.
+ */
 function secret() {
   const s = process.env.AUTH_SECRET;
-  if (PRODUCTION && !DEV && (!s || s === FALLBACK_SECRET)) {
+  if (PRODUCTION && (!s || s === FALLBACK_SECRET)) {
     throw new Error('AUTH_SECRET is unset or still the published default; refusing to sign a session');
   }
   return new TextEncoder().encode(s || FALLBACK_SECRET);

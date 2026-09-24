@@ -96,6 +96,19 @@ console.log('Gate: the seeded sign-in is closed by the build, not by a runtime v
     if (/\bAUTH_MODE\b/.test(t.replace(/NEXT_PUBLIC_AUTH_MODE/g, ''))) fail(`${f} still names a second auth switch; one flag, not two`);
   }
   console.log('  ✓ one auth flag across the env template and CI');
+
+  // .env.example is the file a deployer copies. With the flag live in it, one copy-and-build turns
+  // /sign-in into a public list of every user, each a one-click session.
+  const example = fs.readFileSync('.env.example', 'utf8');
+  if (/^\s*NEXT_PUBLIC_AUTH_MODE\s*=\s*dev\b/m.test(example)) fail('.env.example leaves NEXT_PUBLIC_AUTH_MODE=dev enabled; ship it commented out (pnpm setup switches it on locally)');
+  else console.log('  ✓ .env.example ships the dev sign-in commented out');
+
+  // The published default key must never sign a session in a production build — dev door or not.
+  // A `!DEV` term here once waived the check in exactly the build where it mattered.
+  const guard = auth.split('\n').find(l => /s === FALLBACK_SECRET/.test(l));
+  if (!guard) fail('src/lib/auth.ts no longer guards against signing with FALLBACK_SECRET');
+  else if (/!DEV\b/.test(guard)) fail(`the FALLBACK_SECRET guard is waived when the dev door is open: ${guard.trim()}`);
+  else console.log('  ✓ a production build never signs with the published default key');
 }
 
 // A check that swallows its own failure passes for the wrong reason: say so when it cannot run.
