@@ -16,7 +16,7 @@ import pymupdf
 HERE = Path(__file__).parent
 OUT = HERE.parent / "AXIOM-Order-Form.pdf"
 
-LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address",
+LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address", "notes": "Notes",
           "ruo_confirm": "I confirm this order is for research use only"}
 PREFIX_LABELS = {"item": "Item / Compound", "amount": "Amount", "qty": "Quantity", "unit": "Unit (mg / IU / mL)"}
 INK_ON_FIELD = (0.027, 0.024, 0.020)  # --bg, dark text on the cream box

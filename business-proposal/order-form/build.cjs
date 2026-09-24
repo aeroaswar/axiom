@@ -1,4 +1,4 @@
-// Builds the AXIOM order form (one A4 page).
+// Builds the AXIOM order form (A4: the form, then the compound list).
 //   python3 extract-compounds.py && NODE_PATH="$(npm root -g)" node build.cjs && python3 add-fields.py
 // 1. Takes the brand fonts and wordmark from ../axiom-pricelist-print.html,
 //    and compound names + sizes from compounds.json (see extract-compounds.py)
@@ -37,7 +37,7 @@ const itemRows = Array.from({ length: ITEM_ROWS }, (_, i) => {
 
 const html = fs.readFileSync(path.join(HERE, 'order-form.template.html'), 'utf8')
   .replace('/*{{FONTS}}*/', fonts)
-  .replace('{{WM_PATH}}', wmPath)
+  .replaceAll('{{WM_PATH}}', wmPath)
   .replace('{{ITEM_ROWS}}', itemRows)
   .replace('{{COMPOUNDS}}', compounds);
 

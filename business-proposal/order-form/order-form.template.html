@@ -11,9 +11,11 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
    radial-gradient(60% 32% at 88% 4%,rgba(200,138,78,.18),transparent 62%),
    radial-gradient(56% 28% at 16% 102%,rgba(124,76,36,.22),transparent 64%),
    var(--bg)}
+.page{break-after:page}
+.page:last-child{break-after:auto}
 
 /* ---------- masthead ---------- */
-.mast{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:14px}
+.mast{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:20px}
 .mast-top{display:flex;justify-content:space-between;align-items:baseline}
 .kick{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);font-weight:500}
 .meta{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
@@ -23,14 +25,15 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
 .title h1{font-family:var(--display);font-weight:300;font-size:38px;line-height:1;margin:0;color:var(--ink)}
 
 /* ---------- form ---------- */
-.sec{margin-bottom:12px}
-.sh{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--accent-line);padding-bottom:6px;margin-bottom:10px}
+.sec{margin-bottom:20px}
+.sh{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--accent-line);padding-bottom:8px;margin-bottom:14px}
 .sh .ix{font-family:var(--display);color:var(--accent);font-size:16px;font-weight:400}
 .sh h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0;color:var(--ink);letter-spacing:.01em}
 .sh .hint{margin-left:auto;font-size:10.5px;color:var(--muted-2);letter-spacing:.03em}
 .fl{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 6px}
-.box{display:block;height:40px;background:var(--field);border-left:3px solid var(--accent);margin-bottom:10px}
-.box.tall{height:46px;margin-bottom:0}
+.box{display:block;height:44px;background:var(--field);border-left:3px solid var(--accent);margin-bottom:14px}
+.box.tall{height:64px;margin-bottom:0}
+.box.notes{height:92px;margin-bottom:0}
 .row{display:flex;gap:12px}
 .row>div{flex:1}
 .row>div.ph{flex:0 0 250px}
@@ -39,33 +42,35 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
 .items th.s,.items td.s{width:92px}
 .items th.u,.items td.u{width:180px}
 .items th.q,.items td.q{width:92px}
-.items td{padding:0 0 5px}
+.items td{padding:0 0 8px}
 .items td.n{width:32px;font-family:var(--display);color:var(--accent);font-size:16px;vertical-align:middle}
 .items td.s,.items td.q,.items td.u,.items th.s,.items th.q,.items th.u{padding-left:10px}
-.items .box{margin:0;height:36px}
+.items .box{margin:0;height:42px}
 /* mg / IU / mL choice: the rings are artwork, the dots are the PDF radio buttons */
-.unit{display:flex;height:36px;border:1px solid var(--line-2)}
+.unit{display:flex;height:42px;border:1px solid var(--line-2)}
 .opt{flex:1;display:flex;align-items:center;gap:8px;padding-left:11px;font-size:13px;color:var(--ink);font-weight:400}
 .opt+.opt{border-left:1px solid var(--line-2)}
 .ring{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--accent);flex:none}
 
 /* ---------- compound reference ---------- */
-.cmp{column-count:3;column-gap:22px;font-size:9px;line-height:1.25}
-.cmp div{break-inside:avoid;display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line-soft);padding:.6px 0}
+.mast.slim .wm{width:200px}
+.mast.slim h1{font-size:32px}
+.cmp{column-count:2;column-gap:36px;font-size:12.5px;line-height:1.4}
+.cmp div{break-inside:avoid;display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line-soft);padding:3.2px 0}
 .cmp .c{color:var(--ink)}
-.cmp .z{color:var(--muted);white-space:nowrap}
+.cmp .z{color:var(--accent-bright);white-space:nowrap;font-variant-numeric:tabular-nums}
 
 /* ---------- research-use confirmation: the square is artwork, the tick is a PDF checkbox ---------- */
-.confirm{display:flex;align-items:center;gap:14px;border:1px solid var(--accent-line);background:rgba(200,138,78,.06);padding:8px 14px;margin-bottom:12px}
+.confirm{display:flex;align-items:center;gap:14px;border:1px solid var(--accent-line);background:rgba(200,138,78,.06);padding:13px 16px;margin-bottom:20px}
 .sq{width:22px;height:22px;background:var(--field);flex:none}
-.confirm p{margin:0;font-size:12px;color:var(--ink);line-height:1.45;font-weight:400}
+.confirm p{margin:0;font-size:13px;color:var(--ink);line-height:1.45;font-weight:400}
 
 /* ---------- how to order ---------- */
 .steps{display:flex;gap:12px}
-.step{flex:1;border:1px solid var(--line);padding:7px 11px 8px;background:rgba(242,237,229,.02)}
+.step{flex:1;border:1px solid var(--line);padding:12px 14px 14px;background:rgba(242,237,229,.02)}
 .step .k{font-family:var(--display);color:var(--accent);font-size:14px;float:right;line-height:1}
-.step b{display:block;font-weight:500;color:var(--ink);font-size:12.5px;letter-spacing:.02em;margin-bottom:3px}
-.step span.t{display:block;font-size:10px;color:var(--muted);line-height:1.4}
+.step b{display:block;font-weight:500;color:var(--ink);font-size:13px;letter-spacing:.02em;margin-bottom:4px}
+.step span.t{display:block;font-size:11.5px;color:var(--muted);line-height:1.5}
 .step .wa{color:var(--accent-bright)}
 
 /* ---------- footer ---------- */
@@ -106,10 +111,8 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
   </section>
 
   <section class="sec">
-    <div class="sh"><span class="ix">03</span><h2>Compounds</h2><span class="hint">Available sizes</span></div>
-    <div class="cmp">
-{{COMPOUNDS}}
-    </div>
+    <div class="sh"><span class="ix">03</span><h2>Notes</h2><span class="hint">Delivery instructions, preferred courier, receiving times</span></div>
+    <span class="box notes" data-field="notes" data-multiline="1"></span>
   </section>
 
   <div class="confirm" data-check="ruo_confirm">
@@ -118,11 +121,32 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
   </div>
 
   <div class="steps">
-    <div class="step"><span class="k">1</span><b>Fill in</b><span class="t">Tap each field; pick the unit per item.</span></div>
+    <div class="step"><span class="k">1</span><b>Fill in</b><span class="t">Tap each field and pick the unit. Compounds &amp; sizes on page 2.</span></div>
     <div class="step"><span class="k">2</span><b>Save</b><span class="t">Save or export the completed PDF.</span></div>
     <div class="step"><span class="k">3</span><b>Send</b><span class="t">WhatsApp to <span class="wa">AXIOM</span>. We confirm the total.</span></div>
   </div>
 
+  <div class="spacer"></div>
+  <div class="ruo">Research Use Only. Orders are confirmed by AXIOM before payment.</div>
+</div>
+
+<div class="page">
+  <header class="mast slim">
+    <div class="mast-top">
+      <div class="kick">Human Performance &amp; Longevity</div>
+      <div class="meta">Research catalogue · IDR</div>
+    </div>
+    <div class="mast-main">
+      <svg class="wm" viewBox="0 0 582 70" aria-label="AXIOM"><path fill="#FFFFFF" fill-rule="evenodd" d="{{WM_PATH}}"/></svg>
+      <div class="title"><h1>Compounds</h1></div>
+    </div>
+  </header>
+  <section class="sec">
+    <div class="sh"><span class="ix">04</span><h2>Available Sizes</h2><span class="hint">Write the compound and size on page 1</span></div>
+    <div class="cmp">
+{{COMPOUNDS}}
+    </div>
+  </section>
   <div class="spacer"></div>
   <div class="ruo">Research Use Only. Orders are confirmed by AXIOM before payment.</div>
 </div>
