@@ -23,7 +23,35 @@ used to say in small print now lives behind the code, where there is room for it
 - **A4 sheet** lays out 10 cards (2 × 5) on one page.
 - The panel reports the QR version and module size in mm and warns below the 0.5 mm print floor. Defaults give a v3 code at ECC Q with 0.73 mm modules.
 
-The QR payload is `{base URL}/{compound slug}`, e.g.
+**The package card** goes in every package: two-sided, 85 × 55 mm. Its QR opens the
+guide itself, `https://axiom-guide-weld.vercel.app`, where the customer picks their
+compound.
+
+- **Front:** the AXIOM wordmark on the left. On the right, the QR drawn in bone
+  as round dots with rounded eyes, straight on the onyx ground with no light tile,
+  and *Scan for your guide* beneath it.
+- **Back:** a bronze keyline frame. Inside it, *Keep refrigerated* in bronze, and
+  *Protect from light · Do not freeze* beneath.
+
+The source is `print/card-print.html` (`qrstyle.js` draws the styled QR from
+`qr.js`'s module grid). Ready-to-print files are in `print/`:
+
+- `axiom-card-print-shop.pdf`: for a print shop. Two pages, front then back, each
+  one card with 3 mm bleed and crop marks on a 101 × 71 mm page.
+- `axiom-card-a4-double-sided.pdf`: for printing yourself. Ten fronts, then ten
+  backs, on a centred 2 × 5 grid with cut marks. Print double-sided; the backs land
+  behind the fronts whichever edge the printer flips on.
+- `axiom-card-preview.png`: front and back side by side.
+
+The QR is v5 at ECC H, 27 mm with a 3-module quiet zone: 0.63 mm modules. It is
+light-on-dark, which the iPhone camera, Google Lens and current Android cameras
+read. Some older scanner apps read only dark-on-light, so scan a printed proof
+with the phones your customers use before ordering a batch. To regenerate the PDFs,
+open `card-print.html?mode=shop` or `?mode=sheet` and print to PDF (background
+graphics on, margins none).
+
+`card.html` still makes the earlier one-sided cards, including one per compound. Pick a compound under **Card opens** there to make a card that opens that
+compound's page; its QR payload is `{base URL}/{compound slug}`, e.g.
 `https://axiom-guide-weld.vercel.app/tirzepatide`. The base URL defaults to the live
 guide; change it on the page if the guide moves to another address.
 
