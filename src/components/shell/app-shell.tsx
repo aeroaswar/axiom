@@ -25,7 +25,8 @@ export async function AppShell({ surface, session, children }: { surface: Surfac
     ],
     [
       { href: '/console/clients', icon: 'users', label: t('clients') },
-      { href: '/console/clients?filter=attention', icon: 'funnel', label: t('ack_due') },
+      { href: '/console/leads', icon: 'funnel', label: t('leads') },
+      { href: '/console/clients?filter=attention', icon: 'warn', label: t('ack_due') },
       { href: '/console/content', icon: 'pen', label: t('content') },
     ],
     [
