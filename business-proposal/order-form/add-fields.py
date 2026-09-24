@@ -6,19 +6,31 @@ Android Drive, Adobe Acrobat) and sent back:
   - a text field over every cream input box
   - an mg / IU / mL radio group on every order line
   - the research-use confirmation checkbox
-Requires: pip install pymupdf
+Typed text uses the brand's Inter, embedded as a simple TrueType font, so
+filled-in answers match the page instead of falling back to Helvetica.
+Requires: pip install pymupdf fonttools brotli
 """
+import base64
+import io
 import json
+import re
 from pathlib import Path
 
 import pymupdf
+from fontTools.ttLib import TTFont
+from fontTools.varLib import instancer
 
 HERE = Path(__file__).parent
 OUT = HERE.parent / "AXIOM-Order-Form.pdf"
 
-LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address",
+LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address", "notes": "Notes",
           "ruo_confirm": "I confirm this order is for research use only"}
 PREFIX_LABELS = {"item": "Item / Compound", "amount": "Amount", "qty": "Quantity", "unit": "Unit (mg / IU / mL)"}
+FIELD_PT = 11                          # one size for every typed answer
+# Multi-line fields always start their text at the top, so two lines of 11pt leave the
+# spare space below. Starting the text area lower evens the gap above and below
+# (Apple's renderer: 5.5pt over 10.7pt before; ~8pt over ~8.2pt with this drop).
+MULTILINE_DROP = 2.5
 INK_ON_FIELD = (0.027, 0.024, 0.020)  # --bg, dark text on the cream box
 DOT = "0.906 0.694 0.451"             # --accent-bright, the selected radio dot
 TICK = "0.027 0.024 0.020"            # --bg, the tick drawn on the cream square
@@ -43,6 +55,45 @@ def circle(cx, cy, r):
             f"{cx + k:.2f} {cy - r:.2f} {cx + r:.2f} {cy - k:.2f} {cx + r:.2f} {cy:.2f} c f")
 
 
+def embed_inter(doc):
+    """Embed Inter Regular (from the price list's own @font-face) as a WinAnsi TrueType font; return its xref."""
+    html = (HERE.parent / "axiom-pricelist-print.html").read_text()
+    face = next(b for b in re.findall(r"@font-face \{(.*?)\}", html, re.S)
+                if "'Inter'" in b and "font-weight: 400" in b)
+    font = TTFont(io.BytesIO(base64.b64decode(re.search(r"base64,([^)]+)\)", face).group(1))))
+    if "fvar" in font:
+        font = instancer.instantiateVariableFont(font, {"wght": 400})
+    font.flavor = None
+    buf = io.BytesIO()
+    font.save(buf)
+    data = buf.getvalue()
+
+    upm = font["head"].unitsPerEm
+    scale = lambda v: round(v * 1000 / upm)
+    cmap, hmtx = font.getBestCmap(), font["hmtx"]
+    widths = []
+    for code in range(32, 256):
+        ch = bytes([code]).decode("cp1252", errors="ignore")
+        gid = cmap.get(ord(ch)) if ch else None
+        widths.append(scale(hmtx[gid][0]) if gid else 0)
+    head, hhea, os2 = font["head"], font["hhea"], font["OS/2"]
+
+    file_xref = doc.get_new_xref()
+    doc.update_object(file_xref, f"<< /Length1 {len(data)} >>")
+    doc.update_stream(file_xref, data)
+    desc = doc.get_new_xref()
+    doc.update_object(desc, (
+        f"<< /Type /FontDescriptor /FontName /Inter-Regular /Flags 32 "
+        f"/FontBBox [{scale(head.xMin)} {scale(head.yMin)} {scale(head.xMax)} {scale(head.yMax)}] "
+        f"/ItalicAngle 0 /Ascent {scale(hhea.ascent)} /Descent {scale(hhea.descent)} "
+        f"/CapHeight {scale(getattr(os2, 'sCapHeight', 0) or 700)} /StemV 80 /FontFile2 {file_xref} 0 R >>"))
+    xref = doc.get_new_xref()
+    doc.update_object(xref, (
+        f"<< /Type /Font /Subtype /TrueType /BaseFont /Inter-Regular /FirstChar 32 /LastChar 255 "
+        f"/Widths [{' '.join(map(str, widths))}] /Encoding /WinAnsiEncoding /FontDescriptor {desc} 0 R >>"))
+    return xref
+
+
 def form_xobject(doc, w, h, content):
     xref = doc.get_new_xref()
     doc.update_object(xref, f"<< /Type /XObject /Subtype /Form /BBox [0 0 {w:.2f} {h:.2f}] /Resources << >> >>")
@@ -61,9 +112,10 @@ for f in spec["text"]:
     w.field_type = pymupdf.PDF_WIDGET_TYPE_TEXT
     w.field_name = f["name"]
     w.field_label = label_for(f["name"])  # tooltip / accessible name
-    w.rect = pymupdf.Rect(f["x"] + ACCENT_BORDER + 5, f["y"] + 1, f["x"] + f["w"] - 5, f["y"] + f["h"] - 1)
+    top = f["y"] + 1 + (MULTILINE_DROP if f["multiline"] else 0)
+    w.rect = pymupdf.Rect(f["x"] + ACCENT_BORDER + 5, top, f["x"] + f["w"] - 5, f["y"] + f["h"] - 1)
     w.text_font = "Helv"
-    w.text_fontsize = 12 if f["multiline"] else 14
+    w.text_fontsize = FIELD_PT
     w.text_color = INK_ON_FIELD
     w.border_width = 0
     w.fill_color = None     # the cream box is part of the page artwork
@@ -126,7 +178,15 @@ for c in spec["check"]:
     annots = [a[0] for a in page.annot_xrefs()] + [xref]
     doc.xref_set_key(page.xref, "Annots", "[" + " ".join(f"{a} 0 R" for a in annots) + "]")
 
+# ---- typed text in Inter: register the font in the form's resources and point every text field at it ----
+inter = embed_inter(doc)
 cat = doc.pdf_catalog()
+doc.xref_set_key(cat, "AcroForm/DR/Font/Inter", f"{inter} 0 R")
+for x in text_fields:
+    size = doc.xref_get_key(x, "DA")[1].split(" Tf")[0].split()[-1]
+    doc.xref_set_key(x, "DA", f"(/Inter {size} Tf {' '.join(map(str, INK_ON_FIELD))} rg)")
+doc.xref_set_key(cat, "AcroForm/DA", f"(/Inter 12 Tf {' '.join(map(str, INK_ON_FIELD))} rg)")
+
 doc.xref_set_key(cat, "AcroForm/Fields", "[" + " ".join(f"{x} 0 R" for x in text_fields + new_fields) + "]")
 # No NeedAppearances: it makes viewers redraw the mg / IU buttons in their own style.
 # Text fields already carry appearances and viewers redraw them as the user types.
