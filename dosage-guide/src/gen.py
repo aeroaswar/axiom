@@ -51,6 +51,59 @@ def basis(c, dose):
     assert not rows, (c["slug"], f"pre-filled {dose} {c['unit']} contradicts {rows}")
     return None
 
+
+# Round amounts for the dose buttons: 1, 2, 2.5 and 5 in every decade.
+PREFERRED = (1, 2, 2.5, 5)
+INCR_RE = re.compile(r"^\+(\d+(?:\.\d+)?)\s*(mg|IU|mL)\b")
+
+def ladder(lo, hi):
+    out = set()
+    for e in range(-3, 5):
+        for m in PREFERRED:
+            v = round(m * 10 ** e, 6)
+            if lo - 1e-9 <= v <= hi + 1e-9:
+                out.add(v)
+    return out
+
+def dose_options(c):
+    """The doses offered as one-tap buttons, each tagged with where it comes from.
+
+    Where the page documents doses, the buttons are exactly those doses — the
+    stated figures, round steps inside a stated range, and the steps of a
+    stated increment ("+2.5 mg at a time" between 2.5 mg and 15 mg). Where the
+    page documents none, they are a few round amounts around the compound's
+    scale, skewed low, and carry no basis: the page labels them quick picks,
+    not recommendations.
+    """
+    unit = c["unit"]
+    rows = list(stated_doses(c["protocol"], unit))
+    opts = {}
+    if rows:
+        for k, lo, hi in rows:
+            vals = {lo} if lo == hi else ({lo, hi} | ladder(lo, hi))
+            for v in vals:
+                opts.setdefault(v, {"k": k, "range": lo != hi})
+        # A stated increment fills in the steps between the stated doses.
+        exact = sorted(lo for _, lo, hi in rows if lo == hi)
+        for k, v, _ in c["protocol"]:
+            m = INCR_RE.match(v)
+            if m and m.group(2) == unit and len(exact) >= 2:
+                step, v = float(m.group(1)), exact[0]
+                while v <= exact[-1] + 1e-9:
+                    opts.setdefault(round(v, 6), {"k": k, "step": True})
+                    v += step
+    else:
+        p = c["dose"]
+        for v in ladder(p / 5, p * 2) | {p}:
+            opts[v] = None
+    for r in c.get("regimens", []):
+        opts.setdefault(r["dose"], basis(c, r["dose"]))
+    biggest = max(q for q, _, _ in c["sizes"])
+    whole = lambda v: int(v) if v == int(v) else v
+    out = [{"v": whole(v), "basis": opts[v]} for v in sorted(opts) if v <= biggest]
+    assert 1 <= len(out) <= 9, (c["slug"], [o["v"] for o in out])
+    return out
+
 ALL = C1 + C2 + C3 + C4 + C5 + C6 + C7 + C8 + C9
 
 # Category display order, matching the price list.
@@ -61,6 +114,7 @@ ALL.sort(key=lambda c: (ORDER.index(c["cat"]), c["name"].lower()))
 slugs = [c["slug"] for c in ALL]
 assert len(slugs) == len(set(slugs)), "duplicate slug"
 for c in ALL:
+    basis(c, c["dose"])   # fails the build if the anchor dose contradicts the page
     assert c["cat"] in ORDER, c["cat"]
     assert len(c["days"]) == 7, c["slug"]
     assert c["ev"] in ("label","trial","regional","preclinical"), c["slug"]
@@ -113,8 +167,10 @@ for i, c in enumerate(ALL):
       "evidence": c["ev"], "evidenceNote": c["evNote"],
       "protocol": [{"k": k, "v": v, "n": n} for k, v, n in c["protocol"]],
       "benefits": c["benefits"],
-      "pen": {"qty": smallest[0], "dose": c["dose"], "unit": c["unit"],
-              "basis": basis(c, c["dose"])},
+      "pen": {"qty": smallest[0], "unit": c["unit"]},
+      # One-tap dose buttons. Nothing is pre-selected on the page: the
+      # customer taps the dose they actually take.
+      "doseOptions": dose_options(c),
       # Prices deliberately stay out of the shipped data — src/ keeps them as
       # the record of the price list, but the guide does not show them.
       "sizes": [{"qty": q, "unit": u} for q, u, _ in c["sizes"]],
@@ -129,8 +185,7 @@ for i, c in enumerate(ALL):
             assert len(r["days"]) == 7 and r["dose"] > 0, (c["slug"], r["id"])
         o["regimens"] = [{"id": r["id"], "label": r["label"], "sub": r["sub"],
                           "dose": r["dose"], "perWeek": r["perWeek"],
-                          "days": r["days"], "note": r["note"],
-                          "basis": basis(c, r["dose"])} for r in rs]
+                          "days": r["days"], "note": r["note"]} for r in rs]
     out.write("  " + js(o) + ("," if i < len(ALL) - 1 else "") + "\n")
 
 out.write("""];

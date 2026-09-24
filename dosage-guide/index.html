@@ -135,16 +135,36 @@ h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
 .out-cell b{display:block;font-family:var(--display);font-size:16px;font-weight:400;font-variant-numeric:tabular-nums;line-height:1.3}
 .out-cell span{display:block;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);margin-top:3px}
 .calc-note{font-size:12px;color:var(--muted-2);margin-top:16px;line-height:1.6}
-.sizes{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.size{
-  border:1px solid var(--line);border-radius:3px;background:var(--panel-2);
+/* The calculator is four steps, each a row of one-tap buttons or a field. */
+.step{padding:20px 0;border-top:1px solid var(--line-soft)}
+.step:first-child{padding-top:0;border-top:0}
+.step-k{display:flex;align-items:center;gap:10px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:13px}
+.step-k i{font-style:normal;flex:none;width:20px;height:20px;border-radius:50%;border:1px solid var(--accent-line);
+  color:var(--accent-bright);display:inline-flex;align-items:center;justify-content:center;font-size:10.5px;letter-spacing:0}
+.picks{display:flex;flex-wrap:wrap;gap:8px}
+.pick{
+  min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:3px;background:var(--panel-2);
   padding:10px 15px;cursor:pointer;font-family:var(--display);font-size:15px;
   color:var(--ink);transition:.16s;font-variant-numeric:tabular-nums;
 }
-.size:hover{border-color:var(--line-2)}
-.size:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.size.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
-.sizes-label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin-top:20px}
+.pick:hover{border-color:var(--line-2)}
+.pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.pick.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
+.other{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12.5px;color:var(--muted-2)}
+.other label{flex:none}
+.other input{
+  width:104px;background:var(--panel-2);border:1px solid var(--line);border-radius:3px;color:var(--ink);
+  font-family:var(--display);font-size:16px;padding:8px 10px;font-variant-numeric:tabular-nums;-moz-appearance:textfield;
+}
+.other input:focus{outline:none;border-color:var(--accent-line)}
+.other input::-webkit-outer-spin-button,.other input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.pick-select{
+  width:100%;background:var(--panel-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%239c9488' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 14px center;
+  border:1px solid var(--line);border-radius:3px;color:var(--ink);font-family:var(--display);font-size:16px;
+  padding:12px 40px 12px 13px;-webkit-appearance:none;appearance:none;cursor:pointer;
+}
+.pick-select:focus{outline:none;border-color:var(--accent-line)}
+.out-empty{font-size:13.5px;color:var(--muted);line-height:1.6}
 .regimens{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
 .reg{
   flex:1 1 180px;text-align:left;border:1px solid var(--line);border-radius:4px;background:var(--panel);
@@ -161,7 +181,8 @@ h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
 .btn-cal{
   background:linear-gradient(120deg,#E7B173,#C88A4E 55%,#9A5F2C);color:#120c06;border:none;border-radius:3px;
   font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-  padding:11px 18px;cursor:pointer;
+  padding:11px 18px;cursor:pointer;min-height:44px;
+  display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
 }
 .btn-cal:hover{filter:brightness(1.08)}
 .btn-cal.ghost{background:none;color:var(--accent-bright);border:1px solid var(--accent-line);text-decoration:none;display:inline-block}
@@ -169,7 +190,9 @@ h2::after{content:"";height:1px;background:var(--line-soft);flex:1}
 .ics-fb-top b{color:var(--ink);font-weight:500}
 .ics-fb-top code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent-bright)}
 .btn-cal:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.cal-note{font-size:12px;color:var(--muted-2)}
+.cal-note{font-size:12.5px;color:var(--muted-2);line-height:1.6;margin-top:12px}
+.ics-raw summary{cursor:pointer;font-size:12px;color:var(--muted);margin-top:12px}
+.ics-raw textarea{margin-top:4px}
 .ics-fb{margin-top:16px;border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:14px}
 .ics-fb-top{font-size:12px;color:var(--muted);margin-bottom:10px}
 .ics-fb textarea{
@@ -230,6 +253,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
   .fields{grid-template-columns:repeat(3,1fr)}
   .out-grid{grid-template-columns:repeat(5,1fr)}
   .out-cell:last-child{grid-column:auto}
+  .field.wide{grid-column:auto}
   .glance{grid-template-columns:repeat(4,1fr)}
 }
 </style>
@@ -263,7 +287,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
   }
   function fmtNum(n, dp) {
     if (!isFinite(n)) return "—";
-    return (n.toFixed(dp == null ? 2 : dp).replace(/\.?0+$/, "")) || "0";
+    /* At least three decimals: dose buttons go as small as 0.025 mg. */
+    return String(+n.toFixed(Math.max(dp == null ? 3 : dp, 3)));
   }
 
   var DAYS = ["M", "T", "W", "T", "F", "S", "S"];
@@ -363,12 +388,28 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     draw();
   }
 
+  /* Every compound, grouped as on the index, for step 1 of the calculator. */
+  function compoundOptions(current) {
+    var groups = {}, order = [];
+    window.COMPOUNDS.forEach(function (x) {
+      if (!groups[x.category]) { groups[x.category] = []; order.push(x.category); }
+      groups[x.category].push(x);
+    });
+    return order.map(function (cat) {
+      return '<optgroup label="' + esc(cat) + '">' + groups[cat].map(function (x) {
+        return '<option value="' + esc(x.slug) + '"' + (x.slug === current ? " selected" : "") + ">" +
+          esc(x.name) + "</option>";
+      }).join("") + "</optgroup>";
+    }).join("");
+  }
+
   /* ---------------- Compound ---------------- */
   function renderCompound(c) {
     back.hidden = false;
     document.title = "AXIOM — " + c.name;
     var ev = window.EVIDENCE_META[c.evidence] || window.EVIDENCE_META.preclinical;
     var iso = isoOf(new Date());
+    var unit = esc(c.pen.unit);
 
     var rows = c.protocol.map(function (r) {
       var none = /not set|not established|^none/i.test(r.v);
@@ -431,25 +472,44 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         c.cautions.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") +
       "</ul></section>" +
 
+      /* Four taps, top to bottom: compound, pen, dose, schedule. Nothing is
+         pre-picked except a pen that only comes in one size — the customer
+         taps what they actually have and what they actually take. */
       "<section><h2>Your pen</h2>" +
         '<div class="calc">' +
-          '<div class="fields">' +
-            '<div class="field"><label for="f-qty">Quantity (' + esc(c.pen.unit) + ')</label><input id="f-qty" type="number" inputmode="decimal" step="any" min="0" value="' + c.pen.qty + '"></div>' +
-            '<div class="field"><label for="f-dose">Each dose (' + esc(c.pen.unit) + ')</label><input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="' + c.pen.dose + '"></div>' +
-            '<div class="field"><label for="f-week">Doses per week</label><input id="f-week" type="number" inputmode="numeric" step="1" min="0" max="21" value="' + c.perWeek + '"></div>' +
-            '<div class="field"><label for="f-time">Time of day</label><input id="f-time" type="time" value="' + esc(c.timing.time) + '"></div>' +
-            '<div class="field wide"><label for="f-date">First dose on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
-          "</div>" +
-          '<div class="basis" id="basis"></div>' +
+          '<div class="step"><div class="step-k"><i>1</i><label for="f-compound">Compound</label></div>' +
+            '<select id="f-compound" class="pick-select">' + compoundOptions(c.slug) + "</select></div>" +
+
+          '<div class="step"><div class="step-k"><i>2</i>Which pen do you have?</div>' +
+            '<div class="picks" id="pen-picks">' + c.sizes.map(function (z) {
+              return '<button class="pick" data-qty="' + z.qty + '" type="button">' +
+                fmtNum(z.qty) + " " + unit + "</button>";
+            }).join("") + "</div>" +
+            '<div class="other"><label for="f-qty">Or how much is left</label>' +
+              '<input id="f-qty" type="number" inputmode="decimal" step="any" min="0" value="' +
+              (c.sizes.length === 1 ? c.sizes[0].qty : "") + '"><span>' + unit + "</span></div></div>" +
+
+          '<div class="step"><div class="step-k"><i>3</i>How much is each dose?</div>' +
+            '<div class="picks" id="dose-picks">' + c.doseOptions.map(function (o) {
+              return '<button class="pick" data-dose="' + o.v + '" type="button">' +
+                fmtNum(o.v) + " " + unit + "</button>";
+            }).join("") + "</div>" +
+            '<div class="other"><label for="f-dose">Or another amount</label>' +
+              '<input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="">' +
+              "<span>" + unit + "</span></div>" +
+            '<div class="basis" id="basis"></div></div>' +
+
+          '<div class="step"><div class="step-k"><i>4</i>How often, and from when</div>' +
+            '<div class="fields">' +
+              '<div class="field"><label for="f-week">Doses per week</label><input id="f-week" type="number" inputmode="numeric" step="1" min="0" max="21" value="' + c.perWeek + '"></div>' +
+              '<div class="field"><label for="f-time">Time of day</label><input id="f-time" type="time" value="' + esc(c.timing.time) + '"></div>' +
+              '<div class="field wide"><label for="f-date">First dose on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
+            "</div></div>" +
+
           '<div class="out" id="out"></div>' +
           '<div class="calc-note">Your pen comes ready to use — the mixing water is already in the quantity ' +
           "shown, so there is nothing to prepare. This works out how many doses are in your pen and how long " +
           "it lasts. It does not tell you what your dose should be.</div>" +
-          '<div class="sizes-label">Pen sizes — tap to switch</div>' +
-          '<div class="sizes">' + c.sizes.map(function (z) {
-            return '<button class="size" data-qty="' + z.qty + '" type="button">' +
-              z.qty + " " + esc(z.unit) + "</button>";
-          }).join("") + "</div>" +
         "</div>" +
         '<div id="sched-wrap"></div>' +
       "</section>" +
@@ -556,10 +616,24 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       update();
     });
 
-    document.querySelector(".sizes").addEventListener("click", function (e) {
-      var btn = e.target.closest(".size");
+    /* Step 1 goes to the chosen compound's own page. */
+    document.getElementById("f-compound").addEventListener("change", function () {
+      var slug = this.value;
+      if (param("c")) location.search = "?c=" + encodeURIComponent(slug);
+      else location.hash = encodeURIComponent(slug);
+    });
+
+    /* Steps 2 and 3: a tap fills the field, and the field stays editable. */
+    document.getElementById("pen-picks").addEventListener("click", function (e) {
+      var btn = e.target.closest(".pick");
       if (!btn) return;
       f.qty.value = btn.getAttribute("data-qty");
+      update();
+    });
+    document.getElementById("dose-picks").addEventListener("click", function (e) {
+      var btn = e.target.closest(".pick");
+      if (!btn) return;
+      f.dose.value = btn.getAttribute("data-dose");
       update();
     });
 
@@ -575,25 +649,36 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
        name it; where it documents none, call the figure what it is — a
        placeholder — so the calculator never reads as a recommendation the
        page above has just declined to make. */
+    /* Say where the tapped dose comes from. The buttons are the page's own
+       documented doses where it has them; where it has none they are round
+       quick picks, and the line says so, so a button never reads as a
+       recommendation the page above has declined to make. */
     var basisEl = document.getElementById("basis");
+    var documented = c.doseOptions.some(function (o) { return o.basis; });
+    function optionFor(d) {
+      for (var i = 0; i < c.doseOptions.length; i++)
+        if (Math.abs(c.doseOptions[i].v - d) < 1e-9) return c.doseOptions[i];
+      return null;
+    }
     function drawBasis(d) {
-      var ref = regimen || c.pen;
-      var unit = esc(c.pen.unit);
-      var b = ref.basis;
+      var unit = esc(c.pen.unit), o = d > 0 ? optionFor(d) : null, b = o && o.basis;
       var text, cls = "basis";
-      if (!(d > 0) || d !== ref.dose) {
+      if (!(d > 0)) {
+        text = documented
+          ? "The buttons are the doses documented above. Tap the one you take."
+          : "<b>No human dose has been set for this</b>, so these are quick picks, not recommendations. " +
+            "Tap the amount you take, or type your own.";
+      } else if (!o) {
         text = "Worked out at the dose you entered.";
-      } else if (b && b.range) {
-        var key = b.k.toLowerCase();
-        text = "Starts at " + fmtNum(d, 2) + " " + unit + ", within " +
-          (/range/.test(key) ? "the " + esc(key) : "the range given for " + esc(key)) + " above.";
-        cls += " doc";
       } else if (b) {
-        text = "Starts at " + fmtNum(d, 2) + " " + unit + " — the " + esc(b.k.toLowerCase()) + " above.";
+        var v = fmtNum(d) + " " + unit, k = "“" + esc(b.k) + "”";
+        text = b.step ? v + " is one of the steps under " + k + " in the doses above."
+             : b.range ? v + " is within " + k + " in the doses above."
+             : v + " matches " + k + " in the doses above.";
         cls += " doc";
       } else {
-        text = "<b>" + fmtNum(d, 2) + " " + unit + " is only a placeholder</b> so the sums work. " +
-          "This page gives no dose to start from — put in your own.";
+        text = "<b>" + fmtNum(d) + " " + unit + " is a quick pick, not a recommendation.</b> " +
+          "No human dose has been set for this.";
       }
       basisEl.className = cls;
       basisEl.innerHTML = text;
@@ -603,12 +688,17 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       var qty = parseFloat(f.qty.value), d = parseFloat(f.dose.value), perWeek = parseFloat(f.week.value);
       drawBasis(d);
 
-      Array.prototype.forEach.call(document.querySelectorAll(".size"), function (b) {
-        b.classList.toggle("on", parseFloat(b.getAttribute("data-qty")) === qty);
+      Array.prototype.forEach.call(document.querySelectorAll("#pen-picks .pick"), function (b) {
+        b.classList.toggle("on", Math.abs(parseFloat(b.getAttribute("data-qty")) - qty) < 1e-9);
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("#dose-picks .pick"), function (b) {
+        b.classList.toggle("on", Math.abs(parseFloat(b.getAttribute("data-dose")) - d) < 1e-9);
       });
 
       if (!(qty > 0) || !(d > 0)) {
-        out.innerHTML = '<div class="flag">Enter the quantity in your pen and the size of each dose.</div>';
+        out.innerHTML = '<div class="out-empty">' +
+          (!(qty > 0) && !(d > 0) ? "Pick your pen and your dose" : !(qty > 0) ? "Pick your pen" : "Pick your dose") +
+          " to see how many doses you have and the dates they fall on.</div>";
         schedWrap.innerHTML = ""; doseDates = [];
         return;
       }
@@ -619,7 +709,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         return;
       }
 
-      var doses = Math.floor(qty / d);
+      var doses = Math.floor(qty / d + 1e-9);   /* 0.3 / 0.1 is 2.999… in floating point */
       var leftover = qty - doses * d;
       var days = perWeek > 0 ? doses / perWeek * 7 : null;
       var unit = esc(c.pen.unit);
@@ -664,7 +754,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           "Taken when needed, so there are no dates to plan.</div>";
         return;
       }
-      var gcal = googleUrl(c, dose);
+      var gcal = googleUrl(c, dose, doses);
       var cells = doseDates.map(function (day, i) {
         var last = i === doseDates.length - 1;
         return '<div class="sd' + (i === 0 ? " first" : "") + (last ? " last" : "") + '">' +
@@ -676,11 +766,12 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         '<h2 style="margin-top:34px">Your dose dates</h2>' +
         '<div class="sched">' + cells + "</div>" +
         '<div class="cal-row">' +
-          '<button class="btn-cal" id="ics" type="button">Download .ics</button>' +
-          (gcal ? '<a class="btn-cal ghost" href="' + esc(gcal) + '" target="_blank" rel="noopener">Google Calendar</a>' : "") +
-          '<span class="cal-note">' + doseDates.length + " dose" + (doseDates.length === 1 ? "" : "s") +
-          (doseDates.length ? ", ending " + fmtDate(doseDates[doseDates.length - 1]) : "") + "</span>" +
+          '<button class="btn-cal" id="cal-apple" type="button">Apple Calendar</button>' +
+          (gcal ? '<a class="btn-cal" id="cal-google" href="' + esc(gcal) + '" target="_blank" rel="noopener">Google Calendar</a>' : "") +
         "</div>" +
+        '<div class="cal-note">Either one adds all ' + doses + " dose" + (doses === 1 ? "" : "s") +
+          " as a single repeating event at " + esc(hhmm()) + ", with a reminder — delete it once and the whole run goes. " +
+          "The Apple Calendar file also opens in Outlook and most other calendar apps.</div>" +
         (doseDates.length < doses
           ? '<div class="note" style="margin-top:12px">Showing the first ' + doseDates.length +
             " of " + doses + " doses.</div>"
@@ -690,8 +781,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         "Tap a day above to move the whole run — the gaps between doses stay the same.</div>" +
         '<div id="ics-fallback"></div>';
 
-      document.getElementById("ics").addEventListener("click", function () {
-        downloadIcs(c, dose);
+      document.getElementById("cal-apple").addEventListener("click", function () {
+        addToApple(c, dose, doses);
       });
     }
 
@@ -715,7 +806,18 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       return out.join("\r\n");
     }
 
-    function icsText(c, dose) {
+    /* One weekly rule shared by both calendars, so Apple and Google hold the
+       identical run: the pattern's days, for exactly the doses in the pen.
+       The first dose date always falls on a pattern day, so DTSTART is the
+       rule's first occurrence. */
+    function recurRule(doses) {
+      var BY = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"], byday = [];
+      pattern.forEach(function (on, i) { if (on) byday.push(BY[i]); });
+      return byday.length ? "FREQ=WEEKLY;BYDAY=" + byday.join(",") + ";COUNT=" + doses : null;
+    }
+    function eventTitle(c, dose) { return c.name + " " + fmtNum(dose) + " " + c.pen.unit; }
+
+    function icsText(c, dose, doses) {
       function esc2(t) { return String(t).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n"); }
       function stamp(d) {
         return d.getUTCFullYear() + String(d.getUTCMonth() + 1).padStart(2, "0") +
@@ -728,19 +830,25 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
          invitation rather than a calendar to import. */
       var lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//AXIOM//Compound Guide//EN",
                    "CALSCALE:GREGORIAN", "X-WR-CALNAME:" + esc2("AXIOM " + c.name)];
-      doseDates.forEach(function (d, i) {
-        lines.push("BEGIN:VEVENT");
-        lines.push("UID:axiom-" + c.slug + "-" + dayStamp(d) + "-" + i + "@axiom");
-        lines.push("DTSTAMP:" + now);
-        lines.push("DTSTART:" + localStamp(d, 0));
-        lines.push("DTEND:" + localStamp(d, 30));
-        lines.push("SUMMARY:" + esc2(c.name + " " + fmtNum(dose, 2) + " " + c.pen.unit));
-        lines.push("DESCRIPTION:" + esc2(
-          "Dose " + (i + 1) + " of " + doseDates.length + ". " +
-          "When: " + c.timing.when + ". Food: " + c.timing.food + "."));
-        lines.push("END:VEVENT");
-      });
-      lines.push("END:VCALENDAR");
+      /* One repeating event rather than one per dose: it covers every dose in
+         the pen (the chips on the page stop at 120), and deleting it removes the
+         whole run. The UID is stable for the same compound, start and time, so
+         adding the same run twice updates it instead of duplicating it. */
+      var first = doseDates[0];
+      lines.push("BEGIN:VEVENT",
+        "UID:axiom-" + c.slug + "-" + localStamp(first, 0) + "@axiom",
+        "DTSTAMP:" + now,
+        "DTSTART:" + localStamp(first, 0),
+        "DTEND:" + localStamp(first, 30),
+        "RRULE:" + recurRule(doses),
+        "SUMMARY:" + esc2(eventTitle(c, dose)),
+        "DESCRIPTION:" + esc2(doses + " doses in this pen. " +
+          "When: " + c.timing.when + ". Food: " + c.timing.food + "."),
+        /* Google adds the account's default reminder by itself; an imported
+           file gets none unless it carries one, so it would never alert. */
+        "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + esc2(eventTitle(c, dose)),
+        "TRIGGER:PT0M", "END:VALARM",
+        "END:VEVENT", "END:VCALENDAR");
       return lines.map(foldLine).join("\r\n") + "\r\n";
     }
 
@@ -769,28 +877,29 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
 
     /* A single repeating event, as a plain link. Needs no file at all, which
        is the one route that works everywhere — phones and sandboxes included. */
-    function googleUrl(c, dose) {
-      if (!doseDates.length) return null;
-      var BY = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
-      var byday = [];
-      pattern.forEach(function (on, i) { if (on) byday.push(BY[i]); });
-      if (!byday.length) return null;
+    function googleUrl(c, dose, doses) {
+      var rule = recurRule(doses);
+      if (!doseDates.length || !rule) return null;
       var first = doseDates[0];
       var p = {
         action: "TEMPLATE",
-        text: c.name + " " + fmtNum(dose, 2) + " " + c.pen.unit,
+        text: eventTitle(c, dose),
         dates: localStamp(first, 0) + "/" + localStamp(first, 30),
         details: "When: " + c.timing.when + ". Food: " + c.timing.food + "." +
-                 "\n" + doseDates.length + " doses in this pen.",
-        recur: "RRULE:FREQ=WEEKLY;BYDAY=" + byday.join(",") + ";COUNT=" + doseDates.length
+                 "\n" + doses + " doses in this pen.",
+        recur: "RRULE:" + rule
       };
       return "https://calendar.google.com/calendar/render?" +
         Object.keys(p).map(function (k) { return k + "=" + encodeURIComponent(p[k]); }).join("&");
     }
 
-    function downloadIcs(c, dose) {
-      var text = icsText(c, dose);
-      var fallback = document.getElementById("ics-fallback");
+    /* Apple Calendar takes the run as a file. Safari on iPhone, iPad and Mac
+       offers to add a downloaded calendar file straight to Calendar; Outlook and
+       most other calendar apps open the same file. Two places cannot hand the
+       file over, and each gets a way forward instead of a dead button. */
+    function addToApple(c, dose, doses) {
+      var text = icsText(c, dose, doses);
+      var help = document.getElementById("ics-fallback");
       try {
         var blob = new Blob([text], { type: "text/calendar;charset=utf-8" });
         var url = URL.createObjectURL(blob);
@@ -801,20 +910,34 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
         a.click();
         document.body.removeChild(a);
         setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-      } catch (err) { /* fall through to the copy panel below */ }
+      } catch (err) { /* the panels below still apply */ }
 
-      /* Embedded viewers block downloads outright, so offer the text instead.
-         Note the warning: a textarea normalises line endings, so the copy goes
-         through the clipboard API to keep the CRLF the format requires. */
+      var ua = navigator.userAgent || "";
+      var apple = /iPhone|iPad|iPod|Macintosh/.test(ua);
+      /* Browsers built into other apps on iPhone (Instagram, Facebook, LINE,
+         the Google app) cannot pass a calendar file on to Calendar. */
+      var inApp = /iPhone|iPad|iPod/.test(ua) && /FBAN|FBAV|Instagram|Line\/|MicroMessenger|GSA\//.test(ua);
+
       if (window.self !== window.top) {
-        fallback.innerHTML = '<div class="ics-fb"><div class="ics-fb-top">' +
-          "<b>Downloads are blocked in this preview.</b> Use the Google Calendar button above, " +
-          "or copy this and save it as a <b>plain text</b> file named <code>axiom.ics</code> — " +
-          "TextEdit must be in plain-text mode (Format → Make Plain Text), or Calendar will refuse it." +
-          "</div><textarea readonly rows=\"5\"></textarea>" +
-          '<button class="btn-cal" id="ics-copy" type="button">Copy</button></div>';
-        fallback.querySelector("textarea").value = text;
+        /* A preview frame such as the claude.ai viewer blocks downloads outright.
+           The page itself, opened directly, does not. */
+        var direct = /^https?:$/.test(location.protocol)
+          ? '<a class="btn-cal ghost" href="' + esc(location.href) + '" target="_blank" rel="noopener">Open this page directly</a>'
+          : "";
+        help.innerHTML = '<div class="ics-fb"><div class="ics-fb-top">' +
+          "<b>This preview can't hand your device a calendar file.</b> " +
+          (direct ? "Open the page directly — in Safari on an iPhone — and tap Apple Calendar there, or use " : "Use ") +
+          "the Google Calendar button, which works from anywhere.</div>" +
+          (direct ? '<div class="cal-row" style="margin-top:0">' + direct + "</div>" : "") +
+          '<details class="ics-raw"><summary>On a computer: copy the calendar file instead</summary>' +
+          '<div class="ics-fb-top" style="margin-top:10px">Save it as a <b>plain text</b> file named <code>axiom.ics</code> ' +
+          "and open it — in TextEdit, choose Format → Make Plain Text first, or Calendar will refuse it.</div>" +
+          '<textarea readonly rows="5"></textarea>' +
+          '<button class="btn-cal" id="ics-copy" type="button">Copy</button></details></div>';
+        help.querySelector("textarea").value = text;
         document.getElementById("ics-copy").addEventListener("click", function () {
+          /* Through the clipboard API, not the textarea: a textarea normalises
+             CRLF to LF, and the calendar format requires CRLF. */
           var btn = this;
           function done(msg) { btn.textContent = msg; }
           if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -824,6 +947,17 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
             done("Select the text and copy");
           }
         });
+      } else if (inApp) {
+        help.innerHTML = '<div class="ics-fb"><div class="ics-fb-top">' +
+          "<b>If Calendar didn't open,</b> this app's built-in browser can't pass files to it. " +
+          "Tap the <b>•••</b> or share button, choose <b>Open in Safari</b>, then tap Apple Calendar again." +
+          "</div></div>";
+      } else if (apple) {
+        help.innerHTML = '<div class="note" style="margin-top:12px">Safari asks to add the event — tap ' +
+          "<b>Add</b>. On a Mac, open the downloaded file if Calendar doesn't open by itself.</div>";
+      } else {
+        help.innerHTML = '<div class="note" style="margin-top:12px">Open the downloaded file to add it to ' +
+          "your calendar app. On Android, the Google Calendar button is the quicker route.</div>";
       }
     }
 
