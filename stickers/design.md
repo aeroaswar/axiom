@@ -28,7 +28,8 @@ rather than approximately right.
 ## 2. Colour
 
 Four tokens, taken verbatim from the canonical `:root` block in
-`../business-proposal/axiom-business-master-prompt.md` §9 (identical to `../website/index.html:42-61`).
+`../business-proposal/axiom-business-master-prompt.md` §9 (identical to the `:root` block in
+`../src/app/globals.css:9-11`).
 
 | Role | Token | Hex |
 |---|---|---|
@@ -126,7 +127,7 @@ yourself reaching for a gradient here, don't.
 Inlined as an SVG path from `../business-proposal/assets/logo/axiom-wordmark-white.svg`
 (`viewBox="0 0 582 70"`, 813 bytes) with `fill="currentColor"` so it inherits `--ink`. Inlining
 keeps it true vector at 9 mm, keeps both HTML files self-contained, and avoids the per-directory
-asset duplication seen across `../website/assets/` and `../company-profile/assets/`.
+asset duplication seen across `../company-profile/assets/` and `../business-proposal/assets/`.
 
 ---
 
@@ -169,8 +170,9 @@ The sheet as shipped carries the **Retatrutide range** — 10 / 20 / 30 / 40 / 6
 40 labels in five two-row blocks. Keeping `copies` a multiple of 4 keeps every strength on whole
 rows, so a cut sheet stays sorted. Set one SKU to `copies: 48` for a full single-strength sheet.
 
-Note that 40 mg is not in the catalogue at `../archive/premium-hero/data.js`, which lists
-5 / 10 / 15 / 20 / 30 / 60 mg. It is included here because it was asked for.
+All five strengths are real SKUs. The catalogue — `../supabase/seed.sql`, the only file in the
+repository permitted to carry a price, a name or a dose — lists Retatrutide as `reta10`, `reta20`,
+`reta30`, `reta40` and `reta60`, so the sheet matches it exactly.
 
 ### The click conversion
 
