@@ -23,7 +23,17 @@ used to say in small print now lives behind the code, where there is room for it
 - **A4 sheet** lays out 10 cards (2 × 5) on one page.
 - The panel reports the QR version and module size in mm and warns below the 0.5 mm print floor. Defaults give a v3 code at ECC Q with 0.73 mm modules.
 
-The QR payload is `{base URL}/{compound slug}`, e.g.
+**The package card** is the default: its QR opens the guide itself,
+`https://axiom-guide-weld.vercel.app`, where the customer picks their compound. One
+design goes in every package. Ready-to-print files are in `print/`:
+
+- `axiom-card-print-bleed.pdf` — one card with 3 mm bleed and crop marks
+  (101 × 71 mm page), for a commercial printer.
+- `axiom-card-a4-10up.pdf` — ten cards on A4, to print and cut yourself.
+- `axiom-card-preview.png` — how the card looks.
+
+Pick a compound under **Card opens** instead to make a card that opens that
+compound's page; its QR payload is `{base URL}/{compound slug}`, e.g.
 `https://axiom-guide-weld.vercel.app/tirzepatide`. The base URL defaults to the live
 guide; change it on the page if the guide moves to another address.
 
