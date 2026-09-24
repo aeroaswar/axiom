@@ -22,7 +22,9 @@ const SELECT = `
   from public.accounts a
   left join public.profiles m on m.id = a.account_manager_id
   left join lateral (
-    select sum(o.total_idr) filter (where o.state = 'delivered') as lifetime,
+    -- Lifetime value is revenue, and PPN is a tax collected for the state, not revenue. The order
+    -- total carries PPN (0009), so this sums goods + delivery rather than total_idr.
+    select sum(o.subtotal_idr + o.delivery_idr) filter (where o.state = 'delivered') as lifetime,
            count(*) filter (where o.state <> 'cancelled') as orders_n,
            max(o.placed_at) filter (where o.state <> 'cancelled') as last_order
     from public.orders o where o.account_id = a.id) l on true`;

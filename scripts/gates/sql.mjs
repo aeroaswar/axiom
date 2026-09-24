@@ -531,6 +531,25 @@ console.log('Gate S15: payment and void are recorded only by the functions that 
   });
 }
 
+console.log("Gate S16: an order's total is what the client pays — equal to its live invoice");
+await as(OWNER, async tx => {
+  const rows = await tx`
+    select o.number, o.total_idr, i.total_idr as invoice_total, i.ppn_idr
+      from public.orders o
+      join lateral (select total_idr, ppn_idr from public.invoices
+                     where order_id = o.id and kind = 'invoice' and voided_at is null
+                     order by issued_at desc limit 1) i on true`;
+  // Two guards so this cannot pass on nothing. Some orders must be compared; and at least one must
+  // carry PPN — with every PPN at zero, the old sub + del and the new sub + del + ppn would both
+  // equal the invoice, and the gate would prove nothing.
+  ok(rows.length > 0, `orders with a live invoice to compare (${rows.length})`);
+  const taxed = rows.filter(r => BigInt(r.ppn_idr) > 0n);
+  ok(taxed.length > 0, `at least one compared order carries PPN (${taxed.length})`);
+  const off = rows.filter(r => BigInt(r.total_idr) !== BigInt(r.invoice_total));
+  ok(off.length === 0, 'every order total equals its invoice total',
+    off.slice(0, 3).map(r => `${r.number}: order ${r.total_idr} vs invoice ${r.invoice_total}`).join('; '));
+});
+
 await sql.end();
 console.log(`\n${passes} passed, ${failures} failed`);
 process.exit(failures ? 1 : 0);
