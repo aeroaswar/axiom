@@ -138,19 +138,22 @@ variable therefore scales **size and tracking together** — which is the point:
 font-size alone leaves the letter-spacing proportionally too wide and the type falls apart.
 
 `autofit()` walks each band, and while it overflows its measure, steps `--k` down by `0.02` to a
-floor of **`0.55`**, warning to the console if it still does not fit.
+floor of **`0.48`**, warning to the console if it still does not fit.
 
-Measured against the catalogue's longest names:
+Measured in `builder.html` against the longest names in the 79-compound catalogue (the same in
+A4 and thermal mode):
 
 | Compound | `--k` |
 |---|---|
 | `Retatrutide` | `1` (no shrink) |
-| `Thymosin Alpha-1` | `0.96` |
-| `CJC No DAC + Ipamorelin` | `0.68` |
+| `Ipamorelin + Tesamorelin` | `0.64` |
+| `BPC-157 + TB-500 (Wolverine)` | `0.60` |
+| `CJC-1295 (No DAC) + Ipamorelin` | `0.54` |
+| `VIP (Vasoactive Intestinal Peptide)` | `0.48` — the longest; cap height 1.31 mm |
 
-The floor was originally `0.74`, which was not low enough — `CJC No DAC + Ipamorelin` still
-crossed the die line. If names get longer than that, lower the floor rather than widening the
-label.
+The floor was originally `0.74`, then `0.55`; each time a longer name crossed the die line.
+`VIP (Vasoactive Intestinal Peptide)` needs `0.49`. If names get longer again, lower the floor
+rather than widening the label.
 
 ---
 
@@ -244,6 +247,54 @@ well as drawing, since a new die is cut from the spec, not traced off a PDF.
 
 ---
 
+## 7c. Thermal roll
+
+`builder.html` has a second output, **Thermal roll · 40 × 20**, for printing in-house on a
+thermal-transfer label printer. Same layout, same autofit, same data; three things change.
+
+**One colour.** A thermal head is 1-bit: a dot is black or it is not. Every tone is therefore
+solid black on white stock — `--bg #fff`, and `--ink`, `--muted` and `--accent` all `#000`. A
+grey would print as a dither pattern. The hierarchy the greys carried moves to weight instead:
+
+| Element | A4 | Thermal |
+|---|---|---|
+| `QTY` / `DOSE` keys, `RESEARCH USE ONLY` | Inter 400, `--muted` | Inter 500, black |
+| Values, `HIGH PURITY` | Inter 500 | Inter 600 |
+| Compound | Jost 400 | Jost 400 — at 500 the longest name no longer fits at the autofit floor |
+| Wordmark | `--ink` | black |
+
+No bronze and no onyx ground: this is the working label, not the brand-book stock in §8.
+
+**Hairlines are exactly 3 dots.** At 300 dpi a dot is 0.0847 mm. Both rules are drawn as an SVG
+rect 0.254 mm tall (3 dots). A CSS border or background cannot do this: Chromium snaps both to a
+whole CSS pixel (0.2646 mm = 3.125 dots) and snaps their position too, so one rule landed on 3 dot
+rows and the other on 4. SVG geometry is not snapped. The rect is also nudged down 0.005 mm so
+neither edge sits exactly on a dot centre, where the driver's rounding would decide. Measured
+from the PDF across every catalogue name with and without the DOSE row (158 labels, 316 rules):
+every rule covers **3 rows at 300 dpi**, and a uniform 2 rows at 203 dpi. The rules print with
+*Background graphics* off.
+
+**One label per page.** `@page` becomes `40mm 20mm`, margin 0, and each label is its own page, so
+the driver feeds one label per page and uses the gap sensor to register the next. The PDF page
+box measures 39.9 × 20.1 mm: Chromium rounds the page to whole CSS pixels, the same way A4 comes
+out at 209.9 mm. The 0.1 mm lands in the gap between labels.
+
+**The printer.**
+
+- **Thermal transfer, not direct thermal.** Direct thermal (no ribbon) fades in light and heat
+  and smears under an alcohol swab, which is how a vial gets handled.
+- **300 dpi.** At 203 dpi the rules still print evenly (2 dots), but the 4 pt micro-print gets
+  ragged and the wordmark's notched X loses its shape.
+- **Resin ribbon on synthetic stock** (PP or PET), 40 × 20 mm die-cut on the roll. Wax ribbon on
+  paper will not survive handling or refrigeration.
+- In the driver, set the stock to 40 × 20 mm with gap sensing. In the print dialog: Paper 40 × 20
+  mm, Scale 100%, Margins None.
+
+Print one label first and check `RESEARCH USE ONLY`. If it breaks up, raise the darkness (heat) a
+step rather than slowing the print speed.
+
+---
+
 ## 8. Production notes
 
 The brand book (`../brand-book/index.html:2521-2589`, *07.2 — Label & Packaging Specifications*)
@@ -304,6 +355,9 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Overflowing bands | 0 at `--k: 1` for the shipped SKU |
 | Hairlines | both `rgb(200, 138, 78)`, identical width and height |
 | Proof page | no page errors, no horizontal overflow, 1:1 view measures 40 × 20 mm |
+| Builder, all 79 names | 0 overflowing bands in A4 and thermal mode at the `0.48` floor |
+| Thermal PDF | 39.9 × 20.1 mm per page; 8 labels → 8 pages, 80 → 80, no trailing page |
+| Thermal hairlines | 316 rules on 158 labels: every one 3 dot rows at 300 dpi |
 
 To re-measure after a change, load the print sheet from `file://`, then in the page context read
 `getBoundingClientRect()` on `.lbl` and divide by `96/25.4` for millimetres, or multiply by
