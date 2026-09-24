@@ -23,8 +23,9 @@ used to say in small print now lives behind the code, where there is room for it
 - **A4 sheet** lays out 10 cards (2 × 5) on one page.
 - The panel reports the QR version and module size in mm and warns below the 0.5 mm print floor. Defaults give a v3 code at ECC Q with 0.73 mm modules.
 
-The QR payload is `{base URL}/{compound slug}`, e.g. `https://axiom.id/g/tirzepatide`.
-Point the base URL at wherever the guide is hosted.
+The QR payload is `{base URL}/{compound slug}`, e.g.
+`https://axiom-guide-weld.vercel.app/tirzepatide`. The base URL defaults to the live
+guide; change it on the page if the guide moves to another address.
 
 ## The guide
 
@@ -221,12 +222,16 @@ blocks every download.
   in the repo.
 - **Indexing.** Every page is `noindex`, by header and by meta tag.
 
-**On Vercel:** Add New → Project → import `aeroaswar/axiom` → Root Directory
-`dosage-guide` → Framework Preset *Other*, no build command. Production deploys
-from the repo's default branch, which gains `dosage-guide/` when this work
-merges; until then, set Settings → Git → Production Branch to the branch that has
-it. Once live, put the site's address in the card's **Base URL** field
-(`card.html`) before printing, and check a code scans through to a compound.
+**Live at <https://axiom-guide-weld.vercel.app>** — Vercel project `axiom-guide`,
+Root Directory `dosage-guide`, Application Preset *Other*, no build command, no
+environment variables. Production deploys from the repo's default branch, so a
+merge there updates the site. The card's **Base URL** defaults to this address;
+if the guide moves (a custom domain under Settings → Domains), change it there
+before printing, and test-scan a card through to a compound.
+
+To set it up again elsewhere: Add New → Project → import `aeroaswar/axiom` →
+Root Directory `dosage-guide` → Create. Then Settings → Deployment Protection →
+turn off Vercel Authentication, or customers who scan a card get a login page.
 
 ## Evidence tiers
 
