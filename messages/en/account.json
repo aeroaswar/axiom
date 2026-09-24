@@ -40,7 +40,8 @@
       "o_reorder_due": "Delivered · a reorder is due around {date}",
       "o_reorder_overdue": "Delivered · a reorder was due {date}",
       "o_delivered": "Delivered {date}",
-      "o_cancelled": "Cancelled {date}"
+      "o_cancelled": "Cancelled {date}",
+      "o_refund_due": "Refund on its way to you"
     },
     "steps": {
       "accepted": "Accepted",
