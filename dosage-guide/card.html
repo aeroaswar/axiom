@@ -129,8 +129,10 @@ a{color:inherit}
     <div class="mark"><img src="assets/axiom-wordmark-white.svg" alt="AXIOM" /></div>
 
     <div class="ctl">
-      <label for="c-compound">Compound</label>
-      <select id="c-compound"></select>
+      <label for="c-compound">Card opens</label>
+      <select id="c-compound">
+        <option value="" selected>The guide — every compound</option>
+      </select>
     </div>
 
     <div class="ctl grow">
@@ -190,8 +192,10 @@ a{color:inherit}
     els.compound.appendChild(o);
   });
 
-  function payload(c) {
-    return els.base.value.trim().replace(/\/+$/, "") + "/" + c.slug;
+  /* The package card opens the guide's index; a compound card opens its page. */
+  function payload(slug) {
+    var base = els.base.value.trim().replace(/\/+$/, "");
+    return slug ? base + "/" + slug : base;
   }
 
   function face(url) {
@@ -221,9 +225,7 @@ a{color:inherit}
   }
 
   function render() {
-    var c = window.COMPOUNDS.filter(function (x) { return x.slug === els.compound.value; })[0];
-    if (!c) return;
-    var url = payload(c);
+    var url = payload(els.compound.value);
 
     var info;
     try { info = QR.encode(url, els.ecl.value); }
