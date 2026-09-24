@@ -250,7 +250,9 @@ well as drawing, since a new die is cut from the spec, not traced off a PDF.
 ## 7c. Thermal roll
 
 `builder.html` has a second output, **Thermal roll · 40 × 20**, for printing in-house on a
-thermal-transfer label printer. Same layout, same autofit, same data; three things change.
+thermal label printer. It is tuned for the printers in use, the **Xprinter XP-420B and
+XP-D4601B: direct thermal, 203 dpi**, where a dot is 0.125 mm. Same layout, same autofit, same
+data; four things change.
 
 **One colour.** A thermal head is 1-bit: a dot is black or it is not. Every tone is therefore
 solid black on white stock — `--bg #fff`, and `--ink`, `--muted` and `--accent` all `#000`. A
@@ -258,40 +260,63 @@ grey would print as a dither pattern. The hierarchy the greys carried moves to w
 
 | Element | A4 | Thermal |
 |---|---|---|
-| `QTY` / `DOSE` keys, `RESEARCH USE ONLY` | Inter 400, `--muted` | Inter 500, black |
+| `QTY` / `DOSE` keys | Inter 400, `--muted` | Inter 500, black |
 | Values, `HIGH PURITY` | Inter 500 | Inter 600 |
 | Compound | Jost 400 | Jost 400 — at 500 the longest name no longer fits at the autofit floor |
-| Wordmark | `--ink` | black |
 
 No bronze and no onyx ground: this is the working label, not the brand-book stock in §8.
 
-**Hairlines are exactly 3 dots.** At 300 dpi a dot is 0.0847 mm. Both rules are drawn as an SVG
-rect 0.254 mm tall (3 dots). A CSS border or background cannot do this: Chromium snaps both to a
+**The wordmark and the micro-print are sized for 203 dpi.**
+
+| Element | A4 | Thermal |
+|---|---|---|
+| Wordmark | 9 × 1.08 mm | **14 × 1.68 mm**, plus a 1.5-unit stroke (`stroke-linejoin: round`) |
+| `RESEARCH USE ONLY` | `1.4em`, Inter 400, `--muted` | **`1.7em`, Inter 600**, black |
+| Space around the top rule | 1.1 / 1.3 mm | 0.9 / 1.1 mm |
+| Space around the bottom rule | 1.2 / 0.9 mm | 1.0 / 0.8 mm |
+
+At 9 mm the wordmark's thinnest strokes, the arms of the X (9.8 of 582 units), are 0.15 mm:
+1.2 dots at 203 dpi, and they print broken. Scale alone would need about 15 mm to reach 2 dots,
+which does not fit. At 14 mm with the stroke they are 0.27 mm, 2.2 dots, and band A grows by only
+0.18 mm (the mark is 1.68 mm tall against the 1.5 mm `HIGH PURITY` line). The cost is the notch in the X, which is under a dot at this size
+either way; it prints as a plain X. The tighter rule spacing pays for the larger micro-print, so
+the tallest label (Retatrutide with DOSE) stacks to 16.75 mm, inside the 16.8 mm content box.
+
+**Hairlines print at one weight.** Both rules are drawn as an SVG rect 0.254 mm tall: 2 dots at
+203 dpi, 3 at 300 dpi. A CSS border or background cannot do this: Chromium snaps both to a
 whole CSS pixel (0.2646 mm = 3.125 dots) and snaps their position too, so one rule landed on 3 dot
 rows and the other on 4. SVG geometry is not snapped. The rect is also nudged down 0.005 mm so
 neither edge sits exactly on a dot centre, where the driver's rounding would decide. Measured
 from the PDF across every catalogue name with and without the DOSE row (158 labels, 316 rules):
-every rule covers **3 rows at 300 dpi**, and a uniform 2 rows at 203 dpi. The rules print with
-*Background graphics* off.
+every rule covers **2 rows at 203 dpi** and 3 at 300 dpi. The rules print with *Background
+graphics* off.
 
 **One label per page.** `@page` becomes `40mm 20mm`, margin 0, and each label is its own page, so
 the driver feeds one label per page and uses the gap sensor to register the next. The PDF page
 box measures 39.9 × 20.1 mm: Chromium rounds the page to whole CSS pixels, the same way A4 comes
 out at 209.9 mm. The 0.1 mm lands in the gap between labels.
 
-**The printer.**
+**The printer and the labels.**
 
-- **Thermal transfer, not direct thermal.** Direct thermal (no ribbon) fades in light and heat
-  and smears under an alcohol swab, which is how a vial gets handled.
-- **300 dpi.** At 203 dpi the rules still print evenly (2 dots), but the 4 pt micro-print gets
-  ragged and the wordmark's notched X loses its shape.
-- **Resin ribbon on synthetic stock** (PP or PET), 40 × 20 mm die-cut on the roll. Wax ribbon on
-  paper will not survive handling or refrigeration.
-- In the driver, set the stock to 40 × 20 mm with gap sensing. In the print dialog: Paper 40 × 20
-  mm, Scale 100%, Margins None.
+- **Direct thermal means the label is the ink.** There is no ribbon; the head darkens a
+  heat-sensitive coating. Plain thermal paper smears under an alcohol swab, which is how a vial
+  gets handled, and darkens or fades with heat and sunlight.
+- **So use top-coated synthetic direct-thermal labels** (PP or synthetic, "top coated"). The top
+  coat protects the print from swabs and fridge condensation. Keep labelled vials out of heat and
+  direct sun.
+- **40 × 20 mm, one across the roll, with a gap.** Many 40 × 20 rolls are two or three across;
+  those do not line up with one label per page.
+- **Print over USB from a computer** with the Xprinter driver installed. It is the dependable
+  path for a browser print; the XP-D4601B's Bluetooth is aimed at phone apps.
+- In the driver, add a 40 × 20 mm paper size, labels with gaps, and calibrate the gap sensor (the
+  XP-D4601B calibrates itself; on the XP-420B hold the feed button). In the print dialog: Paper
+  40 × 20 mm, Scale 100%, Margins None.
 
-Print one label first and check `RESEARCH USE ONLY`. If it breaks up, raise the darkness (heat) a
-step rather than slowing the print speed.
+Print one label first and check `RESEARCH USE ONLY`. If it breaks up, raise the darkness (density)
+a step, then slow the print speed.
+
+A 300 dpi thermal-transfer printer with a resin ribbon on PP or PET stock prints the same file
+more crisply and more durably. It is the upgrade path, not a requirement.
 
 ---
 
@@ -357,7 +382,8 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Proof page | no page errors, no horizontal overflow, 1:1 view measures 40 × 20 mm |
 | Builder, all 79 names | 0 overflowing bands in A4 and thermal mode at the `0.48` floor |
 | Thermal PDF | 39.9 × 20.1 mm per page; 8 labels → 8 pages, 80 → 80, no trailing page |
-| Thermal hairlines | 316 rules on 158 labels: every one 3 dot rows at 300 dpi |
+| Thermal hairlines | 316 rules on 158 labels: every one 2 dot rows at 203 dpi, 3 at 300 dpi |
+| Thermal fit | tallest stack 16.75 mm of the 16.8 mm content box across all 158 labels; wordmark 14 × 1.68 mm |
 
 To re-measure after a change, load the print sheet from `file://`, then in the page context read
 `getBoundingClientRect()` on `.lbl` and divide by `96/25.4` for millimetres, or multiply by

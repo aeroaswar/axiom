@@ -221,14 +221,15 @@ button,input,select{font:inherit;color:inherit}
 .page[data-die="on"] .spec{display:block}
 
 /* ---------- thermal mode ----------
-   For a thermal-transfer roll printer: one colour, black on white label
-   stock, one 40 x 20 mm label per page. A thermal head is 1-bit, so every
+   For a thermal roll printer, direct thermal at 203 dpi (Xprinter XP-420B,
+   XP-D4601B) or thermal transfer: one colour, black on white label stock,
+   one 40 x 20 mm label per page. A thermal head is 1-bit, so every
    tone is solid black (a grey prints as a dither pattern) and the hierarchy
    the greys carried moves to weight instead. The compound stays at 400: it
    is the largest type and already heavy enough, and at 500 the longest name
    in the catalogue no longer fits at the autofit floor.
-   The hairlines are drawn as an SVG rect, 0.254 mm = 3 dots at 300 dpi, so
-   both print at the same weight. A CSS border or background is snapped to a
+   The hairlines are drawn as an SVG rect, 0.254 mm = 3 dots at 300 dpi and
+   2 at 203 dpi, so both print at the same weight. A CSS border or background is snapped to a
    whole CSS pixel (0.265 mm = 3.1 dots) and lands on 3 or 4 dots depending on
    where it falls; SVG geometry is not snapped, and it prints with "Background
    graphics" off. The @page size is swapped by setOut(). */
@@ -236,10 +237,20 @@ button,input,select{font:inherit;color:inherit}
 [data-out="thermal"] .lbl__rule{height:.254mm; flex:0 0 .254mm; background:none}
 .lbl__rule svg{display:none}
 [data-out="thermal"] .lbl__rule svg{display:block; width:100%; height:100%; overflow:visible}
-[data-out="thermal"] .lbl__k,
-[data-out="thermal"] .lbl__ruo{font-weight:500}
+[data-out="thermal"] .lbl__k{font-weight:500}
 [data-out="thermal"] .lbl__v,
 [data-out="thermal"] .lbl__note{font-weight:600}
+/* Sized for 203 dpi, where a dot is 0.125 mm. At 9 mm wide the wordmark's
+   thinnest strokes are 1.2 dots and break up, so it grows to 14 mm and takes
+   a 1.5-unit stroke: its strokes reach 2 dots, and band A grows by only
+   0.18 mm. The micro-print goes from 1.4em/500 to 1.7em/600. The room comes
+   from tightening the space around the rules, which keeps the tallest label
+   (Retatrutide, with DOSE) inside the 16.8 mm content box. */
+[data-out="thermal"] .lbl__wm{width:14em}
+[data-out="thermal"] .lbl__wm path{stroke:currentColor; stroke-width:1.5; stroke-linejoin:round}
+[data-out="thermal"] .lbl__ruo{font-size:1.7em; font-weight:600}
+[data-out="thermal"] .lbl__rule--top{margin:.9mm 0 1.1mm}
+[data-out="thermal"] .lbl__rule--bot{margin:1mm 0 .8mm}
 
 /* On screen the roll is white labels on a liner; in print each label is a page. */
 .roll{display:flex;flex-wrap:wrap;gap:14px;padding:18px;background:#DAD5CC;border-radius:6px;max-width:760px}
@@ -410,10 +421,11 @@ button,input,select{font:inherit;color:inherit}
       </div>
       <div id="thopts" hidden>
         <p class="hint" style="margin:10px 0 0">Black on white, one label per page, for a
-          thermal-transfer roll printer. Load 40&nbsp;×&nbsp;20&nbsp;mm synthetic (PP or PET) die-cut
-          labels and a resin ribbon, and set the same 40&nbsp;×&nbsp;20&nbsp;mm stock in the printer
-          driver. Use a 300&nbsp;dpi printer: at 203&nbsp;dpi the 4&nbsp;pt line and the wordmark
-          print ragged. Direct-thermal (no ribbon) fades and smears under an alcohol swab.</p>
+          direct-thermal roll printer such as the Xprinter XP-420B or XP-D4601B (203&nbsp;dpi).
+          Load 40&nbsp;×&nbsp;20&nbsp;mm labels, one across the roll with a gap between them. Use
+          top-coated synthetic direct-thermal labels: plain thermal paper smears under an alcohol
+          swab and fades with heat and sunlight. Set the same 40&nbsp;×&nbsp;20&nbsp;mm size in the
+          printer driver and calibrate the gap sensor.</p>
       </div>
     </div>
   </aside>
@@ -463,9 +475,10 @@ button,input,select{font:inherit;color:inherit}
 
     <div class="note" id="noteThermal" hidden>
       <b>Before a roll.</b> Print one label first and check <i>Research use only</i>, the smallest
-      line at 4&nbsp;pt. If it breaks up, raise the printer's darkness (heat) a step rather than
-      the speed. The thermal version drops the bronze and the onyx ground: it is the working label,
-      not the brand-book stock. A label may not imply human dose or frequency; the DOSE row is a
+      line. If it breaks up, raise the printer's darkness (density) a step, then slow the print
+      speed. Keep labelled vials out of heat and direct sun: direct-thermal print darkens or fades
+      under both. The thermal version drops the bronze and the onyx ground: it is the working
+      label, not the brand-book stock. A label may not imply human dose or frequency; the DOSE row is a
       pen-device calibration and is yours to leave off.
     </div>
     <div class="note" id="noteA4">
@@ -1190,9 +1203,10 @@ const PRINT_HOW = {
     <b>Scale</b> 100% · <b>Margins</b> None · <b>Background graphics ON</b>.
     That last one matters — without it the onyx ground drops out and the labels
     print as white boxes.`,
-  thermal: `In the print dialog: <b>Destination</b> your thermal printer (or Save as PDF) ·
-    <b>Paper</b> 40 × 20 mm, the same stock set in the printer driver · <b>Scale</b> 100% ·
-    <b>Margins</b> None. Each label is its own page.`,
+  thermal: `In the print dialog: <b>Destination</b> your Xprinter (or Save as PDF) ·
+    <b>Paper</b> 40 × 20 mm, the same size set in the printer driver · <b>Scale</b> 100% ·
+    <b>Margins</b> None. Each label is its own page. Print over USB from a computer, with
+    the Xprinter driver installed; it is the dependable path for a browser print.`,
 };
 function setOut(o){
   out = o;
