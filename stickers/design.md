@@ -270,17 +270,32 @@ No bronze and no onyx ground: this is the working label, not the brand-book stoc
 
 | Element | A4 | Thermal |
 |---|---|---|
-| Wordmark | 9 × 1.08 mm | **14 × 1.68 mm**, plus a 1.5-unit stroke (`stroke-linejoin: round`) |
+| Wordmark | 9 × 1.08 mm, master drawing | **14 × 1.68 mm**, redrawn with every stroke 12.5 units |
 | `RESEARCH USE ONLY` | `1.4em`, Inter 400, `--muted` | **`1.7em`, Inter 600**, black |
 | Space around the top rule | 1.1 / 1.3 mm | 0.9 / 1.1 mm |
 | Space around the bottom rule | 1.2 / 0.9 mm | 1.0 / 0.8 mm |
 
 At 9 mm the wordmark's thinnest strokes, the arms of the X (9.8 of 582 units), are 0.15 mm:
 1.2 dots at 203 dpi, and they print broken. Scale alone would need about 15 mm to reach 2 dots,
-which does not fit. At 14 mm with the stroke they are 0.27 mm, 2.2 dots, and band A grows by only
-0.18 mm (the mark is 1.68 mm tall against the 1.5 mm `HIGH PURITY` line). The cost is the notch in the X, which is under a dot at this size
-either way; it prints as a plain X. The tighter rule spacing pays for the larger micro-print, so
-the tallest label (Retatrutide with DOSE) stacks to 16.75 mm, inside the 16.8 mm content box.
+which does not fit. Band A grows by only 0.18 mm at 14 mm (the mark is 1.68 mm tall against the
+1.5 mm `HIGH PURITY` line). The tighter rule spacing pays for the larger micro-print, so the
+tallest label (Retatrutide with DOSE) stacks to 16.75 mm, inside the 16.8 mm content box.
+
+The master's strokes are not one weight:
+
+| Letter | A legs | X arms | I | O | M stems / diagonals |
+|---|---|---|---|---|---|
+| Master (units of 582) | 11.0 | 9.8 | 11.6 | 11.2 top/bottom, 12.9 sides | 11.8 / 11.8 |
+| Thermal (`WORDMARK_THERMAL`) | 12.5 | 12.5 | 12.5 | 12.4–12.5 all round | 12.5 / 12.5 |
+
+At 203 dpi those differences land on whole dots, so the O printed visibly heavier than the X. The
+thermal wordmark is the same letters redrawn so every stroke is 12.5 units (0.30 mm, 2.4 dots).
+Only the inner edges move: the outer silhouettes, the flat apex of the A, the O's 2-unit
+overshoot and the X's centre notch (4.62 × 5.18 units) are kept. An earlier version thickened the
+master with a uniform 1.5-unit stroke instead; that carried the unevenness across and spilled
+past the viewBox, where the SVG viewport clipped the O flat. The redraw fixes both.
+`WORDMARK_THERMAL` is used only on thermal labels; the A4 sheet and the builder's own header keep
+the master.
 
 **Hairlines print at one weight.** Both rules are drawn as an SVG rect 0.254 mm tall: 2 dots at
 203 dpi, 3 at 300 dpi. A CSS border or background cannot do this: Chromium snaps both to a
@@ -384,6 +399,7 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Thermal PDF | 39.9 × 20.1 mm per page; 8 labels → 8 pages, 80 → 80, no trailing page |
 | Thermal hairlines | 316 rules on 158 labels: every one 2 dot rows at 203 dpi, 3 at 300 dpi |
 | Thermal fit | tallest stack 16.75 mm of the 16.8 mm content box across all 158 labels; wordmark 14 × 1.68 mm |
+| Thermal wordmark strokes | A, X, I, M 12.5 units; O ring 12.41–12.5 sampled every 5°; X notch 4.62 × 5.18 as in the master |
 
 To re-measure after a change, load the print sheet from `file://`, then in the page context read
 `getBoundingClientRect()` on `.lbl` and divide by `96/25.4` for millimetres, or multiply by

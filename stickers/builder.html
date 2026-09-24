@@ -241,16 +241,13 @@ button,input,select{font:inherit;color:inherit}
 [data-out="thermal"] .lbl__v,
 [data-out="thermal"] .lbl__note{font-weight:600}
 /* Sized for 203 dpi, where a dot is 0.125 mm. At 9 mm wide the wordmark's
-   thinnest strokes are 1.2 dots and break up, so it grows to 14 mm and takes
-   a 1.5-unit stroke: its strokes reach 2 dots, and band A grows by only
-   0.18 mm. The micro-print goes from 1.4em/500 to 1.7em/600. The room comes
+   thinnest strokes are 1.2 dots and break up, so thermal mode draws it 14 mm
+   wide from WORDMARK_THERMAL, which gives every letter the same 12.5-unit
+   stroke (0.30 mm, 2.4 dots). Band A grows by only 0.18 mm. The micro-print
+   goes from 1.4em/500 to 1.7em/600. The room comes
    from tightening the space around the rules, which keeps the tallest label
    (Retatrutide, with DOSE) inside the 16.8 mm content box. */
-/* overflow:visible — the wordmark fills its 582 x 70 viewBox edge to edge
-   (the O touches top and bottom, the A and M the sides), so the stroke's
-   outer half would otherwise be clipped flat by the SVG viewport. */
-[data-out="thermal"] .lbl__wm{width:14em; overflow:visible}
-[data-out="thermal"] .lbl__wm path{stroke:currentColor; stroke-width:1.5; stroke-linejoin:round}
+[data-out="thermal"] .lbl__wm{width:14em}
 [data-out="thermal"] .lbl__ruo{font-size:1.7em; font-weight:600}
 [data-out="thermal"] .lbl__rule--top{margin:.9mm 0 1.1mm}
 [data-out="thermal"] .lbl__rule--bot{margin:1mm 0 .8mm}
@@ -994,6 +991,14 @@ const CATALOGUE = {
 /* Inline AXIOM wordmark — vector, from business-proposal/assets/logo/axiom-wordmark-white.svg */
 const WORDMARK = '<svg class="lbl__wm" viewBox="0 0 582 70" xmlns="http://www.w3.org/2000/svg" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M0 68 12.5 68 41 15 69.5 68 82 68 46.5 2 35.5 2Z M132 2 145.91 2 169.91 26.72 162.82 32.69ZM213 2 199.09 2 175.09 26.72 182.18 32.69ZM132 68 145.91 68 169.91 43.28 162.82 37.31ZM213 68 199.09 68 175.09 43.28 182.18 37.31Z M279.2 2 290.8 2 290.8 68 279.2 68Z M352.3 35A42.7 35 0 1 1 437.7 35A42.7 35 0 1 1 352.3 35ZM365.2 35A29.8 23.8 0 1 0 424.8 35A29.8 23.8 0 1 0 365.2 35Z M497 2 508.8 2 539.5 41 570.2 2 582 2 582 68 570.2 68 570.2 21 539.5 59 508.8 21 508.8 68 497 68Z"/></svg>';
 
+/* Thermal wordmark: the same letters redrawn so every stroke is 12.5 units.
+   The master's strokes vary (A 11.0, X 9.8, I 11.6, O 11.2-12.9, M 11.8), and
+   at 203 dpi that difference lands on whole dots, so the O printed visibly
+   heavier than the X. Outer silhouettes, the flat apex of the A, the O's
+   overshoot and the X's centre notch (4.62 x 5.18 units) are kept; only the
+   inner edges move. */
+const WORDMARK_THERMAL = '<svg class="lbl__wm" viewBox="0 0 582 70" xmlns="http://www.w3.org/2000/svg" aria-label="AXIOM"><path fill="currentColor" fill-rule="evenodd" d="M0 68 14.19 68 41 18.16 67.81 68 82 68 46.5 2 35.5 2Z M132 2 149.72 2 169.91 22.11 162.82 32.69Z M213 2 195.28 2 175.09 22.11 182.18 32.69Z M132 68 149.72 68 169.91 47.89 162.82 37.31Z M213 68 195.28 68 175.09 47.89 182.18 37.31Z M278.75 2 291.25 2 291.25 68 278.75 68Z M352.3 35A42.7 35 0 1 1 437.7 35A42.7 35 0 1 1 352.3 35ZM364.8 35A30.2 22.5 0 1 0 425.2 35A30.2 22.5 0 1 0 364.8 35Z M497 2 509.5 2 539.5 40.11 569.5 2 582 2 582 68 569.5 68 569.5 22.21 539.5 60.32 509.5 22.21 509.5 68 497 68Z"/></svg>';
+
 /* Thermal hairline, shown only in thermal mode. The rect is nudged down
    0.005 mm (0.06 dot) so neither edge can sit exactly on a 300 dpi dot centre,
    where the driver's rounding would decide between 2 and 3 rows. */
@@ -1018,7 +1023,7 @@ function labelHTML(d){
     `<div class="lbl__band lbl__band--${cls}"><span class="lbl__k">${esc(k)}</span><span class="lbl__v">${esc(v)}</span></div>`;
   return `<div class="lbl">
   <div class="lbl__band lbl__band--a">
-    ${WORDMARK}
+    ${out === 'thermal' ? WORDMARK_THERMAL : WORDMARK}
     <span class="lbl__spacer"></span>
     <span class="lbl__note">${esc(d.note || 'HIGH PURITY')}</span>
   </div>
