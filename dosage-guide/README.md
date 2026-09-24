@@ -47,12 +47,16 @@ Per compound, in order:
 3. **How often** — with a seven-day strip you can shift (see below).
 4. **When to take it** — time of day, food, and why that timing rather than another.
 5. **Doses** — the documented rows, each with its provenance.
-6. **Your pen** — the calculator and the sizes AXIOM sells.
-7. **Your dose dates** — every dose in the pen on real dates, with calendar export.
-8. **What it is used for**, **Looking after it**, **Watch out for**, and scope.
+6. **Watch out for** — placed before the calculator, so the cautions are read
+   before the first dose rather than after the benefits and the storage notes.
+7. **Your pen** — the calculator and the sizes AXIOM sells.
+8. **Your dose dates** — every dose in the pen on real dates, with calendar export.
+9. **What it is used for**, **Looking after it**, and scope.
 
-The index lists everything by category with a search across name, class, category
-and description.
+The index lists everything by category. Each row leads with the compound's own
+plain-language first sentence — *"A weekly shot that copies two gut hormones"* —
+rather than its pharmacology class, which most readers cannot parse. The class
+is still searchable: the search covers name, class, category and description.
 
 ### More than one schedule
 
@@ -93,6 +97,20 @@ of the last dose.
 Tap a size chip to load that pen size, which makes it easy to see which size
 actually fits a protocol. It flags a dose bigger than the pen holds, and a
 remainder too small for another full dose.
+
+**Where the starting dose comes from.** The calculator needs a figure to work
+with, and on most pages the Doses section above says no human dose has been
+set. So one line under the fields always says what the pre-filled figure is:
+
+- where the page documents a dose, it names it — *"Starts at 2.5 mg — the
+  starting dose above"*, or *"within the trial range above"* for a range;
+- where it documents none, it says so — *"0.25 mg is only a placeholder so the
+  sums work. This page gives no dose to start from — put in your own."*
+
+Change the dose and the line becomes *"Worked out at the dose you entered."* Ten
+compounds start from a documented dose; the other 55 are marked placeholders.
+Without this, a page would print *Human dose: Not set* and then, directly below,
+*40 doses in this pen at 0.25 mg* — a recommendation it had just declined to make.
 
 Prices are deliberately not shown and are not in the shipped data. The source
 tables under `src/` keep them as the record of the price list, so `src/` is a
@@ -167,7 +185,9 @@ each entry looks like this, and both pages pick up a new one with no other chang
   evidenceNote: "…",
   protocol: [{ k: "Human dose", v: "Not set", n: "…" }],
   benefits: ["…"],
-  pen: { qty: 10, dose: 0.5, unit: "mg" },      // unit: mg | IU | mL
+  pen: { qty: 10, dose: 0.5, unit: "mg",       // unit: mg | IU | mL
+         basis: null },                       // derived by gen.py: the protocol row
+                                              // `dose` comes from, or null if none
   // optional — omit unless there is genuinely more than one way to schedule it
   regimens: [
     { id: "weekly", label: "Once a week", sub: "2 mg in one go",
@@ -184,6 +204,12 @@ A protocol row reading *Not set*, *Not established* or *None* renders in the mut
 "no figure" style. A compound with an all-zero `days` array is episodic and gets
 no schedule.
 
+`gen.py` derives each pen's `basis` — the protocol row its `dose` comes from —
+by matching `dose` against the figures the protocol rows state in the same unit
+(ranges included; increments and per-kg doses are skipped). **If a row states a
+dose and `dose` matches none of them, the build fails**, because the calculator
+would contradict the page it sits on. Regimen doses are checked the same way.
+
 ## Verification
 
 The QR encoder is not a dependency, so it is checked rather than trusted:
@@ -192,9 +218,10 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - Mask selection matches independent penalty scoring across all eight masks.
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
 - Cards rendered to print PDFs, rasterised at 300 dpi, and decoded back to the exact expected URL, with the wordmark confirmed present in each.
-- All 65 compound pages checked for correct dose counts, schedule length, size chips and layout.
+- All 65 compound pages checked for correct dose counts, schedule length, size chips and layout, with no horizontal overflow at phone width.
+- Every page's starting-dose line checked against its data: the 10 documented doses name the row they come from, the 55 placeholders say so, editing the dose switches the line, and Retatrutide's two schedules each carry their own.
 - Every lot in the price list PDF matched against `compounds.js` by name *and* size: 79/79, so no lot is missing a page and no size chip is offered that isn't a real lot. Four names differ in presentation only and are mapped deliberately — the price list's `CJC-1295 (No DAC) + Ipamorelin`, `VIP (Vasoactive Intestinal Peptide)`, `SLU-PP-332 (Injectable)` and `PT-141` appear here as `CJC-1295 + Ipamorelin`, `VIP`, `SLU-PP-332` and `PT-141 (Bremelanotide)`.
-- The generated `.ics` validated for all 62 scheduled compounds — 1201 events — against line length, CRLF, absent `METHOD` and round-trip parsing with the `icalendar` library.
+- The generated `.ics` validated for all 62 scheduled compounds — 1199 events — against line length, CRLF, absent `METHOD` and round-trip parsing with the `icalendar` library.
 - Printed geometry measured off the PDF: 85.0 × 55.0 mm trim, 91.0 × 60.9 mm with bleed, 10-up sheet at 170 × 275 mm.
 
 ## Scope

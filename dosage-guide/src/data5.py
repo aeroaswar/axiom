@@ -186,7 +186,7 @@ dict(slug="ss-31", name="SS-31", cat="Longevity",
             "Has real phase 3 human trial data behind it.",
             "Studied for mitochondrial disease, heart failure and eye disease.",
             "Reduces oxidative damage inside mitochondria."],
-  sizes=[(50,"mg",4000000)], dose=5, unit="mg",
+  sizes=[(50,"mg",4000000)], dose=40, unit="mg",
   storage=FRIDGE, cautions=["Trial results were mixed and approval hasn't followed.","Not an approved medicine."]),
 
 dict(slug="humanin", name="Humanin", cat="Longevity",
@@ -260,7 +260,7 @@ BIOREG = [
 ]
 
 C9 = [dict(slug=slug, name=name, cat="Bioregulators",
-  what="A very short peptide from the Russian bioregulator family, aimed at " + organ + ". The idea is that each one signals its target tissue to repair itself.",
+  what="A short Russian peptide, aimed at " + organ + ". It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.",
   cls="Short peptide bioregulator (Khavinson peptide)", half="Minutes", route="Under the skin",
   cadence="cycle", days=[1,1,1,1,1,0,0], perWeek=5,
   cadNote="A 10 to 20 day course, then months off. Every peptide in this family is used in courses, never continuously.",

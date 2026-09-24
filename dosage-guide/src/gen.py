@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Emit dosage-guide/compounds.js from the category tables."""
-import json, io, os, sys
+import json, io, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from data1 import C1
 from data2 import C2
@@ -19,6 +19,37 @@ def default_time(when):
     if "training" in w:                       return "07:30"
     if "evening" in w or "night" in w:        return "20:00"
     return "09:00"
+
+
+# A dose stated in a protocol row: "2.5 mg once a week", or a range such as
+# "1–12 mg once a week". Increments ("+2.5 mg at a time") and weight-based
+# doses ("0.03 mg per kg") are not a figure the calculator can start from.
+DOSE_RE = re.compile(r"(?<![+\d.])(\d+(?:\.\d+)?)(?:\s*[–-]\s*(\d+(?:\.\d+)?))?\s*(mg|IU|mL)\b(?!\s*per\s*kg)")
+
+def stated_doses(protocol, unit):
+    """Yield (row key, low, high) for every dose a protocol row states in `unit`."""
+    for k, v, _ in protocol:
+        for lo, hi, u in DOSE_RE.findall(v):
+            if u == unit:
+                yield k, float(lo), float(hi or lo)
+
+def basis(c, dose):
+    """Where the calculator's starting dose comes from.
+
+    Returns the protocol row it matches, so the page can say "the starting
+    dose above", or None when the page documents no dose to start from — in
+    which case the page labels the figure a placeholder rather than letting
+    it pass as a recommendation.
+
+    A pre-filled dose that disagrees with a dose the same page documents is
+    a contradiction, and fails the build.
+    """
+    rows = list(stated_doses(c["protocol"], c["unit"]))
+    for k, lo, hi in rows:
+        if lo <= dose <= hi:
+            return {"k": k, "range": lo != hi}
+    assert not rows, (c["slug"], f"pre-filled {dose} {c['unit']} contradicts {rows}")
+    return None
 
 ALL = C1 + C2 + C3 + C4 + C5 + C6 + C7 + C8 + C9
 
@@ -82,7 +113,8 @@ for i, c in enumerate(ALL):
       "evidence": c["ev"], "evidenceNote": c["evNote"],
       "protocol": [{"k": k, "v": v, "n": n} for k, v, n in c["protocol"]],
       "benefits": c["benefits"],
-      "pen": {"qty": smallest[0], "dose": c["dose"], "unit": c["unit"]},
+      "pen": {"qty": smallest[0], "dose": c["dose"], "unit": c["unit"],
+              "basis": basis(c, c["dose"])},
       # Prices deliberately stay out of the shipped data — src/ keeps them as
       # the record of the price list, but the guide does not show them.
       "sizes": [{"qty": q, "unit": u} for q, u, _ in c["sizes"]],
@@ -97,7 +129,8 @@ for i, c in enumerate(ALL):
             assert len(r["days"]) == 7 and r["dose"] > 0, (c["slug"], r["id"])
         o["regimens"] = [{"id": r["id"], "label": r["label"], "sub": r["sub"],
                           "dose": r["dose"], "perWeek": r["perWeek"],
-                          "days": r["days"], "note": r["note"]} for r in rs]
+                          "days": r["days"], "note": r["note"],
+                          "basis": basis(c, r["dose"])} for r in rs]
     out.write("  " + js(o) + ("," if i < len(ALL) - 1 else "") + "\n")
 
 out.write("""];
