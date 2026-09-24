@@ -11,7 +11,9 @@ matching `web-app/mockup/index.html`. Decisions and deviations are recorded in `
 pnpm install
 pnpm setup        # checks Postgres 16 (or starts a local cluster), migrates, seeds, writes .env.local
 pnpm dev          # http://localhost:3000 · /console (sign in as Aero) · /account (sign in as a clinic)
+pnpm test         # unit tests for the domain rules (src/**/*.test.ts)
 pnpm gates        # every gate in §13 that can run locally, as a test
+pnpm db:clean     # empty the demo data, keep the catalogue — see "Starting with real data"
 ```
 
 Local runs use plain Postgres 16 with a small auth stub (`supabase/local/auth_stub.sql`) so the
@@ -23,17 +25,19 @@ drops and re-creates the local database. With Docker, `supabase start` works the
 
 ```
 supabase/migrations/   0001 schema · 0002 functions, triggers, views · 0003 row-level security
+                       0004 security fixes · 0005 acknowledgement state · 0006 basket uniqueness
+                       0007 site ownership · 0008 workflow logic (linking, refunds, lead pipeline)
 supabase/seed.sql      THE catalogue — the only file that may carry a price, a name or a dose
 supabase/seed_dev.sql  development fixtures, walked through the real functions
 src/app/[locale]/(public)   the site: /, /compounds, /price-list, /standard, /process, /faq, /request …
-src/app/[locale]/(app)/console   dashboard · orders & quotes · catalogue & stock · pricing · invoices · clients · content · settings
+src/app/[locale]/(app)/console   dashboard · orders & quotes · catalogue & stock · pricing · invoices · clients · pipeline · content · settings
 src/app/[locale]/(app)/account   needs you / in progress / earlier · shop · basket · orders · quotes · saved · profile
 src/lib/db.ts          one pool; every request is a transaction that adopts the caller's role and claims (RLS applies)
 src/lib/domain/        next-action, cut-off, dates — one implementation per rule
 src/components/document/  the one A4 document template: invoice, credit note, quote, price list
+scripts/db/            migrate · seed · reset (local only) · clean (empties operational data, keeps the catalogue)
 scripts/gates/         the gate suite (sql · copy lint · greps · i18n · references) and the runner
 tests/e2e/             the browser gates (Playwright)
-coa/                   the Certificate of Analysis builder — authoring, outside the app
 messages/{id,en}/      catalogues per surface, merged at request time; Indonesian is the default locale
 ```
 
@@ -52,19 +56,88 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
   into packing, enforced by a trigger; dispatch writes the sale to the ledger.
 - **Stock never lies.** An append-only ledger, a derived balance held above zero by a check
   constraint, reserved = sent quotes + undispatched orders, available is the only public figure.
+- **A paid order is not cancelled with the money still in it.** `cancel_order` refuses while the
+  order holds a payment and names the sum; the credit note comes first, so a refund is always a
+  document. A cancelled order still holding money reads as a refund due, in red, on every surface.
+- **A request from the public site can be finished.** It creates an account, a lead and a quote;
+  the owner links the person who asked to that account (`axiom.link_member`, owner-only, refusing
+  anyone who already belongs elsewhere), they record their acknowledgement, and the quote can go.
+- **The pipeline moves itself.** A lead walks `new → contacted → acknowledged → quoted → won` as its
+  quote does; nobody updates a stage by hand unless they choose to. A lead is inbound — a client
+  typed straight into the Console is already a client and does not appear there.
 - **Delivery is per consignment**, one SQL function, shown before commitment.
 - **Nothing is typed.** Dashboard, Today list, bell and badge derive from `axiom.events()`.
 - **No dosing, no claims.** A CI lint over every catalogue and content row; every research claim
   needs a PubMed ID or DOI that resolves, or it does not render.
 
-## Certificates
+## Starting with real data
 
-The app **serves** certificates: `coa_documents` indexes them (lot code, file path, method,
-purity) and `/api/coa` returns the published sample. It does not author one. `coa/` is where a
-certificate is made — a self-contained builder that fills a lot, signs it on screen and prints
-one A4 page, keeping its own record of issue, revision, fingerprint and shipment. The two do not
-overlap: `coa_documents` is the publication index, the builder's register is the authoring
-record. See `coa/README.md`.
+The development fixtures are demo clients, quotes and orders. To enter real sales, empty them and
+keep everything else:
+
+```
+pnpm db:clean
+```
+
+It removes every account, person who is not staff, lead, quote, order, invoice, shipment, basket
+and stock movement, and restarts document numbering, so the first real order is `AX-YYMM-0001`.
+The catalogue, cost basis, delivery zones, site settings and the owner and ops logins stay. It runs
+in one transaction: either the whole sheet is clean or nothing changed.
+
+It refuses a remote database unless you name it, so it cannot empty Supabase by accident:
+
+```
+DATABASE_URL=<supabase direct connection> AXIOM_CLEAN_CONFIRM=<database name> pnpm db:clean
+```
+
+On the clean sheet, a first sale runs in this order, each step in the Console:
+
+1. **Clients → New account** — the client and its first delivery site.
+2. **Link the person** who signs for the account (they sign in once first), then they record
+   their acknowledgement on their own profile. Without it, peptide lines are not offered.
+3. **Catalogue & stock** — record opening stock (`intake`). A line never stocked cannot be quoted,
+   and does not appear as a stockout in Today until it has had stock and run out.
+4. **New quote → send → accept** — acceptance issues the invoice; **mark paid** moves it to
+   packing; dispatch and delivery close it.
+
+## Standalone invoice builder
+
+`invoice/axiom-invoice-a4.html` is a self-contained, dependency-free A4 invoice builder that
+predates the Console's invoicing and still runs from a file — useful for issuing an invoice
+without the app or a database. Open it in a browser, fill the form on the left, watch the
+sheet redraw on the right, then *Save as PDF* (paper A4, background graphics on; a one-page
+invoice prints correctly at any margin setting, set margins to None past that).
+
+Line items come from a dropdown of the full price list — 79 lots across the 9 pathways plus
+devices and apparel, 84 entries — generated from `invoice/AXIOM-Price-List-v1.0.pdf`, which
+is committed beside it. Shipping is Rp 100.000 per 3 units at an address, capped at
+Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to*, route each
+line item to one, and each carries its own amount, calculated by default and overridable.
+`invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to.
+
+This duplicates what `src/components/console/invoices/` and `src/lib/documents/` now do inside
+the app, and its catalogue is a second copy of prices that `supabase/seed.sql` owns, as are its
+delivery rates against the platform's per-consignment function. Treat the database as
+authoritative; retire this file once the Console covers the offline case.
+
+## Standalone certificate builder
+
+`coa/builder/index.html` is a self-contained A4 **Certificate of Analysis** builder. Open it in
+a browser, fill the lot on the left, watch the sheet redraw on the right, sign it on screen and
+*Print / PDF* for one A4 page. `coa/index.html` is the same sheet driven by a `LOT` object in the
+file, for hand-editing without the tool. `coa/README.md` has the detail.
+
+A certificate here is a record, not a page. A lot is a **draft** until it is issued — and prints
+with a *Draft — not issued* watermark until then — and issuing freezes it, fingerprints it
+(SHA-256, printed in the footer) and files it in a register that also logs which orders a lot
+shipped on, so a batch can be traced. Revising opens R+1 and supersedes the old revision;
+voiding keeps the row. Nothing blocks issuing, but whatever was overridden is stored on the
+record.
+
+Unlike the invoice builder this duplicates nothing: the app **serves** certificates —
+`coa_documents` indexes a published PDF and `/api/coa` returns the sample — but has no way to
+author one. `coa_documents` is the publication index; the builder's register is the authoring
+record. Neither should be rebuilt inside the other.
 
 ## Production
 

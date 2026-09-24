@@ -49,6 +49,8 @@ export type Site = { id: string; name: string; address: string | null; zone: str
 export type DocRow = { id: string; number: string; state: string; at: Date | null; total: string | null };
 export type InvoiceRow = { id: string; number: string; order_number: string; issued_at: Date | null; due_at: Date | null; paid_at: Date | null; voided_at: Date | null; total_idr: string };
 export type Manager = { id: string; full_name: string; role: string };
+/** Signed in, belonging to no account: the queue a public request leaves behind. */
+export type Unlinked = { id: string; label: string; email: string | null; created_at: Date };
 
 export async function clientDetail(uid: string, accountId: string) {
   return withRls({ uid }, async tx => ({
@@ -77,6 +79,9 @@ export async function clientDetail(uid: string, accountId: string) {
     managers: await tx<Manager[]>`
       select id, full_name, role::text as role from public.profiles
       where role in ('ops','owner') order by role desc, full_name`,
+    unlinked: await tx<Unlinked[]>`
+      select id::text as id, label, email, created_at from public.v_unlinked_people order by created_at desc limit 25`,
+    ackState: (await tx<{ s: string }[]>`select axiom.ack_state_for(${accountId}::uuid) as s`)[0]?.s ?? 'none',
   }));
 }
 

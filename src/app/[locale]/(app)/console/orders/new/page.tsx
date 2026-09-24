@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
 import { Sheet } from '@/components/shell/sheet';
 import { staffSession } from '@/components/console/shared/act';
 import { ActionForm } from '@/components/console/shared/action-form';
@@ -21,9 +22,22 @@ export default async function NewQuotePage() {
   const tq = await getTranslations('commerce.quote');
   const ts = await getTranslations('states.ack');
   const tc = await getTranslations('console.common');
+  const tcl = await getTranslations('console.clients');
 
   const [accounts, settings] = await Promise.all([accountOptions(session.uid), getSettings()]);
-  const options = await variantOptions(session.uid, accounts[0]?.id ?? '');
+
+  // A database with no clients in it is a first day, not a fault: say what the first step is
+  // rather than offering a form whose only field cannot be filled.
+  if (!accounts.length) {
+    return (
+      <Sheet backHref="/console/orders" closeLabel={tc('close')} kicker={t('kicker')} title={t('title')}>
+        <p className="note">{t('no_accounts')}</p>
+        <Link className="btn accent" href="/console/clients/new">{tcl('new')}</Link>
+      </Sheet>
+    );
+  }
+
+  const options = await variantOptions(session.uid, accounts[0].id);
 
   return (
     <Sheet backHref="/console/orders" closeLabel={tc('close')} kicker={t('kicker')} title={t('title')}>
