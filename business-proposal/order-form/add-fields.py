@@ -26,6 +26,7 @@ OUT = HERE.parent / "AXIOM-Order-Form.pdf"
 LABELS = {"name": "Name", "phone": "Phone Number", "address": "Address", "notes": "Notes",
           "ruo_confirm": "I confirm this order is for research use only"}
 PREFIX_LABELS = {"item": "Item / Compound", "amount": "Amount", "qty": "Quantity", "unit": "Unit (mg / IU / mL)"}
+FIELD_PT = 11                          # one size for every typed answer
 INK_ON_FIELD = (0.027, 0.024, 0.020)  # --bg, dark text on the cream box
 DOT = "0.906 0.694 0.451"             # --accent-bright, the selected radio dot
 TICK = "0.027 0.024 0.020"            # --bg, the tick drawn on the cream square
@@ -109,7 +110,7 @@ for f in spec["text"]:
     w.field_label = label_for(f["name"])  # tooltip / accessible name
     w.rect = pymupdf.Rect(f["x"] + ACCENT_BORDER + 5, f["y"] + 1, f["x"] + f["w"] - 5, f["y"] + f["h"] - 1)
     w.text_font = "Helv"
-    w.text_fontsize = 12 if f["multiline"] else 14
+    w.text_fontsize = FIELD_PT
     w.text_color = INK_ON_FIELD
     w.border_width = 0
     w.fill_color = None     # the cream box is part of the page artwork
