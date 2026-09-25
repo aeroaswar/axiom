@@ -17,6 +17,7 @@ every assumption here. Each is one setting or one flag; none needs a rewrite to 
 | 9 | Who marks an invoice paid | Ops with the transfer reference; flip to owner-only with one flag | `site_settings.paid_by_owner_only` |
 | 10 | Clinic members | Unlimited members per account; any member may request and accept; the paid confirmation is AXIOM's | `account_members` |
 | 11 | CoA publication | One sample CoA row seeded and shown on The standard; the PDF file itself is not in the repository | `coa_documents.is_sample` |
+| 12 | Per-lot verification (§4.6, brought forward at the owner's request) | Public `/verify?lot=…` lookup — the query string is the label QR scheme. `lots` and unpublished certificates stay staff-only; one definer function answers an exact, normalised code with one row and discloses no price, cost, stock, customer or file path. Only the published sample links a file; any other certificate is sent on request. Lots are entered by SQL until the Console gains a lot screen; production seeds none | `axiom.verify_lot`, `0009_lot_verification.sql` |
 
 Sibling prompt §12 items with a stated default: pen Rp 600.000 current; devices/apparel cost assumed
 (flagged `cost_assumed`); 45 % reporting floor; no discounts or tiers anywhere; cut-off 15.00 cold /

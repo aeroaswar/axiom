@@ -25,7 +25,7 @@ const ok = (name, cond, detail = '') => {
 
 const ROUTES = [
   '/', '/compounds', '/compounds/metabolic', '/price-list', '/standard',
-  '/how-to-read-a-coa', '/process', '/faq', '/contact', '/terms', '/privacy', '/legal', '/request',
+  '/how-to-read-a-coa', '/verify', '/process', '/faq', '/contact', '/terms', '/privacy', '/legal', '/request',
 ];
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM || '/opt/pw-browsers/chromium' });
