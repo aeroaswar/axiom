@@ -41,6 +41,18 @@ tests/e2e/             the browser gates (Playwright)
 messages/{id,en}/      catalogues per surface, merged at request time; Indonesian is the default locale
 ```
 
+## Static design files
+
+Standalone files outside the app: the Next.js build, the site and the gates never touch them.
+
+- `label-builder/` — personalised box and carrying-case labels. Type a name, proof both labels,
+  then print A4 multi-up sheets at true millimetre size, or switch to thermal roll: one mono label
+  per page at the label's own size, for a 4-inch, 203 dpi direct-thermal printer (Xprinter XP-420B
+  or XP-D4601B), with a per-roll printer offset and an alignment frame for calibrating it. Fonts and wordmark are inlined, so it works offline and opens straight from disk.
+- `company-profile/` — the AXIOM company profile page.
+- `brand-book/` — the brand book and style guide.
+- `business-proposal/` — business proposal, GTM strategy, price lists and the fillable A4 order form.
+
 ## The rules the code enforces
 
 - **One catalogue.** `product_variants` is the home of every price; every surface reads it through
