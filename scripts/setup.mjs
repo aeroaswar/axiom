@@ -5,7 +5,12 @@ import { execSync, spawnSync } from 'node:child_process';
 
 const url = process.env.DATABASE_URL || 'postgres://postgres:postgres@127.0.0.1:5432/axiom';
 if (!fs.existsSync('.env.local')) {
-  fs.writeFileSync('.env.local', fs.readFileSync('.env.example', 'utf8').replace(/^DATABASE_URL=.*$/m, `DATABASE_URL=${url}`));
+  // .env.example ships the dev sign-in commented out, because it is the file a deployer copies.
+  // This script only ever builds a local environment, so it switches the seeded sign-in back on.
+  const local = fs.readFileSync('.env.example', 'utf8')
+    .replace(/^DATABASE_URL=.*$/m, `DATABASE_URL=${url}`)
+    .replace(/^# NEXT_PUBLIC_AUTH_MODE=dev$/m, 'NEXT_PUBLIC_AUTH_MODE=dev');
+  fs.writeFileSync('.env.local', local);
   console.log('wrote .env.local');
 }
 process.env.DATABASE_URL = url;
