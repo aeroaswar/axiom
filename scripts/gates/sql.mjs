@@ -531,6 +531,39 @@ console.log('Gate S15: payment and void are recorded only by the functions that 
   });
 }
 
+console.log('Gate P2: a lot verifies by its exact code, and discloses nothing else');
+for (const [label, uid] of [['anon', null], ['client', IVAN]]) {
+  await as(uid, async tx => {
+    const [v] = await tx`select * from axiom.verify_lot('AX-2606-BPC10')`;
+    ok(v && v.state === 'verified' && v.product && v.dose, `${label}: the sample lot verifies by its code`);
+    const [loose] = await tx`select lot_code from axiom.verify_lot(' ax 2606 bpc10 ')`;
+    ok(loose?.lot_code === 'AX-2606-BPC10', `${label}: case, spaces and separators do not change the answer`);
+    const [unpub] = await tx`select state, purity_pct from axiom.verify_lot('AX-2607-RT10')`;
+    ok(unpub?.state === 'verified' && Number(unpub.purity_pct) > 0, `${label}: an unpublished certificate answers through the lookup`);
+    const [direct] = await tx`select count(*)::int n from public.coa_documents where lot_code = 'AX-2607-RT10'`;
+    ok(direct.n === 0, `${label}: … and stays unreadable directly`);
+    const [lots] = await tx`select count(*)::int n from public.lots`;
+    ok(lots.n === 0, `${label}: the lots table stays staff-only`);
+    for (const probe of ['AX-26', 'AX%', '%', '', 'AX-2606-BPC1', `AX-2606-BPC10${'0'.repeat(40)}`]) {
+      const rows = await tx`select 1 from axiom.verify_lot(${probe})`;
+      ok(rows.length === 0, `${label}: no answer for a partial, pattern or oversized code (${JSON.stringify(probe.slice(0, 16))})`);
+    }
+  });
+}
+{
+  const [exp] = await sql`select state from axiom.verify_lot('AX-2405-KPV10')`;
+  ok(exp?.state === 'expired', 'a lot past its date reads expired, not verified');
+  const [aw] = await sql`select state, purity_pct from axiom.verify_lot('AX-2609-SEM10')`;
+  ok(aw?.state === 'awaiting' && aw.purity_pct === null, 'a received lot without a filed analysis reads awaiting');
+  const [fn] = await sql`select pg_get_function_result(p.oid) r from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'axiom' and p.proname = 'verify_lot'`;
+  ok(fn && !/price|cost|stock|account|file_path|order/i.test(fn.r), 'verify_lot returns no price, cost, stock, customer or document path');
+  await rollback(async tx => {
+    await expectError(tx, sp => sp`insert into public.lots (variant_id, lot_code) select variant_id, 'ax2606bpc10' from public.lots where lot_code = 'AX-2606-BPC10'`,
+      'a second code that normalises alike is refused at entry', /lots_lot_key_uniq|duplicate/i);
+  });
+}
+
 await sql.end();
 console.log(`\n${passes} passed, ${failures} failed`);
 process.exit(failures ? 1 : 0);
