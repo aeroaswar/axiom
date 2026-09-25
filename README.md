@@ -100,6 +100,31 @@ On the clean sheet, a first sale runs in this order, each step in the Console:
 4. **New quote → send → accept** — acceptance issues the invoice; **mark paid** moves it to
    packing; dispatch and delivery close it.
 
+## The AXIOM wordmark
+
+One vector path, drawn on a 582 × 70 grid, with every stroke 11.8 units wide: the A's legs,
+the four arms of the notched X, the I, the O all the way round, and the M's stems and
+diagonals. The O keeps its overshoot (0–70 against 2–68). The master file is
+`business-proposal/assets/logo/axiom-wordmark-white.svg` (bone `#F2EDE5`, for dark grounds).
+
+The same path is inlined, byte for byte, in `src/components/shell/sprite-svg.ts` (the web app's
+`#wm` symbol), `web-app/mockup/index.html`, `business-proposal/axiom-pricelist-print.html` (which
+`order-form/build.cjs` reads it from), `invoice/axiom-invoice-a4.html`, the three pages in
+`stickers/`, and `dosage-guide/print/card-print.html`; `dosage-guide/assets/` keeps a copy of
+the SVG. Change the path in all of them together. The committed PDFs and the raster lockups
+(`brand-book/logo.png`, the two PNGs in `company-profile/assets/`,
+`dosage-guide/print/axiom-card-preview.png`) carry the same drawing and need re-exporting too.
+
+## Compound guide and pen card
+
+`dosage-guide/` is a static site, separate from the app: a print-ready 85 × 55 mm card carrying
+the wordmark and a QR, and the mobile-first guide the QR opens. It covers every lot in the price
+list — 79 lots across 65 compounds, a multi-size compound appearing as one page with a size chip
+per lot — with cadence, timing, documented doses, a tap-to-pick pen calculator, dose dates with
+Apple and Google Calendar export, and the evidence tier stated for every dosing figure. It is
+deployed as its own Vercel project with Root Directory `dosage-guide` and no build step; prices
+live only in `dosage-guide/src/`, which is never published. Details in `dosage-guide/README.md`.
+
 ## Standalone invoice builder
 
 `invoice/axiom-invoice-a4.html` is a self-contained, dependency-free A4 invoice builder that
