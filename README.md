@@ -145,6 +145,25 @@ the app, and its catalogue is a second copy of prices that `supabase/seed.sql` o
 delivery rates against the platform's per-consignment function. Treat the database as
 authoritative; retire this file once the Console covers the offline case.
 
+## Standalone certificate builder
+
+`coa/builder/index.html` is a self-contained A4 **Certificate of Analysis** builder. Open it in
+a browser, fill the lot on the left, watch the sheet redraw on the right, sign it on screen and
+*Print / PDF* for one A4 page. `coa/index.html` is the same sheet driven by a `LOT` object in the
+file, for hand-editing without the tool. `coa/README.md` has the detail.
+
+A certificate here is a record, not a page. A lot is a **draft** until it is issued — and prints
+with a *Draft — not issued* watermark until then — and issuing freezes it, fingerprints it
+(SHA-256, printed in the footer) and files it in a register that also logs which orders a lot
+shipped on, so a batch can be traced. Revising opens R+1 and supersedes the old revision;
+voiding keeps the row. Nothing blocks issuing, but whatever was overridden is stored on the
+record.
+
+Unlike the invoice builder this duplicates nothing: the app **serves** certificates —
+`coa_documents` indexes a published PDF and `/api/coa` returns the sample — but has no way to
+author one. `coa_documents` is the publication index; the builder's register is the authoring
+record. Neither should be rebuilt inside the other.
+
 ## Production
 
 Supabase (Postgres, Auth magic link, Storage) + Vercel. Set `DATABASE_URL` to the project's direct
