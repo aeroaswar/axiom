@@ -15,6 +15,7 @@ export type OrderDetail = {
   quote_number: string | null;
   invoice_id: string | null; invoice_number: string | null; invoice_total_idr: string | null;
   invoice_due_at: Date | null; invoice_paid_at: Date | null; invoice_paid_ref: string | null; invoice_voided_at: Date | null;
+  held_idr: string;
   dispatched_at: Date | null; carrier: string | null; tracking_no: string | null; eta_at: Date | null;
   cold: boolean; eta_days: number; has_peptide: boolean;
   reorder_due_at: Date | null; cadence_days: number | null;
@@ -40,6 +41,7 @@ export async function orderByNumber(uid: string, number: string) {
            q.number as quote_number,
            i.id::text as invoice_id, i.number as invoice_number, i.total_idr::text as invoice_total_idr,
            i.due_at as invoice_due_at, i.paid_at as invoice_paid_at, i.paid_ref as invoice_paid_ref, i.voided_at as invoice_voided_at,
+           axiom.net_paid(o.id)::text as held_idr,
            s.dispatched_at, s.carrier, s.tracking_no, s.eta_at,
            exists (select 1 from public.order_items oi join public.product_variants v on v.id = oi.variant_id
                     where oi.order_id = o.id and v.is_cold_chain) as cold,

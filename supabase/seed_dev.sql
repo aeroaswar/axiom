@@ -76,12 +76,17 @@ select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000
 -- stock intake: a spread across the book, a few deliberate stockouts and low lines
 insert into public.stock_movements (variant_id, delta, reason, ref, actor_id)
 select v.id,
-       case v.sku when 'tb500' then 0 when 'ta1' then 0 when 'epi50' then 0 when 'mat' then 2 when 'legs' then 3 when 'mask' then 4
+       case v.sku when 'tb500' then 4 when 'ta1' then 4 when 'epi50' then 4 when 'mat' then 2 when 'legs' then 3 when 'mask' then 4
                   when 'reta30' then 6 when 'reta60' then 2 when 'tirz40' then 5 when 'ipatesa18' then 3 when 'huma10' then 3 when 'duffel' then 9
                   else case when p.kind = 'peptide' then 6 + (v.sort * 7) % 22 else 20 + (v.sort * 5) % 40 end end,
        'intake', 'Opening stock', '00000000-0000-4000-8000-000000000001'
-from public.product_variants v join public.products p on p.id = v.product_id
-where v.sku not in ('tb500','ta1','epi50');
+from public.product_variants v join public.products p on p.id = v.product_id;
+
+-- The deliberate stockouts had stock and sold through it, which is what a stockout is; a line never
+-- stocked is not one, and the feed does not count it.
+insert into public.stock_movements (variant_id, delta, reason, ref, actor_id)
+select v.id, -4, 'sale', 'Sold through before cut-over', '00000000-0000-4000-8000-000000000001'
+from public.product_variants v where v.sku in ('tb500','ta1','epi50');
 
 -- Fixtures age the record after the fact: every state below was produced by the real functions and
 -- only the clock is moved. Migration 0007 froze `paid_at` on an issued invoice behind the frame the
@@ -173,8 +178,27 @@ begin
   perform axiom.send_quote(q); perform axiom.mark_quote_lost(q);
 end $$;
 
+-- lots on the record, one per verification state (§4.6): the sample's own lot, a verified lot
+-- whose certificate is staff-only, an expired lot, and a received lot still awaiting analysis
+insert into public.lots (variant_id, lot_code, received_at, expires_at)
+select v.id, x.code, now()::date - x.received, now()::date + x.expires
+from (values ('bpc10',    'AX-2606-BPC10',  100,  630),
+             ('reta10',   'AX-2607-RT10',    70,  660),
+             ('kpv10',    'AX-2405-KPV10',  850, -120),
+             ('semax10',  'AX-2609-SEM10',    6,  720)) x(sku, code, received, expires)
+join public.product_variants v on v.sku = x.sku;
+
 -- one sample CoA, published on the standard page
-insert into public.coa_documents (variant_id, lot_code, file_path, issued_at, method, purity_pct, is_sample)
-select id, 'AX-2606-BPC10', 'coa/sample-bpc-157-10mg.pdf', now()::date - 90, 'HPLC / MS', 99.2, true from public.product_variants where sku = 'bpc10';
+insert into public.coa_documents (variant_id, lot_id, lot_code, file_path, issued_at, method, purity_pct, is_sample)
+select v.id, l.id, 'AX-2606-BPC10', 'coa/sample-bpc-157-10mg.pdf', now()::date - 90, 'HPLC / MS', 99.2, true
+from public.product_variants v left join public.lots l on l.lot_code = 'AX-2606-BPC10' where v.sku = 'bpc10';
+
+-- certificates filed against lots but not published: readable by staff, and by a buyer only
+-- through axiom.verify_lot with the exact code
+insert into public.coa_documents (variant_id, lot_id, lot_code, file_path, issued_at, method, purity_pct)
+select l.variant_id, l.id, l.lot_code, x.path, now()::date - x.issued, 'HPLC / MS', x.purity
+from (values ('AX-2607-RT10',  'coa/AX-2607-RT10.pdf',   60, 99.1),
+             ('AX-2405-KPV10', 'coa/AX-2405-KPV10.pdf', 840, 98.7)) x(code, path, issued, purity)
+join public.lots l on l.lot_code = x.code;
 
 select set_config('request.jwt.claims', '', true);
