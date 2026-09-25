@@ -41,13 +41,17 @@ The source is `print/card-print.html` (`qrstyle.js` draws the styled QR from
 - `axiom-card-a4-double-sided.pdf`: for printing yourself. Ten fronts, then ten
   backs, on a centred 2 × 5 grid with cut marks. Print double-sided; the backs land
   behind the fronts whichever edge the printer flips on.
+- `axiom-card-a3-21up.pdf`: for an A3 press sheet. 21 fronts, then 21 backs, on a
+  centred 3 × 7 grid. Cards share their cut lines, and the grid's outer edge carries
+  3 mm of bleed. Cut marks are on every line, and the backs align on either flip
+  edge. Suits 260 gsm art carton with matte lamination on both sides.
 - `axiom-card-preview.png`: front and back side by side.
 
 The QR is v5 at ECC H, 27 mm with a 3-module quiet zone: 0.63 mm modules. It is
 light-on-dark, which the iPhone camera, Google Lens and current Android cameras
 read. Some older scanner apps read only dark-on-light, so scan a printed proof
 with the phones your customers use before ordering a batch. To regenerate the PDFs,
-open `card-print.html?mode=shop` or `?mode=sheet` and print to PDF (background
+open `card-print.html?mode=shop`, `?mode=sheet` or `?mode=a3` and print to PDF (background
 graphics on, margins none).
 
 `card.html` still makes the earlier one-sided cards, including one per compound. Pick a compound under **Card opens** there to make a card that opens that
@@ -249,6 +253,10 @@ blocks every download.
   tables and must never be published; the card, the encoder and this README stay
   in the repo.
 - **Indexing.** Every page is `noindex`, by header and by meta tag.
+- **Home screen.** `apple-touch-icon.png` (180 px) and `manifest.webmanifest`
+  (with `icons/`) give the saved guide the AXIOM notched X in bronze on onyx,
+  named "AXIOM", instead of a letter iOS draws from the title. The icons are
+  rendered from `business-proposal/assets/logo/axiom-x-symbol-bronze.svg`.
 
 **Live at <https://axiom-guide-weld.vercel.app>** — Vercel project `axiom-guide`,
 Root Directory `dosage-guide`, Application Preset *Other*, no build command, no

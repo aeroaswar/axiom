@@ -11,6 +11,8 @@
           bleed and crop marks, for a print shop.
   sheet — two A4 pages: ten fronts, then ten backs, on a centred 2 × 5 grid so the backs
           land behind the fronts whichever edge the printer flips on. Cut on the marks.
+  a3    — two A3 pages: 21 fronts, then 21 backs, on a centred 3 × 7 grid. Cards share
+          their cut lines; the grid's outer edge carries 3 mm of bleed. Cut on the marks.
 -->
 <style>
 @font-face{font-family:"Jost";src:local("Jost"),local("Jost Regular")}
@@ -58,6 +60,12 @@ body{font-family:"Jost","Century Gothic",Futura,"Helvetica Neue",Arial,sans-seri
 .sheet .page{width:210mm;height:297mm}
 .sheet .grid{position:absolute;left:20mm;top:11mm;display:grid;grid-template-columns:repeat(2,85mm);grid-auto-rows:55mm}
 
+.bleedbox{position:absolute;background:var(--onyx);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* a3: 297 × 420, 3 × 7 grid of 85 × 55 = 255 × 385, centred → 21 mm sides, 17.5 mm top and bottom */
+.a3 .page{width:297mm;height:420mm}
+.a3 .grid{position:absolute;left:21mm;top:17.5mm;display:grid;grid-template-columns:repeat(3,85mm);grid-auto-rows:55mm}
+
 @media screen{body{background:#555;padding:20px}.page{background:#fff;margin:0 auto 20px;box-shadow:0 4px 18px rgba(0,0,0,.4)}}
 </style>
 <style id="pagesize"></style>
@@ -102,9 +110,25 @@ body{font-family:"Jost","Century Gothic",Futura,"Helvetica Neue",Arial,sans-seri
     return m;
   }
 
+  /* A3: cut marks on every grid line, kept outside the 3 mm outer bleed. */
+  function a3Marks() {
+    var t = .1, m = "", L = 21, T = 17.5;
+    for (var c = 0; c <= 3; c++) { var x = L + 85 * c; m += line(x - t / 2, 6, t, 8) + line(x - t / 2, 420 - 14, t, 8); }
+    for (var r = 0; r <= 7; r++) { var y = T + 55 * r; m += line(6, y - t / 2, 10, t) + line(297 - 16, y - t / 2, 10, t); }
+    /* the dark ground runs 3 mm past the grid, so a cut just outside the edge shows no white */
+    return m + '<div class="bleedbox" style="left:' + (L - 3) + 'mm;top:' + (T - 3) + 'mm;width:' + (255 + 6) + 'mm;height:' + (385 + 6) + 'mm"></div>';
+  }
+
   function render() {
     var html = "";
-    if (mode === "sheet") {
+    if (mode === "a3") {
+      document.body.className = "a3";
+      document.getElementById("pagesize").textContent = "@page{size:297mm 420mm;margin:0}";
+      [front, back].forEach(function (face) {
+        var cards = ""; for (var i = 0; i < 21; i++) cards += face(false);
+        html += '<div class="page">' + a3Marks() + '<div class="grid">' + cards + "</div></div>";
+      });
+    } else if (mode === "sheet") {
       document.body.className = "sheet";
       document.getElementById("pagesize").textContent = "@page{size:A4;margin:0}";
       [front, back].forEach(function (face) {
