@@ -78,6 +78,7 @@ export default async function StandardPage({ params }: { params: Promise<{ local
               <p className="lead" style={{ marginTop: 18 }}>{t('coa_lead')}</p>
               <div className="acts" style={{ marginTop: 30 }}>
                 <Link href="/how-to-read-a-coa" className="tlink">{t('coa_read')} <Icon name="arrow" className="ar" /></Link>
+                <Link href={coa?.lot_code ? { pathname: '/verify', query: { lot: coa.lot_code } } : '/verify'} className="tlink">{t('coa_verify')} <Icon name="arrow" className="ar" /></Link>
               </div>
             </div>
             <div>
