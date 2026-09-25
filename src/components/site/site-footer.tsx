@@ -28,6 +28,7 @@ export async function SiteFooter({ whatsapp }: { whatsapp: { number: string; dis
             <ul>
               <li><Link href="/standard">{t('standard')}</Link></li>
               <li><Link href="/how-to-read-a-coa">{t('coa')}</Link></li>
+              <li><Link href="/verify">{t('verify')}</Link></li>
               <li><Link href="/process">{t('process')}</Link></li>
               <li><Link href="/faq">{t('faq')}</Link></li>
             </ul>

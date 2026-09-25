@@ -1,0 +1,9 @@
+# Only the guide itself is served. src/ holds the price tables and the
+# generator — a build input that must never be published. The card is an
+# internal print tool, and the README is for the repo.
+src/
+README.md
+card.html
+qr.js
+.gitignore
+print/
