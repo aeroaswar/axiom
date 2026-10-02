@@ -378,6 +378,23 @@ more crisply and more durably. It is the upgrade path, not a requirement.
 
 ---
 
+## 7d. PDF only
+
+`builder.html` has a third output, **PDF only · 50 × 30**, for a file rather than a print job:
+one 50 × 30 mm page per label and nothing else on the page — no sheet, guides or spec line.
+There is no Print button in this mode; **Download PDF** is the output.
+
+| Style | What it is |
+|---|---|
+| **Colour** | The AXIOM label as on the A4 sheet: onyx ground with its 2.5 mm rounded corners, bone type, bronze rules. For a print shop that sets its own layout, or for sharing. |
+| **Black & white (thermal)** | Exactly the thermal-roll label (§7c): black on white, the heavier wordmark and micro-print, the 2-dot hairlines. |
+
+The look is keyed off `data-style` on the page, separately from the layout (`data-out`): the
+thermal roll is always black and white, and PDF only can be either. Files are named
+`axiom-labels-50x30-colour-N.pdf` and `axiom-labels-50x30-bw-N.pdf`.
+
+---
+
 ## 8. Production notes
 
 The brand book (`../brand-book/index.html:2521-2589`, *07.2 — Label & Packaging Specifications*)
@@ -443,6 +460,7 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Builder fit | tallest stack 23.94 mm (A4) and 23.45 mm (thermal) of the 26 mm content box; wordmark 11.25 × 1.35 mm (A4), 17.5 × 2.1 mm (thermal) |
 | Thermal print | 50.1 × 30.0 mm per page; 8 labels → 8 pages, 80 → 80, no trailing page |
 | Download PDF | A4 pages exactly 210 × 297 mm, thermal pages exactly 50 × 30 mm; 158 thermal labels build in about 1 s |
+| PDF only | colour and black & white: one page per label, each exactly 50 × 30 mm; colour keeps the onyx ground and bronze rules, black & white matches the thermal output |
 | Thermal hairlines | 316 rules on 158 labels: every one 2 dot rows at 203 dpi, 3 at 300 dpi |
 | Thermal wordmark strokes | A, X, I, M 12.5 units; O ring 12.41–12.5 sampled every 5°; X notch 4.62 × 5.18 as in the master |
 

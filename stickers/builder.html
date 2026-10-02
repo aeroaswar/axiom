@@ -241,24 +241,26 @@ button,input,select{font:inherit;color:inherit}
    2 at 203 dpi, so both print at the same weight. A CSS border or background is snapped to a
    whole CSS pixel (0.265 mm = 3.1 dots) and lands on 3 or 4 dots depending on
    where it falls; SVG geometry is not snapped, and it prints with "Background
-   graphics" off. The @page size is swapped by setOut(). */
-[data-out="thermal"] .lbl{--bg:#fff; --ink:#000; --muted:#000; --accent:#000}
-[data-out="thermal"] .lbl__rule{height:.254mm; flex:0 0 .254mm; background:none}
+   graphics" off. The @page size is swapped by setOut().
+   The look is keyed off data-style, not data-out: the thermal roll is always
+   black and white, and "PDF only" can be either. */
+[data-style="thermal"] .lbl{--bg:#fff; --ink:#000; --muted:#000; --accent:#000}
+[data-style="thermal"] .lbl__rule{height:.254mm; flex:0 0 .254mm; background:none}
 .lbl__rule svg{display:none}
-[data-out="thermal"] .lbl__rule svg{display:block; width:100%; height:100%; overflow:visible}
-[data-out="thermal"] .lbl__k{font-weight:500}
-[data-out="thermal"] .lbl__v,
-[data-out="thermal"] .lbl__note{font-weight:600}
+[data-style="thermal"] .lbl__rule svg{display:block; width:100%; height:100%; overflow:visible}
+[data-style="thermal"] .lbl__k{font-weight:500}
+[data-style="thermal"] .lbl__v,
+[data-style="thermal"] .lbl__note{font-weight:600}
 /* Sized for 203 dpi, where a dot is 0.125 mm. Thermal mode draws the
    wordmark at 14em (17.5 mm on a 50 mm label) from WORDMARK_THERMAL, which
    gives every letter the same 12.5-unit stroke (0.38 mm, 3 dots), and sets
    the micro-print at 1.7em/600 rather than 1.4em/500. The space around the
    rules is a little tighter than in A4 mode to pay for both, which keeps
    the tallest label (Retatrutide, with DOSE) inside the 26 mm content box. */
-[data-out="thermal"] .lbl__wm{width:14em; height:calc(14em * 70 / 582)}
-[data-out="thermal"] .lbl__ruo{font-size:1.7em; font-weight:600}
-[data-out="thermal"] .lbl__rule--top{margin:1.6mm 0 1.9mm}
-[data-out="thermal"] .lbl__rule--bot{margin:1.8mm 0 1.4mm}
+[data-style="thermal"] .lbl__wm{width:14em; height:calc(14em * 70 / 582)}
+[data-style="thermal"] .lbl__ruo{font-size:1.7em; font-weight:600}
+[data-style="thermal"] .lbl__rule--top{margin:1.6mm 0 1.9mm}
+[data-style="thermal"] .lbl__rule--bot{margin:1.8mm 0 1.4mm}
 
 /* On screen the roll is white labels on a liner; in print each label is a page. */
 .roll{display:flex;flex-wrap:wrap;gap:14px;padding:18px;background:#DAD5CC;border-radius:6px;max-width:760px}
@@ -281,11 +283,11 @@ button,input,select{font:inherit;color:inherit}
      spills a hair onto a phantom trailing page */
   .sheets > figure{break-after:page;break-inside:avoid;margin:0}
   .sheets > figure:last-of-type{break-after:auto}
-  [data-out="thermal"] .roll{display:block;padding:0;background:none;border-radius:0;max-width:none}
-  [data-out="thermal"] .tbox{width:var(--lw);height:var(--lh);border-radius:0;box-shadow:none;
+  :is([data-out="thermal"],[data-out="pdf"]) .roll{display:block;padding:0;background:none;border-radius:0;max-width:none}
+  :is([data-out="thermal"],[data-out="pdf"]) .tbox{width:var(--lw);height:var(--lh);border-radius:0;box-shadow:none;
     break-after:page;break-inside:avoid}
-  [data-out="thermal"] .tbox:last-child{break-after:auto}
-  [data-out="thermal"] .tbox > .lbl{transform:none}
+  :is([data-out="thermal"],[data-out="pdf"]) .tbox:last-child{break-after:auto}
+  :is([data-out="thermal"],[data-out="pdf"]) .tbox > .lbl{transform:none}
 }
 /* ============================================================
    AXIOM vial sticker — 50 x 30 mm, rounded corners
@@ -420,6 +422,7 @@ button,input,select{font:inherit;color:inherit}
       <div class="chips" id="out">
         <button class="chip" data-o="a4" aria-pressed="true">A4 sheet</button>
         <button class="chip" data-o="thermal" aria-pressed="false">Thermal roll · 50 × 30</button>
+        <button class="chip" data-o="pdf" aria-pressed="false">PDF only · 50 × 30</button>
       </div>
       <div id="a4opts">
         <p class="kick" style="margin:18px 0 10px">Sheet density</p>
@@ -438,6 +441,15 @@ button,input,select{font:inherit;color:inherit}
           top-coated synthetic direct-thermal labels: plain thermal paper smears under an alcohol
           swab and fades with heat and sunlight. Set the same 50&nbsp;×&nbsp;30&nbsp;mm size in the
           printer driver and calibrate the gap sensor.</p>
+      </div>
+      <div id="pdfopts" hidden>
+        <div class="chips" id="pstyle" style="margin-top:14px">
+          <button class="chip" data-s="colour" aria-pressed="true">Colour</button>
+          <button class="chip" data-s="thermal" aria-pressed="false">Black &amp; white (thermal)</button>
+        </div>
+        <p class="hint" style="margin:9px 0 0">One 50&nbsp;×&nbsp;30&nbsp;mm page per label, nothing
+          else on the page. Colour is the AXIOM label for a print shop or for sharing; black &amp;
+          white is the same design as the thermal roll.</p>
       </div>
     </div>
   </aside>
@@ -1036,7 +1048,7 @@ function labelHTML(d){
     `<div class="lbl__band lbl__band--${cls}"><span class="lbl__k">${esc(k)}</span><span class="lbl__v">${esc(v)}</span></div>`;
   return `<div class="lbl">
   <div class="lbl__band lbl__band--a">
-    ${out === 'thermal' ? WORDMARK_THERMAL : WORDMARK}
+    ${look() === 'thermal' ? WORDMARK_THERMAL : WORDMARK}
     <span class="lbl__spacer"></span>
     <span class="lbl__note">${esc(d.note || 'HIGH PURITY')}</span>
   </div>
@@ -1087,11 +1099,19 @@ const DENSITIES = {
 let densKey = 'standard', die = false;
 
 /* Output: 'a4' gangs labels onto A4; 'thermal' is one label per
-   page for a roll printer. Remembered per browser, so a new tab opened for
-   printing comes up in the same mode. */
-let out = 'a4';
-try { if (localStorage.getItem('axiom.out') === 'thermal') out = 'thermal'; } catch (e) {}
+   page for a roll printer; 'pdf' is one label per page for a download only,
+   in colour or in the thermal black and white (pdfStyle). Remembered per
+   browser, so a new tab opened for printing comes up in the same mode. */
+const OUTS = ['a4', 'thermal', 'pdf'];
+let out = 'a4', pdfStyle = 'colour';
+try {
+  const o = localStorage.getItem('axiom.out'); if (OUTS.includes(o)) out = o;
+  if (localStorage.getItem('axiom.pdfStyle') === 'thermal') pdfStyle = 'thermal';
+} catch (e) {}
+const perLabel = () => out !== 'a4';   // one label per 50 x 30 page
+const look = () => out === 'thermal' || (out === 'pdf' && pdfStyle === 'thermal') ? 'thermal' : 'colour';
 document.documentElement.dataset.out = out;
+document.documentElement.dataset.style = look();
 const pageRule = document.head.appendChild(document.createElement('style'));
 const dens = () => DENSITIES[densKey];
 const perPage = () => dens().cols * dens().rows;
@@ -1234,19 +1254,29 @@ const PRINT_HOW = {
 function setOut(o){
   out = o;
   document.documentElement.dataset.out = o;
+  document.documentElement.dataset.style = look();
   [...$('out').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.o === o)));
+  [...$('pstyle').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.s === pdfStyle)));
   $('a4opts').hidden = o !== 'a4';
   $('thopts').hidden = o !== 'thermal';
-  $('noteA4').hidden = o !== 'a4';
-  $('noteThermal').hidden = o !== 'thermal';
-  pageRule.textContent = o === 'thermal' ? `@page{ size:${LABEL.w}mm ${LABEL.h}mm; margin:0; }` : '';
-  $('printHow').innerHTML = PRINT_HOW[o];
+  $('pdfopts').hidden = o !== 'pdf';
+  $('noteA4').hidden = look() !== 'colour';
+  $('noteThermal').hidden = look() !== 'thermal';
+  pageRule.textContent = perLabel() ? `@page{ size:${LABEL.w}mm ${LABEL.h}mm; margin:0; }` : '';
+  $('printHow').innerHTML = PRINT_HOW[o] || '';
+  // "PDF only" is a download, not a print job
+  $('print').hidden = o === 'pdf';
+  if (o === 'pdf') $('printNote').hidden = true;
   $('print').textContent = embedded ? 'Print in new tab' : 'Print';
-  try { localStorage.setItem('axiom.out', o); } catch (e) {}
+  try { localStorage.setItem('axiom.out', o); localStorage.setItem('axiom.pdfStyle', pdfStyle); } catch (e) {}
   preview(); renderQueue();
 }
 $('out').addEventListener('click', e => {
   const b = e.target.closest('.chip'); if (b) setOut(b.dataset.o);
+});
+$('pstyle').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  pdfStyle = b.dataset.s; setOut(out);
 });
 
 /* ---------- queue ---------- */
@@ -1282,7 +1312,10 @@ function renderQueue(){
 
   const n = used(), pp = perPage(), pages = Math.max(1, Math.ceil(n / pp));
   const spare = pages * pp - n;
-  $('qcount').innerHTML = out === 'thermal'
+  $('qcount').innerHTML = out === 'pdf'
+    ? (n ? `${n} label${n === 1 ? '' : 's'} · one ${LABEL.w} × ${LABEL.h} mm page each`
+         : 'Nothing queued · one label per page')
+    : out === 'thermal'
     ? (n ? `${n} label${n === 1 ? '' : 's'} · one per page on a ${LABEL.w} × ${LABEL.h} mm roll`
          : 'Nothing queued · one label per page')
     : n
@@ -1300,10 +1333,12 @@ function renderSheet(){
   const flat = [];
   queue.forEach(r => { for (let i = 0; i < r.copies; i++) flat.push(r); });
 
-  if (out === 'thermal'){
+  if (perLabel()){
     $('sheet').innerHTML = `<div class="roll">${
       flat.map(x => `<div class="tbox">${labelHTML(x)}</div>`).join('')}</div>`;
-    $('pageCount').textContent = `${flat.length} label${flat.length === 1 ? '' : 's'} on the roll`;
+    $('pageCount').textContent = out === 'pdf'
+      ? `${flat.length} page${flat.length === 1 ? '' : 's'}, one label each`
+      : `${flat.length} label${flat.length === 1 ? '' : 's'} on the roll`;
     autofit($('sheet'));
     return;
   }
@@ -1561,14 +1596,14 @@ async function buildPdf(){
   doc.setTitle('AXIOM vial labels'); doc.setCreator('AXIOM label builder'); doc.setProducer('pdf-lib');
   const fonts = {};
   for (const [name, data] of Object.entries(PDF_FONTS)) fonts[name] = await doc.embedFont(b64bytes(data), { subset: true });
-  const thermal = out === 'thermal';
-  const wMm = thermal ? LABEL.w : 210, hMm = thermal ? LABEL.h : 297;
-  const roots = [...$('sheet').querySelectorAll(thermal ? '.tbox' : '.page')];
+  const single = perLabel();   // one label per page: thermal roll or "PDF only"
+  const wMm = single ? LABEL.w : 210, hMm = single ? LABEL.h : 297;
+  const roots = [...$('sheet').querySelectorAll(single ? '.tbox' : '.page')];
   for (const root of roots){
     const page = doc.addPage([wMm * MM, hMm * MM]);
     const R = root.getBoundingClientRect(), k = R.width / (wMm * PXMM), H = hMm * MM;
     const map = (x, y) => [(x - R.left) / k * PT, H - (y - R.top) / k * PT];
-    if (thermal){ drawLabel(page, root.querySelector('.lbl'), map, k, fonts); continue; }
+    if (single){ drawLabel(page, root.querySelector('.lbl'), map, k, fonts); continue; }
     for (const cell of root.querySelectorAll('.cell')){
       drawGuide(page, cell, '::before', map, k);
       drawGuide(page, cell, '::after', map, k);
@@ -1586,6 +1621,7 @@ $('dl').addEventListener('click', async () => {
   $('dl').disabled = true; dlMsg('Building the PDF…');
   const n = used();
   const name = out === 'thermal' ? `axiom-labels-thermal-${LABEL.w}x${LABEL.h}-${n}.pdf`
+    : out === 'pdf' ? `axiom-labels-${LABEL.w}x${LABEL.h}-${pdfStyle === 'thermal' ? 'bw' : 'colour'}-${n}.pdf`
     : `axiom-labels-a4-${densKey}${die ? '-dielines' : ''}-${n}.pdf`;
   try {
     const bytes = await buildPdf();
