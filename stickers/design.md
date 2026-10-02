@@ -322,7 +322,9 @@ The original master's uneven weights landed on whole dots at 203 dpi, so the O p
 heavier than the X. The master has since been evened out to 11.8 everywhere. The thermal wordmark
 is the same letters with every stroke 12.5 units (0.38 mm, 3 dots at 17.5 mm), a touch heavier
 than the master for 203 dpi. Only the inner edges differ: the outer silhouettes, the flat apex of
-the A, the O's 2-unit overshoot and the X's centre notch (4.62 × 5.18 units) are the master's.
+the A and the O's 2-unit overshoot are the master's. The X is built like the master's: each arm
+runs through the X's centre and ends in a square cut, leaving a small square opening (slits of
+4.2 and 5.0 units at 12.5, against the master's 4.4 and 4.9 at 11.8).
 `WORDMARK_THERMAL` is used only on thermal labels; the A4 sheet and the builder's own header use
 the master.
 
@@ -455,7 +457,7 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Download PDF | A4 pages exactly 210 × 297 mm, thermal pages exactly 50 × 30 mm; 158 thermal labels build in about 1 s |
 | PDF only | colour and black & white: one page per label, each exactly 50 × 30 mm; colour keeps the onyx ground and bronze rules, black & white matches the thermal output |
 | Thermal hairlines | 316 rules on 158 labels: every one 2 dot rows at 203 dpi, 3 at 300 dpi |
-| Thermal wordmark strokes | A, X, I, M 12.5 units; O ring 12.41–12.5 sampled every 5°; X notch 4.62 × 5.18 as in the master |
+| Thermal wordmark strokes | A, X, I, M 12.5 units; O ring 12.41–12.5 sampled every 5° |
 
 To re-measure after a change, load the print sheet from `file://`, then in the page context read
 `getBoundingClientRect()` on `.lbl` and divide by `96/25.4` for millimetres, or multiply by
