@@ -1,13 +1,13 @@
 # AXIOM vial sticker — design specification
 
-**20 × 40 mm wrap label** for pen-format research peptides. Retatrutide 30 mg is the worked
+**50 × 30 mm wrap label** for pen-format research peptides. Retatrutide 30 mg is the worked
 example; the label is data-driven, so the rest of the catalogue drops in without redrawing.
 
 | File | What it renders |
 |---|---|
 | `index.html` | Design proof — the label at 5× and 1:1, corner-radius options, spec table, production notes. Google Fonts. |
-| `axiom-vial-stickers-print.html` | Production A4 gang sheet, 48 slots — currently the Retatrutide range at 10 / 20 / 30 / 40 / 60 mg. Fonts embedded base64, self-contained for a vendor. Print → Save as PDF. |
-| `builder.html` | Label builder — pick compounds and strengths, queue them, and print or **Download PDF** on A4 or a thermal roll. Builds **50 × 30 mm** labels (§1b). |
+| `axiom-vial-stickers-print.html` | Production A4 gang sheet, two pages of 3 × 8 — currently the Retatrutide range at 10 / 20 / 30 / 40 / 60 mg, 9 each. Fonts embedded base64, self-contained for a vendor. Print → Save as PDF. |
+| `builder.html` | Label builder — pick compounds and strengths, queue them, and print or **Download PDF** on A4, a thermal roll, or one label per page (§7d). |
 | `design.md` | This document. |
 
 Geometry is declared in millimetres throughout, so the rendered PDF is dimensionally exact
@@ -19,27 +19,15 @@ rather than approximately right.
 
 | | |
 |---|---|
-| Die | **40 × 20 mm**, landscape |
-| Corner radius | **2 mm** (`--r`; the proof page shows 1 / 1.5 / 2 / 2.5 mm to choose from off a test print) |
-| Inset | 1.6 mm on all four sides (`--pad-x`, `--pad-y`) |
-| Safe area | **36.8 × 16.8 mm** — nothing may cross this |
-
-### 1b. The builder's 50 × 30 mm label
-
-`builder.html` makes the larger **50 × 30 mm** label. It is the same design at 1.25×: every size
-is in `--u` (1.25 mm, up from 1 mm), so type, the wordmark and the rules scale together, and the
-autofit has more room before it shrinks a long name. The proof (`index.html`) and the vendor gang
-sheet (`axiom-vial-stickers-print.html`) are still 40 × 20; the numbers in §1–§7 describe those.
-
-| | |
-|---|---|
 | Die | **50 × 30 mm**, landscape |
-| Corner radius | **2.5 mm** |
-| Inset | 2 mm on all four sides |
-| Safe area | **46 × 26 mm** |
-| Space around the top rule | 1.9 / 2.2 mm (thermal 1.6 / 1.9 mm) |
-| Space around the bottom rule | 2.1 / 1.6 mm (thermal 1.8 / 1.4 mm) |
-| A4 sheet | Standard 3 × 8 = **24** a page, Tight 3 × 9 = **27**, Die-cut 4 × 9 = **36** |
+| Corner radius | **2.5 mm** (`--r`; the proof page shows 1.5 / 2 / 2.5 / 3 mm to choose from off a test print) |
+| Inset | 2 mm on all four sides (`--pad-x`, `--pad-y`) |
+| Safe area | **46 × 26 mm** — nothing may cross this |
+
+The label was first drawn at 40 × 20 mm. The 50 × 30 label is the same design at 1.25×: each
+band's type unit is 1.25 mm instead of 1 mm, so type, the wordmark and the rules scale together,
+and the 46 mm measure is 1.25× the old 36.8 mm, so a long name shrinks to the same `--k` as
+before. The extra height goes to the space around the rules (§4).
 
 ---
 
@@ -57,10 +45,10 @@ Four tokens, taken verbatim from the canonical `:root` block in
 | Accent | `--accent` | `#C88A4E` |
 
 **Bronze budget.** Master prompt §7 caps bronze at ≤ 8 % of any surface. Here it is two
-0.2 × 36.8 mm rules plus the `HIGH PURITY` line — roughly **1.8 %** of the 800 mm² face. Well
+0.25 × 46 mm rules plus the `HIGH PURITY` line — roughly **1.7 %** of the 1,500 mm² face. Well
 inside the ceiling, and deliberately so: bronze is earned emphasis, not decoration.
 
-`RESEARCH USE ONLY` is set in `--muted`, not the dimmer `--muted-2`. At 4.0 pt on a black
+`RESEARCH USE ONLY` is set in `--muted`, not the dimmer `--muted-2`. At 5.0 pt on a black
 ground the darker grey does not survive printing.
 
 ---
@@ -76,14 +64,14 @@ Sizes are given in mm (what the CSS declares) and pt (what a printer will ask fo
 
 | Element | Size | Weight / colour | Tracking |
 |---|---|---|---|
-| Wordmark | 9 mm wide, vector | `currentColor` → `--ink` | — |
-| `HIGH PURITY` | 1.5 mm · 4.3 pt | Inter 500, `--accent` | `.14em` |
-| Hairlines | 0.2 mm · 0.57 pt | solid `--accent` | — |
-| `RETATRUTIDE` | 3.9 mm · 11.1 pt | Jost 400, `--ink` | `.05em` |
-| `QTY` / `DOSE` keys | 1.5 mm · 4.3 pt | Inter 400, `--muted` | `.14em` |
-| QTY value | 2.0 mm · 5.7 pt | Inter 500, `--ink` | `.01em` |
-| DOSE value | 1.8 mm · 5.1 pt | Inter 500, `--ink` | `.01em` |
-| `RESEARCH USE ONLY` | 1.4 mm · 4.0 pt | Inter 400, `--muted` | `.10em` |
+| Wordmark | 11.25 mm wide, vector | `currentColor` → `--ink` | — |
+| `HIGH PURITY` | 1.9 mm · 5.3 pt | Inter 500, `--accent` | `.14em` |
+| Hairlines | 0.25 mm · 0.71 pt | solid `--accent` | — |
+| `RETATRUTIDE` | 4.9 mm · 13.8 pt | Jost 400, `--ink` | `.05em` |
+| `QTY` / `DOSE` keys | 1.9 mm · 5.3 pt | Inter 400, `--muted` | `.14em` |
+| QTY value | 2.5 mm · 7.1 pt | Inter 500, `--ink` | `.01em` |
+| DOSE value | 2.25 mm · 6.4 pt | Inter 500, `--ink` | `.01em` |
+| `RESEARCH USE ONLY` | 1.75 mm · 5.0 pt | Inter 400, `--muted` | `.10em` |
 
 Two details that are easy to lose in a rebuild:
 
@@ -102,7 +90,7 @@ printing.
 
 ## 4. Layout
 
-Five bands stacked inside the 36.8 × 16.8 mm safe area, split by two hairlines:
+Five bands stacked inside the 46 × 26 mm safe area, split by two hairlines:
 
 ```
 ┌────────────────────────────────────────┐
@@ -123,10 +111,12 @@ whether or not band D is present. Vertical rhythm, as shipped:
 
 | Gap | Value |
 |---|---|
-| `.lbl__rule--top` margin | `1.1 mm` above / `1.3 mm` below |
-| `.lbl__band--c` margin-top | `0.9 mm` |
-| `.lbl__band--d` margin-top | `0.45 mm` |
-| `.lbl__rule--bot` margin | `1.2 mm` above / `0.9 mm` below |
+| `.lbl__rule--top` margin | `1.9 mm` above / `2.2 mm` below (thermal 1.6 / 1.9) |
+| `.lbl__band--c` margin-top | `1.6 mm` |
+| `.lbl__band--d` margin-top | `0.8 mm` |
+| `.lbl__rule--bot` margin | `2.1 mm` above / `1.6 mm` below (thermal 1.8 / 1.4) |
+
+The tallest label (Retatrutide with DOSE) stacks to 23.94 mm of the 26 mm content box.
 
 Band A is `align-items: center` (wordmark against cap-height text); the rest are
 `align-items: baseline` so keys and values sit on a shared baseline.
@@ -144,14 +134,14 @@ yourself reaching for a gradient here, don't.
 
 Inlined as an SVG path from `../business-proposal/assets/logo/axiom-wordmark-white.svg`
 (`viewBox="0 0 582 70"`, 586 bytes — the clean redraw from PR #24) with `fill="currentColor"` so it
-inherits `--ink`. Inlining keeps it true vector at 9 mm, keeps each HTML file self-contained, and
+inherits `--ink`. Inlining keeps it true vector at 11.25 mm, keeps each HTML file self-contained, and
 avoids the per-directory asset duplication seen across `../company-profile/assets/` and `../business-proposal/assets/`.
 
 ---
 
 ## 5. Autofit
 
-Each band declares `font-size: calc(1mm * var(--k, 1))` and sizes its children in `em`. One
+Each band declares `font-size: calc(1.25mm * var(--k, 1))` and sizes its children in `em`. One
 variable therefore scales **size and tracking together** — which is the point: shrinking
 font-size alone leaves the letter-spacing proportionally too wide and the type falls apart.
 
@@ -167,7 +157,7 @@ A4 and thermal mode):
 | `Ipamorelin + Tesamorelin` | `0.64` |
 | `BPC-157 + TB-500 (Wolverine)` | `0.60` |
 | `CJC-1295 (No DAC) + Ipamorelin` | `0.54` |
-| `VIP (Vasoactive Intestinal Peptide)` | `0.48` — the longest; cap height 1.31 mm |
+| `VIP (Vasoactive Intestinal Peptide)` | `0.48` — the longest; cap height 1.64 mm |
 
 The floor was originally `0.74`, then `0.55`; each time a longer name crossed the die line.
 `VIP (Vasoactive Intestinal Peptide)` needs `0.49`. If names get longer again, lower the floor
@@ -184,12 +174,13 @@ Both files share one `LABELS` array:
   qty:      "30 mg",              // QTY value — units spaced
   dose:     "10 clicks = 1 mg",   // DOSE value, or null
   note:     "HIGH PURITY",        // bronze mark, top right
-  copies:   8 }                   // how many to place on the sheet
+  copies:   9 }                   // how many to place on the sheet
 ```
 
-The sheet as shipped carries the **Retatrutide range** — 10 / 20 / 30 / 40 / 60 mg, 8 of each,
-40 labels in five two-row blocks. Keeping `copies` a multiple of 4 keeps every strength on whole
-rows, so a cut sheet stays sorted. Set one SKU to `copies: 48` for a full single-strength sheet.
+The sheet as shipped carries the **Retatrutide range** — 10 / 20 / 30 / 40 / 60 mg, 9 of each,
+45 labels in five three-row blocks over two pages. Keeping `copies` a multiple of 3 keeps every
+strength on whole rows, so a cut sheet stays sorted. Set one SKU to `copies: 24` for a full
+single-strength page; more copies add pages.
 
 All five strengths are real SKUs. The catalogue — `../supabase/seed.sql`, the only file in the
 repository permitted to carry a price, a name or a dose — lists Retatrutide as `reta10`, `reta20`,
@@ -221,13 +212,15 @@ A4 is 210 × 297 mm; less an 8 mm margin, the usable area is 194 × 281 mm.
 
 | | |
 |---|---|
-| Grid | **4 columns × 12 rows = 48 slots** (40 placed by the current range) |
-| Column pitch | 44 mm (40 mm label + 4 mm gutter) → 172 mm of 194 |
-| Row pitch | 23 mm (20 mm label + 3 mm gutter) → 273 mm of 281 |
+| Grid | **3 columns × 8 rows = 24 slots a page**; the current range fills 24 + 21 over two pages |
+| Column pitch | 54 mm (50 mm label + 4 mm gutter) → 158 mm of 194 |
+| Row pitch | 33 mm (30 mm label + 3 mm gutter) → 261 mm of 281, after 1.5 mm at the top for the first row's guides |
 | Sheet ground | `#fff` — it is white stock, the labels are the ink, so the screen preview matches the press |
 | Cut guides | `rgba(0, 0, 0, .38)` at 0.1 mm, centred on each die edge and extending into the gutter |
 
-The guides are **dark on purpose**. An earlier cut drew them in bone white, which is invisible
+The labels paint above the guides (`z-index`), so the guides show only in the gutters; before,
+the vertical guide drew through the middle of every label. Each A4 page is its own `.sheet`, with
+a page break after every one but the last. The guides are **dark on purpose**. An earlier cut drew them in bone white, which is invisible
 against a white gutter — they existed only on screen. If you restyle them, keep them dark.
 
 Set `--gutter-x` and `--gutter-y` to `0` for a kiss-cut / die-cut vendor file; the guides hide
@@ -240,7 +233,7 @@ A screen-only header strip states sheet size, label size, pitch, count and the s
 
 ## 7b. Sending it to a print shop
 
-`builder.html` has a **Die lines for vendor** toggle. Its labels are 50 × 30 mm (§1b). With it on, each page carries:
+`builder.html` has a **Die lines for vendor** toggle. With it on, each page carries:
 
 | | |
 |---|---|
@@ -277,8 +270,7 @@ vertical line through the middle of every label on the Standard sheet.
 **Two things to tell the vendor.** The PDF is RGB — the bronze `#C88A4E` will
 shift on a CMYK press, so ask for a match to a printed swatch, or give them
 Pantone 7502 C from `../brand-book/index.html:2162-2181`. And the die is a
-rounded rectangle, 50 × 30 mm with a 2.5 mm corner radius for the builder's labels (40 × 20 mm,
-2 mm for the fixed print sheet) — worth stating in writing as
+rounded rectangle, 50 × 30 mm with a 2.5 mm corner radius — worth stating in writing as
 well as drawing, since a new die is cut from the spec, not traced off a PDF.
 
 ---
@@ -311,7 +303,7 @@ No bronze and no onyx ground: this is the working label, not the brand-book stoc
 | Space around the top rule | 1.9 / 2.2 mm | 1.6 / 1.9 mm |
 | Space around the bottom rule | 2.1 / 1.6 mm | 1.8 / 1.4 mm |
 
-These are the 50 × 30 mm sizes (§1b). The mark was first tuned on the 40 × 20 label, where the
+These are the 50 × 30 mm sizes. The mark was first tuned on the 40 × 20 label, where the
 master wordmark is 9 mm wide and its strokes (11.8 of 582 units) are 0.18 mm: 1.5 dots at 203 dpi,
 and they print broken. The thermal mark is wider and also drawn slightly heavier (below); at
 17.5 mm its strokes are 0.38 mm, 3 dots. The tighter rule spacing pays for the larger
@@ -414,11 +406,11 @@ Three things to settle before a run:
    paper. That is heavy and unreliable on an office inkjet, and it is not what the brand book
    specifies. For production, print on black stock with white foil, or hand the vendor the PDF
    and let them.
-2. **Micro-print.** `RESEARCH USE ONLY` sets at 4.0 pt. Normal for pharma micro-print, but it is
+2. **Micro-print.** `RESEARCH USE ONLY` sets at 5.0 pt. Normal for pharma micro-print, but it is
    the one line that must be checked on a real proof. If the press cannot hold it, raise
-   `.lbl__ruo` to 1.6 mm and drop the compound to 3.6 mm to make room.
+   `.lbl__ruo` to 1.6em (2 mm) and drop the compound to 3.6em (4.5 mm) to make room.
 3. **Batch and QR.** Neither is on the label today. The brand book puts the QR on the outer box
-   at 18 × 18 mm minimum, which will not fit a 20 × 40 mm face alongside the current content —
+   at 18 × 18 mm minimum, which will not fit a 50 × 30 mm face alongside the current content —
    if a batch number is needed on the vial itself, it wants its own band and a size review.
 
 ---
@@ -446,15 +438,16 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 
 | Check | Result |
 |---|---|
-| PDF page box | 209.9 × 297.0 mm — A4, single page, `@page` honoured |
-| Label box | 113.38 × 56.68 pt = exactly 40 × 20 mm |
-| Corner radius | 7.559 px = 2 mm |
-| Sheet | 194 × 281 mm; pitch 43.995 × 22.994 mm |
-| Label count | 40 placed — 8 each of 10 / 20 / 30 / 40 / 60 mg, on rows 1-2 / 3-4 / 5-6 / 7-8 / 9-10 |
-| DOSE row | present on all 40 |
-| Overflowing bands | 0 at `--k: 1` for the shipped SKU |
+| PDF page box | 209.9 × 297.0 mm — A4, two pages, `@page` honoured, no guides spilling across the break |
+| Label box | exactly 50 × 30 mm |
+| Corner radius | 9.449 px = 2.5 mm |
+| Sheet | 194 × 281 mm a page; pitch 54 × 33 mm |
+| Label count | 45 placed — 9 each of 10 / 20 / 30 / 40 / 60 mg, 24 on page 1 and 21 on page 2, in order |
+| DOSE row | present on all 45 |
+| Overflowing bands | 0 at `--k: 1` for the shipped SKUs; tallest stack 23.94 mm of 26 |
 | Hairlines | both `rgb(200, 138, 78)`, identical width and height |
-| Proof page | no page errors, no horizontal overflow, 1:1 view measures 40 × 20 mm |
+| Guides | under the labels (`z-index: 1`), visible only in the gutters |
+| Proof page | no page errors, no horizontal overflow, 1:1 view measures 50 × 30 mm |
 | Builder label | 50 × 30 mm, 2.5 mm radius, in A4 and thermal mode |
 | Builder, all 79 names | 0 overflowing bands in A4 and thermal mode at the `0.48` floor |
 | Builder fit | tallest stack 23.94 mm (A4) and 23.45 mm (thermal) of the 26 mm content box; wordmark 11.25 × 1.35 mm (A4), 17.5 × 2.1 mm (thermal) |
