@@ -66,6 +66,11 @@
   --display:"Jost","Century Gothic",system-ui,sans-serif;
   --sans:"Inter",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
   --panel:#0E0C0A; --panel-2:#17150F;
+  /* Label size, set once. The design scales with it through --u, the
+     band unit: 1.25 mm at 50 mm wide, so the 50 x 30 label is the 40 x 20
+     design at 1.25x, with the extra height spent on space around the rules.
+     LABEL in the script must match. */
+  --lw:50mm; --lh:30mm; --lr:2.5mm; --u:1.25mm;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
@@ -195,10 +200,10 @@ button,input,select{font:inherit;color:inherit}
 .page{
   --pad:8mm; --cols:4; --gx:4mm; --gy:3mm;
   width:210mm;height:297mm;padding:var(--pad);background:#fff;
-  display:grid;grid-template-columns:repeat(var(--cols), 40mm);grid-auto-rows:20mm;
+  display:grid;grid-template-columns:repeat(var(--cols), var(--lw));grid-auto-rows:var(--lh);
   column-gap:var(--gx);row-gap:var(--gy);align-content:start;justify-content:start;
 }
-.cell{position:relative;width:40mm;height:20mm}
+.cell{position:relative;width:var(--lw);height:var(--lh)}
 /* the label paints above both guides, so they show only in the gutters */
 .cell > .lbl{z-index:1}
 .cell::before,.cell::after{content:"";position:absolute;background:rgba(0,0,0,.38);
@@ -209,7 +214,7 @@ button,input,select{font:inherit;color:inherit}
 .page[data-guides="off"] .cell::after{display:none}
 
 /* ---------- vendor mode ----------
-   The die contour sits exactly on the 40x20mm trim with the real 2mm radius,
+   The die contour sits exactly on the trim with the real corner radius,
    drawn 0.09mm (~0.25pt) in 100% magenta — the usual CutContour convention.
    box-shadow paints 1mm of bleed outside the trim and follows the radius,
    without affecting layout, so the black ground runs past the cut. */
@@ -227,7 +232,7 @@ button,input,select{font:inherit;color:inherit}
 /* ---------- thermal mode ----------
    For a thermal roll printer, direct thermal at 203 dpi (Xprinter XP-420B,
    XP-D4601B) or thermal transfer: one colour, black on white label stock,
-   one 40 x 20 mm label per page. A thermal head is 1-bit, so every
+   one label per page. A thermal head is 1-bit, so every
    tone is solid black (a grey prints as a dither pattern) and the hierarchy
    the greys carried moves to weight instead. The compound stays at 400: it
    is the largest type and already heavy enough, and at 500 the longest name
@@ -244,22 +249,21 @@ button,input,select{font:inherit;color:inherit}
 [data-out="thermal"] .lbl__k{font-weight:500}
 [data-out="thermal"] .lbl__v,
 [data-out="thermal"] .lbl__note{font-weight:600}
-/* Sized for 203 dpi, where a dot is 0.125 mm. At 9 mm wide the wordmark's
-   thinnest strokes are 1.2 dots and break up, so thermal mode draws it 14 mm
-   wide from WORDMARK_THERMAL, which gives every letter the same 12.5-unit
-   stroke (0.30 mm, 2.4 dots). Band A grows by only 0.18 mm. The micro-print
-   goes from 1.4em/500 to 1.7em/600. The room comes
-   from tightening the space around the rules, which keeps the tallest label
-   (Retatrutide, with DOSE) inside the 16.8 mm content box. */
+/* Sized for 203 dpi, where a dot is 0.125 mm. Thermal mode draws the
+   wordmark at 14em (17.5 mm on a 50 mm label) from WORDMARK_THERMAL, which
+   gives every letter the same 12.5-unit stroke (0.38 mm, 3 dots), and sets
+   the micro-print at 1.7em/600 rather than 1.4em/500. The space around the
+   rules is a little tighter than in A4 mode to pay for both, which keeps
+   the tallest label (Retatrutide, with DOSE) inside the 26 mm content box. */
 [data-out="thermal"] .lbl__wm{width:14em; height:calc(14em * 70 / 582)}
 [data-out="thermal"] .lbl__ruo{font-size:1.7em; font-weight:600}
-[data-out="thermal"] .lbl__rule--top{margin:.9mm 0 1.1mm}
-[data-out="thermal"] .lbl__rule--bot{margin:1mm 0 .8mm}
+[data-out="thermal"] .lbl__rule--top{margin:1.6mm 0 1.9mm}
+[data-out="thermal"] .lbl__rule--bot{margin:1.8mm 0 1.4mm}
 
 /* On screen the roll is white labels on a liner; in print each label is a page. */
 .roll{display:flex;flex-wrap:wrap;gap:14px;padding:18px;background:#DAD5CC;border-radius:6px;max-width:760px}
-.tbox{--z:2;position:relative;width:calc(40mm * var(--z));height:calc(20mm * var(--z));
-  border-radius:calc(2mm * var(--z));overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tbox{--z:1.6;position:relative;width:calc(var(--lw) * var(--z));height:calc(var(--lh) * var(--z));
+  border-radius:calc(var(--lr) * var(--z));overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.25)}
 .tbox > .lbl{position:absolute;top:0;left:0;transform:scale(var(--z));transform-origin:top left}
 
 @page{ size:A4 portrait; margin:0; }
@@ -278,23 +282,23 @@ button,input,select{font:inherit;color:inherit}
   .sheets > figure{break-after:page;break-inside:avoid;margin:0}
   .sheets > figure:last-of-type{break-after:auto}
   [data-out="thermal"] .roll{display:block;padding:0;background:none;border-radius:0;max-width:none}
-  [data-out="thermal"] .tbox{width:40mm;height:20mm;border-radius:0;box-shadow:none;
+  [data-out="thermal"] .tbox{width:var(--lw);height:var(--lh);border-radius:0;box-shadow:none;
     break-after:page;break-inside:avoid}
   [data-out="thermal"] .tbox:last-child{break-after:auto}
   [data-out="thermal"] .tbox > .lbl{transform:none}
 }
 /* ============================================================
-   AXIOM vial sticker — 20 x 40 mm, rounded corners
+   AXIOM vial sticker — 50 x 30 mm, rounded corners
    Geometry is declared in mm so the printed piece is
    dimensionally exact. Type inside each band is expressed in em
-   against a 1mm-based band font-size, so autofit() can shrink a
+   against a band font-size of one --u, so autofit() can shrink a
    whole band (size AND tracking) proportionally when a long
    compound name would otherwise cross the die line.
-   Content box: 40 - 2*1.6 = 36.8mm wide, 20 - 2*1.6 = 16.8mm tall.
+   Content box: 50 - 2*2 = 46mm wide, 30 - 2*2 = 26mm tall.
    ============================================================ */
 .lbl{
-  --w:40mm; --h:20mm; --r:2mm;
-  --pad-x:1.6mm; --pad-y:1.6mm;
+  --w:var(--lw); --h:var(--lh); --r:var(--lr);
+  --pad-x:2mm; --pad-y:2mm;
   position:relative;
   width:var(--w); height:var(--h);
   border-radius:var(--r);
@@ -308,7 +312,7 @@ button,input,select{font:inherit;color:inherit}
 }
 /* Each band scales as one unit via --k (set by autofit) */
 .lbl__band{
-  font-size:calc(1mm * var(--k,1));
+  font-size:calc(var(--u) * var(--k,1));
   display:flex; align-items:baseline;
   gap:.7em; min-width:0; line-height:1;
 }
@@ -330,9 +334,9 @@ button,input,select{font:inherit;color:inherit}
 /* --- hairline dividers — the core AXIOM texture -------------
    Both rules are solid bronze at full strength, so they read the
    same on every label; no gradient, no grey. */
-.lbl__rule{height:.2mm; flex:0 0 .2mm; background:var(--accent)}
-.lbl__rule--top{ margin:1.1mm 0 1.3mm }
-.lbl__rule--bot{ margin:1.2mm 0 .9mm }
+.lbl__rule{height:.25mm; flex:0 0 .25mm; background:var(--accent)}
+.lbl__rule--top{ margin:1.9mm 0 2.2mm }
+.lbl__rule--bot{ margin:2.1mm 0 1.6mm }
 
 /* --- band B — compound, the hero --------------------------- */
 .lbl__compound{
@@ -342,8 +346,8 @@ button,input,select{font:inherit;color:inherit}
 }
 
 /* --- bands C / D — quantity and dose ------------------------ */
-.lbl__band--c{margin-top:.9mm}
-.lbl__band--d{margin-top:.45mm}
+.lbl__band--c{margin-top:1.6mm}
+.lbl__band--d{margin-top:.8mm}
 .lbl__k{
   font-weight:400; font-size:1.5em; letter-spacing:.14em;
   text-transform:uppercase; color:var(--muted);
@@ -415,7 +419,7 @@ button,input,select{font:inherit;color:inherit}
       <p class="kick">3 · Output</p>
       <div class="chips" id="out">
         <button class="chip" data-o="a4" aria-pressed="true">A4 sheet</button>
-        <button class="chip" data-o="thermal" aria-pressed="false">Thermal roll · 40 × 20</button>
+        <button class="chip" data-o="thermal" aria-pressed="false">Thermal roll · 50 × 30</button>
       </div>
       <div id="a4opts">
         <p class="kick" style="margin:18px 0 10px">Sheet density</p>
@@ -430,9 +434,9 @@ button,input,select{font:inherit;color:inherit}
       <div id="thopts" hidden>
         <p class="hint" style="margin:10px 0 0">Black on white, one label per page, for a
           direct-thermal roll printer such as the Xprinter XP-420B or XP-D4601B (203&nbsp;dpi).
-          Load 40&nbsp;×&nbsp;20&nbsp;mm labels, one across the roll with a gap between them. Use
+          Load 50&nbsp;×&nbsp;30&nbsp;mm labels, one across the roll with a gap between them. Use
           top-coated synthetic direct-thermal labels: plain thermal paper smears under an alcohol
-          swab and fades with heat and sunlight. Set the same 40&nbsp;×&nbsp;20&nbsp;mm size in the
+          swab and fades with heat and sunlight. Set the same 50&nbsp;×&nbsp;30&nbsp;mm size in the
           printer driver and calibrate the gap sensor.</p>
       </div>
     </div>
@@ -442,13 +446,13 @@ button,input,select{font:inherit;color:inherit}
     <header>
       <h1>Vial label builder</h1>
       <p class="sub">Pick a compound from the AXIOM research catalogue, set the copy, and gang it
-        onto A4. Labels are 40 × 20 mm with a 2 mm die radius, drawn in the AXIOM system — the same
+        onto A4. Labels are 50 × 30 mm with a 2.5 mm die radius, drawn in the AXIOM system — the same
         component the production sheet uses. Queue as many compounds as you like; the sheet adds
         pages as it fills.</p>
     </header>
 
     <section>
-      <p class="kick">Preview — 5&times;</p>
+      <p class="kick">Preview — 4&times;</p>
       <div class="plate"><div class="pv" id="pv"></div></div>
       <p class="cap" id="pvCap">Select a compound to begin</p>
     </section>
@@ -1019,7 +1023,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    entirely rather than printed empty. Click conversions are device-specific
    and are never inferred for a strength that was not supplied.
 
-   Stacked inside 36.8 x 16.8 mm:
+   Stacked inside the 46 x 26 mm content box:
      A  AXIOM wordmark ................ HIGH PURITY
         ------------------------------------------
      B  RETATRUTIDE
@@ -1046,7 +1050,7 @@ function labelHTML(d){
 }
 
 /* Shrink a band (size + tracking together, via --k) until it fits the
-   36.8mm content box. The floor is set low enough for the longest name in
+   46 mm content box. The floor is set low enough for the longest name in
    the catalogue — "VIP (Vasoactive Intestinal Peptide)", which needs 0.49 —
    to stay inside the die line. */
 function autofit(root){
@@ -1066,21 +1070,23 @@ function autofit(root){
 
 /* ---------- state ---------- */
 /* Every page is a full A4 holding its own padding, so the density is just
-   padding + column count + gutters. Widths checked against 210 x 297mm:
-     standard  194 x 281 usable · 4*40+3*4 = 172 · 12*20+11*3 = 273
-     tight     194 x 281 usable · 4*40     = 160 · 14*20      = 280
-     die-cut   200 x 287 usable · 5*40     = 200 · 14*20      = 280            */
+   padding + column count + gutters. Checked against 210 x 297mm with a
+   50 x 30 label:
+     standard  194 x 281 usable · 3*50+2*4 = 158 · 8*30+7*3 = 261
+     tight     194 x 281 usable · 3*50     = 150 · 9*30     = 270
+     die-cut   200 x 287 usable · 4*50     = 200 · 9*30     = 270            */
+const LABEL = { w: 50, h: 30 };   // mm; must match --lw / --lh
 const DENSITIES = {
-  standard: { name:'Standard', pad:8, cols:4, rows:12, gx:4, gy:3, guides:true,
-              hint:'4 &times; 12 with cut guides in the gutters — trim with a guillotine or scissors.' },
-  tight:    { name:'Tight',    pad:8, cols:4, rows:14, gx:0, gy:0, guides:false,
-              hint:'4 &times; 14, labels butted edge to edge. No gutters, so cut on the die line.' },
-  diecut:   { name:'Die-cut',  pad:5, cols:5, rows:14, gx:0, gy:0, guides:false,
-              hint:'5 &times; 14 at a 5&nbsp;mm page margin — the densest fit on A4. Send to a vendor for kiss-cutting; most office printers cannot hold a 5&nbsp;mm margin.' },
+  standard: { name:'Standard', pad:8, cols:3, rows:8, gx:4, gy:3, guides:true,
+              hint:'3 &times; 8 with cut guides in the gutters — trim with a guillotine or scissors.' },
+  tight:    { name:'Tight',    pad:8, cols:3, rows:9, gx:0, gy:0, guides:false,
+              hint:'3 &times; 9, labels butted edge to edge. No gutters, so cut on the die line.' },
+  diecut:   { name:'Die-cut',  pad:5, cols:4, rows:9, gx:0, gy:0, guides:false,
+              hint:'4 &times; 9 at a 5&nbsp;mm page margin — the densest fit on A4. Send to a vendor for kiss-cutting; most office printers cannot hold a 5&nbsp;mm margin.' },
 };
 let densKey = 'standard', die = false;
 
-/* Output: 'a4' gangs labels onto A4; 'thermal' is one 40 x 20 mm label per
+/* Output: 'a4' gangs labels onto A4; 'thermal' is one label per
    page for a roll printer. Remembered per browser, so a new tab opened for
    printing comes up in the same mode. */
 let out = 'a4';
@@ -1183,12 +1189,12 @@ const draft = () => ({
 });
 
 function preview(){
-  const S = 5;
+  const S = 4;
   $('pv').innerHTML = labelHTML(draft());
   const l = $('pv').firstElementChild;
   l.style.transform = `scale(${S})`;
-  $('pv').style.width  = (40 * S) + 'mm';
-  $('pv').style.height = (20 * S) + 'mm';
+  $('pv').style.width  = (LABEL.w * S) + 'mm';
+  $('pv').style.height = (LABEL.h * S) + 'mm';
   autofit($('pv'));
   $('pvCap').textContent = sel
     ? `${sel.compound} · ${sel.lot} · ${CATALOGUE.categories[sel.cat]}`
@@ -1221,7 +1227,7 @@ const PRINT_HOW = {
     That last one matters — without it the onyx ground drops out and the labels
     print as white boxes.`,
   thermal: `In the print dialog: <b>Destination</b> your Xprinter (or Save as PDF) ·
-    <b>Paper</b> 40 × 20 mm, the same size set in the printer driver · <b>Scale</b> 100% ·
+    <b>Paper</b> ${LABEL.w} × ${LABEL.h} mm, the same size set in the printer driver · <b>Scale</b> 100% ·
     <b>Margins</b> None. Each label is its own page. Print over USB from a computer, with
     the Xprinter driver installed; it is the dependable path for a browser print.`,
 };
@@ -1233,7 +1239,7 @@ function setOut(o){
   $('thopts').hidden = o !== 'thermal';
   $('noteA4').hidden = o !== 'a4';
   $('noteThermal').hidden = o !== 'thermal';
-  pageRule.textContent = o === 'thermal' ? '@page{ size:40mm 20mm; margin:0; }' : '';
+  pageRule.textContent = o === 'thermal' ? `@page{ size:${LABEL.w}mm ${LABEL.h}mm; margin:0; }` : '';
   $('printHow').innerHTML = PRINT_HOW[o];
   $('print').textContent = embedded ? 'Print in new tab' : 'Print';
   try { localStorage.setItem('axiom.out', o); } catch (e) {}
@@ -1277,7 +1283,7 @@ function renderQueue(){
   const n = used(), pp = perPage(), pages = Math.max(1, Math.ceil(n / pp));
   const spare = pages * pp - n;
   $('qcount').innerHTML = out === 'thermal'
-    ? (n ? `${n} label${n === 1 ? '' : 's'} · one per page on a 40 × 20 mm roll`
+    ? (n ? `${n} label${n === 1 ? '' : 's'} · one per page on a ${LABEL.w} × ${LABEL.h} mm roll`
          : 'Nothing queued · one label per page')
     : n
     ? `${n} label${n === 1 ? '' : 's'} · ${pages} page${pages === 1 ? '' : 's'} · ${pp}/page`
@@ -1307,7 +1313,7 @@ function renderSheet(){
   for (let i = 0; i < pages; i++){
     const cells = flat.slice(i * pp, (i + 1) * pp)
       .map(x => `<div class="cell">${labelHTML(x)}</div>`).join('');
-    const spec = `AXIOM vial label · 40 × 20 mm · 2 mm corner radius · 1 mm bleed · `
+    const spec = `AXIOM vial label · ${LABEL.w} × ${LABEL.h} mm · 2.5 mm corner radius · 1 mm bleed · `
       + `die line = magenta (CutContour), do not print · ${d.name} ${d.cols}×${d.rows} · `
       + `page ${i + 1} of ${pages}`;
     html += `<figure style="margin:0">
@@ -1556,7 +1562,7 @@ async function buildPdf(){
   const fonts = {};
   for (const [name, data] of Object.entries(PDF_FONTS)) fonts[name] = await doc.embedFont(b64bytes(data), { subset: true });
   const thermal = out === 'thermal';
-  const wMm = thermal ? 40 : 210, hMm = thermal ? 20 : 297;
+  const wMm = thermal ? LABEL.w : 210, hMm = thermal ? LABEL.h : 297;
   const roots = [...$('sheet').querySelectorAll(thermal ? '.tbox' : '.page')];
   for (const root of roots){
     const page = doc.addPage([wMm * MM, hMm * MM]);
@@ -1579,7 +1585,7 @@ $('dl').addEventListener('click', async () => {
   if (!queue.length) return;
   $('dl').disabled = true; dlMsg('Building the PDF…');
   const n = used();
-  const name = out === 'thermal' ? `axiom-labels-thermal-40x20-${n}.pdf`
+  const name = out === 'thermal' ? `axiom-labels-thermal-${LABEL.w}x${LABEL.h}-${n}.pdf`
     : `axiom-labels-a4-${densKey}${die ? '-dielines' : ''}-${n}.pdf`;
   try {
     const bytes = await buildPdf();

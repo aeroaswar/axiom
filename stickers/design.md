@@ -7,6 +7,7 @@ example; the label is data-driven, so the rest of the catalogue drops in without
 |---|---|
 | `index.html` | Design proof — the label at 5× and 1:1, corner-radius options, spec table, production notes. Google Fonts. |
 | `axiom-vial-stickers-print.html` | Production A4 gang sheet, 48 slots — currently the Retatrutide range at 10 / 20 / 30 / 40 / 60 mg. Fonts embedded base64, self-contained for a vendor. Print → Save as PDF. |
+| `builder.html` | Label builder — pick compounds and strengths, queue them, and print or **Download PDF** on A4 or a thermal roll. Builds **50 × 30 mm** labels (§1b). |
 | `design.md` | This document. |
 
 Geometry is declared in millimetres throughout, so the rendered PDF is dimensionally exact
@@ -22,6 +23,23 @@ rather than approximately right.
 | Corner radius | **2 mm** (`--r`; the proof page shows 1 / 1.5 / 2 / 2.5 mm to choose from off a test print) |
 | Inset | 1.6 mm on all four sides (`--pad-x`, `--pad-y`) |
 | Safe area | **36.8 × 16.8 mm** — nothing may cross this |
+
+### 1b. The builder's 50 × 30 mm label
+
+`builder.html` makes the larger **50 × 30 mm** label. It is the same design at 1.25×: every size
+is in `--u` (1.25 mm, up from 1 mm), so type, the wordmark and the rules scale together, and the
+autofit has more room before it shrinks a long name. The proof (`index.html`) and the vendor gang
+sheet (`axiom-vial-stickers-print.html`) are still 40 × 20; the numbers in §1–§7 describe those.
+
+| | |
+|---|---|
+| Die | **50 × 30 mm**, landscape |
+| Corner radius | **2.5 mm** |
+| Inset | 2 mm on all four sides |
+| Safe area | **46 × 26 mm** |
+| Space around the top rule | 1.9 / 2.2 mm (thermal 1.6 / 1.9 mm) |
+| Space around the bottom rule | 2.1 / 1.6 mm (thermal 1.8 / 1.4 mm) |
+| A4 sheet | Standard 3 × 8 = **24** a page, Tight 3 × 9 = **27**, Die-cut 4 × 9 = **36** |
 
 ---
 
@@ -222,11 +240,11 @@ A screen-only header strip states sheet size, label size, pitch, count and the s
 
 ## 7b. Sending it to a print shop
 
-`builder.html` has a **Die lines for vendor** toggle. With it on, each page carries:
+`builder.html` has a **Die lines for vendor** toggle. Its labels are 50 × 30 mm (§1b). With it on, each page carries:
 
 | | |
 |---|---|
-| Cut contour | The real 40 × 20 mm trim with the 2 mm radius, 0.09 mm (~0.25 pt) in 100% magenta — the usual CutContour convention. Ask the vendor to use it as the cut path and not print it. |
+| Cut contour | The real 50 × 30 mm trim with the 2.5 mm radius, 0.09 mm (~0.25 pt) in 100% magenta — the usual CutContour convention. Ask the vendor to use it as the cut path and not print it. |
 | Bleed | 1 mm of the onyx ground past the trim on all four sides, so a slight cut variance never leaves a white edge. |
 | Spec line | Printed at the foot of every page: size, radius, bleed, what the magenta means, density and page number. |
 
@@ -259,14 +277,15 @@ vertical line through the middle of every label on the Standard sheet.
 **Two things to tell the vendor.** The PDF is RGB — the bronze `#C88A4E` will
 shift on a CMYK press, so ask for a match to a printed swatch, or give them
 Pantone 7502 C from `../brand-book/index.html:2162-2181`. And the die is a
-rounded rectangle, 40 × 20 mm, 2 mm corner radius — worth stating in writing as
+rounded rectangle, 50 × 30 mm with a 2.5 mm corner radius for the builder's labels (40 × 20 mm,
+2 mm for the fixed print sheet) — worth stating in writing as
 well as drawing, since a new die is cut from the spec, not traced off a PDF.
 
 ---
 
 ## 7c. Thermal roll
 
-`builder.html` has a second output, **Thermal roll · 40 × 20**, for printing in-house on a
+`builder.html` has a second output, **Thermal roll · 50 × 30**, for printing in-house on a
 thermal label printer. It is tuned for the printers in use, the **Xprinter XP-420B and
 XP-D4601B: direct thermal, 203 dpi**, where a dot is 0.125 mm. Same layout, same autofit, same
 data; four things change.
@@ -287,16 +306,17 @@ No bronze and no onyx ground: this is the working label, not the brand-book stoc
 
 | Element | A4 | Thermal |
 |---|---|---|
-| Wordmark | 9 × 1.08 mm, master drawing | **14 × 1.68 mm**, redrawn with every stroke 12.5 units |
+| Wordmark | 11.25 × 1.35 mm, master drawing | **17.5 × 2.1 mm**, redrawn with every stroke 12.5 units |
 | `RESEARCH USE ONLY` | `1.4em`, Inter 400, `--muted` | **`1.7em`, Inter 600**, black |
-| Space around the top rule | 1.1 / 1.3 mm | 0.9 / 1.1 mm |
-| Space around the bottom rule | 1.2 / 0.9 mm | 1.0 / 0.8 mm |
+| Space around the top rule | 1.9 / 2.2 mm | 1.6 / 1.9 mm |
+| Space around the bottom rule | 2.1 / 1.6 mm | 1.8 / 1.4 mm |
 
-At 9 mm the master wordmark's strokes (11.8 of 582 units) are 0.18 mm: 1.5 dots at 203 dpi, and
-they print broken. Scale alone would need about 12.3 mm to reach 2 dots; the thermal mark is 14 mm and
-also drawn slightly heavier (below). Band A grows by only 0.18 mm at 14 mm (the mark is 1.68 mm tall against the
-1.5 mm `HIGH PURITY` line). The tighter rule spacing pays for the larger micro-print, so the
-tallest label (Retatrutide with DOSE) stacks to 16.75 mm, inside the 16.8 mm content box.
+These are the 50 × 30 mm sizes (§1b). The mark was first tuned on the 40 × 20 label, where the
+master wordmark is 9 mm wide and its strokes (11.8 of 582 units) are 0.18 mm: 1.5 dots at 203 dpi,
+and they print broken. The thermal mark is wider and also drawn slightly heavier (below); at
+17.5 mm its strokes are 0.38 mm, 3 dots. The tighter rule spacing pays for the larger
+micro-print, so the tallest label (Retatrutide with DOSE) stacks to 23.45 mm, inside the 26 mm
+content box (23.94 mm on A4).
 
 Stroke weights, in units of the 582 × 70 grid:
 
@@ -308,7 +328,7 @@ Stroke weights, in units of the 582 × 70 grid:
 
 The original master's uneven weights landed on whole dots at 203 dpi, so the O printed visibly
 heavier than the X. The master has since been evened out to 11.8 everywhere. The thermal wordmark
-is the same letters with every stroke 12.5 units (0.30 mm, 2.4 dots at 14 mm), a touch heavier
+is the same letters with every stroke 12.5 units (0.38 mm, 3 dots at 17.5 mm), a touch heavier
 than the master for 203 dpi. Only the inner edges differ: the outer silhouettes, the flat apex of
 the A, the O's 2-unit overshoot and the X's centre notch (4.62 × 5.18 units) are the master's.
 `WORDMARK_THERMAL` is used only on thermal labels; the A4 sheet and the builder's own header use
@@ -327,10 +347,11 @@ from the PDF across every catalogue name with and without the DOSE row (158 labe
 every rule covers **2 rows at 203 dpi** and 3 at 300 dpi. The rules print with *Background
 graphics* off.
 
-**One label per page.** `@page` becomes `40mm 20mm`, margin 0, and each label is its own page, so
-the driver feeds one label per page and uses the gap sensor to register the next. The PDF page
-box measures 39.9 × 20.1 mm: Chromium rounds the page to whole CSS pixels, the same way A4 comes
-out at 209.9 mm. The 0.1 mm lands in the gap between labels.
+**One label per page.** `@page` becomes `50mm 30mm`, margin 0, and each label is its own page, so
+the driver feeds one label per page and uses the gap sensor to register the next. Browser print
+gives a page of 50.1 × 30.0 mm: Chromium rounds the page to whole CSS pixels, the same way A4
+comes out at 209.9 mm, and the 0.1 mm lands in the gap between labels. **Download PDF** pages are
+exactly 50 × 30 mm.
 
 **The printer and the labels.**
 
@@ -340,13 +361,14 @@ out at 209.9 mm. The 0.1 mm lands in the gap between labels.
 - **So use top-coated synthetic direct-thermal labels** (PP or synthetic, "top coated"). The top
   coat protects the print from swabs and fridge condensation. Keep labelled vials out of heat and
   direct sun.
-- **40 × 20 mm, one across the roll, with a gap.** Many 40 × 20 rolls are two or three across;
-  those do not line up with one label per page.
+- **50 × 30 mm, one across the roll, with a gap.** Rolls that are two or three across do not line
+  up with one label per page.
 - **Print over USB from a computer** with the Xprinter driver installed. It is the dependable
   path for a browser print; the XP-D4601B's Bluetooth is aimed at phone apps.
-- In the driver, add a 40 × 20 mm paper size, labels with gaps, and calibrate the gap sensor (the
+- In the driver, add a 50 × 30 mm paper size, labels with gaps, and calibrate the gap sensor (the
   XP-D4601B calibrates itself; on the XP-420B hold the feed button). In the print dialog: Paper
-  40 × 20 mm, Scale 100%, Margins None.
+  50 × 30 mm, Scale 100%, Margins None. Printing the downloaded PDF from a PDF viewer works the
+  same way: Actual size, not Fit.
 
 Print one label first and check `RESEARCH USE ONLY`. If it breaks up, raise the darkness (density)
 a step, then slow the print speed.
@@ -416,10 +438,12 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Overflowing bands | 0 at `--k: 1` for the shipped SKU |
 | Hairlines | both `rgb(200, 138, 78)`, identical width and height |
 | Proof page | no page errors, no horizontal overflow, 1:1 view measures 40 × 20 mm |
+| Builder label | 50 × 30 mm, 2.5 mm radius, in A4 and thermal mode |
 | Builder, all 79 names | 0 overflowing bands in A4 and thermal mode at the `0.48` floor |
-| Thermal PDF | 39.9 × 20.1 mm per page; 8 labels → 8 pages, 80 → 80, no trailing page |
+| Builder fit | tallest stack 23.94 mm (A4) and 23.45 mm (thermal) of the 26 mm content box; wordmark 11.25 × 1.35 mm (A4), 17.5 × 2.1 mm (thermal) |
+| Thermal print | 50.1 × 30.0 mm per page; 8 labels → 8 pages, 80 → 80, no trailing page |
+| Download PDF | A4 pages exactly 210 × 297 mm, thermal pages exactly 50 × 30 mm; 158 thermal labels build in about 1 s |
 | Thermal hairlines | 316 rules on 158 labels: every one 2 dot rows at 203 dpi, 3 at 300 dpi |
-| Thermal fit | tallest stack 16.75 mm of the 16.8 mm content box across all 158 labels; wordmark 14 × 1.68 mm |
 | Thermal wordmark strokes | A, X, I, M 12.5 units; O ring 12.41–12.5 sampled every 5°; X notch 4.62 × 5.18 as in the master |
 
 To re-measure after a change, load the print sheet from `file://`, then in the page context read
