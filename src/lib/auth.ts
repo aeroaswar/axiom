@@ -26,15 +26,44 @@ export type Session = {
 // `NEXT_PUBLIC_AUTH_MODE` is the real thing. Next inlines it into the bundle at build time, so an
 // artifact built without it has no dev door at all and no environment variable can add one later.
 // A deployment builds without it; local and CI builds set it and get the seeded sign-in.
+//
+// The flag alone still left one way in: a build made on purpose with it. So the door also requires
+// NEXT_PUBLIC_SITE_URL to be local — likewise inlined at build — and a build for a real domain has
+// it shut, flag or not. CI builds for http://127.0.0.1:3000 and `pnpm setup` for localhost, so
+// every build that needs the seeded sign-in still gets it.
 const PRODUCTION = process.env.NODE_ENV === 'production';
-const DEV = process.env.NEXT_PUBLIC_AUTH_MODE === 'dev';
+const DEV = process.env.NEXT_PUBLIC_AUTH_MODE === 'dev' && isLocalSite(process.env.NEXT_PUBLIC_SITE_URL);
+
+/**
+ * Whether a site URL names this machine. Fails closed: an unset or unparseable URL is not local.
+ * That deliberately differs from `siteUrl()` in lib/site/seo.ts, which falls back to localhost so a
+ * canonical link always renders — a production build that forgot the variable must not open the
+ * dev door on that guess.
+ */
+function isLocalSite(url: string | undefined): boolean {
+  if (!url) return false;
+  try {
+    const host = new URL(url).hostname;
+    return host === 'localhost' || host === '127.0.0.1' || host === '[::1]';
+  } catch {
+    return false;
+  }
+}
 const COOKIE = 'axiom_session';
 const FALLBACK_SECRET = 'axiom-dev-secret';
 
-/** The key the dev cookie is signed with. A published default may never sign a real session. */
+/**
+ * The key the dev cookie is signed with. A published default may never sign a real session.
+ *
+ * This refuses in every production build, dev door or not. It once carried a `!DEV` term, which
+ * waived the check in exactly the build where it matters: a production artifact built with the
+ * dev door open would sign sessions with FALLBACK_SECRET, a constant published in this repository,
+ * so anyone could forge a session for any user. CI (`ci-secret`) and `pnpm setup` both supply an
+ * AUTH_SECRET other than this fallback, so the only build this now stops is the dangerous one.
+ */
 function secret() {
   const s = process.env.AUTH_SECRET;
-  if (PRODUCTION && !DEV && (!s || s === FALLBACK_SECRET)) {
+  if (PRODUCTION && (!s || s === FALLBACK_SECRET)) {
     throw new Error('AUTH_SECRET is unset or still the published default; refusing to sign a session');
   }
   return new TextEncoder().encode(s || FALLBACK_SECRET);
