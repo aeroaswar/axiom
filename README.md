@@ -100,6 +100,21 @@ On the clean sheet, a first sale runs in this order, each step in the Console:
 4. **New quote → send → accept** — acceptance issues the invoice; **mark paid** moves it to
    packing; dispatch and delivery close it.
 
+## The AXIOM wordmark
+
+One vector path, drawn on a 582 × 70 grid, with every stroke 11.8 units wide: the A's legs,
+the four arms of the notched X, the I, the O all the way round, and the M's stems and
+diagonals. The O keeps its overshoot (0–70 against 2–68). The master file is
+`business-proposal/assets/logo/axiom-wordmark-white.svg` (bone `#F2EDE5`, for dark grounds).
+
+The same path is inlined, byte for byte, in `src/components/shell/sprite-svg.ts` (the web app's
+`#wm` symbol), `web-app/mockup/index.html`, `business-proposal/axiom-pricelist-print.html` (which
+`order-form/build.cjs` reads it from), `invoice/axiom-invoice-a4.html`, the three pages in
+`stickers/`, and `dosage-guide/print/card-print.html`; `dosage-guide/assets/` keeps a copy of
+the SVG. Change the path in all of them together. The committed PDFs and the raster lockups
+(`brand-book/logo.png`, the two PNGs in `company-profile/assets/`,
+`dosage-guide/print/axiom-card-preview.png`) carry the same drawing and need re-exporting too.
+
 ## Compound guide and pen card
 
 `dosage-guide/` is a static site, separate from the app: a print-ready 85 × 55 mm card carrying

@@ -15,6 +15,7 @@ export default async function PublicLayout({ children, params }: { children: Rea
     { href: '/compounds', label: t('compounds') },
     { href: '/price-list', label: t('price_list') },
     { href: '/standard', label: t('standard') },
+    { href: '/verify', label: t('verify') },
     { href: '/process', label: t('process') },
     { href: '/faq', label: t('faq') },
   ];
