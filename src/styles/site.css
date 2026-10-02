@@ -60,6 +60,11 @@
 .site .chip:hover{border-color:var(--line-2);color:var(--ink)}
 .site .chip.active,.site .chip.on{background:var(--ink);color:#000;border-color:var(--ink)}
 .site .chip.quiet{border-color:transparent;padding-left:0;padding-right:0;cursor:default}
+/* a status, not a filter: toned, and inert under the pointer */
+.site .chip.ok,.site .chip.warn,.site .chip.err{cursor:default;display:inline-flex;align-items:center;gap:8px}
+.site .chip.ok{color:var(--ok);border-color:rgba(143,163,126,.32)}
+.site .chip.warn{color:var(--warn);border-color:rgba(200,162,78,.32)}
+.site .chip.err{color:var(--err);border-color:rgba(176,85,59,.34)}
 
 /* ---------- hero ---------- */
 .site .hero{position:relative;min-height:calc(100dvh - 76px);display:flex;flex-direction:column;padding:110px 0 38px}
