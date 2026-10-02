@@ -25,7 +25,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
 .sh h2{font-family:var(--display);font-weight:400;font-size:18px;margin:0;color:var(--ink);letter-spacing:.01em}
 .sh .hint{margin-left:auto;font-size:10px;color:var(--muted);letter-spacing:.03em}
 .fl{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 5px}
-.fl i{font-style:normal;letter-spacing:.03em;text-transform:none;color:var(--muted-2);font-weight:400;margin-left:5px}
+.fl i,.items th i{font-style:normal;letter-spacing:.03em;text-transform:none;color:var(--muted-2);font-weight:400;margin-left:5px}
 .box{display:block;height:40px;background:var(--field);border-left:3px solid var(--accent)}
 .box.tall{height:50px}
 .grid{display:grid;grid-template-columns:1fr 270px;gap:10px 12px}
@@ -64,7 +64,8 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
 .how span+span{border-left:1px solid var(--line);padding-left:14px}
 .how b{font-family:var(--display);font-weight:400;color:var(--accent);font-size:15px}
 .how i{font-style:normal}
-.how span.w{flex:1.7}
+.how span.f{flex:2}
+.how span.w{flex:1.9}
 .how em{font-style:normal;color:var(--accent-bright)}
 .ruo{margin-top:7px;font-size:9px;color:var(--muted-2);text-align:center;letter-spacing:.03em}
 </style></head><body>
@@ -91,7 +92,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
   <section class="sec">
     <div class="sh"><span class="ix">02</span><h2>Your Order</h2><span class="hint">e.g. Retatrutide · 10 · mg · 2</span></div>
     <table class="items">
-      <thead><tr><th></th><th>Item / Compound</th><th class="s">Amount</th><th class="u">Unit</th><th class="q">Quantity</th></tr></thead>
+      <thead><tr><th></th><th>Item / Compound</th><th class="s">Amount</th><th class="u">Unit<i>tap a circle</i></th><th class="q">Quantity</th></tr></thead>
       <tbody>
 {{ITEM_ROWS}}
       </tbody>
@@ -111,7 +112,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:v
 
   <div class="spacer"></div>
   <div class="how">
-    <span><b>1</b><i>Fill in &amp; pick the unit</i></span>
+    <span class="f"><b>1</b><i>Tap to type &amp; pick — no drawing needed</i></span>
     <span><b>2</b><i>Save the PDF</i></span>
     <span class="w"><b>3</b><i>WhatsApp to <em>AXIOM</em> — we confirm the total</i></span>
   </div>
