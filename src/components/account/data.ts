@@ -30,6 +30,7 @@ export type OrderRow = {
   quote_number: string | null;
   invoice_id: string | null; invoice_number: string | null;
   invoice_due_at: Date | null; invoice_paid_at: Date | null; invoice_voided_at: Date | null;
+  held_idr: string;
   invoice_total_idr: string | null; invoice_bank: Record<string, string> | null; invoice_ppn_idr: string | null;
   invoice_ppn_rate: string | null;
   cold: boolean; eta_days: number; line_count: number; visible_goods: string | null;
@@ -46,6 +47,7 @@ const ORDER_SELECT = `
          s.dispatched_at, s.carrier, s.tracking_no, s.eta_at,
          i.id::text as invoice_id, i.number as invoice_number, i.due_at as invoice_due_at, i.paid_at as invoice_paid_at,
          i.voided_at as invoice_voided_at, i.total_idr::text as invoice_total_idr, i.bank_details as invoice_bank,
+         axiom.net_paid(o.id)::text as held_idr,
          i.ppn_idr::text as invoice_ppn_idr, i.ppn_rate::text as invoice_ppn_rate,
          coalesce((select bool_or(v.is_cold_chain) from public.order_items oi
                    join public.product_variants v on v.id = oi.variant_id where oi.order_id = o.id), false) as cold,

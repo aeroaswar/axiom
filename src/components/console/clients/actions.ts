@@ -66,3 +66,23 @@ export async function changeMemberRole(_prev: ActionState, form: FormData): Prom
     await tx`update public.profiles set role = ${str(form, 'role')}::public.user_role where id = ${profileId}::uuid`;
   }, 'clients.members.role_changed');
 }
+
+/**
+ * The step a request from the public site could not complete without: a person signs in and
+ * belongs to no account, so they see none of what they asked for and cannot acknowledge for it.
+ * Linking them is the owner's act — the function refuses anyone else, and refuses a person who
+ * already belongs somewhere, so a mis-pick cannot hand one client's orders to another.
+ */
+export async function linkMember(_prev: ActionState, form: FormData): Promise<ActionState> {
+  const profileId = str(form, 'profile_id');
+  const accountId = str(form, 'account_id');
+  return attempt(async tx => {
+    await tx`select axiom.link_member(${profileId}::uuid, ${accountId}::uuid, ${str(form, 'is_primary') === 'on'})`;
+  }, 'clients.members.linked');
+}
+
+export async function unlinkMember(_prev: ActionState, form: FormData): Promise<ActionState> {
+  return attempt(async tx => {
+    await tx`select axiom.unlink_member(${str(form, 'profile_id')}::uuid)`;
+  }, 'clients.members.unlinked');
+}

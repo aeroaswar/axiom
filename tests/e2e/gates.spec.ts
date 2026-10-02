@@ -86,7 +86,7 @@ test.describe('Gate 6 · acknowledgement gates commerce', () => {
 });
 
 test.describe('Gate 15 · 16 · both surfaces render, one nav per width', () => {
-  const publicPaths = ['/', '/compounds', '/price-list', '/standard', '/how-to-read-a-coa', '/process', '/faq', '/request', '/en', '/en/price-list'];
+  const publicPaths = ['/', '/compounds', '/price-list', '/standard', '/how-to-read-a-coa', '/verify', '/process', '/faq', '/request', '/en', '/en/price-list'];
   for (const path of publicPaths) {
     test(`public ${path} has no horizontal scroll`, async ({ page }) => {
       await page.goto(path);
@@ -276,6 +276,35 @@ test.describe('Ops', () => {
     expect(await page.locator('nav a[href*="/console/pricing"]').count()).toBe(0);
     await page.goto('/console/orders');
     await expect(page.locator('body')).not.toContainText(/Application error|Internal Server Error/);
+  });
+});
+
+test.describe('Phase 2 · a lot verifies from its label', () => {
+  test('a typed code, however it is written, answers with that lot’s record', async ({ page }) => {
+    await page.goto('/verify');
+    await page.locator('input[name="lot"]').fill('ax 2607 rt10');
+    await page.locator('form[role="search"] button[type="submit"]').click();
+    await page.waitForURL(u => u.searchParams.get('lot') === 'ax 2607 rt10');
+    await expect(page.locator('.dl')).toContainText('AX-2607-RT10');
+    await expect(page.locator('[data-state="verified"]')).toBeVisible();
+    expect(await noHorizontalScroll(page)).toBe(true);
+    expect(await page.locator('meta[name="robots"]').getAttribute('content')).toMatch(/noindex/);
+  });
+
+  test('a QR link opens the record; an unknown code says so and offers a trace', async ({ page }) => {
+    await page.goto('/verify?lot=AX-2405-KPV10');
+    await expect(page.locator('[data-state="expired"]')).toBeVisible();
+    await page.goto('/verify?lot=AX-0000-NONE');
+    await expect(page.locator('.dl')).toHaveCount(0);
+    const trace = page.locator('a[href^="https://wa.me/"]').filter({ hasText: /WhatsApp/ }).first();
+    expect(decodeURIComponent((await trace.getAttribute('href'))!)).toContain('AX-0000-NONE');
+  });
+
+  test('the bare page is indexable and reached from the nav', async ({ page }) => {
+    await page.goto('/standard');
+    expect(await page.locator('a[href$="/verify"], a[href*="/verify?"]').count()).toBeGreaterThan(0);
+    await page.goto('/verify');
+    expect(await page.locator('meta[name="robots"][content*="noindex"]').count()).toBe(0);
   });
 });
 

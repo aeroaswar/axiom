@@ -29,6 +29,7 @@ export function orderView(o: OrderRow): OrderView & { invoice_number?: string | 
     invoice_due_at: o.invoice_due_at,
     invoice_paid_at: o.invoice_paid_at,
     invoice_voided_at: o.invoice_voided_at,
+    held_idr: o.held_idr,
     invoice_number: o.invoice_number,
     cold: o.cold,
     eta_days: o.eta_days,

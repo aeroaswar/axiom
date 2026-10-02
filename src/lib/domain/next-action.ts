@@ -23,6 +23,8 @@ export type OrderView = {
   eta_days?: number;
   reorder_due_at?: string | Date | null;   // set when this is the account's latest order
   cadence_days?: number | null;
+  /** Paid, less any credit note: what a cancelled order is still holding. Zero on a live order. */
+  held_idr?: string | number | null;
 };
 
 export type QuoteView = {
@@ -72,6 +74,11 @@ export function nextAction(o: OrderView, cutoff: CutoffSetting, ref = now()): Ne
   if (o.state === 'delivered') {
     if (o.reorder_due_at) { const d = daysFrom(o.reorder_due_at, ref); return { key: d > 0 ? 'o_reorder_overdue' : 'o_reorder_due', params: { days: Math.abs(d), cadence: o.cadence_days ?? 0 }, tone: d > 0 ? 'warn' : '', act: 'reorder', at: toDate(o.reorder_due_at), quiet: d <= 0 }; }
     return { key: 'o_delivered', params: {}, tone: '', act: 'reorder', at: toDate(o.delivered_at) ?? toDate(o.placed_at), quiet: true };
+  }
+  // A cancelled order that is still holding money is not closed: the refund is what happens next,
+  // and it is loud. Only when nothing is held does cancelled read as a finished record.
+  if (Number(o.held_idr ?? 0) > 0) {
+    return { key: 'o_refund_due', params: {}, tone: 'err', act: 'credit', at: toDate(o.cancelled_at) ?? toDate(o.placed_at) };
   }
   return { key: 'o_cancelled', params: {}, tone: '', act: 'reorder', at: toDate(o.cancelled_at) ?? toDate(o.placed_at), quiet: true };
 }

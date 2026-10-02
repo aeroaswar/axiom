@@ -3,12 +3,13 @@ import { Link } from '@/i18n/navigation';
 import { idr } from '@/lib/money';
 import { Icon } from '@/components/shell/sprite';
 import { ActionButton, ActionForm } from '../shared/action-form';
-import { addSite, changeMemberRole, deleteSite, saveAccount } from './actions';
+import { addSite, changeMemberRole, deleteSite, linkMember, saveAccount, unlinkMember } from './actions';
 import { AckChip } from './list';
-import { reorderDue, type ClientRow, type DocRow, type InvoiceRow, type Manager, type Member, type Site, type Zone } from './data';
+import { reorderDue, type ClientRow, type DocRow, type InvoiceRow, type Manager, type Member, type Site, type Unlinked, type Zone } from './data';
 
 export type Detail = {
   members: Member[]; sites: Site[]; quotes: DocRow[]; orders: DocRow[]; invoices: InvoiceRow[]; managers: Manager[];
+  unlinked: Unlinked[]; ackState: string;
 };
 
 const ZONES = ['jabodetabek', 'jawa', 'luar_jawa', 'other'] as const;
@@ -71,11 +72,37 @@ export async function ClientSheetBody({ c, d, zones }: { c: ClientRow; d: Detail
                 <span className="t1">{m.full_name}</span>
                 <span className="t2">{t(`members.roles.${m.role}`)}{m.email ? ` · ${m.email}` : ''}</span>
               </span>
-              {m.is_primary ? <span className="rt"><span className="chip quiet"><span className="dot" />{t('members.primary')}</span></span> : null}
+              <span className="rt">
+                {m.is_primary ? <span className="chip quiet"><span className="dot" />{t('members.primary')}</span> : null}
+                <ActionButton action={unlinkMember} submit={t('members.unlink')} hidden={{ profile_id: m.profile_id }} />
+              </span>
             </div>
           ))}
         </div>
       ) : <p className="empty">{t('members.empty')}</p>}
+
+      {/* Linking is what finishes a request raised from the public site: until someone belongs to
+          this account they see none of it, and no acknowledgement can be recorded against it —
+          which is what stops a peptide quote being sent. */}
+      {d.unlinked.length ? (
+        <ActionForm action={linkMember} submit={t('members.link')}>
+          <input type="hidden" name="account_id" value={c.id} />
+          <div className="fgrid">
+            <div className="field">
+              <label htmlFor="link_profile">{t('members.person')}</label>
+              <select id="link_profile" name="profile_id" defaultValue={d.unlinked[0].id}>
+                {d.unlinked.map(p => <option key={p.id} value={p.id}>{p.label}{p.email ? ` · ${p.email}` : ''}</option>)}
+              </select>
+            </div>
+            <div className="field">
+              <label htmlFor="is_primary">{t('members.as_primary')}</label>
+              <input id="is_primary" name="is_primary" type="checkbox" />
+            </div>
+          </div>
+        </ActionForm>
+      ) : null}
+      {!d.members.length && !d.unlinked.length ? <p className="note">{t('members.nobody_waiting')}</p> : null}
+      {d.ackState === 'none' ? <p className="note err">{t('members.ack_blocked')}</p> : null}
       {d.members.length ? (
         <ActionForm action={changeMemberRole} submit={t('members.change_role')}>
           <div className="fgrid">

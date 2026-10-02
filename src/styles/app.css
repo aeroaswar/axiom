@@ -24,7 +24,7 @@ input{font:inherit;color:inherit}
 .wm-sv{height:15px;width:auto;display:block;fill:var(--ink);flex:none}
 
 /* ---------- shared micro-typography (ported from website/index.html) ---------- */
-.kicker{font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;font-weight:500;color:var(--muted)}
+.kicker{font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;font-weight:500;color:var(--muted);text-wrap:balance}
 .eyebrow{font-size:9.5px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;color:var(--muted)}
 .rule{height:1px;background:var(--line);width:100%}
 h1,h2,h3,h4{font-family:var(--display);font-weight:300;letter-spacing:-.01em;line-height:1.1}

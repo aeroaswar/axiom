@@ -57,6 +57,7 @@ type OrderRaw = {
   paid_claim_at: Date | null; paid_claim_ref: string | null; delivered_at: Date | null;
   dispatched_at: Date | null; eta_days: number; cold: boolean;
   invoice_number: string | null; invoice_due_at: Date | null; invoice_paid_at: Date | null; invoice_voided_at: Date | null;
+  held_idr: string;
   quote_number: string | null; line_count: number; first_item: string | null;
   total_idr: string; reorder_due_at: Date | null; cadence_days: number | null;
 };
@@ -99,6 +100,7 @@ export async function pipelineData(uid: string) {
              s.dispatched_at,
              q.number as quote_number,
              i.number as invoice_number, i.due_at as invoice_due_at, i.paid_at as invoice_paid_at, i.voided_at as invoice_voided_at,
+             axiom.net_paid(o.id)::text as held_idr,
              (select count(*)::int from public.order_items oi where oi.order_id = o.id) as line_count,
              (select p.name || case when p.kind = 'peptide' then ' ' || v.dose else '' end
                 from public.order_items oi
@@ -154,6 +156,7 @@ export const orderView = (o: OrderRaw): OrderView => ({
   cancelled_at: o.cancelled_at, dispatched_at: o.dispatched_at, invoice_due_at: o.invoice_due_at,
   invoice_paid_at: o.invoice_paid_at, invoice_voided_at: o.invoice_voided_at,
   cold: o.cold, eta_days: o.eta_days, reorder_due_at: o.reorder_due_at, cadence_days: o.cadence_days,
+  held_idr: o.held_idr,
 });
 
 export type PipelineOpts = { cutoff: CutoffSetting; quoteDays: number; ref?: Date };

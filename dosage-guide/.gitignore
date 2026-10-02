@@ -1,0 +1,3 @@
+# Bytecode from running src/gen.py
+__pycache__/
+*.pyc
