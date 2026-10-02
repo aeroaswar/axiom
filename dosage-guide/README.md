@@ -254,9 +254,10 @@ blocks every download.
   in the repo.
 - **Indexing.** Every page is `noindex`, by header and by meta tag.
 - **Home screen.** `apple-touch-icon.png` (180 px) and `manifest.webmanifest`
-  (with `icons/`) give the saved guide the AXIOM notched X in bronze on onyx,
-  named "AXIOM", instead of a letter iOS draws from the title. The icons are
-  rendered from `business-proposal/assets/logo/axiom-x-symbol-bronze.svg`.
+  (with `icons/`) give the saved guide the X from the AXIOM wordmark, in bone
+  on onyx, named "AXIOM", instead of a letter iOS draws from the title. The
+  icons, and the browser-tab icon, are drawn from the X's four arms in
+  `assets/axiom-wordmark-white.svg`, so they follow the wordmark.
 
 **Live at <https://axiom-guide-weld.vercel.app>** — Vercel project `axiom-guide`,
 Root Directory `dosage-guide`, Application Preset *Other*, no build command, no
