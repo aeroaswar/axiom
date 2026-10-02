@@ -232,12 +232,29 @@ A screen-only header strip states sheet size, label size, pitch, count and the s
 
 Turning it on also drops the alignment guides — the contour replaces them.
 
-**Producing the PDF.** The builder is HTML; the PDF comes from the browser.
-Open `builder.html` (or the published builder in its own tab, not embedded — a
-sandboxed iframe blocks printing), then Print with **Destination: Save as PDF ·
-Paper: A4 · Scale: 100% · Margins: None · Background graphics: ON**. Background
-graphics is the one that matters: without it the onyx ground drops out and the
-labels print as white boxes.
+**Producing the PDF.** Use **Download PDF** in the builder's queue. It builds the PDF in the
+page, with no print dialog, and works embedded in claude.ai as well as on its own tab:
+
+- **Vector, not a picture.** Every page is redrawn from the rendered preview: each glyph at the
+  position the browser laid it out (read from its own text range), each rule, logo and die line
+  from its box. Text stays real text in embedded fonts, and the logo and die line stay vector paths.
+- **Fonts.** The web fonts are variable and a PDF embeds one weight per font, so the builder
+  carries static TrueType instances of the weights the labels use (Inter 400/500/600, Jost 400).
+  TrueType because fontkit cannot subset WOFF2.
+- **Exact sizes.** Pages are exactly 210 × 297 mm, or the label size for thermal (the browser's
+  print rounds to whole CSS pixels, 209.9 mm). The die line is drawn at its specified 0.09 mm;
+  browser print rounds a border that thin up to 1 px (0.26 mm).
+- **Libraries.** pdf-lib and fontkit load from the CDN the first time the button is used. In a
+  claude.ai viewer the file is handed over through the page's `downloads` capability, so the
+  viewer confirms the save; on its own tab it is an ordinary browser download.
+
+Print still works: open `builder.html` (or the published builder in its own tab — a sandboxed
+iframe blocks printing) and print with **Paper: A4 · Scale: 100% · Margins: None · Background
+graphics: ON**. Without background graphics the onyx ground drops out and the labels print as
+white boxes.
+
+The cut guides sit under the labels, so they show only in the gutters. Before this they drew a
+vertical line through the middle of every label on the Standard sheet.
 
 **Two things to tell the vendor.** The PDF is RGB — the bronze `#C88A4E` will
 shift on a CMYK press, so ask for a match to a printed swatch, or give them
