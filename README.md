@@ -145,6 +145,16 @@ the app, and its catalogue is a second copy of prices that `supabase/seed.sql` o
 delivery rates against the platform's per-consignment function. Treat the database as
 authoritative; retire this file once the Console covers the offline case.
 
+## Sales playbook and promo architecture
+
+Two standalone pages in `business-proposal/`, the execution layer under the GTM strategy.
+`axiom-sales-playbook.html` covers the leak map, the assembled offer, closing loops, the quote
+and follow-up ladder, the daily number, the content engine and a 30-day sprint.
+`axiom-promo-architecture.html` is the promo, discount and bundle architecture built on the
+79-lot margin structure, with a blended-margin calculator for pricing an order before quoting
+it. Its prices and costs are a planning copy: `supabase/seed.sql` and the Console's pricing
+screen stay authoritative, and the page needs refreshing when either moves.
+
 ## Production
 
 Supabase (Postgres, Auth magic link, Storage) + Vercel. Set `DATABASE_URL` to the project's direct
