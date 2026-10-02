@@ -104,7 +104,8 @@ On the clean sheet, a first sale runs in this order, each step in the Console:
 
 One vector path, drawn on a 582 × 70 grid, with every stroke 11.8 units wide: the A's legs,
 the four arms of the notched X, the I, the O all the way round, and the M's stems and
-diagonals. The O keeps its overshoot (0–70 against 2–68). The master file is
+diagonals. The O keeps its overshoot (0–70 against 2–68). The X's arms run through its centre
+and end square-cut, leaving a small square opening in the middle. The master file is
 `business-proposal/assets/logo/axiom-wordmark-white.svg` (bone `#F2EDE5`, for dark grounds).
 
 The same path is inlined, byte for byte, in `src/components/shell/sprite-svg.ts` (the web app's
