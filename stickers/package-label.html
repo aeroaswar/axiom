@@ -301,55 +301,32 @@ details.sender .fields{margin-top:12px}
 
 /* ============================================================
    AXIOM package label — 80 x 50 mm, thermal (NIIMBOT B31 and the like)
-   The same data at a quarter of the area: recipient first and largest,
-   contents as one flowing line, courier and resi on the foot with blanks
-   to write in, handling marks as icons. Content box 74.4 x 45.2 mm.
+   Only what the courier and the packer need: who it goes to, what is
+   inside, who sent it. Content box 74 x 45 mm.
    ============================================================ */
-.ps{width:80mm;height:50mm;padding:2.4mm 2.8mm;background:#fff;color:#000;
-  display:flex;flex-direction:column;gap:.9mm;overflow:hidden;
+.ps{width:80mm;height:50mm;padding:3mm;background:#fff;color:#000;
+  display:flex;flex-direction:column;gap:1.2mm;overflow:hidden;
   font-family:var(--sans);font-weight:500;line-height:1.2;
   font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
   -webkit-print-color-adjust:exact;print-color-adjust:exact}
 .ps *{flex-shrink:0}
-.ps .fill{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
-.ps .k{font-weight:600;letter-spacing:.14em;text-transform:uppercase}
-.ps .k i{font-style:normal;font-weight:500}
 .ps__head{display:flex;align-items:center;justify-content:space-between;gap:2mm;
-  padding-bottom:1.1mm;border-bottom:.5mm solid #000}
-.ps .pl__wm{width:21mm}
-.ps__meta{font-size:1.75mm;white-space:nowrap}
-.ps__meta .k{font-size:1.4mm;margin-right:.8mm}
-.ps__meta b{font-weight:600;font-size:2mm;letter-spacing:.02em}
-.ps__to{display:flex;align-items:center;gap:1.6mm;min-width:0;margin-top:.3mm}
-.ps__tag{position:relative;color:#fff;font-size:1.45mm;padding:.8mm 1.3mm .7mm;border-radius:.6mm;overflow:hidden;white-space:nowrap}
-.ps__tag span{position:relative;z-index:1}
-.ps__name{flex:1 1 auto;min-width:0;font-family:var(--display);font-weight:500;font-size:calc(4.6mm * var(--k,1));
+  padding-bottom:1.4mm;border-bottom:.4mm solid #000}
+.ps .pl__wm{width:20mm}
+.ps__no{font-size:2mm;font-weight:600;letter-spacing:.03em;white-space:nowrap}
+.ps__name{margin-top:.6mm;font-family:var(--display);font-weight:500;font-size:calc(5.2mm * var(--k,1));
   line-height:1.1;letter-spacing:.01em;text-transform:uppercase;white-space:nowrap;overflow:hidden}
-.ps__phone{display:flex;align-items:baseline;gap:1.2mm;font-size:3.1mm;font-weight:600;letter-spacing:.02em;white-space:nowrap}
-.ps__phone .k{font-size:1.4mm}
-.ps__addr{max-height:8.2mm;font-size:calc(2.3mm * var(--k,1));line-height:1.22;overflow:hidden;overflow-wrap:anywhere}
-.ps__note{font-size:calc(1.75mm * var(--k,1));white-space:nowrap;overflow:hidden}
-.ps__note .k{font-size:.8em;margin-right:1mm}
-.ps__from{display:flex;align-items:baseline;gap:1.2mm;padding-top:.9mm;border-top:.25mm solid #000;
-  font-size:calc(1.75mm * var(--k,1));white-space:nowrap;overflow:hidden}
-.ps__from .k{font-size:.8em}
-.ps__from b{font-weight:600}
-.ps__items{flex:1 1 auto;min-height:0;overflow:hidden;font-size:calc(2.1mm * var(--k,1));line-height:1.32}
-.ps__items .k{font-size:.7em;margin-right:1mm}
+.ps__phone{font-size:3.4mm;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.ps__addr{max-height:9.8mm;font-size:calc(2.5mm * var(--k,1));line-height:1.28;overflow:hidden;overflow-wrap:anywhere}
+.ps__items{flex:1 1 auto;min-height:0;overflow:hidden;margin-top:.6mm;font-size:calc(2.2mm * var(--k,1));line-height:1.32}
 .ps__items b{font-weight:600}
 .ps__items .it + .it::before,.ps__more::before{content:" · ";font-weight:600}
 .ps__more{font-weight:600}
-.ps__foot{display:flex;align-items:center;gap:1.8mm;padding-top:.9mm;border-top:.35mm solid #000;white-space:nowrap}
-.ps__marks{display:flex;gap:1.3mm}
-.ps__marks .mk{display:flex;align-items:center;gap:.5mm}
-.ps__marks svg{width:3mm;height:3mm;flex:0 0 3mm}
-.ps__marks b{font-size:1.35mm;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-.ps__foot.is-tight .mk b{display:none}
-.ps__ship{flex:1 1 auto;min-width:0;overflow:hidden;font-size:calc(1.7mm * var(--k,1))}
-.ps__ship .k{font-size:.82em;margin-right:.7mm}
-.ps__ship b{font-weight:600;margin-right:1.4mm}
-.ps__ship .blank{display:inline-block;width:10mm;height:1.5mm;border-bottom:.25mm solid #000;margin-right:1.4mm}
-.ps__ruo{font-size:1.6mm;font-weight:600;letter-spacing:.03em}
+.ps__foot{display:flex;align-items:baseline;justify-content:space-between;gap:2mm;
+  padding-top:1.2mm;border-top:.25mm solid #000;font-size:1.7mm;white-space:nowrap}
+.ps__from{min-width:0;overflow:hidden;font-size:calc(1.7mm * var(--k,1))}
+.ps__from b{font-weight:600}
+.ps__ruo{font-weight:600;letter-spacing:.03em}
 /* The PNG copy: html2canvas lays text out with the page but draws it with canvas,
    which ignores tabular figures, so digits would land with gaps. Proportional
    figures keep the two in step. */
@@ -446,7 +423,7 @@ details.sender .fields{margin-top:12px}
         <button class="chip" data-o="land" aria-pressed="false">150 × 100</button>
       </div>
       <p class="hint" style="margin-top:9px">80 × 50 is the compact layout for a small label printer such as
-        the NIIMBOT B31. 100 × 150 is the full shipping label; 150 × 100 is the same label turned 90° for
+        the NIIMBOT B31: recipient, contents and sender only. 100 × 150 is the full shipping label; 150 × 100 is the same label turned 90° for
         printers fed long edge first.</p>
     </div>
   </aside>
@@ -981,39 +958,30 @@ function labelHTML(o){
 }
 
 /* 80 x 50 mm:
-     AXIOM .................. No. AX-INV-… · date
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     [KEPADA / TO]  NAME
-     TEL 0815 1612 598
+     AXIOM ......................... AX-INV-2026-0003
+     ─────────────────────────────────────────────────
+     NAME
+     0815 1612 598
      address, up to three lines
-     DARI / FROM  AXIOM · phone · city
-     ISI / CONTENTS  Compound 20 mg ×1 · Compound 10 mg ×2 …
-     [icons]  KURIR ____  RESI ____   Research Use Only        */
+     Compound 20 mg ×1 · Compound 10 mg ×2 …
+     ─────────────────────────────────────────────────
+     From AXIOM · phone · city ......... Research Use Only
+   Courier, resi, handling marks and the note stay on the 100 x 150 label. */
 function labelSmallHTML(o){
   const lines = o.lines.filter(l => l.compound);
   const units = lines.reduce((n, l) => n + (parseInt(l.qty, 10) || 0), 0);
   const items = !lines.length ? '<span class="it">—</span>'
-    : o.discreet ? `<span class="it"><b>Research materials · Bahan riset</b> ×${units}</span>`
+    : o.discreet ? `<span class="it"><b>Research materials</b> ×${units}</span>`
     : lines.map(l => `<span class="it"><b>${esc(l.compound)}</b>${l.amount ? ' ' + esc(l.amount + ' ' + l.unit) : ''} ×${esc(l.qty || 1)}</span>`).join('');
-  const markKeys = Object.keys(MARKS).filter(k => o.marks[k]);
-  const marks = markKeys.map(k => `<span class="mk">${MARKS[k].icon}<b>${MARKS[k].en}</b></span>`).join('');
-  const from = [sender.phone, sender.addr].filter(Boolean).map(esc).join(' · ');
-  const ship = [o.courier, o.service].filter(Boolean).join(' ');
-  const blank = '<i class="blank"></i>';
+  const from = [sender.name && `<b>${esc(sender.name)}</b>`, sender.phone && esc(sender.phone), sender.addr && esc(sender.addr)]
+    .filter(Boolean).join(' · ');
   return `<div class="ps">
-  <div class="ps__head">${WORDMARK}
-    <div class="ps__meta">${o.ref ? `<span class="k">No.</span><b>${esc(o.ref)}</b> · ` : ''}${esc(fmtDate(o.date))}</div></div>
-  <div class="ps__to"><span class="ps__tag k">${FILL}<span>Kepada <i>/ To</i></span></span><span class="ps__name" data-fit="w">${esc(o.name || ' ')}</span></div>
-  <div class="ps__phone"><span class="k">Tel</span>${esc(fmtPhone(o.phone))}</div>
+  <div class="ps__head">${WORDMARK}${o.ref ? `<span class="ps__no">${esc(o.ref)}</span>` : ''}</div>
+  <div class="ps__name" data-fit="w">${esc(o.name || ' ')}</div>
+  <div class="ps__phone">${esc(fmtPhone(o.phone))}</div>
   <div class="ps__addr" data-fit="h">${esc(o.addr)}</div>
-  ${o.notes.trim() ? `<div class="ps__note" data-fit="w"><span class="k">Catatan</span>${esc(o.notes)}</div>` : ''}
-  <div class="ps__from" data-fit="w"><span class="k">Dari <i>/ From</i></span><b>${esc(sender.name)}</b>${from ? `<span>· ${from}</span>` : ''}</div>
-  <div class="ps__items" data-fit="items" data-ref="${esc(o.invNo || o.ref)}"><span class="k">Isi <i>/ Contents</i> · ${units} unit${units === 1 ? '' : 's'}</span>${items}<span class="ps__more" hidden></span></div>
-  <div class="ps__foot${markKeys.length > 2 ? ' is-tight' : ''}">
-    ${marks ? `<span class="ps__marks">${marks}</span>` : ''}
-    <span class="ps__ship" data-fit="w"><span class="k">Kurir</span>${ship ? `<b>${esc(ship)}</b>` : blank}<span class="k">Resi</span>${o.awb ? `<b>${esc(o.awb)}</b>` : blank}</span>
-    <span class="ps__ruo">Research Use Only</span>
-  </div>
+  <div class="ps__items" data-fit="items" data-ref="${esc(o.invNo || o.ref)}">${items}<span class="ps__more" hidden></span></div>
+  <div class="ps__foot"><span class="ps__from" data-fit="w">From ${from}</span><span class="ps__ruo">Research Use Only</span></div>
 </div>`;
 }
 const drawLabel = o => stock === 's80' ? labelSmallHTML(o) : labelHTML(o);
