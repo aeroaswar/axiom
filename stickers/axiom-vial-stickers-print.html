@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AXIOM — Retatrutide Vial Stickers 20 x 40 mm — Print Sheet</title>
+<title>AXIOM — Retatrutide Vial Stickers 50 x 30 mm — Print Sheet</title>
 <style>
 @font-face {
   font-family: 'Inter';
@@ -70,27 +70,33 @@
   /* --- sheet geometry: change these, nothing else --- */
   --gutter-x:4mm;   /* set both gutters to 0 for a kiss-cut / die-cut vendor file */
   --gutter-y:3mm;
-  --cols:4;
-  --rows:12;
+  --cols:3;
+  --rows:8;
 }
 *{box-sizing:border-box}
 @page{ size:A4 portrait; margin:8mm; }
 html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 
 /* A4 210x297mm less 8mm margins = 194 x 281mm usable.
-   Column pitch 44mm (40 + 4) x4 = 172mm.  Row pitch 23mm (20 + 3) x12 = 273mm. */
+   Column pitch 54mm (50 + 4) x3 = 158mm.  Row pitch 33mm (30 + 3) x8 = 261mm.
+   One .sheet per A4 page; a page break follows every sheet but the last. */
 .sheet{
   width:194mm; height:281mm;
   margin:0 auto;
   display:grid;
-  grid-template-columns:repeat(var(--cols), 40mm);
-  grid-auto-rows:20mm;
+  grid-template-columns:repeat(var(--cols), 50mm);
+  grid-auto-rows:30mm;
   column-gap:var(--gutter-x);
   row-gap:var(--gutter-y);
   align-content:start; justify-content:start;
+  /* room for the top row's guides inside the sheet, or on page 2 they
+     spill back onto the foot of page 1 */
+  padding-top:1.5mm;
   background:#fff;   /* the sheet is white stock; the labels are the ink */
 }
-.cell{position:relative; width:40mm; height:20mm}
+.cell{position:relative; width:50mm; height:30mm}
+/* The label paints above the guides, so they show only in the gutters. */
+.cell > .lbl{z-index:1}
 
 /* Hairline cut guides sit in the gutter, keyed off the die line.
    Hidden when the gutters are set to 0 for a die-cut file. */
@@ -103,17 +109,17 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 .sheet[data-guides="off"] .cell::before,
 .sheet[data-guides="off"] .cell::after{display:none}
 /* ============================================================
-   AXIOM vial sticker — 20 x 40 mm, rounded corners
+   AXIOM vial sticker — 50 x 30 mm, rounded corners
    Geometry is declared in mm so the printed piece is
    dimensionally exact. Type inside each band is expressed in em
-   against a 1mm-based band font-size, so autofit() can shrink a
+   against a 1.25mm-based band font-size, so autofit() can shrink a
    whole band (size AND tracking) proportionally when a long
    compound name would otherwise cross the die line.
-   Content box: 40 - 2*1.6 = 36.8mm wide, 20 - 2*1.6 = 16.8mm tall.
+   Content box: 50 - 2*2 = 46mm wide, 30 - 2*2 = 26mm tall.
    ============================================================ */
 .lbl{
-  --w:40mm; --h:20mm; --r:2mm;
-  --pad-x:1.6mm; --pad-y:1.6mm;
+  --w:50mm; --h:30mm; --r:2.5mm;
+  --pad-x:2mm; --pad-y:2mm;
   position:relative;
   width:var(--w); height:var(--h);
   border-radius:var(--r);
@@ -127,7 +133,7 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 }
 /* Each band scales as one unit via --k (set by autofit) */
 .lbl__band{
-  font-size:calc(1mm * var(--k,1));
+  font-size:calc(1.25mm * var(--k,1));
   display:flex; align-items:baseline;
   gap:.7em; min-width:0; line-height:1;
 }
@@ -136,7 +142,11 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 
 /* --- band A — brand bar ------------------------------------ */
 .lbl__band--a{align-items:center}
-.lbl__wm{display:block; width:9em; height:auto}
+/* Height is set, not left to height:auto, and overflow is visible: the O
+   overshoots the other letters by 2 units top and bottom, filling the
+   582 x 70 viewBox edge to edge, and a viewer that sizes the SVG box a
+   touch short would otherwise clip it flat at the cap line. */
+.lbl__wm{display:block; width:9em; height:calc(9em * 70 / 582); overflow:visible}
 .lbl__note{
   font-weight:500; font-size:1.5em; letter-spacing:.14em;
   text-transform:uppercase; color:var(--accent);
@@ -145,9 +155,9 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 /* --- hairline dividers — the core AXIOM texture -------------
    Both rules are solid bronze at full strength, so they read the
    same on every label; no gradient, no grey. */
-.lbl__rule{height:.2mm; flex:0 0 .2mm; background:var(--accent)}
-.lbl__rule--top{ margin:1.1mm 0 1.3mm }
-.lbl__rule--bot{ margin:1.2mm 0 .9mm }
+.lbl__rule{height:.25mm; flex:0 0 .25mm; background:var(--accent)}
+.lbl__rule--top{ margin:1.9mm 0 2.2mm }
+.lbl__rule--bot{ margin:2.1mm 0 1.6mm }
 
 /* --- band B — compound, the hero --------------------------- */
 .lbl__compound{
@@ -157,8 +167,8 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 }
 
 /* --- bands C / D — quantity and dose ------------------------ */
-.lbl__band--c{margin-top:.9mm}
-.lbl__band--d{margin-top:.45mm}
+.lbl__band--c{margin-top:1.6mm}
+.lbl__band--d{margin-top:.8mm}
 .lbl__k{
   font-weight:400; font-size:1.5em; letter-spacing:.14em;
   text-transform:uppercase; color:var(--muted);
@@ -193,18 +203,21 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
 @media print{
   .bar{display:none !important}
   html,body{background:#fff}
-  .sheet{margin:0}
+  .sheet{margin:0; break-after:page}
+  .sheet:last-of-type{break-after:auto}
 }
+.sheet + .sheet{margin-top:14mm}
+@media print{ .sheet + .sheet{margin-top:0} }
 </style></head>
 <body>
 
 <div class="bar">
   <div class="kick">AXIOM — Production Artwork</div>
-  <h1>Retatrutide range — vial stickers 20 &times; 40 mm</h1>
+  <h1>Retatrutide range — vial stickers 50 &times; 30 mm</h1>
   <dl>
-    <dt>Label</dt><dd>40 &times; 20 mm, 2 mm corner radius &middot; 10 / 20 / 30 / 40 / 60 mg, 8 each</dd>
-    <dt>Sheet</dt><dd>A4 portrait, 8 mm margin &middot; 4 &times; 12 slots &middot; <span id="count">40</span> labels placed</dd>
-    <dt>Pitch</dt><dd>44 mm horizontal (4 mm gutter) &middot; 23 mm vertical (3 mm gutter)</dd>
+    <dt>Label</dt><dd>50 &times; 30 mm, 2.5 mm corner radius &middot; 10 / 20 / 30 / 40 / 60 mg, 9 each</dd>
+    <dt>Sheet</dt><dd>A4 portrait, 8 mm margin &middot; 3 &times; 8 slots a page &middot; <span id="count">45</span> labels on <span id="pages">2</span> pages</dd>
+    <dt>Pitch</dt><dd>54 mm horizontal (4 mm gutter) &middot; 33 mm vertical (3 mm gutter)</dd>
     <dt>Output</dt><dd>Print &rarr; Destination &ldquo;Save as PDF&rdquo; &middot; scale 100% &middot; background graphics ON</dd>
   </dl>
   <div class="warn">
@@ -217,14 +230,15 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
   </div>
 </div>
 
-<div class="sheet" id="sheet"></div>
+<div id="sheets"></div>
 
 <script>
 /* ============================================================
    LABEL DATA — Retatrutide range
-   Sheet is 4 columns x 12 rows = 48 slots. `copies` in multiples
-   of 4 keeps each strength on whole rows, so a cut sheet stays
-   sorted. 8 each = 2 rows per strength, 40 labels, 2 rows spare.
+   Each A4 page is 3 columns x 8 rows = 24 slots. `copies` in
+   multiples of 3 keeps each strength on whole rows, so a cut sheet
+   stays sorted. 9 each = 3 rows per strength, 45 labels over two
+   pages (8 rows + 7 rows), 3 slots spare.
 
    `dose` is the pen-device click conversion. Every strength in
    this range is reconstituted to the same concentration, so the
@@ -235,11 +249,11 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
    A null dose drops the DOSE row rather than printing a guess.
    ============================================================ */
 const LABELS = [
-  { compound:"Retatrutide", qty:"10 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
-  { compound:"Retatrutide", qty:"20 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
-  { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
-  { compound:"Retatrutide", qty:"40 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
-  { compound:"Retatrutide", qty:"60 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:8 },
+  { compound:"Retatrutide", qty:"10 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"20 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"40 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"60 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
 ];
 
 /* Inline AXIOM wordmark — vector, from business-proposal/assets/logo/axiom-wordmark-white.svg */
@@ -251,7 +265,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    entirely rather than printed empty. Click conversions are device-specific
    and are never inferred for a strength that was not supplied.
 
-   Stacked inside 36.8 x 16.8 mm:
+   Stacked inside 46 x 26 mm:
      A  AXIOM wordmark ................ HIGH PURITY
         ------------------------------------------
      B  RETATRUTIDE
@@ -278,10 +292,10 @@ function labelHTML(d){
 }
 
 /* Shrink a band (size + tracking together, via --k) until it fits the
-   36.8mm content box. The floor is set low enough for the longest name in
+   46mm content box. The floor is set low enough for the longest name in
    the catalogue — "CJC No DAC + Ipamorelin" — to stay inside the die line. */
 function autofit(root){
-  const MIN = 0.55;
+  const MIN = 0.48;
   root.querySelectorAll('.lbl__band').forEach(band => {
     let k = 1;
     band.style.setProperty('--k', k);
@@ -295,16 +309,22 @@ function autofit(root){
   });
 }
 
-/* --- render the sheet -------------------------------------- */
-const sheet = document.getElementById('sheet');
-const capacity = 4 * 12;
+/* --- render the sheets ------------------------------------- */
+const root = document.getElementById('sheets');
+const perPage = 3 * 8;
 const queue = [];
 LABELS.forEach(d => { for (let i = 0; i < d.copies; i++) queue.push(d); });
 
-sheet.innerHTML = queue.slice(0, capacity)
-  .map(d => `<div class="cell">${labelHTML(d)}</div>`).join('');
+const pages = Math.max(1, Math.ceil(queue.length / perPage));
+let html = '';
+for (let i = 0; i < pages; i++){
+  html += `<div class="sheet">${queue.slice(i * perPage, (i + 1) * perPage)
+    .map(d => `<div class="cell">${labelHTML(d)}</div>`).join('')}</div>`;
+}
+root.innerHTML = html;
 
-autofit(sheet);
-document.getElementById('count').textContent = sheet.querySelectorAll('.lbl').length;
+autofit(root);
+document.getElementById('count').textContent = root.querySelectorAll('.lbl').length;
+document.getElementById('pages').textContent = pages;
 </script>
 </body></html>
