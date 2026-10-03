@@ -1,0 +1,53 @@
+category_no,category,compound,lot,lot_value,lot_unit,old_price_idr,new_price_idr,actual_change_pct,new_price_per_mg_idr,cost_basis_idr,new_gross_margin_pct
+01,GLP-1s & Weight Loss,Cagrilintide,10 mg,10,mg,3000000,2700000,-10.0,270000,1400000,48.1
+01,GLP-1s & Weight Loss,Retatrutide,5 mg,5,mg,2700000,2450000,-9.26,490000,1250000,49.0
+01,GLP-1s & Weight Loss,Retatrutide,10 mg,10,mg,3100000,2800000,-9.68,280000,1450000,48.2
+01,GLP-1s & Weight Loss,Retatrutide,15 mg,15,mg,3500000,3150000,-10.0,210000,1650000,47.6
+01,GLP-1s & Weight Loss,Retatrutide,20 mg,20,mg,3900000,3500000,-10.26,175000,1850000,47.1
+01,GLP-1s & Weight Loss,Retatrutide,30 mg,30,mg,5100000,4600000,-9.8,153333,2400000,47.8
+01,GLP-1s & Weight Loss,Retatrutide,60 mg,60,mg,8300000,7450000,-10.24,124167,3900000,47.7
+01,GLP-1s & Weight Loss,Tirzepatide,10 mg,10,mg,2400000,2150000,-10.42,215000,1150000,46.5
+01,GLP-1s & Weight Loss,Tirzepatide,30 mg,30,mg,3800000,3400000,-10.53,113333,1800000,47.1
+01,GLP-1s & Weight Loss,Tirzepatide,40 mg,40,mg,4500000,4050000,-10.0,101250,2100000,48.1
+02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,10 mg,10,mg,3000000,2700000,-10.0,270000,1400000,48.1
+02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,20 mg,20,mg,4300000,3850000,-10.47,192500,2000000,48.1
+02,GH Secretagogues,HGH 191AA (Somatropin),36 IU,36,IU,3200000,2900000,-9.38,,1500000,48.3
+02,GH Secretagogues,HGH 191AA (Somatropin),40 IU,40,IU,3600000,3250000,-9.72,,1700000,47.7
+02,GH Secretagogues,Ipamorelin,10 mg,10,mg,2800000,2500000,-10.71,250000,1300000,48.0
+02,GH Secretagogues,Ipamorelin + Tesamorelin,18 mg,18,mg,5000000,4500000,-10.0,250000,2350000,47.8
+02,GH Secretagogues,Tesamorelin,10 mg,10,mg,3600000,3250000,-9.72,325000,1700000,47.7
+02,GH Secretagogues,Tesamorelin,20 mg,20,mg,4700000,4250000,-9.57,212500,2200000,48.2
+03,Healing & Repair,BPC-157,10 mg,10,mg,2700000,2450000,-9.26,245000,1250000,49.0
+03,Healing & Repair,BPC-157 + TB-500 (Wolverine),20 mg,20,mg,3900000,3500000,-10.26,175000,1850000,47.1
+03,Healing & Repair,GHK-Cu,50 mg,50,mg,2100000,1900000,-9.52,38000,970000,48.9
+03,Healing & Repair,GHK-Cu,100 mg,100,mg,2300000,2050000,-10.87,20500,1100000,46.3
+03,Healing & Repair,KPV,10 mg,10,mg,2600000,2350000,-9.62,235000,1200000,48.9
+03,Healing & Repair,KLOW (BPC+TB+GHK+KPV),80 mg,80,mg,4400000,3950000,-10.23,49375,2050000,48.1
+03,Healing & Repair,LL-37,5 mg,5,mg,3000000,2700000,-10.0,540000,1400000,48.1
+03,Healing & Repair,Peg MGF,2 mg,2,mg,3100000,2800000,-9.68,1400000,1450000,48.2
+03,Healing & Repair,TB-500,10 mg,10,mg,2900000,2600000,-10.34,260000,1350000,48.1
+04,Brain Health & Nootropics,Adamax,10 mg,10,mg,3100000,2800000,-9.68,280000,1450000,48.2
+04,Brain Health & Nootropics,Cerebrolysin,60 mg,60,mg,3000000,2700000,-10.0,45000,1400000,48.1
+04,Brain Health & Nootropics,Pinealon,20 mg,20,mg,3600000,3250000,-9.72,162500,1700000,47.7
+04,Brain Health & Nootropics,Selank,10 mg,10,mg,2300000,2050000,-10.87,205000,1100000,46.3
+04,Brain Health & Nootropics,Semax,10 mg,10,mg,2300000,2050000,-10.87,205000,1100000,46.3
+04,Brain Health & Nootropics,Selank + Semax,20 mg,20,mg,3200000,2900000,-9.38,145000,1500000,48.3
+05,Energy & Endurance,5-Amino-1MQ,50 mg,50,mg,3200000,2900000,-9.38,58000,1500000,48.3
+05,Energy & Endurance,AICAR,50 mg,50,mg,3000000,2700000,-10.0,54000,1400000,48.1
+05,Energy & Endurance,L-Carnitine (Injectable),5000 mg,5000,mg,3000000,2700000,-10.0,540,1400000,48.1
+05,Energy & Endurance,MOTS-c,10 mg,10,mg,2400000,2150000,-10.42,215000,1150000,46.5
+05,Energy & Endurance,MOTS-c,40 mg,40,mg,4300000,3850000,-10.47,96250,2000000,48.1
+05,Energy & Endurance,SLU-PP-332 (Injectable),5 mg,5,mg,2700000,2450000,-9.26,490000,1250000,49.0
+06,Immunity,Thymosin Alpha-1,10 mg,10,mg,3600000,3250000,-9.72,325000,1700000,47.7
+07,Sexual Health,HCG,10000 IU,10000,IU,3000000,2700000,-10.0,,1400000,48.1
+07,Sexual Health,HMG,75 IU,75,IU,2700000,2450000,-9.26,,1250000,49.0
+07,Sexual Health,Kisspeptin,10 mg,10,mg,3200000,2900000,-9.38,290000,1500000,48.3
+07,Sexual Health,Oxytocin Acetate,10 mg,10,mg,3000000,2700000,-10.0,270000,1400000,48.1
+07,Sexual Health,PT-141,10 mg,10,mg,2600000,2350000,-9.62,235000,1200000,48.9
+08,Longevity & Cellular Repair,DSIP,5 mg,5,mg,2100000,1900000,-9.52,380000,1000000,47.4
+08,Longevity & Cellular Repair,DSIP,10 mg,10,mg,2600000,2350000,-9.62,235000,1200000,48.9
+08,Longevity & Cellular Repair,Epithalon,50 mg,50,mg,3400000,3050000,-10.29,61000,1600000,47.5
+08,Longevity & Cellular Repair,Humanin,10 mg,10,mg,4500000,4050000,-10.0,405000,2100000,48.1
+08,Longevity & Cellular Repair,NAD+,500 mg,500,mg,2600000,2350000,-9.62,4700,1200000,48.9
+08,Longevity & Cellular Repair,NAD+,1000 mg,1000,mg,3000000,2700000,-10.0,2700,1400000,48.1
+08,Longevity & Cellular Repair,SS-31,50 mg,50,mg,4500000,4050000,-10.0,81000,2100000,48.1

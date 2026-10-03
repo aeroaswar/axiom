@@ -1,0 +1,80 @@
+category_no,category,compound,lot,supplier_cost_idr,pen_cost_idr,base_price_idr,selling_price_idr,margin_idr,margin_pct,markup_pct,pen_share_of_price_pct,pricing
+01,GLP-1s & Weight Loss,AOD-9604,5 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+01,GLP-1s & Weight Loss,Cagrilintide,10 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+01,GLP-1s & Weight Loss,Retatrutide,10 mg,700000,600000,1300000,2700000,1400000,51.9,107.7,22.2,manual override
+01,GLP-1s & Weight Loss,Retatrutide,20 mg,1200000,600000,1800000,3600000,1800000,50.0,100.0,16.7,manual override
+01,GLP-1s & Weight Loss,Retatrutide,30 mg,1600000,600000,2200000,4900000,2700000,55.1,122.7,12.2,manual override
+01,GLP-1s & Weight Loss,Retatrutide,40 mg,2200000,600000,2800000,6400000,3600000,56.2,128.6,9.4,manual override
+01,GLP-1s & Weight Loss,Retatrutide,60 mg,3100000,600000,3700000,8500000,4800000,56.5,129.7,7.1,manual override
+01,GLP-1s & Weight Loss,Tirzepatide,10 mg,550000,600000,1150000,2200000,1050000,47.7,91.3,27.3,formula
+01,GLP-1s & Weight Loss,Tirzepatide,30 mg,1200000,600000,1800000,3500000,1700000,48.6,94.4,17.1,formula
+01,GLP-1s & Weight Loss,Tirzepatide,40 mg,1500000,600000,2100000,4000000,1900000,47.5,90.5,15.0,formula
+02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,10 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,20 mg,1400000,600000,2000000,3800000,1800000,47.4,90.0,15.8,formula
+02,GH Secretagogues,CJC-1295 (With DAC),5 mg,900000,600000,1500000,2900000,1400000,48.3,93.3,20.7,formula
+02,GH Secretagogues,HGH 191AA (Somatropin),36 IU,900000,600000,1500000,2800000,1300000,46.4,86.7,21.4,manual override
+02,GH Secretagogues,HGH 191AA (Somatropin),40 IU,1100000,600000,1700000,3000000,1300000,43.3,76.5,20.0,manual override
+02,GH Secretagogues,IGF-1 LR3,1 mg,1350000,600000,1950000,3800000,1850000,48.7,94.9,15.8,formula
+02,GH Secretagogues,Ipamorelin,10 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
+02,GH Secretagogues,Ipamorelin + Tesamorelin,18 mg,1750000,600000,2350000,4500000,2150000,47.8,91.5,13.3,formula
+02,GH Secretagogues,Sermorelin,10 mg,1000000,600000,1600000,3100000,1500000,48.4,93.8,19.4,formula
+02,GH Secretagogues,Tesamorelin,10 mg,1100000,600000,1700000,2300000,600000,26.1,35.3,26.1,manual override
+02,GH Secretagogues,Tesamorelin,20 mg,1600000,600000,2200000,3300000,1100000,33.3,50.0,18.2,manual override
+03,Healing & Repair,AHK-Cu,100 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
+03,Healing & Repair,ARA-290,10 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
+03,Healing & Repair,ARA-290,50 mg,1550000,600000,2150000,4100000,1950000,47.6,90.7,14.6,formula
+03,Healing & Repair,BPC-157,10 mg,650000,600000,1250000,1600000,350000,21.9,28.0,37.5,manual override
+03,Healing & Repair,BPC-157 + TB-500 (Wolverine),20 mg,1250000,600000,1850000,2900000,1050000,36.2,56.8,20.7,manual override
+03,Healing & Repair,GHK-Cu,50 mg,370000,600000,970000,2600000,1630000,62.7,168.0,23.1,manual override
+03,Healing & Repair,GHK-Cu,100 mg,500000,600000,1100000,5000000,3900000,78.0,354.5,12.0,manual override
+03,Healing & Repair,KPV,10 mg,600000,600000,1200000,2300000,1100000,47.8,91.7,26.1,formula
+03,Healing & Repair,KLOW (BPC+TB+GHK+KPV),80 mg,1450000,600000,2050000,5800000,3750000,64.7,182.9,10.3,manual override
+03,Healing & Repair,LL-37,5 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+03,Healing & Repair,Peg MGF,2 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
+03,Healing & Repair,SNAP-8,10 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
+03,Healing & Repair,TB-500,10 mg,750000,600000,1350000,1800000,450000,25.0,33.3,33.3,manual override
+04,Brain Health & Nootropics,Adamax,10 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
+04,Brain Health & Nootropics,Cerebrolysin,80 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+04,Brain Health & Nootropics,Dihexa,10 mg,1200000,600000,1800000,3500000,1700000,48.6,94.4,17.1,formula
+04,Brain Health & Nootropics,Pinealon,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+04,Brain Health & Nootropics,Selank,10 mg,500000,600000,1100000,2100000,1000000,47.6,90.9,28.6,formula
+04,Brain Health & Nootropics,Semax,10 mg,500000,600000,1100000,2100000,1000000,47.6,90.9,28.6,formula
+04,Brain Health & Nootropics,Selank + Semax,20 mg,900000,600000,1500000,3900000,2400000,61.5,160.0,15.4,manual override
+04,Brain Health & Nootropics,VIP (Vasoactive Intestinal Peptide),10 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+05,Energy & Endurance,5-Amino-1MQ,50 mg,900000,600000,1500000,2900000,1400000,48.3,93.3,20.7,formula
+05,Energy & Endurance,AICAR,50 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+05,Energy & Endurance,L-Carnitine (Injectable),5000 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+05,Energy & Endurance,LC216 Lipo-B (Injectable),10 mL,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+05,Energy & Endurance,LC526 Fat Blaster (Injectable),10 mL,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+05,Energy & Endurance,MOTS-c,10 mg,550000,600000,1150000,2200000,1050000,47.7,91.3,27.3,formula
+05,Energy & Endurance,MOTS-c,40 mg,1400000,600000,2000000,3800000,1800000,47.4,90.0,15.8,formula
+05,Energy & Endurance,SLU-PP-332 (Injectable),5 mg,650000,600000,1250000,2400000,1150000,47.9,92.0,25.0,formula
+06,Immunity,Thymalin,10 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
+06,Immunity,Thymosin Alpha-1,10 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+07,Sexual Health,HCG,10000 IU,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+07,Sexual Health,HMG,75 IU,650000,600000,1250000,2400000,1150000,47.9,92.0,25.0,formula
+07,Sexual Health,Kisspeptin,10 mg,900000,600000,1500000,2900000,1400000,48.3,93.3,20.7,formula
+07,Sexual Health,Melanotan II,10 mg,750000,600000,1350000,1900000,550000,28.9,40.7,31.6,manual override
+07,Sexual Health,Oxytocin Acetate,10 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+07,Sexual Health,PT-141,10 mg,600000,600000,1200000,2300000,1100000,47.8,91.7,26.1,formula
+08,Longevity & Cellular Repair,DSIP,5 mg,400000,600000,1000000,1900000,900000,47.4,90.0,31.6,formula
+08,Longevity & Cellular Repair,DSIP,10 mg,600000,600000,1200000,2300000,1100000,47.8,91.7,26.1,formula
+08,Longevity & Cellular Repair,Epithalon,50 mg,1000000,600000,1600000,3100000,1500000,48.4,93.8,19.4,formula
+08,Longevity & Cellular Repair,FOXO4-DRI,10 mg,1800000,600000,2400000,4600000,2200000,47.8,91.7,13.0,formula
+08,Longevity & Cellular Repair,Glutathione,1500 mg,600000,600000,1200000,2300000,1100000,47.8,91.7,26.1,formula
+08,Longevity & Cellular Repair,Humanin,10 mg,1500000,600000,2100000,4000000,1900000,47.5,90.5,15.0,formula
+08,Longevity & Cellular Repair,NAD+,500 mg,600000,600000,1200000,2300000,1100000,47.8,91.7,26.1,formula
+08,Longevity & Cellular Repair,NAD+,1000 mg,800000,600000,1400000,3700000,2300000,62.2,164.3,16.2,manual override
+08,Longevity & Cellular Repair,SS-31,50 mg,1500000,600000,2100000,4000000,1900000,47.5,90.5,15.0,formula
+09,Peptide Bioregulators,Bronchogen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Cardiogen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Cartalax,20 mg,1200000,600000,1800000,3500000,1700000,48.6,94.4,17.1,formula
+09,Peptide Bioregulators,Chonluten,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Cortagen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Crystagen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Livagen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Ovagen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Pancragen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Prostamax,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Testagen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
+09,Peptide Bioregulators,Vesugen,20 mg,1100000,600000,1700000,3300000,1600000,48.5,94.1,18.2,formula
