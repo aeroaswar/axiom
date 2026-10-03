@@ -197,6 +197,13 @@ th.p{text-align:right}
 .panel .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 12px}
 .panel .hint{font-size:10.5px;color:var(--muted-2);line-height:1.55;margin:8px 0 0}
 .panel .locked{opacity:.5;pointer-events:none}
+#of-pick{margin-top:10px}
+#of-report b{color:var(--ink);font-weight:400}
+#of-report ul{margin:6px 0 0;padding-left:15px}
+#of-report li{margin:3px 0}
+#of-report .warn{color:#D9A27A}
+#of-report.err{color:#C87A5E}
+.app.dropping .panel{box-shadow:inset 0 0 0 2px var(--accent-line)}
 
 /* Line-item rows */
 .item{border:1px solid var(--line);border-radius:6px;padding:10px 11px 12px;margin-top:12px;background:rgba(242,237,229,.02)}
@@ -275,6 +282,14 @@ th.p{text-align:right}
 <aside class="panel">
   <h1>Invoice builder</h1>
   <div class="tag">AXIOM &middot; IDR &middot; A4</div>
+
+  <fieldset>
+    <legend>Order form</legend>
+    <input type="file" id="of-file" accept="application/pdf,.pdf" hidden>
+    <button class="btn" type="button" id="of-pick">Import order form PDF&hellip;</button>
+    <div class="hint" id="of-report">Fills in the client, address and line items from a filled-in
+      AXIOM order form. You can also drop the PDF anywhere on this page.</div>
+  </fieldset>
 
   <fieldset>
     <legend>Invoice</legend>
@@ -373,7 +388,7 @@ th.p{text-align:right}
    ═══════════════════════════════════════════════════════════════ */
 const CATALOG=[
 {g:"GLP-1s & Weight Loss",i:[
-  {n:"AOD-",s:"96045 mg",p:2700000},
+  {n:"AOD-9604",s:"5 mg",p:2700000},
   {n:"Cagrilintide",s:"10 mg",p:2700000},
   {n:"Retatrutide",s:"10 mg",p:2700000},
   {n:"Retatrutide",s:"20 mg",p:3600000},
@@ -390,7 +405,7 @@ const CATALOG=[
   {n:"CJC-1295 (With DAC)",s:"5 mg",p:2900000},
   {n:"HGH 191AA (Somatropin)",s:"36 IU",p:2800000},
   {n:"HGH 191AA (Somatropin)",s:"40 IU",p:3000000},
-  {n:"IGF-1 LR",s:"31 mg",p:3800000},
+  {n:"IGF-1 LR3",s:"1 mg",p:3800000},
   {n:"Ipamorelin",s:"10 mg",p:2500000},
   {n:"Ipamorelin + Tesamorelin",s:"18 mg",p:4500000},
   {n:"Sermorelin",s:"10 mg",p:3100000},
@@ -399,18 +414,18 @@ const CATALOG=[
 ]},
 {g:"Healing & Repair",i:[
   {n:"AHK-Cu",s:"100 mg",p:2500000},
-  {n:"ARA-",s:"29010 mg",p:2800000},
-  {n:"ARA-",s:"29050 mg",p:4100000},
-  {n:"BPC-",s:"15710 mg",p:1600000},
+  {n:"ARA-290",s:"10 mg",p:2800000},
+  {n:"ARA-290",s:"50 mg",p:4100000},
+  {n:"BPC-157",s:"10 mg",p:1600000},
   {n:"BPC-157 + TB-500 (Wolverine)",s:"20 mg",p:2900000},
   {n:"GHK-Cu",s:"50 mg",p:2600000},
   {n:"GHK-Cu",s:"100 mg",p:5000000},
   {n:"KPV",s:"10 mg",p:2300000},
   {n:"KLOW (BPC+TB+GHK+KPV)",s:"80 mg",p:5800000},
-  {n:"LL-",s:"375 mg",p:2700000},
+  {n:"LL-37",s:"5 mg",p:2700000},
   {n:"Peg MGF",s:"2 mg",p:2800000},
-  {n:"SNAP-",s:"810 mg",p:2500000},
-  {n:"TB-",s:"50010 mg",p:1800000}
+  {n:"SNAP-8",s:"10 mg",p:2500000},
+  {n:"TB-500",s:"10 mg",p:1800000}
 ]},
 {g:"Brain Health & Nootropics",i:[
   {n:"Adamax",s:"10 mg",p:2800000},
@@ -434,7 +449,7 @@ const CATALOG=[
 ]},
 {g:"Immunity",i:[
   {n:"Thymalin",s:"10 mg",p:2500000},
-  {n:"Thymosin Alpha-",s:"110 mg",p:3300000}
+  {n:"Thymosin Alpha-1",s:"10 mg",p:3300000}
 ]},
 {g:"Sexual Health",i:[
   {n:"HCG",s:"10000 IU",p:2700000},
@@ -442,7 +457,7 @@ const CATALOG=[
   {n:"Kisspeptin",s:"10 mg",p:2900000},
   {n:"Melanotan II",s:"10 mg",p:1900000},
   {n:"Oxytocin Acetate",s:"10 mg",p:2700000},
-  {n:"PT-",s:"14110 mg",p:2300000}
+  {n:"PT-141",s:"10 mg",p:2300000}
 ]},
 {g:"Longevity & Cellular Repair",i:[
   {n:"DSIP",s:"5 mg",p:1900000},
@@ -453,7 +468,7 @@ const CATALOG=[
   {n:"Humanin",s:"10 mg",p:4000000},
   {n:"NAD+",s:"500 mg",p:2300000},
   {n:"NAD+",s:"1000 mg",p:3700000},
-  {n:"SS-",s:"3150 mg",p:4000000}
+  {n:"SS-31",s:"50 mg",p:4000000}
 ]},
 {g:"Peptide Bioregulators",i:[
   {n:"Bronchogen",s:"20 mg",p:3300000},
@@ -482,6 +497,10 @@ const MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
 
 const $  = s => document.querySelector(s);
+function catalogItem(sel){
+  const m = /^(\d+):(\d+)$/.exec(sel || "");
+  return m && CATALOG[+m[1]] ? CATALOG[+m[1]].i[+m[2]] || null : null;
+}
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g,
   c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const rp  = n => "Rp " + Math.round(n || 0).toLocaleString("de-DE");
@@ -530,6 +549,12 @@ function load(){
     const raw = localStorage.getItem(KEY);
     if(raw) S = Object.assign(DEFAULTS(), JSON.parse(raw));
   }catch(e){ S = DEFAULTS(); }
+  /* A row picked from the catalogue copies its name and lot. Re-read them, so an invoice
+     saved under an older catalogue picks up corrected names; the price stays as typed. */
+  S.items.forEach(it => {
+    const src = catalogItem(it.sel);
+    if(src){ it.n = src.n; it.s = src.s; }
+  });
 }
 
 /* ── Shipping ──────────────────────────────────────────────────
@@ -990,6 +1015,348 @@ $("#reset").addEventListener("click", () => {
   S = DEFAULTS();
   try{ localStorage.removeItem(KEY); }catch(e){}
   syncFields(); render();
+});
+
+/* ── Order-form import ─────────────────────────────────────────
+   Reads a filled-in AXIOM order form (business-proposal/AXIOM-Order-Form.pdf)
+   and turns it into this invoice: name, phone and address become the client,
+   each order row becomes a line item matched to the catalogue.
+
+   The form's answers live in its AcroForm fields, so this reads those rather
+   than the page: name, phone, address, notes, item_1..5, amount_1..5,
+   unit_1..5 (radio: mg / IU / mL), qty_1..5 and ruo_confirm. A form that was
+   printed and scanned, or flattened on export, has no fields left; that is
+   reported rather than guessed at. Everything runs in the browser — the PDF
+   is never uploaded. */
+const OF_UNITS = ["mg", "IU", "mL"];
+
+/* ---- A small PDF object reader: just enough to reach the form fields ---- */
+function pdfLatin1(bytes){
+  let s = "";
+  for(let i = 0; i < bytes.length; i += 0x8000)
+    s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return s;
+}
+async function pdfInflate(str){
+  const bytes = Uint8Array.from(str, c => c.charCodeAt(0));
+  const ds = new DecompressionStream("deflate");
+  const w = ds.writable.getWriter();
+  w.write(bytes).catch(() => {}); w.close().catch(() => {});
+  const r = ds.readable.getReader(), out = [];
+  /* Some writers leave junk after the compressed data; keep whatever inflated. */
+  try{ for(;;){ const {done, value} = await r.read(); if(done) break; out.push(value); } }catch(e){}
+  const all = new Uint8Array(out.reduce((n, c) => n + c.length, 0));
+  let o = 0; out.forEach(c => { all.set(c, o); o += c.length; });
+  return pdfLatin1(all);
+}
+const PDF_WS = "\0\t\n\f\r ", PDF_DELIM = "()<>[]{}/%";
+function pdfValue(src, pos){
+  const skip = () => {
+    for(;;){
+      while(pos < src.length && PDF_WS.includes(src[pos])) pos++;
+      if(src[pos] !== "%") return;
+      while(pos < src.length && src[pos] !== "\n" && src[pos] !== "\r") pos++;
+    }
+  };
+  const word = () => { const a = pos; while(pos < src.length && !PDF_WS.includes(src[pos]) && !PDF_DELIM.includes(src[pos])) pos++; return src.slice(a, pos); };
+  const val = () => {
+    skip();
+    const c = src[pos];
+    if(c === "<" && src[pos+1] === "<"){
+      pos += 2; const d = {};
+      for(;;){
+        skip();
+        if(src[pos] === ">" && src[pos+1] === ">"){ pos += 2; return d; }
+        if(src[pos] !== "/") throw new Error("bad dict");
+        pos++; const k = word().replace(/#([0-9a-f]{2})/gi, (m, h) => String.fromCharCode(parseInt(h, 16)));
+        d[k] = val();
+      }
+    }
+    if(c === "<"){
+      const end = src.indexOf(">", pos);
+      let h = src.slice(pos + 1, end).replace(/[^0-9a-f]/gi, ""); pos = end + 1;
+      if(h.length % 2) h += "0";
+      let s = ""; for(let i = 0; i < h.length; i += 2) s += String.fromCharCode(parseInt(h.substr(i, 2), 16));
+      return {S:s};
+    }
+    if(c === "("){
+      pos++; let depth = 1, s = "";
+      while(pos < src.length){
+        const ch = src[pos++];
+        if(ch === "\\"){
+          const e = src[pos++];
+          if(e === "n") s += "\n"; else if(e === "r") s += "\r"; else if(e === "t") s += "\t";
+          else if(e === "b") s += "\b"; else if(e === "f") s += "\f";
+          else if(e === "\r"){ if(src[pos] === "\n") pos++; }
+          else if(e === "\n"){}
+          else if(e >= "0" && e <= "7"){
+            let o = e; while(o.length < 3 && src[pos] >= "0" && src[pos] <= "7") o += src[pos++];
+            s += String.fromCharCode(parseInt(o, 8) & 255);
+          } else s += e;
+        } else if(ch === "("){ depth++; s += ch; }
+        else if(ch === ")"){ if(--depth === 0) break; s += ch; }
+        else s += ch;
+      }
+      return {S:s};
+    }
+    if(c === "["){
+      pos++; const a = [];
+      for(;;){ skip(); if(src[pos] === "]"){ pos++; return a; } a.push(val()); }
+    }
+    if(c === "/"){ pos++; return {N:word().replace(/#([0-9a-f]{2})/gi, (m, h) => String.fromCharCode(parseInt(h, 16)))}; }
+    const w = word();
+    if(w === "") throw new Error("bad token at " + pos);
+    if(/^[+-]?\d+$/.test(w)){
+      /* "12 0 R" is a reference */
+      const save = pos; skip(); const g = word(); skip();
+      if(/^\d+$/.test(g) && src[pos] === "R" && (pos + 1 >= src.length || PDF_WS.includes(src[pos+1]) || PDF_DELIM.includes(src[pos+1]))){ pos++; return {R:+w}; }
+      pos = save; return +w;
+    }
+    if(/^[+-]?(\d*\.\d+|\d+\.?)$/.test(w)) return +w;
+    return w === "true" ? true : w === "false" ? false : null;
+  };
+  const v = val();
+  return [v, pos];
+}
+async function pdfObjects(src){
+  const defs = [], streams = [];
+  const re = /(\d+)\s+(\d+)\s+obj\b/g;
+  let m;
+  while((m = re.exec(src))){
+    let v, end;
+    try{ [v, end] = pdfValue(src, re.lastIndex); }catch(e){ continue; }
+    defs.push({n:+m[1], v, at:m.index});
+    /* Step over stream bodies, both to keep their bytes and so binary data is never scanned for objects. */
+    const after = /^\s*stream\r?\n/.exec(src.slice(end, end + 12));
+    if(v && typeof v === "object" && after){
+      const from = end + after[0].length;
+      let to = typeof v.Length === "number" ? from + v.Length : -1;
+      if(to < 0 || src.slice(to, to + 30).indexOf("endstream") < 0) to = src.indexOf("endstream", from);
+      if(to < 0) break;
+      if(v.Type && v.Type.N === "ObjStm") streams.push({v, at:m.index, data:src.slice(from, to)});
+      re.lastIndex = to + 9;
+    } else re.lastIndex = end;
+  }
+  /* Compressed object streams (Acrobat and most desktop editors write these) */
+  for(const st of streams){
+    const f = st.v.Filter, flt = Array.isArray(f) ? f.map(x => x.N) : f ? [f.N] : [];
+    if(flt.some(x => x !== "FlateDecode")) continue;
+    const body = flt.length ? await pdfInflate(st.data) : st.data;
+    const head = body.slice(0, st.v.First).trim().split(/\s+/).map(Number);
+    for(let k = 0; k + 1 < head.length; k += 2){
+      try{ defs.push({n:head[k], v:pdfValue(body, st.v.First + head[k+1])[0], at:st.at + 0.5}); }catch(e){}
+    }
+  }
+  /* Later definitions win: that is how an incremental save (a re-filled form) overrides. */
+  defs.sort((a, b) => a.at - b.at);
+  const objs = new Map();
+  defs.forEach(d => objs.set(d.n, d.v));
+  return objs;
+}
+function pdfText(v){
+  if(!v || typeof v.S !== "string") return v && v.N != null ? v.N : "";
+  const s = v.S;
+  if(s.startsWith("\xFE\xFF")){
+    let o = ""; for(let i = 2; i + 1 < s.length; i += 2) o += String.fromCharCode(s.charCodeAt(i) << 8 | s.charCodeAt(i+1));
+    return o;
+  }
+  if(s.startsWith("\xEF\xBB\xBF")){
+    try{ return new TextDecoder().decode(Uint8Array.from(s.slice(3), c => c.charCodeAt(0))); }catch(e){}
+  }
+  /* PDFDocEncoding: Latin-1 except for a few accents below 0x20 and typographic marks at 0x80-0xA0 */
+  return s.replace(/[\x18-\x1F\x80-\x9E\xA0]/g, c => {
+    const k = c.charCodeAt(0);
+    return k < 0x20 ? "\u02D8\u02C7\u02C6\u02D9\u02DD\u02DB\u02DA\u02DC"[k - 0x18]
+         : k === 0xA0 ? "\u20AC"
+         : "\u2022\u2020\u2021\u2026\u2014\u2013\u0192\u2044\u2039\u203A\u2212\u2030\u201E\u201C\u201D\u2018\u2019\u201A\u2122\uFB01\uFB02\u0141\u0152\u0160\u0178\u017D\u0131\u0142\u0153\u0161\u017E"[k - 0x80];
+  });
+}
+/* Every terminal field as {name: {ft, value}}; a radio group's value is its picked state. */
+async function pdfFields(buf){
+  const src = pdfLatin1(new Uint8Array(buf));
+  if(!/^%PDF-/.test(src.slice(0, 1024).trimStart())) throw new Error("not-pdf");
+  const objs = await pdfObjects(src);
+  const get = v => { for(let i = 0; v && v.R != null && i < 32; i++) v = objs.get(v.R); return v; };
+  let form = null, encrypted = false;
+  for(const v of objs.values()){
+    if(v && v.Type && v.Type.N === "Catalog" && v.AcroForm) form = get(v.AcroForm);
+    if(v && v.Type && v.Type.N === "XRef" && v.Encrypt) encrypted = true;
+  }
+  if(/\/Encrypt\s/.test(src) && /trailer[\s\S]*\/Encrypt/.test(src)) encrypted = true;
+  if(encrypted) throw new Error("encrypted");
+  const out = {}, seen = new Set();
+  const walk = (ref, prefix, inh) => {
+    if(ref && ref.R != null){ if(seen.has(ref.R)) return; seen.add(ref.R); }
+    const d = get(ref);
+    if(!d || typeof d !== "object") return;
+    const t = pdfText(get(d.T));
+    const name = t ? (prefix ? prefix + "." + t : t) : prefix;
+    const ft = d.FT ? d.FT.N : inh.ft;
+    const v = d.V !== undefined ? get(d.V) : inh.v;
+    const kids = (get(d.Kids) || []).map(get).filter(Boolean);
+    const fieldKids = (get(d.Kids) || []).filter(k => { const kd = get(k); return kd && kd.T; });
+    if(fieldKids.length){ fieldKids.forEach(k => walk(k, name, {ft, v})); return; }
+    if(!name) return;
+    let value = pdfText(v);
+    if(ft === "Btn"){
+      if(!value || value === "Off"){
+        /* Some viewers record the pick only on the widget's appearance state. */
+        const on = [d, ...kids].map(k => k.AS && k.AS.N).find(s => s && s !== "Off");
+        value = on || "";
+      }
+      value = String(value).replace(/^\//, "");   /* a state written as a string, "/mg" */
+      if(value === "Off") value = "";
+    }
+    out[name] = {ft, value:String(value).replace(/\r\n?/g, "\n").trim()};
+  };
+  if(form) (get(form.Fields) || []).forEach(f => walk(f, "", {}));
+  return out;
+}
+
+/* ---- Matching an order row to the catalogue ---- */
+const ofNorm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+const OF_ALIAS = {epitalon:"epithalon", mt2:"melanotanii", melanotan2:"melanotanii", hgh:"hgh191aa",
+  somatropin:"hgh191aa", nad:"nad", motsc:"motsc", glutathion:"glutathione", tb4:"tb500", bpc:"bpc157"};
+function ofLev(a, b){
+  if(Math.abs(a.length - b.length) > 2) return 9;
+  let p = Array.from({length:b.length + 1}, (x, i) => i);
+  for(let i = 1; i <= a.length; i++){
+    const c = [i];
+    for(let j = 1; j <= b.length; j++) c[j] = Math.min(p[j] + 1, c[j-1] + 1, p[j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+    p = c;
+  }
+  return p[b.length];
+}
+/* Best catalogue compound for the typed name: returns its rows (one per lot size) or []. */
+function ofCompound(raw){
+  let q = ofNorm(raw);
+  if(!q) return [];
+  if(OF_ALIAS[q]) q = OF_ALIAS[q];
+  const rows = [];
+  CATALOG.forEach((g, gi) => g.i.forEach((it, ii) => {
+    if(it.s === "unit") return;
+    const base = ofNorm(it.n.replace(/\(.*?\)/g, "")), full = ofNorm(it.n);
+    const alias = ofNorm((/\(([^)]*)\)/.exec(it.n) || [])[1]);
+    let sc = 0;
+    if(q === base || q === full || (alias && q === alias)) sc = 100;
+    else if(q.length >= 3 && (base.startsWith(q) || (alias && alias.startsWith(q)))) sc = 80 - base.length / 100;
+    else if(q.length >= 4 && full.includes(q)) sc = 60 - full.length / 100;
+    else if(base.length >= 3 && q.includes(base)) sc = 50 + base.length / 100;
+    else if(q.length >= 5 && ofLev(q, base) <= (base.length > 8 ? 2 : 1)) sc = 40;
+    if(sc) rows.push({sc, n:it.n, sel:gi + ":" + ii, it});
+  }));
+  if(!rows.length) return [];
+  const best = Math.max(...rows.map(r => r.sc));
+  const name = rows.find(r => r.sc === best).n;
+  return rows.filter(r => r.n === name);
+}
+const ofSize = s => { const m = /^([\d.]+)\s*(mg|IU|mL)$/.exec(s || ""); return m ? {n:+m[1], u:m[2]} : null; };
+
+function ofImport(f, fileName){
+  const v = k => (f[k] && f[k].value) || "";
+  const items = [], warn = [];
+  for(let r = 1; r <= 5; r++){
+    let name = v("item_" + r), amt = v("amount_" + r), unit = v("unit_" + r), qty = v("qty_" + r);
+    if(!name && !amt && !qty) continue;
+    const tag = "Row " + String(r).padStart(2, "0");
+    /* A size typed into the name or the amount box ("Reta 20mg", "20 mg") still counts. */
+    const inName = /(\d+(?:[.,]\d+)?)\s*(mg|iu|ml)\b/i.exec(name);
+    if(!amt && inName){ amt = inName[1]; if(!unit) unit = inName[2]; name = name.replace(inName[0], "").trim(); }
+    const inAmt = /^\s*(\d+(?:[.,]\d+)?)\s*(mg|iu|ml)?\s*$/i.exec(amt);
+    const num = inAmt ? parseFloat(inAmt[1].replace(",", ".")) : NaN;
+    if(inAmt && inAmt[2] && !unit) unit = inAmt[2];
+    unit = OF_UNITS.find(u => u.toLowerCase() === String(unit).toLowerCase()) || "";
+    let q = parseInt(qty, 10);
+    if(!(q > 0)){ warn.push(`${tag}: no quantity on the form — set to 1.`); q = 1; }
+    if(!name){ warn.push(`${tag}: a size or quantity but no compound — skipped.`); continue; }
+
+    const lots = ofCompound(name);
+    const typed = name + (amt ? " " + amt + (unit ? " " + unit : "") : "");
+    if(!lots.length){
+      items.push({sel:"custom", n:name, s:amt ? amt + (unit ? " " + unit : "") : "", p:0, q, d:0});
+      warn.push(`${tag}: “${typed}” isn’t in the catalogue — added as a custom item at Rp 0. Pick the compound or type the price.`);
+      continue;
+    }
+    let lot = null;
+    if(!isNaN(num)) lot = lots.find(l => { const z = ofSize(l.it.s); return z && z.n === num && (!unit || z.u === unit); })
+                       || lots.find(l => { const z = ofSize(l.it.s); return z && z.n === num; });
+    else if(lots.length === 1) lot = lots[0];
+    if(!lot){
+      const sizes = lots.map(l => l.it.s).join(", ");
+      items.push({sel:"custom", n:lots[0].n, s:amt ? amt + (unit ? " " + unit : "") : "", p:0, q, d:0});
+      warn.push(isNaN(num)
+        ? `${tag}: ${lots[0].n} comes in ${sizes} and the form gives no amount — added at Rp 0. Pick the lot.`
+        : `${tag}: ${lots[0].n} isn’t sold as ${amt}${unit ? " " + unit : ""} (lots: ${sizes}) — added at Rp 0. Pick the lot.`);
+      continue;
+    }
+    const z = ofSize(lot.it.s);
+    if(unit && z && z.u !== unit) warn.push(`${tag}: the form ticks ${unit} but ${lot.it.n} is sold in ${z.u} — invoiced as ${lot.it.s}.`);
+    if(ofNorm(name) !== ofNorm(lot.it.n)) warn.push(`${tag}: read “${typed}” as ${lot.it.n} · ${lot.it.s}.`);
+    items.push({sel:lot.sel, n:lot.it.n, s:lot.it.s, p:lot.it.p, q, d:0});
+  }
+  return {items, warn, client:{name:v("name"), phone:v("phone"), addr:v("address")}, notes:v("notes"),
+          ruo:!!v("ruo_confirm"), fileName};
+}
+
+function ofReport(html, err){
+  const el = $("#of-report");
+  el.className = "hint" + (err ? " err" : "");
+  el.innerHTML = html;
+}
+
+async function ofLoad(file){
+  if(!file) return;
+  if(!/\.pdf$/i.test(file.name) && file.type !== "application/pdf"){ ofReport(`${esc(file.name)} isn’t a PDF.`, true); return; }
+  if(typeof DecompressionStream === "undefined"){ ofReport("This browser can’t read PDFs here — open the builder in a current Chrome, Safari or Firefox.", true); return; }
+  let fields;
+  try{ fields = await pdfFields(await file.arrayBuffer()); }
+  catch(e){
+    ofReport(e.message === "encrypted" ? `${esc(file.name)} is password-protected, so its fields can’t be read.`
+           : e.message === "not-pdf" ? `${esc(file.name)} isn’t a readable PDF.`
+           : `Couldn’t read ${esc(file.name)}.`, true);
+    return;
+  }
+  const isForm = ["name", "phone", "address", "item_1"].every(k => k in fields);
+  if(!isForm){
+    ofReport(Object.keys(fields).length
+      ? `${esc(file.name)} has form fields, but not the AXIOM order form’s.`
+      : `${esc(file.name)} has no fillable fields. If it’s a filled-in order form, it was printed and scanned or flattened on export — type that one in by hand.`, true);
+    return;
+  }
+  const o = ofImport(fields, file.name);
+  if(!o.items.length && !o.client.name){ ofReport(`${esc(file.name)} is an AXIOM order form, but it’s empty.`, true); return; }
+  const busy = S.client.name.trim() && S.client.name.trim() !== o.client.name;
+  if(busy && !confirm(`Replace the client and line items for ${S.client.name} with this order form?`)) return;
+
+  S.client = {name:o.client.name, company:"", addr:o.client.addr, email:"", phone:o.client.phone};
+  S.dests = [{label:"", addr:"", phone:"", ship:""}];   /* blank → ships to the client's address */
+  if(o.items.length) S.items = o.items;
+  syncFields(); render();
+
+  const units = o.items.reduce((n, it) => n + it.q, 0);
+  const warn = o.warn.slice();
+  if(!o.items.length) warn.push("No order rows on the form — line items left as they were.");
+  if(!o.ruo) warn.push("The research-use box isn’t ticked as a form field. A tick drawn on with a pen or markup tool doesn’t register here — check the PDF itself.");
+  const list = [
+    ...warn.map(w => `<li class="warn">${esc(w)}</li>`),
+    o.notes ? `<li>Client note: <b>${esc(o.notes)}</b></li>` : ""
+  ].join("");
+  ofReport(`Imported <b>${esc(o.client.name || "unnamed client")}</b> — ${o.items.length} item${o.items.length === 1 ? "" : "s"}, `
+    + `${units} unit${units === 1 ? "" : "s"}, total <b>${rp(totals().total)}</b>. `
+    + `Check the invoice number before saving.${list ? "<ul>" + list + "</ul>" : ""}`);
+}
+
+$("#of-pick").addEventListener("click", () => $("#of-file").click());
+$("#of-file").addEventListener("change", e => { ofLoad(e.target.files[0]); e.target.value = ""; });
+/* Drop a PDF anywhere on the page. */
+let ofDrag = 0;
+window.addEventListener("dragenter", e => { if([...e.dataTransfer.types].includes("Files")){ ofDrag++; $(".app").classList.add("dropping"); } });
+window.addEventListener("dragleave", () => { if(--ofDrag <= 0){ ofDrag = 0; $(".app").classList.remove("dropping"); } });
+window.addEventListener("dragover", e => e.preventDefault());
+window.addEventListener("drop", e => {
+  e.preventDefault(); ofDrag = 0; $(".app").classList.remove("dropping");
+  const file = [...(e.dataTransfer.files || [])].find(x => /\.pdf$/i.test(x.name) || x.type === "application/pdf");
+  if(file) ofLoad(file);
 });
 
 load();
