@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AXIOM — Vial Sticker 20 &times; 40 mm — Design Proof</title>
+<title>AXIOM — Vial Sticker 50 &times; 30 mm — Design Proof</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -66,17 +66,17 @@ td b{color:var(--ink);font-weight:500}
 a{color:var(--accent-bright)}
 footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.04em}
 /* ============================================================
-   AXIOM vial sticker — 20 x 40 mm, rounded corners
+   AXIOM vial sticker — 50 x 30 mm, rounded corners
    Geometry is declared in mm so the printed piece is
    dimensionally exact. Type inside each band is expressed in em
-   against a 1mm-based band font-size, so autofit() can shrink a
+   against a 1.25mm-based band font-size, so autofit() can shrink a
    whole band (size AND tracking) proportionally when a long
    compound name would otherwise cross the die line.
-   Content box: 40 - 2*1.6 = 36.8mm wide, 20 - 2*1.6 = 16.8mm tall.
+   Content box: 50 - 2*2 = 46mm wide, 30 - 2*2 = 26mm tall.
    ============================================================ */
 .lbl{
-  --w:40mm; --h:20mm; --r:2mm;
-  --pad-x:1.6mm; --pad-y:1.6mm;
+  --w:50mm; --h:30mm; --r:2.5mm;
+  --pad-x:2mm; --pad-y:2mm;
   position:relative;
   width:var(--w); height:var(--h);
   border-radius:var(--r);
@@ -90,7 +90,7 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
 }
 /* Each band scales as one unit via --k (set by autofit) */
 .lbl__band{
-  font-size:calc(1mm * var(--k,1));
+  font-size:calc(1.25mm * var(--k,1));
   display:flex; align-items:baseline;
   gap:.7em; min-width:0; line-height:1;
 }
@@ -99,7 +99,11 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
 
 /* --- band A — brand bar ------------------------------------ */
 .lbl__band--a{align-items:center}
-.lbl__wm{display:block; width:9em; height:auto}
+/* Height is set, not left to height:auto, and overflow is visible: the O
+   overshoots the other letters by 2 units top and bottom, filling the
+   582 x 70 viewBox edge to edge, and a viewer that sizes the SVG box a
+   touch short would otherwise clip it flat at the cap line. */
+.lbl__wm{display:block; width:9em; height:calc(9em * 70 / 582); overflow:visible}
 .lbl__note{
   font-weight:500; font-size:1.5em; letter-spacing:.14em;
   text-transform:uppercase; color:var(--accent);
@@ -108,9 +112,9 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
 /* --- hairline dividers — the core AXIOM texture -------------
    Both rules are solid bronze at full strength, so they read the
    same on every label; no gradient, no grey. */
-.lbl__rule{height:.2mm; flex:0 0 .2mm; background:var(--accent)}
-.lbl__rule--top{ margin:1.1mm 0 1.3mm }
-.lbl__rule--bot{ margin:1.2mm 0 .9mm }
+.lbl__rule{height:.25mm; flex:0 0 .25mm; background:var(--accent)}
+.lbl__rule--top{ margin:1.9mm 0 2.2mm }
+.lbl__rule--bot{ margin:2.1mm 0 1.6mm }
 
 /* --- band B — compound, the hero --------------------------- */
 .lbl__compound{
@@ -120,8 +124,8 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
 }
 
 /* --- bands C / D — quantity and dose ------------------------ */
-.lbl__band--c{margin-top:.9mm}
-.lbl__band--d{margin-top:.45mm}
+.lbl__band--c{margin-top:1.6mm}
+.lbl__band--d{margin-top:.8mm}
 .lbl__k{
   font-weight:400; font-size:1.5em; letter-spacing:.14em;
   text-transform:uppercase; color:var(--muted);
@@ -145,7 +149,7 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
   <header class="mast">
     <p class="kick">AXIOM — Peptide Science</p>
     <div id="mast-wm"></div>
-    <h1>Vial sticker &mdash; 20 &times; 40 mm</h1>
+    <h1>Vial sticker &mdash; 50 &times; 30 mm</h1>
     <p>Wrap label for pen-format research peptides, drawn in the AXIOM system: onyx ground,
     bone ink, a single bronze hairline and one bronze mark. Geometry is declared in millimetres,
     so what is on screen is what comes off the press. Retatrutide 30 mg is the worked example.</p>
@@ -168,9 +172,9 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
 
   <section>
     <div class="sh"><span class="ix">03</span><h2>Corner radius</h2></div>
-    <p class="sub">The die radius, at three times size. 2 mm is the default and what the print
+    <p class="sub">The die radius, at three times size. 2.5 mm is the default and what the print
     sheet ships with; change <code>--r</code> on <code>.lbl</code> to pick another after a test
-    print. Shown 1 / 1.5 / 2 / 2.5 mm.</p>
+    print. Shown 1.5 / 2 / 2.5 / 3 mm.</p>
     <div class="row" id="radii"></div>
   </section>
 
@@ -189,17 +193,17 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
     <table>
       <thead><tr><th>Element</th><th>Size</th><th>Treatment</th></tr></thead>
       <tbody>
-        <tr><td>Die</td><td>40 &times; 20 mm</td><td>2 mm corner radius, rounded rectangle</td></tr>
-        <tr><td>Safe area</td><td>36.8 &times; 16.8 mm</td><td>1.6 mm inset on all four sides</td></tr>
-        <tr><td>Wordmark</td><td>9 mm wide</td><td>Vector, drawn AXIOM wordmark, bone <b>#F2EDE5</b></td></tr>
-        <tr><td>HIGH PURITY</td><td>1.5 mm &middot; 4.3 pt</td><td>Inter 500, .14em, bronze <b>#C88A4E</b></td></tr>
-        <tr><td>Hairline</td><td>0.2 mm &middot; 0.57 pt</td><td>Bronze fading to 22% bone</td></tr>
-        <tr><td>Compound</td><td>3.9 mm &middot; 11.1 pt</td><td>Jost 400, .05em, uppercase, bone</td></tr>
-        <tr><td>Field keys</td><td>1.5 mm &middot; 4.3 pt</td><td>Inter 400, .14em, <b>#9C9488</b></td></tr>
-        <tr><td>QTY value</td><td>2.0 mm &middot; 5.7 pt</td><td>Inter 500, tabular figures, bone</td></tr>
-        <tr><td>DOSE value</td><td>1.8 mm &middot; 5.1 pt</td><td>Inter 500, tabular figures, bone</td></tr>
-        <tr><td>Compliance</td><td>1.4 mm &middot; 4.0 pt</td><td>Inter 400, .10em, <b>#9C9488</b></td></tr>
-        <tr><td>Sheet</td><td>A4, 4 &times; 12</td><td>48 labels &middot; 44 mm &times; 23 mm pitch</td></tr>
+        <tr><td>Die</td><td>50 &times; 30 mm</td><td>2.5 mm corner radius, rounded rectangle</td></tr>
+        <tr><td>Safe area</td><td>46 &times; 26 mm</td><td>2 mm inset on all four sides</td></tr>
+        <tr><td>Wordmark</td><td>11.25 mm wide</td><td>Vector, drawn AXIOM wordmark, bone <b>#F2EDE5</b></td></tr>
+        <tr><td>HIGH PURITY</td><td>1.9 mm &middot; 5.3 pt</td><td>Inter 500, .14em, bronze <b>#C88A4E</b></td></tr>
+        <tr><td>Hairline</td><td>0.25 mm &middot; 0.71 pt</td><td>Solid bronze <b>#C88A4E</b></td></tr>
+        <tr><td>Compound</td><td>4.9 mm &middot; 13.8 pt</td><td>Jost 400, .05em, uppercase, bone</td></tr>
+        <tr><td>Field keys</td><td>1.9 mm &middot; 5.3 pt</td><td>Inter 400, .14em, <b>#9C9488</b></td></tr>
+        <tr><td>QTY value</td><td>2.5 mm &middot; 7.1 pt</td><td>Inter 500, tabular figures, bone</td></tr>
+        <tr><td>DOSE value</td><td>2.25 mm &middot; 6.4 pt</td><td>Inter 500, tabular figures, bone</td></tr>
+        <tr><td>Compliance</td><td>1.75 mm &middot; 5.0 pt</td><td>Inter 400, .10em, <b>#9C9488</b></td></tr>
+        <tr><td>Sheet</td><td>A4, 3 &times; 8</td><td>24 labels a page &middot; 54 mm &times; 33 mm pitch</td></tr>
       </tbody>
     </table>
   </section>
@@ -218,9 +222,9 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
       hairline cut guides hide themselves when the gutters close.
     </div>
     <div class="note">
-      <b>Micro-print.</b> <i>Research use only</i> sets at 4.0 pt. That is normal for pharma
+      <b>Micro-print.</b> <i>Research use only</i> sets at 5.0 pt. That is normal for pharma
       micro-print but it is the one line to check on a real proof &mdash; if the press cannot
-      hold it, raise <code>.lbl__ruo</code> to 1.6 mm and drop the compound to 3.6 mm.
+      hold it, raise <code>.lbl__ruo</code> to 1.6em (2 mm) and drop the compound to 3.6em (4.5 mm).
     </div>
     <div class="note">
       <b>Label copy.</b> The brand's own label rule states that a label may not imply human dose,
@@ -245,7 +249,7 @@ footer{padding:44px 0 64px;color:var(--muted-2);font-size:11px;letter-spacing:.0
    `copies` is how many of that SKU to place on the sheet.
    ============================================================ */
 const LABELS = [
-  { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:48 },
+  { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:24 },
 
   /* Remaining catalogue SKUs (supabase/seed.sql — the only file permitted to
      carry a price, a name or a dose). Set `copies` and fill in `dose` to gang
@@ -268,7 +272,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    entirely rather than printed empty. Click conversions are device-specific
    and are never inferred for a strength that was not supplied.
 
-   Stacked inside 36.8 x 16.8 mm:
+   Stacked inside 46 x 26 mm:
      A  AXIOM wordmark ................ HIGH PURITY
         ------------------------------------------
      B  RETATRUTIDE
@@ -295,10 +299,10 @@ function labelHTML(d){
 }
 
 /* Shrink a band (size + tracking together, via --k) until it fits the
-   36.8mm content box. The floor is set low enough for the longest name in
+   46mm content box. The floor is set low enough for the longest name in
    the catalogue — "CJC No DAC + Ipamorelin" — to stay inside the die line. */
 function autofit(root){
-  const MIN = 0.55;
+  const MIN = 0.48;
   root.querySelectorAll('.lbl__band').forEach(band => {
     let k = 1;
     band.style.setProperty('--k', k);
@@ -322,8 +326,8 @@ function mount(stage, data, scale){
   stage.innerHTML = labelHTML(data);
   const lbl = stage.firstElementChild;
   lbl.style.transform = `scale(${scale})`;
-  stage.style.width  = (40 * scale) + 'mm';
-  stage.style.height = (20 * scale) + 'mm';
+  stage.style.width  = (50 * scale) + 'mm';
+  stage.style.height = (30 * scale) + 'mm';
   autofit(stage);
   return lbl;
 }
@@ -334,9 +338,9 @@ document.querySelectorAll('.stage[data-sku]').forEach(s =>
 
 /* 03 — corner radius options */
 document.getElementById('radii').innerHTML =
-  [1, 1.5, 2, 2.5].map(r =>
+  [1.5, 2, 2.5, 3].map(r =>
     `<figure style="margin:0"><div class="plate"><div class="stage" data-r="${r}"></div></div>
-     <figcaption class="cap">${r} mm${r === 2 ? ' — default' : ''}</figcaption></figure>`).join('');
+     <figcaption class="cap">${r} mm${r === 2.5 ? ' — default' : ''}</figcaption></figure>`).join('');
 document.querySelectorAll('.stage[data-r]').forEach(s => {
   mount(s, HERO, 3).style.setProperty('--r', s.dataset.r + 'mm');
 });
