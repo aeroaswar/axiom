@@ -1204,8 +1204,24 @@ document.querySelectorAll('#edit [data-k]').forEach(el => el.addEventListener('i
 $('lines').addEventListener('input', e => {
   const el = e.target.closest('[data-l]'); if (!el) return;
   const i = +el.closest('.ln').dataset.i, l = O().lines[i];
+  const row = el.closest('.ln'), lot = el.dataset.l === 'compound' && LOT_BY_KEY[el.value];
+  if (lot){
+    /* picked from the list: one pick sets the compound, its lot size and its unit */
+    Object.assign(l, { compound: lot.name, amount: lot.amount, unit: lot.unit, unitFrom: 'pick', raw: '' });
+    el.value = lot.name;
+    row.querySelector('[data-l="amount"]').value = lot.amount;
+    row.querySelector('[data-l="unit"]').value = lot.unit;
+    const fl = lineFlag(l), hint = row.querySelector('.ln-hint');
+    hint.textContent = fl.t; hint.classList.toggle('w', fl.w);
+    soon(); return;
+  }
   l[el.dataset.l] = el.value.trim();
   if (el.dataset.l === 'unit') l.unitFrom = 'typed';
+  /* a compound typed out in full that comes in one size gets that size */
+  if (el.dataset.l === 'compound' && byName[l.compound] && !l.amount && byName[l.compound].sizes.length === 1){
+    l.amount = byName[l.compound].sizes[0];
+    row.querySelector('[data-l="amount"]').value = l.amount;
+  }
   if (el.dataset.l === 'compound' && byName[l.compound] && l.unitFrom !== 'form' && l.unitFrom !== 'typed'){
     l.unit = byName[l.compound].units[0]; l.unitFrom = 'catalogue';
     el.closest('.ln').querySelector('[data-l="unit"]').value = l.unit;
@@ -1247,7 +1263,10 @@ $('marks').addEventListener('click', e => {
   soon();
 });
 
-$('cmpList').innerHTML = COMPOUNDS.map(c => `<option value="${esc(c.name)}">${esc(c.sizes.join(' · ') + ' ' + c.units.join('/'))}</option>`).join('');
+/* One list entry per lot ("Retatrutide — 30 mg"), so a pick carries the size and unit with it. */
+const LOTS = COMPOUNDS.flatMap(c => c.sizes.map(z => ({ key: `${c.name} — ${z} ${c.units[0]}`, name: c.name, amount: z, unit: c.units[0] })));
+const LOT_BY_KEY = Object.fromEntries(LOTS.map(x => [x.key, x]));
+$('cmpList').innerHTML = LOTS.map(x => `<option value="${esc(x.key)}"></option>`).join('');
 
 /* sender */
 function renderSender(){
