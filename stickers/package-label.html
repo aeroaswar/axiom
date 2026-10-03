@@ -170,13 +170,16 @@ details.sender .fields{margin-top:12px}
 .tbox{--z:1;--W:100mm;--H:150mm;position:relative;width:calc(var(--W) * var(--z));height:calc(var(--H) * var(--z));
   overflow:hidden;background:#fff;border-radius:calc(2.5mm * var(--z));box-shadow:0 1px 3px rgba(0,0,0,.35)}
 .tbox > .pl{position:absolute;top:0;left:0;transform-origin:top left;transform:scale(var(--z))}
-[data-orient="land"] .tbox{--W:150mm;--H:100mm}
-[data-orient="land"] .tbox > .pl{transform:scale(var(--z)) translateX(150mm) rotate(90deg)}
+[data-stock="land"] .tbox{--W:150mm;--H:100mm}
+[data-stock="land"] .tbox > .pl{transform:scale(var(--z)) translateX(150mm) rotate(90deg)}
+[data-stock="s80"] .tbox{--W:80mm;--H:50mm;border-radius:calc(2mm * var(--z))}
+.tbox > .ps{position:absolute;top:0;left:0;transform-origin:top left;transform:scale(var(--z))}
 .roll{display:flex;flex-wrap:wrap;gap:16px;padding:18px;background:#DAD5CC;border-radius:6px;max-width:100%}
 .roll figure{margin:0}
 .roll figcaption{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#4a453e;margin:7px 0 0;
   max-width:calc(var(--W, 100mm) * .5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .roll .tbox{--z:.5;cursor:pointer}
+[data-stock="s80"] .roll .tbox{--z:.8}
 .roll figure.is-cur .tbox{outline:2px solid var(--accent);outline-offset:3px}
 
 @page{ size:100mm 150mm; margin:0; }
@@ -296,6 +299,62 @@ details.sender .fields{margin-top:12px}
 .pl__marks.is-row b{font-size:1.8mm;letter-spacing:.05em}
 .pl__marks.is-row small{font-size:1.4mm;letter-spacing:.02em}
 
+/* ============================================================
+   AXIOM package label — 80 x 50 mm, thermal (NIIMBOT B31 and the like)
+   The same data at a quarter of the area: recipient first and largest,
+   contents as one flowing line, courier and resi on the foot with blanks
+   to write in, handling marks as icons. Content box 74.4 x 45.2 mm.
+   ============================================================ */
+.ps{width:80mm;height:50mm;padding:2.4mm 2.8mm;background:#fff;color:#000;
+  display:flex;flex-direction:column;gap:.9mm;overflow:hidden;
+  font-family:var(--sans);font-weight:500;line-height:1.2;
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ps *{flex-shrink:0}
+.ps .fill{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
+.ps .k{font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.ps .k i{font-style:normal;font-weight:500}
+.ps__head{display:flex;align-items:center;justify-content:space-between;gap:2mm;
+  padding-bottom:1.1mm;border-bottom:.5mm solid #000}
+.ps .pl__wm{width:21mm}
+.ps__meta{font-size:1.75mm;white-space:nowrap}
+.ps__meta .k{font-size:1.4mm;margin-right:.8mm}
+.ps__meta b{font-weight:600;font-size:2mm;letter-spacing:.02em}
+.ps__to{display:flex;align-items:center;gap:1.6mm;min-width:0;margin-top:.3mm}
+.ps__tag{position:relative;color:#fff;font-size:1.45mm;padding:.8mm 1.3mm .7mm;border-radius:.6mm;overflow:hidden;white-space:nowrap}
+.ps__tag span{position:relative;z-index:1}
+.ps__name{flex:1 1 auto;min-width:0;font-family:var(--display);font-weight:500;font-size:calc(4.6mm * var(--k,1));
+  line-height:1.1;letter-spacing:.01em;text-transform:uppercase;white-space:nowrap;overflow:hidden}
+.ps__phone{display:flex;align-items:baseline;gap:1.2mm;font-size:3.1mm;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.ps__phone .k{font-size:1.4mm}
+.ps__addr{max-height:8.2mm;font-size:calc(2.3mm * var(--k,1));line-height:1.22;overflow:hidden;overflow-wrap:anywhere}
+.ps__note{font-size:calc(1.75mm * var(--k,1));white-space:nowrap;overflow:hidden}
+.ps__note .k{font-size:.8em;margin-right:1mm}
+.ps__from{display:flex;align-items:baseline;gap:1.2mm;padding-top:.9mm;border-top:.25mm solid #000;
+  font-size:calc(1.75mm * var(--k,1));white-space:nowrap;overflow:hidden}
+.ps__from .k{font-size:.8em}
+.ps__from b{font-weight:600}
+.ps__items{flex:1 1 auto;min-height:0;overflow:hidden;font-size:calc(2.1mm * var(--k,1));line-height:1.32}
+.ps__items .k{font-size:.7em;margin-right:1mm}
+.ps__items b{font-weight:600}
+.ps__items .it + .it::before,.ps__more::before{content:" · ";font-weight:600}
+.ps__more{font-weight:600}
+.ps__foot{display:flex;align-items:center;gap:1.8mm;padding-top:.9mm;border-top:.35mm solid #000;white-space:nowrap}
+.ps__marks{display:flex;gap:1.3mm}
+.ps__marks .mk{display:flex;align-items:center;gap:.5mm}
+.ps__marks svg{width:3mm;height:3mm;flex:0 0 3mm}
+.ps__marks b{font-size:1.35mm;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.ps__foot.is-tight .mk b{display:none}
+.ps__ship{flex:1 1 auto;min-width:0;overflow:hidden;font-size:calc(1.7mm * var(--k,1))}
+.ps__ship .k{font-size:.82em;margin-right:.7mm}
+.ps__ship b{font-weight:600;margin-right:1.4mm}
+.ps__ship .blank{display:inline-block;width:10mm;height:1.5mm;border-bottom:.25mm solid #000;margin-right:1.4mm}
+.ps__ruo{font-size:1.6mm;font-weight:600;letter-spacing:.03em}
+/* The PNG copy: html2canvas lays text out with the page but draws it with canvas,
+   which ignores tabular figures, so digits would land with gaps. Proportional
+   figures keep the two in step. */
+.for-png .ps,.for-png .ps *,.for-png .pl,.for-png .pl *{font-variant-numeric:normal !important;font-feature-settings:normal !important}
+
 /* compliance */
 .pl__ruo{border-top:.35mm solid #000;padding-top:1.5mm;text-align:center;
   font-size:2.4mm;font-weight:600;letter-spacing:.06em;line-height:1.4}
@@ -381,12 +440,14 @@ details.sender .fields{margin-top:12px}
 
     <div>
       <p class="kick">6 · Stock</p>
-      <div class="chips" id="orient">
-        <button class="chip" data-o="port" aria-pressed="true">100 × 150 · portrait feed</button>
-        <button class="chip" data-o="land" aria-pressed="false">150 × 100 · landscape feed</button>
+      <div class="chips" id="stock">
+        <button class="chip" data-o="s80" aria-pressed="true">80 × 50 · compact</button>
+        <button class="chip" data-o="port" aria-pressed="false">100 × 150</button>
+        <button class="chip" data-o="land" aria-pressed="false">150 × 100</button>
       </div>
-      <p class="hint" style="margin-top:9px">Same label either way. Landscape turns it 90° on the page for
-        printers loaded with the long edge leading.</p>
+      <p class="hint" style="margin-top:9px">80 × 50 is the compact layout for a small label printer such as
+        the NIIMBOT B31. 100 × 150 is the full shipping label; 150 × 100 is the same label turned 90° for
+        printers fed long edge first.</p>
     </div>
   </aside>
 
@@ -418,9 +479,12 @@ details.sender .fields{margin-top:12px}
 
     <section id="printSec" hidden>
       <div class="printbar">
-        <button class="btn" id="printOne">Print this label</button>
+        <button class="btn" id="pngOne">Save PNG</button>
+        <button class="btn btn--ghost" id="pngAll">Save all PNGs</button>
+        <button class="btn btn--ghost" id="printOne">Print this label</button>
         <button class="btn btn--ghost" id="printAll">Print all</button>
       </div>
+      <p class="hint" id="pngHint" style="margin-top:10px;max-width:68ch"></p>
       <div class="note" id="printNote" hidden style="margin-top:18px">
         <b>Printing needs its own browser tab.</b> This embedded view blocks it.
         <a id="openLink" href="#" target="_blank" rel="noopener">Open the builder in a new tab →</a>
@@ -434,11 +498,14 @@ details.sender .fields{margin-top:12px}
     </section>
 
     <div class="note">
-      <b>Printer settings.</b> Load 100 × 150 mm die-cut labels and set the same stock, with gap sensing,
-      in the printer driver. In the print dialog: <b>Destination</b> the thermal printer ·
-      <b>Paper</b> 100 × 150 mm (150 × 100 if you chose landscape) · <b>Scale</b> 100% ·
-      <b>Margins</b> None. Each label is its own page. Direct thermal is fine for a mailer — it only has to
-      survive the trip; 203 dpi holds everything on this label.
+      <b>NIIMBOT and other app-driven printers.</b> Use <b>Save PNG</b>: it writes the label as a pure
+      black-and-white image at 8 dots per mm (203 dpi), exactly the label's size — 640 × 400 px for 80 × 50.
+      In the NIIMBOT app, pick the same label size, insert the image, stretch it to fill the label and print.
+      On a phone, the PNG lands in Downloads or Photos.
+      <br><br>
+      <b>Printers with a computer driver.</b> Use <b>Print</b>: set the same stock, with gap sensing, in the
+      driver, then in the print dialog <b>Paper</b> to match · <b>Scale</b> 100% · <b>Margins</b> None. Each
+      label is its own page. Direct thermal is fine for a mailer — it only has to survive the trip.
       <br><br>
       <b>Before it goes out.</b> Check every amber flag: a missing phone number (the invoice often has none),
       a compound the catalogue didn't recognise, a size that isn't a listed lot, or an order form whose
@@ -821,7 +888,13 @@ async function readFlattened(page){
 const today = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10); };
 let sender = { ...SENDER_DEFAULT, ...store.get('sender', {}) };
 let lastShip = store.get('ship', { courier:'', service:'', marks:{ fragile:true } });
-let orient = store.get('orient', 'port');
+const STOCKS = {
+  s80:  { w:80,  h:50,  name:'80 × 50 mm',               page:'80mm 50mm' },
+  port: { w:100, h:150, name:'100 × 150 mm',             page:'100mm 150mm' },
+  land: { w:150, h:100, name:'150 × 100 mm, turned 90°', page:'150mm 100mm' },
+};
+let stock = store.get('stock', 's80');
+if (!STOCKS[stock]) stock = 's80';
 let orders = [], cur = -1;
 
 function blankOrder(){
@@ -907,6 +980,44 @@ function labelHTML(o){
 </div>`;
 }
 
+/* 80 x 50 mm:
+     AXIOM .................. No. AX-INV-… · date
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     [KEPADA / TO]  NAME
+     TEL 0815 1612 598
+     address, up to three lines
+     DARI / FROM  AXIOM · phone · city
+     ISI / CONTENTS  Compound 20 mg ×1 · Compound 10 mg ×2 …
+     [icons]  KURIR ____  RESI ____   Research Use Only        */
+function labelSmallHTML(o){
+  const lines = o.lines.filter(l => l.compound);
+  const units = lines.reduce((n, l) => n + (parseInt(l.qty, 10) || 0), 0);
+  const items = !lines.length ? '<span class="it">—</span>'
+    : o.discreet ? `<span class="it"><b>Research materials · Bahan riset</b> ×${units}</span>`
+    : lines.map(l => `<span class="it"><b>${esc(l.compound)}</b>${l.amount ? ' ' + esc(l.amount + ' ' + l.unit) : ''} ×${esc(l.qty || 1)}</span>`).join('');
+  const markKeys = Object.keys(MARKS).filter(k => o.marks[k]);
+  const marks = markKeys.map(k => `<span class="mk">${MARKS[k].icon}<b>${MARKS[k].en}</b></span>`).join('');
+  const from = [sender.phone, sender.addr].filter(Boolean).map(esc).join(' · ');
+  const ship = [o.courier, o.service].filter(Boolean).join(' ');
+  const blank = '<i class="blank"></i>';
+  return `<div class="ps">
+  <div class="ps__head">${WORDMARK}
+    <div class="ps__meta">${o.ref ? `<span class="k">No.</span><b>${esc(o.ref)}</b> · ` : ''}${esc(fmtDate(o.date))}</div></div>
+  <div class="ps__to"><span class="ps__tag k">${FILL}<span>Kepada <i>/ To</i></span></span><span class="ps__name" data-fit="w">${esc(o.name || ' ')}</span></div>
+  <div class="ps__phone"><span class="k">Tel</span>${esc(fmtPhone(o.phone))}</div>
+  <div class="ps__addr" data-fit="h">${esc(o.addr)}</div>
+  ${o.notes.trim() ? `<div class="ps__note" data-fit="w"><span class="k">Catatan</span>${esc(o.notes)}</div>` : ''}
+  <div class="ps__from" data-fit="w"><span class="k">Dari <i>/ From</i></span><b>${esc(sender.name)}</b>${from ? `<span>· ${from}</span>` : ''}</div>
+  <div class="ps__items" data-fit="items" data-ref="${esc(o.invNo || o.ref)}"><span class="k">Isi <i>/ Contents</i> · ${units} unit${units === 1 ? '' : 's'}</span>${items}<span class="ps__more" hidden></span></div>
+  <div class="ps__foot${markKeys.length > 2 ? ' is-tight' : ''}">
+    ${marks ? `<span class="ps__marks">${marks}</span>` : ''}
+    <span class="ps__ship" data-fit="w"><span class="k">Kurir</span>${ship ? `<b>${esc(ship)}</b>` : blank}<span class="k">Resi</span>${o.awb ? `<b>${esc(o.awb)}</b>` : blank}</span>
+    <span class="ps__ruo">Research Use Only</span>
+  </div>
+</div>`;
+}
+const drawLabel = o => stock === 's80' ? labelSmallHTML(o) : labelHTML(o);
+
 /* Shrink a block (size and tracking together, via --k) until it fits its box.
    Two blocks get a second resort: a long name wraps onto two lines rather than
    going below 62%, and a long contents list drops the pack-check strip rather
@@ -945,24 +1056,37 @@ function autofit(root){
         more.hidden = false;
         more.textContent = `+ ${cut} more line${cut > 1 ? 's' : ''}` + (el.dataset.ref ? ` — see ${el.dataset.ref}` : ' — see the invoice');
       }
+    } else if (mode === 'items'){
+      /* the compact contents line: shrink to 70%, then count what still doesn't fit */
+      const more = el.querySelector('.ps__more'), its = [...el.querySelectorAll('.it')];
+      more.hidden = true; its.forEach(r => { r.hidden = false; });
+      shrink(el, H, .7);
+      let cut = 0;
+      while (H() && cut < its.length - 1){
+        its[its.length - 1 - cut].hidden = true; cut++;
+        more.hidden = false;
+        more.textContent = `+${cut} more` + (el.dataset.ref ? ` — see ${el.dataset.ref}` : '');
+      }
     } else shrink(el, mode === 'h' ? H : W, .5);
   });
 }
 
 /* ---------- render ---------- */
 const pageRule = document.head.appendChild(document.createElement('style'));
-function setOrient(o){
-  orient = o; store.set('orient', o);
-  document.documentElement.dataset.orient = o;
-  pageRule.textContent = o === 'land' ? '@page{ size:150mm 100mm; margin:0; }' : '@page{ size:100mm 150mm; margin:0; }';
-  [...$('orient').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.o === o)));
+function setStock(o){
+  stock = o; store.set('stock', o);
+  document.documentElement.dataset.stock = o;
+  pageRule.textContent = `@page{ size:${STOCKS[o].page}; margin:0; }`;
+  [...$('stock').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.o === o)));
+  const S = STOCKS[o];
+  $('pngHint').textContent = `PNG: ${S.w * 8} × ${S.h * 8} px, black and white, 203 dpi — for the NIIMBOT app or any printer app that takes an image.`;
   renderLabels();
 }
 
 function sizePreview(){
-  const pxPerMm = 96 / 25.4, W = (orient === 'land' ? 150 : 100) * pxPerMm;
+  const pxPerMm = 96 / 25.4, W = STOCKS[stock].w * pxPerMm;
   const avail = Math.max(200, $('pvSec').clientWidth - 54);
-  const z = Math.min(1.5, avail / W);
+  const z = Math.min(stock === 's80' ? 2.4 : 1.5, avail / W);
   $('pv').style.setProperty('--zp', z);
   $('zLab').textContent = Math.round(z * 100) + '%';
 }
@@ -974,14 +1098,15 @@ function renderLabels(){
   if (!has) return;
   sizePreview();
   const o = O();
-  $('pv').innerHTML = `<div class="tbox" style="--z:var(--zp,1)">${labelHTML(o)}</div>`;
-  $('pvCap').textContent = `${o.src || 'Blank label'} · ${orient === 'land' ? '150 × 100 mm, turned 90°' : '100 × 150 mm'}`;
+  $('pv').innerHTML = `<div class="tbox" style="--z:var(--zp,1)">${drawLabel(o)}</div>`;
+  $('pvCap').textContent = `${o.src || 'Blank label'} · ${STOCKS[stock].name}`;
   $('roll').innerHTML = orders.map((x, i) =>
-    `<figure class="${i === cur ? 'is-cur' : ''}" data-i="${i}"><div class="tbox">${labelHTML(x)}</div>
+    `<figure class="${i === cur ? 'is-cur' : ''}" data-i="${i}"><div class="tbox">${drawLabel(x)}</div>
       <figcaption>${String(i + 1).padStart(2, '0')} · ${esc(x.name || 'Untitled')}</figcaption></figure>`).join('');
   $('rollCount').textContent = `${orders.length} label${orders.length === 1 ? '' : 's'}, one per page`;
   $('printAll').textContent = `Print all (${orders.length})`;
-  $('printAll').hidden = orders.length < 2;
+  $('printAll').hidden = $('pngAll').hidden = orders.length < 2;
+  $('pngAll').textContent = `Save all PNGs (${orders.length})`;
   autofit($('pv')); autofit($('roll'));
 }
 
@@ -1117,7 +1242,7 @@ $('blank').addEventListener('click', () => {
   select(orders.length - 1); $('fName').focus();
 });
 $('clearAll').addEventListener('click', () => { orders = []; cur = -1; $('status').textContent = ''; renderAll(); });
-$('orient').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) setOrient(b.dataset.o); });
+$('stock').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) setStock(b.dataset.o); });
 
 /* ---------- upload ---------- */
 async function addFiles(files){
@@ -1179,12 +1304,84 @@ $('printOne').addEventListener('click', () => doPrint(true));
 $('printAll').addEventListener('click', () => doPrint(false));
 if (embedded){ $('printOne').textContent = 'Open in new tab to print'; }
 
+/* ---------- PNG export ----------
+   App-driven printers (NIIMBOT and the like) take an image, not a print job.
+   The label is drawn unscaled off screen, rasterised with html2canvas at
+   exactly 8 px per mm (203 dpi, the printer's own dot pitch), and every pixel
+   is snapped to black or white so the app has nothing to dither. */
+const H2C = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+let h2cReady = null;
+function loadH2C(){
+  if (window.html2canvas) return Promise.resolve(window.html2canvas);
+  return h2cReady ||= new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = H2C;
+    s.onload = () => res(window.html2canvas);
+    s.onerror = () => { h2cReady = null; rej(new Error('Could not load the image renderer — it needs an internet connection the first time.')); };
+    document.head.appendChild(s);
+  });
+}
+async function labelPNG(o){
+  const h2c = await loadH2C();
+  const S = STOCKS[stock];
+  const host = document.createElement('div');
+  host.className = 'for-png';
+  host.style.cssText = 'position:fixed;left:-10000px;top:0;background:#fff';
+  /* the turned 150 x 100 label is drawn upright and rotated in the canvas */
+  host.innerHTML = drawLabel(o);
+  document.body.appendChild(host);
+  try {
+    autofit(host);
+    const el = host.firstElementChild;
+    const scale = 8 / (96 / 25.4);
+    const src = await h2c(el, { scale, backgroundColor:'#fff', logging:false });
+    const land = stock === 'land';
+    const W = S.w * 8, Hh = S.h * 8;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = Hh;
+    const g = c.getContext('2d');
+    g.fillStyle = '#fff'; g.fillRect(0, 0, W, Hh);
+    if (land){ g.translate(W, 0); g.rotate(Math.PI / 2); g.drawImage(src, 0, 0, Hh, W); }
+    else g.drawImage(src, 0, 0, W, Hh);
+    const img = g.getImageData(0, 0, W, Hh), d = img.data;
+    for (let i = 0; i < d.length; i += 4){
+      const v = (d[i] * 299 + d[i + 1] * 587 + d[i + 2] * 114) / 1000 < 150 ? 0 : 255;
+      d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+    return await new Promise(r => c.toBlob(r, 'image/png'));
+  } finally { host.remove(); }
+}
+const pngName = o => `AXIOM-label-${(o.ref || o.name || 'label').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '')}-${stock === 's80' ? '80x50' : stock === 'land' ? '150x100' : '100x150'}.png`;
+function saveBlob(blob, name){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+async function savePNGs(list){
+  try {
+    setStatus(`Drawing ${list.length} PNG${list.length > 1 ? 's' : ''}…`);
+    const files = [];
+    for (const o of list) files.push(new File([await labelPNG(o)], pngName(o), { type:'image/png' }));
+    /* a phone hands the images to the share sheet (Save to Photos, or straight to an app) */
+    if (navigator.canShare && matchMedia('(pointer:coarse)').matches && navigator.canShare({ files })){
+      try { await navigator.share({ files }); setStatus(`${files.length} PNG${files.length > 1 ? 's' : ''} shared.`); return; }
+      catch (e) { if (e.name === 'AbortError'){ setStatus(''); return; } }
+    }
+    for (const f of files) saveBlob(f, f.name);
+    setStatus(`Saved ${files.length} PNG${files.length > 1 ? 's' : ''} — ${files.map(f => f.name).join(', ')}.`);
+  } catch (e) { setStatus(e.message || String(e), true); }
+}
+$('pngOne').addEventListener('click', () => savePNGs([O()]));
+$('pngAll').addEventListener('click', () => savePNGs(orders));
+
 window.addEventListener('resize', () => { if (orders.length){ sizePreview(); autofit($('pv')); } });
 
 /* ---------- go ---------- */
 $('wm').innerHTML = WORDMARK.replace('class="pl__wm"', '');
 renderSender();
-setOrient(orient);
+setStock(stock);
 renderAll();
 /* Fonts load lazily on first use, which can be after the first fit; load them
    up front and fit again once they are in. */
