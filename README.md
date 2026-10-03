@@ -181,6 +181,10 @@ B31 with the large label's outlined recipient box (courier and service beside th
 contents table, and the sender (resi, handling marks and the note stay on the large label),
 and the full **100 × 150 mm** label, or the same turned 90° on **150 × 100 mm**.
 
+For a printer that takes labels only 50 mm wide, such as the NIIMBOT B21 / B21 Pro (300 dpi),
+*Turn 90°* prints the compact label along the feed on **50 × 80** or **50 × 70 mm** stock: the
+page and the PNG come out turned (600 × 960 / 600 × 840 px at 300 dpi), the preview stays upright.
+
 PDFs are read in the browser with pdf.js (loaded from cdnjs on first use, so it needs a
 connection); nothing is uploaded. Two outputs:
 

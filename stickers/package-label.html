@@ -174,6 +174,15 @@ details.sender .fields{margin-top:12px}
 [data-stock="land"] .tbox > .pl{transform:scale(var(--z)) translateX(150mm) rotate(90deg)}
 [data-stock="s80"] .tbox{--W:80mm;--H:50mm;border-radius:calc(2mm * var(--z))}
 [data-stock="s70"] .tbox{--W:70mm;--H:50mm;border-radius:calc(2mm * var(--z))}
+/* turned for 50 mm-wide printers (NIIMBOT B21): the page is 50 wide, the label runs
+   along the feed. The preview stays upright so it can be read. */
+[data-rot="1"][data-stock="s80"] .tbox{--W:50mm;--H:80mm}
+[data-rot="1"][data-stock="s70"] .tbox{--W:50mm;--H:70mm}
+[data-rot="1"][data-stock="s80"] .tbox > .ps,
+[data-rot="1"][data-stock="s70"] .tbox > .ps{transform:scale(var(--z)) translateX(50mm) rotate(90deg)}
+[data-rot="1"][data-stock="s80"] #pv .tbox{--W:80mm;--H:50mm}
+[data-rot="1"][data-stock="s70"] #pv .tbox{--W:70mm;--H:50mm}
+[data-rot="1"][data-stock] #pv .tbox > .ps{transform:scale(var(--z))}
 .tbox > .ps{position:absolute;top:0;left:0;transform-origin:top left;transform:scale(var(--z))}
 .roll{display:flex;flex-wrap:wrap;gap:16px;padding:18px;background:#DAD5CC;border-radius:6px;max-width:100%}
 .roll figure{margin:0}
@@ -471,6 +480,9 @@ details.sender .fields{margin-top:12px}
         <button class="chip" data-o="s70" aria-pressed="false">70 × 50 · compact</button>
         <button class="chip" data-o="port" aria-pressed="false">100 × 150</button>
         <button class="chip" data-o="land" aria-pressed="false">150 × 100</button>
+      </div>
+      <div class="chips" id="rotRow" style="margin-top:10px">
+        <button class="chip" id="rot" aria-pressed="false">Turn 90° for 50 mm printers · NIIMBOT B21</button>
       </div>
       <p class="hint" style="margin-top:9px">80 × 50 and 70 × 50 are the compact layout for a small label printer such as
         the NIIMBOT B31: recipient, contents and sender only. 100 × 150 is the full shipping label; 150 × 100 is the same label turned 90° for
@@ -1118,10 +1130,27 @@ function autofit(root){
 
 /* ---------- render ---------- */
 const pageRule = document.head.appendChild(document.createElement('style'));
+/* The printed page: the stock as named, or turned for a 50 mm-wide printer. */
+function pageDims(){
+  const S = STOCKS[stock];
+  return S.small && rot ? { w: S.h, h: S.w, turned: true } : { w: S.w, h: S.h, turned: stock === 'land' };
+}
+let rot = !!store.get('rot', false);
+function setRot(v){
+  rot = v; store.set('rot', v);
+  document.documentElement.dataset.rot = v ? '1' : '0';
+  $('rot').setAttribute('aria-pressed', String(v));
+  setStock(stock);
+}
 function setStock(o){
   stock = o; store.set('stock', o);
   document.documentElement.dataset.stock = o;
-  pageRule.textContent = `@page{ size:${STOCKS[o].page}; margin:0; }`;
+  $('rotRow').hidden = !STOCKS[o].small;
+  /* name the compact stocks the way the roll is labelled: 50 x 80 / 50 x 70 when turned */
+  $('stock').querySelector('[data-o="s80"]').textContent = rot ? '50 × 80 · compact' : '80 × 50 · compact';
+  $('stock').querySelector('[data-o="s70"]').textContent = rot ? '50 × 70 · compact' : '70 × 50 · compact';
+  const P = pageDims();
+  pageRule.textContent = `@page{ size:${P.w}mm ${P.h}mm; margin:0; }`;
   [...$('stock').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.o === o)));
   const S = STOCKS[o];
   renderDpi();
@@ -1144,7 +1173,7 @@ function renderLabels(){
   sizePreview();
   const o = O();
   $('pv').innerHTML = `<div class="tbox" style="--z:var(--zp,1)">${drawLabel(o)}</div>`;
-  $('pvCap').textContent = `${o.src || 'Blank label'} · ${STOCKS[stock].name}`;
+  $('pvCap').textContent = `${o.src || 'Blank label'} · ` + (STOCKS[stock].small && rot ? `${pageDims().w} × ${pageDims().h} mm, shown upright — prints turned 90°` : STOCKS[stock].name);
   $('roll').innerHTML = orders.map((x, i) =>
     `<figure class="${i === cur ? 'is-cur' : ''}" data-i="${i}"><div class="tbox">${drawLabel(x)}</div>
       <figcaption>${String(i + 1).padStart(2, '0')} · ${esc(x.name || 'Untitled')}</figcaption></figure>`).join('');
@@ -1307,6 +1336,7 @@ $('blank').addEventListener('click', () => {
 });
 $('clearAll').addEventListener('click', () => { orders = []; cur = -1; $('status').textContent = ''; renderAll(); });
 $('stock').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) setStock(b.dataset.o); });
+$('rot').addEventListener('click', () => setRot(!rot));
 
 /* ---------- upload ---------- */
 async function addFiles(files){
@@ -1404,8 +1434,8 @@ async function labelPNG(o){
   try {
     autofit(host);
     const el = host.firstElementChild;
-    const land = stock === 'land';
-    const W = S.w * dpm, Hh = S.h * dpm;
+    const P = pageDims(), land = P.turned;
+    const W = P.w * dpm, Hh = P.h * dpm;
     const over = Math.max(1, Math.min(4, Math.sqrt(16e6 / (W * Hh))));   // iOS caps a canvas at ~16.7M px
     let src = await h2c(el, { scale: dpm * over / (96 / 25.4), backgroundColor:'#fff', logging:false });
     const lw = land ? Hh : W, lh = land ? W : Hh;        // the upright label's size in dots
@@ -1433,7 +1463,7 @@ async function labelPNG(o){
     return await new Promise(r => c.toBlob(r, 'image/png'));
   } finally { host.remove(); }
 }
-const pngName = o => `AXIOM-label-${(o.ref || o.name || 'label').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '')}-${STOCKS[stock].w}x${STOCKS[stock].h}-${dpi}dpi.png`;
+const pngName = o => `AXIOM-label-${(o.ref || o.name || 'label').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '')}-${pageDims().w}x${pageDims().h}-${dpi}dpi.png`;
 function saveBlob(blob, name){
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = name;
@@ -1455,7 +1485,7 @@ async function savePNGs(list){
   } catch (e) { setStatus(e.message || String(e), true); }
 }
 function renderDpi(){
-  const S = STOCKS[stock], dpm = DPI[dpi];
+  const S = pageDims(), dpm = DPI[dpi];
   [...$('dpi').children].forEach(c => c.setAttribute('aria-pressed', String(+c.dataset.d === dpi)));
   $('pngHint').textContent = `PNG: ${S.w * dpm} × ${S.h * dpm} px, black and white. Match the printer: most small label printers are 203 dpi; `
     + `pick 300 only if yours is a 300 dpi model. Zoomed in on a screen it looks blocky — those blocks are the printer's dots, and at real size they print sharp.`;
@@ -1472,7 +1502,7 @@ window.addEventListener('resize', () => { if (orders.length){ sizePreview(); aut
 /* ---------- go ---------- */
 $('wm').innerHTML = WORDMARK.replace('class="pl__wm"', '');
 renderSender();
-setStock(stock);
+setRot(rot);
 renderAll();
 /* Fonts load lazily on first use, which can be after the first fit; load them
    up front and fit again once they are in. */
