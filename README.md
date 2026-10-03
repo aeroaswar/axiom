@@ -160,20 +160,26 @@ live only in `dosage-guide/src/`, which is never published. Details in `dosage-g
 
 ## Package label builder
 
-`stickers/package-label.html` makes the 100 × 150 mm thermal shipping label for the mailer. Drop
-one or more filled order forms (`AXIOM-Order-Form.pdf`) onto it and each becomes a label: name,
-phone and address from the form's fields, and every order line matched against
-`business-proposal/order-form/compounds.json`, so "Wolverine" prints as BPC-157 + TB-500
-(Wolverine) with its unit. Amber flags mark what needs a human look before it ships: a compound the
-catalogue doesn't know, a size that isn't a listed lot, missing contact details, or a form whose
-research-use box wasn't ticked. Courier, service, resi, order ref, handling marks and a
-discreet-contents option are set in the builder; the sender is remembered per browser.
+`stickers/package-label.html` makes the 100 × 150 mm thermal shipping label for the mailer from the
+invoice. Drop the PDF saved from the invoice builder and each destination becomes a label: the
+recipient, address and phone from *Billed to* (or the *Ship to* row when the order goes to several
+addresses), the invoice number, and every line with its lot size, across as many pages as the
+table runs. A cold-chain invoice turns on *Keep cool*. The invoice is read by layout, anchored on
+its headings in English or Indonesian, so the Console's invoices use the same reader.
 
-The form is read in the browser with pdf.js (loaded from cdnjs on first use, so it needs a
-connection); nothing is uploaded. A form that arrives flattened, with no fields, is read from the
-page text at the form's field positions. Printing is one label per page, black only, at
-100 × 150 mm (or 150 × 100 with the label turned, for landscape-fed stock): Paper to match the
-stock, Scale 100%, Margins None.
+Invoices often carry no phone number. Drop the client's order form (`AXIOM-Order-Form.pdf`) with
+the invoice and its phone, notes and research-use tick fill the invoice's label, matched on first
+name; an order form on its own still makes a label, with each typed line matched against
+`business-proposal/order-form/compounds.json`. Amber flags mark what needs a look before it ships:
+no phone, a compound the catalogue doesn't know, a size that isn't a listed lot, an unticked
+research-use box. Long orders go to two columns; anything that still doesn't fit is counted on the
+label ("+ 4 more lines — see AX-INV-…"), never dropped silently. Courier, service, resi, handling
+marks and a discreet-contents option are set in the builder; the sender is remembered per browser.
+
+PDFs are read in the browser with pdf.js (loaded from cdnjs on first use, so it needs a
+connection); nothing is uploaded. Printing is one label per page, black only, at 100 × 150 mm (or
+150 × 100 with the label turned, for landscape-fed stock): Paper to match the stock, Scale 100%,
+Margins None.
 
 ## Standalone invoice builder
 

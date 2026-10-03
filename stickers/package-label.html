@@ -232,7 +232,7 @@ details.sender .fields{margin-top:12px}
 .pl__name.wrap{white-space:normal;height:calc(8.4mm * var(--k,1) * 1.08 * 2 + .6mm)}
 .pl__phone{display:flex;align-items:baseline;gap:2mm;margin-top:1.6mm;font-size:5.2mm;font-weight:600;letter-spacing:.03em;white-space:nowrap}
 .pl__phone .k{font-size:2mm}
-.pl__addr{height:22mm;margin-top:2mm;padding-top:2mm;border-top:.25mm solid #000;
+.pl__addr{max-height:22mm;margin-top:2mm;padding-top:2mm;border-top:.25mm solid #000;
   font-size:calc(4.1mm * var(--k,1));line-height:1.3;font-weight:500;overflow:hidden;overflow-wrap:anywhere}
 
 /* sender */
@@ -261,6 +261,13 @@ details.sender .fields{margin-top:12px}
 .pl__row .s{font-size:3em;font-weight:500;white-space:nowrap}
 .pl__row .q{font-size:3.3em;font-weight:600;text-align:right;white-space:nowrap}
 .pl__none{font-size:2.6mm;padding:3mm .5mm}
+/* more than six lines: two columns, read across */
+.pl__rows.is-2col{display:grid;grid-template-columns:1fr 1fr;column-gap:4mm;align-content:start}
+.pl__rows.is-2col .pl__row{grid-template-columns:3.4em 1fr auto 5em;gap:1.3em}
+.pl__rows.is-2col .pl__row .c{font-size:3em}
+.pl__rows.is-2col .pl__row .s{font-size:2.7em}
+/* never drop lines silently: what doesn't fit is counted here */
+.pl__more{grid-column:1 / -1;padding:1.3em .5mm 0;font-size:2.9em;font-weight:600}
 
 /* pack check — fills the space under short orders with something useful */
 .pl__qc{display:flex;align-items:center;gap:4mm;padding:1.6mm .5mm 0;border-top:.35mm solid #000;
@@ -300,11 +307,11 @@ details.sender .fields{margin-top:12px}
     <div class="brand"><span id="wm"></span><span class="tag">Package Label</span></div>
 
     <div>
-      <p class="kick">1 · Upload order forms</p>
+      <p class="kick">1 · Upload invoices</p>
       <label class="drop" id="drop">
         <input type="file" id="file" accept="application/pdf,.pdf" multiple>
-        <b>Drop AXIOM order form PDFs</b>
-        <span>or tap to choose · several at once makes one label each</span>
+        <b>Drop AXIOM invoice PDFs</b>
+        <span>or tap to choose · one label per destination · add the order form too and it fills in the phone</span>
       </label>
       <p class="status" id="status"></p>
       <div class="orders" id="orders" role="listbox" aria-label="Orders"></div>
@@ -347,7 +354,7 @@ details.sender .fields{margin-top:12px}
             <div class="f-row3">
               <div class="f"><label for="fCourier">Courier</label><input id="fCourier" data-k="courier" placeholder="—"></div>
               <div class="f"><label for="fService">Service</label><input id="fService" data-k="service" placeholder="REG / Instant"></div>
-              <div class="f"><label for="fRef">Order ref</label><input id="fRef" data-k="ref" placeholder="AX-2610-0001"></div>
+              <div class="f"><label for="fRef">Invoice no.</label><input id="fRef" data-k="ref" placeholder="AX-INV-2026-0001"></div>
             </div>
             <div class="f-row">
               <div class="f"><label for="fAwb">Resi / AWB</label><input id="fAwb" data-k="awb" placeholder="blank = write by hand"></div>
@@ -386,16 +393,18 @@ details.sender .fields{margin-top:12px}
   <main class="stage">
     <header>
       <h1>Package label builder</h1>
-      <p class="sub">Upload the filled AXIOM order form and the label fills itself — recipient, phone,
-        address, and every line matched against the research catalogue. Check the flags, set the courier,
-        and print 100 × 150 mm on the thermal printer, one label per page.</p>
+      <p class="sub">Drop the AXIOM invoice and the label fills itself — recipient, address, phone, the
+        invoice number and every line with its lot size, one label per destination when the order ships to
+        several addresses. Check the flags, set the courier, and print 100 × 150 mm on the thermal printer,
+        one label per page.</p>
     </header>
 
     <section class="empty-stage" id="emptyStage">
       <label class="drop drop--big" id="drop2">
         <input type="file" id="file2" accept="application/pdf,.pdf" multiple>
-        <b>Drop an order form to begin</b>
-        <span>The fillable AXIOM-Order-Form.pdf, filled on a phone and sent back. Read in this browser — nothing is uploaded anywhere.</span>
+        <b>Drop an invoice to begin</b>
+        <span>The PDF saved from the AXIOM invoice builder. Drop the client’s order form with it and its phone number,
+          notes and research-use tick come along. Read in this browser — nothing is uploaded anywhere.</span>
       </label>
     </section>
 
@@ -415,7 +424,7 @@ details.sender .fields{margin-top:12px}
       <div class="note" id="printNote" hidden style="margin-top:18px">
         <b>Printing needs its own browser tab.</b> This embedded view blocks it.
         <a id="openLink" href="#" target="_blank" rel="noopener">Open the builder in a new tab →</a>
-        and drop the form again there — or open <code>stickers/package-label.html</code> from the repo.
+        and drop the invoice again there — or open <code>stickers/package-label.html</code> from the repo.
       </div>
     </section>
 
@@ -431,9 +440,10 @@ details.sender .fields{margin-top:12px}
       <b>Margins</b> None. Each label is its own page. Direct thermal is fine for a mailer — it only has to
       survive the trip; 203 dpi holds everything on this label.
       <br><br>
-      <b>Before it goes out.</b> Check every amber flag: a compound the catalogue didn't recognise, a size
-      that isn't a listed lot, or a form whose research-use box wasn't ticked. The label prints what the
-      fields say, not what the form said.
+      <b>Before it goes out.</b> Check every amber flag: a missing phone number (the invoice often has none),
+      a compound the catalogue didn't recognise, a size that isn't a listed lot, or an order form whose
+      research-use box wasn't ticked. Cold-chain invoices turn on <i>Keep cool</i> by themselves. The label
+      prints what the fields say, not what the PDF said.
     </div>
   </main>
 </div>
@@ -552,7 +562,8 @@ function resolveLine(raw, amountStr, formUnit, qty){
 function lineFlag(l){
   const c = byName[l.compound];
   if (!l.compound) return { w:true, t:'Empty line — it is left off the label.' };
-  if (!c) return { w:true, t:`Not in the catalogue — prints as typed${l.raw && l.raw !== l.compound ? ` (form: “${l.raw}”)` : ''}.` };
+  if (!c) return l.inv ? { w:false, t:'Not a catalogue compound — prints as on the invoice.' }
+    : { w:true, t:`Not in the catalogue — prints as typed${l.raw && l.raw !== l.compound ? ` (form: “${l.raw}”)` : ''}.` };
   if (l.amount && !c.sizes.includes(l.amount)) return { w:true, t:`${l.amount} ${l.unit} is not a listed lot — ${c.name} comes in ${c.sizes.join(' · ')} ${c.units.join('/')}.` };
   if (!l.amount) return { w:true, t:`No size — listed lots: ${c.sizes.join(' · ')} ${c.units.join('/')}.` };
   const bits = [];
@@ -564,7 +575,9 @@ function orderWarns(o){
   const w = [];
   if (o.ruo === false) w.push('Research-use confirmation was not ticked on the form.');
   if (!o.name.trim()) w.push('No recipient name.');
-  if (!o.phone.trim()) w.push('No phone number — couriers need one.');
+  if (!o.phone.trim()) w.push(o.kind === 'invoice'
+    ? 'No phone number on the invoice — couriers need one. Type it in, or drop the client’s order form too and it fills in.'
+    : 'No phone number — couriers need one.');
   if (!o.addr.trim()) w.push('No address.');
   if (!o.lines.some(l => l.compound)) w.push('No items.');
   const bad = o.lines.filter(l => l.compound && lineFlag(l).w).length;
@@ -585,25 +598,31 @@ function loadPdfjs(){
   });
 }
 
-async function readForm(file){
+/* One PDF in, one or more labels out. An AXIOM invoice gives a label per
+   destination; an order form (fillable or flattened) gives one. */
+async function readPdf(file){
   const lib = await loadPdfjs();
   const doc = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
-  const page = await doc.getPage(1);
+  const page1 = await doc.getPage(1);
   const f = {};
-  for (const a of await page.getAnnotations()){
+  for (const a of await page1.getAnnotations()){
     if (a.subtype !== 'Widget' || !a.fieldName) continue;
     if (a.fieldType === 'Tx') f[a.fieldName] = String(a.fieldValue ?? '');
     else if (a.radioButton){ if (a.fieldValue && a.fieldValue === a.buttonValue) f[a.fieldName] = a.buttonValue; }
     else if (a.checkBox){ f[a.fieldName] = !!a.fieldValue && a.fieldValue !== 'Off'; }
   }
-  let flattened = false;
-  if (!('name' in f) && !('item_1' in f)){
-    Object.assign(f, await readFlattened(page));
-    flattened = true;
-  }
-  if (!Object.values(f).some(v => typeof v === 'string' && v.trim()))
-    throw new Error('No answers found — is this a filled AXIOM order form?');
+  if ('name' in f || 'item_1' in f) return [orderFromForm(f, file, false)];
 
+  const pages = [];
+  for (let i = 1; i <= doc.numPages; i++) pages.push(await pageLines(await doc.getPage(i)));
+  const inv = parseInvoice(pages, file);
+  if (inv) return inv;
+  return [orderFromForm(await readFlattened(page1), file, true)];
+}
+
+function orderFromForm(f, file, flattened){
+  if (!Object.values(f).some(v => typeof v === 'string' && v.trim()))
+    throw new Error('Not an AXIOM invoice or order form — nothing to read.');
   const nums = [...new Set(Object.keys(f).map(k => (k.match(/^(?:item|amount|qty)_(\d+)$/) || [])[1]).filter(Boolean))]
     .map(Number).sort((a, b) => a - b);
   const lines = [];
@@ -613,11 +632,171 @@ async function readForm(file){
     lines.push(resolveLine(raw, amt, f['unit_' + n] || '', f['qty_' + n]));
   }
   return {
-    ...blankOrder(), src: file.name, flattened,
+    ...blankOrder(), kind: 'form', src: file.name, flattened,
     name: (f.name || '').trim(), phone: (f.phone || '').trim(),
     addr: (f.address || '').replace(/\s*\n\s*/g, ', ').trim(), notes: (f.notes || '').trim(),
     lines, ruo: flattened ? null : 'ruo_confirm' in f ? !!f.ruo_confirm : null,
   };
+}
+
+/* ---------- reading the invoice ----------
+   The invoice is a printed page, not a form, so it is read by layout: text
+   runs are grouped into lines by baseline, and runs within a line into cells
+   (a gap wider than a word space starts a new cell). Everything is found from
+   its heading, compared with spaces removed so letter-spaced headings
+   ("B I L L E D  T O") still match, in English or Indonesian. */
+async function pageLines(page){
+  const tc = await page.getTextContent();
+  const runs = tc.items.filter(t => t.str.trim()).map(t => ({
+    s: t.str, x: t.transform[4], y: t.transform[5], w: t.width, h: Math.abs(t.transform[3]) || t.height || 8 }))
+    .sort((a, b) => b.y - a.y || a.x - b.x);
+  const lines = [];
+  for (const r of runs){
+    let L = lines.find(l => Math.abs(l.y - r.y) < Math.max(1.2, r.h * .25));
+    if (!L) lines.push(L = { y: r.y, runs: [] });
+    L.runs.push(r);
+  }
+  lines.sort((a, b) => b.y - a.y);
+  for (const L of lines){
+    L.runs.sort((a, b) => a.x - b.x);
+    L.cells = [];
+    for (const r of L.runs){
+      const c = L.cells[L.cells.length - 1], gap = c ? r.x - c.x1 : Infinity;
+      if (c && gap < Math.max(6, r.h * .9)){
+        c.t += (gap > r.h * .12 ? ' ' : '') + r.s; c.x1 = r.x + r.w; c.h = Math.max(c.h, r.h);
+      } else L.cells.push({ t: r.s, x0: r.x, x1: r.x + r.w, y: L.y, h: r.h });
+    }
+    for (const c of L.cells){ c.t = c.t.replace(/\s+/g, ' ').trim(); c.k = c.t.replace(/\s+/g, '').toUpperCase(); }
+  }
+  return lines;
+}
+
+const HEAD = {
+  billed: ['BILLEDTO', 'DITAGIHKANKEPADA'], issued: ['ISSUEDBY', 'DITERBITKANOLEH'],
+  ship: ['SHIPTO', 'DIKIRIMKE', 'KIRIMKE'], desc: ['DESCRIPTION', 'KETERANGAN'],
+  qty: ['QTY', 'JML', 'QUANTITY', 'JUMLAH'], unit: ['UNITPRICE', 'HARGASATUAN'],
+  handling: ['HANDLING', 'PENANGANAN'], dests: ['DESTINATIONS', 'TUJUAN'],
+};
+const STOP = k => /^(SUBTOTAL|TOTALDUE|TOTAL|PAYMENT|PEMBAYARAN|RESEARCHUSEONLY|PAGE\d)/.test(k) || k.includes('HUMANPERFORMANCE');
+const isPhone = t => /^\+?[\d\s().-]{8,}$/.test(t) && t.replace(/\D/g, '').length >= 8;
+const cellOf = (lines, names) => { for (const L of lines) for (const c of L.cells) if (names.includes(c.k)) return c; return null; };
+const kvValue = (lines, names) => {
+  for (const L of lines){ const i = L.cells.findIndex(c => names.includes(c.k)); if (i >= 0) return (L.cells[i + 1] || {}).t || ''; }
+  return '';
+};
+const byPos = (a, b) => b.y - a.y || a.x0 - b.x0;
+
+function parseInvoice(pages, file){
+  const p1 = pages[0];
+  const billed = cellOf(p1, HEAD.billed), descH = cellOf(p1, HEAD.desc);
+  if (!billed || !descH) return null;
+  const issued = cellOf(p1, HEAD.issued), shipH = cellOf(p1, HEAD.ship);
+  const allK = pages.flat().flatMap(L => L.cells.map(c => c.k));
+  const no = (allK.map(k => (k.match(/^(?:NO|NOMOR)[.:]?(AX[-A-Z0-9]+)$/) || [])[1]).find(Boolean))
+    || (allK.join(' ').match(/AX-[A-Z0-9]+(?:-[A-Z0-9]+)+/) || [])[0] || '';
+  const cold = /cold|dingin/i.test(kvValue(p1, HEAD.handling));
+
+  /* Billed to: the name, then company / address / email / phone lines. A line
+     that runs most of the column's width is a wrap and joins with a space; a
+     short one was its own line and joins with a comma. */
+  const colR = issued ? issued.x0 - 4 : billed.x0 + 180, colW = colR - billed.x0;
+  const floor = shipH ? shipH.y : descH.y;
+  const col = p1.filter(L => L.y < billed.y - 1 && L.y > floor + 1)
+    .map(L => L.cells.filter(c => c.x0 >= billed.x0 - 3 && c.x0 < colR))
+    .filter(cs => cs.length)
+    .map(cs => ({ t: cs.map(c => c.t).join(' '), w: cs[cs.length - 1].x1 - cs[0].x0, h: Math.max(...cs.map(c => c.h)) }));
+  if (!col.length) throw new Error('Found the invoice but no Billed-to details on it.');
+  const name = col[0].t;
+  let phone = '', addr = '';
+  col.slice(1).forEach((l, i, arr) => {
+    if (/@/.test(l.t)) return;
+    if (isPhone(l.t)){ phone ||= l.t; return; }
+    const prevWrapped = i > 0 && arr[i - 1].w > colW * .72 && !/@/.test(arr[i - 1].t) && !isPhone(arr[i - 1].t);
+    addr += addr ? (prevWrapped || /[,;]$/.test(addr) ? ' ' : ', ') + l.t : l.t;
+  });
+
+  /* Line items, across every page the table runs onto. */
+  const rows = [];
+  for (const lines of pages){
+    const dh = cellOf(lines, HEAD.desc); if (!dh) continue;
+    const hdr = lines.find(L => L.cells.includes(dh));
+    const qh = hdr.cells.find(c => HEAD.qty.includes(c.k));
+    const uh = hdr.cells.find(c => HEAD.unit.includes(c.k) || /^(UNIT|HARGA)/.test(c.k));
+    const qLo = qh ? qh.x0 - 30 : dh.x0 + 200, qHi = uh ? uh.x0 - 4 : qLo + 70;
+    let cur = null;
+    for (const L of lines){
+      if (L.y >= hdr.y - 1) continue;
+      if (L.cells.some(c => STOP(c.k))) break;
+      const d = L.cells.find(c => c.x0 >= dh.x0 - 3 && c.x0 < qLo);
+      const q = L.cells.find(c => c.x0 >= qLo && c.x0 < qHi && /^\d+$/.test(c.t));
+      if (d && q){ cur = { name: d.t, spec: '', q: q.t }; rows.push(cur); }
+      else if (d && cur && !cur.spec){
+        const m = d.t.match(/^([\d.,]+\s*[a-zA-Zµ]+)\s+lot$/i);
+        if (m) cur.spec = m[1]; else cur.name += ' ' + d.t;
+      }
+    }
+  }
+  if (!rows.length) throw new Error('Found the invoice but could not read its line items.');
+  const toLine = r => ({ ...resolveLine(r.name, r.spec, '', r.q), inv: true });
+
+  /* Ship to: printed only when the order goes to more than one address. One
+     row per destination, anchored on its shipping amount; each becomes a label. */
+  const base = { ...blankOrder(), kind: 'invoice', src: file.name, invNo: no };
+  if (cold) base.marks = { ...base.marks, cool: true };
+  if (shipH){
+    const region = p1.filter(L => L.y < shipH.y - 1 && L.y > descH.y + 1);
+    const cells = region.flatMap(L => L.cells);
+    const prices = cells.filter(c => /^Rp\s?[\d.,]+$/.test(c.t)).sort(byPos);
+    const items = cells.filter(c => /×/.test(c.t));
+    if (prices.length && items.length){
+      const ixX = Math.min(...cells.map(c => c.x0));
+      const addrX = Math.min(...cells.filter(c => c.x0 > ixX + 5).map(c => c.x0));
+      const itX = Math.min(...items.map(c => c.x0)), prX = Math.min(...prices.map(c => c.x0));
+      const used = new Set();
+      return prices.map((pc, i) => {
+        const lo = prices[i + 1] ? prices[i + 1].y : descH.y;
+        const rc = cells.filter(c => c.y <= pc.y + 1 && c.y > lo + 1).sort(byPos);
+        const aText = rc.filter(c => c.x0 >= addrX - 2 && c.x0 < itX - 2).map(c => c.t).join(' ');
+        const iText = rc.filter(c => c.x0 >= itX - 2 && c.x0 < prX - 2).map(c => c.t).join(' ');
+        let parts = aText.split(/\s*·\s*/).map(x => x.trim()).filter(Boolean);
+        const asBilled = parts.some(x => /^as billed to$|^sesuai tagihan$/i.test(x));
+        parts = parts.filter(x => !/^as billed to$|^sesuai tagihan$/i.test(x));
+        const rest = parts.filter(x => !isPhone(x));
+        const label = rest.length > 1 || (asBilled && rest.length) ? rest.shift() : '';
+        const dPhone = parts.find(isPhone) || (!label ? phone : '');
+        const lines = iText.split(/\s*·\s*/).map(x => x.match(/^(.*?)\s*×\s*(\d+)$/)).filter(Boolean).map(m => {
+          const want = norm(m[1]);
+          let k = rows.findIndex((r, j) => !used.has(j) && norm(r.name) === want && r.q === m[2]);
+          if (k < 0) k = rows.findIndex((r, j) => !used.has(j) && norm(r.name) === want);
+          if (k >= 0) used.add(k);
+          return toLine({ name: m[1], spec: k >= 0 ? rows[k].spec : '', q: m[2] });
+        });
+        return { ...base, marks: { ...base.marks }, name: label || name, phone: dPhone,
+          addr: asBilled || !rest.length ? addr : rest.join(', '), lines,
+          ref: no + ` · ${i + 1}/${prices.length}` };
+      });
+    }
+  }
+  return [{ ...base, name, phone, addr, lines: rows.map(toLine), ref: no }];
+}
+
+/* An order form dropped alongside its invoice adds what the invoice lacks
+   (usually the phone number, plus the notes and the research-use tick) and
+   then steps aside, so each parcel still gets one label. Matched on first name. */
+function mergeForms(){
+  const first = o => norm(String(o.name || '').split(/\s+/)[0]);
+  const msgs = [];
+  for (const F of orders.filter(o => o.kind === 'form')){
+    const key = first(F); if (key.length < 3) continue;
+    const I = orders.find(o => o.kind === 'invoice' && first(o) === key);
+    if (!I) continue;
+    if (!I.phone && F.phone) I.phone = F.phone;
+    if (!I.notes && F.notes) I.notes = F.notes;
+    if (I.ruo == null) I.ruo = F.ruo;
+    orders.splice(orders.indexOf(F), 1);
+    msgs.push(`${F.name}'s order form merged into ${I.invNo || 'the invoice'}`);
+  }
+  return msgs;
 }
 
 /* A flattened form has no fields; its answers are page text sitting in the boxes. */
@@ -646,7 +825,7 @@ let orient = store.get('orient', 'port');
 let orders = [], cur = -1;
 
 function blankOrder(){
-  return { src:'', name:'', phone:'', addr:'', notes:'', lines:[], ref:'', date: today(),
+  return { kind:'manual', invNo:'', src:'', name:'', phone:'', addr:'', notes:'', lines:[], ref:'', date: today(),
     courier: lastShip.courier, service: lastShip.service, awb:'', marks:{ ...lastShip.marks },
     discreet:false, ruo:null, flattened:false };
 }
@@ -654,6 +833,7 @@ const O = () => orders[cur];
 
 /* ---------- formatting ---------- */
 function fmtPhone(p){
+  if (/\d\s+\d/.test(String(p).trim())) return String(p).trim();   // already grouped by whoever typed it
   const d = String(p).replace(/[^\d+]/g, '');
   let m;
   if ((m = d.match(/^\+?62(\d{3})(\d{3,4})(\d{3,5})$/))) return `+62 ${m[1]} ${m[2]} ${m[3]}`;
@@ -697,7 +877,7 @@ function labelHTML(o){
   <div class="pl__head">
     ${WORDMARK}
     <div class="pl__meta">
-      ${o.ref ? `<div><span class="k">Order</span><b>${esc(o.ref)}</b></div>` : ''}
+      ${o.ref ? `<div><span class="k">No.</span><b>${esc(o.ref)}</b></div>` : ''}
       <div><span class="k">Tgl</span>${esc(fmtDate(o.date))}</div>
     </div>
   </div>
@@ -716,7 +896,7 @@ function labelHTML(o){
   <div class="pl__items">
     <div class="pl__ihead"><span class="k">Isi paket <i>/ Contents</i></span>
       <b>${lines.length} item${lines.length === 1 ? '' : 's'} · ${units} unit${units === 1 ? '' : 's'}</b></div>
-    <div class="pl__rows" data-fit="rows">${rows}</div>
+    <div class="pl__rows${!o.discreet && lines.length > 6 ? ' is-2col' : ''}" data-fit="rows" data-ref="${esc(o.invNo || o.ref)}">${rows}<div class="pl__more" hidden></div></div>
     <div class="pl__qc"><span><span class="bx"></span><span class="k">Isi dicek <i>/ Checked</i></span></span>
       <span><span class="bx"></span><span class="k">Disegel <i>/ Sealed</i></span></span>
       <span class="sig"><span class="k">Packed</span><span class="rl"></span></span></div>
@@ -750,11 +930,20 @@ function autofit(root){
       if (shrink(el, H, .6) < .85 && qc){ qc.hidden = true; shrink(el, H, .6); }
       /* last resort: give the address box's spare room to the contents */
       const addr = el.closest('.pl').querySelector('.pl__addr');
-      addr.style.height = '';
+      addr.style.maxHeight = '';
       if (H()){
-        addr.style.height = '17mm';
+        addr.style.maxHeight = '17mm';
         shrink(addr, () => addr.scrollHeight > addr.clientHeight + .5, .5);
         shrink(el, H, .6);
+      }
+      /* still too many: hide from the end and say how many, with where to find them */
+      const more = el.querySelector('.pl__more'), rowEls = [...el.querySelectorAll('.pl__row')];
+      more.hidden = true; rowEls.forEach(r => { r.hidden = false; });
+      let cut = 0;
+      while (H() && cut < rowEls.length - 1){
+        rowEls[rowEls.length - 1 - cut].hidden = true; cut++;
+        more.hidden = false;
+        more.textContent = `+ ${cut} more line${cut > 1 ? 's' : ''}` + (el.dataset.ref ? ` — see ${el.dataset.ref}` : ' — see the invoice');
       }
     } else shrink(el, mode === 'h' ? H : W, .5);
   });
@@ -933,18 +1122,29 @@ $('orient').addEventListener('click', e => { const b = e.target.closest('.chip')
 /* ---------- upload ---------- */
 async function addFiles(files){
   const pdfs = [...files].filter(f => /pdf$/i.test(f.type) || /\.pdf$/i.test(f.name));
-  if (!pdfs.length){ setStatus('Only PDF order forms can be read.', true); return; }
-  setStatus(`Reading ${pdfs.length} form${pdfs.length > 1 ? 's' : ''}…`);
-  const errs = []; let added = 0;
+  if (!pdfs.length){ setStatus('Only PDF invoices and order forms can be read.', true); return; }
+  setStatus(`Reading ${pdfs.length} PDF${pdfs.length > 1 ? 's' : ''}…`);
+  const errs = [], fresh = [];
   for (const f of pdfs){
-    try { orders.push(await readForm(f)); added++; }
+    try { fresh.push(...await readPdf(f)); }
     catch (e) { errs.push(`${f.name}: ${e.message || e}`); }
   }
-  if (added) cur = orders.length - added;
+  /* Invoices first, so a form dropped in the same batch has one to merge into. */
+  fresh.sort((a, b) => (a.kind === 'invoice' ? 0 : 1) - (b.kind === 'invoice' ? 0 : 1));
+  const before = orders.length;
+  orders.push(...fresh);
+  const merged = mergeForms();
+  if (orders.length > before) cur = before;
+  else if (orders.length) cur = Math.min(Math.max(cur, 0), orders.length - 1);
   renderAll();
-  const flat = orders.slice(-added).some(o => o.flattened);
-  setStatus(errs.length ? errs.join(' · ')
-    : `Read ${added} form${added > 1 ? 's' : ''}.` + (flat ? ' One arrived flattened — its text was read from the page, so check every field.' : ''), !!errs.length);
+  const inv = fresh.filter(o => o.kind === 'invoice').length;
+  const n = orders.length - before;
+  const bits = [];
+  if (n) bits.push(`${n} label${n > 1 ? 's' : ''} added` + (inv > 1 && new Set(fresh.map(o => o.invNo)).size < inv ? ' — one per destination' : '') + '.');
+  if (merged.length) bits.push(merged.join(' · ') + '.');
+  if (fresh.some(o => o.flattened)) bits.push('A flattened order form was read from its page text — check every field.');
+  if (errs.length) bits.push(errs.join(' · '));
+  setStatus(bits.join(' '), !!errs.length);
 }
 function setStatus(t, err){ $('status').textContent = t; $('status').classList.toggle('err', !!err); }
 
