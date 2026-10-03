@@ -230,8 +230,9 @@ button,input,select{font:inherit;color:inherit}
 .page[data-die="on"] .spec{display:block}
 
 /* ---------- thermal mode ----------
-   For a thermal roll printer, direct thermal at 203 dpi (Xprinter XP-420B,
-   XP-D4601B) or thermal transfer: one colour, black on white label stock,
+   For a thermal label printer, direct thermal at 203 dpi (NIIMBOT B31;
+   first tuned on the Xprinter XP-420B / XP-D4601B) or thermal transfer:
+   one colour, black on white label stock,
    one label per page. A thermal head is 1-bit, so every
    tone is solid black (a grey prints as a dither pattern) and the hierarchy
    the greys carried moves to weight instead. The compound stays at 400: it
@@ -435,12 +436,12 @@ button,input,select{font:inherit;color:inherit}
           of bleed, and a spec line on each page. Turn off for printing at home.</p>
       </div>
       <div id="thopts" hidden>
-        <p class="hint" style="margin:10px 0 0">Black on white, one label per page, for a
-          direct-thermal roll printer such as the Xprinter XP-420B or XP-D4601B (203&nbsp;dpi).
-          Load 50&nbsp;×&nbsp;30&nbsp;mm labels, one across the roll with a gap between them. Use
-          top-coated synthetic direct-thermal labels: plain thermal paper smears under an alcohol
-          swab and fades with heat and sunlight. Set the same 50&nbsp;×&nbsp;30&nbsp;mm size in the
-          printer driver and calibrate the gap sensor.</p>
+        <p class="hint" style="margin:10px 0 0">Black on white, for a 203&nbsp;dpi direct-thermal
+          label printer such as the NIIMBOT B31. Load genuine NIIMBOT 50&nbsp;×&nbsp;30&nbsp;mm labels:
+          the B31 reads the chip in the roll to know the label size. For the NIIMBOT phone app, use
+          <b>Download images</b>: one picture per label, exactly 50&nbsp;×&nbsp;30&nbsp;mm at the
+          printer's 203&nbsp;dpi, to add as an image in the app. From a computer, print the PDF
+          through the NIIMBOT driver instead.</p>
       </div>
       <div id="pdfopts" hidden>
         <div class="chips" id="pstyle" style="margin-top:14px">
@@ -479,6 +480,7 @@ button,input,select{font:inherit;color:inherit}
           <span style="display:flex;gap:10px">
             <button class="btn btn--ghost" id="clear">Clear</button>
             <button class="btn btn--ghost" id="print" disabled>Print</button>
+            <button class="btn btn--ghost" id="img" disabled hidden>Download images</button>
             <button class="btn" id="dl" disabled>Download PDF</button>
           </span>
           <span class="dlmsg" id="dlMsg" role="status"></span>
@@ -500,9 +502,10 @@ button,input,select{font:inherit;color:inherit}
     </section>
 
     <div class="note" id="noteThermal" hidden>
-      <b>Before a roll.</b> Print one label first and check <i>Research use only</i>, the smallest
-      line. If it breaks up, raise the printer's darkness (density) a step, then slow the print
-      speed. Keep labelled vials out of heat and direct sun: direct-thermal print darkens or fades
+      <b>Before a roll.</b> In the NIIMBOT app, start a 50&nbsp;×&nbsp;30&nbsp;mm label (the app
+      picks it up from the roll), add the downloaded image, stretch it to fill the label edge to
+      edge and set the number of copies. Print one label first and check <i>Research use only</i>,
+      the smallest line. If it breaks up, raise the print density a step in the app. Keep labelled vials out of heat and direct sun: direct-thermal print darkens or fades
       under both. The thermal version drops the bronze and the onyx ground: it is the working
       label, not the brand-book stock. A label may not imply human dose or frequency; the DOSE row is a
       pen-device calibration and is yours to leave off.
@@ -1247,10 +1250,10 @@ const PRINT_HOW = {
     <b>Scale</b> 100% · <b>Margins</b> None · <b>Background graphics ON</b>.
     That last one matters — without it the onyx ground drops out and the labels
     print as white boxes.`,
-  thermal: `In the print dialog: <b>Destination</b> your Xprinter (or Save as PDF) ·
+  thermal: `In the print dialog: <b>Destination</b> your label printer (or Save as PDF) ·
     <b>Paper</b> ${LABEL.w} × ${LABEL.h} mm, the same size set in the printer driver · <b>Scale</b> 100% ·
-    <b>Margins</b> None. Each label is its own page. Print over USB from a computer, with
-    the Xprinter driver installed; it is the dependable path for a browser print.`,
+    <b>Margins</b> None. Each label is its own page. For the NIIMBOT B31 from a phone, use
+    <b>Download images</b> instead and print from the NIIMBOT app.`,
 };
 function setOut(o){
   out = o;
@@ -1267,6 +1270,7 @@ function setOut(o){
   $('printHow').innerHTML = PRINT_HOW[o] || '';
   // "PDF only" is a download, not a print job
   $('print').hidden = o === 'pdf';
+  $('img').hidden = look() !== 'thermal';
   if (o === 'pdf') $('printNote').hidden = true;
   $('print').textContent = embedded ? 'Print in new tab' : 'Print';
   try { localStorage.setItem('axiom.out', o); localStorage.setItem('axiom.pdfStyle', pdfStyle); } catch (e) {}
@@ -1325,6 +1329,7 @@ function renderQueue(){
     : `Nothing queued · ${pp} labels per page`;
   $('print').disabled = !queue.length;
   $('dl').disabled = !queue.length;
+  $('img').disabled = !queue.length;
   renderSheet();
 }
 
@@ -1494,12 +1499,30 @@ function pathOps(segs, map){
   }
   return ops;
 }
+/* A canvas target ({ ctx }) takes the same calls as a pdf-lib page, so the
+   label images below are drawn by exactly the code that draws the PDF. */
+function canvasPath(segs, map){
+  const p = new Path2D();
+  for (const s of segs){
+    if (s[0] === 'M') p.moveTo(...map(s[1], s[2]));
+    else if (s[0] === 'L') p.lineTo(...map(s[1], s[2]));
+    else if (s[0] === 'C') p.bezierCurveTo(...map(s[1], s[2]), ...map(s[3], s[4]), ...map(s[5], s[6]));
+    else p.closePath();
+  }
+  return p;
+}
+const cssRgb = c => `rgb(${Math.round(c.r * 255)},${Math.round(c.g * 255)},${Math.round(c.b * 255)})`;
 function fillSegs(page, segs, map, c){
+  if (page.ctx){ page.ctx.fillStyle = cssRgb(c); page.ctx.fill(canvasPath(segs, map), 'evenodd'); return; }
   const L = window.PDFLib;
   page.pushOperators(L.pushGraphicsState(), L.setFillingColor(L.rgb(c.r, c.g, c.b)),
     ...pathOps(segs, map), L.PDFOperator.of(L.PDFOperatorNames.FillEvenOdd), L.popGraphicsState());
 }
 function strokeSegs(page, segs, map, c, widthPt){
+  if (page.ctx){
+    const x = page.ctx; x.strokeStyle = cssRgb(c); x.lineWidth = widthPt / PT * page.scale;
+    x.stroke(canvasPath(segs, map)); return;
+  }
   const L = window.PDFLib;
   page.pushOperators(L.pushGraphicsState(), L.setStrokingColor(L.rgb(c.r, c.g, c.b)),
     L.setLineWidth(widthPt), ...pathOps(segs, map), L.stroke(), L.popGraphicsState());
@@ -1513,7 +1536,7 @@ function pickFont(cs, fonts){
 }
 /* every glyph at the position the browser laid it out */
 function drawTextIn(page, root, map, fonts){
-  const L = window.PDFLib, range = document.createRange();
+  const L = window.PDFLib || {}, range = document.createRange();
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   for (let node; (node = walker.nextNode()); ){
     const el = node.parentElement;
@@ -1525,8 +1548,14 @@ function drawTextIn(page, root, map, fonts){
     node.after(probe);
     const base = probe.getBoundingClientRect().top;
     probe.remove();
-    const font = pickFont(cs, fonts), size = parseFloat(cs.fontSize) * PT;
-    const c = parseColor(cs.color) || { r: 0, g: 0, b: 0 }, color = L.rgb(c.r, c.g, c.b);
+    const c = parseColor(cs.color) || { r: 0, g: 0, b: 0 };
+    const ctx = page.ctx;
+    if (ctx){
+      ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${parseFloat(cs.fontSize) * page.scale}px ${cs.fontFamily}`;
+      ctx.fillStyle = cssRgb(c); ctx.textBaseline = 'alphabetic';
+    }
+    const font = ctx ? null : pickFont(cs, fonts), size = parseFloat(cs.fontSize) * PT;
+    const color = ctx ? null : L.rgb(c.r, c.g, c.b);
     const upper = cs.textTransform === 'uppercase';
     for (let i = 0; i < node.data.length; i++){
       const ch = node.data[i];
@@ -1535,7 +1564,8 @@ function drawTextIn(page, root, map, fonts){
       const r = range.getBoundingClientRect();
       if (!r.width && !r.height) continue;
       const [x, y] = map(r.left, base);
-      page.drawText(upper ? ch.toUpperCase() : ch, { x, y, size, font, color });
+      if (ctx) ctx.fillText(upper ? ch.toUpperCase() : ch, x, y);
+      else page.drawText(upper ? ch.toUpperCase() : ch, { x, y, size, font, color });
     }
   }
 }
@@ -1615,6 +1645,117 @@ async function buildPdf(){
   }
   return doc.save();
 }
+
+/* ---------- Download images ----------
+   For a phone label app (the NIIMBOT app imports pictures, not PDFs): one
+   PNG per distinct label in the queue, not per copy, since copies are set in
+   the app. Each is exactly the label at 203 dpi, 400 x 240 px for 50 x 30 mm,
+   so one pixel is one dot on the head, and 1-bit black and white so the app
+   has nothing to dither. Drawn by the PDF code above on a canvas target, with
+   the page's own web fonts, then thresholded at mid-grey. */
+const IMG_DPI = 203;
+const imgSize = () => [Math.round(LABEL.w / 25.4 * IMG_DPI), Math.round(LABEL.h / 25.4 * IMG_DPI)];
+
+let crcTable = null;
+function crc32(bytes){
+  if (!crcTable){
+    crcTable = new Uint32Array(256);
+    for (let n = 0; n < 256; n++){ let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; crcTable[n] = c >>> 0; }
+  }
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < bytes.length; i++) c = crcTable[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function pngChunk(type, data){
+  const out = new Uint8Array(12 + data.length), dv = new DataView(out.buffer);
+  dv.setUint32(0, data.length);
+  for (let i = 0; i < 4; i++) out[4 + i] = type.charCodeAt(i);
+  out.set(data, 8);
+  dv.setUint32(8 + data.length, crc32(out.subarray(4, 8 + data.length)));
+  return out;
+}
+/* 1-bit greyscale PNG with a pHYs chunk, so the file states its own dpi.
+   `ink` is 1 for a black dot; in the PNG a set bit is white, so ink stays 0. */
+async function png1bit(ink, w, h, dpi){
+  const stride = Math.ceil(w / 8), raw = new Uint8Array((stride + 1) * h);
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++)
+      if (!ink[y * w + x]) raw[y * (stride + 1) + 1 + (x >> 3)] |= 0x80 >> (x & 7);
+  const z = new Uint8Array(await new Response(new Blob([raw]).stream()
+    .pipeThrough(new CompressionStream('deflate'))).arrayBuffer());
+  const ihdr = new Uint8Array(13), hv = new DataView(ihdr.buffer);
+  hv.setUint32(0, w); hv.setUint32(4, h); ihdr[8] = 1; ihdr[9] = 0;   // bit depth 1, greyscale
+  const phys = new Uint8Array(9), pv = new DataView(phys.buffer), ppm = Math.round(dpi / 0.0254);
+  pv.setUint32(0, ppm); pv.setUint32(4, ppm); phys[8] = 1;
+  return new Blob([new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]),
+    pngChunk('IHDR', ihdr), pngChunk('pHYs', phys), pngChunk('IDAT', z), pngChunk('IEND', new Uint8Array(0))],
+    { type: 'image/png' });
+}
+async function labelImage(box){
+  const [w, h] = imgSize();
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+  const lbl = box.querySelector('.lbl'), R = lbl.getBoundingClientRect();
+  const k = R.width / (LABEL.w * PXMM), scale = w / (LABEL.w * PXMM);
+  const map = (x, y) => [(x - R.left) / k * scale, (y - R.top) / k * scale];
+  drawLabel({ ctx, scale }, lbl, map, k, null);
+  const px = ctx.getImageData(0, 0, w, h).data, bits = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++){
+    const lum = 0.299 * px[4 * i] + 0.587 * px[4 * i + 1] + 0.114 * px[4 * i + 2];
+    bits[i] = lum < 128 ? 1 : 0;
+  }
+  return png1bit(bits, w, h, IMG_DPI);
+}
+const slug = t => String(t).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'label';
+
+$('img').addEventListener('click', async () => {
+  if (!queue.length || look() !== 'thermal') return;
+  $('img').disabled = true; dlMsg('Drawing the images…');
+  try {
+    await document.fonts.ready;
+    await Promise.all(['400', '500', '600'].map(wt => document.fonts.load(`${wt} 16px Inter`)).concat(document.fonts.load('400 16px Jost')));
+    const boxes = [...$('sheet').querySelectorAll('.tbox')], seen = new Set(), files = [];
+    let at = 0;
+    for (const row of queue){
+      const box = boxes[at]; at += row.copies;
+      if (!box) continue;
+      let name = `axiom-${slug(row.compound)}-${slug(row.qty)}${row.dose ? '' : '-no-dose'}`;
+      for (let i = 2; seen.has(name); i++) name = name.replace(/(-\d+)?$/, '-' + i);
+      seen.add(name);
+      files.push({ filename: name + '.png', data: await labelImage(box) });
+    }
+    const cap = await dlCap;
+    let saved = 0;
+    if (cap){
+      for (const f of files){
+        try { await cap.save(f); saved++; }
+        catch (e){
+          if (e && e.code === 'declined') break;
+          throw new Error((e && (e.code || e.message)) || 'save failed');
+        }
+      }
+    } else if (embedded){
+      dlMsg('Downloads are not available in this view. Open the builder in its own tab and use Download images there.');
+      return;
+    } else {
+      for (const f of files){
+        const url = URL.createObjectURL(f.data), a = document.createElement('a');
+        a.href = url; a.download = f.filename; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+        saved++;
+        await new Promise(res => setTimeout(res, 300));
+      }
+    }
+    const [w, h] = imgSize();
+    dlMsg(saved ? `${saved} image${saved === 1 ? '' : 's'} saved, ${w} × ${h} px at ${IMG_DPI} dpi. In the NIIMBOT app: `
+      + `start a ${LABEL.w} × ${LABEL.h} mm label, add the image, stretch it to fill the label, set the copies, print.` : '');
+  } catch (e){
+    dlMsg('Could not make the images (' + (e && e.message || e) + ').');
+  } finally {
+    $('img').disabled = !queue.length;
+  }
+});
 
 const dlMsg = t => { $('dlMsg').textContent = t; };
 $('dl').addEventListener('click', async () => {

@@ -278,9 +278,9 @@ well as drawing, since a new die is cut from the spec, not traced off a PDF.
 ## 7c. Thermal roll
 
 `builder.html` has a second output, **Thermal roll · 50 × 30**, for printing in-house on a
-thermal label printer. It is tuned for the printers in use, the **Xprinter XP-420B and
-XP-D4601B: direct thermal, 203 dpi**, where a dot is 0.125 mm. Same layout, same autofit, same
-data; four things change.
+thermal label printer. It is tuned for **direct thermal at 203 dpi**, where a dot is 0.125 mm:
+the printer in use is the **NIIMBOT B31** (it was first tuned for the Xprinter XP-420B and
+XP-D4601B, which print the same way). Same layout, same autofit, same data; four things change.
 
 **One colour.** A thermal head is 1-bit: a dot is black or it is not. Every tone is therefore
 solid black on white stock — `--bg #fff`, and `--ink`, `--muted` and `--accent` all `#000`. A
@@ -355,17 +355,35 @@ exactly 50 × 30 mm.
 - **So use top-coated synthetic direct-thermal labels** (PP or synthetic, "top coated"). The top
   coat protects the print from swabs and fridge condensation. Keep labelled vials out of heat and
   direct sun.
-- **50 × 30 mm, one across the roll, with a gap.** Rolls that are two or three across do not line
-  up with one label per page.
-- **Print over USB from a computer** with the Xprinter driver installed. It is the dependable
-  path for a browser print; the XP-D4601B's Bluetooth is aimed at phone apps.
-- In the driver, add a 50 × 30 mm paper size, labels with gaps, and calibrate the gap sensor (the
-  XP-D4601B calibrates itself; on the XP-420B hold the feed button). In the print dialog: Paper
-  50 × 30 mm, Scale 100%, Margins None. Printing the downloaded PDF from a PDF viewer works the
-  same way: Actual size, not Fit.
+- **NIIMBOT B31: genuine NIIMBOT 50 × 30 mm rolls.** The B31 reads an RFID chip in the roll to
+  learn the label size, and third-party rolls without it may not be recognised. NIIMBOT sells
+  50 × 30 mm rolls for the B1 / B21 / B31.
+- **From the phone (the usual path):** **Download images** (below), then in the NIIMBOT app start
+  a 50 × 30 mm label, add the image, stretch it to fill the label edge to edge, set the copies
+  and print over Bluetooth.
+- **From a computer:** install the NIIMBOT driver, connect over USB and print the downloaded PDF
+  at Paper 50 × 30 mm, Scale 100% (Actual size, not Fit), Margins None.
+- **Another roll printer** (the Xprinter the mode was first tuned for): one label across the roll
+  with a gap, a 50 × 30 mm paper size in the driver, the gap sensor calibrated.
 
-Print one label first and check `RESEARCH USE ONLY`. If it breaks up, raise the darkness (density)
-a step, then slow the print speed.
+Print one label first and check `RESEARCH USE ONLY`. If it breaks up, raise the print density a
+step (in the NIIMBOT app, or the darkness in a driver), then slow the print speed.
+
+**Download images (for the NIIMBOT app).** The NIIMBOT phone app imports pictures, not PDFs, so in
+the thermal look (Thermal roll, or PDF only in black & white) the queue has a **Download images**
+button:
+
+- **One PNG per distinct label** in the queue, not per copy: the copies are set in the app.
+- **Exactly 400 × 240 px**, 50 × 30 mm at 203 dpi, so one pixel is one dot on the head and the app
+  has nothing to resample when the image fills the label. The PNG's `pHYs` says 203 dpi.
+- **1-bit black and white**, thresholded at mid-grey, so the app has nothing to dither.
+- **Drawn by the PDF code**, on a canvas instead of a PDF page: the same per-glyph positions, the
+  same wordmark path and the same 2-dot hairlines, in the page's own web fonts. Against the
+  thermal PDF rendered at 203 dpi it differs by 1–2 % of pixels, all at glyph edges; the hairlines
+  land on the same two rows.
+- Named `axiom-<compound>-<qty>.png` (`-no-dose` when the DOSE row is off). In claude.ai each
+  image is offered with its own save prompt; on iOS that is the share sheet, so **Save Image** puts
+  it in Photos for the app to pick up.
 
 A 300 dpi thermal-transfer printer with a resin ribbon on PP or PET stock prints the same file
 more crisply and more durably. It is the upgrade path, not a requirement.
@@ -456,6 +474,7 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Thermal print | 50.1 × 30.0 mm per page; 8 labels → 8 pages, 80 → 80, no trailing page |
 | Download PDF | A4 pages exactly 210 × 297 mm, thermal pages exactly 50 × 30 mm; 158 thermal labels build in about 1 s |
 | PDF only | colour and black & white: one page per label, each exactly 50 × 30 mm; colour keeps the onyx ground and bronze rules, black & white matches the thermal output |
+| Download images | one PNG per distinct label: 400 × 240 px, 1-bit (values 0 and 255 only), `pHYs` 203 dpi; hairlines exactly 2 px rows, at the same rows as the thermal PDF at 203 dpi; 0.8–1.6 % of pixels differ from it, all at glyph edges |
 | Thermal hairlines | 316 rules on 158 labels: every one 2 dot rows at 203 dpi, 3 at 300 dpi |
 | Thermal wordmark strokes | A, X, I, M 12.5 units; O ring 12.41–12.5 sampled every 5° |
 
