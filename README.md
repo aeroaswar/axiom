@@ -177,8 +177,8 @@ label ("+ 4 more lines — see AX-INV-…"), never dropped silently. Courier, se
 marks and a discreet-contents option are set in the builder; the sender is remembered per browser.
 
 Three stocks: **80 × 50 mm**, a compact layout for a small label printer such as the NIIMBOT
-B31 that carries only the recipient, the contents and the sender (courier, resi, handling marks
-and the note stay on the large label),
+B31 with the large label's outlined recipient box and ruled contents table, and the sender
+(courier, resi, handling marks and the note stay on the large label),
 and the full **100 × 150 mm** label, or the same turned 90° on **150 × 100 mm**.
 
 PDFs are read in the browser with pdf.js (loaded from cdnjs on first use, so it needs a
