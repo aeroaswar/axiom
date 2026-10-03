@@ -51,6 +51,7 @@ business-proposal/AXIOM-Price-List.pdf          its render; edit the HTML, never
 business-proposal/order-form/                   the fillable A4 order form (build.cjs, then add-fields.py)
 business-proposal/axiom-peptide-pricelist.html  the internal sheet — cost basis and margin per lot
 brand-book/ · company-profile/                  brand book and the one-page company profile
+stickers/                                       vial label builder (40 × 20) and package label builder (100 × 150)
 docs/                                           DECISIONS.md, catalogue notes, design specs
 ```
 
@@ -156,6 +157,23 @@ per lot — with cadence, timing, documented doses, a tap-to-pick pen calculator
 Apple and Google Calendar export, and the evidence tier stated for every dosing figure. It is
 deployed as its own Vercel project with Root Directory `dosage-guide` and no build step; prices
 live only in `dosage-guide/src/`, which is never published. Details in `dosage-guide/README.md`.
+
+## Package label builder
+
+`stickers/package-label.html` makes the 100 × 150 mm thermal shipping label for the mailer. Drop
+one or more filled order forms (`AXIOM-Order-Form.pdf`) onto it and each becomes a label: name,
+phone and address from the form's fields, and every order line matched against
+`business-proposal/order-form/compounds.json`, so "Wolverine" prints as BPC-157 + TB-500
+(Wolverine) with its unit. Amber flags mark what needs a human look before it ships: a compound the
+catalogue doesn't know, a size that isn't a listed lot, missing contact details, or a form whose
+research-use box wasn't ticked. Courier, service, resi, order ref, handling marks and a
+discreet-contents option are set in the builder; the sender is remembered per browser.
+
+The form is read in the browser with pdf.js (loaded from cdnjs on first use, so it needs a
+connection); nothing is uploaded. A form that arrives flattened, with no fields, is read from the
+page text at the form's field positions. Printing is one label per page, black only, at
+100 × 150 mm (or 150 × 100 with the label turned, for landscape-fed stock): Paper to match the
+stock, Scale 100%, Margins None.
 
 ## Standalone invoice builder
 
