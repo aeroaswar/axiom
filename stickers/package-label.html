@@ -173,13 +173,14 @@ details.sender .fields{margin-top:12px}
 [data-stock="land"] .tbox{--W:150mm;--H:100mm}
 [data-stock="land"] .tbox > .pl{transform:scale(var(--z)) translateX(150mm) rotate(90deg)}
 [data-stock="s80"] .tbox{--W:80mm;--H:50mm;border-radius:calc(2mm * var(--z))}
+[data-stock="s70"] .tbox{--W:70mm;--H:50mm;border-radius:calc(2mm * var(--z))}
 .tbox > .ps{position:absolute;top:0;left:0;transform-origin:top left;transform:scale(var(--z))}
 .roll{display:flex;flex-wrap:wrap;gap:16px;padding:18px;background:#DAD5CC;border-radius:6px;max-width:100%}
 .roll figure{margin:0}
 .roll figcaption{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#4a453e;margin:7px 0 0;
   max-width:calc(var(--W, 100mm) * .5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .roll .tbox{--z:.5;cursor:pointer}
-[data-stock="s80"] .roll .tbox{--z:.8}
+[data-stock="s80"] .roll .tbox,[data-stock="s70"] .roll .tbox{--z:.8}
 .roll figure.is-cur .tbox{outline:2px solid var(--accent);outline-offset:3px}
 
 @page{ size:100mm 150mm; margin:0; }
@@ -306,7 +307,7 @@ details.sender .fields{margin-top:12px}
    and the ruled contents table. Resi, handling marks and the note stay on
    100 x 150. Content box 74 x 45 mm.
    ============================================================ */
-.ps{width:80mm;height:50mm;padding:2.5mm 3mm;background:#fff;color:#000;
+.ps{width:var(--pw,80mm);height:50mm;padding:2.5mm 3mm;background:#fff;color:#000;
   display:flex;flex-direction:column;gap:1.3mm;overflow:hidden;
   font-family:var(--sans);font-weight:500;line-height:1.2;
   font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;
@@ -325,6 +326,9 @@ details.sender .fields{margin-top:12px}
 .ps__tab{position:relative;align-self:flex-start;color:#fff;margin:-.05mm 0 1.2mm -2.25mm;
   padding:.75mm 1.6mm .7mm;font-size:1.45mm;border-radius:.85mm 0 .85mm 0;overflow:hidden}
 .ps__tab span{position:relative;z-index:1}
+/* 70 x 50: the same layout 10 mm narrower; the courier column gives up a little */
+[data-stock="s70"] .ps{--pw:70mm}
+[data-stock="s70"] .ps__ship{max-width:22mm}
 /* name and phone on the left; courier over service on the right, spanning both rows */
 .ps__id{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:2.5mm;align-items:center}
 .ps__id .ps__name{grid-column:1;grid-row:1;min-width:0}
@@ -464,10 +468,11 @@ details.sender .fields{margin-top:12px}
       <p class="kick">6 · Stock</p>
       <div class="chips" id="stock">
         <button class="chip" data-o="s80" aria-pressed="true">80 × 50 · compact</button>
+        <button class="chip" data-o="s70" aria-pressed="false">70 × 50 · compact</button>
         <button class="chip" data-o="port" aria-pressed="false">100 × 150</button>
         <button class="chip" data-o="land" aria-pressed="false">150 × 100</button>
       </div>
-      <p class="hint" style="margin-top:9px">80 × 50 is the compact layout for a small label printer such as
+      <p class="hint" style="margin-top:9px">80 × 50 and 70 × 50 are the compact layout for a small label printer such as
         the NIIMBOT B31: recipient, contents and sender only. 100 × 150 is the full shipping label; 150 × 100 is the same label turned 90° for
         printers fed long edge first.</p>
     </div>
@@ -911,7 +916,8 @@ const today = () => { const d = new Date(); return new Date(d - d.getTimezoneOff
 let sender = { ...SENDER_DEFAULT, ...store.get('sender', {}) };
 let lastShip = store.get('ship', { courier:'', service:'', marks:{ fragile:true } });
 const STOCKS = {
-  s80:  { w:80,  h:50,  name:'80 × 50 mm',               page:'80mm 50mm' },
+  s80:  { w:80,  h:50,  name:'80 × 50 mm',               page:'80mm 50mm',   small:true },
+  s70:  { w:70,  h:50,  name:'70 × 50 mm',               page:'70mm 50mm',   small:true },
   port: { w:100, h:150, name:'100 × 150 mm',             page:'100mm 150mm' },
   land: { w:150, h:100, name:'150 × 100 mm, turned 90°', page:'150mm 100mm' },
 };
@@ -1044,7 +1050,7 @@ function labelSmallHTML(o){
   <div class="ps__foot"><span class="ps__from" data-fit="w">From ${from}</span><span class="ps__ruo">Research Use Only</span></div>
 </div>`;
 }
-const drawLabel = o => stock === 's80' ? labelSmallHTML(o) : labelHTML(o);
+const drawLabel = o => STOCKS[stock].small ? labelSmallHTML(o) : labelHTML(o);
 
 /* Shrink a block (size and tracking together, via --k) until it fits its box.
    Two blocks get a second resort: a long name wraps onto two lines rather than
@@ -1121,7 +1127,7 @@ function setStock(o){
 function sizePreview(){
   const pxPerMm = 96 / 25.4, W = STOCKS[stock].w * pxPerMm;
   const avail = Math.max(200, $('pvSec').clientWidth - 54);
-  const z = Math.min(stock === 's80' ? 2.4 : 1.5, avail / W);
+  const z = Math.min(STOCKS[stock].small ? 2.4 : 1.5, avail / W);
   $('pv').style.setProperty('--zp', z);
   $('zLab').textContent = Math.round(z * 100) + '%';
 }
@@ -1406,7 +1412,7 @@ async function labelPNG(o){
     return await new Promise(r => c.toBlob(r, 'image/png'));
   } finally { host.remove(); }
 }
-const pngName = o => `AXIOM-label-${(o.ref || o.name || 'label').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '')}-${stock === 's80' ? '80x50' : stock === 'land' ? '150x100' : '100x150'}.png`;
+const pngName = o => `AXIOM-label-${(o.ref || o.name || 'label').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '')}-${STOCKS[stock].w}x${STOCKS[stock].h}.png`;
 function saveBlob(blob, name){
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = name;

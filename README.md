@@ -176,7 +176,7 @@ research-use box. Long orders go to two columns; anything that still doesn't fit
 label ("+ 4 more lines — see AX-INV-…"), never dropped silently. Courier, service, resi, handling
 marks and a discreet-contents option are set in the builder; the sender is remembered per browser.
 
-Three stocks: **80 × 50 mm**, a compact layout for a small label printer such as the NIIMBOT
+Four stocks: **80 × 50 mm** and **70 × 50 mm**, a compact layout for a small label printer such as the NIIMBOT
 B31 with the large label's outlined recipient box (courier and service beside the name) and ruled
 contents table, and the sender (resi, handling marks and the note stay on the large label),
 and the full **100 × 150 mm** label, or the same turned 90° on **150 × 100 mm**.
@@ -185,7 +185,7 @@ PDFs are read in the browser with pdf.js (loaded from cdnjs on first use, so it 
 connection); nothing is uploaded. Two outputs:
 
 - **Save PNG**, for app-driven printers such as NIIMBOT: the label as a pure black-and-white image
-  at 8 dots per mm (203 dpi), exactly the label's size (640 × 400 px for 80 × 50). It is drawn with
+  at 8 dots per mm (203 dpi), exactly the label's size (640 × 400 px for 80 × 50, 560 × 400 for 70 × 50). It is drawn with
   html2canvas, also from cdnjs. In the printer's app, choose the same label size, insert the image
   and fill the label with it. On a phone the share sheet offers *Save Image*.
 - **Print**, for printers with a computer driver: one label per page, black only, at the stock's size
