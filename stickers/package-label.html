@@ -298,7 +298,7 @@ details.sender .fields{margin-top:12px}
 
 /* compliance */
 .pl__ruo{border-top:.35mm solid #000;padding-top:1.5mm;text-align:center;
-  font-size:1.85mm;font-weight:600;letter-spacing:.1em;text-transform:uppercase;line-height:1.5}
+  font-size:2.4mm;font-weight:600;letter-spacing:.06em;line-height:1.4}
 </style></head>
 <body>
 <div class="app">
@@ -903,7 +903,7 @@ function labelHTML(o){
   </div>
   ${o.notes.trim() ? `<div class="pl__note" data-fit="h"><span class="k">Catatan <i>/ Note</i></span><span class="t">${esc(o.notes)}</span></div>` : ''}
   ${marks ? `<div class="pl__marks${markKeys.length > 2 ? ' is-row' : ''}" style="--n:${markKeys.length}">${marks}</div>` : ''}
-  <div class="pl__ruo">For research use only · not for human or veterinary use<br>Tolak paket jika segel rusak · Refuse if the seal is broken</div>
+  <div class="pl__ruo">Research Use Only</div>
 </div>`;
 }
 
