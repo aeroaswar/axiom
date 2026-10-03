@@ -505,6 +505,7 @@ details.sender .fields{margin-top:12px}
         <button class="btn btn--ghost" id="pngAll">Save all PNGs</button>
         <button class="btn btn--ghost" id="printOne">Print this label</button>
         <button class="btn btn--ghost" id="printAll">Print all</button>
+        <button class="btn btn--ghost" id="toVials" title="Open the vial label builder with these orders' compounds">Vial labels →</button>
       </div>
       <p class="hint" id="pngHint" style="margin-top:10px;max-width:68ch"></p>
       <div class="note" id="printNote" hidden style="margin-top:18px">
@@ -1356,6 +1357,17 @@ function doPrint(only){
 window.addEventListener('afterprint', () => $('roll').classList.remove('only'));
 $('printOne').addEventListener('click', () => doPrint(true));
 $('printAll').addEventListener('click', () => doPrint(false));
+/* The same orders make the vial labels: hand them to stickers/builder.html (read once, within 30 min). */
+$('toVials').addEventListener('click', () => {
+  const list = orders.filter(o => o.lines.some(l => l.compound));
+  if (!list.length){ setStatus('No compounds on these labels to make vial labels from.', true); return; }
+  try {
+    localStorage.setItem('axiom.handoff.vial', JSON.stringify({ at: Date.now(), orders: list.map(o => ({
+      kind: o.kind, invNo: o.invNo, src: o.src, name: o.name,
+      lines: o.lines.map(l => ({ compound: l.compound, amount: l.amount, unit: l.unit, qty: l.qty, raw: l.raw })) })) }));
+  } catch (e) { setStatus('This browser blocked local storage — drop the same PDF into the vial label builder instead.', true); return; }
+  location.href = 'builder.html#from=package';
+});
 if (embedded){ $('printOne').textContent = 'Open in new tab to print'; }
 
 /* ---------- PNG export ----------

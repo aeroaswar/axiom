@@ -179,6 +179,16 @@ button,input,select{font:inherit;color:inherit}
 .qfoot b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
 .over{color:var(--accent-bright)}
 .dlmsg{flex-basis:100%;font-size:11px;color:var(--muted);min-height:0}
+/* From an invoice or order form */
+.imp{display:block;border:1px dashed var(--line-2);border-radius:8px;padding:12px;text-align:center;cursor:pointer;font-size:11px;color:var(--muted);transition:border-color .15s}
+.imp:hover,.imp.over{border-color:var(--accent-line);color:var(--accent-bright)}
+.imp b{display:block;font-size:12px;color:var(--text,inherit);margin-bottom:3px}
+.panel .hint a{color:var(--accent-bright);text-decoration:none;border-bottom:1px solid var(--accent-line)}
+.impmsg{font-size:10.5px;line-height:1.6;color:var(--muted);margin:8px 0 0}
+.impmsg:empty{display:none}
+.impmsg.err{color:#d9534f}
+.impmsg ul{margin:6px 0 0;padding-left:16px}
+.impmsg li.w{color:#c98a1a}
 .dlmsg:empty{display:none}
 
 .note{border:1px solid var(--accent-line);border-radius:8px;padding:15px 17px;
@@ -374,6 +384,15 @@ button,input,select{font:inherit;color:inherit}
     <div class="brand"><span id="wm"></span><span class="tag">Label Builder</span></div>
 
     <div>
+      <p class="kick">From an invoice or order form</p>
+      <label class="imp" id="impDrop" for="impFile"><b>Upload invoice / order form (PDF)</b>One label per vial on each line, copies = quantity</label>
+      <input type="file" id="impFile" accept="application/pdf,.pdf" multiple hidden>
+      <div class="impmsg" id="impMsg" role="status"></div>
+      <p class="hint" style="margin:8px 0 0">Use the PDF saved from the <a href="../invoice/axiom-invoice-a4.html">invoice builder</a>, or the client's order form.
+        The same PDF makes the <a href="package-label.html">package label</a>.</p>
+    </div>
+
+    <div>
       <p class="kick">1 · Choose a compound</p>
       <input class="search" id="q" type="search" placeholder="Search 79 compounds…" autocomplete="off">
       <div class="chips" id="chips" style="margin-top:10px"></div>
@@ -517,6 +536,7 @@ button,input,select{font:inherit;color:inherit}
   </main>
 </div>
 
+<script src="axiom-docs.js"></script>
 <script>
 /* ============================================================
    AXIOM research catalogue — transcribed from AXIOMPriceList_2.pdf
@@ -1290,11 +1310,12 @@ $('add').addEventListener('click', () => {
   if (sel && c > 0 && mg > 0) remember(memKey(sel), { clicks: c, mg });
   const same = queue.find(r =>
     r.compound === d.compound && r.qty === d.qty && r.dose === d.dose && r.note === d.note);
+  demoQueue = false;      // the sheet is now the user's own: an import adds to it
   if (same) same.copies += n; else queue.push({ ...d, copies: n });
   renderQueue();
 });
 
-$('clear').addEventListener('click', () => { queue = []; renderQueue(); });
+$('clear').addEventListener('click', () => { queue = []; demoQueue = false; renderQueue(); });
 $('qrows').addEventListener('click', e => {
   const b = e.target.closest('.x'); if (!b) return;
   queue.splice(+b.dataset.i, 1); renderQueue();
@@ -1646,6 +1667,74 @@ $('dl').addEventListener('click', async () => {
   }
 });
 
+/* ---------- from an invoice or order form ----------
+   The PDF is read by the shared reader (axiom-docs.js, the package label's): each line
+   matched to the catalogue becomes vial labels — compound, lot, copies = quantity, the
+   remembered click conversion for that compound + lot, and the purity mark in the form.
+   The package label can also hand an order over (localStorage axiom.handoff.vial). */
+const lotKey = s => String(s || '').replace(/\s+/g, '').toLowerCase();
+let demoQueue = true;      // the worked example the builder opens on; an import replaces it
+function importOrders(orders){
+  if (demoQueue) { queue = []; demoQueue = false; }
+  const note = $('fNote').value.trim() || 'HIGH PURITY';
+  const out = [], warn = [];
+  let n = 0;
+  for (const o of orders){
+    let k = 0;
+    for (const l of o.lines){
+      if (!l.compound) continue;
+      const q = Math.max(1, Math.min(500, parseInt(l.qty, 10) || 1));
+      const lot = `${l.amount} ${l.unit}`.trim();
+      const item = CATALOGUE.items.find(d => d.compound === l.compound && lotKey(d.lot) === lotKey(lot));
+      const mem = item ? asPair(doseMem[memKey(item)]) : null;
+      const row = { compound: item ? item.compound : l.compound, qty: item ? item.lot : (lot || '— mg'),
+                    dose: mem ? `${num(mem.clicks)} clicks = ${num(mem.mg)} mg` : null, note, copies: q };
+      if (!item) warn.push(`${l.raw || l.compound}${lot ? ' ' + lot : ''} is not a catalogue lot — added as written, check it.`);
+      const same = queue.find(r => r.compound === row.compound && r.qty === row.qty && r.dose === row.dose && r.note === row.note);
+      if (same) same.copies += q; else queue.push(row);
+      n += q; k++;
+    }
+    out.push(`${o.invNo || o.src || 'order'}${o.name ? ' · ' + o.name : ''}: ${k} line${k === 1 ? '' : 's'}`);
+  }
+  const noDose = queue.filter(r => !r.dose).length;
+  if (noDose) warn.push(`${noDose} row${noDose === 1 ? ' has' : 's have'} no click conversion yet — select the compound, fill the dose and add it again, or print without the DOSE row.`);
+  renderQueue();
+  return { n, out, warn };
+}
+function impReport(r, err){
+  const m = $('impMsg');
+  m.classList.toggle('err', !!err);
+  m.innerHTML = err ? esc(err)
+    : `${r.n} label${r.n === 1 ? '' : 's'} added — ${r.out.map(esc).join(' · ')}.` + (r.warn.length ? `<ul>${r.warn.map(w => `<li class="w">${esc(w)}</li>`).join('')}</ul>` : '');
+}
+async function importFiles(files){
+  const pdfs = [...files].filter(f => /pdf$/i.test(f.type) || /\.pdf$/i.test(f.name));
+  if (!pdfs.length) return impReport(null, 'Only PDF invoices and order forms can be read.');
+  if (!window.AxiomDocs) return impReport(null, 'The reader (axiom-docs.js) did not load — open this page from the stickers folder.');
+  $('impMsg').classList.remove('err'); $('impMsg').textContent = `Reading ${pdfs.length} PDF${pdfs.length > 1 ? 's' : ''}…`;
+  const got = [], errs = [];
+  for (const f of pdfs){ try { got.push(...await AxiomDocs.readPdf(f)); } catch (e) { errs.push(`${f.name}: ${e.message || e}`); } }
+  got.sort((a, b) => (a.kind === 'invoice' ? 0 : 1) - (b.kind === 'invoice' ? 0 : 1));
+  AxiomDocs.mergeForms(got);                   // an order form beside its invoice adds nothing to vials; drop the duplicate
+  if (!got.length) return impReport(null, errs.join(' · ') || 'Nothing to read.');
+  const r = importOrders(got);
+  r.warn.unshift(...errs);
+  impReport(r);
+}
+$('impFile').addEventListener('change', e => { importFiles(e.target.files); e.target.value = ''; });
+const drop = $('impDrop');
+['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => importFiles(e.dataTransfer.files));
+function takeHandoff(){
+  let h = null;
+  try { h = JSON.parse(localStorage.getItem('axiom.handoff.vial') || 'null'); localStorage.removeItem('axiom.handoff.vial'); } catch (e) {}
+  if (!h || !Array.isArray(h.orders) || Date.now() - (h.at || 0) > 30 * 60e3) return;
+  const r = importOrders(h.orders);
+  r.out = r.out.map(s => s + ' (from the package label)');
+  impReport(r);
+}
+
 /* ---------- go ----------
    Open on a real worked example rather than an empty shell: Retatrutide
    30 mg is the SKU whose click conversion we actually have. Clear removes it. */
@@ -1657,5 +1746,6 @@ $('fCopies').value = 8;
 renderList(); preview();
 queue = [{ ...draft(), copies: 8 }];
 setOut(out);
+takeHandoff();
 </script>
 </body></html>

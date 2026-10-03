@@ -191,6 +191,17 @@ connection); nothing is uploaded. Two outputs:
 - **Print**, for printers with a computer driver: one label per page, black only, at the stock's size
   (Paper to match, Scale 100%, Margins None).
 
+## Order form → invoice → labels
+
+One order flows through four files, each reading the previous one's PDF in the browser (nothing is uploaded):
+
+1. **Order form** (`business-proposal/AXIOM-Order-Form.pdf`): the client fills it in.
+2. **Invoice** (`invoice/axiom-invoice-a4.html`): *Import order form PDF* fills the client and line items; *Save as PDF*.
+3. **Package label** (`stickers/package-label.html`): drop the invoice PDF (and the order form for the phone number); one label per destination.
+4. **Vial labels** (`stickers/builder.html`): *Upload invoice / order form* queues one label per vial — compound and lot from each line, copies = quantity, the remembered click conversion for that compound + lot. Or press **Vial labels →** on the package label to hand the same orders over.
+
+The package label and the vial builder share one reader, `stickers/axiom-docs.js` (the package label still carries its own copy of the same code; keep them in step, or switch it to the shared file). Lines are matched to `business-proposal/order-form/compounds.json`, which agrees with the vial catalogue on every compound and lot.
+
 ## Standalone invoice builder
 
 `invoice/axiom-invoice-a4.html` is a self-contained, dependency-free A4 invoice builder that
