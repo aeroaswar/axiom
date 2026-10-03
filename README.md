@@ -51,6 +51,7 @@ business-proposal/AXIOM-Price-List.pdf          its render; edit the HTML, never
 business-proposal/order-form/                   the fillable A4 order form (build.cjs, then add-fields.py)
 business-proposal/axiom-peptide-pricelist.html  the internal sheet — cost basis and margin per lot
 brand-book/ · company-profile/                  brand book and the one-page company profile
+stickers/                                       vial label builder (40 × 20) and package label builder (100 × 150)
 docs/                                           DECISIONS.md, catalogue notes, design specs
 ```
 
@@ -157,6 +158,50 @@ Apple and Google Calendar export, and the evidence tier stated for every dosing 
 deployed as its own Vercel project with Root Directory `dosage-guide` and no build step; prices
 live only in `dosage-guide/src/`, which is never published. Details in `dosage-guide/README.md`.
 
+## Package label builder
+
+`stickers/package-label.html` makes the 100 × 150 mm thermal shipping label for the mailer from the
+invoice. Drop the PDF saved from the invoice builder and each destination becomes a label: the
+recipient, address and phone from *Billed to* (or the *Ship to* row when the order goes to several
+addresses), the invoice number, and every line with its lot size, across as many pages as the
+table runs. A cold-chain invoice turns on *Keep cool*. The invoice is read by layout, anchored on
+its headings in English or Indonesian, so the Console's invoices use the same reader.
+
+Invoices often carry no phone number. Drop the client's order form (`AXIOM-Order-Form.pdf`) with
+the invoice and its phone, notes and research-use tick fill the invoice's label, matched on first
+name; an order form on its own still makes a label, with each typed line matched against
+`business-proposal/order-form/compounds.json`. Amber flags mark what needs a look before it ships:
+no phone, a compound the catalogue doesn't know, a size that isn't a listed lot, an unticked
+research-use box. Long orders go to two columns; anything that still doesn't fit is counted on the
+label ("+ 4 more lines — see AX-INV-…"), never dropped silently. Courier, service, resi, handling
+marks and a discreet-contents option are set in the builder; the sender is remembered per browser.
+
+Three stocks: **80 × 50 mm**, a compact layout for a small label printer such as the NIIMBOT
+B31 with the large label's outlined recipient box (courier and service beside the name) and ruled
+contents table, and the sender (resi, handling marks and the note stay on the large label),
+and the full **100 × 150 mm** label, or the same turned 90° on **150 × 100 mm**.
+
+PDFs are read in the browser with pdf.js (loaded from cdnjs on first use, so it needs a
+connection); nothing is uploaded. Two outputs:
+
+- **Save PNG**, for app-driven printers such as NIIMBOT: the label as a pure black-and-white image
+  at 8 dots per mm (203 dpi), exactly the label's size (640 × 400 px for 80 × 50). It is drawn with
+  html2canvas, also from cdnjs. In the printer's app, choose the same label size, insert the image
+  and fill the label with it. On a phone the share sheet offers *Save Image*.
+- **Print**, for printers with a computer driver: one label per page, black only, at the stock's size
+  (Paper to match, Scale 100%, Margins None).
+
+## Order form → invoice → labels
+
+One order flows through four files, each reading the previous one's PDF in the browser (nothing is uploaded):
+
+1. **Order form** (`business-proposal/AXIOM-Order-Form.pdf`): the client fills it in.
+2. **Invoice** (`invoice/axiom-invoice-a4.html`): *Import order form PDF* fills the client and line items; *Save as PDF*.
+3. **Package label** (`stickers/package-label.html`): drop the invoice PDF (and the order form for the phone number); one label per destination.
+4. **Vial labels** (`stickers/builder.html`): *Upload invoice / order form* queues one label per vial — compound and lot from each line, copies = quantity, the remembered click conversion for that compound + lot. Or press **Vial labels →** on the package label to hand the same orders over.
+
+The package label and the vial builder share one reader, `stickers/axiom-docs.js` (the package label still carries its own copy of the same code; keep them in step, or switch it to the shared file). Lines are matched to `business-proposal/order-form/compounds.json`, which agrees with the vial catalogue on every compound and lot.
+
 ## Standalone invoice builder
 
 `invoice/axiom-invoice-a4.html` is a self-contained, dependency-free A4 invoice builder that
@@ -171,6 +216,14 @@ is committed beside it. Shipping is Rp 100.000 per 3 units at an address, capped
 Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to*, route each
 line item to one, and each carries its own amount, calculated by default and overridable.
 `invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to.
+
+*Import order form PDF* (or dropping the PDF on the page) fills an invoice from a client's
+filled-in `business-proposal/AXIOM-Order-Form.pdf`. It reads the form's fields, so it handles
+forms filled on an iPhone, in Preview or in Acrobat, but not a printed-and-scanned one. Name,
+phone and address become the client, and each order row is matched to a catalogue lot by name
+and amount. The panel lists anything it had to guess or couldn't place, such as a size that isn't
+sold, an unknown compound or a missing quantity. Those rows go in at Rp 0 to be fixed by hand.
+The file is read in the browser and never uploaded.
 
 This duplicates what `src/components/console/invoices/` and `src/lib/documents/` now do inside
 the app, and its catalogue is a second copy of prices that `supabase/seed.sql` owns, as are its
