@@ -511,7 +511,11 @@ details.sender .fields{margin-top:12px}
         <button class="btn btn--ghost" id="printOne">Print this label</button>
         <button class="btn btn--ghost" id="printAll">Print all</button>
       </div>
-      <p class="hint" id="pngHint" style="margin-top:10px;max-width:68ch"></p>
+      <div class="chips" id="dpi" style="margin-top:12px">
+        <button class="chip" data-d="203" aria-pressed="true">PNG 203 dpi</button>
+        <button class="chip" data-d="300" aria-pressed="false">PNG 300 dpi</button>
+      </div>
+      <p class="hint" id="pngHint" style="margin-top:8px;max-width:68ch"></p>
       <div class="note" id="printNote" hidden style="margin-top:18px">
         <b>Printing needs its own browser tab.</b> This embedded view blocks it.
         <a id="openLink" href="#" target="_blank" rel="noopener">Open the builder in a new tab →</a>
@@ -1120,7 +1124,7 @@ function setStock(o){
   pageRule.textContent = `@page{ size:${STOCKS[o].page}; margin:0; }`;
   [...$('stock').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.o === o)));
   const S = STOCKS[o];
-  $('pngHint').textContent = `PNG: ${S.w * 8} × ${S.h * 8} px, black and white, 203 dpi — for the NIIMBOT app or any printer app that takes an image.`;
+  renderDpi();
   renderLabels();
 }
 
@@ -1381,9 +1385,16 @@ function loadH2C(){
     document.head.appendChild(s);
   });
 }
+/* Drawn 4x larger than the printer's dots (as far as the browser's canvas limit
+   allows), shrunk in halving steps so every dot is the average of what it
+   covers, and only then snapped to black or white. Rasterising straight at
+   printer size hints small text badly and the hard snap breaks thin strokes. */
+const DPI = { 203: 8, 300: 12 };   // dots per mm
+let dpi = store.get('dpi', 203);
+if (!DPI[dpi]) dpi = 203;
 async function labelPNG(o){
   const h2c = await loadH2C();
-  const S = STOCKS[stock];
+  const S = STOCKS[stock], dpm = DPI[dpi];
   const host = document.createElement('div');
   host.className = 'for-png';
   host.style.cssText = 'position:fixed;left:-10000px;top:0;background:#fff';
@@ -1393,26 +1404,36 @@ async function labelPNG(o){
   try {
     autofit(host);
     const el = host.firstElementChild;
-    const scale = 8 / (96 / 25.4);
-    const src = await h2c(el, { scale, backgroundColor:'#fff', logging:false });
     const land = stock === 'land';
-    const W = S.w * 8, Hh = S.h * 8;
+    const W = S.w * dpm, Hh = S.h * dpm;
+    const over = Math.max(1, Math.min(4, Math.sqrt(16e6 / (W * Hh))));   // iOS caps a canvas at ~16.7M px
+    let src = await h2c(el, { scale: dpm * over / (96 / 25.4), backgroundColor:'#fff', logging:false });
+    const lw = land ? Hh : W, lh = land ? W : Hh;        // the upright label's size in dots
+    while (src.width / 2 >= lw * 1.5){
+      const t = document.createElement('canvas');
+      t.width = Math.round(src.width / 2); t.height = Math.round(src.height / 2);
+      const tg = t.getContext('2d');
+      tg.imageSmoothingEnabled = true; tg.imageSmoothingQuality = 'high';
+      tg.drawImage(src, 0, 0, t.width, t.height);
+      src = t;
+    }
     const c = document.createElement('canvas');
     c.width = W; c.height = Hh;
     const g = c.getContext('2d');
+    g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
     g.fillStyle = '#fff'; g.fillRect(0, 0, W, Hh);
     if (land){ g.translate(W, 0); g.rotate(Math.PI / 2); g.drawImage(src, 0, 0, Hh, W); }
     else g.drawImage(src, 0, 0, W, Hh);
     const img = g.getImageData(0, 0, W, Hh), d = img.data;
     for (let i = 0; i < d.length; i += 4){
-      const v = (d[i] * 299 + d[i + 1] * 587 + d[i + 2] * 114) / 1000 < 150 ? 0 : 255;
+      const v = (d[i] * 299 + d[i + 1] * 587 + d[i + 2] * 114) / 1000 < 160 ? 0 : 255;
       d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255;
     }
     g.putImageData(img, 0, 0);
     return await new Promise(r => c.toBlob(r, 'image/png'));
   } finally { host.remove(); }
 }
-const pngName = o => `AXIOM-label-${(o.ref || o.name || 'label').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '')}-${STOCKS[stock].w}x${STOCKS[stock].h}.png`;
+const pngName = o => `AXIOM-label-${(o.ref || o.name || 'label').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '')}-${STOCKS[stock].w}x${STOCKS[stock].h}-${dpi}dpi.png`;
 function saveBlob(blob, name){
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = name;
@@ -1433,6 +1454,16 @@ async function savePNGs(list){
     setStatus(`Saved ${files.length} PNG${files.length > 1 ? 's' : ''} — ${files.map(f => f.name).join(', ')}.`);
   } catch (e) { setStatus(e.message || String(e), true); }
 }
+function renderDpi(){
+  const S = STOCKS[stock], dpm = DPI[dpi];
+  [...$('dpi').children].forEach(c => c.setAttribute('aria-pressed', String(+c.dataset.d === dpi)));
+  $('pngHint').textContent = `PNG: ${S.w * dpm} × ${S.h * dpm} px, black and white. Match the printer: most small label printers are 203 dpi; `
+    + `pick 300 only if yours is a 300 dpi model. Zoomed in on a screen it looks blocky — those blocks are the printer's dots, and at real size they print sharp.`;
+}
+$('dpi').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  dpi = +b.dataset.d; store.set('dpi', dpi); renderDpi();
+});
 $('pngOne').addEventListener('click', () => savePNGs([O()]));
 $('pngAll').addEventListener('click', () => savePNGs(orders));
 

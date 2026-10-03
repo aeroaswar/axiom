@@ -185,8 +185,9 @@ PDFs are read in the browser with pdf.js (loaded from cdnjs on first use, so it 
 connection); nothing is uploaded. Two outputs:
 
 - **Save PNG**, for app-driven printers such as NIIMBOT: the label as a pure black-and-white image
-  at 8 dots per mm (203 dpi), exactly the label's size (640 × 400 px for 80 × 50, 560 × 400 for 70 × 50). It is drawn with
-  html2canvas, also from cdnjs. In the printer's app, choose the same label size, insert the image
+  at the printer's dot pitch, 203 dpi (8 dots/mm, 560 × 400 px for 70 × 50) or 300 dpi (12 dots/mm).
+  It is drawn at four times that with html2canvas (from cdnjs), shrunk smoothly, then snapped to
+  black and white, so small text keeps its shape.  In the printer's app, choose the same label size, insert the image
   and fill the label with it. On a phone the share sheet offers *Save Image*.
 - **Print**, for printers with a computer driver: one label per page, black only, at the stock's size
   (Paper to match, Scale 100%, Margins None).
