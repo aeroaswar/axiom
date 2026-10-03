@@ -172,6 +172,14 @@ Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to
 line item to one, and each carries its own amount, calculated by default and overridable.
 `invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to.
 
+*Import order form PDF* (or dropping the PDF on the page) fills an invoice from a client's
+filled-in `business-proposal/AXIOM-Order-Form.pdf`. It reads the form's fields, so it handles
+forms filled on an iPhone, in Preview or in Acrobat, but not a printed-and-scanned one. Name,
+phone and address become the client, and each order row is matched to a catalogue lot by name
+and amount. The panel lists anything it had to guess or couldn't place, such as a size that isn't
+sold, an unknown compound or a missing quantity. Those rows go in at Rp 0 to be fixed by hand.
+The file is read in the browser and never uploaded.
+
 This duplicates what `src/components/console/invoices/` and `src/lib/documents/` now do inside
 the app, and its catalogue is a second copy of prices that `supabase/seed.sql` owns, as are its
 delivery rates against the platform's per-consignment function. Treat the database as
