@@ -282,6 +282,31 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
   .field.wide{grid-column:auto}
   .glance{grid-template-columns:repeat(4,1fr)}
 }
+/* ---------- Wide and sideways: iPhone Duo's inner screen opened flat, iPad, desktop ----------
+   The page goes to two columns. The columns are centred, so on a foldable held open the
+   gutter between them sits on the fold and no line of text crosses it. */
+@media (min-width:820px) and (orientation:landscape){
+  :root{--maxw:1120px;--gut:56px}
+  .page-compound{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
+  .page-compound>.hero,.page-compound>.pen,.page-compound>.scope{grid-column:1/-1}
+  /* Hero: the name and blurb on the left, the at-a-glance strip and evidence on the right. */
+  .page-compound>.hero{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
+  .page-compound>.hero>.cat,.page-compound>.hero>h1,.page-compound>.hero>.what,.page-compound>.hero>.cls{grid-column:1}
+  .page-compound>.hero>.glance{grid-column:2;grid-row:1/span 2;margin-top:0;grid-template-columns:repeat(2,1fr)}
+  .page-compound>.hero>.ev{grid-column:2;grid-row:3/span 2}
+  /* Your pen: the calculator on one half, the dose dates and calendar buttons on the other. */
+  .pen-in{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
+  #sched-wrap>h2:first-child{margin-top:0!important}
+  .pen .fields{grid-template-columns:1fr 1fr}
+  .pen .field.wide{grid-column:span 2}
+  .pen .out-grid{grid-template-columns:repeat(2,1fr)}
+  .pen .out-cell:last-child{grid-column:1/-1}
+  .page-compound .scope{column-count:2;column-gap:var(--gut)}
+  .page-compound .scope p{break-inside:avoid}
+  /* Index: the categories in two columns. */
+  .page-index #list{column-count:2;column-gap:var(--gut)}
+  .page-index .grp{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -362,6 +387,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
 
   function renderIndex() {
     back.hidden = true;
+    app.className = "wrap page-index";
     document.title = "AXIOM — Compound Guide";
     app.innerHTML =
       '<div class="idx-hero">' +
@@ -432,6 +458,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
   /* ---------------- Compound ---------------- */
   function renderCompound(c) {
     back.hidden = false;
+    app.className = "wrap page-compound";
     document.title = "AXIOM — " + c.name;
     var ev = window.EVIDENCE_META[c.evidence] || window.EVIDENCE_META.preclinical;
     var iso = isoOf(new Date());
@@ -501,8 +528,8 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
       /* Four taps, top to bottom: compound, pen, dose, schedule. Nothing is
          pre-picked except a pen that only comes in one size — the customer
          taps what they actually have and what they actually take. */
-      "<section><h2>Your pen</h2>" +
-        '<div class="calc">' +
+      '<section class="pen"><h2>Your pen</h2>' +
+        '<div class="pen-in"><div class="calc">' +
           '<div class="step"><div class="step-k"><i>1</i><label for="f-compound">Compound</label></div>' +
             '<select id="f-compound" class="pick-select">' + compoundOptions(c.slug) + "</select></div>" +
 
@@ -538,7 +565,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           "shown, so there is nothing to prepare. This works out how many doses are in your pen and how long " +
           "it lasts. It does not tell you what your dose should be.</div>" +
         "</div>" +
-        '<div id="sched-wrap"></div>' +
+        '<div id="sched-wrap"></div></div>' +
       "</section>" +
 
       "<section><h2>What it is used for</h2><ul class=\"bul\">" +
