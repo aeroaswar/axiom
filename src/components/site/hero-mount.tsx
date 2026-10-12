@@ -22,16 +22,18 @@ export function HeroMount() {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (media.matches) return;
     let cancelled = false;
-    const arm = () => { if (!cancelled && webglOk()) setOn(true); };
+    const arm = () => { if (!cancelled && !media.matches && webglOk()) setOn(true); };
     const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
     let idle = 0;
     let timer = 0;
     if (typeof ric === 'function') idle = ric(arm, { timeout: 2500 });
     else timer = window.setTimeout(arm, 1000);
-    const off = () => setOn(false);
-    media.addEventListener('change', e => { if (e.matches) off(); });
+    // Reduce Motion switched on mid-visit unmounts the field (its own cleanup stops the loop).
+    const onChange = (e: MediaQueryListEvent) => { if (e.matches) setOn(false); };
+    media.addEventListener('change', onChange);
     return () => {
       cancelled = true;
+      media.removeEventListener('change', onChange);
       const cic = (window as unknown as { cancelIdleCallback?: (h: number) => void }).cancelIdleCallback;
       if (idle && typeof cic === 'function') cic(idle);
       if (timer) clearTimeout(timer);

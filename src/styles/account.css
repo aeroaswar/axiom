@@ -25,7 +25,7 @@
 .app-root .row.rowa .lk { color: inherit; position: static; }
 .app-root .row.rowa .lk::after { content: ""; position: absolute; inset: 0; }
 .app-root .row.rowa .lk:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
-.app-root .row.rowa:hover .lk { color: var(--accent-bright); }
+@media (hover: hover) and (pointer: fine) { .app-root .row.rowa:hover .lk { color: var(--accent-bright); } }
 .app-root .row.rowa .act { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; flex: none; }
 .app-root .row .bd .sub { font-size: 11px; color: var(--muted-2); font-weight: 300; display: block; }
 
@@ -97,7 +97,7 @@
 .app-root .pcard .nm.lk { color: var(--ink); display: block; }
 .app-root .pcard .nm.lk::after { content: ""; position: absolute; inset: 0; }
 .app-root .pcard .nm.lk:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
-.app-root .pcard:hover .nm.lk { color: var(--accent-bright); }
+@media (hover: hover) and (pointer: fine) { .app-root .pcard:hover .nm.lk { color: var(--accent-bright); } }
 .app-root .pcard .doses, .app-root .pcard .cardfoot, .app-root .pcard .sv { position: relative; z-index: 1; }
 .app-root .pcard .doses .dose { cursor: pointer; }
 .app-root .pcard .pr.gated {
@@ -111,7 +111,13 @@
 .app-root .pcard .sv { margin-left: auto; }
 .app-root .pcard .svbtn { color: var(--muted-2); padding: 6px; display: grid; place-items: center; }
 .app-root .pcard .svbtn .ic-sv { font-size: 15px; }
-.app-root .pcard .svbtn:hover, .app-root .pcard .svbtn.on { color: var(--accent); }
+/* touch: the bookmark keeps its drawn size, the hit area grows to 45 px */
+@media (pointer: coarse) {
+  .app-root .pcard .svbtn { position: relative; }
+  .app-root .pcard .svbtn::after { content: ""; position: absolute; inset: -9px; }
+}
+.app-root .pcard .svbtn.on { color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .app-root .pcard .svbtn:hover { color: var(--accent); } }
 
 /* ---------- the product sheet's dose rows -------------------------------- */
 .app-root .doselist { border-top: 1px solid var(--line); }

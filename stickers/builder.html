@@ -78,12 +78,12 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
 button,input,select{font:inherit;color:inherit}
 
 /* ---------- shell ---------- */
-.app{display:grid;grid-template-columns:392px 1fr;min-height:100vh}
+.app{display:grid;grid-template-columns:392px 1fr;min-height:100vh;min-height:100dvh}
 @media (max-width:900px){ .app{grid-template-columns:1fr} }
 
 .panel{background:var(--panel);border-right:1px solid var(--line);
   padding:26px 24px 40px;display:flex;flex-direction:column;gap:22px;
-  max-height:100vh;overflow-y:auto;position:sticky;top:0}
+  max-height:100vh;max-height:100dvh;overflow-y:auto;position:sticky;top:0}
 @media (max-width:900px){ .panel{max-height:none;position:static;border-right:0;border-bottom:1px solid var(--line)} }
 
 .brand{display:flex;align-items:center;gap:12px}

@@ -127,6 +127,7 @@
   /* ─── COVER ───────────────────────────────────── */
   .cover {
     min-height: 100vh;
+    min-height: 100svh;
     background: var(--onyx);
     display: flex;
     flex-direction: column;
@@ -215,6 +216,7 @@
   /* ─── SECTION COVERS ──────────────────────────── */
   .section-cover {
     min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -979,7 +981,7 @@
     width: 22px;
     height: 1px;
     background: var(--platinum);
-    transition: all 0.25s ease;
+    transition: transform 0.25s ease, opacity 0.25s ease;
   }
   .site-nav__hamburger.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
   .site-nav__hamburger.is-open span:nth-child(2) { opacity: 0; }
@@ -1002,7 +1004,7 @@
     border: none;
     color: var(--titanium);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background-color 0.2s, color 0.2s;
   }
   .voice-tab.active {
     background: var(--bone);
@@ -1415,6 +1417,21 @@
     /* ── Misc ───────────────────────────────── */
     .container { padding: 0 20px; }
     .section-cover__rule { margin-top: auto; }
+  }
+
+  /* ─── ACCESSIBILITY PREFERENCES ──────────────── */
+  /* Reduce Motion: anchor jumps land rather than glide, the menu icon swaps rather than morphs.
+     The easing demos still play on click: they are the motion the reader asked to see. */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .site-nav__hamburger span { transition: none; }
+  }
+  /* Reduce Transparency and Increase Contrast: a solid nav with a drawn edge, no blur */
+  @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+    .site-nav { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom-color: rgba(245,245,243,0.24); }
+    @media (max-width: 768px) {
+      .site-nav__links { background: #0a0a0a; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom-color: rgba(245,245,243,0.24); }
+    }
   }
 </style>
 </head>

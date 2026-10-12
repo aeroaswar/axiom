@@ -10,7 +10,7 @@
 .tbl tbody tr.lnk td.k a { color: inherit; display: inline-block; max-width: 100%; }
 .tbl tbody tr.lnk td.k a::after { content: ""; position: absolute; inset: 0; }
 .tbl tbody tr.lnk td.k a:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
-.tbl tbody tr.lnk:hover td.k a { color: var(--accent-bright); }
+@media (hover: hover) and (pointer: fine) { .tbl tbody tr.lnk:hover td.k a { color: var(--accent-bright); } }
 .tbl td .sub { display: block; font-size: 10.5px; color: var(--muted-2); font-weight: 300; }
 
 /* a figure that is an exception carries the tone; the norm stays quiet */
@@ -172,5 +172,5 @@ tr.sel td { background: var(--glass-accent); }
 /* The primary action inside the Next block is the sheet's one solid bronze object, exactly as the
    sheet footer's is: the action that completes what the record is waiting for. */
 .nxt-act .btn-accent { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
-.nxt-act .btn-accent:hover { background: var(--accent-bright); border-color: var(--accent-bright); color: var(--bg); }
+@media (hover: hover) and (pointer: fine) { .nxt-act .btn-accent:hover { background: var(--accent-bright); border-color: var(--accent-bright); color: var(--bg); } }
 .nxt-act .btn-accent[disabled] { background: transparent; color: var(--muted-2); border-color: var(--line); }
