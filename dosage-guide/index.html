@@ -52,14 +52,17 @@ a{color:inherit;text-decoration:none}
 .bar{
   position:sticky;top:0;z-index:20;background:rgba(7,6,5,.86);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line-soft);
   padding-top:env(safe-area-inset-top);
 }
-.bar-in{display:flex;align-items:center;gap:14px;height:56px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
-.mark{display:flex;align-items:center;min-height:44px}
+/* Scroll edge: content fades under the bar instead of meeting a hard rule. */
+.bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;pointer-events:none;
+  background:linear-gradient(rgba(7,6,5,.86),rgba(7,6,5,0))}
+.bar-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;height:56px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
+.mark{grid-column:2;display:flex;align-items:center;min-height:44px}
 .mark img{width:96px;height:auto;display:block}
-.bar .back{margin-left:auto;font-size:0.8824rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 16px;min-height:44px;display:inline-flex;align-items:center;transition:.2s}
-.bar .back:hover{color:var(--ink);border-color:var(--line-2)}
+.bar .back{grid-column:1;justify-self:start;font-size:1rem;color:var(--accent-bright);margin-left:-8px;padding:0 8px;gap:2px;min-height:44px;display:inline-flex;align-items:center;transition:.2s}
+.bar .back:hover{color:var(--ink)}
+.bar .back svg{flex:none}
 .bar .back[hidden]{display:none}
 
 /* ---------- Hero ---------- */
@@ -111,8 +114,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .timing{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
 .tcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
 .tcard span{display:block;font-size:0.7647rem;color:var(--muted-2);margin-bottom:7px;font-weight:500}
-.tcard b{font-family:var(--display);font-weight:400;font-size:1rem;line-height:1.25;display:block;color:var(--accent-bright)}
-.tcard.plain b{color:var(--ink)}
+.tcard b{font-family:var(--display);font-weight:400;font-size:1rem;line-height:1.25;display:block;color:var(--ink)}
 
 /* ---------- Protocol rows ---------- */
 .rows{border-top:1px solid var(--line-soft)}
@@ -170,7 +172,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 }
 .pick:hover{border-color:var(--line-2)}
 .pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.pick.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
+.pick.on{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright);font-weight:600}
 .pick{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2}
 .pick-tag{font-family:var(--sans);font-size:0.6471rem;color:var(--accent);margin-top:3px;font-weight:600}
 .other{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;font-size:0.7353rem;color:var(--muted-2)}
@@ -198,7 +200,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .reg.on{border-color:var(--accent-line);background:var(--accent-soft)}
 .reg b{display:block;font-family:var(--display);font-weight:400;font-size:0.9412rem;line-height:1.25}
 .reg span{display:block;font-size:0.7059rem;color:var(--muted-2);margin-top:3px;font-variant-numeric:tabular-nums}
-.reg.on b{color:var(--accent-bright)}
+.reg.on b{color:var(--accent-bright);font-weight:600}
 .sd.last{border-color:var(--line-2)}
 .cal-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
 .btn-cal{
@@ -208,7 +210,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
   display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
 }
 .btn-cal:hover{filter:brightness(1.08)}
-.btn-cal.ghost{background:none;color:var(--accent-bright);border:1px solid var(--accent-line);text-decoration:none;display:inline-block}
+.btn-cal.ghost{background:none;color:var(--accent-bright);border:1px solid var(--accent-line);text-decoration:none}
 .btn-cal.ghost:hover{background:var(--accent-soft);filter:none}
 .ics-fb-top b{color:var(--ink);font-weight:500}
 .ics-fb-top code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent-bright)}
@@ -272,7 +274,16 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 .empty{padding:34px 0;color:var(--muted-2);font-size:0.8235rem}
 
 /* Touch feedback, and the system motion setting. */
-.pick:active,.reg:active,.day:active,.item:active,.btn-cal:active,.bar .back:active{opacity:.72}
+.pick:active,.reg:active,.day:active,.item:active,.btn-cal:active,.bar .back:active,.mark:active{opacity:.6;transition-duration:0s}
+@media (prefers-contrast:more){
+  :root{--muted:#cfc7bb;--muted-2:#b3aa9d;--line:rgba(242,237,229,.42);--line-2:rgba(242,237,229,.6);
+    --line-soft:rgba(242,237,229,.28);--accent-line:rgba(231,177,115,.8)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .bar{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .bar::after{display:none}
+  .bar-in{border-bottom:1px solid var(--line-soft)}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition:none!important;animation:none!important}
@@ -286,10 +297,10 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
   .field.wide{grid-column:auto}
   .glance{grid-template-columns:repeat(4,1fr)}
 }
-/* ---------- Wide and sideways: iPhone Duo's inner screen opened flat, iPad, desktop ----------
+/* ---------- Wide (820 px and up): iPhone Duo's inner screen held sideways, iPad, desktop ----------
    The page goes to two columns. The columns are centred, so on a foldable held open the
    gutter between them sits on the fold and no line of text crosses it. */
-@media (min-width:820px) and (orientation:landscape){
+@media (min-width:820px){
   :root{--maxw:1120px;--gut:56px}
   .page-compound{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .page-compound>.hero,.page-compound>.pen,.page-compound>.scope{grid-column:1/-1}
@@ -315,8 +326,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
 <div class="bar">
   <div class="bar-in">
+    <a class="back" id="back" href="index.html" hidden><svg aria-hidden="true" width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2 2 10l8 8"/></svg>Compounds</a>
     <a class="mark" href="index.html" aria-label="AXIOM — compound guide"><img src="assets/axiom-wordmark-white.svg" alt="AXIOM" /></a>
-    <a class="back" id="back" href="index.html" hidden>All compounds</a>
   </div>
 </div>
 
@@ -326,6 +337,9 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 <script>
 (function () {
   "use strict";
+  /* iOS Safari only applies :active on touch when a touch listener exists; this makes the
+     press state show the instant a finger lands. */
+  document.addEventListener("touchstart", function () {}, { passive: true });
   var app = document.getElementById("app");
   var back = document.getElementById("back");
 
@@ -830,7 +844,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         '<div class="sched">' + cells + "</div>" +
         '<div class="cal-row">' +
           '<button class="btn-cal" id="cal-apple" type="button">Apple Calendar</button>' +
-          (gcal ? '<a class="btn-cal" id="cal-google" href="' + esc(gcal) + '" target="_blank" rel="noopener">Google Calendar</a>' : "") +
+          (gcal ? '<a class="btn-cal ghost" id="cal-google" href="' + esc(gcal) + '" target="_blank" rel="noopener">Google Calendar</a>' : "") +
         "</div>" +
         '<div class="cal-note">Either one adds all ' + doses + " dose" + (doses === 1 ? "" : "s") +
           " as a single repeating event at " + esc(hhmm()) + ", with a reminder — delete it once and the whole run goes. " +
