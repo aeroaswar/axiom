@@ -291,9 +291,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
   .page-compound>.hero,.page-compound>.pen,.page-compound>.scope{grid-column:1/-1}
   /* Hero: the name and blurb on the left, the at-a-glance strip and evidence on the right. */
   .page-compound>.hero{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
-  .page-compound>.hero>.cat,.page-compound>.hero>h1,.page-compound>.hero>.what,.page-compound>.hero>.cls{grid-column:1}
-  .page-compound>.hero>.glance{grid-column:2;grid-row:1/span 2;margin-top:0;grid-template-columns:repeat(2,1fr)}
-  .page-compound>.hero>.ev{grid-column:2;grid-row:3/span 2}
+  .hero-side>.glance{margin-top:0;grid-template-columns:repeat(2,1fr)}
   /* Your pen: the calculator on one half, the dose dates and calendar buttons on the other. */
   .pen-in{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   #sched-wrap>h2:first-child{margin-top:0!important}
@@ -473,11 +471,12 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
     }).join("");
 
     app.innerHTML =
-      '<div class="hero">' +
+      '<div class="hero"><div class="hero-txt">' +
         '<div class="cat">' + esc(c.category) + "</div>" +
         "<h1>" + esc(c.name) + "</h1>" +
         '<div class="what">' + esc(c.what) + "</div>" +
         '<div class="cls">' + esc(c.cls) + "</div>" +
+        '</div><div class="hero-side">' +
         '<div class="glance">' +
           "<div><span>How often</span><b>" + esc(CAD_WORD[c.cadence] || c.cadence) + "</b></div>" +
           "<div><span>When</span><b>" + esc(c.timing.when) + "</b></div>" +
@@ -488,7 +487,7 @@ p.body{font-size:14.5px;color:#d8d1c6;line-height:1.7}
           '<div class="ev-top"><i class="ev-dot"></i><div class="ev-label">' + esc(ev.label) + "</div></div>" +
           "<p>" + esc(c.evidenceNote) + "</p>" +
         "</div>" +
-      "</div>" +
+      "</div></div>" +
 
       "<section><h2>How often</h2>" +
         '<div class="cad-head"><div class="cad-word" id="cad-word">' +
