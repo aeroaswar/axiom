@@ -1,0 +1,8 @@
+{
+  "slug": "selank",
+  "source": "/Users/aeroaswar/.codex/generated_images/01a09c00-132e-7de2-bef2-e967a5283123/exec-66ab7214-96ab-4737-9e29-0c2f56e38a86.png",
+  "prompt": "Use case: product-mockup. Create one square premium AXIOM shop photograph matching the attached stone product reference. Preserve exactly the same black pen hardware, elegant AXIOM wordmark, bronze label rules, dial 0, diagonal upper-left to lower-right pose, taupe background and real rough pale limestone supports. Change product label name to \"Selank\" and quantity to \"10 mg\". Label must read AXIOM, Selank, QTY 10 mg, HIGH PURITY, RESEARCH USE ONLY. Fit long names neatly over two lines if necessary, never truncate or change spelling. Entire pen visible with generous margins, a close square product photograph. No other text, no collage, no border. The photograph will be one of a cohesive luxury stone catalogue.",
+  "method": "built-in image_gen",
+  "name": "Selank",
+  "dose": "10 mg"
+}
