@@ -1,7 +1,7 @@
-const {chromium}=require('/Users/aeroaswar/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const {launch}=require('./browser.cjs');
 const assert=require('node:assert/strict');
 (async()=>{
-const browser=await chromium.launch({headless:true,channel:'chrome'});
+const browser=await launch();
 const page=await browser.newPage({viewport:{width:1440,height:1000}});
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.goto(process.env.AXIOM_TEST_URL || 'http://127.0.0.1:8765/#/');
@@ -43,4 +43,4 @@ assert.equal(await mobile.locator('.hero-cursor-light').evaluate(n=>getComputedS
 assert.deepEqual(errors,[]);
 console.log(JSON.stringify({result:'PASS',desktopCursor:true,independentPens:true,scrollDepth:true,anchoredStone:true,pointerReset:true,reducedMotion:true,routeRemount:true,mobile:true,noOverflow:true,errors},null,2));
 await browser.close();
-})().catch(e=>{console.error(e);process.exitCode=1});
+})().catch(e=>{console.error(e);process.exit(1)});

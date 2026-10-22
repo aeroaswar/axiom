@@ -104,6 +104,17 @@
   function go(hash) { if (location.hash === hash) render(); else location.hash = hash; }
   var STATIC = { '/': 'home', '/products': 'products', '/merch': 'merch', '/coas': 'coas', '/compounds': 'compounds', '/contact': 'contact', '/request': 'request', '/sign-in': 'signin', '/account': 'signin', '/console': 'signin', '/standard': 'standard', '/process': 'process', '/faq': 'faq', '/price-list': 'pricelist', '/how-to-read-a-coa': 'howto', '/terms': 'terms', '/privacy': 'privacy', '/legal': 'legal' };
   var first = true;
+  var pageRequests = {};
+  function loadPage(key) {
+    main.setAttribute('aria-busy', 'true');
+    if (pageRequests[key]) return;
+    pageRequests[key] = true;
+    var s = document.createElement('script');
+    s.src = 'pages/' + key + '.js?v=' + window.__PAGES_VERSION;
+    s.onload = function () { render(); };
+    s.onerror = function () { pageRequests[key] = false; s.remove(); main.removeAttribute('aria-busy'); toast('This page could not load. Check your connection and try again.'); };
+    document.head.appendChild(s);
+  }
   function render() {
     var r = parse(), key = null, m;
     if (STATIC[r.path]) key = STATIC[r.path];
@@ -112,9 +123,11 @@
     else if ((m = r.path.match(/^\/compounds\/([a-z0-9-]+)\/([a-z0-9-]+)$/))) key = 'compound-' + m[2];
     else if ((m = r.path.match(/^\/compounds\/([a-z0-9-]+)$/))) key = 'pathway-' + m[1];
     else if (r.path === '/request/sent') key = 'sent';
+    if (key && !PAGES[key] && window.__PAGE_KEYS.indexOf(key) >= 0) { loadPage(key); return; }
     if (key === 'sent') main.innerHTML = sentPage();
     else if (!PAGES[key]) { key = 'home'; main.innerHTML = PAGES.home; }
     else main.innerHTML = PAGES[key];
+    main.removeAttribute('aria-busy');
     closeMenu();
     window.scrollTo(0, 0);
     hydrate(key, r);

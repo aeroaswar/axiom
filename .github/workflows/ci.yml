@@ -39,6 +39,14 @@ jobs:
         run: pnpm db:reset
       - name: Static gates — typecheck, copy lint (9), greps (1, 13), bilingual (17)
         run: pnpm typecheck && pnpm gates:lint && pnpm gates:grep && node scripts/gates/i18n.mjs
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Storefront — rebuild matches the committed files, stone photographs verified
+        working-directory: storefront
+        run: |
+          pip install --quiet pillow==11.3.0
+          python build.py && python verify_stone.py
+          git status --porcelain -- . | grep . && { echo 'Generated storefront files are out of date: run python3 build.py in storefront/ and commit.'; exit 1; } || true
       - name: Database gates — 2, 2b, 3, 4, 5, 6, 11, 12, 14, 22, RLS on every table
         run: pnpm gates:sql
       - name: Gate 8 — every reference resolves
@@ -49,6 +57,16 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Browser gates — 6, 7, 10, 14, 15, 16, 18, 19, 20, 21
         run: pnpm exec playwright test
+      - name: Storefront browser checks — hero motion, Bahasa Indonesia on every route, standalone package
+        working-directory: storefront
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 >/dev/null 2>&1 &
+          for i in $(seq 40); do curl -sf http://127.0.0.1:8765/ >/dev/null && break; sleep 0.5; done
+          python package.py
+          node qa/check-hero.cjs
+          node qa/check-i18n.cjs
+          AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-hero.cjs
+          AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-i18n.cjs
       - uses: actions/upload-artifact@v4
         if: failure()
         with: { name: playwright-report, path: playwright-report, retention-days: 7 }

@@ -1,3 +1,6 @@
+// Asset paths resolve to embedded copies in the self-contained package (package.py sets window.__ASSET).
+function asset(path) { return (window.__ASSET || {})[path] || path; }
+
 // Keep page titles, active navigation and keyboard navigation in sync with routing.
 document.addEventListener('click', function (event) {
   var link = event.target.closest('a[href="#catalog"],a[href="#main"]');
@@ -24,7 +27,7 @@ window.addEventListener('axiom:route', function (event) {
     var stoneEnd = document.createElement('section');
     stoneEnd.className = 'stone-page-end';
     stoneEnd.setAttribute('aria-label', 'The AXIOM standard');
-    stoneEnd.innerHTML = '<img src="assets/stone-dark.webp" alt="" loading="lazy"><div class="wrap"><p class="ed-label">The AXIOM standard</p><h2>Considered. <br>In every detail.</h2><a class="ed-text-link" href="#/standard">Explore our standard <svg class="ic-sv" aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>';
+    stoneEnd.innerHTML = '<img src="' + asset('assets/stone-dark.webp') + '" alt="" loading="lazy"><div class="wrap"><p class="ed-label">The AXIOM standard</p><h2>Considered. <br>In every detail.</h2><a class="ed-text-link" href="#/standard">Explore our standard <svg class="ic-sv" aria-hidden="true"><use href="#i-arrow"></use></svg></a></div>';
     main.appendChild(stoneEnd);
   }
   if (event.detail.key === 'home') {
@@ -185,10 +188,10 @@ window.addEventListener('axiom:route', function (event) {
 })();
 
 // Bahasa Indonesia. Rendered text is translated in place, so every template and app message is covered
-// without editing the source pages; switching back restores the exact English nodes.
+// without editing the source pages; switching back restores the exact English nodes. The dictionary
+// (i18n-id.js) loads only when Indonesian is chosen.
 (function () {
-  var dict = window.__I18N_ID || {text:{}, html:{}, patterns:[]};
-  var patterns = dict.patterns.map(function (p) { return [new RegExp(p[0]), p[1]]; });
+  var dict = null, patterns = [];
   var ATTRS = ['placeholder','aria-label','title','alt'];
   var SKIP = 'script,style,svg,textarea,[translate="no"]';
   var BLOCKS = 'h1,h2';
@@ -197,10 +200,28 @@ window.addEventListener('axiom:route', function (event) {
   function initialLanguage() {
     try { return localStorage.getItem('axiom-design-lang') === 'id' ? 'id' : 'en'; } catch (e) { return 'en'; }
   }
+  function withDictionary(ready, failed) {
+    function use() {
+      dict = window.__I18N_ID;
+      patterns = dict.patterns.map(function (p) { return [new RegExp(p[0]), p[1]]; });
+      ready();
+    }
+    if (window.__I18N_ID) { use(); return; }
+    // The early check in <head> may already be fetching it for a saved choice.
+    var script = document.getElementById('i18n-id');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'i18n-id';
+      script.src = 'i18n-id.js?v=' + window.__I18N_VERSION;
+      document.head.appendChild(script);
+    }
+    script.addEventListener('load', use);
+    script.addEventListener('error', function () { script.remove(); failed(); });
+  }
   function normal(value) { return value.replace(/\s+/g,' ').trim(); }
   function lookup(value) {
     var key = normal(value);
-    if (!key || !/[A-Za-z]/.test(key)) return null;
+    if (!dict || !key || !/[A-Za-z]/.test(key)) return null;
     var hit = dict.text[key];
     for (var i = 0; hit === undefined && i < patterns.length; i++) {
       if (patterns[i][0].test(key)) hit = key.replace(patterns[i][0], function () {
@@ -244,7 +265,7 @@ window.addEventListener('axiom:route', function (event) {
     });
   }
   function translate(root) {
-    if (lang !== 'id') return;
+    if (lang !== 'id' || !dict || !root) return;
     if (root.nodeType === Node.TEXT_NODE) { translateText(root); return; }
     if (root.nodeType !== Node.ELEMENT_NODE) return;
     translateBlocks(root);
@@ -263,12 +284,24 @@ window.addEventListener('axiom:route', function (event) {
   }
   function prune(map) { map.forEach(function (_, node) { if (!node.isConnected) map.delete(node); }); }
   function syncTitle() { document.title = lang === 'id' ? (lookup(englishTitle.replace(/ — AXIOM$/, '')) || englishTitle.replace(/ — AXIOM$/, '')).trim() + ' — AXIOM' : englishTitle; }
-  function setLanguage(next) {
-    lang = next === 'id' ? 'id' : 'en';
-    try { localStorage.setItem('axiom-design-lang', lang); } catch (e) {}
+  function show(next) {
+    lang = next;
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-lang]').forEach(function (button) { button.setAttribute('aria-pressed', String(button.dataset.lang === lang)); });
+  }
+  function setLanguage(next) {
+    show(next === 'id' ? 'id' : 'en');
+    try { localStorage.setItem('axiom-design-lang', lang); } catch (e) {}
+    if (lang === 'id' && !dict) {
+      // Offline or blocked: stay readable in English without overwriting the saved choice.
+      withDictionary(function () { if (lang === 'id') setLanguage('id'); }, function () {
+        show('en');
+        document.documentElement.classList.remove('lang-pending');
+      });
+      return;
+    }
     if (lang === 'id') translate(document.body); else restore();
+    document.documentElement.classList.remove('lang-pending');
     syncTitle();
   }
   document.addEventListener('click', function (event) {

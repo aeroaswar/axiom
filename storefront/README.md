@@ -22,6 +22,7 @@ Visit http://127.0.0.1:8765.
 - The stone band fades smoothly into charcoal; the footer uses one small wordmark and aligned links.
 - Original prices, product names, 174 templates and client behavior are preserved.
 - An EN / ID switch in the navigation shows the whole storefront in Bahasa Indonesia, including the basket, request form, filters and messages. The choice is remembered. Strings live in `i18n-id.json`; `qa/check-i18n.cjs` reports any English left in Indonesian mode.
+- Lean first load: the homepage ships in a 160 KB `content.js`; the other 173 templates load from `pages/` when visited and the Indonesian dictionary only when ID is chosen. `base.css` keeps only rules the storefront uses (510 KB → 100 KB) with its two variable fonts as separate preloaded files. The standalone HTML embeds each image once (about 22 MB, from 50 MB).
 - `verify_stone.py` checks every product and all pen image markup. The build refuses to silently fall back to missing or rejected stone photographs.
 - The image queue is complete. PNG masters and optimized WebP assets are in `assets/`; generation records are in `asset-records/`.
 
