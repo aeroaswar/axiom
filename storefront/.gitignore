@@ -8,3 +8,6 @@ __pycache__/
 .remember/
 .claude-flow/
 .playwright-mcp/
+.omc/
+# Artifact staging output from artifact.py.
+artifact/
