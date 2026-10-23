@@ -156,7 +156,7 @@
     });
     root.querySelectorAll('form').forEach(function (f) {
       var sku = f.querySelector('input[name="sku"]'), delta = f.querySelector('input[name="delta"]');
-      if (!sku || !delta || f.classList.contains('buy')) return;
+      if (!sku || !delta || f.classList.contains('buy') || f.closest('.buy')) return;
       var card = f.closest('.pcard');
       f.addEventListener('submit', function (e) {
         e.preventDefault(); var b = f.querySelector('button[type="submit"]'); if (b.disabled) return;

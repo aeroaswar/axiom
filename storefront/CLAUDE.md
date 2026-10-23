@@ -40,6 +40,7 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 | `qa/browser.cjs` | Shared Playwright setup and route helpers for the QA scripts |
 | `i18n-id.json` | Bahasa Indonesia dictionary: exact rendered strings, whole-headline translations and patterns for live numbers |
 | `qa/check-i18n.cjs` | Browser checks for the language switch, every route in Indonesian and restoring English |
+| `qa/check-basket.cjs` | Browser checks that every way of adding to the basket adds the chosen item exactly once |
 
 ## Bahasa Indonesia
 
@@ -81,6 +82,7 @@ node qa/check-hero.cjs
 AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-hero.cjs
 node qa/check-i18n.cjs
 AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-i18n.cjs
+node qa/check-basket.cjs
 ```
 
 The browser checks find Playwright through `qa/browser.cjs`: the project's `@playwright/test` (in the `aeroaswar/axiom` repository, after `pnpm install` at its root), a global `playwright`, `AXIOM_PLAYWRIGHT`, or this Mac's Codex-bundled copy. They use Playwright's Chromium when installed and fall back to installed Chrome; `AXIOM_BROWSER_CHANNEL` forces one. In the repository, CI rebuilds the storefront, fails if the committed generated files differ, and runs both checks.
