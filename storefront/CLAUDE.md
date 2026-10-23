@@ -33,6 +33,7 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 | `stone-quality.json` | Image acceptance information used by the build |
 | `verify_stone.py` | Catalogue and detail image coverage checks |
 | `package.py` | Generates standalone `AXIOM-storefront.html` and deployable ZIP |
+| `artifact.py` | Stages the built site in `artifact/` for republishing the Claude Artifact |
 | `qa/check-hero.cjs` | Browser checks for hero behavior |
 | `qa/browser.cjs` | Shared Playwright setup and route helpers for the QA scripts |
 | `i18n-id.json` | Bahasa Indonesia dictionary: exact rendered strings, whole-headline translations and patterns for live numbers |
@@ -85,6 +86,10 @@ The browser checks find Playwright through `qa/browser.cjs`: the project's `@pla
 The original PNG masters in `assets/` are stored with Git LFS in the repository; the site itself uses only the WebP/JPG files.
 
 Check desktop and mobile rendering, cursor response, distinct scroll transforms, stationary stone, pointer-leave reset, reduced motion, homepage route remount, image-load fallback and horizontal overflow. Inspect the rendered result as well as running checks.
+
+## Claude Artifact
+
+The storefront is also published as a private Claude Artifact: https://claude.ai/artifact/XGKwxNkWwM2qR41G74qdiv. It is a snapshot; republish it after changes. Run the build steps above, then `python3 artifact.py`. It writes `artifact/site/` (ignored by git): the page without its document skeleton, as the Artifact host adds its own, and every file at an unversioned path. It also writes `artifact/publish.json`, which lists the files in two batches, since one publish takes at most 255. Publish `artifact/site/index.html` to that URL twice, with `root` set to `artifact/site`: first with the `pages` batch as `files`, then with the `assets` batch. Files left out of a publish are kept, so a change that touches only code can skip the asset batch.
 
 ## Known preview issue
 
