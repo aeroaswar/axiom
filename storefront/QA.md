@@ -29,3 +29,12 @@
 - Lazy pages: a failed page chunk shows a translated message, keeps the current page and recovers on the next navigation. A saved Indonesian choice fetches the dictionary from `<head>` at high priority and holds the first paint until it applies.
 - Inactive language label raised from 50 % to 65 % ivory: about 7:1 on the charcoal nav and above 4.5:1 where the 95 %-opaque nav sits over ivory sections.
 - `qa/check-hero.cjs` and `qa/check-i18n.cjs` pass on the served site and the standalone HTML through the new `qa/browser.cjs` (no machine-specific path required).
+
+## Readability and mobile buying — 23 October 2026
+
+- Type floor 11px: 91 smaller sizes raised in the hand-written stylesheets, and `build.py` applies the same floor to `base.css` and stops on any regression. A browser audit of eight pages at 1440 px and the homepage at 390 and 360 px finds no text under 11px and no text below 4.5:1, apart from the skip link, which is only visible when focused. Fixed along the way: the ivory secondary grey (3.8–4.3:1 → 4.6–5.2:1), a 1.85:1 caption on the homepage, the homepage filter count, the footer legal line, the 01–03 markers and the "RUO" label in the ribbon, which was dark on dark.
+- Language buttons are now 44px tall and breadcrumb links have a 24px hit area. The demo notice moved from a floating badge into the top ribbon.
+- Shop header: at 1440×900 the first row of products now ends at 880px (before: cards started at 628px and ended below the fold). On a phone the categories are one scrolling row and the first product starts about 190px higher.
+- Mobile buy bar (390 px): shows size and price at the top of a product page, steps aside when half of the size choices or Add to basket row is on screen, follows size changes (20 mg → Rp 3.600.000), adds through the page's own button, reads "Tambah ke keranjang" in Indonesian, and is gone on other pages. Hidden at desktop widths.
+- `qa/check-hero.cjs` and `qa/check-i18n.cjs` pass on the served site and the standalone HTML.
+- Found, not changed here: one click on Add to basket stores quantity 2, in this build and the previous one. It comes from the reference app.

@@ -187,6 +187,67 @@ window.addEventListener('axiom:route', function (event) {
   });
 })();
 
+// Mobile buy bar: mirrors the product's buy box (size, price, sold out) while that box is out of view,
+// and adds to the basket through the box's own button so quantities, plans and the basket stay in one place.
+(function () {
+  var disposeBar = function () {};
+  window.addEventListener('axiom:route', function () {
+    disposeBar();
+    var main = document.querySelector('#main');
+    var buy = main.querySelector('.buy');
+    if (!buy) return;
+    var bar = document.createElement('div');
+    bar.className = 'buy-bar is-off';
+    bar.innerHTML = '<div class="bb-info"><span class="bb-size"></span><span class="bb-price tnum"></span></div><button type="button" class="bb-add">Add to basket</button>';
+    main.appendChild(bar);
+    var size = bar.querySelector('.bb-size'), price = bar.querySelector('.bb-price'), add = bar.querySelector('.bb-add');
+    var phone = window.matchMedia('(max-width: 700px)');
+    var boxVisible = true;
+    function sync() {
+      var chosen = buy.querySelector('.size.on .d'), now = buy.querySelector('.price-big .now');
+      var submit = buy.querySelector('.buy-foot [type="submit"]');
+      size.textContent = chosen ? chosen.textContent : '';
+      price.textContent = now ? now.textContent : '';
+      add.disabled = !submit || submit.disabled;
+      if (add.disabled) add.textContent = 'Sold out';
+      else if (add.textContent !== submit.textContent.trim()) add.textContent = submit.textContent.trim();
+      var show = phone.matches && !boxVisible;
+      bar.classList.toggle('is-off', !show);
+      bar.setAttribute('aria-hidden', String(!show));
+      add.tabIndex = show ? 0 : -1;
+      document.body.classList.toggle('has-buy-bar', phone.matches);
+    }
+    add.addEventListener('click', function () {
+      var submit = buy.querySelector('.buy-foot [type="submit"]');
+      if (submit && !submit.disabled) submit.click();
+    });
+    // The bar steps aside while at least half of the real size choices or Add to basket row is on screen.
+    var watched = [];
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) { entry.target.__inView = entry.intersectionRatio >= 0.5; });
+      boxVisible = watched.some(function (el) { return el.__inView; });
+      sync();
+    }, {threshold:[0, 0.5, 1]});
+    function watch() {
+      watched.forEach(function (el) { observer.unobserve(el); });
+      watched = [buy.querySelector('.sizes'), buy.querySelector('.buy-foot')].filter(Boolean);
+      watched.forEach(function (el) { observer.observe(el); });
+    }
+    // app.js re-renders the buy box when the size or plan changes.
+    var mutations = new MutationObserver(function () { watch(); sync(); });
+    mutations.observe(buy, {childList:true, subtree:true, characterData:true});
+    phone.addEventListener('change', sync);
+    watch();
+    sync();
+    disposeBar = function () {
+      observer.disconnect();
+      mutations.disconnect();
+      phone.removeEventListener('change', sync);
+      document.body.classList.remove('has-buy-bar');
+    };
+  });
+})();
+
 // Bahasa Indonesia. Rendered text is translated in place, so every template and app message is covered
 // without editing the source pages; switching back restores the exact English nodes. The dictionary
 // (i18n-id.js) loads only when Indonesian is chosen.
