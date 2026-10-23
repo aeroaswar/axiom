@@ -23,6 +23,11 @@ app = app.replace('    hydrate(key, r);', '    hydrate(key, r);\n    window.disp
 # The certificate search rewrites its own counter; strip the translated form too so it never accumulates.
 app = app.replace("replace(/ · Showing.*$/, '')", "replace(/ · (Showing|Menampilkan).*$/, '')")
 if 'Showing|Menampilkan' not in app: raise SystemExit('Certificate counter not found in reference app; update the Bahasa Indonesia patch.')
+# The product page's buy box (form.buy-form inside .buy) handles its own adds. The card handler only skipped forms
+# classed "buy", so it also fired on the buy box and added the page's default size on every click.
+card_skip = "if (!sku || !delta || f.classList.contains('buy')) return;"
+if app.count(card_skip) != 1: raise SystemExit('Card add handler changed in reference app; update the buy box guard.')
+app = app.replace(card_skip, "if (!sku || !delta || f.classList.contains('buy') || f.closest('.buy')) return;")
 # Page templates load on first visit (pages/<key>.js); the standalone package ships them inline.
 loader = '''  var pageRequests = {};
   function loadPage(key) {
