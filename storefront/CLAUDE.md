@@ -11,6 +11,8 @@ Continue the existing local AXIOM storefront in this folder. The user has approv
 - Keep the footer compact: one small wordmark, aligned navigation and restrained spacing.
 - The hero contains MOTS-c, Retatrutide and KLOW. Each original photographic pen moves independently with scrolling and cursor input, over a stationary stone background. Preserve the original label pixels.
 - Keep the headline and buttons stationary during interaction. Use eased movement, no scroll locking, smaller mobile movement, reduced-motion support and a complete static fallback.
+- No text under 11px: `build.py` raises any smaller size in the generated `base.css` and stops the build if `design.css`, `editorial-v2.css` or `stone-v3.css` declares one. Text meets 4.5:1 contrast on its background. On ivory, the secondary grey is `--muted-2: #666259`.
+- The demo notice sits in the top ribbon (`.demo-tag`, placed by `build.py`), never floating over content. On phones, product pages show a buy bar with size, price and Add to basket (`design.js`) until the real buy box is on screen.
 
 ## Architecture and source of truth
 

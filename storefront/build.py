@@ -62,6 +62,17 @@ def extract_fonts(css):
         for _, face in members[1:]: css = css.replace(face, '', 1)
     return css
 
+TYPE_FLOOR = 11  # px: the smallest text the storefront sets
+SIZE = re.compile(r'(font-size\s*:\s*|font\s*:[^;{}]*?(?<![\w.-]))([\d.]+)(px|rem)(?=[\s;/}!]|$)')
+
+def small_sizes(css):
+    """Declared font sizes under the floor (zero sizes hide text on purpose and are left alone)."""
+    return [m[0] for m in SIZE.finditer(css) if 0 < float(m[2]) * (16 if m[3] == 'rem' else 1) < TYPE_FLOOR]
+
+def floor_type(css):
+    """Raise every declared font size under the floor to the floor, keeping each rule's own media context."""
+    return SIZE.sub(lambda m: m[1] + f'{TYPE_FLOOR}px' if 0 < float(m[2]) * (16 if m[3] == 'rem' else 1) < TYPE_FLOOR else m[0], css)
+
 def purge_css(css, corpus):
     """Drop selectors naming a class or id that appears nowhere in the markup or scripts."""
     def skip(i):  # past a string or comment starting at i
@@ -205,13 +216,20 @@ i18n_version = digest([ROOT / 'i18n-id.js'])
 body = source[source.index('<svg width="0"'):source.index('<script src=')]
 nav = '<div class="nav-links" id="site-links"><a href="#/products">Shop</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a href="#/merch">Merch</a><a class="nav-account-m" href="#/account">Account</a></div>'
 body = re.sub(r'<div class="nav-links" id="site-links">.*?</div>',nav,body,count=1,flags=re.S)
+# The demo notice joins the top ribbon rather than floating over page content.
+demo = '<div class="demo-band">Demo · storefront only</div>'
+if body.count(demo) != 1 or body.count('<div class="ribbon">') != 1: raise SystemExit('Reference body changed; update the demo notice move.')
+body = re.sub(r'(<div class="ribbon">.*?)</div>', lambda m: m[1] + '<span class="demo-tag">Demo · storefront only</span></div>', body.replace(demo, '', 1), count=1, flags=re.S)
 lang = '<div class="nav-lang" role="group" aria-label="Language"><button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button><button type="button" data-lang="id" lang="id" aria-pressed="false">ID</button></div>'
 body = body.replace('<div class="nav-right">', '<div class="nav-right">'+lang, 1)
 body = body.replace('<a class="btn btn-sm nav-account" href="#/account">Account</a>','<a class="btn btn-sm nav-account" href="#/account" aria-label="Account" title="Account"><svg class="ic-sv" aria-hidden="true"><use href="#i-user"></use></svg></a>')
 # The reference styles carry their fonts inline and many unused rules; keep what the storefront renders.
 corpus = '\n'.join([body, app, (ROOT/'design.js').read_text(), *pages.values(), *i18n_id['html'].values()])
-base_css = purge_css(extract_fonts(styles), corpus)
+base_css = floor_type(purge_css(extract_fonts(styles), corpus))
 (ROOT / 'base.css').write_text(base_css)
+for sheet in ['design.css', 'editorial-v2.css', 'stone-v3.css']:
+    if small_sizes((ROOT / sheet).read_text()):
+        raise SystemExit(f'{sheet} sets text below {TYPE_FLOOR}px: ' + ', '.join(small_sizes((ROOT / sheet).read_text())[:5]))
 fonts = ''.join(f'<link rel="preload" href="{f}" as="font" type="font/woff2" crossorigin>' for f in dict.fromkeys(re.findall(r'assets/font-\w+\.woff2', base_css)))
 # A saved Indonesian choice fetches the dictionary early and holds the first paint until it applies.
 early_lang = '<script>try{if(localStorage.getItem("axiom-design-lang")==="id"){var d=document.documentElement;d.lang="id";if(!window.__I18N_ID){d.classList.add("lang-pending");setTimeout(function(){d.classList.remove("lang-pending")},3000);var s=document.createElement("script");s.id="i18n-id";s.fetchPriority="high";s.src="i18n-id.js?v='+i18n_version+'";document.head.appendChild(s)}}}catch(e){}</script>'
