@@ -146,10 +146,12 @@
 
 /* Language switch: restrained EN / ID pair in the navigation */
 .nav-lang{display:flex;align-items:center;margin-right:4px}
-.nav-lang button{background:none;border:0;padding:8px 6px;color:#f0eee780;font:500 11px/1 inherit;letter-spacing:.16em;cursor:pointer;position:relative}
+.nav-lang button{background:none;border:0;padding:8px 6px;color:#f0eee7a6;font:500 11px/1 inherit;letter-spacing:.16em;cursor:pointer;position:relative}
 .nav-lang button+button{border-left:1px solid #f0eee72a}
 .nav-lang button[aria-pressed=true]{color:#f0eee7}
 .nav-lang button[aria-pressed=true]::after{content:"";position:absolute;left:6px;right:calc(6px + .16em);bottom:3px;height:1px;background:var(--stone-bronze)}
 .nav-lang button:hover{color:#f0eee7}
 .nav-lang button:focus-visible{outline:1px solid var(--stone-bronze);outline-offset:2px}
 @media(max-width:700px){.nav-lang{margin-right:0}.nav-lang button{padding:8px 5px;font-size:10px}}
+/* A saved Indonesian choice holds the first paint until the dictionary applies (3 s fallback in <head>). */
+.lang-pending body{visibility:hidden}

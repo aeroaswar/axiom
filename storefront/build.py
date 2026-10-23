@@ -23,9 +23,87 @@ app = app.replace('    hydrate(key, r);', '    hydrate(key, r);\n    window.disp
 # The certificate search rewrites its own counter; strip the translated form too so it never accumulates.
 app = app.replace("replace(/ · Showing.*$/, '')", "replace(/ · (Showing|Menampilkan).*$/, '')")
 if 'Showing|Menampilkan' not in app: raise SystemExit('Certificate counter not found in reference app; update the Bahasa Indonesia patch.')
+# Page templates load on first visit (pages/<key>.js); the standalone package ships them inline.
+loader = '''  var pageRequests = {};
+  function loadPage(key) {
+    main.setAttribute('aria-busy', 'true');
+    if (pageRequests[key]) return;
+    pageRequests[key] = true;
+    var s = document.createElement('script');
+    s.src = 'pages/' + key + '.js?v=' + window.__PAGES_VERSION;
+    s.onload = function () { render(); };
+    s.onerror = function () { pageRequests[key] = false; s.remove(); main.removeAttribute('aria-busy'); toast('This page could not load. Check your connection and try again.'); };
+    document.head.appendChild(s);
+  }
+  function render() {'''
+for old, new in [('  function render() {', loader),
+                 ("    if (key === 'sent') main.innerHTML = sentPage();", "    if (key && !PAGES[key] && window.__PAGE_KEYS.indexOf(key) >= 0) { loadPage(key); return; }\n    if (key === 'sent') main.innerHTML = sentPage();"),
+                 ('    closeMenu();\n    window.scrollTo(0, 0);', "    main.removeAttribute('aria-busy');\n    closeMenu();\n    window.scrollTo(0, 0);")]:
+    if app.count(old) != 1: raise SystemExit('Reference app changed; update the page loader patch: ' + old.strip())
+    app = app.replace(old, new)
 (ROOT / 'app.js').write_text(app)
-styles = re.findall(r'<style>(.*?)</style>', source, re.S)
-(ROOT / 'base.css').write_text('\n'.join(styles))
+styles = '\n'.join(re.findall(r'<style>(.*?)</style>', source, re.S))
+
+def extract_fonts(css):
+    """Write each embedded web font to assets/ once; per-weight copies of a variable font become one weight range."""
+    def save(m):
+        data = base64.b64decode(m[2])
+        name = 'assets/font-' + hashlib.sha256(data).hexdigest()[:10] + '.woff2'
+        (ROOT / name).write_bytes(data)
+        return 'url(' + name + ')'
+    css = re.sub(r'url\((["\']?)data:font/woff2;base64,([A-Za-z0-9+/=]+)\1\)', save, css)
+    groups = {}
+    for face in re.findall(r'@font-face\{[^}]*\}', css):
+        weight = re.search(r'font-weight:(\d+)', face)
+        if weight and 'url(assets/' in face: groups.setdefault(face.replace(weight[0], 'font-weight:W'), []).append((int(weight[1]), face))
+    for template, members in groups.items():
+        weights = [w for w, _ in members]
+        css = css.replace(members[0][1], template.replace('font-weight:W', f'font-weight:{min(weights)} {max(weights)}'), 1)
+        for _, face in members[1:]: css = css.replace(face, '', 1)
+    return css
+
+def purge_css(css, corpus):
+    """Drop selectors naming a class or id that appears nowhere in the markup or scripts."""
+    def skip(i):  # past a string or comment starting at i
+        if css.startswith('/*', i): return css.index('*/', i) + 2
+        quote = css[i]; i += 1
+        while css[i] != quote: i += 2 if css[i] == '\\' else 1
+        return i + 1
+    def block_end(i):  # i is just after '{'
+        depth = 1
+        while depth:
+            c = css[i]
+            if c in '"\'' or css.startswith('/*', i): i = skip(i); continue
+            depth += c == '{'; depth -= c == '}'; i += 1
+        return i
+    def alive(selector):
+        bare = re.sub(r'\[[^\]]*\]', '', selector)
+        while '(' in bare: bare = re.sub(r'\([^()]*\)', '', bare)  # :not/:is/:where/:has lists stay
+        return all(re.sub(r'\\(.)', r'\1', name) in corpus for name in re.findall(r'[.#]((?:\\.|[\w-])+)', bare))
+    def split(prelude):
+        parts, depth, start = [], 0, 0
+        for i, c in enumerate(prelude):
+            depth += c in '(['; depth -= c in ')]'
+            if c == ',' and not depth: parts.append(prelude[start:i]); start = i + 1
+        return parts + [prelude[start:]]
+    def walk(start, end):
+        out, i = [], start
+        while i < end:
+            brace, semi = css.find('{', i, end), css.find(';', i, end)
+            if brace < 0: out.append(css[i:end]); break
+            if 0 <= semi < brace and css[i:semi].lstrip().startswith('@'): out.append(css[i:semi+1]); i = semi + 1; continue
+            close = block_end(brace + 1)
+            prelude = css[i:brace].strip()
+            if re.match(r'@(media|supports|layer|container)\b', prelude):
+                inner = walk(brace + 1, close - 1)
+                if inner.strip(): out.append(prelude + '{' + inner + '}')
+            elif prelude.startswith('@'): out.append(css[i:close])
+            else:
+                selectors = [s for s in split(prelude) if alive(s)]
+                if selectors: out.append(','.join(selectors) + css[brace:close])
+            i = close
+        return ''.join(out)
+    return walk(0, len(css))
 
 hero = '''<section class="axiom-hero" aria-labelledby="hero-title">
   <div class="wrap axiom-hero-grid">
@@ -109,7 +187,20 @@ for key, markup in pages.items():
         markup=markup.replace('class="prod-fig" aria-hidden="true"','class="prod-fig"')
     pages[key]=markup
 i18n_id = json.loads((ROOT / 'i18n-id.json').read_text())
-(ROOT / 'content.js').write_text('window.__PAGES='+js(pages)+';\nwindow.__DATA='+js(data)+';\nwindow.__I18N_ID='+js({k:i18n_id[k] for k in ['text','html','patterns']})+';\nwindow.__IMG='+js(images)+';\n')
+# The homepage ships with content.js; every other template and the Indonesian dictionary load on demand.
+def write(path, text):
+    """Rewrite only on change: this folder may sync through iCloud, which keeps conflict copies of churned files."""
+    if not path.exists() or path.read_text() != text: path.write_text(text)
+chunks = {key + '.js': 'window.__PAGES['+js(key)+']='+js(markup)+';\n' for key, markup in pages.items() if key != 'home'}
+(ROOT / 'pages').mkdir(exist_ok=True)
+for stale in (ROOT / 'pages').iterdir():
+    if stale.name not in chunks: stale.unlink()
+for name, text in chunks.items(): write(ROOT / 'pages' / name, text)
+write(ROOT / 'i18n-id.js', 'window.__I18N_ID='+js({k:i18n_id[k] for k in ['text','html','patterns']})+';\n')
+digest = lambda paths: hashlib.sha256(b''.join(p.read_bytes() for p in paths)).hexdigest()[:10]
+pages_version = digest([ROOT / 'pages' / name for name in sorted(chunks)])
+i18n_version = digest([ROOT / 'i18n-id.js'])
+(ROOT / 'content.js').write_text('window.__PAGES='+js({'home':pages['home']})+';\nwindow.__PAGE_KEYS='+js(list(pages))+';\nwindow.__PAGES_VERSION='+js(pages_version)+';\nwindow.__I18N_VERSION='+js(i18n_version)+';\nwindow.__DATA='+js(data)+';\nwindow.__IMG='+js(images)+';\n')
 
 body = source[source.index('<svg width="0"'):source.index('<script src=')]
 nav = '<div class="nav-links" id="site-links"><a href="#/products">Shop</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a href="#/merch">Merch</a><a class="nav-account-m" href="#/account">Account</a></div>'
@@ -117,12 +208,19 @@ body = re.sub(r'<div class="nav-links" id="site-links">.*?</div>',nav,body,count
 lang = '<div class="nav-lang" role="group" aria-label="Language"><button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button><button type="button" data-lang="id" lang="id" aria-pressed="false">ID</button></div>'
 body = body.replace('<div class="nav-right">', '<div class="nav-right">'+lang, 1)
 body = body.replace('<a class="btn btn-sm nav-account" href="#/account">Account</a>','<a class="btn btn-sm nav-account" href="#/account" aria-label="Account" title="Account"><svg class="ic-sv" aria-hidden="true"><use href="#i-user"></use></svg></a>')
+# The reference styles carry their fonts inline and many unused rules; keep what the storefront renders.
+corpus = '\n'.join([body, app, (ROOT/'design.js').read_text(), *pages.values(), *i18n_id['html'].values()])
+base_css = purge_css(extract_fonts(styles), corpus)
+(ROOT / 'base.css').write_text(base_css)
+fonts = ''.join(f'<link rel="preload" href="{f}" as="font" type="font/woff2" crossorigin>' for f in dict.fromkeys(re.findall(r'assets/font-\w+\.woff2', base_css)))
+# A saved Indonesian choice fetches the dictionary early and holds the first paint until it applies.
+early_lang = '<script>try{if(localStorage.getItem("axiom-design-lang")==="id"){var d=document.documentElement;d.lang="id";if(!window.__I18N_ID){d.classList.add("lang-pending");setTimeout(function(){d.classList.remove("lang-pending")},3000);var s=document.createElement("script");s.id="i18n-id";s.fetchPriority="high";s.src="i18n-id.js?v='+i18n_version+'";document.head.appendChild(s)}}}catch(e){}</script>'
 # Keep one small wordmark in the footer; no oversized duplicate.
 html = '''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="AXIOM — research compounds, performance wear and everyday carry. Explore the catalogue and the standard behind every lot.">
 <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b0b0a">
-<title>AXIOM — Built for better research.</title><link rel="icon" href="data:,">
+<title>AXIOM — Built for better research.</title><link rel="icon" href="data:,">'''+early_lang+fonts+'''
 <link rel="stylesheet" href="base.css"><link rel="stylesheet" href="design.css"><link rel="stylesheet" href="editorial-v2.css"><link rel="stylesheet" href="stone-v3.css">
 </head><body>'''+body+'''<script src="content.js"></script><script src="design.js"></script><script src="app.js"></script></body></html>'''
 for asset in ['base.css','design.css','editorial-v2.css','stone-v3.css','content.js','design.js','app.js']:

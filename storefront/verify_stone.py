@@ -7,10 +7,27 @@ from PIL import Image
 root = Path(__file__).resolve().parent
 products = json.loads((root / 'data.json').read_text())['products']
 code = (root / 'content.js').read_text()
-pages = json.loads(code.split('window.__PAGES=', 1)[1].split(';\nwindow.__DATA=', 1)[0])
+pages = json.loads(code.split('window.__PAGES=', 1)[1].split(';\nwindow.', 1)[0])
+keys = json.loads(code.split('window.__PAGE_KEYS=', 1)[1].split(';\nwindow.', 1)[0])
 images = json.loads(code.split('window.__IMG=', 1)[1].rstrip(';\n'))
-cards = re.findall(r'<article\b.*?</article>', pages['products'], re.S)
 errors = []
+# Every other template is a lazily loaded pages/<key>.js chunk.
+for key in keys:
+    chunk = root / 'pages' / (key + '.js')
+    if key in pages or not chunk.is_file():
+        continue
+    match = re.fullmatch(r'window\.__PAGES\[("(?:[^"\\]|\\.)*")\]=(.*);\n', chunk.read_text(), re.S)
+    if not match or json.loads(match[1]) != key:
+        errors.append(f'{chunk.name}: unreadable page chunk')
+        continue
+    pages[key] = json.loads(match[2])
+stray = sorted(p.name for p in (root / 'pages').iterdir() if p.name[:-3] not in keys)
+if stray:
+    errors.append('Unexpected files in pages/: ' + ', '.join(stray))
+missing_pages = sorted(set(keys) - set(pages))
+if missing_pages:
+    errors.append('Templates without a page chunk: ' + ', '.join(missing_pages))
+cards = re.findall(r'<article\b.*?</article>', pages['products'], re.S)
 for product in products:
     slug = product['slug']
     expected = f'assets/stone-{slug}.webp'
