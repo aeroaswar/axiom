@@ -7,7 +7,7 @@ Version 4 translates the approved stone reference into the entire storefront: wa
 Open `AXIOM-storefront.html` for the self-contained version, or unzip `AXIOM-storefront.zip` and serve its folder:
 
 ```sh
-python3 -m http.server 8765 --bind 127.0.0.1
+python3 serve.py
 ```
 
 Visit http://127.0.0.1:8765.
@@ -23,6 +23,7 @@ Visit http://127.0.0.1:8765.
 - Original prices, product names, 174 templates and client behavior are preserved.
 - An EN / ID switch in the navigation shows the whole storefront in Bahasa Indonesia, including the basket, request form, filters and messages. The choice is remembered. Strings live in `i18n-id.json`; `qa/check-i18n.cjs` reports any English left in Indonesian mode.
 - Lean first load: the homepage ships in a 160 KB `content.js`; the other 173 templates load from `pages/` when visited and the Indonesian dictionary only when ID is chosen. `base.css` keeps only rules the storefront uses (510 KB → 100 KB) with its two variable fonts as separate preloaded files. The standalone HTML embeds each image once (about 22 MB, from 50 MB).
+- Product cards load a 640px photo where that is sharp enough (phones, laptops) and the full photograph on wide high-density screens; tiles show their stone colour while photos load. An empty basket offers the four featured compounds. Browsers set to Indonesian open the site in Indonesian until the visitor picks a language.
 - `verify_stone.py` checks every product and all pen image markup. The build refuses to silently fall back to missing or rejected stone photographs.
 - The image queue is complete. PNG masters and optimized WebP assets are in `assets/`; generation records are in `asset-records/`.
 

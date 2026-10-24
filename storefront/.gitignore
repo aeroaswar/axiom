@@ -11,3 +11,5 @@ __pycache__/
 .omc/
 # Artifact staging output from artifact.py.
 artifact/
+# Screenshots written by the QA checks.
+qa/latest/

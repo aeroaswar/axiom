@@ -38,6 +38,9 @@ for product in products:
     with Image.open(path) as photo:
         if photo.width != photo.height or photo.width < 1000:
             errors.append(f'{slug}: expected a high-resolution square photograph')
+    small = root / f'assets/stone-{slug}-640.webp'
+    if not small.is_file():
+        errors.append(f'{slug}: missing 640px card photo (run card_photos.py)')
     card = next((c for c in cards if f'data-compound="{slug}"' in c), '')
     if 'stone-photo' not in card:
         errors.append(f'{slug}: catalogue card does not use stone styling')

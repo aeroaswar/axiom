@@ -31,4 +31,6 @@ function routes(page){
     return [...new Set(r)];
   });
 }
+// Screenshots from the checks land in qa/latest/ (git-ignored), never over committed files.
+require('fs').mkdirSync(require('path').join(__dirname,'latest'),{recursive:true});
 module.exports={launch,go,routes};

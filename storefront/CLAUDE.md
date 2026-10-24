@@ -36,6 +36,8 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 | `verify_stone.py` | Catalogue and detail image coverage checks |
 | `package.py` | Generates standalone `AXIOM-storefront.html` and deployable ZIP |
 | `artifact.py` | Stages the built site in `artifact/` for republishing the Claude Artifact |
+| `card_photos.py` | Makes the 640px card photos (`assets/stone-<slug>-640.webp`) from the PNG masters; run after adding or changing a product photograph and commit the output |
+| `serve.py` | Local preview server |
 | `qa/check-hero.cjs` | Browser checks for hero behavior |
 | `qa/browser.cjs` | Shared Playwright setup and route helpers for the QA scripts |
 | `i18n-id.json` | Bahasa Indonesia dictionary: exact rendered strings, whole-headline translations and patterns for live numbers |
@@ -44,7 +46,7 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 
 ## Bahasa Indonesia
 
-The EN / ID switch sits in the navigation. `design.js` translates rendered text in place from `i18n-id.json` (built into `content.js` as `window.__I18N_ID`), so the 174 source templates stay English and switching back restores the original nodes. The choice is stored in `localStorage` as `axiom-design-lang`; English is the default. When copy changes, add the new English string and its translation to `i18n-id.json`, rebuild, and run `node qa/check-i18n.cjs`: it lists any English still showing in Indonesian mode. Headlines whose word order changes across `<br>`/`<span>` belong in its `html` section. Translations were machine-drafted with a fixed glossary; legal pages (terms, privacy, legal) and certificate wording need review by a fluent Indonesian speaker before public use.
+The EN / ID switch sits in the navigation. `design.js` translates rendered text in place from `i18n-id.json`, which `build.py` writes to `i18n-id.js` and the page loads only when Indonesian is in use, so the 174 source templates stay English and switching back restores the original nodes. A visitor's own choice is saved in `localStorage` as `axiom-design-lang`; without one, a browser set to Indonesian starts in Indonesian and every other browser in English. The early script in `index.html` (from `build.py`) and `initialLanguage()` in `design.js` apply the same rule and must stay in step. When copy changes, add the new English string and its translation to `i18n-id.json`, rebuild, and run `node qa/check-i18n.cjs`: it lists any English still showing in Indonesian mode. Headlines whose word order changes across `<br>`/`<span>` belong in its `html` section. Translations were machine-drafted with a fixed glossary; legal pages (terms, privacy, legal) and certificate wording need review by a fluent Indonesian speaker before public use.
 
 Edit source files, then rebuild. Direct edits to generated files are overwritten. For changes to core application behavior, inspect how `build.py` extracts the app from `reference.html` before selecting the appropriate source change.
 
@@ -70,8 +72,10 @@ python3 package.py
 Serve the directory in an active terminal:
 
 ```sh
-python3 -m http.server 8765 --bind 127.0.0.1
+python3 serve.py
 ```
+
+It is a threaded server with a deeper connection queue. The plain `python3 -m http.server` drops connections when the browser loads page files, photos and fonts in parallel, which shows up as pages that fail to load.
 
 If that port is already serving this project, reuse it. Verify a real HTTP response before sharing the preview. Use a fresh query value when delivering changes, for example `http://127.0.0.1:8765/?v=claude-handoff#/`.
 
@@ -85,9 +89,9 @@ AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-i18n.cjs
 node qa/check-basket.cjs
 ```
 
-The browser checks find Playwright through `qa/browser.cjs`: the project's `@playwright/test` (in the `aeroaswar/axiom` repository, after `pnpm install` at its root), a global `playwright`, `AXIOM_PLAYWRIGHT`, or this Mac's Codex-bundled copy. They use Playwright's Chromium when installed and fall back to installed Chrome; `AXIOM_BROWSER_CHANNEL` forces one. In the repository, CI rebuilds the storefront, fails if the committed generated files differ, and runs both checks.
+The browser checks find Playwright through `qa/browser.cjs`: the project's `@playwright/test` (in the `aeroaswar/axiom` repository, after `pnpm install` at its root), a global `playwright`, `AXIOM_PLAYWRIGHT`, or this Mac's Codex-bundled copy. They use Playwright's Chromium when installed and fall back to installed Chrome; `AXIOM_BROWSER_CHANNEL` forces one. Screenshots from the checks go to `qa/latest/`, which git ignores. In the repository, CI rebuilds the storefront, fails if the committed generated files differ, and runs all three checks.
 
-The original PNG masters in `assets/` are stored with Git LFS in the repository; the site itself uses only the WebP/JPG files.
+The original PNG masters in `assets/` are stored with Git LFS in the repository; the site itself uses only the WebP/JPG files. Catalogue, homepage and related-product cards offer the 640px photo next to the full-size one through `srcset` (added by `build.py`), so small tiles load a small file; product pages keep the full-size photograph. The standalone HTML drops the `srcset` and embeds each photo once.
 
 Check desktop and mobile rendering, cursor response, distinct scroll transforms, stationary stone, pointer-leave reset, reduced motion, homepage route remount, image-load fallback and horizontal overflow. Inspect the rendered result as well as running checks.
 

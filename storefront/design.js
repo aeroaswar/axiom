@@ -258,8 +258,13 @@ window.addEventListener('axiom:route', function (event) {
   var BLOCKS = 'h1,h2';
   var texts = new Map(), attrs = new Map(), blocks = new Map();
   var lang = initialLanguage(), englishTitle = document.title;
+  // A saved choice wins; otherwise a browser set to Indonesian starts in Indonesian. Mirrors the early check in <head>.
   function initialLanguage() {
-    try { return localStorage.getItem('axiom-design-lang') === 'id' ? 'id' : 'en'; } catch (e) { return 'en'; }
+    var saved = null;
+    try { saved = localStorage.getItem('axiom-design-lang'); } catch (e) {}
+    if (saved === 'en' || saved === 'id') return saved;
+    var languages = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+    return languages.some(function (code) { return /^id\b/i.test(code); }) ? 'id' : 'en';
   }
   function withDictionary(ready, failed) {
     function use() {
@@ -350,12 +355,13 @@ window.addEventListener('axiom:route', function (event) {
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-lang]').forEach(function (button) { button.setAttribute('aria-pressed', String(button.dataset.lang === lang)); });
   }
-  function setLanguage(next) {
+  function setLanguage(next, chosen) {
     show(next === 'id' ? 'id' : 'en');
-    try { localStorage.setItem('axiom-design-lang', lang); } catch (e) {}
+    // Only a visitor's own choice is saved, so a browser-language default can change with the browser.
+    if (chosen) { try { localStorage.setItem('axiom-design-lang', lang); } catch (e) {} }
     if (lang === 'id' && !dict) {
       // Offline or blocked: stay readable in English without overwriting the saved choice.
-      withDictionary(function () { if (lang === 'id') setLanguage('id'); }, function () {
+      withDictionary(function () { if (lang === 'id') setLanguage('id', chosen); }, function () {
         show('en');
         document.documentElement.classList.remove('lang-pending');
       });
@@ -367,7 +373,7 @@ window.addEventListener('axiom:route', function (event) {
   }
   document.addEventListener('click', function (event) {
     var button = event.target.closest('[data-lang]');
-    if (button) setLanguage(button.dataset.lang);
+    if (button) setLanguage(button.dataset.lang, true);
   });
   window.addEventListener('axiom:route', function () {
     englishTitle = document.title;

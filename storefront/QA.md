@@ -43,3 +43,13 @@
 
 - One click on a product page's Add to basket added the chosen item and, through the catalogue card handler, the page's default size as well: two lines, or a 10 mg vial nobody chose when 20 mg was picked. The card handler skipped forms classed `buy`, but the product form is `buy-form` inside `.buy`. `build.py` now patches that guard.
 - `qa/check-basket.cjs` covers nine paths: the product page (default size, another size, quantity 3, subscription, two adds), a device page, the mobile buy bar, and the catalogue and homepage card choosers. Each adds exactly the chosen item. It passes on the served site and the standalone HTML, fails on the previous build, and runs in CI.
+
+## Polish — 24 October 2026
+
+- Photo placeholders: product, coa and detail photos rest on their stone tile while loading instead of black (screenshots taken with photo responses held back).
+- Card photos: `card_photos.py` made 72 photos at 640px (3.5 MB in total) from the PNG masters. Cards offer them through `srcset`, and product pages keep the full-size photograph. Photos for the shop page went from 11.9 MB to 3.6 MB. Checked in a browser: phones (3x) and laptops (1x, 2x at 1440px) load the 640px file; wide 2x screens (1920px) load the full size. The standalone HTML drops the `srcset`, so it stays at 21.8 MB.
+- Empty basket: the four featured compounds appear as link cards under the empty-state message ("From the collection" / "Dari koleksi").
+- Indonesian default: a browser set to Indonesian opens the site in Indonesian without saving a choice; a choice made with EN / ID is saved and wins. `qa/check-i18n.cjs` covers both.
+- Fixed: the Saved icon appeared in the header in Indonesian, because the CSS hid it by its English label. It now matches the link address.
+- Tools: `serve.py` (threaded preview server, also in the ZIP and used by CI). QA screenshots go to `qa/latest/` (ignored). CLAUDE.md corrected on where the dictionary loads and on the CI checks.
+- `qa/check-hero.cjs`, `qa/check-i18n.cjs` and `qa/check-basket.cjs` pass on the served site and the standalone HTML.
