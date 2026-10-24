@@ -25,7 +25,7 @@ assert.equal(await page.locator('[data-lang="id"]').getAttribute('aria-pressed')
 assert.match(await page.locator('.nav-links').innerText(),/Belanja/i);
 assert.match(await page.locator('#hero-title').innerText(),/Dibangun untuk/);
 assert.match(await page.title(),/^Dibangun untuk riset yang lebih baik\. — AXIOM$/);
-await page.screenshot({path:'qa/i18n-home-id.png'});
+await page.screenshot({path:'qa/latest/i18n-home-id.png'});
 // Hero motion still runs under the translated headline.
 const art=await page.locator('.hero-motion').boundingBox();
 const before=await page.locator('.hero-pen').evaluateAll(ns=>ns.map(n=>getComputedStyle(n).transform));
@@ -42,7 +42,7 @@ await page.locator('[data-plan="sub"]').first().click();
 await page.locator('.add button, button:has-text("Tambah ke keranjang")').first().click();await page.waitForTimeout(300);
 const toast=await page.evaluate(()=>document.querySelector('.toast,[role=status]')?.textContent||'');
 assert.doesNotMatch(toast,/Added to the basket/);
-await page.screenshot({path:'qa/i18n-product-id.png'});
+await page.screenshot({path:'qa/latest/i18n-product-id.png'});
 await go(page,'/request');
 await page.locator('form button[type="submit"]').first().click();await page.waitForTimeout(300);
 const formText=await page.locator('#main').innerText();
@@ -67,6 +67,16 @@ await page.locator('[data-lang="id"]').click();await page.reload();await page.lo
 await page.waitForFunction(()=>!document.documentElement.classList.contains('lang-pending')&&/Dibangun/.test(document.querySelector('#hero-title').textContent));
 assert.equal(await page.evaluate(()=>document.documentElement.lang),'id');
 assert.match(await page.locator('#hero-title').innerText(),/Dibangun untuk/);
+// A browser set to Indonesian starts in Indonesian without saving a choice; a saved English choice still wins.
+const idContext=await browser.newContext({viewport:{width:1280,height:900},locale:'id-ID'});
+const idPage=await idContext.newPage();idPage.on('pageerror',e=>errors.push(e.message));
+await idPage.goto(URL);await idPage.locator('.is-motion-ready').waitFor();
+await idPage.waitForFunction(()=>/Dibangun/.test(document.querySelector('#hero-title').textContent));
+assert.equal(await idPage.evaluate(()=>document.documentElement.lang),'id');
+assert.equal(await idPage.evaluate(()=>localStorage.getItem('axiom-design-lang')),null);
+await idPage.locator('[data-lang="en"]').click();await idPage.reload();await idPage.locator('.is-motion-ready').waitFor();
+assert.match(await idPage.locator('#hero-title').innerText(),/Built for/);
+await idContext.close();
 // Mobile: switch reachable, no horizontal overflow.
 const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
 mobile.on('pageerror',e=>errors.push(e.message));
@@ -75,9 +85,9 @@ await mobile.locator('[data-lang="id"]').tap();
 await mobile.waitForFunction(()=>window.__I18N_ID&&/Dibangun/.test(document.querySelector('#hero-title').textContent));
 assert.equal(await mobile.locator('[data-lang="id"]').isVisible(),true);
 assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-await mobile.screenshot({path:'qa/i18n-home-mobile-id.png'});
+await mobile.screenshot({path:'qa/latest/i18n-home-mobile-id.png'});
 assert.deepEqual(errors,[]);
-console.log(JSON.stringify({result:'PASS',routes:routes.length,toggle:true,heroMotion:true,dynamicCopy:true,restoresEnglish:true,persists:true,mobile:true,errors,
+console.log(JSON.stringify({result:'PASS',routes:routes.length,toggle:true,heroMotion:true,dynamicCopy:true,restoresEnglish:true,persists:true,browserDefault:true,mobile:true,errors,
   leftovers:leftovers.size,leftoverSample:[...leftovers]},null,2));
 await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -202,6 +202,27 @@ for key, markup in pages.items():
         markup=markup.replace('<span class="lab">Vial + pen</span>','<span class="lab">AXIOM / Stone collection · '+stone_doses[key[8:]]+' presentation shown</span>')
         markup=markup.replace('class="prod-fig" aria-hidden="true"','class="prod-fig"')
     pages[key]=markup
+
+# An empty basket offers the featured compounds as plain links (adding from this page would leave its empty state up).
+empty = '<div class="acts" style="margin-top:32px"><a class="btn btn-solid" href="#/products">Open the shop</a>'
+if pages['request'].count(empty) != 1: raise SystemExit('Empty basket template changed; update the featured compounds block.')
+final_cards = {re.search(r'data-compound="([^"]+)"', card)[1]: card for card in re.findall(r'<article\b.*?</article>', pages['products'], re.S)}
+picks = ''.join(re.sub(r'<form\b.*?</form>', '', final_cards[slug], flags=re.S).replace('<article ', '<article data-pick ', 1) for slug in featured)
+pages['request'] = re.sub(r'(<div class="acts" style="margin-top:32px">.*?</div>)', lambda m: m[1] + '<div class="basket-picks"><p class="kicker">From the collection</p><div class="pgrid cards">' + picks + '</div></div>', pages['request'], count=1, flags=re.S)
+
+# Cards offer the 640px photo (card_photos.py) next to the full-size one, so small tiles load a small file.
+from PIL import Image
+# Cards are half the screen on phones, a third on tablets, about 310px on laptops and up to 360px on wide screens.
+card_sizes = '(max-width: 700px) 50vw, (max-width: 1100px) 33vw, (max-width: 1600px) 320px, 360px'
+def card_srcset(img):
+    slug = re.search(r'data-pen="([^"]+)"', img) or re.search(r'src="assets/stone-([a-z0-9-]+)\.webp"', img)
+    if not slug or 'srcset=' in img: return img
+    full, small = f'assets/stone-{slug[1]}.webp', f'assets/stone-{slug[1]}-640.webp'
+    if not (ROOT / small).is_file(): raise SystemExit(f'{small} is missing; run python3 card_photos.py.')
+    with Image.open(ROOT / full) as photo: width = photo.width
+    return img[:-1].rstrip('/').rstrip() + f' srcset="{small} 640w, {full} {width}w" sizes="{card_sizes}">'
+for key, markup in pages.items():
+    pages[key] = re.sub(r'<article\b[^>]*class="[^"]*\bpcard\b.*?</article>', lambda card: re.sub(r'<img\b[^>]*class="[^"]*\bstone-photo\b[^>]*>', lambda m: card_srcset(m[0]), card[0]), markup, flags=re.S)
 i18n_id = json.loads((ROOT / 'i18n-id.json').read_text())
 # The homepage ships with content.js; every other template and the Indonesian dictionary load on demand.
 def write(path, text):
@@ -237,7 +258,8 @@ for sheet in ['design.css', 'editorial-v2.css', 'stone-v3.css']:
         raise SystemExit(f'{sheet} sets text below {TYPE_FLOOR}px: ' + ', '.join(small_sizes((ROOT / sheet).read_text())[:5]))
 fonts = ''.join(f'<link rel="preload" href="{f}" as="font" type="font/woff2" crossorigin>' for f in dict.fromkeys(re.findall(r'assets/font-\w+\.woff2', base_css)))
 # A saved Indonesian choice fetches the dictionary early and holds the first paint until it applies.
-early_lang = '<script>try{if(localStorage.getItem("axiom-design-lang")==="id"){var d=document.documentElement;d.lang="id";if(!window.__I18N_ID){d.classList.add("lang-pending");setTimeout(function(){d.classList.remove("lang-pending")},3000);var s=document.createElement("script");s.id="i18n-id";s.fetchPriority="high";s.src="i18n-id.js?v='+i18n_version+'";document.head.appendChild(s)}}}catch(e){}</script>'
+# Indonesian is the default for a browser set to Indonesian; a saved choice always wins. Keep in step with design.js.
+early_lang = '<script>try{var l=null;try{l=localStorage.getItem("axiom-design-lang")}catch(e){}if(l!=="en"&&l!=="id")l=(navigator.languages||[navigator.language||""]).some(function(x){return /^id\\b/i.test(x)})?"id":"en";if(l==="id"){var d=document.documentElement;d.lang="id";if(!window.__I18N_ID){d.classList.add("lang-pending");setTimeout(function(){d.classList.remove("lang-pending")},3000);var s=document.createElement("script");s.id="i18n-id";s.fetchPriority="high";s.src="i18n-id.js?v='+i18n_version+'";document.head.appendChild(s)}}}catch(e){}</script>'
 # Keep one small wordmark in the footer; no oversized duplicate.
 html = '''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

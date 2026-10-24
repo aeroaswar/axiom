@@ -60,7 +60,7 @@ jobs:
       - name: Storefront browser checks — hero motion, Bahasa Indonesia on every route, standalone package
         working-directory: storefront
         run: |
-          python -m http.server 8765 --bind 127.0.0.1 >/dev/null 2>&1 &
+          python serve.py >/dev/null 2>&1 &
           for i in $(seq 40); do curl -sf http://127.0.0.1:8765/ >/dev/null && break; sleep 0.5; done
           python package.py
           node qa/check-hero.cjs
