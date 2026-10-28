@@ -187,12 +187,16 @@ th.p{text-align:right}
    ══════════════════════════════════════════════════════════ */
 .app{display:flex;align-items:flex-start;gap:0;min-height:100vh}
 .panel{
-  flex:0 0 392px;position:sticky;top:0;max-height:100vh;overflow-y:auto;
+  flex:0 0 clamp(320px,34vw,392px);position:sticky;top:0;max-height:100vh;overflow-y:auto;
   background:#0d0b09;border-right:1px solid var(--line);
   padding:22px 22px 40px;font-size:13px;color:var(--ink)
 }
 .stage{flex:1;min-width:0;padding:30px;display:flex;flex-direction:column;align-items:center;gap:22px;background:#141210}
-.sheets{display:flex;flex-direction:column;gap:22px}
+.sheets{display:flex;flex-direction:column;gap:22px;width:210mm;transform-origin:0 0}
+/* The preview scales to the room beside the form (fitSheets); .fit takes the scaled size so the
+   stage scrolls by what is shown. Print and the Artifact's PDF use the sheets at full size. */
+.fit{flex:none;position:relative}
+body.capturing .sheets{transform:none!important}
 .sheets .page{box-shadow:0 18px 60px rgba(0,0,0,.6);flex:none}
 
 .panel h1{font-family:var(--display);font-weight:300;font-size:21px;letter-spacing:.01em;margin:0 0 3px}
@@ -210,7 +214,9 @@ th.p{text-align:right}
 .panel select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 15px) 15px,calc(100% - 10px) 15px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:28px}
 .panel input:focus,.panel select:focus,.panel textarea:focus{outline:0;border-color:var(--accent-line);background:#0a0908}
 .panel .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
-.panel .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 12px}
+/* The invoice number needs its full width: this row stacks when the panel is narrow. */
+.panel .grid2.wrap{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.panel .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:0 12px}
 .panel .hint{font-size:10.5px;color:var(--muted-2);line-height:1.55;margin:8px 0 0}
 .panel .locked{opacity:.5;pointer-events:none}
 #of-pick{margin-top:10px}
@@ -252,11 +258,14 @@ th.p{text-align:right}
 .status b{color:var(--accent-bright);font-weight:400;font-variant-numeric:tabular-nums}
 .status .over{color:#C87A5E}
 
-@media(max-width:1180px){
+@media(max-width:900px){
+  .stage{padding:20px 16px}
+}
+/* Only a phone-width window stacks the form above the invoice. */
+@media(max-width:700px){
   .app{flex-direction:column}
   .panel{flex:none;width:100%;position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line)}
-  .stage{width:100%;padding:22px 10px}
-  .sheets .page{transform-origin:top center}
+  .stage{width:100%;padding:22px 16px}
 }
 
 /* ══ Print: the sheets only ══ */
@@ -268,7 +277,9 @@ th.p{text-align:right}
      any margin setting — the flex spacer simply takes up less room. */
   html,body{background:var(--bg);height:100%}
   .panel{display:none!important}
-  .app,.stage,.sheets{display:block;height:auto}
+  .app,.stage,.fit,.sheets{display:block;height:auto}
+  .fit{width:auto!important;height:auto!important}
+  .sheets{transform:none!important;width:auto}
   /* .stage carries overflow-x:auto for the screen. Left alone it computes overflow-y to
      auto as well, which clips every sheet after the first when printing. */
   .stage{padding:0;background:none;overflow:visible}
@@ -280,7 +291,8 @@ th.p{text-align:right}
      container a definite height would collapse them into too few pages. */
   body.single-sheet .app,
   body.single-sheet .stage,
-  body.single-sheet .sheets{height:100%}
+  body.single-sheet .fit,
+  body.single-sheet .sheets{height:100%!important}
   body.single-sheet .sheets .page{width:100%;min-height:100%}
 }
 
@@ -309,7 +321,7 @@ th.p{text-align:right}
 
   <fieldset>
     <legend>Invoice</legend>
-    <div class="grid2">
+    <div class="grid2 wrap">
       <div><label for="f-no">Invoice no.</label><input id="f-no" data-k="no"></div>
       <div><label for="f-ref">Reference</label><input id="f-ref" data-k="ref" placeholder="PO / quote no."></div>
     </div>
@@ -389,7 +401,7 @@ th.p{text-align:right}
   <button class="btn ghost" type="button" id="reset">Reset to defaults</button>
 </aside>
 
-<main class="stage"><div class="sheets" id="sheets"></div></main>
+<main class="stage"><div class="fit" id="fit"><div class="sheets" id="sheets"></div></div></main>
 </div>
 <script>
 /* ═══════════════════════════════════════════════════════════════
@@ -940,8 +952,24 @@ function render(opts){
   st.textContent = pages + (pages === 1 ? " page" : " pages");
   st.className = pages > 1 ? "over" : "";
   document.title = "AXIOM-Invoice-" + String(S.no || "draft").replace(/[^\w.-]+/g, "-");
+  fitSheets();
   save();
 }
+
+/* Shrink the preview to the room the stage has; never enlarge it past real size. */
+function fitSheets(){
+  const stage = $(".stage"), fit = $("#fit"), sh = $("#sheets");
+  sh.style.transform = "";
+  const cs = getComputedStyle(stage);
+  const room = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const w = sh.offsetWidth, h = sh.offsetHeight;
+  const k = Math.min(1, room / w);
+  sh.style.transform = k < 1 ? `scale(${k})` : "";
+  fit.style.width = w * k + "px";
+  fit.style.height = h * k + "px";
+}
+if(window.ResizeObserver) new ResizeObserver(() => fitSheets()).observe($(".stage"));
+else window.addEventListener("resize", fitSheets);
 
 /* Top-level fields */
 $(".panel").addEventListener("input", e => {
@@ -1060,6 +1088,7 @@ async function viewerPdf(){
     if(!window.html2canvas) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
     if(!window.jspdf) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
     await document.fonts.ready;
+    document.body.classList.add("capturing");     /* draw the sheets at full size, not the preview scale */
     const pdf = new window.jspdf.jsPDF({unit:"mm", format:"a4", orientation:"portrait", compress:true});
     const sheets = [...document.querySelectorAll("#sheets .page")];
     for(let i = 0; i < sheets.length; i++){
@@ -1077,7 +1106,7 @@ async function viewerPdf(){
       : code === "rate_limited" ? "A save prompt is already open. Finish that one first."
       : e && e.message === "load" ? "Couldn't load the PDF tools. Check the connection and try again."
       : "Couldn't make the PDF. Open the builder as a file in Chrome and use Save as PDF there.";
-  }finally{ btn.disabled = false; }
+  }finally{ document.body.classList.remove("capturing"); btn.disabled = false; }
 }
 $("#pdf").addEventListener("click", () => VIEWER ? viewerPdf() : window.print());
 
