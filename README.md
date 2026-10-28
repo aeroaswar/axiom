@@ -170,7 +170,7 @@ devices and apparel, 84 entries — generated from `invoice/AXIOM-Price-List-v1.
 is committed beside it. Shipping is Rp 100.000 per 3 units at an address, capped at
 Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to*, route each
 line item to one, and each carries its own amount, calculated by default and overridable.
-`invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to.
+`invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to. The last sheet has the storefront's dark stone ridge (`storefront/assets/stone-dark.webp`) in its bottom-left corner. It is confined to the space below the payment block, shrinks as that space fills, and is replaced by the plain glow when the page is full.
 
 *Import order form PDF* (or dropping the PDF on the page) fills an invoice from a client's
 filled-in `business-proposal/AXIOM-Order-Form.pdf`. It reads the form's fields, so it handles
