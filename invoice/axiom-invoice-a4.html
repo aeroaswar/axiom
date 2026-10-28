@@ -95,7 +95,9 @@ header.mast{position:relative;display:flex;justify-content:space-between;align-i
 .title h1{font-family:var(--display);font-weight:300;font-size:32px;line-height:1.05;margin:0;letter-spacing:0;color:var(--ink)}
 .title .meta{font-family:var(--sans);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:8px;line-height:1.9}
 .title .meta b{color:var(--ink);font-weight:400}
-.amount-flag{margin-top:13px;border:1px solid var(--accent-line);border-radius:6px;padding:8px 11px;display:inline-block;text-align:right;background:var(--accent-soft)}
+/* A right-aligned block of its own width rather than inline-block: the same box in print, and the
+   Artifact's in-page PDF renderer (html2canvas) otherwise drops the block label inside it. */
+.amount-flag{margin-top:13px;margin-left:auto;width:max-content;border:1px solid var(--accent-line);border-radius:6px;padding:8px 11px;display:block;text-align:right;background:var(--accent-soft)}
 .amount-flag .l{font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px}
 .amount-flag .v{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:.01em;color:var(--accent-bright);line-height:1.1;white-space:nowrap}
 
@@ -383,7 +385,7 @@ th.p{text-align:right}
   </div>
 
   <button class="btn primary" type="button" id="pdf">Save as PDF</button>
-  <p class="hint">In the print dialog: paper <b>A4</b>, <b>Background graphics</b> on. A one-page invoice prints correctly at any margin setting; set margins to <b>None</b> once it runs past one page.</p>
+  <p class="hint" id="pdf-hint">In the print dialog: paper <b>A4</b>, <b>Background graphics</b> on. A one-page invoice prints correctly at any margin setting; set margins to <b>None</b> once it runs past one page.</p>
   <button class="btn ghost" type="button" id="reset">Reset to defaults</button>
 </aside>
 
@@ -1029,10 +1031,66 @@ $("#add").addEventListener("click", () => {
   $("#items").lastElementChild.querySelector("select").focus();
 });
 
-$("#pdf").addEventListener("click", () => window.print());
+/* Opened as a file, the browser's print dialog makes the PDF: vector text, exact colours.
+   Inside a Claude Artifact the page may not open that dialog (window.print does nothing) or
+   start a download itself, so there the sheets are drawn to images, bound into an A4 PDF in
+   the page, and handed to the viewer through the Artifact's downloads capability. */
+const VIEWER = !!(window.claude && typeof window.claude.use === "function");
+let downloads = null;
+if(VIEWER){
+  $("#pdf").textContent = "Download PDF";
+  $("#pdf-hint").textContent = "Makes an A4 PDF of the sheets on the right and asks where to save it.";
+  window.claude.use("downloads").then(d => {
+    downloads = d;
+    if(!d){ $("#pdf").disabled = true; $("#pdf-hint").textContent = "Saving files isn't available in this view. Open the builder as a file in Chrome to save the PDF."; }
+  }).catch(() => {});
+}
+function loadScript(src){
+  return new Promise((ok, no) => {
+    const el = document.createElement("script");
+    el.src = src; el.onload = ok; el.onerror = () => no(new Error("load"));
+    document.head.appendChild(el);
+  });
+}
+async function viewerPdf(){
+  const btn = $("#pdf"), hint = $("#pdf-hint");
+  if(!downloads){ hint.textContent = "Saving files isn't available in this view yet. Try again in a moment."; return; }
+  btn.disabled = true; hint.textContent = "Making the PDF…";
+  try{
+    if(!window.html2canvas) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js");
+    if(!window.jspdf) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+    await document.fonts.ready;
+    const pdf = new window.jspdf.jsPDF({unit:"mm", format:"a4", orientation:"portrait", compress:true});
+    const sheets = [...document.querySelectorAll("#sheets .page")];
+    for(let i = 0; i < sheets.length; i++){
+      hint.textContent = `Drawing page ${i + 1} of ${sheets.length}…`;
+      const canvas = await window.html2canvas(sheets[i], {scale:2.5, backgroundColor:"#070605", logging:false});
+      if(i) pdf.addPage();
+      pdf.addImage(canvas.toDataURL("image/jpeg", 0.9), "JPEG", 0, 0, 210, 297, undefined, "FAST");
+    }
+    const name = "AXIOM-Invoice-" + String(S.no || "draft").replace(/[^\w.-]+/g, "-") + ".pdf";
+    await downloads.save({filename:name, data:pdf.output("blob")});
+    hint.textContent = `Saved ${name}.`;
+  }catch(e){
+    const code = e && e.code;
+    hint.textContent = code === "declined" ? "Not saved."
+      : code === "rate_limited" ? "A save prompt is already open. Finish that one first."
+      : e && e.message === "load" ? "Couldn't load the PDF tools. Check the connection and try again."
+      : "Couldn't make the PDF. Open the builder as a file in Chrome and use Save as PDF there.";
+  }finally{ btn.disabled = false; }
+}
+$("#pdf").addEventListener("click", () => VIEWER ? viewerPdf() : window.print());
 
+/* Reset asks twice in the page itself: an Artifact never shows browser dialogs. */
+let resetArmed = 0;
 $("#reset").addEventListener("click", () => {
-  if(!confirm("Reset every field back to the defaults?")) return;
+  const b = $("#reset");
+  if(!resetArmed){
+    b.textContent = "Tap again to reset every field";
+    resetArmed = setTimeout(() => { resetArmed = 0; b.textContent = "Reset to defaults"; }, 4000);
+    return;
+  }
+  clearTimeout(resetArmed); resetArmed = 0; b.textContent = "Reset to defaults";
   S = DEFAULTS();
   try{ localStorage.removeItem(KEY); }catch(e){}
   syncFields(); render();
@@ -1346,8 +1404,9 @@ async function ofLoad(file){
   }
   const o = ofImport(fields, file.name);
   if(!o.items.length && !o.client.name){ ofReport(`${esc(file.name)} is an AXIOM order form, but it’s empty.`, true); return; }
-  const busy = S.client.name.trim() && S.client.name.trim() !== o.client.name;
-  if(busy && !confirm(`Replace the client and line items for ${S.client.name} with this order form?`)) return;
+  /* Import straight away and offer an undo: an Artifact never shows browser dialogs. */
+  const before = JSON.stringify(S);
+  const prevName = S.client.name.trim();
 
   S.client = {name:o.client.name, company:"", addr:o.client.addr, email:"", phone:o.client.phone};
   S.dests = [{label:"", addr:"", phone:"", ship:""}];   /* blank → ships to the client's address */
@@ -1364,7 +1423,13 @@ async function ofLoad(file){
   ].join("");
   ofReport(`Imported <b>${esc(o.client.name || "unnamed client")}</b> — ${o.items.length} item${o.items.length === 1 ? "" : "s"}, `
     + `${units} unit${units === 1 ? "" : "s"}, total <b>${rp(totals().total)}</b>. `
-    + `Check the invoice number before saving.${list ? "<ul>" + list + "</ul>" : ""}`);
+    + `Check the invoice number before saving.${list ? "<ul>" + list + "</ul>" : ""}`
+    + `<button class="btn ghost" type="button" id="of-undo">Undo import${prevName && prevName !== o.client.name ? " · back to " + esc(prevName) : ""}</button>`);
+  $("#of-undo").addEventListener("click", () => {
+    S = Object.assign(DEFAULTS(), JSON.parse(before));
+    syncFields(); render();
+    ofReport("Import undone.");
+  });
 }
 
 $("#of-pick").addEventListener("click", () => $("#of-file").click());
