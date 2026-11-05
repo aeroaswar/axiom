@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="business-proposal/assets/logo/axiom-wordmark-white.svg">
+    <img src="business-proposal/assets/logo/axiom-wordmark-black.svg" alt="AXIOM" width="360">
+  </picture>
+</p>
+
 # AXIOM — one catalogue, three surfaces
 
 The AXIOM digital property as one Next.js 15 application over one Postgres database: the public
@@ -175,6 +182,13 @@ version:
 
 ### The wordmark
 
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="business-proposal/assets/logo/axiom-wordmark-white.svg">
+    <img src="business-proposal/assets/logo/axiom-wordmark-black.svg" alt="The AXIOM wordmark" width="480">
+  </picture>
+</p>
+
 One vector path, drawn on a 582 × 70 grid, with every stroke 11.8 units wide: the A's legs,
 the four arms of the notched X, the I, the O all the way round, and the M's stems and
 diagonals. The A has a flat apex, and the O keeps its overshoot (0–70 against 2–68). The X's
@@ -182,6 +196,10 @@ arms run through its centre and end square-cut, leaving a small square opening i
 It comes in bone `#F2EDE5` for dark grounds and onyx `#070605` for light ones.
 
 ### The logo mark
+
+<p>
+  <img src="business-proposal/assets/logo/axiom-x-symbol-bronze.svg" alt="The AXIOM logo mark: the notched X in bronze" width="120">
+</p>
 
 The notched-X symbol: the X's four arms on their own, on a 297 × 243 grid, in bronze `#C88A4E`.
 It is for icons, stickers and avatars, and the guide's home-screen and tab icons are drawn from
