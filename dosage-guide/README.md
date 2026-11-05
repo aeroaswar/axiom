@@ -10,8 +10,14 @@ A card that carries nothing but the wordmark and a QR, and the guide it opens.
 | `qr.js` | Self-contained QR encoder. No CDN, no network — the card generates its own code. |
 | `src/` | The compound tables and the script that generates `compounds.js`. Edit these, then run `python3 src/gen.py`. |
 | `assets/axiom-wordmark-white.svg` | The AXIOM wordmark, copied from `business-proposal/assets/logo/`. |
+| `print/` | The two-sided package card: `card-print.html`, `qrstyle.js` and the ready-to-print PDFs. |
+| `vercel.json`, `.vercelignore`, `manifest.webmanifest`, `apple-touch-icon.png`, `icons/` | Hosting: the slug rewrite, what ships, and the home-screen icons (see [Hosting](#hosting)). |
 
 Open either file directly in a browser; there is no build step.
+
+The guide follows the AXIOM design language and voice in the root `DESIGN.md` and `SOUL.md`.
+SOUL.md records one open tension that applies here: the guide shows documented doses, which the
+business master prompt's compliance rules otherwise exclude.
 
 ## The card
 

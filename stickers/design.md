@@ -35,7 +35,8 @@ before. The extra height goes to the space around the rules (§4).
 
 Four tokens, taken verbatim from the canonical `:root` block in
 `../business-proposal/axiom-business-master-prompt.md` §9 (identical to the `:root` block in
-`../src/app/globals.css:9-11`).
+`../src/app/globals.css:9-11`). The whole palette and the rules for using it are in
+`../DESIGN.md`.
 
 | Role | Token | Hex |
 |---|---|---|
