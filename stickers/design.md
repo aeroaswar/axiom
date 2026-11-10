@@ -225,16 +225,15 @@ at 100 mcg; the amount stays editable, and the choice is remembered per compound
 **Device icons.** In the builder, every dosed label carries an icon at the right of the compound line that says
 how the dose is taken:
 
-- **Pen** (`N clicks = M mg`): an injection pen held at an angle, with the dose knob, a body with
-  a clear window, the hub and a pointed needle with a drop at its tip.
+- **Pen** (`N clicks = M mg`): an injection pen held at an angle, kept to three shapes: the dose
+  knob, the body and a pointed needle.
 - **Spray** (`1 spray = N mcg`): drawn after the reference the user supplied, a slim pump bottle
   on a rounded base and a cone of eleven mist dots fanning out to the right, growing as they
   spread.
 
 A label with **No dose** has no icon. Both icons are filled shapes only, 3.2em tall on the
 compound line (4 mm), and are drawn in the PDFs and the label images too. The finest parts are
-the pen's needle (0.27 mm, 2 dots at 203 dpi), its window (0.43 mm) and the spray's smallest dot
-(0.37 mm). The icon shares the compound line's autofit; a name too long to share the line with it
+the pen's needle (0.36 mm, 3 dots at 203 dpi) and the spray's smallest dot (0.37 mm). The icon shares the compound line's autofit; a name too long to share the line with it
 (only *VIP (Vasoactive Intestinal Peptide)*) keeps the line to itself and the icon is left off.
 
 ---
