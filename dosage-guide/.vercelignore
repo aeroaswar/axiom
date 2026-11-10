@@ -9,3 +9,4 @@ qr.js
 print/
 # The tracker is a private tool, opened locally; it is not deployed with the guide.
 tracker.html
+artifact/

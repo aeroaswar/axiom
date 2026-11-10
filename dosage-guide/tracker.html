@@ -5,54 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>AXIOM Tracker</title>
 <meta name="description" content="A private daily log: what you took, a check-in, and progress photos you can compare. Everything stays on this device." />
-<meta name="theme-color" content="#070605" media="(prefers-color-scheme: dark)" />
-<meta name="theme-color" content="#F2EDE5" media="(prefers-color-scheme: light)" />
-<meta name="color-scheme" content="dark light" />
+<meta name="theme-color" content="#F2EDE5" />
+<meta name="color-scheme" content="light" />
 <meta name="robots" content="noindex" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='117.77 -19.73 109.46 109.46'%3E%3Crect x='117.77' y='-19.73' width='109.46' height='109.46' fill='%23070605'/%3E%3Cpath fill='%23F2EDE5' d='M132 2 148.5 2 170.29 24.3 161.85 32.54ZM213 2 196.5 2 174.71 24.3 183.15 32.54ZM132 68 148.5 68 170.29 45.7 161.85 37.46ZM213 68 196.5 68 174.71 45.7 183.15 37.46Z'/%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AXIOM" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="mobile-web-app-capable" content="yes" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&display=swap" rel="stylesheet" />
 <style>
 /* ------------------------------------------------------------------ *
- * Tokens. Dark is the AXIOM ground (DESIGN.md). Light is the print
- * palette: paper with deep bronze, because core bronze fails small-text
- * contrast on a light ground.
+ * Tokens. Light only: the AXIOM print palette, paper with deep bronze
+ * (DESIGN.md), because core bronze fails small-text contrast on paper.
  * ------------------------------------------------------------------ */
 :root{
-  --bg:#070605; --ink:#F2EDE5; --muted:#9c9488; --muted-2:#8a8276;
-  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
-  --accent:#C88A4E; --accent-bright:#E7B173; --accent-ink:#0a0704;
-  --accent-soft:rgba(200,138,78,.14); --accent-line:rgba(200,138,78,.34);
-  --panel:#0d0b09; --panel-2:#131010; --bar:rgba(7,6,5,.86); --bar-0:rgba(7,6,5,0);
-  --err:#d0745a; --ok:#8FA37E;
+  --bg:#F2EDE5; --ink:#070605; --muted:#5c544a; --muted-2:#6e665c;
+  --line:rgba(7,6,5,.13); --line-2:rgba(7,6,5,.24); --line-soft:rgba(7,6,5,.06);
+  --accent:#7C4C24; --accent-bright:#7C4C24; --accent-ink:#F2EDE5;
+  --accent-soft:rgba(124,76,36,.10); --accent-line:rgba(124,76,36,.34);
+  --panel:#ece6dc; --panel-2:#e5ddd1; --bar:rgba(242,237,229,.88); --bar-0:rgba(242,237,229,0);
+  --err:#9a3f27; --ok:#4f6342;
   --brand:"Jost","Century Gothic",system-ui,sans-serif;
   --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",system-ui,"Segoe UI",Roboto,Arial,sans-serif;
   --pad:20px; --maxw:700px;
   --pad-l:max(var(--pad),env(safe-area-inset-left)); --pad-r:max(var(--pad),env(safe-area-inset-right));
   --ease:cubic-bezier(.16,1,.3,1);
-  color-scheme:dark;
-}
-@media (prefers-color-scheme: light){
-  :root{
-    --bg:#F2EDE5; --ink:#070605; --muted:#5c544a; --muted-2:#6e665c;
-    --line:rgba(7,6,5,.13); --line-2:rgba(7,6,5,.24); --line-soft:rgba(7,6,5,.06);
-    --accent:#7C4C24; --accent-bright:#7C4C24; --accent-ink:#F2EDE5;
-    --accent-soft:rgba(124,76,36,.10); --accent-line:rgba(124,76,36,.34);
-    --panel:#ece6dc; --panel-2:#e5ddd1; --bar:rgba(242,237,229,.88); --bar-0:rgba(242,237,229,0);
-    --err:#9a3f27; --ok:#4f6342;
-    color-scheme:light;
-  }
+  color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{font-size:17px;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 @supports (font:-apple-system-body) and (-webkit-touch-callout:none){html{font:-apple-system-body}}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;
-  font-feature-settings:"tnum" 1;padding-bottom:calc(84px + env(safe-area-inset-bottom));min-height:100vh}
+  font-feature-settings:"tnum" 1;padding-bottom:84px;min-height:100%}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0}
 ::selection{background:var(--accent);color:var(--accent-ink)}
@@ -62,7 +49,11 @@ main:focus{outline:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- Top bar ---------- */
-.bar{position:sticky;top:0;z-index:20;background:var(--bar);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding-top:env(safe-area-inset-top)}
+/* The page is padded by the safe-area insets top and bottom (the Artifact host does the same);
+   the sticky bar sits under the top inset, and a fixed band paints the strip above it. */
+:root{padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:25;background:var(--bg)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bar);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;pointer-events:none;background:linear-gradient(var(--bar),var(--bar-0))}
 .bar-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;height:56px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
 .mark{grid-column:2;display:flex;align-items:center;gap:10px;color:var(--ink)}
@@ -71,7 +62,6 @@ main:focus{outline:none}
 .bar-l{justify-self:start}.bar-r{justify-self:end}
 .icon-btn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;color:var(--muted);transition:color .22s var(--ease)}
 .icon-btn:hover{color:var(--ink)}
-.lang{font-size:.7647rem;letter-spacing:.14em;font-weight:600}
 
 /* ---------- Type and sections ---------- */
 .kicker{font-size:.6471rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
@@ -221,6 +211,7 @@ dialog[open]{animation:up .42s var(--ease)}
 .scope p{font-size:.7059rem;color:var(--muted-2);line-height:1.7}
 .scope p+p{margin-top:10px}
 .scope strong{color:var(--muted);font-weight:500}
+.ask-msg{font-size:1rem;line-height:1.5;padding:6px 0 4px}
 .toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translate(-50%,12px);opacity:0;z-index:40;background:var(--ink);color:var(--bg);
   padding:10px 16px;border-radius:10px;font-size:.8235rem;max-width:calc(100% - 40px);transition:opacity .22s var(--ease),transform .22s var(--ease);pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -233,7 +224,7 @@ dialog[open]{animation:up .42s var(--ease)}
 <body>
 <header class="bar">
   <div class="bar-in">
-    <div class="bar-l"><button class="icon-btn lang" id="lang" type="button"></button></div>
+    <div class="bar-l"></div>
     <div class="mark">
       <svg viewBox="0 0 582 70" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 68 13.4 68 41 16.69 68.6 68 82 68 46.5 2 35.5 2Z M132 2 148.5 2 170.29 24.3 161.85 32.54ZM213 2 196.5 2 174.71 24.3 183.15 32.54ZM132 68 148.5 68 170.29 45.7 161.85 37.46ZM213 68 196.5 68 174.71 45.7 183.15 37.46Z M279.1 2 290.9 2 290.9 68 279.1 68Z M352.3 35A42.7 35 0 1 1 437.7 35A42.7 35 0 1 1 352.3 35ZM364.1 35A30.9 23.2 0 1 0 425.9 35A30.9 23.2 0 1 0 364.1 35Z M497 2 508.8 2 539.5 41 570.2 2 582 2 582 68 570.2 68 570.2 21.08 539.5 60.08 508.8 21.08 508.8 68 497 68Z"/></svg>
       <span data-t="brand_sub"></span>
@@ -283,16 +274,9 @@ dialog[open]{animation:up .42s var(--ease)}
   <div class="sheet">
     <div class="grab" aria-hidden="true"></div>
     <div class="sheet-h"><h2 id="set-title" data-t="settings"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
-    <div class="sec" style="border:0;padding-top:14px">
-      <h2 data-t="language"></h2>
-      <div class="seg" id="set-lang">
-        <button type="button" data-lang="id">Bahasa Indonesia</button>
-        <button type="button" data-lang="en">English</button>
-      </div>
-    </div>
-    <div class="sec">
+    <div class="sec" style="border:0;margin-top:0;padding-top:14px">
       <h2 data-t="backup"></h2>
-      <p class="hint" data-t="export_hint"></p>
+      <p class="hint" id="set-hint"></p>
       <p class="hint" id="set-usage"></p>
       <div class="row-actions">
         <button class="btn" type="button" id="exp-json" data-t="export_json"></button>
@@ -321,6 +305,17 @@ dialog[open]{animation:up .42s var(--ease)}
   </div>
 </dialog>
 
+<!-- Confirmation. The Artifact viewer answers window.confirm() with false, so the page asks itself. -->
+<dialog id="ask-dlg" aria-labelledby="ask-msg">
+  <form class="sheet" method="dialog">
+    <p id="ask-msg" class="ask-msg"></p>
+    <div class="row-actions">
+      <button class="btn danger" value="yes" id="ask-yes" style="flex:1"></button>
+      <button class="btn" value="no" style="flex:1" data-t="ask_cancel"></button>
+    </div>
+  </form>
+</dialog>
+
 <input type="file" id="photo-file" accept="image/*" hidden />
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -333,10 +328,16 @@ dialog[open]{animation:up .42s var(--ease)}
  * check-in (weight, waist, how the day felt) and progress photos with a
  * before / after comparison.
  *
- * Storage. Entries, check-ins and preferences live in localStorage under
- * STORE_KEY. Photos are Blobs in IndexedDB ("axiom-tracker" / "photos"),
- * each saved as a 1600 px JPEG with a 480 px thumbnail. Nothing leaves
- * the device; Export writes one JSON file that Import reads back.
+ * Storage, two ways.
+ *  - Opened as a Claude Artifact: the person's private subtree of the
+ *    Artifact's database (data/users/<id>, one document per month plus
+ *    "prefs") holds entries, check-ins and photo records; photos go to the
+ *    Artifact's asset store. It follows them across devices. See "Cloud".
+ *  - Opened anywhere else: entries, check-ins and preferences live in
+ *    localStorage under STORE_KEY, photos as Blobs in IndexedDB
+ *    ("axiom-tracker" / "photos"). Nothing leaves the device.
+ * Photos are saved as a 1600 px JPEG with a 480 px thumbnail either way.
+ * Export writes one JSON file, photos included, that Import reads back.
  *
  * Restraint. The page records what the person enters. It never proposes
  * an amount or a schedule: the only default it offers is the person's
@@ -352,7 +353,7 @@ dialog[open]{animation:up .42s var(--ease)}
   var SITES = ROTATION.concat(["oral", "nasal", "topical", "other"]);
   var POSES = ["front", "side", "back", "other"];
 
-  /* ---------- Copy (EN / ID) ---------- */
+  /* ---------- Copy ---------- */
   var I18N = {
     en: {
       brand_sub: "Tracker", tab_today: "Today", tab_history: "History", tab_photos: "Photos", tab_compare: "Compare",
@@ -378,8 +379,15 @@ dialog[open]{animation:up .42s var(--ease)}
       compare_need: "Add at least two photos to compare them.", before: "Before", after: "After", side_by_side: "Side by side", slider: "Slider",
       days_apart: "Days apart", doses_between: "Doses between", weight_delta: "Weight change", waist_delta: "Waist change", no_data: "—",
       pick_before: "Choose the before photo", pick_after: "Choose the after photo", set_before: "Use as before", set_after: "Use as after",
-      settings: "Settings", language: "Language", backup: "Backup",
+      settings: "Settings", backup: "Backup",
       export_hint: "Everything stays in this browser on this device and is never uploaded. Clearing site data removes it, so export a backup now and then.",
+      export_hint_cloud: "Saved to your private part of this Artifact, on every device you open it from. Export a backup now and then to keep a copy of your own.",
+      usage_cloud: "{n} photos stored with this Artifact.", ask_cancel: "Cancel", delete_everything: "Delete everything",
+      sync_slow: "Your log has not loaded yet. Anything you add now is kept and saved once it does.",
+      sync_failed: "That change did not save. Check your connection, then make it again.",
+      sync_full: "This Artifact's storage is full. Delete a few photos, then try again.",
+      sync_off: "Your log stopped syncing. Reload the page to reconnect.",
+      save_failed: "The file could not be saved here.",
       export_json: "Export backup", import_json: "Import backup", export_csv: "Export log as CSV", delete_all: "Delete everything",
       usage: "{n} photos, about {mb} MB on this device.",
       confirm_delete_all: "Delete every entry, check-in and photo on this device? This cannot be undone.",
@@ -390,51 +398,13 @@ dialog[open]{animation:up .42s var(--ease)}
       idb_off: "Photos need browser storage, which is off in this window. Entries still save.",
       err_amount: "Enter an amount greater than zero.", err_name: "Name the compound.",
       scope_1: "<strong>What this is.</strong> A personal log. It records what you enter and does not suggest an amount or a schedule. It is not medical advice.",
-      scope_2: "<strong>Where it lives.</strong> In this browser, on this device. Nothing is sent anywhere. AXIOM peptides are sold for research use only."
-    },
-    id: {
-      brand_sub: "Pelacak", tab_today: "Hari ini", tab_history: "Riwayat", tab_photos: "Foto", tab_compare: "Bandingkan",
-      today: "Hari ini", yesterday: "Kemarin", prev_day: "Hari sebelumnya", next_day: "Hari berikutnya", go_today: "Hari ini",
-      today_title: "Hari Anda", history_title: "Catatan Anda", photos_title: "Foto Anda", compare_title: "Lihat perbedaannya",
-      doses: "Dosis", log_dose: "Catat dosis", edit_dose: "Ubah catatan", no_doses: "Belum ada catatan di hari ini.",
-      checkin: "Cek harian", weight: "Berat badan", waist: "Lingkar pinggang", feel: "Kondisi hari ini", note: "Catatan", saved: "Tersimpan",
-      feel_1: "Rendah", feel_2: "Kurang", feel_3: "Stabil", feel_4: "Baik", feel_5: "Prima",
-      photo: "Foto", add_photo: "Tambah foto", pose: "Pose", pose_front: "Depan", pose_side: "Samping", pose_back: "Belakang", pose_other: "Lainnya", all: "Semua",
-      photo_hint: "Cahaya, jarak, dan pose yang sama setiap kali membuat perbandingan jujur.",
-      compound: "Senyawa", recent: "Terakhir dipakai", other_compound: "Lainnya (tulis nama)", name: "Nama", amount: "Jumlah", unit: "Satuan", time: "Jam", site: "Lokasi",
-      unit_unit: "unit", next_site: "Giliran berikutnya dalam rotasi Anda: {s}.", save: "Simpan", cancel: "Tutup", delete: "Hapus", edit: "Ubah",
-      site_abd_l: "Perut, kiri", site_abd_r: "Perut, kanan", site_thigh_l: "Paha, kiri", site_thigh_r: "Paha, kanan",
-      site_arm_l: "Lengan, kiri", site_arm_r: "Lengan, kanan", site_glute_l: "Bokong, kiri", site_glute_r: "Bokong, kanan",
-      site_oral: "Diminum", site_nasal: "Hidung", site_topical: "Di kulit", site_other: "Lainnya",
-      days_logged: "Hari tercatat", streak: "Hari berturut-turut", last7: "Catatan, 7 hari terakhir",
-      by_compound: "Per senyawa", last: "Terakhir", in30: "30 hari terakhir", total30: "Total, 30 hari", entries_n: "{n} catatan",
-      days_ago: "{n} hari lalu", rel_today: "hari ini", rel_yesterday: "kemarin",
-      weight_trend: "Berat badan", start: "Awal", latest: "Terbaru", change: "Perubahan",
-      calendar: "Kalender", prev_month: "Bulan sebelumnya", next_month: "Bulan berikutnya", all_entries: "Semua catatan", show_more: "Tampilkan lagi",
-      history_empty: "Catatan Anda terisi seiring Anda mencatat. Mulai dari Hari ini.",
-      photos_empty: "Belum ada foto. Tambahkan di sini atau dari Hari ini.", photo_of: "{pose} · {date}",
-      compare_need: "Tambahkan minimal dua foto untuk membandingkannya.", before: "Sebelum", after: "Sesudah", side_by_side: "Berdampingan", slider: "Geser",
-      days_apart: "Selisih hari", doses_between: "Dosis di antaranya", weight_delta: "Perubahan berat", waist_delta: "Perubahan pinggang", no_data: "—",
-      pick_before: "Pilih foto sebelum", pick_after: "Pilih foto sesudah", set_before: "Jadikan sebelum", set_after: "Jadikan sesudah",
-      settings: "Pengaturan", language: "Bahasa", backup: "Cadangan",
-      export_hint: "Semua data tersimpan di browser ini, di perangkat ini, dan tidak pernah diunggah. Menghapus data situs akan menghapusnya, jadi ekspor cadangan sesekali.",
-      export_json: "Ekspor cadangan", import_json: "Impor cadangan", export_csv: "Ekspor catatan (CSV)", delete_all: "Hapus semua",
-      usage: "{n} foto, sekitar {mb} MB di perangkat ini.",
-      confirm_delete_all: "Hapus semua catatan, cek harian, dan foto di perangkat ini? Tindakan ini tidak bisa dibatalkan.",
-      confirm_delete: "Hapus catatan ini?", confirm_delete_photo: "Hapus foto ini?",
-      import_done: "Cadangan dipulihkan: {e} catatan, {p} foto.", import_bad: "Berkas ini bukan cadangan pelacak AXIOM.",
-      exported: "Cadangan tersimpan.", deleted: "Terhapus.", photo_saved: "Foto tersimpan.", saving_photo: "Menyimpan foto",
-      photo_failed: "Gambar ini tidak bisa dibaca. Coba JPEG atau PNG.",
-      idb_off: "Foto memerlukan penyimpanan browser, yang nonaktif di jendela ini. Catatan tetap tersimpan.",
-      err_amount: "Masukkan jumlah lebih dari nol.", err_name: "Tulis nama senyawanya.",
-      scope_1: "<strong>Apa ini.</strong> Catatan pribadi. Halaman ini merekam apa yang Anda masukkan dan tidak menyarankan jumlah atau jadwal. Ini bukan saran medis.",
-      scope_2: "<strong>Di mana datanya.</strong> Di browser ini, di perangkat ini. Tidak ada yang dikirim ke mana pun. Peptida AXIOM dijual hanya untuk penelitian."
+      scope_2: "<strong>Where it lives.</strong> In this browser, on this device. Nothing is sent anywhere. AXIOM peptides are sold for research use only.",
+      scope_2_cloud: "<strong>Where it lives.</strong> In your own private part of this Artifact on claude.ai, so it follows you across devices. Your entries can be read by you alone. Photos are stored with the Artifact itself, so keep it unshared. AXIOM peptides are sold for research use only."
     }
   };
 
   /* ---------- State ---------- */
   var S = loadState();
-  var lang = S.prefs.lang || (/^id\b/i.test(navigator.language || "") ? "id" : "en");
   var view = "today";
   var day = todayKey();
   var calMonth = day.slice(0, 7);
@@ -447,6 +417,7 @@ dialog[open]{animation:up .42s var(--ease)}
   var idbOk = true;
   var pendingPose = "front";
   var viewerId = null;
+  var cloud = null;         // set once the Artifact's database answers; see "Cloud"
 
   var COMPOUNDS = (window.COMPOUNDS || []).map(function (c) { return { slug: c.slug, name: c.name, category: c.category }; });
   var BY_SLUG = {};
@@ -463,13 +434,14 @@ dialog[open]{animation:up .42s var(--ease)}
     return s;
   }
   function save() {
+    if (cloud) { syncCloud(); return; }
     try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* storage full or blocked: keep running in memory */ }
   }
 
   /* ---------- Helpers ---------- */
   function t(k, vars) {
-    var s = (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
-    if (vars && vars.n === 1 && I18N[lang][k + "_1"]) s = I18N[lang][k + "_1"];
+    var s = I18N.en[k] || k;
+    if (vars && vars.n === 1 && I18N.en[k + "_1"]) s = I18N.en[k + "_1"];
     if (vars) Object.keys(vars).forEach(function (v) { s = s.split("{" + v + "}").join(vars[v]); });
     return s;
   }
@@ -487,7 +459,7 @@ dialog[open]{animation:up .42s var(--ease)}
     var pa = a.split("-"), pb = b.split("-");
     return Math.round((Date.UTC(+pb[0], +pb[1] - 1, +pb[2]) - Date.UTC(+pa[0], +pa[1] - 1, +pa[2])) / 864e5);
   }
-  function loc() { return lang === "id" ? "id-ID" : "en-GB"; }
+  function loc() { return "en-GB"; }
   function fmtNum(n, d) { return new Intl.NumberFormat(loc(), { maximumFractionDigits: d == null ? 2 : d }).format(n); }
   function fmtDate(k, opts) { return new Intl.DateTimeFormat(loc(), opts || { day: "numeric", month: "short", year: "numeric" }).format(parseKey(k)); }
   function fmtLong(k) { return new Intl.DateTimeFormat(loc(), { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(parseKey(k)); }
@@ -497,10 +469,9 @@ dialog[open]{animation:up .42s var(--ease)}
     if (v == null) return NaN;
     var s = String(v).trim().replace(/\s/g, "");
     if (!s) return NaN;
-    // Thousands only where the reader's language groups that way: "1.500" in Indonesian, "1,500" in English.
-    // Otherwise a lone comma or dot is the decimal mark, so "0,25" and "0.25" both read as a quarter.
-    var grp = lang === "id" ? /^[1-9]\d{0,2}(\.\d{3})+(,\d+)?$/ : /^[1-9]\d{0,2}(,\d{3})+(\.\d+)?$/;
-    if (grp.test(s)) s = lang === "id" ? s.replace(/\./g, "").replace(",", ".") : s.replace(/,/g, "");
+    // "1,500" is fifteen hundred. Otherwise a lone comma or dot is the decimal mark, so a phone
+    // keypad that offers only a comma still works: "0,25" and "0.25" both read as a quarter.
+    if (/^[1-9]\d{0,2}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g, "");
     else if (s.indexOf(",") > -1 && s.indexOf(".") > -1) s = s.replace(/[.,](?=.*[.,])/g, "").replace(",", ".");
     else s = s.replace(",", ".");
     return /^-?\d*\.?\d+$/.test(s) ? Number(s) : NaN;
@@ -554,6 +525,7 @@ dialog[open]{animation:up .42s var(--ease)}
     }).catch(function () { idbOk = false; photos = []; });
   }
   function url(p, full) {
+    if (p.full) return "/_blob/" + (full ? p.full : p.thumbId || p.full); // an asset in the Artifact's store
     var k = p.id + (full ? ":f" : ":t");
     if (!urls[k]) urls[k] = URL.createObjectURL(full ? p.blob : (p.thumb || p.blob));
     return urls[k];
@@ -591,22 +563,158 @@ dialog[open]{animation:up .42s var(--ease)}
     toast(t("saving_photo") + "…");
     return shrink(file, 1600, 0.86).then(function (full) {
       return shrink(full.blob, 480, 0.8).then(function (th) {
-        var p = { id: uid(), date: date, pose: pose, createdAt: new Date().toISOString(), w: full.w, h: full.h, blob: full.blob, thumb: th.blob };
-        return tx("readwrite", function (st) { return st.put(p); }).then(function () {
-          photos.push(p); photos.sort(function (a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); });
-          if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
-          toast(t("photo_saved"));
-        });
+        return storePhoto(full, th, { id: uid(), date: date, pose: pose, createdAt: new Date().toISOString() }).then(function () { toast(t("photo_saved")); });
       });
     }).catch(function () { toast(t("photo_failed")); });
   }
+  function byPhoto(a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); }
+  // To the Artifact's asset store when it is there, otherwise to IndexedDB on this device.
+  function storePhoto(full, th, meta) {
+    var assets = cloud && cloud.assets;
+    if (assets) {
+      return assets.upload(full.blob, { type: "image/jpeg" }).then(function (a) {
+        return assets.upload(th.blob, { type: "image/jpeg" }).then(function (b) {
+          photos.push({ id: meta.id, date: meta.date, pose: meta.pose, createdAt: meta.createdAt, w: full.w, h: full.h, full: a.id, thumbId: b.id });
+          photos.sort(byPhoto); save();
+        });
+      });
+    }
+    var p = { id: meta.id, date: meta.date, pose: meta.pose, createdAt: meta.createdAt, w: full.w, h: full.h, blob: full.blob, thumb: th.blob };
+    return tx("readwrite", function (st) { return st.put(p); }).then(function () {
+      photos.push(p); photos.sort(byPhoto);
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
+    });
+  }
   function deletePhoto(id) {
-    return tx("readwrite", function (st) { return st.delete(id); }).then(function () {
-      photos = photos.filter(function (p) { return p.id !== id; });
+    var p = find(id);
+    function gone() {
+      photos = photos.filter(function (x) { return x.id !== id; });
       dropUrls(id);
       if (cmp.a === id) cmp.a = null;
       if (cmp.b === id) cmp.b = null;
+    }
+    if (p && p.full) {
+      gone(); save();
+      var assets = cloud && cloud.assets;
+      if (assets) [p.full, p.thumbId].filter(Boolean).forEach(function (a) { assets.delete(a).catch(function () {}); });
+      return Promise.resolve();
+    }
+    return tx("readwrite", function (st) { return st.delete(id); }).then(gone);
+  }
+
+  /* ---------- Cloud: the Artifact's database and asset store ---------- */
+  // Each month is one document, "m-2026-11", holding that month's entries, check-ins and photo
+  // records (asset ids, never the images); "prefs" holds the last amounts and compound. All of it
+  // sits under data/users/<this person's id>, which nobody else on the Artifact, its owner
+  // included, can read. A change rewrites only the documents whose content changed, one write at a
+  // time per document, and a snapshot never overwrites a document whose own write is on its way.
+  var synced = {};    // doc id -> JSON last written or received
+  var latest = {};    // doc id -> JSON waiting to be written (null deletes)
+  var inflight = {};  // doc id -> writes not yet settled
+  var chain = {};     // doc id -> the promise the next write waits on
+  var deferred = false;
+
+  function bodies() {
+    var out = {};
+    function m(k) { var id = "m-" + k.slice(0, 7); return out[id] = out[id] || { entries: [], checkins: {}, photos: [] }; }
+    S.entries.slice().sort(byTime).forEach(function (e) { m(e.date).entries.push(e); });
+    Object.keys(S.checkins).sort().forEach(function (k) { m(k).checkins[k] = S.checkins[k]; });
+    photos.forEach(function (p) {
+      if (p.full) m(p.date).photos.push({ id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, full: p.full, thumb: p.thumbId });
     });
+    out.prefs = { prefs: S.prefs };
+    return out;
+  }
+  function syncCloud() {
+    var b = bodies();
+    Object.keys(synced).forEach(function (id) { if (!(id in b)) b[id] = null; });
+    Object.keys(b).forEach(function (id) {
+      var json = b[id] === null ? null : JSON.stringify(b[id]);
+      if (json === null ? !(id in synced) : synced[id] === json) return;
+      if (json === null) delete synced[id]; else synced[id] = json;
+      writeDoc(id, json);
+    });
+  }
+  function writeDoc(id, json) {
+    latest[id] = json;
+    inflight[id] = (inflight[id] || 0) + 1;
+    chain[id] = (chain[id] || Promise.resolve()).then(function () {
+      if (!(id in latest)) return; // an earlier turn of this chain already sent the newest body
+      var j = latest[id]; delete latest[id];
+      var ref = cloud.col.doc(id);
+      return j === null ? ref.delete() : ref.set(JSON.parse(j));
+    }).catch(function (e) {
+      delete synced[id]; // the next change writes this document again
+      toast(t(e && e.code === "quota_exceeded" ? "sync_full" : "sync_failed"));
+    }).then(function () { inflight[id]--; });
+  }
+  function stateKey() { return JSON.stringify([S.entries, S.checkins, photos.map(function (p) { return p.id + p.date + p.pose; })]); }
+  function applySnapshot(snap, merge) {
+    var docs = {};
+    snap.docs.forEach(function (d) { docs[d.id] = d.data(); });
+    docs = JSON.parse(JSON.stringify(docs)); // snapshot bodies are frozen; entries get edited in place
+    Object.keys(inflight).forEach(function (id) {
+      if (inflight[id] > 0) { if (synced[id]) docs[id] = JSON.parse(synced[id]); else delete docs[id]; }
+    });
+    var entries = [], checkins = {}, cps = [], prefs = null;
+    Object.keys(docs).forEach(function (id) {
+      var b = docs[id] || {};
+      if (id === "prefs") { prefs = b.prefs; return; }
+      if (id.indexOf("m-") !== 0) return;
+      (b.entries || []).forEach(function (e) { if (e && e.id && e.date && Number(e.amount) > 0) entries.push(e); });
+      Object.keys(b.checkins || {}).forEach(function (k) { checkins[k] = b.checkins[k]; });
+      (b.photos || []).forEach(function (p) {
+        if (p && p.id && p.full && p.date) cps.push({ id: p.id, date: p.date, pose: POSES.indexOf(p.pose) > -1 ? p.pose : "other", createdAt: p.createdAt || "", w: p.w, h: p.h, full: p.full, thumbId: p.thumb || p.full });
+      });
+    });
+    if (merge) { // what was logged on this device before the database answered goes up with it
+      var have = {};
+      entries.forEach(function (e) { have[e.id] = 1; });
+      S.entries.forEach(function (e) { if (!have[e.id]) entries.push(e); });
+      Object.keys(S.checkins).forEach(function (k) { if (!checkins[k]) checkins[k] = S.checkins[k]; });
+      if (!prefs) prefs = S.prefs;
+    }
+    var before = stateKey();
+    S.entries = entries; S.checkins = checkins;
+    if (prefs && typeof prefs === "object") S.prefs = prefs;
+    S.prefs.last = S.prefs.last || {};
+    photos = cps.concat(photos.filter(function (p) { return !p.full; })).sort(byPhoto);
+    synced = {};
+    var b = bodies();
+    Object.keys(docs).forEach(function (id) { if (b[id]) synced[id] = JSON.stringify(b[id]); });
+    if (merge) syncCloud();
+    if (stateKey() !== before) softRender();
+  }
+  // A snapshot never redraws under someone typing or inside an open sheet; it waits for them.
+  function busy() {
+    var a = document.activeElement;
+    return (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && main.contains(a)) || !!document.querySelector("dialog[open]");
+  }
+  function softRender() { if (busy()) deferred = true; else render(); }
+  function catchUp() { setTimeout(function () { if (deferred && !busy()) { deferred = false; render(); } }, 0); }
+
+  function connectCloud() {
+    var c = window.claude;
+    if (!c || typeof c.use !== "function") return;
+    Promise.all([c.use("db"), c.use("user")]).then(function (r) {
+      var store = r[0], user = r[1];
+      if (!store || !user) return null;
+      return user.id().then(function (id) {
+        if (!id) return;
+        cloud = { col: store.collection("data/users/" + id), assets: null, downloads: null };
+        c.use("assets").then(function (a) { cloud.assets = a; }, function () {});
+        c.use("downloads").then(function (d) { cloud.downloads = d; }, function () {});
+        var first = true, slow = setTimeout(function () { toast(t("sync_slow")); }, 10000);
+        cloud.col.onSnapshot(function (snap) {
+          if (!snap.metadata.fromCache) clearTimeout(slow);
+          var merge = first && (S.entries.length > 0 || Object.keys(S.checkins).length > 0);
+          first = false;
+          applySnapshot(snap, merge);
+          if (merge) { try { localStorage.removeItem(STORE_KEY); } catch (e) { /* nothing to clear */ } }
+        }, function () { clearTimeout(slow); toast(t("sync_off")); });
+        render();
+      });
+    }).catch(function () { /* stays on this device */ });
   }
 
   /* ---------- Derived data ---------- */
@@ -638,12 +746,8 @@ dialog[open]{animation:up .42s var(--ease)}
 
   function render() {
     flushCheckin();
-    document.documentElement.lang = lang;
     document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
     document.querySelectorAll("[data-t-aria]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-aria"))); });
-    var lb = document.getElementById("lang");
-    lb.textContent = lang === "id" ? "EN" : "ID";
-    lb.setAttribute("aria-label", lang === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia");
     document.querySelectorAll(".tabs [data-view]").forEach(function (b) {
       if (b.getAttribute("data-view") === view) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
     });
@@ -651,7 +755,7 @@ dialog[open]{animation:up .42s var(--ease)}
     main.innerHTML = html + scope();
     if (view === "compare") wireSlider();
   }
-  function scope() { return '<div class="scope"><p>' + t("scope_1") + "</p><p>" + t("scope_2") + "</p></div>"; }
+  function scope() { return '<div class="scope"><p>' + t("scope_1") + "</p><p>" + t(cloud ? "scope_2_cloud" : "scope_2") + "</p></div>"; }
   function hero(k) { return '<div class="hero"><div class="kicker">AXIOM · ' + esc(t("brand_sub")) + "</div><h1>" + esc(t(k)) + "</h1></div>"; }
 
   function seg(name, items, current, extraCls) {
@@ -996,9 +1100,12 @@ dialog[open]{animation:up .42s var(--ease)}
     save(); dlg.close(); render();
   });
   document.getElementById("f-delete").addEventListener("click", function () {
-    if (!editingId || !confirm(t("confirm_delete"))) return;
-    S.entries = S.entries.filter(function (e) { return e.id !== editingId; });
-    save(); dlg.close(); render(); toast(t("deleted"));
+    if (!editingId) return;
+    ask(t("confirm_delete"), t("delete")).then(function (yes) {
+      if (!yes) return;
+      S.entries = S.entries.filter(function (e) { return e.id !== editingId; });
+      save(); dlg.close(); render(); toast(t("deleted"));
+    });
   });
 
   /* ---------- Check-in autosave ---------- */
@@ -1095,8 +1202,6 @@ dialog[open]{animation:up .42s var(--ease)}
       render(); window.scrollTo(0, 0); main.focus({ preventScroll: true });
     });
   });
-  document.getElementById("lang").addEventListener("click", function () { setLang(lang === "id" ? "en" : "id"); });
-  function setLang(l) { lang = l; S.prefs.lang = l; save(); render(); syncSettings(); }
 
   /* ---------- Photo viewer ---------- */
   var pic = document.getElementById("pic-dlg");
@@ -1121,24 +1226,53 @@ dialog[open]{animation:up .42s var(--ease)}
     pic.close(); view = "compare"; render(); window.scrollTo(0, 0);
   }
   document.getElementById("pic-del").addEventListener("click", function () {
-    if (!viewerId || !confirm(t("confirm_delete_photo"))) return;
-    deletePhoto(viewerId).then(function () { pic.close(); render(); toast(t("deleted")); });
+    if (!viewerId) return;
+    ask(t("confirm_delete_photo"), t("delete")).then(function (yes) {
+      if (yes) deletePhoto(viewerId).then(function () { pic.close(); render(); toast(t("deleted")); });
+    });
   });
+
+  /* ---------- Confirmation ---------- */
+  var askDlg = document.getElementById("ask-dlg");
+  function ask(msg, yesLabel) {
+    return new Promise(function (res) {
+      document.getElementById("ask-msg").textContent = msg;
+      document.getElementById("ask-yes").textContent = yesLabel;
+      askDlg.returnValue = "";
+      askDlg.addEventListener("close", function () { res(askDlg.returnValue === "yes"); }, { once: true });
+      askDlg.showModal();
+    });
+  }
 
   /* ---------- Settings, backup ---------- */
   var setDlg = document.getElementById("set-dlg");
   function syncSettings() {
-    document.querySelectorAll("#set-lang [data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang)); });
-    var bytes = photos.reduce(function (s, p) { return s + (p.blob ? p.blob.size : 0) + (p.thumb ? p.thumb.size : 0); }, 0);
-    document.getElementById("set-usage").textContent = t("usage", { n: fmtNum(photos.length, 0), mb: fmtNum(bytes / 1048576, 1) });
+    var local = photos.filter(function (p) { return !p.full; });
+    var bytes = local.reduce(function (s, p) { return s + (p.blob ? p.blob.size : 0) + (p.thumb ? p.thumb.size : 0); }, 0);
+    document.getElementById("set-hint").textContent = t(cloud ? "export_hint_cloud" : "export_hint");
+    document.getElementById("set-usage").textContent = cloud && !local.length ? t("usage_cloud", { n: fmtNum(photos.length, 0) })
+      : t("usage", { n: fmtNum(local.length, 0), mb: fmtNum(bytes / 1048576, 1) });
   }
   document.getElementById("open-settings").addEventListener("click", function () { syncSettings(); setDlg.showModal(); });
-  document.querySelectorAll("#set-lang [data-lang]").forEach(function (b) { b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); }); });
 
+  // In the Artifact viewer a file is offered through the downloads capability (the viewer confirms it);
+  // a plain download link does nothing there. Resolves true once the file is handed over.
   function download(name, blob) {
+    var dl = cloud && cloud.downloads;
+    if (dl) {
+      return dl.save({ filename: name, data: blob }).then(function () { return true; }, function (e) {
+        if (!e || e.code !== "declined") toast(t("save_failed"));
+        return false;
+      });
+    }
     var a = document.createElement("a"), u = URL.createObjectURL(blob);
     a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+    return Promise.resolve(true);
+  }
+  function photoBlob(p) {
+    if (p.blob) return Promise.resolve(p.blob);
+    return fetch(url(p, true)).then(function (r) { if (!r.ok) throw new Error("photo"); return r.blob(); });
   }
   function toDataUrl(blob) {
     return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsDataURL(blob); });
@@ -1147,12 +1281,11 @@ dialog[open]{animation:up .42s var(--ease)}
 
   document.getElementById("exp-json").addEventListener("click", function () {
     Promise.all(photos.map(function (p) {
-      return toDataUrl(p.blob).then(function (data) { return { id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, data: data }; });
+      return photoBlob(p).then(toDataUrl).then(function (data) { return { id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, data: data }; });
     })).then(function (ph) {
       var out = { app: "axiom-tracker", version: 1, exportedAt: new Date().toISOString(), entries: S.entries, checkins: S.checkins, photos: ph };
-      download("axiom-tracker-" + todayKey() + ".json", new Blob([JSON.stringify(out)], { type: "application/json" }));
-      toast(t("exported"));
-    });
+      return download("axiom-tracker-" + todayKey() + ".json", new Blob([JSON.stringify(out)], { type: "application/json" }));
+    }).then(function (ok) { if (ok) toast(t("exported")); }, function () { toast(t("save_failed")); });
   });
   document.getElementById("imp-json").addEventListener("click", function () { var f = document.getElementById("imp-file"); f.value = ""; f.click(); });
   document.getElementById("imp-file").addEventListener("change", function (ev) {
@@ -1176,8 +1309,8 @@ dialog[open]{animation:up .42s var(--ease)}
           if (!p || !p.id || !p.data || find(p.id)) return;
           return fromDataUrl(p.data).then(function (blob) {
             return shrink(blob, 480, 0.8).then(function (th) {
-              var rec = { id: p.id, date: p.date, pose: POSES.indexOf(p.pose) > -1 ? p.pose : "other", createdAt: p.createdAt || new Date().toISOString(), w: p.w, h: p.h, blob: blob, thumb: th.blob };
-              return tx("readwrite", function (st) { return st.put(rec); }).then(function () { photos.push(rec); });
+              var meta = { id: p.id, date: p.date, pose: POSES.indexOf(p.pose) > -1 ? p.pose : "other", createdAt: p.createdAt || new Date().toISOString() };
+              return storePhoto({ blob: blob, w: p.w, h: p.h }, th, meta);
             });
           });
         });
@@ -1195,19 +1328,26 @@ dialog[open]{animation:up .42s var(--ease)}
     download("axiom-tracker-" + todayKey() + ".csv", new Blob(["﻿" + rows.map(function (r) { return r.map(q).join(","); }).join("\n")], { type: "text/csv" }));
   });
   document.getElementById("wipe").addEventListener("click", function () {
-    if (!confirm(t("confirm_delete_all"))) return;
-    S = { entries: [], checkins: {}, prefs: { lang: lang, last: {} } };
-    save();
-    Object.keys(urls).forEach(function (k) { URL.revokeObjectURL(urls[k]); }); urls = {};
-    tx("readwrite", function (st) { return st.clear(); }).catch(function () {}).then(function () {
-      photos = []; cmp.a = cmp.b = null; setDlg.close(); render(); toast(t("deleted"));
+    ask(t("confirm_delete_all"), t("delete_everything")).then(function (yes) {
+      if (!yes) return;
+      var assets = cloud && cloud.assets;
+      if (assets) photos.forEach(function (p) { [p.full, p.thumbId].filter(Boolean).forEach(function (a) { assets.delete(a).catch(function () {}); }); });
+      S = { entries: [], checkins: {}, prefs: { last: {} } };
+      photos = []; cmp.a = cmp.b = null;
+      save();
+      Object.keys(urls).forEach(function (k) { URL.revokeObjectURL(urls[k]); }); urls = {};
+      tx("readwrite", function (st) { return st.clear(); }).catch(function () {}).then(function () {
+        setDlg.close(); render(); toast(t("deleted"));
+      });
     });
   });
 
   // Close buttons and tapping the backdrop close a sheet.
   document.querySelectorAll("dialog").forEach(function (d) {
     d.addEventListener("click", function (ev) { if (ev.target === d || ev.target.closest("[data-close]")) d.close(); });
+    d.addEventListener("close", catchUp);
   });
+  main.addEventListener("focusout", catchUp);
 
   // A page left open overnight moves "today" forward.
   var lastToday = todayKey();
@@ -1222,6 +1362,7 @@ dialog[open]{animation:up .42s var(--ease)}
 
   render();
   loadPhotos().then(render);
+  connectCloud();
 })();
 </script>
 </body>

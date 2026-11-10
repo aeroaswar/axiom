@@ -111,7 +111,7 @@ decision from the owner, and none should be resolved silently in code.
   10 November 2026: a person records what they took, with check-ins and progress photos. It
   suggests no amount or schedule and keeps every record on the device, but it is still a
   personal-use surface beside a Research Use Only catalogue. It is kept out of the guide's
-  deployment (`dosage-guide/.vercelignore`) and is opened locally.
+  deployment (`dosage-guide/.vercelignore`) and published only as a private Claude Artifact.
 - **The vial label's DOSE row.** `10 clicks = 1 mg` is a pen calibration, but a regulator may
   read it as a dose. `stickers/design.md` §9 keeps it switchable per SKU (`dose: null`).
 - **The brand book's copy examples.** Its "write this" example states a dose ("250mcg twice

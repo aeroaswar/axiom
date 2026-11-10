@@ -24,7 +24,7 @@ it. Two documents apply to all of it:
 | --- | --- |
 | `src/`, `supabase/`, `messages/` | The web app: public site, client Account, ops/owner Console |
 | `storefront/` | The stone storefront, a static demo shop with an EN / ID switch |
-| `dosage-guide/` | The compound guide, the package card whose QR opens it, and the private dose tracker (the guide is live on Vercel; the tracker is not deployed) |
+| `dosage-guide/` | The compound guide, the package card whose QR opens it, and the private dose tracker (the guide is live on Vercel; the tracker is a private Claude Artifact) |
 | `business-proposal/` | The A4 price list, the order form, the proposal and the logo files |
 | `invoice/` | A standalone A4 invoice builder, also published as a Claude Artifact |
 | `stickers/` | The 50 × 30 mm vial label: proof, A4 gang sheet and label builder |

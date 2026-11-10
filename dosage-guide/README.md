@@ -7,6 +7,7 @@ A card that carries nothing but the wordmark and a QR, and the guide it opens.
 | `card.html` | Print-ready card — 85 × 55 mm, AXIOM wordmark left, QR right, nothing else. Pick a compound, set the URL, print. |
 | `index.html` | What the QR opens. Mobile-first guide to every lot in the price list — 79 lots across 65 compounds: what it is, how often, when in the day, the documented doses, a pen calculator, a dose schedule with calendar export, storage and cautions. |
 | `tracker.html` | A private daily log beside the guide: doses as taken, a check-in (weight, waist, how the day felt) and progress photos with a before / after comparison. See [The tracker](#the-tracker). |
+| `tracker_artifact.py` | Stages `tracker.html` as a Claude Artifact in `artifact/` (git-ignored). |
 | `compounds.js` | The data behind both. One entry per compound, carrying every size that compound is sold in. |
 | `qr.js` | Self-contained QR encoder. No CDN, no network — the card generates its own code. |
 | `src/` | The compound tables and the script that generates `compounds.js`. Edit these, then run `python3 src/gen.py`. |
@@ -366,10 +367,18 @@ not a prescription, and not a recommendation to administer anything to a person.
 
 ## The tracker
 
-`tracker.html` is a personal log kept beside the guide. It is **not deployed**: `.vercelignore`
-keeps it off the guide's Vercel host, and the guide does not link to it. Open it locally, for
-example `python3 -m http.server` in `dosage-guide/`, then `http://localhost:8000/tracker.html`.
-It reads compound names from `compounds.js` and nothing else.
+`tracker.html` is a personal log kept beside the guide. It is **not deployed** with the guide:
+`.vercelignore` keeps it off the guide's Vercel host, and the guide does not link to it. It runs
+two ways, from the same file:
+
+- **As a Claude Artifact** (how it is used). `python3 dosage-guide/tracker_artifact.py` stages
+  `artifact/tracker.html` (git-ignored): no document skeleton, the compound names inlined in
+  place of `compounds.js` (slug, name and category only). Publish that file with the
+  capabilities `db`, `user`, `assets` and `downloads`.
+- **Locally.** `python3 -m http.server` in `dosage-guide/`, then
+  `http://localhost:8000/tracker.html`.
+
+What it does:
 
 - **Today.** Log a dose (compound, amount, unit, time, site, note), a check-in (weight in kg,
   waist in cm, how the day felt on 1–5, a note) and a photo tagged front, side, back or other.
@@ -382,17 +391,27 @@ It reads compound names from `compounds.js` and nothing else.
   the doses logged between them and the change in weight and waist (taken from the check-in on
   each date, or the nearest one up to three days before).
 - **Backup.** Settings exports one JSON file holding every entry, check-in and photo, imports it
-  back (merging by id), exports the log as CSV and deletes everything.
+  back (merging by id), exports the log as CSV and deletes everything. Every delete asks in the
+  page: the Artifact viewer answers `window.confirm()` with false.
 
 **Restraint.** The tracker records what the person enters and proposes no amount and no
 schedule. The only defaults it fills in are the person's own last amount for that compound and
 the next site in their own rotation (abdomen, thigh, arm, glute; left then right).
 
-**Storage.** Entries live in `localStorage` (`axiom.tracker.v1`); photos are JPEG Blobs in
-IndexedDB (`axiom-tracker`), each reduced to 1600 px on the long side with a 480 px thumbnail.
-Nothing is uploaded. Clearing site data removes it all, which is why the export exists.
+**Storage.**
 
-EN / ID follows the browser and remembers the reader's choice; numbers follow the language
-(`2,5 mg` in Indonesian, `2.5 mg` in English) and both decimal marks are accepted. Dark is the
-AXIOM ground; under a light system setting it switches to paper with deep bronze.
+- *In the Artifact*, the log lives in the person's private subtree of the Artifact's database,
+  `data/users/<id>`, which nobody else on the Artifact can read, its owner included: one document
+  per month (`m-2026-11`: that month's entries, check-ins and photo records) and one for
+  preferences (`prefs`). Photos go to the Artifact's asset store as JPEGs, and the records keep
+  only their ids, so anyone the Artifact is shared with as an editor could reach them: keep it
+  unshared. A change rewrites only the documents whose content changed, one write at a time per
+  document; a snapshot never redraws under someone typing. Anything logged on the device before
+  the database answered is merged up on the first connection. Exports go through the
+  `downloads` capability.
+- *Locally*, entries live in `localStorage` (`axiom.tracker.v1`) and photos in IndexedDB
+  (`axiom-tracker`). Nothing is uploaded.
 
+Photos are reduced to 1600 px on the long side, with a 480 px thumbnail. The page is English
+only and light only: paper `#F2EDE5` with deep bronze `#7C4C24`, the print palette in
+`DESIGN.md`, whatever the system setting.
