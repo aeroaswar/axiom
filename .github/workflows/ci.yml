@@ -57,17 +57,16 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Browser gates — 6, 7, 10, 14, 15, 16, 18, 19, 20, 21
         run: pnpm exec playwright test
-      - name: Storefront browser checks — hero motion, Bahasa Indonesia on every route, standalone package
+      - name: Storefront browser checks — hero motion, showcase routes and WhatsApp ordering, standalone package
         working-directory: storefront
         run: |
           python serve.py >/dev/null 2>&1 &
           for i in $(seq 40); do curl -sf http://127.0.0.1:8765/ >/dev/null && break; sleep 0.5; done
           python package.py
           node qa/check-hero.cjs
-          node qa/check-i18n.cjs
+          node qa/check-showcase.cjs
           AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-hero.cjs
-          AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-i18n.cjs
-          node qa/check-basket.cjs
+          AXIOM_TEST_URL="file://$PWD/AXIOM-storefront.html#/" node qa/check-showcase.cjs
       - uses: actions/upload-artifact@v4
         if: failure()
         with: { name: playwright-report, path: playwright-report, retention-days: 7 }

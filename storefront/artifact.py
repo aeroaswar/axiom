@@ -12,10 +12,9 @@ OUT = ROOT / 'artifact'
 SITE = OUT / 'site'
 ASSET = r'assets/[a-zA-Z0-9_.-]+\.(?:jpg|png|webp|woff2)'
 TITLE = '<title>AXIOM Storefront</title>'
-CORE = ['base.css', 'design.css', 'editorial-v2.css', 'stone-v3.css', 'content.js', 'app.js', 'design.js', 'i18n-id.js']
+CORE = ['base.css', 'design.css', 'editorial-v2.css', 'stone-v3.css', 'content.js', 'app.js', 'design.js']
 # Generated scripts that build their own versioned URLs at runtime.
-UNVERSION = {'app.js': ("pages/' + key + '.js?v=' + window.__PAGES_VERSION", "pages/' + key + '.js'"),
-             'design.js': ("'i18n-id.js?v=' + window.__I18N_VERSION", "'i18n-id.js'")}
+UNVERSION = {'app.js': ("pages/' + key + '.js?v=' + window.__PAGES_VERSION", "pages/' + key + '.js'")}
 
 shutil.rmtree(OUT, ignore_errors=True)
 (SITE / 'pages').mkdir(parents=True)

@@ -1,6 +1,7 @@
 """Build a portable restyle of the user-supplied AXIOM storefront demo."""
 from pathlib import Path
 import json, re, base64, hashlib
+import showcase
 
 ROOT = Path(__file__).resolve().parent
 source = (ROOT / 'reference.html').read_text()
@@ -20,18 +21,11 @@ scripts = list(re.finditer(r'<script\b([^>]*)>(.*?)</script>', source, re.S))
 app = scripts[-1][2]
 app = app.replace('axiom-demo-', 'axiom-design-')
 app = app.replace('    hydrate(key, r);', '    hydrate(key, r);\n    window.dispatchEvent(new CustomEvent("axiom:route", {detail:{key:key,path:r.path}}));')
-# The certificate search rewrites its own counter; strip the translated form too so it never accumulates.
-app = app.replace("replace(/ · Showing.*$/, '')", "replace(/ · (Showing|Menampilkan).*$/, '')")
-if 'Showing|Menampilkan' not in app: raise SystemExit('Certificate counter not found in reference app; update the Bahasa Indonesia patch.')
 # The product page's buy box (form.buy-form inside .buy) handles its own adds. The card handler only skipped forms
 # classed "buy", so it also fired on the buy box and added the page's default size on every click.
 card_skip = "if (!sku || !delta || f.classList.contains('buy')) return;"
 if app.count(card_skip) != 1: raise SystemExit('Card add handler changed in reference app; update the buy box guard.')
 app = app.replace(card_skip, "if (!sku || !delta || f.classList.contains('buy') || f.closest('.buy')) return;")
-# AXIOM no longer sells merch; the device buy box says so in its shipping note.
-merch_note = "Devices and merch ship once."
-if app.count(merch_note) != 1: raise SystemExit('Device shipping note changed in reference app; update the merch removal.')
-app = app.replace(merch_note, "Devices ship once.")
 # Page templates load on first visit (pages/<key>.js); the standalone package ships them inline.
 loader = '''  var pageRequests = {};
   function loadPage(key) {
@@ -50,6 +44,8 @@ for old, new in [('  function render() {', loader),
                  ('    closeMenu();\n    window.scrollTo(0, 0);', "    main.removeAttribute('aria-busy');\n    closeMenu();\n    window.scrollTo(0, 0);")]:
     if app.count(old) != 1: raise SystemExit('Reference app changed; update the page loader patch: ' + old.strip())
     app = app.replace(old, new)
+# AXIOM shows its catalogue and takes orders on WhatsApp: no basket, prices, certificates or accounts (showcase.py).
+app = showcase.patch_app(app)
 (ROOT / 'app.js').write_text(app)
 styles = '\n'.join(re.findall(r'<style>(.*?)</style>', source, re.S))
 
@@ -145,6 +141,7 @@ home = home.replace('<div class="chead"><h2>', '<div class="chead"><span class="
 home = home.replace('id="standard"><div class="wrap"><div class="shead duo"><span class="no">02', 'id="standard"><div class="wrap"><div class="shead duo"><span class="no">03')
 home = home.replace('id="next"><div class="wrap"><div class="shead"><span class="no">03', 'id="next"><div class="wrap"><div class="shead"><span class="no">04')
 pages['home'] = home
+pages = showcase.strip_commerce(pages, data)
 
 # Original art-directed homepage, retaining the source catalogue's price/option controls.
 arrow = '<svg class="ic-sv" aria-hidden="true"><use href="#i-arrow"></use></svg>'
@@ -159,7 +156,6 @@ for i, product in enumerate(research):
     if i >= 4: attributes += ' hidden'
     card = card.replace('<article ', '<article '+attributes+' ', 1)
     card = card.replace('decoding="async"', 'decoding="async" loading="lazy"')
-    card = card.replace('Add to basket</button>', 'Select options '+arrow+'</button>')
     home_cards.append(card)
 pages['home'] = (ROOT/'home-v2.html').read_text().replace('{{products}}',''.join(home_cards)).replace('{{arrow}}',arrow)
 
@@ -206,13 +202,6 @@ for key, markup in pages.items():
         markup=markup.replace('class="prod-fig" aria-hidden="true"','class="prod-fig"')
     pages[key]=markup
 
-# An empty basket offers the featured compounds as plain links (adding from this page would leave its empty state up).
-empty = '<div class="acts" style="margin-top:32px"><a class="btn btn-solid" href="#/products">Open the shop</a>'
-if pages['request'].count(empty) != 1: raise SystemExit('Empty basket template changed; update the featured compounds block.')
-final_cards = {re.search(r'data-compound="([^"]+)"', card)[1]: card for card in re.findall(r'<article\b.*?</article>', pages['products'], re.S)}
-picks = ''.join(re.sub(r'<form\b.*?</form>', '', final_cards[slug], flags=re.S).replace('<article ', '<article data-pick ', 1) for slug in featured)
-pages['request'] = re.sub(r'(<div class="acts" style="margin-top:32px">.*?</div>)', lambda m: m[1] + '<div class="basket-picks"><p class="kicker">From the collection</p><div class="pgrid cards">' + picks + '</div></div>', pages['request'], count=1, flags=re.S)
-
 # Cards offer the 640px photo (card_photos.py) next to the full-size one, so small tiles load a small file.
 from PIL import Image
 # Cards are half the screen on phones, a third on tablets, about 310px on laptops and up to 360px on wide screens.
@@ -226,8 +215,7 @@ def card_srcset(img):
     return img[:-1].rstrip('/').rstrip() + f' srcset="{small} 640w, {full} {width}w" sizes="{card_sizes}">'
 for key, markup in pages.items():
     pages[key] = re.sub(r'<article\b[^>]*class="[^"]*\bpcard\b.*?</article>', lambda card: re.sub(r'<img\b[^>]*class="[^"]*\bstone-photo\b[^>]*>', lambda m: card_srcset(m[0]), card[0]), markup, flags=re.S)
-i18n_id = json.loads((ROOT / 'i18n-id.json').read_text())
-# The homepage ships with content.js; every other template and the Indonesian dictionary load on demand.
+# The homepage ships with content.js; every other template loads on demand.
 def write(path, text):
     """Rewrite only on change: this folder may sync through iCloud, which keeps conflict copies of churned files."""
     if not path.exists() or path.read_text() != text: path.write_text(text)
@@ -236,44 +224,46 @@ chunks = {key + '.js': 'window.__PAGES['+js(key)+']='+js(markup)+';\n' for key, 
 for stale in (ROOT / 'pages').iterdir():
     if stale.name not in chunks: stale.unlink()
 for name, text in chunks.items(): write(ROOT / 'pages' / name, text)
-write(ROOT / 'i18n-id.js', 'window.__I18N_ID='+js({k:i18n_id[k] for k in ['text','html','patterns']})+';\n')
+(ROOT / 'i18n-id.js').unlink(missing_ok=True)  # the site is English only
 digest = lambda paths: hashlib.sha256(b''.join(p.read_bytes() for p in paths)).hexdigest()[:10]
 pages_version = digest([ROOT / 'pages' / name for name in sorted(chunks)])
-i18n_version = digest([ROOT / 'i18n-id.js'])
-(ROOT / 'content.js').write_text('window.__PAGES='+js({'home':pages['home']})+';\nwindow.__PAGE_KEYS='+js(list(pages))+';\nwindow.__PAGES_VERSION='+js(pages_version)+';\nwindow.__I18N_VERSION='+js(i18n_version)+';\nwindow.__DATA='+js(data)+';\nwindow.__IMG='+js(images)+';\n')
+(ROOT / 'content.js').write_text('window.__PAGES='+js({'home':pages['home']})+';\nwindow.__PAGE_KEYS='+js(list(pages))+';\nwindow.__PAGES_VERSION='+js(pages_version)+';\nwindow.__DATA='+js(showcase.client_data(data))+';\nwindow.__IMG='+js(images)+';\n')
 
 body = source[source.index('<svg width="0"'):source.index('<script src=')]
-nav = '<div class="nav-links" id="site-links"><a href="#/products">Shop</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a class="nav-account-m" href="#/account">Account</a></div>'
+nav = '<div class="nav-links" id="site-links"><a href="#/products">Shop</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a href="#/contact">Contact</a></div>'
 body = re.sub(r'<div class="nav-links" id="site-links">.*?</div>',nav,body,count=1,flags=re.S)
-# AXIOM no longer sells merch: drop its footer link and the footer's mention of apparel.
-for old, new in [('<li><a href="#/merch">Merch</a></li>', ''),
-                 ('recovery, wellness and apparel under one standard', 'recovery and wellness under one standard')]:
-    if body.count(old) != 1: raise SystemExit('Reference footer changed; update the merch removal: ' + old)
-    body = body.replace(old, new)
+# A showcase: no basket or account in the header, and the footer lists only the pages the site still has.
+footer_shop = '<div><h4>Shop</h4><ul><li><a href="#/products">Shop</a></li><li><a href="#/products?kind=device">Devices</a></li><li><a href="#/products?saved=1">Saved</a></li></ul></div>'
+footer_standard = '<div><h4>The standard</h4><ul><li><a href="#/compounds">Compound guide</a></li><li><a href="#/standard">The standard</a></li><li><a href="#/faq">FAQ</a></li></ul></div>'
+footer_contact = '<div><h4>Contact</h4><ul><li><a href="#/contact">Contact</a></li><li><a href="https://wa.me/628128573396">WhatsApp</a></li></ul></div>'
+for pattern, new in [(r'<a class="nav-ic" aria-label="Basket".*?</a>', ''),
+                     (r'<a class="btn btn-sm nav-account" href="#/account">Account</a>', ''),
+                     (r'<div><h4>Shop</h4><ul>.*?</ul></div>', footer_shop),
+                     (r'<div><h4>The standard</h4><ul>.*?</ul></div>', footer_standard),
+                     (r'<div><h4>Legal</h4><ul>.*?</ul></div>', footer_contact),
+                     (r'recovery, wellness and apparel under one standard', 'recovery and wellness under one standard'),
+                     (r' Prices in IDR\.', '')]:
+    body, n = re.subn(pattern, new, body, count=1, flags=re.S)
+    if n != 1: raise SystemExit('Reference header or footer changed; update the showcase edit: ' + pattern)
 # The demo notice joins the top ribbon rather than floating over page content.
 demo = '<div class="demo-band">Demo · storefront only</div>'
 if body.count(demo) != 1 or body.count('<div class="ribbon">') != 1: raise SystemExit('Reference body changed; update the demo notice move.')
 body = re.sub(r'(<div class="ribbon">.*?)</div>', lambda m: m[1] + '<span class="demo-tag">Demo · storefront only</span></div>', body.replace(demo, '', 1), count=1, flags=re.S)
-lang = '<div class="nav-lang" role="group" aria-label="Language"><button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button><button type="button" data-lang="id" lang="id" aria-pressed="false">ID</button></div>'
-body = body.replace('<div class="nav-right">', '<div class="nav-right">'+lang, 1)
-body = body.replace('<a class="btn btn-sm nav-account" href="#/account">Account</a>','<a class="btn btn-sm nav-account" href="#/account" aria-label="Account" title="Account"><svg class="ic-sv" aria-hidden="true"><use href="#i-user"></use></svg></a>')
+showcase.check_links(pages, [('header and footer', body)])
 # The reference styles carry their fonts inline and many unused rules; keep what the storefront renders.
-corpus = '\n'.join([body, app, (ROOT/'design.js').read_text(), *pages.values(), *i18n_id['html'].values()])
+corpus = '\n'.join([body, app, (ROOT/'design.js').read_text(), *pages.values()])
 base_css = floor_type(purge_css(extract_fonts(styles), corpus))
 (ROOT / 'base.css').write_text(base_css)
 for sheet in ['design.css', 'editorial-v2.css', 'stone-v3.css']:
     if small_sizes((ROOT / sheet).read_text()):
         raise SystemExit(f'{sheet} sets text below {TYPE_FLOOR}px: ' + ', '.join(small_sizes((ROOT / sheet).read_text())[:5]))
 fonts = ''.join(f'<link rel="preload" href="{f}" as="font" type="font/woff2" crossorigin>' for f in dict.fromkeys(re.findall(r'assets/font-\w+\.woff2', base_css)))
-# A saved Indonesian choice fetches the dictionary early and holds the first paint until it applies.
-# Indonesian is the default for a browser set to Indonesian; a saved choice always wins. Keep in step with design.js.
-early_lang = '<script>try{var l=null;try{l=localStorage.getItem("axiom-design-lang")}catch(e){}if(l!=="en"&&l!=="id")l=(navigator.languages||[navigator.language||""]).some(function(x){return /^id\\b/i.test(x)})?"id":"en";if(l==="id"){var d=document.documentElement;d.lang="id";if(!window.__I18N_ID){d.classList.add("lang-pending");setTimeout(function(){d.classList.remove("lang-pending")},3000);var s=document.createElement("script");s.id="i18n-id";s.fetchPriority="high";s.src="i18n-id.js?v='+i18n_version+'";document.head.appendChild(s)}}}catch(e){}</script>'
 # Keep one small wordmark in the footer; no oversized duplicate.
 html = '''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="AXIOM — research compounds, performance wear and everyday carry. Explore the catalogue and the standard behind every lot.">
+<meta name="description" content="AXIOM — research compounds and therapy devices. Explore the catalogue, the compound guide and the standard behind every lot.">
 <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b0b0a">
-<title>AXIOM — Built for better research.</title><link rel="icon" href="data:,">'''+early_lang+fonts+'''
+<title>AXIOM — Built for better research.</title><link rel="icon" href="data:,">'''+fonts+'''
 <link rel="stylesheet" href="base.css"><link rel="stylesheet" href="design.css"><link rel="stylesheet" href="editorial-v2.css"><link rel="stylesheet" href="stone-v3.css">
 </head><body>'''+body+'''<script src="content.js"></script><script src="design.js"></script><script src="app.js"></script></body></html>'''
 for asset in ['base.css','design.css','editorial-v2.css','stone-v3.css','content.js','design.js','app.js']:

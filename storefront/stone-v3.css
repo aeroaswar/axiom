@@ -192,16 +192,16 @@
   .site .pills .chip{flex:none}
 }
 
-/* Mobile buy bar: price and Add to basket stay one tap away until the real buy box is in view (design.js). */
+/* Mobile order bar: the chosen size and Order on WhatsApp stay one tap away until the order box is in view (design.js). */
 .buy-bar{display:none}
 @media(max-width:700px){
   .buy-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;gap:14px;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:#0c0d0a;color:#f0eee7;border-top:1px solid #f0eee72a;transition:transform .32s cubic-bezier(.2,.7,.2,1),visibility .32s}
   .buy-bar.is-off{transform:translateY(105%);visibility:hidden}
   .buy-bar .bb-info{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
   .buy-bar .bb-size{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#b5b2a7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .buy-bar .bb-price{font-size:17px;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .buy-bar .bb-add{flex:none;min-height:48px;padding:0 22px;border:0;background:#f0eee7;color:#0c0d0a;font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
-  .buy-bar .bb-add:disabled{background:#3a3a33;color:#b5b2a7;cursor:not-allowed}
+  .buy-bar .bb-name{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .buy-bar .bb-add{flex:none;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:48px;padding:0 22px;border:0;background:#f0eee7;color:#0c0d0a;font:500 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+  
   .buy-bar .bb-add:focus-visible{outline:2px solid var(--stone-bronze);outline-offset:2px}
   body.has-buy-bar .site-foot{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 }
@@ -216,3 +216,10 @@
 .site .basket-picks .kicker{display:block;margin-bottom:22px}
 .site .basket-picks .pgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;border:0}
 @media(max-width:900px){.site .basket-picks .pgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}}
+/* The standard section has no photograph: its heading and principles share the row. */
+.site .ed-standard-grid{grid-template-columns:1fr}
+@media (min-width:901px){.site .ed-standard-copy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);column-gap:75px;align-items:start}.site .ed-standard-copy>h2,.site .ed-standard-copy>p{grid-column:1}.site .ed-standard-copy>.ed-principles{grid-column:2;grid-row:1/span 2;margin-top:0}}
+/* Order box: what the chosen lot ships as, and how ordering works. */
+.site .buy .order-note{margin:16px 0 22px;font-size:13px;color:var(--muted-2)}
+.site .buy .order-help{margin-top:12px}
+.site .buy-foot .btn[data-order] .ic-sv{font-size:16px;margin-right:4px}

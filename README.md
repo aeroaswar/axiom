@@ -242,13 +242,13 @@ live only in `dosage-guide/src/`, which is never published. Details in `dosage-g
 
 ## Stone storefront
 
-`storefront/` is a static HTML/CSS/JavaScript shop with hash routing and Python build scripts.
+`storefront/` is a static HTML/CSS/JavaScript showcase with hash routing and Python build scripts.
 It needs no Node build. Its pages are warm ivory with charcoal stone sections and bronze accents.
 There are 68 products (65 compounds and three devices), each with its own stone
-photograph, across 167 page templates. The hero's three pens move independently with scroll and
-the cursor over a still stone background. An EN / ID switch shows every route in Bahasa
-Indonesia, and on phones a buy bar follows each product page. Sign-in, inventory, payment and
-order submission are demo features that connect to nothing.
+photograph, across 148 page templates. The hero's three pens move independently with scroll and
+the cursor over a still stone background. It shows the catalogue and the compound guide in
+English without prices; every order opens WhatsApp with the product and size in the message, and
+on phones an order bar follows each product page.
 
 ```
 cd storefront
@@ -257,7 +257,7 @@ python3 package.py                            # AXIOM-storefront.html (standalon
 python3 serve.py                              # http://127.0.0.1:8765
 ```
 
-Edit `home-v2.html`, `stone-v3.css`, `design.js`, `pages.json`, `data.json` and `i18n-id.json`,
+Edit `home-v2.html`, `stone-v3.css`, `design.js`, `pages.json`, `data.json` and `showcase.py`,
 never the generated files. The storefront is also a private Claude Artifact, republished with
 `python3 artifact.py`. Its working rules are in `storefront/CLAUDE.md` and the overview is in
 `storefront/README.md`.
@@ -315,8 +315,8 @@ authoritative; retire this file once the Console covers the offline case.
 `.github/workflows/ci.yml` runs on every pull request. It migrates and seeds Postgres 16, then
 runs the typecheck, copy lint, greps, bilingual check, SQL and reference gates, the build and
 the Playwright gates. For the storefront, it fails if a rebuild changes the committed generated
-files, then runs the hero, Indonesian and basket checks against the served site and the
-standalone file.
+files, then runs the hero and showcase checks against the served site and the standalone
+file.
 
 ## Production
 

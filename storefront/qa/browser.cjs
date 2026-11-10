@@ -25,9 +25,9 @@ function go(page,hash){
 function routes(page){
   return page.evaluate(()=>{
     const keys=window.__PAGE_KEYS;
-    const r=['/','/products','/coas','/compounds','/contact','/request','/sign-in','/standard','/process','/faq','/price-list','/how-to-read-a-coa','/terms','/privacy','/legal','/request/sent'];
+    const r=['/','/products','/compounds','/contact','/standard','/faq'];
     window.__DATA.products.forEach(x=>{r.push('/products/'+x.slug);if(keys.includes('compound-'+x.slug))r.push('/compounds/'+x.pathway+'/'+x.slug);});
-    keys.forEach(k=>{if(k.startsWith('pathway-'))r.push('/compounds/'+k.slice(8));if(k.startsWith('coa-'))r.push('/coas/'+k.slice(4));});
+    keys.forEach(k=>{if(k.startsWith('pathway-'))r.push('/compounds/'+k.slice(8));});
     return [...new Set(r)];
   });
 }

@@ -61,3 +61,11 @@
 - The 22 merch photos (16 MB, including PNG masters in LFS) are deleted; no built file referenced them. The standalone HTML is 20.3 MB. `#/merch` now opens the homepage.
 - Homepage closing band ("Start with the standard."): the stone now fades into charcoal like the inner-page band, instead of stopping at a hard edge halfway across.
 - `qa/check-hero.cjs`, `qa/check-i18n.cjs` (0 English leftovers) and `qa/check-basket.cjs` pass on the served site, and the hero and i18n checks on the standalone HTML.
+
+## Showcase — 11 November 2026
+
+- The storefront now shows what AXIOM carries and the compound guide, in English only, and takes orders on WhatsApp. Removed: prices (cards, product pages, structured data and the data the browser receives), the basket and mini basket, Subscribe & save (product plans and the homepage section), accounts and sign-in, certificates (library, 7 certificate pages, How to read a CoA, product certificate panels and links), the price list, the Process, Terms, Privacy and Legal pages, the Bahasa Indonesia switch and dictionary, every mention of Indonesia, rupiah, Jabodetabek and WIB, and the homepage box photograph. 167 → 148 templates.
+- Ordering: a product page shows its sizes and Order on WhatsApp; the message reads "Hello AXIOM, I would like to order Retatrutide 30 mg." for the chosen size (devices name their option in brackets). The phone order bar mirrors the chosen size and link. Compound guide lots each have an Order link; cards show their sizes and open the product page.
+- Wording kept the testing claim without certificates: "HPLC/MS verified per lot", "Coded by lot" on The standard, and the FAQ keeps four questions. The Contact page sends orders and questions to WhatsApp.
+- `showcase.py` makes these edits at build time and stops the build on any missing target or any link to a removed route. `qa/check-showcase.cjs` replaces the Indonesian and basket checks: 148 routes free of price, basket, certificate, account, subscription and Indonesia wording, and order links checked on the product page, a device page, the phone order bar and the compound guide.
+- `qa/check-hero.cjs` and `qa/check-showcase.cjs` pass on the served site and the standalone HTML (19.4 MB). Reviewed in a browser at 1440 px and 390 px: homepage, shop, product and device pages, compound guide, The standard, Contact, FAQ and footer.
