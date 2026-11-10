@@ -222,34 +222,20 @@ printed with a guess.
 DOSE line reads `1 spray = 100 mcg`. Selecting one of them puts the Dose field on **Nasal spray**
 at 100 mcg; the amount stays editable, and the choice is remembered per compound and strength.
 
-A spray label carries a **spray icon at the right of the compound line**, drawn after the
-reference the user supplied: a slim pump bottle on a rounded base and a cone of eleven mist dots
-fanning out to the right, growing as they spread. It is all filled shapes, 3.2em tall on the
-compound line (4 mm), so the smallest dot is 0.37 mm (3 dots at 203 dpi), and it is drawn in the
-PDFs and the label images too. It shares the compound line's autofit; a name too long to share
-the line with it (only *VIP (Vasoactive Intestinal Peptide)*, were it ever a spray) keeps the
-line to itself and the icon is left off.
+**Device icons.** In the builder, every dosed label carries an icon at the right of the compound line that says
+how the dose is taken:
 
----|---|---|
-| 10 mg | 3.33 | `30 clicks = 1 mg` |
-| 20 mg | 6.67 | `15 clicks = 1 mg` |
-| 30 mg | 10 | `10 clicks = 1 mg` |
-| 40 mg | 13.3 | `15 clicks = 2 mg` |
-| 60 mg | 20 | `5 clicks = 1 mg` |
+- **Pen** (`N clicks = M mg`): an injection pen held at an angle, with the dose knob, a body with
+  a clear window, the hub and a pointed needle with a drop at its tip.
+- **Spray** (`1 spray = N mcg`): drawn after the reference the user supplied, a slim pump bottle
+  on a rounded base and a cone of eleven mist dots fanning out to the right, growing as they
+  spread.
 
-**Nasal sprays.** Adamax, Selank and Semax (and Selank + Semax) are nasal sprays, not pens: their
-DOSE line reads `1 spray = 100 mcg`. In the builder the Dose field has a **Pen · clicks / Nasal
-spray** switch; selecting one of those compounds opens on the spray at 100 mcg, the amount stays
-editable, and the choice is remembered per compound and strength like the water. A spray DOSE
-carries a spray icon before the value, drawn after the reference the user supplied: a slim
-pump bottle on a rounded base and a cone of eleven mist dots fanning out to the right, growing as
-they spread. All filled shapes, 1.45em tall, drawn in the PDF and the label images as well; the
-smallest dot is 0.3 mm across (2.4 dots at 203 dpi). It raises the tallest spray label to
-24.95 mm of the 26 mm content box (24.46 mm thermal).
-
-The print sheet's `10 clicks = 1 mg` on every strength holds only if each strength is mixed to
-10 mg/ml (10 mg in 1 ml, 30 mg in 3 ml, 60 mg in 6 ml). If they are all mixed in 3 ml, only the
-30 mg line is right; set each SKU's `dose` from the table above.
+A label with **No dose** has no icon. Both icons are filled shapes only, 3.2em tall on the
+compound line (4 mm), and are drawn in the PDFs and the label images too. The finest parts are
+the pen's needle (0.27 mm, 2 dots at 203 dpi), its window (0.43 mm) and the spray's smallest dot
+(0.37 mm). The icon shares the compound line's autofit; a name too long to share the line with it
+(only *VIP (Vasoactive Intestinal Peptide)*) keeps the line to itself and the icon is left off.
 
 ---
 

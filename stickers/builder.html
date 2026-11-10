@@ -366,8 +366,8 @@ button,input,select{font:inherit;color:inherit}
   font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
 }
 .lbl__band--d .lbl__v{font-size:1.8em}
-/* spray icon: at the right of the compound line, centred on the name's caps */
-.lbl__band--spray{align-items:center}
+/* device icon (spray or pen): at the right of the compound line, centred */
+.lbl__band--ico{align-items:center}
 .lbl__ico{display:block;width:3.6em;height:3.2em;margin-left:.6em;overflow:visible}
 
 /* --- band E — compliance micro-print ------------------------ */
@@ -1093,10 +1093,18 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    smallest dot is 0.37 mm across, 3 dots on a 203 dpi head. */
 const SPRAY_ICON = '<svg class="lbl__ico" viewBox="0 0 27 24" xmlns="http://www.w3.org/2000/svg" aria-label="spray">'
   + '<path fill="currentColor" fill-rule="evenodd" d="M4.6 6.8H6V8H4.6Z M2.5 8H8V18.6H2.5Z M2.9 18.6H7.9A2.3 2.3 0 0 1 10.2 20.9V20.9A2.3 2.3 0 0 1 7.9 23.2H2.9A2.3 2.3 0 0 1 0.6 20.9V20.9A2.3 2.3 0 0 1 2.9 18.6Z M11.1 8.4A1.1 1.1 0 1 0 13.3 8.4A1.1 1.1 0 1 0 11.1 8.4Z M11.1 12.6A1.1 1.1 0 1 0 13.3 12.6A1.1 1.1 0 1 0 11.1 12.6Z M14.55 6.4A1.25 1.25 0 1 0 17.05 6.4A1.25 1.25 0 1 0 14.55 6.4Z M14.55 10.5A1.25 1.25 0 1 0 17.05 10.5A1.25 1.25 0 1 0 14.55 10.5Z M14.55 14.6A1.25 1.25 0 1 0 17.05 14.6A1.25 1.25 0 1 0 14.55 14.6Z M18.35 4.6A1.45 1.45 0 1 0 21.25 4.6A1.45 1.45 0 1 0 18.35 4.6Z M18.35 10.5A1.45 1.45 0 1 0 21.25 10.5A1.45 1.45 0 1 0 18.35 10.5Z M18.35 16.4A1.45 1.45 0 1 0 21.25 16.4A1.45 1.45 0 1 0 18.35 16.4Z M22.8 2.2A1.6 1.6 0 1 0 26 2.2A1.6 1.6 0 1 0 22.8 2.2Z M22.8 10.5A1.6 1.6 0 1 0 26 10.5A1.6 1.6 0 1 0 22.8 10.5Z M22.8 18.8A1.6 1.6 0 1 0 26 18.8A1.6 1.6 0 1 0 22.8 18.8Z"/></svg>';
+/* Injection-pen icon for a pen (clicks) label, the spray icon's partner:
+   dose knob, body with its window, hub, a pointed needle and a drop at the
+   tip, pointing up-right. Same rules: filled shapes that never overlap (the
+   window is a hole, by even-odd), on the same 27 x 24 grid, at the same size
+   on the compound line. The needle is 0.27 mm wide (2 dots at 203 dpi), the
+   window 0.43 mm. */
+const PEN_ICON = '<svg class="lbl__ico" viewBox="0 0 27 24" xmlns="http://www.w3.org/2000/svg" aria-label="injection pen">'
+  + '<path fill="currentColor" fill-rule="evenodd" d="M1.49 19.17L3.78 17.25L6.41 20.39L4.13 22.31Z M3.68 16.12L14.6 6.95L18.43 11.52L7.51 20.69Z M10.42 12.71L14.06 9.65L15.68 11.58L12.04 14.63Z M15.82 7.39L17.6 5.89L20 8.75L18.21 10.25Z M18.29 6.71L22.43 3.24L23.94 3.01L23.45 4.45L19.31 7.93Z M24.02 1.69A1.49 1.49 0 1 0 27 1.69A1.49 1.49 0 1 0 24.02 1.69Z"/></svg>';
 function labelHTML(d){
   const field = (cls,k,v) =>
     `<div class="lbl__band lbl__band--${cls}"><span class="lbl__k">${esc(k)}</span><span class="lbl__v">${esc(v)}</span></div>`;
-  const spray = d.dose && /spray/i.test(d.dose);
+  const icon = !d.dose ? '' : /spray/i.test(d.dose) ? SPRAY_ICON : /click/i.test(d.dose) ? PEN_ICON : '';
   return `<div class="lbl">
   <div class="lbl__band lbl__band--a">
     ${look() === 'thermal' ? WORDMARK_THERMAL : WORDMARK}
@@ -1104,8 +1112,8 @@ function labelHTML(d){
     <span class="lbl__note">${esc(d.note || 'HIGH PURITY')}</span>
   </div>
   <div class="lbl__rule lbl__rule--top">${RULE}</div>
-  <div class="lbl__band lbl__band--b${spray ? ' lbl__band--spray' : ''}"><span class="lbl__compound">${esc(d.compound)}</span>${
-    spray ? '<span class="lbl__spacer"></span>' + SPRAY_ICON : ''}</div>
+  <div class="lbl__band lbl__band--b${icon ? ' lbl__band--ico' : ''}"><span class="lbl__compound">${esc(d.compound)}</span>${
+    icon ? '<span class="lbl__spacer"></span>' + icon : ''}</div>
   ${field('c', 'QTY', d.qty)}
   ${d.dose ? field('d', 'DOSE', d.dose) : ''}
   <div class="lbl__rule lbl__rule--bot">${RULE}</div>
@@ -1129,7 +1137,7 @@ function autofit(root){
   };
   root.querySelectorAll('.lbl__band').forEach(band => {
     fit(band);
-    // a name too long to share its line with the spray icon keeps the line
+    // a name too long to share its line with the device icon keeps the line
     // to itself: the icon is dropped rather than the name pushed past the die
     const ico = band.querySelector('.lbl__ico');
     if (ico && band.scrollWidth > band.clientWidth + 0.5){
@@ -1705,7 +1713,7 @@ function drawLabel(page, lbl, map, k, fonts){
     const c = parseColor(useSvg ? getComputedStyle(shape).fill : getComputedStyle(rule).backgroundColor);
     if (c && c.a > 0 && box.width && box.height) fillSegs(page, rectSegs(box.left, box.top, box.width, box.height), map, c);
   }
-  // wordmark and the spray icon: their own paths, mapped through the viewBox
+  // wordmark and the device icon: their own paths, mapped through the viewBox
   for (const svg of lbl.querySelectorAll('svg.lbl__wm, svg.lbl__ico')){
     const vb = svg.viewBox.baseVal, b = svg.getBoundingClientRect();
     const s = Math.min(b.width / vb.width, b.height / vb.height);
