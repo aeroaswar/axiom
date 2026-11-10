@@ -366,8 +366,10 @@ not a prescription, and not a recommendation to administer anything to a person.
 
 ## The tracker
 
-`tracker.html` is a personal log that ships with the guide (served at `/tracker.html`; it is
-not linked from the guide yet). It reads compound names from `compounds.js` and nothing else.
+`tracker.html` is a personal log kept beside the guide. It is **not deployed**: `.vercelignore`
+keeps it off the guide's Vercel host, and the guide does not link to it. Open it locally, for
+example `python3 -m http.server` in `dosage-guide/`, then `http://localhost:8000/tracker.html`.
+It reads compound names from `compounds.js` and nothing else.
 
 - **Today.** Log a dose (compound, amount, unit, time, site, note), a check-in (weight in kg,
   waist in cm, how the day felt on 1–5, a note) and a photo tagged front, side, back or other.
