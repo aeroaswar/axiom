@@ -11,7 +11,7 @@ Continue the existing local AXIOM storefront in this folder. The user has approv
 - The homepage manifesto band ("A higher standard for research") is limestone: `assets/stone-light.webp` on the right, fading through a solid limestone wash into the band colour, with dark text on plain stone.
 - The product listing is the Catalogue, never the Shop: navigation, footer, breadcrumbs and headings. `qa/check-showcase.cjs` fails on visible "shop".
 - Keep the footer compact: one small wordmark, aligned navigation and restrained spacing.
-- The hero is light limestone (`#e5dcd1`) with dark text. It shows MOTS-c, Retatrutide and KLOW as their original photographic pens, still: no cursor, scroll or entrance motion. Preserve the original label pixels.
+- The hero is light limestone (`#e5dcd1`) with dark text. It shows MOTS-c, Retatrutide and KLOW as their original photographic pens leaning on the limestone, with shadows where they touch it, and still: no cursor, scroll or entrance motion. Preserve the original label pixels.
 - No text under 11px: `build.py` raises any smaller size in the generated `base.css` and stops the build if `design.css`, `editorial-v2.css` or `stone-v3.css` declares one. Text meets 4.5:1 contrast on its background. On ivory, the secondary grey is `--muted-2: #666259`.
 - The demo notice sits in the top ribbon (`.demo-tag`, placed by `build.py`), never floating over content. On phones, product pages show an order bar with the chosen size and Order on WhatsApp (`design.js`) until the order box is on screen.
 - The storefront is a showcase in English only: the catalogue, product pages and the compound guide, with orders taken on WhatsApp. It has no prices, basket, plans or subscriptions, accounts, certificates (COA), price list, legal pages, Bahasa Indonesia or mention of Indonesia. `showcase.py` enforces this at build time and `qa/check-showcase.cjs` checks every route.
@@ -52,7 +52,7 @@ CSS load order: `base.css`, `design.css`, `editorial-v2.css`, `stone-v3.css`.
 
 `package.py` builds the standalone HTML with every page inline and each image or font embedded once (about 22 MB): CSS images become custom properties and template paths resolve through `window.__ASSET`. In `design.js`, reference assets through `asset('assets/...')` so the standalone copy can resolve them.
 
-The hero clips the three pens out of `assets/stone-hero.webp` with inline SVG paths (each with a soft drop shadow) and sets them over `assets/stone-light.webp`, which fades into the limestone colour on its left. `assets/hero-stone-background.webp`, the generated dark plate, is no longer used.
+The hero picture is one inline SVG (`.hero-scene` in `home-v2.html`): `assets/stone-light.webp` mirrored, contact shadows, and the three pens clipped out of `assets/stone-hero.webp`, placed to lean on the tall block with their ends on the slab. A CSS mask fades its edges into the limestone colour. `assets/hero-stone-background.webp`, the generated dark plate, is no longer used.
 
 ## Build and verify
 

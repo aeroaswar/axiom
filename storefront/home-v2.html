@@ -1,5 +1,4 @@
 <section class="ed-hero" aria-labelledby="hero-title">
-  <img class="hero-limestone" src="assets/stone-light.webp" alt="" width="1536" height="1024" fetchpriority="high">
   <div class="wrap ed-stage">
     <div class="ed-copy">
       <p class="ed-label">The AXIOM standard</p>
@@ -8,18 +7,26 @@
       <div class="ed-actions"><a class="btn btn-solid" href="#/products">Explore the catalogue {{arrow}}</a><a class="ed-text-link" href="#/compounds">The compound guide {{arrow}}</a></div>
     </div>
     <figure class="ed-art hero-art">
-      <svg class="hero-pens" viewBox="150 20 1260 990" role="img" aria-label="The AXIOM research collection: MOTS-c, Retatrutide and KLOW pens" focusable="false">
+      <!-- One picture: the limestone (mirrored) and the three original pens leaning on it, so they stay grounded at every width. -->
+      <svg class="hero-scene" viewBox="0 0 1536 1024" role="img" aria-label="The AXIOM research collection: MOTS-c, Retatrutide and KLOW pens resting on limestone" focusable="false">
         <defs>
           <image id="hero-pen-source" href="assets/stone-hero.webp" width="1536" height="1024"/>
           <!-- Clip the original photography, preserving every label and dial pixel. -->
           <clipPath id="hero-mots-outline"><path d="M282 68 C260 64 238 91 232 121 C227 147 234 167 249 177 L1277 499 Q1300 514 1313 496 Q1336 459 1345 399 Q1350 379 1334 367 L1284 350 L1279 350 L1217 328 L1208 323 L1070 280 L603 147 Z"/></clipPath>
           <clipPath id="hero-reta-outline"><path d="M269 237 C243 234 222 261 217 292 C211 318 222 341 240 351 L1268 723 Q1293 737 1305 711 Q1327 671 1338 613 Q1342 601 1325 589 L1267 570 L1215 550 L1204 544 L1065 497 L591 336 Z"/></clipPath>
           <clipPath id="hero-klow-outline"><path d="M284 422 C260 420 236 447 230 474 C222 501 231 526 251 540 L1210 935 Q1233 947 1245 926 Q1271 881 1284 824 Q1289 808 1273 798 L1221 781 L1216 775 L1157 755 L1141 746 L1018 696 L594 534 Z"/></clipPath>
-          <filter id="hero-pen-shadow" x="-8%" y="-20%" width="120%" height="170%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="34" stdDeviation="26" flood-color="#4d3a26" flood-opacity=".34"/></filter>
+          <filter id="hero-pen-shadow" x="-10%" y="-30%" width="130%" height="190%" color-interpolation-filters="sRGB"><feDropShadow dx="-14" dy="26" stdDeviation="14" flood-color="#3a2a1a" flood-opacity=".45"/></filter>
+          <filter id="hero-contact-blur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="9"/></filter>
         </defs>
-        <g class="hero-pen" filter="url(#hero-pen-shadow)"><g clip-path="url(#hero-mots-outline)"><use href="#hero-pen-source"/></g></g>
-        <g class="hero-pen" filter="url(#hero-pen-shadow)"><g clip-path="url(#hero-reta-outline)"><use href="#hero-pen-source"/></g></g>
-        <g class="hero-pen" filter="url(#hero-pen-shadow)"><g clip-path="url(#hero-klow-outline)"><use href="#hero-pen-source"/></g></g>
+        <image href="assets/stone-light.webp" width="1536" height="1024" transform="translate(1536,0) scale(-1,1)"/>
+        <ellipse cx="1112" cy="790" rx="70" ry="13" fill="#2a1d12" opacity="0.5" filter="url(#hero-contact-blur)"/>
+        <ellipse cx="1068" cy="890" rx="70" ry="13" fill="#2a1d12" opacity="0.55" filter="url(#hero-contact-blur)"/>
+        <ellipse cx="1000" cy="990" rx="70" ry="13" fill="#2a1d12" opacity="0.6" filter="url(#hero-contact-blur)"/>
+        <g transform="translate(80,250) rotate(14 780 500) scale(.78)">
+          <g transform="translate(18,128)"><g class="hero-pen" filter="url(#hero-pen-shadow)"><g clip-path="url(#hero-mots-outline)"><use href="#hero-pen-source"/></g></g></g>
+          <g transform="translate(8,64)"><g class="hero-pen" filter="url(#hero-pen-shadow)"><g clip-path="url(#hero-reta-outline)"><use href="#hero-pen-source"/></g></g></g>
+          <g transform="translate(0,0)"><g class="hero-pen" filter="url(#hero-pen-shadow)"><g clip-path="url(#hero-klow-outline)"><use href="#hero-pen-source"/></g></g></g>
+        </g>
       </svg>
     </figure>
   </div>
