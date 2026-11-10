@@ -383,11 +383,26 @@ What it does:
 - **Today.** Log a dose (compound, amount, unit, time, site, note), a check-in (weight in kg,
   waist in cm, how the day felt on 1–5, a note) and a photo tagged front, side, back or other.
   Any past day can be opened from the date or the calendar.
+- **Log again.** The six most recent compounds sit under the doses as chips. One tap repeats the
+  person's own last entry for it (same amount and unit) at the next site in their rotation and
+  the current time, with Undo for six seconds.
+- **Vials on hand.** A vial records a compound, the mg in it, the day it was opened and,
+  optionally, a number of days to use it within. Every dose of that compound in mg or mcg comes
+  off the newest vial opened on or before that day; IU, mL and units are not counted. The card
+  shows mg left, a bar, the age and, once there are two doses in the last 28 days, roughly how
+  many days it lasts at the person's own pace. Past the days set, the age turns red. A finished
+  vial leaves the list.
 - **History.** Days logged, days in a row, entries in the last 7 days; per compound the last
-  entry, the count and the total over 30 days; the weight trend; a calendar marking dose days
-  and photo days; every entry, editable.
-- **Photos** by month, filterable by pose, each one viewable full size or deletable.
-- **Compare.** Two photos of one pose, side by side or under a slider, with the days apart,
+  entry, the count and the total over 30 days; trends; a calendar marking dose days and photo
+  days; every entry, editable.
+- **Trends.** Weight or waist over 4 weeks, 3 months or everything: each check-in as a faint
+  point, the 7-day average as the line, and one row per compound (the four logged most in the
+  range) with a mark on every dose, on the same timeline.
+- **Photos** by month, filterable by pose. The viewer shows one full size and corrects its date
+  and pose. Before a new photo, the last one of the chosen pose shows dimmed beside Add photo so
+  the framing can match.
+- **Compare.** Two photos of one pose, side by side, under a slider, or faded one over the other
+  to check they line up, with the days apart,
   the doses logged between them and the change in weight and waist (taken from the check-in on
   each date, or the nearest one up to three days before).
 - **Backup.** Settings exports one JSON file holding every entry, check-in and photo, imports it
@@ -403,7 +418,7 @@ the next site in their own rotation (abdomen, thigh, arm, glute; left then right
 - *In the Artifact*, the log lives in the person's private subtree of the Artifact's database,
   `data/users/<id>`, which nobody else on the Artifact can read, its owner included: one document
   per month (`m-2026-11`: that month's entries, check-ins and photo records) and one for
-  preferences (`prefs`). Photos go to the Artifact's asset store as JPEGs, and the records keep
+  preferences (`prefs`), plus `vials`. Photos go to the Artifact's asset store as JPEGs, and the records keep
   only their ids, so anyone the Artifact is shared with as an editor could reach them: keep it
   unshared. A change rewrites only the documents whose content changed, one write at a time per
   document; a snapshot never redraws under someone typing. Anything logged on the device before

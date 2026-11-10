@@ -215,6 +215,43 @@ dialog[open]{animation:up .42s var(--ease)}
 .toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translate(-50%,12px);opacity:0;z-index:40;background:var(--ink);color:var(--bg);
   padding:10px 16px;border-radius:10px;font-size:.8235rem;max-width:calc(100% - 40px);transition:opacity .22s var(--ease),transform .22s var(--ease);pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+.toast{display:flex;align-items:center;gap:14px;width:max-content}
+.kpi b small{font-size:.55em;margin-left:.2em;letter-spacing:0}
+.toast.act.on{pointer-events:auto}
+.toast button{color:var(--bg);font-weight:600;text-decoration:underline;text-underline-offset:3px;min-height:36px;padding:0 4px;white-space:nowrap}
+
+/* ---------- Log again ---------- */
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.quick button{min-height:48px;padding:6px 12px;border:1px solid var(--accent-line);border-radius:10px;background:var(--accent-soft);text-align:left;line-height:1.25;
+  transition:border-color .22s var(--ease)}
+.quick button:hover{border-color:var(--accent)}
+.quick b{display:block;font-weight:500;font-size:.8235rem}
+.quick span{display:block;font-size:.7059rem;color:var(--muted)}
+
+/* ---------- Vials ---------- */
+.vials{display:grid;gap:8px;margin-top:12px}
+.vial{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;width:100%;text-align:left;
+  border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel);transition:border-color .22s var(--ease)}
+.vial:hover{border-color:var(--accent-line)}
+.vial b{font-weight:500;overflow-wrap:anywhere}
+.vial .left{font-size:.8824rem;color:var(--accent-bright);white-space:nowrap}
+.vial .meta{grid-column:1/-1;font-size:.7647rem;color:var(--muted)}
+.vial .flag{color:var(--err)}
+.meter{grid-column:1/-1;height:6px;border-radius:3px;background:var(--panel-2);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:3px}
+
+/* ---------- Trends ---------- */
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.7059rem;color:var(--muted);padding:2px 4px 8px}
+.legend i{display:inline-block;width:14px;height:2px;background:var(--accent);vertical-align:middle;margin-right:6px}
+.legend i.dot{width:7px;height:7px;border-radius:50%;background:none;border:1.5px solid var(--accent);opacity:.6}
+.legend i.tick{width:2px;height:10px;opacity:.8}
+
+/* ---------- Photo helpers ---------- */
+.ghost{display:flex;gap:12px;align-items:center;margin-top:12px}
+.ghost img{width:72px;aspect-ratio:3/4;object-fit:cover;border-radius:10px;opacity:.45;border:1px dashed var(--line-2);flex:0 0 auto}
+.ghost span{font-size:.7647rem;color:var(--muted)}
+.slider.fade .top{clip-path:none;opacity:var(--o,.5)}
+.fade-range{width:100%;min-height:44px;margin-top:8px;accent-color:var(--accent)}
 
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -269,6 +306,28 @@ dialog[open]{animation:up .42s var(--ease)}
   </form>
 </dialog>
 
+<!-- Add or edit a vial -->
+<dialog id="vial-dlg" aria-labelledby="vial-title">
+  <form class="sheet" id="vial-form" method="dialog" novalidate>
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="vial-title"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <div class="fields">
+      <label class="f full"><span data-t="compound"></span><select class="inp" id="v-compound"></select></label>
+      <label class="f full" id="v-name-wrap" hidden><span data-t="name"></span><input class="inp" id="v-name" type="text" autocomplete="off" maxlength="80" /></label>
+      <label class="f"><span data-t="vial_mg"></span><span class="unit-wrap"><input class="inp" id="v-mg" inputmode="decimal" autocomplete="off" /><em>mg</em></span></label>
+      <label class="f"><span data-t="vial_opened"></span><input class="inp" id="v-opened" type="date" /></label>
+      <label class="f full"><span data-t="vial_within"></span><span class="unit-wrap"><input class="inp" id="v-within" inputmode="numeric" autocomplete="off" /><em data-t="days_unit"></em></span></label>
+      <p class="hint full" data-t="vial_hint"></p>
+      <p class="err full" id="v-err" role="alert"></p>
+    </div>
+    <div class="row-actions">
+      <button class="btn primary" type="submit" style="flex:1" data-t="save"></button>
+      <button class="btn" type="button" id="v-finish" hidden></button>
+      <button class="btn danger" type="button" id="v-delete" hidden data-t="delete"></button>
+    </div>
+  </form>
+</dialog>
+
 <!-- Settings -->
 <dialog id="set-dlg" aria-labelledby="set-title">
   <div class="sheet">
@@ -297,6 +356,10 @@ dialog[open]{animation:up .42s var(--ease)}
     <div class="grab" aria-hidden="true"></div>
     <div class="sheet-h"><h2 id="pic-title"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
     <img id="pic-img" alt="" />
+    <div class="fields">
+      <label class="f"><span data-t="date"></span><input class="inp" id="pic-date" type="date" /></label>
+      <label class="f"><span data-t="pose"></span><select class="inp" id="pic-pose"></select></label>
+    </div>
     <div class="row-actions">
       <button class="btn small" type="button" id="pic-before" data-t="set_before"></button>
       <button class="btn small" type="button" id="pic-after" data-t="set_after"></button>
@@ -317,7 +380,7 @@ dialog[open]{animation:up .42s var(--ease)}
 </dialog>
 
 <input type="file" id="photo-file" accept="image/*" hidden />
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-msg"></span><button type="button" id="toast-act" hidden></button></div>
 
 <script src="compounds.js"></script>
 <script>
@@ -372,7 +435,7 @@ dialog[open]{animation:up .42s var(--ease)}
       days_logged: "Days logged", streak: "Days in a row", last7: "Entries, last 7 days",
       by_compound: "By compound", last: "Last", in30: "Last 30 days", total30: "Total, 30 days", entries_n: "{n} entries", entries_n_1: "{n} entry",
       days_ago: "{n} days ago", rel_today: "today", rel_yesterday: "yesterday",
-      weight_trend: "Weight", start: "Start", latest: "Latest", change: "Change",
+      weight_trend: "Weight", waist_trend: "Waist", start: "Start", latest: "Latest", change: "Change",
       calendar: "Calendar", prev_month: "Previous month", next_month: "Next month", all_entries: "Every entry", show_more: "Show more",
       history_empty: "Your record fills in as you log. Start on Today.",
       photos_empty: "No photos yet. Add one here or from Today.", photo_of: "{pose} · {date}",
@@ -388,6 +451,17 @@ dialog[open]{animation:up .42s var(--ease)}
       sync_full: "This Artifact's storage is full. Delete a few photos, then try again.",
       sync_off: "Your log stopped syncing. Reload the page to reconnect.",
       save_failed: "The file could not be saved here.",
+      log_again: "Log again in one tap", again_sub: "{amt} · again", logged: "Logged {what}.", undo: "Undo",
+      vials: "Vials on hand", add_vial: "Add a vial", edit_vial: "Edit vial", no_vials: "Record a vial to see how much is left in it as you log.",
+      vial_mg: "Amount in the vial", vial_opened: "Opened", vial_within: "Use within (optional)", days_unit: "days",
+      vial_hint: "Every dose of this compound logged in mg or mcg from the day it was opened comes off this vial. Doses in IU, mL or units are not counted.",
+      vial_left: "{left} of {mg} mg left", vial_used_up: "Used up", vial_days: "about {n} days at your logged pace",
+      vial_opened_ago: "opened {date}, {n} days ago", vial_opened_today: "opened today", vial_past: "past the {n} days you set",
+      mark_finished: "Mark finished", back_on_hand: "Back on hand", confirm_delete_vial: "Delete this vial? Your doses stay as they are.",
+      err_mg: "Enter the amount in the vial, in mg.", err_opened: "Choose the day it was opened.",
+      range_4w: "4 weeks", range_3m: "3 months", range_all: "All", trends: "Trends", daily: "Daily", avg7: "7-day average", dose_marks: "Doses",
+      no_range: "No check-ins in this range yet.", fade: "Fade", fade_label: "After photo opacity",
+      last_pose: "Your last {pose} photo, {date}. Match its framing.", date: "Date", photo_updated: "Photo updated.",
       export_json: "Export backup", import_json: "Import backup", export_csv: "Export log as CSV", delete_all: "Delete everything",
       usage: "{n} photos, about {mb} MB on this device.",
       confirm_delete_all: "Delete every entry, check-in and photo on this device? This cannot be undone.",
@@ -409,7 +483,8 @@ dialog[open]{animation:up .42s var(--ease)}
   var day = todayKey();
   var calMonth = day.slice(0, 7);
   var photoPose = "all";
-  var cmp = { pose: null, a: null, b: null, mode: "side", x: 50 };
+  var cmp = { pose: null, a: null, b: null, mode: "side", x: 50, o: 50 };
+  var trendRange = "3m", trendMetric = "weight";
   var historyLimit = 40;
   var editingId = null;
   var photos = [];          // metadata + blobs from IndexedDB, oldest first
@@ -431,6 +506,7 @@ dialog[open]{animation:up .42s var(--ease)}
     s.checkins = s.checkins && typeof s.checkins === "object" ? s.checkins : {};
     s.prefs = s.prefs && typeof s.prefs === "object" ? s.prefs : {};
     s.prefs.last = s.prefs.last || {};
+    s.vials = Array.isArray(s.vials) ? s.vials : [];
     return s;
   }
   function save() {
@@ -489,10 +565,15 @@ dialog[open]{animation:up .42s var(--ease)}
   function compoundKey(e) { return e.slug || "name:" + String(e.name || "").trim().toLowerCase(); }
   function byTime(a, b) { return (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")); }
   var toastTimer;
-  function toast(msg) {
-    var el = document.getElementById("toast");
-    el.textContent = msg; el.classList.add("on");
-    clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.classList.remove("on"); }, 2600);
+  // `action` adds one button (Undo); such a toast stays six seconds instead of under three.
+  function toast(msg, action) {
+    var el = document.getElementById("toast"), b = document.getElementById("toast-act");
+    document.getElementById("toast-msg").textContent = msg;
+    b.hidden = !action; el.classList.toggle("act", !!action);
+    b.onclick = action ? function () { el.classList.remove("on"); action.fn(); } : null;
+    if (action) b.textContent = action.label;
+    el.classList.add("on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.classList.remove("on"); }, action ? 6000 : 2600);
   }
 
   /* ---------- IndexedDB for photos ---------- */
@@ -623,6 +704,7 @@ dialog[open]{animation:up .42s var(--ease)}
       if (p.full) m(p.date).photos.push({ id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, full: p.full, thumb: p.thumbId });
     });
     out.prefs = { prefs: S.prefs };
+    out.vials = { vials: S.vials };
     return out;
   }
   function syncCloud() {
@@ -648,7 +730,7 @@ dialog[open]{animation:up .42s var(--ease)}
       toast(t(e && e.code === "quota_exceeded" ? "sync_full" : "sync_failed"));
     }).then(function () { inflight[id]--; });
   }
-  function stateKey() { return JSON.stringify([S.entries, S.checkins, photos.map(function (p) { return p.id + p.date + p.pose; })]); }
+  function stateKey() { return JSON.stringify([S.entries, S.checkins, S.vials, photos.map(function (p) { return p.id + p.date + p.pose; })]); }
   function applySnapshot(snap, merge) {
     var docs = {};
     snap.docs.forEach(function (d) { docs[d.id] = d.data(); });
@@ -656,10 +738,11 @@ dialog[open]{animation:up .42s var(--ease)}
     Object.keys(inflight).forEach(function (id) {
       if (inflight[id] > 0) { if (synced[id]) docs[id] = JSON.parse(synced[id]); else delete docs[id]; }
     });
-    var entries = [], checkins = {}, cps = [], prefs = null;
+    var entries = [], checkins = {}, cps = [], prefs = null, vials = null;
     Object.keys(docs).forEach(function (id) {
       var b = docs[id] || {};
       if (id === "prefs") { prefs = b.prefs; return; }
+      if (id === "vials") { vials = Array.isArray(b.vials) ? b.vials : []; return; }
       if (id.indexOf("m-") !== 0) return;
       (b.entries || []).forEach(function (e) { if (e && e.id && e.date && Number(e.amount) > 0) entries.push(e); });
       Object.keys(b.checkins || {}).forEach(function (k) { checkins[k] = b.checkins[k]; });
@@ -673,10 +756,12 @@ dialog[open]{animation:up .42s var(--ease)}
       S.entries.forEach(function (e) { if (!have[e.id]) entries.push(e); });
       Object.keys(S.checkins).forEach(function (k) { if (!checkins[k]) checkins[k] = S.checkins[k]; });
       if (!prefs) prefs = S.prefs;
+      if (!vials) vials = S.vials;
     }
     var before = stateKey();
     S.entries = entries; S.checkins = checkins;
     if (prefs && typeof prefs === "object") S.prefs = prefs;
+    S.vials = vials || [];
     S.prefs.last = S.prefs.last || {};
     photos = cps.concat(photos.filter(function (p) { return !p.full; })).sort(byPhoto);
     synced = {};
@@ -733,6 +818,46 @@ dialog[open]{animation:up .42s var(--ease)}
     var last = sorted[sorted.length - 1].site;
     return ROTATION[(ROTATION.indexOf(last) + 1) % ROTATION.length];
   }
+  // mg in a dose, or null for units a vial cannot be counted in.
+  function mgOf(e) { return e.unit === "mg" ? e.amount : e.unit === "mcg" ? e.amount / 1000 : null; }
+  function vialKey(v) { return v.slug || "name:" + String(v.name || "").trim().toLowerCase(); }
+  // Each dose comes off the newest vial of its compound opened on or before that day and not
+  // finished before it. Pace is the person's own: mg logged over the last 28 days.
+  function vialStats() {
+    var out = {}, tk = todayKey();
+    S.vials.forEach(function (v) { out[v.id] = { used: 0 }; });
+    S.entries.forEach(function (e) {
+      var mg = mgOf(e); if (mg == null) return;
+      var key = compoundKey(e), best = null;
+      S.vials.forEach(function (v) {
+        if (vialKey(v) !== key || v.opened > e.date || (v.finishedOn && v.finishedOn < e.date)) return;
+        if (!best || v.opened > best.opened) best = v;
+      });
+      if (best) out[best.id].used += mg;
+    });
+    S.vials.forEach(function (v) {
+      var st = out[v.id], key = vialKey(v), since = addDays(tk, -27);
+      st.left = Math.max(0, v.mg - st.used);
+      var recent = S.entries.filter(function (e) { return compoundKey(e) === key && e.date >= since && e.date <= tk && mgOf(e) != null; });
+      if (recent.length >= 2) {
+        var first = recent.reduce(function (m, e) { return e.date < m ? e.date : m; }, tk);
+        var span = Math.max(7, diffDays(first, tk) + 1);
+        var perDay = recent.reduce(function (s2, e) { return s2 + mgOf(e); }, 0) / span;
+        if (perDay > 0 && st.left > 0) st.days = Math.floor(st.left / perDay);
+      }
+      st.age = diffDays(v.opened, tk);
+      st.past = v.within > 0 && st.age > v.within;
+    });
+    return out;
+  }
+  function recentCompounds() {
+    var seen = {}, out = [];
+    S.entries.slice().sort(byTime).reverse().forEach(function (e) {
+      var k = compoundKey(e);
+      if (!seen[k] && out.length < 6) { seen[k] = 1; out.push(e); }
+    });
+    return out;
+  }
   function weightOn(k, field) { // the check-in on that date, or the nearest one within 3 days before it
     for (var i = 0; i <= 3; i++) {
       var c = S.checkins[addDays(k, -i)];
@@ -786,7 +911,30 @@ dialog[open]{animation:up .42s var(--ease)}
     // Doses
     h += '<section class="sec"><h2>' + esc(t("doses")) + (es.length ? "<small>" + esc(t("entries_n", { n: es.length })) + "</small>" : "") + "</h2>";
     h += es.length ? '<div class="list">' + es.map(function (e) { return entryRow(e, false); }).join("") + "</div>" : '<p class="empty">' + esc(t("no_doses")) + "</p>";
+    var recents = recentCompounds();
+    if (recents.length) {
+      h += '<p class="hint" style="margin-top:16px">' + esc(t("log_again")) + '</p><div class="quick">' + recents.map(function (e) {
+        var amt = fmtNum(e.amount, 3) + " " + unitLabel(e.unit);
+        return '<button type="button" data-repeat="' + e.id + '" aria-label="' + esc(t("log_again") + ": " + entryName(e) + " " + amt) + '">' +
+          "<b>" + esc(entryName(e)) + "</b><span>" + esc(t("again_sub", { amt: amt })) + "</span></button>";
+      }).join("") + "</div>";
+    }
     h += '<div class="row-actions"><button class="btn primary block" type="button" data-act="new-dose">' + esc(t("log_dose")) + "</button></div></section>";
+
+    // Vials
+    var open = S.vials.filter(function (v) { return !v.finishedOn; }).sort(function (a, b) { return a.opened < b.opened ? 1 : -1; });
+    var vs = vialStats();
+    h += '<section class="sec"><h2>' + esc(t("vials")) + "</h2>";
+    h += open.length ? '<div class="vials">' + open.map(function (v) {
+      var st = vs[v.id], pct = v.mg > 0 ? Math.max(0, Math.min(100, st.left / v.mg * 100)) : 0;
+      var meta = [st.age <= 0 ? t("vial_opened_today") : t("vial_opened_ago", { date: fmtDate(v.opened, { day: "numeric", month: "short" }), n: fmtNum(st.age, 0) })];
+      if (st.days != null) meta.push(t("vial_days", { n: fmtNum(st.days, 0) }));
+      return '<button type="button" class="vial" data-vial="' + v.id + '"><b>' + esc(v.slug && BY_SLUG[v.slug] ? BY_SLUG[v.slug].name : v.name) + "</b>" +
+        '<span class="left">' + esc(st.left <= 0 ? t("vial_used_up") : t("vial_left", { left: fmtNum(st.left, 2), mg: fmtNum(v.mg, 2) })) + "</span>" +
+        '<span class="meter" aria-hidden="true"><i style="width:' + pct.toFixed(1) + '%"></i></span>' +
+        '<span class="meta">' + esc(meta.join(" · ")) + (st.past ? ' · <span class="flag">' + esc(t("vial_past", { n: fmtNum(v.within, 0) })) + "</span>" : "") + "</span></button>";
+    }).join("") + "</div>" : '<p class="empty">' + esc(t("no_vials")) + "</p>";
+    h += '<div class="row-actions"><button class="btn block" type="button" data-act="add-vial">' + esc(t("add_vial")) + "</button></div></section>";
 
     // Check-in
     h += '<section class="sec"><h2>' + esc(t("checkin")) + '<small class="saved" id="ck-saved">' + esc(t("saved")) + "</small></h2>" +
@@ -805,11 +953,20 @@ dialog[open]{animation:up .42s var(--ease)}
       if (dayPhotos.length) h += '<div class="thumbs">' + dayPhotos.map(function (p) { return thumbHtml(p, 'data-view-photo="' + p.id + '"'); }).join("") + "</div>";
       h += '<div class="f" style="margin-top:12px"><span class="hint" style="margin:0">' + esc(t("pose")) + "</span>" +
         seg("pose-new", POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; }), pendingPose) + "</div>" +
+        ghost() +
         '<div class="row-actions"><button class="btn block" type="button" data-act="add-photo">' + esc(t("add_photo")) + "</button></div>" +
         '<p class="hint">' + esc(t("photo_hint")) + "</p>";
     }
     h += "</section>";
     return h;
+  }
+
+  // The last photo of the chosen pose, dimmed, so the next one can match its framing.
+  function ghost() {
+    var last = null;
+    photos.forEach(function (p) { if (p.pose === pendingPose) last = p; });
+    if (!last) return "";
+    return '<div class="ghost"><img src="' + url(last) + '" alt="" /><span>' + esc(t("last_pose", { pose: poseLabel(pendingPose).toLowerCase(), date: fmtDate(last.date, { day: "numeric", month: "short" }) })) + "</span></div>";
   }
 
   function entryRow(e, withDate) {
@@ -855,17 +1012,7 @@ dialog[open]{animation:up .42s var(--ease)}
       }).join("") + "</div></section>";
     }
 
-    // Weight
-    var pts = Object.keys(S.checkins).filter(function (k) { return typeof S.checkins[k].weight === "number"; }).sort()
-      .map(function (k) { return { k: k, v: S.checkins[k].weight }; });
-    if (pts.length) {
-      var first = pts[0], lastp = pts[pts.length - 1], dlt = lastp.v - first.v;
-      h += '<section class="sec"><h2>' + esc(t("weight_trend")) + "</h2>" +
-        '<div class="kpis"><div class="kpi"><b>' + fmtNum(first.v, 1) + " kg</b><span>" + esc(t("start")) + ", " + esc(fmtDate(first.k, { day: "numeric", month: "short" })) + "</span></div>" +
-        '<div class="kpi"><b>' + fmtNum(lastp.v, 1) + " kg</b><span>" + esc(t("latest")) + ", " + esc(fmtDate(lastp.k, { day: "numeric", month: "short" })) + "</span></div>" +
-        '<div class="kpi"><b>' + (dlt > 0 ? "+" : dlt < 0 ? "−" : "") + fmtNum(Math.abs(dlt), 1) + " kg</b><span>" + esc(t("change")) + "</span></div></div>" +
-        (pts.length > 1 ? chart(pts) : "") + "</section>";
-    }
+    h += trends();
 
     // Calendar
     h += '<section class="sec"><h2>' + esc(t("calendar")) + "</h2>" + calendar(dd, dp) + "</section>";
@@ -881,31 +1028,84 @@ dialog[open]{animation:up .42s var(--ease)}
     return h;
   }
 
-  function chart(pts) {
-    // Drawn at the width of its box, 1:1, so the axis labels stay at 11 px on every screen.
-    var W = Math.max(280, Math.round(main.clientWidth - 2 * 20 - 22)), H = 170, L = 40, R = 12, T = 12, B = 26;
-    var t0 = parseKey(pts[0].k).getTime(), t1 = parseKey(pts[pts.length - 1].k).getTime();
-    var vs = pts.map(function (p) { return p.v; });
+  // Weight or waist over a chosen range: each check-in as a faint point, the 7-day average as the
+  // line, and below them one row per compound with a mark on every day it was logged, all on one
+  // timeline so a change lines up with what was taken.
+  function trends() {
+    function series(f) {
+      return Object.keys(S.checkins).filter(function (k) { return typeof S.checkins[k][f] === "number"; }).sort()
+        .map(function (k) { return { k: k, v: S.checkins[k][f] }; });
+    }
+    var w = series("weight"), c = series("waist");
+    if (!w.length && !c.length) return "";
+    var metric = trendMetric === "waist" ? (c.length ? "waist" : "weight") : (w.length ? "weight" : "waist");
+    var all = metric === "weight" ? w : c, unit = metric === "weight" ? "kg" : "cm";
+    var tk = todayKey();
+    var from = trendRange === "4w" ? addDays(tk, -27) : trendRange === "3m" ? addDays(tk, -90) : null;
+    var pts = all.filter(function (p) { return !from || p.k >= from; });
+    var avg = pts.map(function (p) {
+      var lo = addDays(p.k, -6), win = all.filter(function (q) { return q.k >= lo && q.k <= p.k; });
+      return { k: p.k, v: win.reduce(function (s2, q) { return s2 + q.v; }, 0) / win.length };
+    });
+    var h = '<section class="sec"><h2>' + esc(t("trends")) + "</h2>";
+    h += seg("trend-range", [{ v: "4w", html: esc(t("range_4w")) }, { v: "3m", html: esc(t("range_3m")) }, { v: "all", html: esc(t("range_all")) }], trendRange);
+    if (w.length && c.length) h += seg("trend-metric", [{ v: "weight", html: esc(t("weight_trend")) }, { v: "waist", html: esc(t("waist_trend")) }], metric);
+    if (!pts.length) return h + '<p class="empty">' + esc(t("no_range")) + "</p></section>";
+    var first = pts[0], last = pts[pts.length - 1], d = last.v - first.v;
+    h += '<div class="kpis"><div class="kpi"><b>' + fmtNum(first.v, 1) + "<small>" + unit + "</small></b><span>" + esc(t("start")) + ", " + esc(fmtDate(first.k, { day: "numeric", month: "short" })) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(last.v, 1) + "<small>" + unit + "</small></b><span>" + esc(t("latest")) + ", " + esc(fmtDate(last.k, { day: "numeric", month: "short" })) + "</span></div>" +
+      '<div class="kpi"><b>' + (d > 0 ? "+" : d < 0 ? "−" : "") + fmtNum(Math.abs(d), 1) + "<small>" + unit + "</small></b><span>" + esc(t("change")) + "</span></div></div>";
+    var x0 = from || pts[0].k;
+    if (!from) S.entries.forEach(function (e) { if (e.date < x0) x0 = e.date; });
+    return h + chart(pts, avg, x0, tk, unit, metric) + "</section>";
+  }
+
+  function chart(pts, avg, x0, x1, unit, metric) {
+    // Drawn at the width of its box, 1:1, so every label stays at 11 px on every screen.
+    var W = Math.max(280, Math.round(main.clientWidth - 2 * 20 - 22)), L = 40, R = 12, T = 12, PH = 140, AX = 22, ROW = 30;
+    var t0 = parseKey(x0).getTime(), t1 = parseKey(x1).getTime();
+    function x(k) { return L + (t1 === t0 ? (W - L - R) / 2 : (parseKey(k).getTime() - t0) / (t1 - t0) * (W - L - R)); }
+    var vs = pts.map(function (p) { return p.v; }).concat(avg.map(function (p) { return p.v; }));
     var lo = Math.min.apply(null, vs), hi = Math.max.apply(null, vs);
-    var span = Math.max(hi - lo, 1), padv = span * 0.15;
-    lo -= padv; hi += padv;
-    function x(p) { return L + (t1 === t0 ? (W - L - R) / 2 : (parseKey(p.k).getTime() - t0) / (t1 - t0) * (W - L - R)); }
-    function y(v) { return T + (hi - v) / (hi - lo) * (H - T - B); }
-    var grid = "";
+    var padv = Math.max(hi - lo, 1) * 0.15; lo -= padv; hi += padv;
+    function y(v) { return T + (hi - v) / (hi - lo) * PH; }
+    // Dose rows: the four compounds logged most often in the range.
+    var counts = {}, names = {};
+    S.entries.forEach(function (e) { if (e.date >= x0 && e.date <= x1) { var k = compoundKey(e); counts[k] = (counts[k] || 0) + 1; names[k] = entryName(e); } });
+    var rows = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 4);
+    var H = T + PH + AX + rows.length * ROW + (rows.length ? 4 : 0);
+    var g = "";
     for (var i = 0; i < 3; i++) {
       var v = lo + (hi - lo) * (i + 0.5) / 3, yy = y(v).toFixed(1);
-      grid += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '" stroke="var(--line)" stroke-width="1"/>' +
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '" stroke="var(--line)" stroke-width="1"/>' +
         '<text x="' + (L - 6) + '" y="' + yy + '" text-anchor="end" dominant-baseline="middle">' + esc(fmtNum(v, 1)) + "</text>";
     }
-    var line = pts.map(function (p, i) { return (i ? "L" : "M") + x(p).toFixed(1) + " " + y(p.v).toFixed(1); }).join(" ");
-    var dots = pts.map(function (p) {
-      return '<circle cx="' + x(p).toFixed(1) + '" cy="' + y(p.v).toFixed(1) + '" r="3" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"><title>' +
-        esc(fmtDate(p.k) + " · " + fmtNum(p.v, 1) + " kg") + "</title></circle>";
+    var ax = T + PH + 16;
+    g += '<text x="' + L + '" y="' + ax + '">' + esc(fmtDate(x0, { day: "numeric", month: "short" })) + "</text>" +
+      '<text x="' + (W - R) + '" y="' + ax + '" text-anchor="end">' + esc(fmtDate(x1, { day: "numeric", month: "short" })) + "</text>";
+    g += pts.map(function (p) {
+      return '<circle cx="' + x(p.k).toFixed(1) + '" cy="' + y(p.v).toFixed(1) + '" r="2.6" fill="var(--bg)" stroke="var(--accent)" stroke-opacity=".55" stroke-width="1.4"><title>' +
+        esc(fmtDate(p.k) + " · " + fmtNum(p.v, 1) + " " + unit) + "</title></circle>";
     }).join("");
-    var dl = '<text x="' + L + '" y="' + (H - 6) + '">' + esc(fmtDate(pts[0].k, { day: "numeric", month: "short" })) + "</text>" +
-      '<text x="' + (W - R) + '" y="' + (H - 6) + '" text-anchor="end">' + esc(fmtDate(pts[pts.length - 1].k, { day: "numeric", month: "short" })) + "</text>";
-    return '<div class="chart"><svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(t("weight_trend")) + '">' + grid +
-      '<path d="' + line + '" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>' + dots + dl + "</svg></div>";
+    if (avg.length > 1) g += '<path d="' + avg.map(function (p, j) { return (j ? "L" : "M") + x(p.k).toFixed(1) + " " + y(p.v).toFixed(1); }).join(" ") +
+      '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    var last = avg[avg.length - 1];
+    g += '<circle cx="' + x(last.k).toFixed(1) + '" cy="' + y(last.v).toFixed(1) + '" r="3.6" fill="var(--accent)"><title>' +
+      esc(t("avg7") + " · " + fmtNum(last.v, 1) + " " + unit) + "</title></circle>";
+    rows.forEach(function (k, r) {
+      var top = T + PH + AX + 4 + r * ROW;
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (top + 24) + '" y2="' + (top + 24) + '" stroke="var(--line-soft)" stroke-width="1"/>' +
+        '<text x="' + L + '" y="' + (top + 9) + '">' + esc(names[k]) + "</text>";
+      S.entries.forEach(function (e) {
+        if (compoundKey(e) !== k || e.date < x0 || e.date > x1) return;
+        var xx = x(e.date).toFixed(1);
+        g += '<line x1="' + xx + '" x2="' + xx + '" y1="' + (top + 14) + '" y2="' + (top + 24) + '" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><title>' +
+          esc(fmtDate(e.date) + " · " + names[k] + " " + fmtNum(e.amount, 3) + " " + unitLabel(e.unit)) + "</title></line>";
+      });
+    });
+    var legend = '<div class="legend"><span><i class="dot"></i>' + esc(t("daily")) + "</span><span><i></i>" + esc(t("avg7")) + "</span>" +
+      (rows.length ? '<span><i class="tick"></i>' + esc(t("dose_marks")) + "</span>" : "") + "</div>";
+    return '<div class="chart">' + legend + '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(t(metric === "weight" ? "weight_trend" : "waist_trend")) + '">' + g + "</svg></div>";
   }
 
   function calendar(dd, dp) {
@@ -971,11 +1171,19 @@ dialog[open]{animation:up .42s var(--ease)}
     if (A.date + A.createdAt > B.date + B.createdAt) { var tmp = A; A = B; B = tmp; }
 
     h += seg("cmp-pose", [{ v: "all", html: esc(t("all")) }].concat(POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; })), cmp.pose);
-    h += seg("cmp-mode", [{ v: "side", html: esc(t("side_by_side")) }, { v: "slider", html: esc(t("slider")) }], cmp.mode);
+    h += seg("cmp-mode", [{ v: "side", html: esc(t("side_by_side")) }, { v: "slider", html: esc(t("slider")) }, { v: "fade", html: esc(t("fade")) }], cmp.mode);
 
     h += '<div class="cmp">';
     if (cmp.mode === "side") {
       h += '<div class="cmp-side">' + fig(A, "before") + fig(B, "after") + "</div>";
+    } else if (cmp.mode === "fade") {
+      // The after photo laid over the before one at the chosen opacity: shows whether the two line up.
+      h += '<div class="slider fade" id="slider" style="--o:' + (cmp.o / 100) + ';aspect-ratio:' + (B.w || 3) + "/" + (B.h || 4) + '">' +
+        '<img src="' + url(A, true) + '" alt="' + esc(t("before") + ", " + fmtDate(A.date)) + '" />' +
+        '<img class="top" src="' + url(B, true) + '" alt="' + esc(t("after") + ", " + fmtDate(B.date)) + '" />' +
+        '<span class="lab l">' + esc(t("before")) + " · " + esc(fmtDate(A.date, { day: "numeric", month: "short" })) + "</span>" +
+        '<span class="lab r">' + esc(t("after")) + " · " + esc(fmtDate(B.date, { day: "numeric", month: "short" })) + "</span></div>" +
+        '<input type="range" class="fade-range" id="fade-o" min="0" max="100" step="1" value="' + cmp.o + '" aria-label="' + esc(t("fade_label")) + '" />';
     } else {
       h += '<div class="slider" id="slider" style="--x:' + cmp.x + '%;aspect-ratio:' + (B.w || 3) + "/" + (B.h || 4) + '">' +
         '<img src="' + url(A, true) + '" alt="' + esc(t("before") + ", " + fmtDate(A.date)) + '" />' +
@@ -1013,9 +1221,9 @@ dialog[open]{animation:up .42s var(--ease)}
     return '<figure><img src="' + url(p, true) + '" alt="' + esc(t(which) + ", " + fmtDate(p.date)) + '" /><figcaption><b>' + esc(t(which)) + "</b>" + esc(fmtDate(p.date)) + "</figcaption></figure>";
   }
   function wireSlider() {
-    var r = document.getElementById("slider-x"), box = document.getElementById("slider");
-    if (!r) return;
-    r.addEventListener("input", function () { cmp.x = +r.value; box.style.setProperty("--x", cmp.x + "%"); });
+    var r = document.getElementById("slider-x"), f = document.getElementById("fade-o"), box = document.getElementById("slider");
+    if (r) r.addEventListener("input", function () { cmp.x = +r.value; box.style.setProperty("--x", cmp.x + "%"); });
+    if (f) f.addEventListener("input", function () { cmp.o = +f.value; box.style.setProperty("--o", String(cmp.o / 100)); });
   }
 
   /* ---------- Dose form ---------- */
@@ -1025,6 +1233,11 @@ dialog[open]{animation:up .42s var(--ease)}
   var fSite = document.getElementById("f-site"), fNote = document.getElementById("f-note"), fErr = document.getElementById("f-err");
 
   function fillCompoundSelect() {
+    fC.innerHTML = compoundOptions();
+    fUnit.innerHTML = UNITS.map(function (u) { return '<option value="' + u + '">' + esc(unitLabel(u)) + "</option>"; }).join("");
+    fSite.innerHTML = '<option value="">—</option>' + SITES.map(function (s) { return '<option value="' + s + '">' + esc(siteLabel(s)) + "</option>"; }).join("");
+  }
+  function compoundOptions() {
     var recentKeys = [];
     S.entries.slice().sort(byTime).reverse().forEach(function (e) {
       if (e.slug && BY_SLUG[e.slug] && recentKeys.indexOf(e.slug) < 0 && recentKeys.length < 5) recentKeys.push(e.slug);
@@ -1039,9 +1252,7 @@ dialog[open]{animation:up .42s var(--ease)}
         .map(function (c) { return '<option value="' + c.slug + '">' + esc(c.name) + "</option>"; }).join("") + "</optgroup>";
     });
     h += '<option value="__other">' + esc(t("other_compound")) + "</option>";
-    fC.innerHTML = h;
-    fUnit.innerHTML = UNITS.map(function (u) { return '<option value="' + u + '">' + esc(unitLabel(u)) + "</option>"; }).join("");
-    fSite.innerHTML = '<option value="">—</option>' + SITES.map(function (s) { return '<option value="' + s + '">' + esc(siteLabel(s)) + "</option>"; }).join("");
+    return h;
   }
   function applyLast() {
     var key = fC.value === "__other" ? "name:" + fName.value.trim().toLowerCase() : fC.value;
@@ -1105,6 +1316,79 @@ dialog[open]{animation:up .42s var(--ease)}
       if (!yes) return;
       S.entries = S.entries.filter(function (e) { return e.id !== editingId; });
       save(); dlg.close(); render(); toast(t("deleted"));
+    });
+  });
+
+  /* ---------- Log again ---------- */
+  // Repeats the person's own entry: same compound, amount and unit, the next site in their
+  // rotation (or the same non-injection route), the current time on today.
+  function repeatEntry(id) {
+    var src = S.entries.filter(function (e) { return e.id === id; })[0];
+    if (!src) return;
+    var now = new Date();
+    var rec = {
+      id: uid(), date: day, createdAt: now.toISOString(),
+      time: day === todayKey() ? pad(now.getHours()) + ":" + pad(now.getMinutes()) : src.time || "08:00",
+      slug: src.slug || null, name: src.name, amount: src.amount, unit: src.unit,
+      site: ROTATION.indexOf(src.site) > -1 ? nextSite() : src.site || "", note: ""
+    };
+    S.entries.push(rec);
+    S.prefs.last[compoundKey(rec)] = { amount: rec.amount, unit: rec.unit };
+    save(); render();
+    var what = entryName(rec) + " " + fmtNum(rec.amount, 3) + " " + unitLabel(rec.unit) + (rec.site ? ", " + siteLabel(rec.site) : "");
+    toast(t("logged", { what: what }), { label: t("undo"), fn: function () {
+      S.entries = S.entries.filter(function (e) { return e.id !== rec.id; });
+      save(); render();
+    } });
+  }
+
+  /* ---------- Vial form ---------- */
+  var vDlg = document.getElementById("vial-dlg"), vC = document.getElementById("v-compound"), vName = document.getElementById("v-name");
+  var vMg = document.getElementById("v-mg"), vOpened = document.getElementById("v-opened"), vWithin = document.getElementById("v-within");
+  var vErr = document.getElementById("v-err"), vFinish = document.getElementById("v-finish"), editingVial = null;
+  function syncVialOther() { document.getElementById("v-name-wrap").hidden = vC.value !== "__other"; }
+  function openVial(id) {
+    var v = id ? S.vials.filter(function (x) { return x.id === id; })[0] : null;
+    editingVial = v ? v.id : null;
+    vC.innerHTML = compoundOptions(); vErr.textContent = "";
+    document.getElementById("vial-title").textContent = t(v ? "edit_vial" : "add_vial");
+    document.getElementById("v-delete").hidden = !v;
+    vFinish.hidden = !v;
+    vOpened.max = todayKey();
+    if (v) {
+      vC.value = v.slug && BY_SLUG[v.slug] ? v.slug : "__other";
+      vName.value = v.slug && BY_SLUG[v.slug] ? "" : v.name || "";
+      vMg.value = fmtIn(v.mg); vOpened.value = v.opened; vWithin.value = v.within ? String(v.within) : "";
+      vFinish.textContent = t(v.finishedOn ? "back_on_hand" : "mark_finished");
+    } else {
+      var r = recentCompounds()[0];
+      vC.value = r && r.slug && BY_SLUG[r.slug] ? r.slug : vC.options[0] ? vC.options[0].value : "__other";
+      vName.value = ""; vMg.value = ""; vOpened.value = todayKey(); vWithin.value = "";
+    }
+    syncVialOther();
+    vDlg.showModal();
+  }
+  vC.addEventListener("change", syncVialOther);
+  document.getElementById("vial-form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var other = vC.value === "__other", mg = parseNum(vMg.value), within = parseInt(vWithin.value, 10);
+    if (other && !vName.value.trim()) { vErr.textContent = t("err_name"); vName.focus(); return; }
+    if (!(mg > 0)) { vErr.textContent = t("err_mg"); vMg.focus(); return; }
+    if (!vOpened.value || vOpened.value > todayKey()) { vErr.textContent = t("err_opened"); vOpened.focus(); return; }
+    var rec = { slug: other ? null : vC.value, name: other ? vName.value.trim() : BY_SLUG[vC.value].name, mg: mg, opened: vOpened.value, within: within > 0 ? within : null };
+    if (editingVial) S.vials.forEach(function (v) { if (v.id === editingVial) Object.keys(rec).forEach(function (k) { v[k] = rec[k]; }); });
+    else { rec.id = uid(); rec.finishedOn = null; S.vials.push(rec); }
+    save(); vDlg.close(); render();
+  });
+  vFinish.addEventListener("click", function () {
+    S.vials.forEach(function (v) { if (v.id === editingVial) v.finishedOn = v.finishedOn ? null : todayKey(); });
+    save(); vDlg.close(); render();
+  });
+  document.getElementById("v-delete").addEventListener("click", function () {
+    ask(t("confirm_delete_vial"), t("delete")).then(function (yes) {
+      if (!yes) return;
+      S.vials = S.vials.filter(function (v) { return v.id !== editingVial; });
+      save(); vDlg.close(); render(); toast(t("deleted"));
     });
   });
 
@@ -1178,10 +1462,12 @@ dialog[open]{animation:up .42s var(--ease)}
       saveCheckin({ feel: cur === v ? null : v });
       b.parentNode.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b && cur !== v)); });
     }
-    else if (b.hasAttribute("data-pose-new")) {
-      pendingPose = b.getAttribute("data-pose-new");
-      b.parentNode.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
-    }
+    else if (b.hasAttribute("data-pose-new")) { pendingPose = b.getAttribute("data-pose-new"); render(); }
+    else if (b.hasAttribute("data-repeat")) repeatEntry(b.getAttribute("data-repeat"));
+    else if (b.hasAttribute("data-vial")) openVial(b.getAttribute("data-vial"));
+    else if (act === "add-vial") openVial();
+    else if (b.hasAttribute("data-trend-range")) { trendRange = b.getAttribute("data-trend-range"); render(); }
+    else if (b.hasAttribute("data-trend-metric")) { trendMetric = b.getAttribute("data-trend-metric"); render(); }
     else if (b.hasAttribute("data-pose-filter")) { photoPose = b.getAttribute("data-pose-filter"); render(); }
     else if (b.hasAttribute("data-cmp-pose")) { cmp.pose = b.getAttribute("data-cmp-pose"); cmp.a = cmp.b = null; render(); }
     else if (b.hasAttribute("data-cmp-mode")) { cmp.mode = b.getAttribute("data-cmp-mode"); render(); }
@@ -1211,8 +1497,27 @@ dialog[open]{animation:up .42s var(--ease)}
     document.getElementById("pic-title").textContent = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
     var im = document.getElementById("pic-img");
     im.src = url(p, true); im.alt = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
+    var pd = document.getElementById("pic-date"), pp = document.getElementById("pic-pose");
+    pd.value = p.date; pd.max = todayKey();
+    pp.innerHTML = POSES.map(function (x) { return '<option value="' + x + '"' + (x === p.pose ? " selected" : "") + ">" + esc(poseLabel(x)) + "</option>"; }).join("");
     pic.showModal();
   }
+  // A photo's date and pose can be corrected after the fact.
+  function updatePhoto(id, patch) {
+    var p = find(id); if (!p) return;
+    Object.keys(patch).forEach(function (k) { p[k] = patch[k]; });
+    photos.sort(byPhoto);
+    if (p.full) save();
+    else tx("readwrite", function (st) { return st.put(p); }).catch(function () { toast(t("sync_failed")); });
+    document.getElementById("pic-title").textContent = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
+    toast(t("photo_updated"));
+    render();
+  }
+  document.getElementById("pic-date").addEventListener("change", function (ev) {
+    var v = ev.target.value;
+    if (v && v <= todayKey()) updatePhoto(viewerId, { date: v });
+  });
+  document.getElementById("pic-pose").addEventListener("change", function (ev) { updatePhoto(viewerId, { pose: ev.target.value }); });
   document.getElementById("pic-before").addEventListener("click", function () { useInCompare("a"); });
   document.getElementById("pic-after").addEventListener("click", function () { useInCompare("b"); });
   function useInCompare(which) {
@@ -1283,7 +1588,7 @@ dialog[open]{animation:up .42s var(--ease)}
     Promise.all(photos.map(function (p) {
       return photoBlob(p).then(toDataUrl).then(function (data) { return { id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, data: data }; });
     })).then(function (ph) {
-      var out = { app: "axiom-tracker", version: 1, exportedAt: new Date().toISOString(), entries: S.entries, checkins: S.checkins, photos: ph };
+      var out = { app: "axiom-tracker", version: 1, exportedAt: new Date().toISOString(), entries: S.entries, checkins: S.checkins, vials: S.vials, photos: ph };
       return download("axiom-tracker-" + todayKey() + ".json", new Blob([JSON.stringify(out)], { type: "application/json" }));
     }).then(function (ok) { if (ok) toast(t("exported")); }, function () { toast(t("save_failed")); });
   });
@@ -1302,6 +1607,10 @@ dialog[open]{animation:up .42s var(--ease)}
         if (e.id in ids) S.entries[ids[e.id]] = e; else S.entries.push(e);
       });
       Object.keys(d.checkins || {}).forEach(function (k) { if (/^\d{4}-\d{2}-\d{2}$/.test(k)) S.checkins[k] = d.checkins[k]; });
+      (Array.isArray(d.vials) ? d.vials : []).forEach(function (v) {
+        if (!v || !v.id || !(Number(v.mg) > 0) || !/^\d{4}-\d{2}-\d{2}$/.test(v.opened || "")) return;
+        S.vials = S.vials.filter(function (x) { return x.id !== v.id; }).concat([v]);
+      });
       save();
       var list = Array.isArray(d.photos) ? d.photos : [];
       return list.reduce(function (pr, p) {
@@ -1332,7 +1641,7 @@ dialog[open]{animation:up .42s var(--ease)}
       if (!yes) return;
       var assets = cloud && cloud.assets;
       if (assets) photos.forEach(function (p) { [p.full, p.thumbId].filter(Boolean).forEach(function (a) { assets.delete(a).catch(function () {}); }); });
-      S = { entries: [], checkins: {}, prefs: { last: {} } };
+      S = { entries: [], checkins: {}, prefs: { last: {} }, vials: [] };
       photos = []; cmp.a = cmp.b = null;
       save();
       Object.keys(urls).forEach(function (k) { URL.revokeObjectURL(urls[k]); }); urls = {};
