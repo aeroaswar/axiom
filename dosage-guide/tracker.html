@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>AXIOM Tracker</title>
+<meta name="description" content="A private daily log: what you took, a check-in, and progress photos you can compare. Everything stays on this device." />
+<meta name="theme-color" content="#070605" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#F2EDE5" media="(prefers-color-scheme: light)" />
+<meta name="color-scheme" content="dark light" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='117.77 -19.73 109.46 109.46'%3E%3Crect x='117.77' y='-19.73' width='109.46' height='109.46' fill='%23070605'/%3E%3Cpath fill='%23F2EDE5' d='M132 2 148.5 2 170.29 24.3 161.85 32.54ZM213 2 196.5 2 174.71 24.3 183.15 32.54ZM132 68 148.5 68 170.29 45.7 161.85 37.46ZM213 68 196.5 68 174.71 45.7 183.15 37.46Z'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="AXIOM" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+/* ------------------------------------------------------------------ *
+ * Tokens. Dark is the AXIOM ground (DESIGN.md). Light is the print
+ * palette: paper with deep bronze, because core bronze fails small-text
+ * contrast on a light ground.
+ * ------------------------------------------------------------------ */
+:root{
+  --bg:#070605; --ink:#F2EDE5; --muted:#9c9488; --muted-2:#8a8276;
+  --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
+  --accent:#C88A4E; --accent-bright:#E7B173; --accent-ink:#0a0704;
+  --accent-soft:rgba(200,138,78,.14); --accent-line:rgba(200,138,78,.34);
+  --panel:#0d0b09; --panel-2:#131010; --bar:rgba(7,6,5,.86); --bar-0:rgba(7,6,5,0);
+  --err:#d0745a; --ok:#8FA37E;
+  --brand:"Jost","Century Gothic",system-ui,sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",system-ui,"Segoe UI",Roboto,Arial,sans-serif;
+  --pad:20px; --maxw:700px;
+  --pad-l:max(var(--pad),env(safe-area-inset-left)); --pad-r:max(var(--pad),env(safe-area-inset-right));
+  --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#F2EDE5; --ink:#070605; --muted:#5c544a; --muted-2:#6e665c;
+    --line:rgba(7,6,5,.13); --line-2:rgba(7,6,5,.24); --line-soft:rgba(7,6,5,.06);
+    --accent:#7C4C24; --accent-bright:#7C4C24; --accent-ink:#F2EDE5;
+    --accent-soft:rgba(124,76,36,.10); --accent-line:rgba(124,76,36,.34);
+    --panel:#ece6dc; --panel-2:#e5ddd1; --bar:rgba(242,237,229,.88); --bar-0:rgba(242,237,229,0);
+    --err:#9a3f27; --ok:#4f6342;
+    color-scheme:light;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:17px;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+@supports (font:-apple-system-body) and (-webkit-touch-callout:none){html{font:-apple-system-body}}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;
+  font-feature-settings:"tnum" 1;padding-bottom:calc(84px + env(safe-area-inset-bottom));min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main:focus{outline:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Top bar ---------- */
+.bar{position:sticky;top:0;z-index:20;background:var(--bar);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding-top:env(safe-area-inset-top)}
+.bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;pointer-events:none;background:linear-gradient(var(--bar),var(--bar-0))}
+.bar-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;height:56px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
+.mark{grid-column:2;display:flex;align-items:center;gap:10px;color:var(--ink)}
+.mark svg{width:84px;height:10.1px;overflow:visible;display:block}
+.mark span{font-size:.6471rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);padding-left:10px;border-left:1px solid var(--line-2)}
+.bar-l{justify-self:start}.bar-r{justify-self:end}
+.icon-btn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;color:var(--muted);transition:color .22s var(--ease)}
+.icon-btn:hover{color:var(--ink)}
+.lang{font-size:.7647rem;letter-spacing:.14em;font-weight:600}
+
+/* ---------- Type and sections ---------- */
+.kicker{font-size:.6471rem;letter-spacing:.34em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--brand);font-weight:300;font-size:clamp(1.76rem,7.5vw,2.35rem);line-height:1.1;letter-spacing:-.01em;margin-top:6px}
+h2{font-weight:600;font-size:1.0588rem;letter-spacing:-.005em;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+h2 small{font-weight:400;font-size:.7647rem;color:var(--muted)}
+.sec{padding:26px 0 6px;border-top:1px solid var(--line);margin-top:22px}
+.muted{color:var(--muted)}
+.hint{font-size:.7647rem;color:var(--muted);margin-top:8px}
+.hero{padding:22px 0 8px}
+
+/* ---------- Day switcher ---------- */
+.day{display:flex;align-items:center;gap:6px;margin-top:14px}
+.day .icon-btn{border:1px solid var(--line);color:var(--ink)}
+.day-label{flex:1;min-height:44px;display:flex;flex-direction:column;justify-content:center;align-items:center;border:1px solid var(--line);border-radius:10px;position:relative;text-align:center;padding:4px 8px}
+.day-label b{font-weight:500;font-size:.9412rem;line-height:1.25}
+.day-label i{font-style:normal;font-size:.7059rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase}
+.day-label input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.chip{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;font-size:.8235rem;color:var(--muted)}
+
+/* ---------- Buttons ---------- */
+.btn{min-height:46px;padding:0 18px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:500;font-size:.9412rem;
+  border:1px solid var(--line-2);transition:background .22s var(--ease),border-color .22s var(--ease)}
+.btn:hover{border-color:var(--accent-line)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.block{width:100%}
+.btn.danger{color:var(--err);border-color:var(--line-2)}
+.btn.small{min-height:44px;padding:0 12px;font-size:.8235rem}
+.btn[disabled]{opacity:.5;cursor:default}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+/* ---------- Entries ---------- */
+.list{margin-top:12px;border-top:1px solid var(--line-soft)}
+.entry{display:grid;grid-template-columns:3.4rem minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+.entry .t{font-size:.8235rem;color:var(--muted)}
+.entry b{display:block;font-weight:500;font-size:.9412rem;line-height:1.3;overflow-wrap:anywhere}
+.entry span{display:block;font-size:.7647rem;color:var(--muted);overflow-wrap:anywhere}
+.entry .amt{color:var(--accent-bright);font-weight:500}
+.entry .acts{display:flex}
+.empty{padding:18px 0;color:var(--muted);font-size:.8824rem}
+
+/* ---------- Fields ---------- */
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.fields .full{grid-column:1/-1}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:.7647rem;color:var(--muted);letter-spacing:.02em}
+.inp{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;min-height:46px;padding:10px 12px;width:100%;font-size:1rem;color:var(--ink);-webkit-appearance:none;appearance:none}
+select.inp{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+textarea.inp{min-height:76px;resize:vertical}
+.inp:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft)}
+.unit-wrap{position:relative}
+.unit-wrap .inp{padding-right:44px}
+.unit-wrap em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:.8235rem;color:var(--muted);pointer-events:none}
+.err{color:var(--err);font-size:.7647rem;min-height:1em}
+.saved{font-size:.7059rem;color:var(--ok);letter-spacing:.06em;opacity:0;transition:opacity .22s var(--ease)}
+.saved.on{opacity:1}
+
+/* ---------- Segmented ---------- */
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.seg button{min-height:44px;padding:0 13px;border:1px solid var(--line);border-radius:10px;font-size:.8235rem;color:var(--muted);transition:.22s var(--ease)}
+.seg button[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
+.seg.feel button{flex:1;min-width:0;padding:0 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;min-height:52px}
+.seg.feel button b{font-family:var(--brand);font-weight:400;font-size:1.0588rem}
+.seg.feel button span{font-size:.6471rem}
+
+/* ---------- Photos ---------- */
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-top:12px}
+.thumb{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--panel-2);border:1px solid var(--line)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .tag{position:absolute;left:6px;bottom:6px;font-size:.6471rem;letter-spacing:.08em;background:rgba(7,6,5,.72);color:#F2EDE5;padding:2px 7px;border-radius:6px}
+.thumb[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:2px}
+.month-h{font-size:.7059rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-top:22px}
+
+/* ---------- Compare ---------- */
+.cmp{margin-top:16px}
+.cmp-side{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cmp-side figure{position:relative;border-radius:12px;overflow:hidden;background:var(--panel-2);aspect-ratio:3/4;border:1px solid var(--line)}
+.cmp-side img{width:100%;height:100%;object-fit:cover;display:block}
+figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;background:linear-gradient(rgba(7,6,5,0),rgba(7,6,5,.78));color:#F2EDE5;font-size:.7059rem;letter-spacing:.04em}
+figcaption b{display:block;font-size:.6471rem;letter-spacing:.24em;text-transform:uppercase;color:#E7B173;font-weight:500}
+.slider{position:relative;border-radius:12px;overflow:hidden;background:var(--panel-2);aspect-ratio:3/4;border:1px solid var(--line);touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.slider .top{clip-path:inset(0 0 0 var(--x,50%))}
+.slider .handle{position:absolute;top:0;bottom:0;left:var(--x,50%);width:2px;margin-left:-1px;background:#F2EDE5;box-shadow:0 0 0 1px rgba(7,6,5,.35);pointer-events:none}
+.slider .handle::after{content:"";position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2px solid #F2EDE5;background:rgba(7,6,5,.45)}
+.slider input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.slider .lab{position:absolute;top:10px;font-size:.6471rem;letter-spacing:.24em;text-transform:uppercase;background:rgba(7,6,5,.68);color:#F2EDE5;padding:3px 8px;border-radius:6px}
+.slider .lab.l{left:10px}.slider .lab.r{right:10px}
+.strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin-top:8px;scroll-snap-type:x proximity}
+.strip .thumb{flex:0 0 72px;scroll-snap-align:start}
+.strip .thumb .tag{font-size:.6471rem;left:4px;bottom:4px;padding:1px 5px}
+
+/* ---------- Stats ---------- */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:14px}
+.kpi{background:var(--bg);padding:14px 12px}
+.kpi b{display:block;font-family:var(--brand);font-weight:300;font-size:1.7647rem;line-height:1.1;color:var(--accent-bright)}
+.kpi span{display:block;font-size:.7059rem;color:var(--muted);margin-top:4px;line-height:1.3}
+.kpis.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cards{display:grid;gap:8px;margin-top:12px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel)}
+.card-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.card-h b{font-weight:500}
+.card-h span{font-size:.7647rem;color:var(--accent-bright);white-space:nowrap}
+.card dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.card dt{font-size:.6471rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.card dd{font-size:.8824rem;margin-top:2px}
+.chart{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px 10px 6px;background:var(--panel)}
+.chart svg{width:100%;height:auto;display:block;max-width:100%}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--sans)}
+
+/* ---------- Calendar ---------- */
+.cal-h{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.cal-h b{font-weight:500}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:8px}
+.cal .wd{font-size:.6471rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+.cal button{min-height:44px;border-radius:10px;border:1px solid transparent;font-size:.8235rem;position:relative;color:var(--ink)}
+.cal button.out{visibility:hidden}
+.cal button.future{color:var(--muted-2)}
+.cal button.today{border-color:var(--line-2)}
+.cal button.sel{border-color:var(--accent)}
+.cal button.dose::after{content:"";position:absolute;left:50%;bottom:6px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--accent)}
+.cal button.pic::before{content:"";position:absolute;right:6px;top:6px;width:5px;height:5px;border-radius:50%;border:1px solid var(--muted)}
+
+/* ---------- Tab bar ---------- */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--bar);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabs-in{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);padding:0 var(--pad-r) 0 var(--pad-l)}
+.tabs button{min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:.6471rem;letter-spacing:.06em;transition:color .22s var(--ease)}
+.tabs button[aria-current="page"]{color:var(--accent-bright)}
+.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- Sheets (dialogs) ---------- */
+dialog{border:0;padding:0;background:var(--panel);color:var(--ink);width:100%;max-width:var(--maxw);margin:auto auto 0;border-radius:16px 16px 0 0;max-height:92vh;
+  border-top:1px solid var(--line-2)}
+dialog::backdrop{background:rgba(7,6,5,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+dialog[open]{animation:up .42s var(--ease)}
+@keyframes up{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.sheet{padding:18px var(--pad-r) calc(22px + env(safe-area-inset-bottom)) var(--pad-l);overflow-y:auto;max-height:92vh}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-h h2{font-size:1.1765rem}
+.grab{width:36px;height:4px;border-radius:2px;background:var(--line-2);margin:0 auto 12px}
+.viewer img{width:100%;max-height:68vh;object-fit:contain;border-radius:12px;background:var(--panel-2);display:block;margin-top:12px}
+@media (min-width:760px){dialog{margin:auto;border-radius:16px;border:1px solid var(--line-2)}}
+
+/* ---------- Footer, toast ---------- */
+.scope{padding:34px 0 10px}
+.scope p{font-size:.7059rem;color:var(--muted-2);line-height:1.7}
+.scope p+p{margin-top:10px}
+.scope strong{color:var(--muted);font-weight:500}
+.toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));transform:translate(-50%,12px);opacity:0;z-index:40;background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:10px;font-size:.8235rem;max-width:calc(100% - 40px);transition:opacity .22s var(--ease),transform .22s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <div class="bar-l"><button class="icon-btn lang" id="lang" type="button"></button></div>
+    <div class="mark">
+      <svg viewBox="0 0 582 70" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 68 13.4 68 41 16.69 68.6 68 82 68 46.5 2 35.5 2Z M132 2 148.5 2 170.29 24.3 161.85 32.54ZM213 2 196.5 2 174.71 24.3 183.15 32.54ZM132 68 148.5 68 170.29 45.7 161.85 37.46ZM213 68 196.5 68 174.71 45.7 183.15 37.46Z M279.1 2 290.9 2 290.9 68 279.1 68Z M352.3 35A42.7 35 0 1 1 437.7 35A42.7 35 0 1 1 352.3 35ZM364.1 35A30.9 23.2 0 1 0 425.9 35A30.9 23.2 0 1 0 364.1 35Z M497 2 508.8 2 539.5 41 570.2 2 582 2 582 68 570.2 68 570.2 21.08 539.5 60.08 508.8 21.08 508.8 68 497 68Z"/></svg>
+      <span data-t="brand_sub"></span>
+    </div>
+    <div class="bar-r"><button class="icon-btn" id="open-settings" type="button" data-t-aria="settings">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    </button></div>
+  </div>
+</header>
+
+<main class="wrap" id="main" tabindex="-1"></main>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-in">
+    <button type="button" data-view="today"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></svg><span data-t="tab_today"></span></button>
+    <button type="button" data-view="history"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span data-t="tab_history"></span></button>
+    <button type="button" data-view="photos"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5.5-5 4 3.5 2.5-2 4 3.5"/></svg><span data-t="tab_photos"></span></button>
+    <button type="button" data-view="compare"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M12 2.5v19"/></svg><span data-t="tab_compare"></span></button>
+  </div>
+</nav>
+
+<!-- Log or edit a dose -->
+<dialog id="dose-dlg" aria-labelledby="dose-title">
+  <form class="sheet" id="dose-form" method="dialog" novalidate>
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="dose-title"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <div class="fields">
+      <label class="f full"><span data-t="compound"></span><select class="inp" id="f-compound"></select></label>
+      <label class="f full" id="f-name-wrap" hidden><span data-t="name"></span><input class="inp" id="f-name" type="text" autocomplete="off" maxlength="80" /></label>
+      <label class="f"><span data-t="amount"></span><input class="inp" id="f-amount" type="text" inputmode="decimal" autocomplete="off" /></label>
+      <label class="f"><span data-t="unit"></span><select class="inp" id="f-unit"></select></label>
+      <label class="f"><span data-t="time"></span><input class="inp" id="f-time" type="time" /></label>
+      <label class="f"><span data-t="site"></span><select class="inp" id="f-site"></select></label>
+      <p class="hint full" id="f-site-hint"></p>
+      <label class="f full"><span data-t="note"></span><textarea class="inp" id="f-note" maxlength="500"></textarea></label>
+      <p class="err full" id="f-err" role="alert"></p>
+    </div>
+    <div class="row-actions">
+      <button class="btn primary" type="submit" style="flex:1" data-t="save"></button>
+      <button class="btn danger" type="button" id="f-delete" hidden data-t="delete"></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Settings -->
+<dialog id="set-dlg" aria-labelledby="set-title">
+  <div class="sheet">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="set-title" data-t="settings"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <div class="sec" style="border:0;padding-top:14px">
+      <h2 data-t="language"></h2>
+      <div class="seg" id="set-lang">
+        <button type="button" data-lang="id">Bahasa Indonesia</button>
+        <button type="button" data-lang="en">English</button>
+      </div>
+    </div>
+    <div class="sec">
+      <h2 data-t="backup"></h2>
+      <p class="hint" data-t="export_hint"></p>
+      <p class="hint" id="set-usage"></p>
+      <div class="row-actions">
+        <button class="btn" type="button" id="exp-json" data-t="export_json"></button>
+        <button class="btn" type="button" id="imp-json" data-t="import_json"></button>
+        <button class="btn" type="button" id="exp-csv" data-t="export_csv"></button>
+      </div>
+      <input type="file" id="imp-file" accept="application/json,.json" hidden />
+    </div>
+    <div class="sec">
+      <button class="btn danger block" type="button" id="wipe" data-t="delete_all"></button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Photo viewer -->
+<dialog id="pic-dlg" aria-labelledby="pic-title">
+  <div class="sheet viewer">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="pic-title"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <img id="pic-img" alt="" />
+    <div class="row-actions">
+      <button class="btn small" type="button" id="pic-before" data-t="set_before"></button>
+      <button class="btn small" type="button" id="pic-after" data-t="set_after"></button>
+      <button class="btn small danger" type="button" id="pic-del" data-t="delete"></button>
+    </div>
+  </div>
+</dialog>
+
+<input type="file" id="photo-file" accept="image/*" hidden />
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="compounds.js"></script>
+<script>
+/* ------------------------------------------------------------------ *
+ * AXIOM Tracker
+ *
+ * A private daily log beside the compound guide: what was taken, a short
+ * check-in (weight, waist, how the day felt) and progress photos with a
+ * before / after comparison.
+ *
+ * Storage. Entries, check-ins and preferences live in localStorage under
+ * STORE_KEY. Photos are Blobs in IndexedDB ("axiom-tracker" / "photos"),
+ * each saved as a 1600 px JPEG with a 480 px thumbnail. Nothing leaves
+ * the device; Export writes one JSON file that Import reads back.
+ *
+ * Restraint. The page records what the person enters. It never proposes
+ * an amount or a schedule: the only default it offers is the person's
+ * own last entry for that compound, and the next site in their own
+ * rotation.
+ * ------------------------------------------------------------------ */
+(function () {
+  "use strict";
+
+  var STORE_KEY = "axiom.tracker.v1";
+  var UNITS = ["mg", "mcg", "IU", "mL", "unit"];
+  var ROTATION = ["abd_l", "abd_r", "thigh_l", "thigh_r", "arm_l", "arm_r", "glute_l", "glute_r"];
+  var SITES = ROTATION.concat(["oral", "nasal", "topical", "other"]);
+  var POSES = ["front", "side", "back", "other"];
+
+  /* ---------- Copy (EN / ID) ---------- */
+  var I18N = {
+    en: {
+      brand_sub: "Tracker", tab_today: "Today", tab_history: "History", tab_photos: "Photos", tab_compare: "Compare",
+      today: "Today", yesterday: "Yesterday", prev_day: "Previous day", next_day: "Next day", go_today: "Today",
+      today_title: "Your day", history_title: "Your record", photos_title: "Your photos", compare_title: "See the difference",
+      doses: "Doses", log_dose: "Log a dose", edit_dose: "Edit entry", no_doses: "Nothing logged on this day.",
+      checkin: "Check-in", weight: "Weight", waist: "Waist", feel: "How the day felt", note: "Note", saved: "Saved",
+      feel_1: "Low", feel_2: "Below par", feel_3: "Steady", feel_4: "Good", feel_5: "Strong",
+      photo: "Photo", add_photo: "Add photo", pose: "Pose", pose_front: "Front", pose_side: "Side", pose_back: "Back", pose_other: "Other", all: "All",
+      photo_hint: "Same light, same distance, same pose each time makes the comparison honest.",
+      compound: "Compound", recent: "Recent", other_compound: "Other (type a name)", name: "Name", amount: "Amount", unit: "Unit", time: "Time", site: "Site",
+      unit_unit: "units", next_site: "Next in your rotation: {s}.", save: "Save", cancel: "Close", delete: "Delete", edit: "Edit",
+      site_abd_l: "Abdomen, left", site_abd_r: "Abdomen, right", site_thigh_l: "Thigh, left", site_thigh_r: "Thigh, right",
+      site_arm_l: "Arm, left", site_arm_r: "Arm, right", site_glute_l: "Glute, left", site_glute_r: "Glute, right",
+      site_oral: "By mouth", site_nasal: "Nasal", site_topical: "On the skin", site_other: "Other",
+      days_logged: "Days logged", streak: "Days in a row", last7: "Entries, last 7 days",
+      by_compound: "By compound", last: "Last", in30: "Last 30 days", total30: "Total, 30 days", entries_n: "{n} entries", entries_n_1: "{n} entry",
+      days_ago: "{n} days ago", rel_today: "today", rel_yesterday: "yesterday",
+      weight_trend: "Weight", start: "Start", latest: "Latest", change: "Change",
+      calendar: "Calendar", prev_month: "Previous month", next_month: "Next month", all_entries: "Every entry", show_more: "Show more",
+      history_empty: "Your record fills in as you log. Start on Today.",
+      photos_empty: "No photos yet. Add one here or from Today.", photo_of: "{pose} · {date}",
+      compare_need: "Add at least two photos to compare them.", before: "Before", after: "After", side_by_side: "Side by side", slider: "Slider",
+      days_apart: "Days apart", doses_between: "Doses between", weight_delta: "Weight change", waist_delta: "Waist change", no_data: "—",
+      pick_before: "Choose the before photo", pick_after: "Choose the after photo", set_before: "Use as before", set_after: "Use as after",
+      settings: "Settings", language: "Language", backup: "Backup",
+      export_hint: "Everything stays in this browser on this device and is never uploaded. Clearing site data removes it, so export a backup now and then.",
+      export_json: "Export backup", import_json: "Import backup", export_csv: "Export log as CSV", delete_all: "Delete everything",
+      usage: "{n} photos, about {mb} MB on this device.",
+      confirm_delete_all: "Delete every entry, check-in and photo on this device? This cannot be undone.",
+      confirm_delete: "Delete this entry?", confirm_delete_photo: "Delete this photo?",
+      import_done: "Backup restored: {e} entries, {p} photos.", import_bad: "That file is not an AXIOM tracker backup.",
+      exported: "Backup saved.", deleted: "Deleted.", photo_saved: "Photo saved.", saving_photo: "Saving photo",
+      photo_failed: "That image could not be read. Try a JPEG or PNG.",
+      idb_off: "Photos need browser storage, which is off in this window. Entries still save.",
+      err_amount: "Enter an amount greater than zero.", err_name: "Name the compound.",
+      scope_1: "<strong>What this is.</strong> A personal log. It records what you enter and does not suggest an amount or a schedule. It is not medical advice.",
+      scope_2: "<strong>Where it lives.</strong> In this browser, on this device. Nothing is sent anywhere. AXIOM peptides are sold for research use only."
+    },
+    id: {
+      brand_sub: "Pelacak", tab_today: "Hari ini", tab_history: "Riwayat", tab_photos: "Foto", tab_compare: "Bandingkan",
+      today: "Hari ini", yesterday: "Kemarin", prev_day: "Hari sebelumnya", next_day: "Hari berikutnya", go_today: "Hari ini",
+      today_title: "Hari Anda", history_title: "Catatan Anda", photos_title: "Foto Anda", compare_title: "Lihat perbedaannya",
+      doses: "Dosis", log_dose: "Catat dosis", edit_dose: "Ubah catatan", no_doses: "Belum ada catatan di hari ini.",
+      checkin: "Cek harian", weight: "Berat badan", waist: "Lingkar pinggang", feel: "Kondisi hari ini", note: "Catatan", saved: "Tersimpan",
+      feel_1: "Rendah", feel_2: "Kurang", feel_3: "Stabil", feel_4: "Baik", feel_5: "Prima",
+      photo: "Foto", add_photo: "Tambah foto", pose: "Pose", pose_front: "Depan", pose_side: "Samping", pose_back: "Belakang", pose_other: "Lainnya", all: "Semua",
+      photo_hint: "Cahaya, jarak, dan pose yang sama setiap kali membuat perbandingan jujur.",
+      compound: "Senyawa", recent: "Terakhir dipakai", other_compound: "Lainnya (tulis nama)", name: "Nama", amount: "Jumlah", unit: "Satuan", time: "Jam", site: "Lokasi",
+      unit_unit: "unit", next_site: "Giliran berikutnya dalam rotasi Anda: {s}.", save: "Simpan", cancel: "Tutup", delete: "Hapus", edit: "Ubah",
+      site_abd_l: "Perut, kiri", site_abd_r: "Perut, kanan", site_thigh_l: "Paha, kiri", site_thigh_r: "Paha, kanan",
+      site_arm_l: "Lengan, kiri", site_arm_r: "Lengan, kanan", site_glute_l: "Bokong, kiri", site_glute_r: "Bokong, kanan",
+      site_oral: "Diminum", site_nasal: "Hidung", site_topical: "Di kulit", site_other: "Lainnya",
+      days_logged: "Hari tercatat", streak: "Hari berturut-turut", last7: "Catatan, 7 hari terakhir",
+      by_compound: "Per senyawa", last: "Terakhir", in30: "30 hari terakhir", total30: "Total, 30 hari", entries_n: "{n} catatan",
+      days_ago: "{n} hari lalu", rel_today: "hari ini", rel_yesterday: "kemarin",
+      weight_trend: "Berat badan", start: "Awal", latest: "Terbaru", change: "Perubahan",
+      calendar: "Kalender", prev_month: "Bulan sebelumnya", next_month: "Bulan berikutnya", all_entries: "Semua catatan", show_more: "Tampilkan lagi",
+      history_empty: "Catatan Anda terisi seiring Anda mencatat. Mulai dari Hari ini.",
+      photos_empty: "Belum ada foto. Tambahkan di sini atau dari Hari ini.", photo_of: "{pose} · {date}",
+      compare_need: "Tambahkan minimal dua foto untuk membandingkannya.", before: "Sebelum", after: "Sesudah", side_by_side: "Berdampingan", slider: "Geser",
+      days_apart: "Selisih hari", doses_between: "Dosis di antaranya", weight_delta: "Perubahan berat", waist_delta: "Perubahan pinggang", no_data: "—",
+      pick_before: "Pilih foto sebelum", pick_after: "Pilih foto sesudah", set_before: "Jadikan sebelum", set_after: "Jadikan sesudah",
+      settings: "Pengaturan", language: "Bahasa", backup: "Cadangan",
+      export_hint: "Semua data tersimpan di browser ini, di perangkat ini, dan tidak pernah diunggah. Menghapus data situs akan menghapusnya, jadi ekspor cadangan sesekali.",
+      export_json: "Ekspor cadangan", import_json: "Impor cadangan", export_csv: "Ekspor catatan (CSV)", delete_all: "Hapus semua",
+      usage: "{n} foto, sekitar {mb} MB di perangkat ini.",
+      confirm_delete_all: "Hapus semua catatan, cek harian, dan foto di perangkat ini? Tindakan ini tidak bisa dibatalkan.",
+      confirm_delete: "Hapus catatan ini?", confirm_delete_photo: "Hapus foto ini?",
+      import_done: "Cadangan dipulihkan: {e} catatan, {p} foto.", import_bad: "Berkas ini bukan cadangan pelacak AXIOM.",
+      exported: "Cadangan tersimpan.", deleted: "Terhapus.", photo_saved: "Foto tersimpan.", saving_photo: "Menyimpan foto",
+      photo_failed: "Gambar ini tidak bisa dibaca. Coba JPEG atau PNG.",
+      idb_off: "Foto memerlukan penyimpanan browser, yang nonaktif di jendela ini. Catatan tetap tersimpan.",
+      err_amount: "Masukkan jumlah lebih dari nol.", err_name: "Tulis nama senyawanya.",
+      scope_1: "<strong>Apa ini.</strong> Catatan pribadi. Halaman ini merekam apa yang Anda masukkan dan tidak menyarankan jumlah atau jadwal. Ini bukan saran medis.",
+      scope_2: "<strong>Di mana datanya.</strong> Di browser ini, di perangkat ini. Tidak ada yang dikirim ke mana pun. Peptida AXIOM dijual hanya untuk penelitian."
+    }
+  };
+
+  /* ---------- State ---------- */
+  var S = loadState();
+  var lang = S.prefs.lang || (/^id\b/i.test(navigator.language || "") ? "id" : "en");
+  var view = "today";
+  var day = todayKey();
+  var calMonth = day.slice(0, 7);
+  var photoPose = "all";
+  var cmp = { pose: null, a: null, b: null, mode: "side", x: 50 };
+  var historyLimit = 40;
+  var editingId = null;
+  var photos = [];          // metadata + blobs from IndexedDB, oldest first
+  var urls = {};            // object URL cache: id + ":t" / ":f"
+  var idbOk = true;
+  var pendingPose = "front";
+  var viewerId = null;
+
+  var COMPOUNDS = (window.COMPOUNDS || []).map(function (c) { return { slug: c.slug, name: c.name, category: c.category }; });
+  var BY_SLUG = {};
+  COMPOUNDS.forEach(function (c) { BY_SLUG[c.slug] = c; });
+
+  function loadState() {
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem(STORE_KEY) || "null"); } catch (e) { s = null; }
+    s = s && typeof s === "object" ? s : {};
+    s.entries = Array.isArray(s.entries) ? s.entries : [];
+    s.checkins = s.checkins && typeof s.checkins === "object" ? s.checkins : {};
+    s.prefs = s.prefs && typeof s.prefs === "object" ? s.prefs : {};
+    s.prefs.last = s.prefs.last || {};
+    return s;
+  }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* storage full or blocked: keep running in memory */ }
+  }
+
+  /* ---------- Helpers ---------- */
+  function t(k, vars) {
+    var s = (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
+    if (vars && vars.n === 1 && I18N[lang][k + "_1"]) s = I18N[lang][k + "_1"];
+    if (vars) Object.keys(vars).forEach(function (v) { s = s.split("{" + v + "}").join(vars[v]); });
+    return s;
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
+  }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  // Local calendar dates, never toISOString(): in Jakarta (UTC+7) that would file an early-morning entry under yesterday.
+  function keyOf(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function todayKey() { return keyOf(new Date()); }
+  function parseKey(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addDays(k, n) { var d = parseKey(k); d.setDate(d.getDate() + n); return keyOf(d); }
+  function diffDays(a, b) { // b - a, in whole days
+    var pa = a.split("-"), pb = b.split("-");
+    return Math.round((Date.UTC(+pb[0], +pb[1] - 1, +pb[2]) - Date.UTC(+pa[0], +pa[1] - 1, +pa[2])) / 864e5);
+  }
+  function loc() { return lang === "id" ? "id-ID" : "en-GB"; }
+  function fmtNum(n, d) { return new Intl.NumberFormat(loc(), { maximumFractionDigits: d == null ? 2 : d }).format(n); }
+  function fmtDate(k, opts) { return new Intl.DateTimeFormat(loc(), opts || { day: "numeric", month: "short", year: "numeric" }).format(parseKey(k)); }
+  function fmtLong(k) { return new Intl.DateTimeFormat(loc(), { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(parseKey(k)); }
+  // Edit fields carry no grouping, so a value read back parses to itself.
+  function fmtIn(n) { return new Intl.NumberFormat(loc(), { maximumFractionDigits: 3, useGrouping: false }).format(n); }
+  function parseNum(v) {
+    if (v == null) return NaN;
+    var s = String(v).trim().replace(/\s/g, "");
+    if (!s) return NaN;
+    // Thousands only where the reader's language groups that way: "1.500" in Indonesian, "1,500" in English.
+    // Otherwise a lone comma or dot is the decimal mark, so "0,25" and "0.25" both read as a quarter.
+    var grp = lang === "id" ? /^[1-9]\d{0,2}(\.\d{3})+(,\d+)?$/ : /^[1-9]\d{0,2}(,\d{3})+(\.\d+)?$/;
+    if (grp.test(s)) s = lang === "id" ? s.replace(/\./g, "").replace(",", ".") : s.replace(/,/g, "");
+    else if (s.indexOf(",") > -1 && s.indexOf(".") > -1) s = s.replace(/[.,](?=.*[.,])/g, "").replace(",", ".");
+    else s = s.replace(",", ".");
+    return /^-?\d*\.?\d+$/.test(s) ? Number(s) : NaN;
+  }
+  function rel(k) {
+    var n = diffDays(k, todayKey());
+    if (n === 0) return t("rel_today");
+    if (n === 1) return t("rel_yesterday");
+    return t("days_ago", { n: fmtNum(n, 0) });
+  }
+  function unitLabel(u) { return u === "unit" ? t("unit_unit") : u; }
+  function siteLabel(s) { return s ? t("site_" + s) : ""; }
+  function poseLabel(p) { return t("pose_" + p); }
+  function entryName(e) { return e.slug && BY_SLUG[e.slug] ? BY_SLUG[e.slug].name : e.name || "—"; }
+  function compoundKey(e) { return e.slug || "name:" + String(e.name || "").trim().toLowerCase(); }
+  function byTime(a, b) { return (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")); }
+  var toastTimer;
+  function toast(msg) {
+    var el = document.getElementById("toast");
+    el.textContent = msg; el.classList.add("on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.classList.remove("on"); }, 2600);
+  }
+
+  /* ---------- IndexedDB for photos ---------- */
+  var dbp = null;
+  function db() {
+    if (dbp) return dbp;
+    dbp = new Promise(function (res, rej) {
+      if (!window.indexedDB) return rej(new Error("no idb"));
+      var r = indexedDB.open("axiom-tracker", 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore("photos", { keyPath: "id" }); };
+      r.onsuccess = function () { res(r.result); };
+      r.onerror = function () { rej(r.error); };
+    });
+    return dbp;
+  }
+  function tx(mode, fn) {
+    return db().then(function (d) {
+      return new Promise(function (res, rej) {
+        var x = d.transaction("photos", mode), st = x.objectStore("photos"), out;
+        var r = fn(st);
+        if (r) r.onsuccess = function () { out = r.result; };
+        x.oncomplete = function () { res(out); };
+        x.onerror = x.onabort = function () { rej(x.error); };
+      });
+    });
+  }
+  function loadPhotos() {
+    return tx("readonly", function (st) { return st.getAll(); }).then(function (all) {
+      photos = (all || []).sort(function (a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); });
+    }).catch(function () { idbOk = false; photos = []; });
+  }
+  function url(p, full) {
+    var k = p.id + (full ? ":f" : ":t");
+    if (!urls[k]) urls[k] = URL.createObjectURL(full ? p.blob : (p.thumb || p.blob));
+    return urls[k];
+  }
+  function dropUrls(id) {
+    [":t", ":f"].forEach(function (s) { if (urls[id + s]) { URL.revokeObjectURL(urls[id + s]); delete urls[id + s]; } });
+  }
+
+  // Decode, honour EXIF orientation, and re-encode as JPEG no larger than `max` on the long side.
+  function shrink(blob, max, q) {
+    function draw(src, w0, h0) {
+      var s = Math.min(1, max / Math.max(w0, h0));
+      var c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(w0 * s)); c.height = Math.max(1, Math.round(h0 * s));
+      c.getContext("2d").drawImage(src, 0, 0, c.width, c.height);
+      return new Promise(function (res, rej) {
+        c.toBlob(function (b) { b ? res({ blob: b, w: c.width, h: c.height }) : rej(new Error("encode")); }, "image/jpeg", q);
+      });
+    }
+    var viaImg = function () {
+      return new Promise(function (res, rej) {
+        var u = URL.createObjectURL(blob), im = new Image();
+        im.onload = function () { URL.revokeObjectURL(u); res(draw(im, im.naturalWidth, im.naturalHeight)); };
+        im.onerror = function () { URL.revokeObjectURL(u); rej(new Error("decode")); };
+        im.src = u;
+      });
+    };
+    if (window.createImageBitmap) {
+      return createImageBitmap(blob, { imageOrientation: "from-image" })
+        .then(function (bmp) { return draw(bmp, bmp.width, bmp.height); }, viaImg);
+    }
+    return viaImg();
+  }
+  function addPhoto(file, date, pose) {
+    toast(t("saving_photo") + "…");
+    return shrink(file, 1600, 0.86).then(function (full) {
+      return shrink(full.blob, 480, 0.8).then(function (th) {
+        var p = { id: uid(), date: date, pose: pose, createdAt: new Date().toISOString(), w: full.w, h: full.h, blob: full.blob, thumb: th.blob };
+        return tx("readwrite", function (st) { return st.put(p); }).then(function () {
+          photos.push(p); photos.sort(function (a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); });
+          if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
+          toast(t("photo_saved"));
+        });
+      });
+    }).catch(function () { toast(t("photo_failed")); });
+  }
+  function deletePhoto(id) {
+    return tx("readwrite", function (st) { return st.delete(id); }).then(function () {
+      photos = photos.filter(function (p) { return p.id !== id; });
+      dropUrls(id);
+      if (cmp.a === id) cmp.a = null;
+      if (cmp.b === id) cmp.b = null;
+    });
+  }
+
+  /* ---------- Derived data ---------- */
+  function entriesOn(k) { return S.entries.filter(function (e) { return e.date === k; }).sort(byTime); }
+  function datesWithDoses() { var o = {}; S.entries.forEach(function (e) { o[e.date] = 1; }); return o; }
+  function datesWithPhotos() { var o = {}; photos.forEach(function (p) { o[p.date] = 1; }); return o; }
+  function streak() {
+    var d = datesWithDoses(), k = todayKey(), n = 0;
+    if (!d[k]) k = addDays(k, -1); // a day not yet logged does not break the run
+    while (d[k]) { n++; k = addDays(k, -1); }
+    return n;
+  }
+  function nextSite() {
+    var sorted = S.entries.filter(function (e) { return ROTATION.indexOf(e.site) > -1; }).sort(byTime);
+    if (!sorted.length) return ROTATION[0];
+    var last = sorted[sorted.length - 1].site;
+    return ROTATION[(ROTATION.indexOf(last) + 1) % ROTATION.length];
+  }
+  function weightOn(k, field) { // the check-in on that date, or the nearest one within 3 days before it
+    for (var i = 0; i <= 3; i++) {
+      var c = S.checkins[addDays(k, -i)];
+      if (c && typeof c[field] === "number") return c[field];
+    }
+    return null;
+  }
+
+  /* ---------- Rendering ---------- */
+  var main = document.getElementById("main");
+
+  function render() {
+    flushCheckin();
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
+    document.querySelectorAll("[data-t-aria]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-aria"))); });
+    var lb = document.getElementById("lang");
+    lb.textContent = lang === "id" ? "EN" : "ID";
+    lb.setAttribute("aria-label", lang === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia");
+    document.querySelectorAll(".tabs [data-view]").forEach(function (b) {
+      if (b.getAttribute("data-view") === view) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+    var html = { today: renderToday, history: renderHistory, photos: renderPhotos, compare: renderCompare }[view]();
+    main.innerHTML = html + scope();
+    if (view === "compare") wireSlider();
+  }
+  function scope() { return '<div class="scope"><p>' + t("scope_1") + "</p><p>" + t("scope_2") + "</p></div>"; }
+  function hero(k) { return '<div class="hero"><div class="kicker">AXIOM · ' + esc(t("brand_sub")) + "</div><h1>" + esc(t(k)) + "</h1></div>"; }
+
+  function seg(name, items, current, extraCls) {
+    return '<div class="seg ' + (extraCls || "") + '" role="group">' + items.map(function (it) {
+      return '<button type="button" data-' + name + '="' + esc(it.v) + '" aria-pressed="' + (it.v === current) + '">' + it.html + "</button>";
+    }).join("") + "</div>";
+  }
+  function thumbHtml(p, attrs) {
+    return '<button type="button" class="thumb" ' + (attrs || "") + ' aria-label="' + esc(t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) })) + '">' +
+      '<img src="' + url(p) + '" alt="" loading="lazy" /><span class="tag">' + esc(poseLabel(p.pose)) + "</span></button>";
+  }
+
+  function renderToday() {
+    var k = day, isToday = k === todayKey();
+    var label = isToday ? t("today") : k === addDays(todayKey(), -1) ? t("yesterday") : "";
+    var es = entriesOn(k);
+    var c = S.checkins[k] || {};
+    var dayPhotos = photos.filter(function (p) { return p.date === k; });
+    var h = hero("today_title");
+    h += '<div class="day">' +
+      '<button class="icon-btn" type="button" data-act="day-prev" aria-label="' + esc(t("prev_day")) + '">‹</button>' +
+      '<div class="day-label">' + (label ? "<i>" + esc(label) + "</i>" : "") + "<b>" + esc(fmtLong(k)) + "</b>" +
+      '<input type="date" id="day-pick" value="' + k + '" max="' + todayKey() + '" aria-label="' + esc(fmtLong(k)) + '" /></div>' +
+      '<button class="icon-btn" type="button" data-act="day-next" aria-label="' + esc(t("next_day")) + '"' + (isToday ? " disabled style=\"opacity:.35\"" : "") + ">›</button>" +
+      (isToday ? "" : '<button class="chip" type="button" data-act="day-today">' + esc(t("go_today")) + "</button>") +
+      "</div>";
+
+    // Doses
+    h += '<section class="sec"><h2>' + esc(t("doses")) + (es.length ? "<small>" + esc(t("entries_n", { n: es.length })) + "</small>" : "") + "</h2>";
+    h += es.length ? '<div class="list">' + es.map(function (e) { return entryRow(e, false); }).join("") + "</div>" : '<p class="empty">' + esc(t("no_doses")) + "</p>";
+    h += '<div class="row-actions"><button class="btn primary block" type="button" data-act="new-dose">' + esc(t("log_dose")) + "</button></div></section>";
+
+    // Check-in
+    h += '<section class="sec"><h2>' + esc(t("checkin")) + '<small class="saved" id="ck-saved">' + esc(t("saved")) + "</small></h2>" +
+      '<div class="fields">' +
+      '<label class="f"><span>' + esc(t("weight")) + '</span><span class="unit-wrap"><input class="inp" id="ck-weight" inputmode="decimal" autocomplete="off" value="' + (c.weight != null ? esc(fmtIn(c.weight)) : "") + '" /><em>kg</em></span></label>' +
+      '<label class="f"><span>' + esc(t("waist")) + '</span><span class="unit-wrap"><input class="inp" id="ck-waist" inputmode="decimal" autocomplete="off" value="' + (c.waist != null ? esc(fmtIn(c.waist)) : "") + '" /><em>cm</em></span></label>' +
+      '<div class="f full"><span>' + esc(t("feel")) + "</span>" +
+      seg("feel", [1, 2, 3, 4, 5].map(function (n) { return { v: String(n), html: "<b>" + n + "</b><span>" + esc(t("feel_" + n)) + "</span>" }; }), c.feel ? String(c.feel) : "", "feel") + "</div>" +
+      '<label class="f full"><span>' + esc(t("note")) + '</span><textarea class="inp" id="ck-note" maxlength="1000">' + esc(c.note || "") + "</textarea></label>" +
+      "</div></section>";
+
+    // Photo
+    h += '<section class="sec"><h2>' + esc(t("photo")) + "</h2>";
+    if (!idbOk) h += '<p class="empty">' + esc(t("idb_off")) + "</p>";
+    else {
+      if (dayPhotos.length) h += '<div class="thumbs">' + dayPhotos.map(function (p) { return thumbHtml(p, 'data-view-photo="' + p.id + '"'); }).join("") + "</div>";
+      h += '<div class="f" style="margin-top:12px"><span class="hint" style="margin:0">' + esc(t("pose")) + "</span>" +
+        seg("pose-new", POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; }), pendingPose) + "</div>" +
+        '<div class="row-actions"><button class="btn block" type="button" data-act="add-photo">' + esc(t("add_photo")) + "</button></div>" +
+        '<p class="hint">' + esc(t("photo_hint")) + "</p>";
+    }
+    h += "</section>";
+    return h;
+  }
+
+  function entryRow(e, withDate) {
+    var sub = [siteLabel(e.site), e.note].filter(Boolean).map(esc).join(" · ");
+    return '<div class="entry"><span class="t">' + esc(withDate ? fmtDate(e.date, { day: "numeric", month: "short" }) : e.time || "") + "</span>" +
+      "<div><b>" + esc(entryName(e)) + ' <span class="amt" style="display:inline">' + esc(fmtNum(e.amount, 3)) + " " + esc(unitLabel(e.unit)) + "</span></b>" +
+      (withDate && e.time ? "<span>" + esc(e.time) + (sub ? " · " + sub : "") + "</span>" : sub ? "<span>" + sub + "</span>" : "") + "</div>" +
+      '<div class="acts"><button class="icon-btn" type="button" data-edit="' + e.id + '" aria-label="' + esc(t("edit") + " " + entryName(e)) + '">' +
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button></div></div>';
+  }
+
+  function renderHistory() {
+    var h = hero("history_title");
+    var dd = datesWithDoses(), dp = datesWithPhotos();
+    var since7 = addDays(todayKey(), -6);
+    var last7 = S.entries.filter(function (e) { return e.date >= since7; }).length;
+    h += '<div class="kpis"><div class="kpi"><b>' + fmtNum(Object.keys(dd).length, 0) + "</b><span>" + esc(t("days_logged")) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(streak(), 0) + "</b><span>" + esc(t("streak")) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(last7, 0) + "</b><span>" + esc(t("last7")) + "</span></div></div>";
+
+    if (!S.entries.length && !Object.keys(S.checkins).length) {
+      h += '<p class="empty" style="margin-top:12px">' + esc(t("history_empty")) + "</p>";
+    }
+
+    // Per compound
+    var groups = {};
+    S.entries.forEach(function (e) { var key = compoundKey(e); (groups[key] = groups[key] || []).push(e); });
+    var keys = Object.keys(groups).map(function (key) {
+      var list = groups[key].sort(byTime);
+      return { key: key, list: list, last: list[list.length - 1] };
+    }).sort(function (a, b) { return byTime(b.last, a.last); });
+    if (keys.length) {
+      var since30 = addDays(todayKey(), -29);
+      h += '<section class="sec"><h2>' + esc(t("by_compound")) + '</h2><div class="cards">' + keys.map(function (g) {
+        var in30 = g.list.filter(function (e) { return e.date >= since30; });
+        var totals = {};
+        in30.forEach(function (e) { totals[e.unit] = (totals[e.unit] || 0) + e.amount; });
+        var tot = Object.keys(totals).map(function (u) { return fmtNum(totals[u], 3) + " " + unitLabel(u); }).join(" + ") || t("no_data");
+        return '<div class="card"><div class="card-h"><b>' + esc(entryName(g.last)) + "</b><span>" + esc(rel(g.last.date)) + "</span></div><dl>" +
+          "<div><dt>" + esc(t("last")) + "</dt><dd>" + esc(fmtNum(g.last.amount, 3) + " " + unitLabel(g.last.unit)) + "</dd></div>" +
+          "<div><dt>" + esc(t("in30")) + "</dt><dd>" + esc(t("entries_n", { n: in30.length })) + "</dd></div>" +
+          "<div><dt>" + esc(t("total30")) + "</dt><dd>" + esc(tot) + "</dd></div></dl></div>";
+      }).join("") + "</div></section>";
+    }
+
+    // Weight
+    var pts = Object.keys(S.checkins).filter(function (k) { return typeof S.checkins[k].weight === "number"; }).sort()
+      .map(function (k) { return { k: k, v: S.checkins[k].weight }; });
+    if (pts.length) {
+      var first = pts[0], lastp = pts[pts.length - 1], dlt = lastp.v - first.v;
+      h += '<section class="sec"><h2>' + esc(t("weight_trend")) + "</h2>" +
+        '<div class="kpis"><div class="kpi"><b>' + fmtNum(first.v, 1) + " kg</b><span>" + esc(t("start")) + ", " + esc(fmtDate(first.k, { day: "numeric", month: "short" })) + "</span></div>" +
+        '<div class="kpi"><b>' + fmtNum(lastp.v, 1) + " kg</b><span>" + esc(t("latest")) + ", " + esc(fmtDate(lastp.k, { day: "numeric", month: "short" })) + "</span></div>" +
+        '<div class="kpi"><b>' + (dlt > 0 ? "+" : dlt < 0 ? "−" : "") + fmtNum(Math.abs(dlt), 1) + " kg</b><span>" + esc(t("change")) + "</span></div></div>" +
+        (pts.length > 1 ? chart(pts) : "") + "</section>";
+    }
+
+    // Calendar
+    h += '<section class="sec"><h2>' + esc(t("calendar")) + "</h2>" + calendar(dd, dp) + "</section>";
+
+    // Every entry
+    var all = S.entries.slice().sort(byTime).reverse();
+    if (all.length) {
+      h += '<section class="sec"><h2>' + esc(t("all_entries")) + "<small>" + esc(t("entries_n", { n: all.length })) + '</small></h2><div class="list">' +
+        all.slice(0, historyLimit).map(function (e) { return entryRow(e, true); }).join("") + "</div>" +
+        (all.length > historyLimit ? '<div class="row-actions"><button class="btn block" type="button" data-act="more">' + esc(t("show_more")) + "</button></div>" : "") +
+        "</section>";
+    }
+    return h;
+  }
+
+  function chart(pts) {
+    // Drawn at the width of its box, 1:1, so the axis labels stay at 11 px on every screen.
+    var W = Math.max(280, Math.round(main.clientWidth - 2 * 20 - 22)), H = 170, L = 40, R = 12, T = 12, B = 26;
+    var t0 = parseKey(pts[0].k).getTime(), t1 = parseKey(pts[pts.length - 1].k).getTime();
+    var vs = pts.map(function (p) { return p.v; });
+    var lo = Math.min.apply(null, vs), hi = Math.max.apply(null, vs);
+    var span = Math.max(hi - lo, 1), padv = span * 0.15;
+    lo -= padv; hi += padv;
+    function x(p) { return L + (t1 === t0 ? (W - L - R) / 2 : (parseKey(p.k).getTime() - t0) / (t1 - t0) * (W - L - R)); }
+    function y(v) { return T + (hi - v) / (hi - lo) * (H - T - B); }
+    var grid = "";
+    for (var i = 0; i < 3; i++) {
+      var v = lo + (hi - lo) * (i + 0.5) / 3, yy = y(v).toFixed(1);
+      grid += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '" stroke="var(--line)" stroke-width="1"/>' +
+        '<text x="' + (L - 6) + '" y="' + yy + '" text-anchor="end" dominant-baseline="middle">' + esc(fmtNum(v, 1)) + "</text>";
+    }
+    var line = pts.map(function (p, i) { return (i ? "L" : "M") + x(p).toFixed(1) + " " + y(p.v).toFixed(1); }).join(" ");
+    var dots = pts.map(function (p) {
+      return '<circle cx="' + x(p).toFixed(1) + '" cy="' + y(p.v).toFixed(1) + '" r="3" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.5"><title>' +
+        esc(fmtDate(p.k) + " · " + fmtNum(p.v, 1) + " kg") + "</title></circle>";
+    }).join("");
+    var dl = '<text x="' + L + '" y="' + (H - 6) + '">' + esc(fmtDate(pts[0].k, { day: "numeric", month: "short" })) + "</text>" +
+      '<text x="' + (W - R) + '" y="' + (H - 6) + '" text-anchor="end">' + esc(fmtDate(pts[pts.length - 1].k, { day: "numeric", month: "short" })) + "</text>";
+    return '<div class="chart"><svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(t("weight_trend")) + '">' + grid +
+      '<path d="' + line + '" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>' + dots + dl + "</svg></div>";
+  }
+
+  function calendar(dd, dp) {
+    var p = calMonth.split("-"), y = +p[0], m = +p[1] - 1;
+    var first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
+    var lead = (first.getDay() + 6) % 7; // weeks start on Monday
+    var tk = todayKey();
+    var monthName = new Intl.DateTimeFormat(loc(), { month: "long", year: "numeric" }).format(first);
+    var wd = [];
+    for (var i = 0; i < 7; i++) wd.push(new Intl.DateTimeFormat(loc(), { weekday: "short" }).format(new Date(2024, 0, 1 + i)));
+    var h = '<div class="cal-h"><button class="icon-btn" type="button" data-act="cal-prev" aria-label="' + esc(t("prev_month")) + '">‹</button><b>' + esc(monthName) + "</b>" +
+      '<button class="icon-btn" type="button" data-act="cal-next" aria-label="' + esc(t("next_month")) + '"' + (calMonth >= tk.slice(0, 7) ? " disabled style=\"opacity:.35\"" : "") + ">›</button></div>";
+    h += '<div class="cal">' + wd.map(function (w) { return '<span class="wd">' + esc(w) + "</span>"; }).join("");
+    for (i = 0; i < lead; i++) h += '<button class="out" type="button" tabindex="-1" aria-hidden="true"></button>';
+    for (var d = 1; d <= days; d++) {
+      var k = y + "-" + pad(m + 1) + "-" + pad(d);
+      var cls = [k === tk ? "today" : "", k === day ? "sel" : "", dd[k] ? "dose" : "", dp[k] ? "pic" : "", k > tk ? "future" : ""].filter(Boolean).join(" ");
+      h += '<button type="button" class="' + cls + '" data-goto="' + k + '"' + (k > tk ? " disabled" : "") + ' aria-label="' + esc(fmtLong(k)) + '">' + d + "</button>";
+    }
+    return h + "</div>";
+  }
+
+  function renderPhotos() {
+    var h = hero("photos_title");
+    if (!idbOk) return h + '<p class="empty">' + esc(t("idb_off")) + "</p>";
+    var list = photos.filter(function (p) { return photoPose === "all" || p.pose === photoPose; }).slice().reverse();
+    h += seg("pose-filter", [{ v: "all", html: esc(t("all")) }].concat(POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; })), photoPose);
+    h += '<div class="fields" style="grid-template-columns:1fr auto;align-items:end">' +
+      '<label class="f"><span>' + esc(t("pose")) + '</span><select class="inp" id="ph-pose">' + POSES.map(function (p) {
+        return '<option value="' + p + '"' + (p === pendingPose ? " selected" : "") + ">" + esc(poseLabel(p)) + "</option>";
+      }).join("") + "</select></label>" +
+      '<button class="btn primary" type="button" data-act="add-photo-today">' + esc(t("add_photo")) + "</button></div>";
+    if (!list.length) return h + '<p class="empty">' + esc(t("photos_empty")) + "</p>";
+    var month = "";
+    h += list.map(function (p) {
+      var m = p.date.slice(0, 7), out = "";
+      if (m !== month) {
+        out += (month ? "</div>" : "") + '<p class="month-h">' + esc(new Intl.DateTimeFormat(loc(), { month: "long", year: "numeric" }).format(parseKey(p.date))) + '</p><div class="thumbs">';
+        month = m;
+      }
+      return out + thumbHtml(p, 'data-view-photo="' + p.id + '"');
+    }).join("") + "</div>";
+    return h;
+  }
+
+  function renderCompare() {
+    var h = hero("compare_title");
+    if (!idbOk) return h + '<p class="empty">' + esc(t("idb_off")) + "</p>";
+    if (photos.length < 2) return h + '<p class="empty">' + esc(t("compare_need")) + "</p>";
+    // Default pose: the one with the most photos.
+    if (!cmp.pose) {
+      var counts = {};
+      photos.forEach(function (p) { counts[p.pose] = (counts[p.pose] || 0) + 1; });
+      cmp.pose = counts.front >= 2 ? "front" : "all";
+      if (cmp.pose === "all") POSES.forEach(function (p) { if (counts[p] >= 2 && cmp.pose === "all") cmp.pose = p; });
+    }
+    var pool = photos.filter(function (p) { return cmp.pose === "all" || p.pose === cmp.pose; });
+    if (pool.length < 2) pool = photos;
+    var ids = pool.map(function (p) { return p.id; });
+    if (ids.indexOf(cmp.a) < 0) cmp.a = pool[0].id;
+    if (ids.indexOf(cmp.b) < 0 || cmp.b === cmp.a) cmp.b = pool[pool.length - 1].id === cmp.a ? pool[0].id : pool[pool.length - 1].id;
+    var A = find(cmp.a), B = find(cmp.b);
+    if (A.date + A.createdAt > B.date + B.createdAt) { var tmp = A; A = B; B = tmp; }
+
+    h += seg("cmp-pose", [{ v: "all", html: esc(t("all")) }].concat(POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; })), cmp.pose);
+    h += seg("cmp-mode", [{ v: "side", html: esc(t("side_by_side")) }, { v: "slider", html: esc(t("slider")) }], cmp.mode);
+
+    h += '<div class="cmp">';
+    if (cmp.mode === "side") {
+      h += '<div class="cmp-side">' + fig(A, "before") + fig(B, "after") + "</div>";
+    } else {
+      h += '<div class="slider" id="slider" style="--x:' + cmp.x + '%;aspect-ratio:' + (B.w || 3) + "/" + (B.h || 4) + '">' +
+        '<img src="' + url(A, true) + '" alt="' + esc(t("before") + ", " + fmtDate(A.date)) + '" />' +
+        '<img class="top" src="' + url(B, true) + '" alt="' + esc(t("after") + ", " + fmtDate(B.date)) + '" />' +
+        '<span class="handle" aria-hidden="true"></span>' +
+        '<span class="lab l">' + esc(t("before")) + " · " + esc(fmtDate(A.date, { day: "numeric", month: "short" })) + "</span>" +
+        '<span class="lab r">' + esc(t("after")) + " · " + esc(fmtDate(B.date, { day: "numeric", month: "short" })) + "</span>" +
+        '<input type="range" min="0" max="100" step="0.5" value="' + cmp.x + '" id="slider-x" aria-label="' + esc(t("before") + " / " + t("after")) + '" /></div>';
+    }
+    h += "</div>";
+
+    // What changed between the two dates.
+    var gap = diffDays(A.date, B.date);
+    var between = S.entries.filter(function (e) { return e.date >= A.date && e.date <= B.date; }).length;
+    function delta(field, unit) {
+      var a = weightOn(A.date, field), b = weightOn(B.date, field);
+      if (a == null || b == null) return t("no_data");
+      var d = b - a;
+      return (d > 0 ? "+" : d < 0 ? "−" : "") + fmtNum(Math.abs(d), 1) + " " + unit;
+    }
+    h += '<div class="kpis two" style="margin-top:12px">' +
+      '<div class="kpi"><b>' + fmtNum(gap, 0) + "</b><span>" + esc(t("days_apart")) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(between, 0) + "</b><span>" + esc(t("doses_between")) + "</span></div>" +
+      '<div class="kpi"><b>' + esc(delta("weight", "kg")) + "</b><span>" + esc(t("weight_delta")) + "</span></div>" +
+      '<div class="kpi"><b>' + esc(delta("waist", "cm")) + "</b><span>" + esc(t("waist_delta")) + "</span></div></div>";
+
+    h += '<section class="sec"><h2>' + esc(t("pick_before")) + '</h2><div class="strip">' +
+      pool.map(function (p) { return thumbHtml(p, 'data-pick-a="' + p.id + '" aria-pressed="' + (p.id === A.id) + '"'); }).join("") + "</div>" +
+      "<h2 style=\"margin-top:14px\">" + esc(t("pick_after")) + '</h2><div class="strip">' +
+      pool.map(function (p) { return thumbHtml(p, 'data-pick-b="' + p.id + '" aria-pressed="' + (p.id === B.id) + '"'); }).join("") + "</div></section>";
+    return h;
+  }
+  function find(id) { for (var i = 0; i < photos.length; i++) if (photos[i].id === id) return photos[i]; return null; }
+  function fig(p, which) {
+    return '<figure><img src="' + url(p, true) + '" alt="' + esc(t(which) + ", " + fmtDate(p.date)) + '" /><figcaption><b>' + esc(t(which)) + "</b>" + esc(fmtDate(p.date)) + "</figcaption></figure>";
+  }
+  function wireSlider() {
+    var r = document.getElementById("slider-x"), box = document.getElementById("slider");
+    if (!r) return;
+    r.addEventListener("input", function () { cmp.x = +r.value; box.style.setProperty("--x", cmp.x + "%"); });
+  }
+
+  /* ---------- Dose form ---------- */
+  var dlg = document.getElementById("dose-dlg");
+  var fC = document.getElementById("f-compound"), fName = document.getElementById("f-name"), fNameWrap = document.getElementById("f-name-wrap");
+  var fAmt = document.getElementById("f-amount"), fUnit = document.getElementById("f-unit"), fTime = document.getElementById("f-time");
+  var fSite = document.getElementById("f-site"), fNote = document.getElementById("f-note"), fErr = document.getElementById("f-err");
+
+  function fillCompoundSelect() {
+    var recentKeys = [];
+    S.entries.slice().sort(byTime).reverse().forEach(function (e) {
+      if (e.slug && BY_SLUG[e.slug] && recentKeys.indexOf(e.slug) < 0 && recentKeys.length < 5) recentKeys.push(e.slug);
+    });
+    var h = "";
+    if (recentKeys.length) h += '<optgroup label="' + esc(t("recent")) + '">' + recentKeys.map(function (s) { return '<option value="' + s + '">' + esc(BY_SLUG[s].name) + "</option>"; }).join("") + "</optgroup>";
+    var cats = [];
+    COMPOUNDS.forEach(function (c) { if (cats.indexOf(c.category) < 0) cats.push(c.category); });
+    cats.forEach(function (cat) {
+      h += '<optgroup label="' + esc(cat) + '">' + COMPOUNDS.filter(function (c) { return c.category === cat; })
+        .sort(function (a, b) { return a.name.localeCompare(b.name); })
+        .map(function (c) { return '<option value="' + c.slug + '">' + esc(c.name) + "</option>"; }).join("") + "</optgroup>";
+    });
+    h += '<option value="__other">' + esc(t("other_compound")) + "</option>";
+    fC.innerHTML = h;
+    fUnit.innerHTML = UNITS.map(function (u) { return '<option value="' + u + '">' + esc(unitLabel(u)) + "</option>"; }).join("");
+    fSite.innerHTML = '<option value="">—</option>' + SITES.map(function (s) { return '<option value="' + s + '">' + esc(siteLabel(s)) + "</option>"; }).join("");
+  }
+  function applyLast() {
+    var key = fC.value === "__other" ? "name:" + fName.value.trim().toLowerCase() : fC.value;
+    var last = S.prefs.last[key];
+    if (last) { fAmt.value = fmtIn(last.amount); fUnit.value = last.unit; }
+  }
+  function syncOther() { fNameWrap.hidden = fC.value !== "__other"; }
+
+  function openDose(id) {
+    editingId = id || null;
+    fillCompoundSelect();
+    fErr.textContent = "";
+    var e = id ? S.entries.filter(function (x) { return x.id === id; })[0] : null;
+    document.getElementById("dose-title").textContent = t(e ? "edit_dose" : "log_dose");
+    document.getElementById("f-delete").hidden = !e;
+    var ns = nextSite();
+    if (e) {
+      fC.value = e.slug && BY_SLUG[e.slug] ? e.slug : "__other";
+      fName.value = e.slug && BY_SLUG[e.slug] ? "" : e.name || "";
+      fAmt.value = fmtIn(e.amount); fUnit.value = e.unit; fTime.value = e.time || ""; fSite.value = e.site || ""; fNote.value = e.note || "";
+    } else {
+      fC.value = S.prefs.lastCompound && (BY_SLUG[S.prefs.lastCompound] || S.prefs.lastCompound === "__other") ? S.prefs.lastCompound : (COMPOUNDS[0] ? fC.options[0].value : "__other");
+      fName.value = S.prefs.lastCompound === "__other" ? S.prefs.lastName || "" : "";
+      fAmt.value = ""; fUnit.value = "mg"; fNote.value = "";
+      var now = new Date();
+      fTime.value = day === todayKey() ? pad(now.getHours()) + ":" + pad(now.getMinutes()) : "08:00";
+      fSite.value = ns;
+      applyLast();
+    }
+    syncOther();
+    document.getElementById("f-site-hint").textContent = t("next_site", { s: siteLabel(ns) });
+    dlg.showModal();
+  }
+  fC.addEventListener("change", function () { syncOther(); if (!editingId) applyLast(); });
+  fName.addEventListener("change", function () { if (!editingId) applyLast(); });
+
+  document.getElementById("dose-form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var amount = parseNum(fAmt.value);
+    var other = fC.value === "__other";
+    if (other && !fName.value.trim()) { fErr.textContent = t("err_name"); fName.focus(); return; }
+    if (!(amount > 0)) { fErr.textContent = t("err_amount"); fAmt.focus(); return; }
+    var rec = {
+      slug: other ? null : fC.value, name: other ? fName.value.trim() : BY_SLUG[fC.value].name,
+      amount: amount, unit: fUnit.value, time: fTime.value || "", site: fSite.value || "", note: fNote.value.trim()
+    };
+    if (editingId) {
+      S.entries.forEach(function (e) { if (e.id === editingId) Object.keys(rec).forEach(function (k) { e[k] = rec[k]; }); });
+    } else {
+      rec.id = uid(); rec.date = day; rec.createdAt = new Date().toISOString();
+      S.entries.push(rec);
+    }
+    S.prefs.last[compoundKey(rec)] = { amount: amount, unit: rec.unit };
+    S.prefs.lastCompound = other ? "__other" : rec.slug;
+    if (other) S.prefs.lastName = rec.name;
+    save(); dlg.close(); render();
+  });
+  document.getElementById("f-delete").addEventListener("click", function () {
+    if (!editingId || !confirm(t("confirm_delete"))) return;
+    S.entries = S.entries.filter(function (e) { return e.id !== editingId; });
+    save(); dlg.close(); render(); toast(t("deleted"));
+  });
+
+  /* ---------- Check-in autosave ---------- */
+  var ckTimer;
+  function saveCheckin(patch) {
+    var c = S.checkins[day] || {};
+    Object.keys(patch).forEach(function (k) { if (patch[k] === null || patch[k] === "") delete c[k]; else c[k] = patch[k]; });
+    if (Object.keys(c).length) S.checkins[day] = c; else delete S.checkins[day];
+    save();
+    var s = document.getElementById("ck-saved");
+    if (s) { s.classList.add("on"); clearTimeout(ckTimer); ckTimer = setTimeout(function () { s.classList.remove("on"); }, 1400); }
+  }
+  function numField(v) { var n = parseNum(v); return n > 0 && n < 1000 ? Math.round(n * 10) / 10 : null; }
+  // Typed fields wait 450 ms after the last keystroke, all together, so moving from weight to waist
+  // never drops the first. A blur, a re-render or leaving the page saves at once.
+  var CK = { "ck-weight": "weight", "ck-waist": "waist", "ck-note": "note" };
+  var pending = null, pendingDay = null, inTimer;
+  function flushCheckin() {
+    clearTimeout(inTimer);
+    if (!pending) return;
+    var patch = pending, k = day;
+    pending = null; day = pendingDay;
+    saveCheckin(patch);
+    day = k;
+  }
+  function queueCheckin(el) {
+    var f = CK[el.id];
+    if (!f) return false;
+    if (pending && pendingDay !== day) flushCheckin();
+    pending = pending || {}; pendingDay = day;
+    pending[f] = f === "note" ? el.value.trim() : numField(el.value);
+    return true;
+  }
+  main.addEventListener("input", function (ev) {
+    if (!queueCheckin(ev.target)) return;
+    clearTimeout(inTimer);
+    inTimer = setTimeout(flushCheckin, 450);
+  });
+  window.addEventListener("pagehide", flushCheckin);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flushCheckin(); });
+  main.addEventListener("change", function (ev) {
+    if (queueCheckin(ev.target)) { flushCheckin(); return; }
+    if (ev.target.id === "day-pick" && ev.target.value) { day = ev.target.value > todayKey() ? todayKey() : ev.target.value; calMonth = day.slice(0, 7); render(); }
+    if (ev.target.id === "ph-pose") pendingPose = ev.target.value;
+  });
+
+  /* ---------- Clicks ---------- */
+  var photoInput = document.getElementById("photo-file");
+  var photoDate = day;
+  main.addEventListener("click", function (ev) {
+    if (ev.target.id === "day-pick" && ev.target.showPicker) { try { ev.target.showPicker(); } catch (e) { /* the native control still opens */ } return; }
+    var b = ev.target.closest("button");
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    if (act === "day-prev") { day = addDays(day, -1); render(); }
+    else if (act === "day-next") { if (day < todayKey()) { day = addDays(day, 1); render(); } }
+    else if (act === "day-today") { day = todayKey(); render(); }
+    else if (act === "new-dose") openDose();
+    else if (act === "add-photo") { photoDate = day; photoInput.value = ""; photoInput.click(); }
+    else if (act === "add-photo-today") { photoDate = todayKey(); var sel = document.getElementById("ph-pose"); if (sel) pendingPose = sel.value; photoInput.value = ""; photoInput.click(); }
+    else if (act === "cal-prev" || act === "cal-next") {
+      var p = calMonth.split("-"), d = new Date(+p[0], +p[1] - 1 + (act === "cal-prev" ? -1 : 1), 1);
+      calMonth = d.getFullYear() + "-" + pad(d.getMonth() + 1); render();
+    }
+    else if (act === "more") { historyLimit += 40; render(); }
+    else if (b.hasAttribute("data-edit")) openDose(b.getAttribute("data-edit"));
+    else if (b.hasAttribute("data-goto")) { day = b.getAttribute("data-goto"); view = "today"; render(); window.scrollTo(0, 0); }
+    else if (b.hasAttribute("data-feel")) {
+      var v = +b.getAttribute("data-feel"), cur = (S.checkins[day] || {}).feel;
+      saveCheckin({ feel: cur === v ? null : v });
+      b.parentNode.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b && cur !== v)); });
+    }
+    else if (b.hasAttribute("data-pose-new")) {
+      pendingPose = b.getAttribute("data-pose-new");
+      b.parentNode.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    }
+    else if (b.hasAttribute("data-pose-filter")) { photoPose = b.getAttribute("data-pose-filter"); render(); }
+    else if (b.hasAttribute("data-cmp-pose")) { cmp.pose = b.getAttribute("data-cmp-pose"); cmp.a = cmp.b = null; render(); }
+    else if (b.hasAttribute("data-cmp-mode")) { cmp.mode = b.getAttribute("data-cmp-mode"); render(); }
+    else if (b.hasAttribute("data-pick-a")) { var a = b.getAttribute("data-pick-a"); if (a !== cmp.b) cmp.a = a; render(); }
+    else if (b.hasAttribute("data-pick-b")) { var bb = b.getAttribute("data-pick-b"); if (bb !== cmp.a) cmp.b = bb; render(); }
+    else if (b.hasAttribute("data-view-photo")) openViewer(b.getAttribute("data-view-photo"));
+  });
+  photoInput.addEventListener("change", function () {
+    var f = photoInput.files && photoInput.files[0];
+    if (!f) return;
+    addPhoto(f, photoDate, pendingPose).then(render);
+  });
+
+  document.querySelectorAll(".tabs [data-view]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      view = b.getAttribute("data-view");
+      if (view === "history") calMonth = day.slice(0, 7);
+      render(); window.scrollTo(0, 0); main.focus({ preventScroll: true });
+    });
+  });
+  document.getElementById("lang").addEventListener("click", function () { setLang(lang === "id" ? "en" : "id"); });
+  function setLang(l) { lang = l; S.prefs.lang = l; save(); render(); syncSettings(); }
+
+  /* ---------- Photo viewer ---------- */
+  var pic = document.getElementById("pic-dlg");
+  function openViewer(id) {
+    var p = find(id); if (!p) return;
+    viewerId = id;
+    document.getElementById("pic-title").textContent = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
+    var im = document.getElementById("pic-img");
+    im.src = url(p, true); im.alt = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
+    pic.showModal();
+  }
+  document.getElementById("pic-before").addEventListener("click", function () { useInCompare("a"); });
+  document.getElementById("pic-after").addEventListener("click", function () { useInCompare("b"); });
+  function useInCompare(which) {
+    var p = find(viewerId); if (!p) return;
+    cmp.pose = p.pose;
+    var pool = photos.filter(function (x) { return x.pose === p.pose; });
+    if (pool.length < 2) cmp.pose = "all";
+    cmp[which] = p.id;
+    var other = which === "a" ? "b" : "a";
+    if (cmp[other] === p.id) cmp[other] = null;
+    pic.close(); view = "compare"; render(); window.scrollTo(0, 0);
+  }
+  document.getElementById("pic-del").addEventListener("click", function () {
+    if (!viewerId || !confirm(t("confirm_delete_photo"))) return;
+    deletePhoto(viewerId).then(function () { pic.close(); render(); toast(t("deleted")); });
+  });
+
+  /* ---------- Settings, backup ---------- */
+  var setDlg = document.getElementById("set-dlg");
+  function syncSettings() {
+    document.querySelectorAll("#set-lang [data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang)); });
+    var bytes = photos.reduce(function (s, p) { return s + (p.blob ? p.blob.size : 0) + (p.thumb ? p.thumb.size : 0); }, 0);
+    document.getElementById("set-usage").textContent = t("usage", { n: fmtNum(photos.length, 0), mb: fmtNum(bytes / 1048576, 1) });
+  }
+  document.getElementById("open-settings").addEventListener("click", function () { syncSettings(); setDlg.showModal(); });
+  document.querySelectorAll("#set-lang [data-lang]").forEach(function (b) { b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); }); });
+
+  function download(name, blob) {
+    var a = document.createElement("a"), u = URL.createObjectURL(blob);
+    a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+  }
+  function toDataUrl(blob) {
+    return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsDataURL(blob); });
+  }
+  function fromDataUrl(d) { return fetch(d).then(function (r) { return r.blob(); }); }
+
+  document.getElementById("exp-json").addEventListener("click", function () {
+    Promise.all(photos.map(function (p) {
+      return toDataUrl(p.blob).then(function (data) { return { id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, data: data }; });
+    })).then(function (ph) {
+      var out = { app: "axiom-tracker", version: 1, exportedAt: new Date().toISOString(), entries: S.entries, checkins: S.checkins, photos: ph };
+      download("axiom-tracker-" + todayKey() + ".json", new Blob([JSON.stringify(out)], { type: "application/json" }));
+      toast(t("exported"));
+    });
+  });
+  document.getElementById("imp-json").addEventListener("click", function () { var f = document.getElementById("imp-file"); f.value = ""; f.click(); });
+  document.getElementById("imp-file").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    f.text().then(function (txt) {
+      var d = JSON.parse(txt);
+      if (!d || d.app !== "axiom-tracker" || !Array.isArray(d.entries)) throw new Error("bad");
+      var ids = {};
+      S.entries.forEach(function (e, i) { ids[e.id] = i; });
+      d.entries.forEach(function (e) {
+        if (!e || !e.id || !e.date || !(Number(e.amount) > 0)) return;
+        e.amount = Number(e.amount);
+        if (e.id in ids) S.entries[ids[e.id]] = e; else S.entries.push(e);
+      });
+      Object.keys(d.checkins || {}).forEach(function (k) { if (/^\d{4}-\d{2}-\d{2}$/.test(k)) S.checkins[k] = d.checkins[k]; });
+      save();
+      var list = Array.isArray(d.photos) ? d.photos : [];
+      return list.reduce(function (pr, p) {
+        return pr.then(function () {
+          if (!p || !p.id || !p.data || find(p.id)) return;
+          return fromDataUrl(p.data).then(function (blob) {
+            return shrink(blob, 480, 0.8).then(function (th) {
+              var rec = { id: p.id, date: p.date, pose: POSES.indexOf(p.pose) > -1 ? p.pose : "other", createdAt: p.createdAt || new Date().toISOString(), w: p.w, h: p.h, blob: blob, thumb: th.blob };
+              return tx("readwrite", function (st) { return st.put(rec); }).then(function () { photos.push(rec); });
+            });
+          });
+        });
+      }, Promise.resolve()).then(function () {
+        photos.sort(function (a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); });
+        setDlg.close(); render(); toast(t("import_done", { e: d.entries.length, p: list.length }));
+      });
+    }).catch(function () { toast(t("import_bad")); });
+  });
+  document.getElementById("exp-csv").addEventListener("click", function () {
+    function q(v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+    var rows = [["type", "date", "time", "compound", "amount", "unit", "site", "weight_kg", "waist_cm", "feel_1_5", "note"]];
+    S.entries.slice().sort(byTime).forEach(function (e) { rows.push(["dose", e.date, e.time, entryName(e), e.amount, e.unit, e.site, "", "", "", e.note]); });
+    Object.keys(S.checkins).sort().forEach(function (k) { var c = S.checkins[k]; rows.push(["check-in", k, "", "", "", "", "", c.weight, c.waist, c.feel, c.note]); });
+    download("axiom-tracker-" + todayKey() + ".csv", new Blob(["﻿" + rows.map(function (r) { return r.map(q).join(","); }).join("\n")], { type: "text/csv" }));
+  });
+  document.getElementById("wipe").addEventListener("click", function () {
+    if (!confirm(t("confirm_delete_all"))) return;
+    S = { entries: [], checkins: {}, prefs: { lang: lang, last: {} } };
+    save();
+    Object.keys(urls).forEach(function (k) { URL.revokeObjectURL(urls[k]); }); urls = {};
+    tx("readwrite", function (st) { return st.clear(); }).catch(function () {}).then(function () {
+      photos = []; cmp.a = cmp.b = null; setDlg.close(); render(); toast(t("deleted"));
+    });
+  });
+
+  // Close buttons and tapping the backdrop close a sheet.
+  document.querySelectorAll("dialog").forEach(function (d) {
+    d.addEventListener("click", function (ev) { if (ev.target === d || ev.target.closest("[data-close]")) d.close(); });
+  });
+
+  // A page left open overnight moves "today" forward.
+  var lastToday = todayKey();
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState !== "visible") return;
+    var tk = todayKey();
+    if (tk !== lastToday) { if (day === lastToday) day = tk; lastToday = tk; render(); }
+  });
+
+  var rz;
+  window.addEventListener("resize", function () { if (view !== "history") return; clearTimeout(rz); rz = setTimeout(render, 150); });
+
+  render();
+  loadPhotos().then(render);
+})();
+</script>
+</body>
+</html>

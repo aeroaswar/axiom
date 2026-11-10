@@ -6,6 +6,7 @@ A card that carries nothing but the wordmark and a QR, and the guide it opens.
 | --- | --- |
 | `card.html` | Print-ready card — 85 × 55 mm, AXIOM wordmark left, QR right, nothing else. Pick a compound, set the URL, print. |
 | `index.html` | What the QR opens. Mobile-first guide to every lot in the price list — 79 lots across 65 compounds: what it is, how often, when in the day, the documented doses, a pen calculator, a dose schedule with calendar export, storage and cautions. |
+| `tracker.html` | A private daily log beside the guide: doses as taken, a check-in (weight, waist, how the day felt) and progress photos with a before / after comparison. See [The tracker](#the-tracker). |
 | `compounds.js` | The data behind both. One entry per compound, carrying every size that compound is sold in. |
 | `qr.js` | Self-contained QR encoder. No CDN, no network — the card generates its own code. |
 | `src/` | The compound tables and the script that generates `compounds.js`. Edit these, then run `python3 src/gen.py`. |
@@ -362,3 +363,34 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 
 Reference material for compounds supplied for research use. Not medical advice,
 not a prescription, and not a recommendation to administer anything to a person.
+
+## The tracker
+
+`tracker.html` is a personal log that ships with the guide (served at `/tracker.html`; it is
+not linked from the guide yet). It reads compound names from `compounds.js` and nothing else.
+
+- **Today.** Log a dose (compound, amount, unit, time, site, note), a check-in (weight in kg,
+  waist in cm, how the day felt on 1–5, a note) and a photo tagged front, side, back or other.
+  Any past day can be opened from the date or the calendar.
+- **History.** Days logged, days in a row, entries in the last 7 days; per compound the last
+  entry, the count and the total over 30 days; the weight trend; a calendar marking dose days
+  and photo days; every entry, editable.
+- **Photos** by month, filterable by pose, each one viewable full size or deletable.
+- **Compare.** Two photos of one pose, side by side or under a slider, with the days apart,
+  the doses logged between them and the change in weight and waist (taken from the check-in on
+  each date, or the nearest one up to three days before).
+- **Backup.** Settings exports one JSON file holding every entry, check-in and photo, imports it
+  back (merging by id), exports the log as CSV and deletes everything.
+
+**Restraint.** The tracker records what the person enters and proposes no amount and no
+schedule. The only defaults it fills in are the person's own last amount for that compound and
+the next site in their own rotation (abdomen, thigh, arm, glute; left then right).
+
+**Storage.** Entries live in `localStorage` (`axiom.tracker.v1`); photos are JPEG Blobs in
+IndexedDB (`axiom-tracker`), each reduced to 1600 px on the long side with a 480 px thumbnail.
+Nothing is uploaded. Clearing site data removes it all, which is why the export exists.
+
+EN / ID follows the browser and remembers the reader's choice; numbers follow the language
+(`2,5 mg` in Indonesian, `2.5 mg` in English) and both decimal marks are accepted. Dark is the
+AXIOM ground; under a light system setting it switches to paper with deep bronze.
+
