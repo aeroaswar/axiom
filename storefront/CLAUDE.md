@@ -5,7 +5,7 @@ Continue the existing local AXIOM storefront in this folder. The user has approv
 ## Design requirements
 
 - Keep the authentic AXIOM wordmark, charcoal/black, warm ivory, and restrained bronze palette.
-- Every shop product uses its matching stone photograph, including its detail page. Preserve all 72 product mappings.
+- Every shop product uses its matching stone photograph, including its detail page. Preserve all 68 product mappings.
 - Preserve exact product names, labels, dial artwork, quantities, prices and existing copy unless the user requests a change.
 - Stone imagery must fade smoothly into charcoal. Avoid visible rectangular image edges.
 - Keep the footer compact: one small wordmark, aligned navigation and restrained spacing.
@@ -46,7 +46,7 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 
 ## Bahasa Indonesia
 
-The EN / ID switch sits in the navigation. `design.js` translates rendered text in place from `i18n-id.json`, which `build.py` writes to `i18n-id.js` and the page loads only when Indonesian is in use, so the 174 source templates stay English and switching back restores the original nodes. A visitor's own choice is saved in `localStorage` as `axiom-design-lang`; without one, a browser set to Indonesian starts in Indonesian and every other browser in English. The early script in `index.html` (from `build.py`) and `initialLanguage()` in `design.js` apply the same rule and must stay in step. When copy changes, add the new English string and its translation to `i18n-id.json`, rebuild, and run `node qa/check-i18n.cjs`: it lists any English still showing in Indonesian mode. Headlines whose word order changes across `<br>`/`<span>` belong in its `html` section. Translations were machine-drafted with a fixed glossary; legal pages (terms, privacy, legal) and certificate wording need review by a fluent Indonesian speaker before public use.
+The EN / ID switch sits in the navigation. `design.js` translates rendered text in place from `i18n-id.json`, which `build.py` writes to `i18n-id.js` and the page loads only when Indonesian is in use, so the 167 source templates stay English and switching back restores the original nodes. A visitor's own choice is saved in `localStorage` as `axiom-design-lang`; without one, a browser set to Indonesian starts in Indonesian and every other browser in English. The early script in `index.html` (from `build.py`) and `initialLanguage()` in `design.js` apply the same rule and must stay in step. When copy changes, add the new English string and its translation to `i18n-id.json`, rebuild, and run `node qa/check-i18n.cjs`: it lists any English still showing in Indonesian mode. Headlines whose word order changes across `<br>`/`<span>` belong in its `html` section. Translations were machine-drafted with a fixed glossary; legal pages (terms, privacy, legal) and certificate wording need review by a fluent Indonesian speaker before public use.
 
 Edit source files, then rebuild. Direct edits to generated files are overwritten. For changes to core application behavior, inspect how `build.py` extracts the app from `reference.html` before selecting the appropriate source change.
 
@@ -105,6 +105,6 @@ The preview previously showed a cached static homepage. Before changing animatio
 
 ## Current scope
 
-The site contains 174 page templates and 72 products. Navigation, product browsing and local demo interactions exist. Account sign-in, live inventory, payments and actual order submission remain unconnected demo features. Bahasa Indonesia works across all routes (see above). Certificate data and business claims originate from the supplied reference and have not been independently verified. Public deployment and backend integrations require their own concrete task.
+The site contains 167 page templates and 68 products (65 compounds and three devices; merch was removed in November 2026). Navigation, product browsing and local demo interactions exist. Account sign-in, live inventory, payments and actual order submission remain unconnected demo features. Bahasa Indonesia works across all routes (see above). Certificate data and business claims originate from the supplied reference and have not been independently verified. Public deployment and backend integrations require their own concrete task.
 
 `AXIOM-storefront.html` is a self-contained viewing artifact. `AXIOM-storefront.zip` is a deployable static package, not a complete source handoff. Work in this full folder for access to the editable sources and build scripts.

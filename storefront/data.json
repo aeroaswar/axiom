@@ -1578,90 +1578,6 @@
       ],
       "synonyms": [],
       "coa": []
-    },
-    {
-      "slug": "performance-tee",
-      "name": "Performance Tee",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "tee",
-          "dose": "Dry-knit - Unisex",
-          "content": "Apparel",
-          "price_idr": 450000,
-          "cold": false,
-          "available": 27
-        }
-      ],
-      "synonyms": [],
-      "coa": []
-    },
-    {
-      "slug": "training-hoodie",
-      "name": "Training Hoodie",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "hoodie",
-          "dose": "Heavyweight - Unisex",
-          "content": "Apparel",
-          "price_idr": 950000,
-          "cold": false,
-          "available": 38
-        }
-      ],
-      "synonyms": [],
-      "coa": []
-    },
-    {
-      "slug": "logo-cap",
-      "name": "Logo Cap",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "cap",
-          "dose": "Adjustable",
-          "content": "Accessory",
-          "price_idr": 350000,
-          "cold": false,
-          "available": 45
-        }
-      ],
-      "synonyms": [],
-      "coa": []
-    },
-    {
-      "slug": "gym-duffel",
-      "name": "Gym Duffel",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "duffel",
-          "dose": "45 L",
-          "content": "Accessory",
-          "price_idr": 850000,
-          "cold": false,
-          "available": 9
-        }
-      ],
-      "synonyms": [],
-      "coa": []
     }
   ],
   "pathways": [
@@ -1744,14 +1660,6 @@
       "name": "Therapy",
       "summary": "Clinical red-light therapy and recovery hardware.",
       "sort": 10
-    },
-    {
-      "slug": "apparel",
-      "no": "11",
-      "kind": "apparel",
-      "name": "Apparel",
-      "summary": "Performance wear and everyday carry.",
-      "sort": 11
     }
   ],
   "tiers": [

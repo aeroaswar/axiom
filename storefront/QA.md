@@ -53,3 +53,11 @@
 - Fixed: the Saved icon appeared in the header in Indonesian, because the CSS hid it by its English label. It now matches the link address.
 - Tools: `serve.py` (threaded preview server, also in the ZIP and used by CI). QA screenshots go to `qa/latest/` (ignored). CLAUDE.md corrected on where the dictionary loads and on the CI checks.
 - `qa/check-hero.cjs`, `qa/check-i18n.cjs` and `qa/check-basket.cjs` pass on the served site and the standalone HTML.
+
+## Merch removed — 10 November 2026
+
+- Removed the four apparel products (Performance Tee, Training Hoodie, Logo Cap, Gym Duffel), the Merch page, its nav and footer links, the shop's Merch filter and search suggestions, the homepage "Beyond the laboratory" section, the price list's Apparel group, and an unused Logo Cap template. 174 → 167 templates, 72 → 68 products. The three devices stay.
+- Copy that listed apparel now reads without it (shop lead, price list, contact, footer, FAQ, terms, legal, device pages, homepage). Indonesian entries follow the same edits; six apparel-only entries were removed.
+- The 22 merch photos (16 MB, including PNG masters in LFS) are deleted; no built file referenced them. The standalone HTML is 20.3 MB. `#/merch` now opens the homepage.
+- Homepage closing band ("Start with the standard."): the stone now fades into charcoal like the inner-page band, instead of stopping at a hard edge halfway across.
+- `qa/check-hero.cjs`, `qa/check-i18n.cjs` (0 English leftovers) and `qa/check-basket.cjs` pass on the served site, and the hero and i18n checks on the standalone HTML.

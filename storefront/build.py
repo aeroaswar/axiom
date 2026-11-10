@@ -28,6 +28,10 @@ if 'Showing|Menampilkan' not in app: raise SystemExit('Certificate counter not f
 card_skip = "if (!sku || !delta || f.classList.contains('buy')) return;"
 if app.count(card_skip) != 1: raise SystemExit('Card add handler changed in reference app; update the buy box guard.')
 app = app.replace(card_skip, "if (!sku || !delta || f.classList.contains('buy') || f.closest('.buy')) return;")
+# AXIOM no longer sells merch; the device buy box says so in its shipping note.
+merch_note = "Devices and merch ship once."
+if app.count(merch_note) != 1: raise SystemExit('Device shipping note changed in reference app; update the merch removal.')
+app = app.replace(merch_note, "Devices ship once.")
 # Page templates load on first visit (pages/<key>.js); the standalone package ships them inline.
 loader = '''  var pageRequests = {};
   function loadPage(key) {
@@ -159,11 +163,10 @@ for i, product in enumerate(research):
     home_cards.append(card)
 pages['home'] = (ROOT/'home-v2.html').read_text().replace('{{products}}',''.join(home_cards)).replace('{{arrow}}',arrow)
 
-# Replace merchandise and device placeholders with their matching stone photographs.
-merch = {'performance-tee':'Performance Tee', 'training-hoodie':'Training Hoodie', 'logo-cap':'Logo Cap', 'gym-duffel':'Gym Duffel', 'steel-water-bottle':'Steel Water Bottle'}
-merch.update({p['slug']:p['name'] for p in data['products'] if p['kind']=='device' and (ROOT/'assets'/('stone-'+p['slug']+'.webp')).exists()})
+# Replace device placeholders with their matching stone photographs.
+devices = {p['slug']:p['name'] for p in data['products'] if p['kind']=='device' and (ROOT/'assets'/('stone-'+p['slug']+'.webp')).exists()}
 for key, markup in pages.items():
-    for slug, name in merch.items():
+    for slug, name in devices.items():
         photo = f'<img class="merch-photo stone-photo" src="assets/stone-{slug}.webp" alt="AXIOM {name}" loading="lazy" width="1024" height="1024">'
         pattern = r'(<a[^>]+href="#/products/'+slug+r'"[^>]*>)<span class="vial-tile card".*?</span>'
         markup = re.sub(pattern, lambda m: m[1]+photo, markup, flags=re.S)
@@ -240,8 +243,13 @@ i18n_version = digest([ROOT / 'i18n-id.js'])
 (ROOT / 'content.js').write_text('window.__PAGES='+js({'home':pages['home']})+';\nwindow.__PAGE_KEYS='+js(list(pages))+';\nwindow.__PAGES_VERSION='+js(pages_version)+';\nwindow.__I18N_VERSION='+js(i18n_version)+';\nwindow.__DATA='+js(data)+';\nwindow.__IMG='+js(images)+';\n')
 
 body = source[source.index('<svg width="0"'):source.index('<script src=')]
-nav = '<div class="nav-links" id="site-links"><a href="#/products">Shop</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a href="#/merch">Merch</a><a class="nav-account-m" href="#/account">Account</a></div>'
+nav = '<div class="nav-links" id="site-links"><a href="#/products">Shop</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a class="nav-account-m" href="#/account">Account</a></div>'
 body = re.sub(r'<div class="nav-links" id="site-links">.*?</div>',nav,body,count=1,flags=re.S)
+# AXIOM no longer sells merch: drop its footer link and the footer's mention of apparel.
+for old, new in [('<li><a href="#/merch">Merch</a></li>', ''),
+                 ('recovery, wellness and apparel under one standard', 'recovery and wellness under one standard')]:
+    if body.count(old) != 1: raise SystemExit('Reference footer changed; update the merch removal: ' + old)
+    body = body.replace(old, new)
 # The demo notice joins the top ribbon rather than floating over page content.
 demo = '<div class="demo-band">Demo · storefront only</div>'
 if body.count(demo) != 1 or body.count('<div class="ribbon">') != 1: raise SystemExit('Reference body changed; update the demo notice move.')

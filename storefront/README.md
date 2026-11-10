@@ -16,13 +16,13 @@ Visit http://127.0.0.1:8765.
 
 - The homepage hero has three independently animated photographic pen layers: restrained scroll depth, eased cursor movement and a soft bronze cursor glow. The stone stays fixed. Mobile uses smaller scroll movement without hover effects; reduced motion and image failures keep the original static hero. Animation stops when offscreen and is cleaned up on route changes.
 - Hero labels and dials use the original photograph via SVG clipping. `assets/hero-stone-background.webp` is the clean background plate; edit the layers in `home-v2.html` and motion behavior in `design.js`.
-- All 72 shop products use individual stone photographs: 65 research compounds, three devices and four apparel products. The same photographs appear on their product detail pages and applicable collection pages.
+- All 68 shop products use individual stone photographs: 65 research compounds and three devices. The same photographs appear on their product detail pages and applicable collection pages.
 - Compound labels retain the catalogue names and first-variant quantities. VIP was regenerated to correct its spelling.
 - The stone band fades smoothly into charcoal. The footer is plain charcoal with one small wordmark, aligned links and compact spacing.
 - No text is smaller than 11px (`build.py` raises smaller sizes in `base.css` and stops the build if a source stylesheet declares one), and text meets 4.5:1 contrast; on ivory the secondary grey is `#666259`.
 - The demo notice sits in the top ribbon, never over content. On phones, product pages show a buy bar with size, price and Add to basket until the real buy box is on screen. Every way of adding to the basket adds the chosen item once.
 - The wordmark is the drawing from the supplied reference storefront, not the repository's master path in `../business-proposal/assets/logo/`; see `../DESIGN.md`.
-- Original prices, product names, 174 templates and client behavior are preserved.
+- Original prices, product names, 167 templates and client behavior are preserved.
 - An EN / ID switch in the navigation shows the whole storefront in Bahasa Indonesia, including the basket, request form, filters and messages. The choice is remembered. Strings live in `i18n-id.json`; `qa/check-i18n.cjs` reports any English left in Indonesian mode.
 - Lean first load: the homepage ships in a 170 KB `content.js`; the other 173 templates load from `pages/` when visited and the Indonesian dictionary only when ID is chosen. `base.css` keeps only rules the storefront uses (510 KB → 100 KB) with its two variable fonts as separate preloaded files. The standalone HTML embeds each image once (about 22 MB, from 50 MB).
 - Product cards load a 640px photo where that is sharp enough (phones, laptops) and the full photograph on wide high-density screens; tiles show their stone colour while photos load. An empty basket offers the four featured compounds. Browsers set to Indonesian open the site in Indonesian until the visitor picks a language.
