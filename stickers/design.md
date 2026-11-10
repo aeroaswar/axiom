@@ -189,17 +189,44 @@ repository permitted to carry a price, a name or a dose — lists Retatrutide as
 
 ### The click conversion
 
-Every strength in the current range carries **`10 clicks = 1 mg`**. That is not a coincidence of
-the numbers and it is not derived from the mg figure — it holds because the whole range is
-reconstituted to the same concentration, so the mg delivered per click is constant and only the
-number of doses per pen changes with strength.
+In the print sheet every strength carries **`10 clicks = 1 mg`**. That holds only if the whole
+range is reconstituted to the same concentration (10 mg/ml), so the mg delivered per click is
+constant and only the number of doses per pen changes with strength.
 
-**`dose` is therefore never inferred from `qty`.** If a strength is ever filled to a different
-concentration, its conversion changes and must be set here explicitly. Two models are possible
-and they disagree sharply — under a same-total-volume pen the 60 mg would read `10 clicks = 2 mg`
-and the 10 mg `10 clicks = 0.33 mg` — so the value always comes from whoever fills the pens,
-never from arithmetic on this end. A SKU whose conversion has not been supplied carries
-`dose: null`, and band D is dropped entirely rather than printed with a guess.
+**`dose` is never inferred from `qty` alone.** It depends on how much bacteriostatic water the
+vial is mixed with, which comes from whoever fills the pens. In the print sheet it is set per SKU
+by hand; a SKU whose conversion has not been supplied carries `dose: null`, and band D is dropped
+entirely rather than printed with a guess.
+
+**The builder works it out from the water.** Give it the BAC water the vial is mixed with and it
+takes the vial's mg from QTY:
+
+- ml per mg = water ml ÷ vial mg; clicks per mg = ml per mg ÷ ml per click.
+- The pen delivers **0.01 ml per click** (100 clicks per ml), editable in the builder. So 10 mg in
+  3 ml is 0.3 ml per mg: `30 clicks = 1 mg`.
+- **Whole clicks.** The label shows the smallest whole number of mg (1–10) that takes a whole
+  number of clicks, so nobody has to dial half a click: 40 mg in 3 ml is 7.5 clicks per mg and
+  reads `15 clicks = 2 mg`. If no whole mg up to 10 works (13 mg in 3 ml), it reads
+  `10 clicks = X mg`, X to two decimals.
+- The result fills the two conversion fields, which stay editable; typing in them by hand clears
+  the water and takes over. The water is remembered per compound and strength in the browser.
+
+| Vial, in 3 ml | mg per ml | DOSE |
+|---|---|---|
+| 10 mg | 3.33 | `30 clicks = 1 mg` |
+| 20 mg | 6.67 | `15 clicks = 1 mg` |
+| 30 mg | 10 | `10 clicks = 1 mg` |
+| 40 mg | 13.3 | `15 clicks = 2 mg` |
+| 60 mg | 20 | `5 clicks = 1 mg` |
+
+**Nasal sprays.** Adamax, Selank and Semax (and Selank + Semax) are nasal sprays, not pens: their
+DOSE line reads `1 spray = 100 mcg`. In the builder the Dose field has a **Pen · clicks / Nasal
+spray** switch; selecting one of those compounds opens on the spray at 100 mcg, the amount stays
+editable, and the choice is remembered per compound and strength like the water.
+
+The print sheet's `10 clicks = 1 mg` on every strength holds only if each strength is mixed to
+10 mg/ml (10 mg in 1 ml, 30 mg in 3 ml, 60 mg in 6 ml). If they are all mixed in 3 ml, only the
+30 mg line is right; set each SKU's `dose` from the table above.
 
 ---
 

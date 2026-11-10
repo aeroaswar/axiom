@@ -138,6 +138,10 @@ button,input,select{font:inherit;color:inherit}
 .dose input::-webkit-outer-spin-button,.dose input::-webkit-inner-spin-button{
   -webkit-appearance:none;margin:0}
 .dose input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.mix{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.mix .f{margin:0}
+.calc{margin:8px 0 0;font-size:11px;color:var(--accent);font-variant-numeric:tabular-nums}
+.calc:empty{display:none}
 .f-row{display:grid;grid-template-columns:1fr 92px;gap:10px}
 
 .btn{background:var(--accent);border:0;border-radius:6px;padding:11px 16px;
@@ -400,15 +404,43 @@ button,input,select{font:inherit;color:inherit}
           </div>
         </div>
         <div class="f">
-          <label for="fClicks">Dose — click conversion</label>
+          <label>Dose</label>
+          <div class="chips" id="dev" style="margin-bottom:8px">
+            <button class="chip" type="button" data-dev="pen" aria-pressed="true">Pen · clicks</button>
+            <button class="chip" type="button" data-dev="spray" aria-pressed="false">Nasal spray</button>
+          </div>
+          <div id="penF">
+          <div class="mix">
+            <div class="f">
+              <label for="fMl">BAC water (ml)</label>
+              <input id="fMl" type="number" min="0" step="0.1" inputmode="decimal" placeholder="3">
+            </div>
+            <div class="f">
+              <label for="fMlClick">ml per click</label>
+              <input id="fMlClick" type="number" min="0" step="0.001" inputmode="decimal" value="0.01">
+            </div>
+          </div>
           <div class="dose">
             <input id="fClicks" type="number" min="1" step="1" inputmode="numeric" placeholder="10">
             <span>clicks =</span>
             <input id="fMg" type="number" min="0" step="0.1" inputmode="decimal" placeholder="1">
             <span>mg</span>
           </div>
-          <p class="hint">Comes from whoever fills the pens — it depends on the reconstitution
-            volume, not the strength. Leave both empty and the DOSE row is omitted.</p>
+          <p class="calc" id="calc" role="status"></p>
+          <p class="hint">Enter the BAC water the vial is mixed with and the conversion is worked
+            out from the QTY, at 0.01&nbsp;ml per pen click (10&nbsp;mg in 3&nbsp;ml: 1&nbsp;mg is
+            0.3&nbsp;ml, 30 clicks). Leave the water empty to type the conversion by hand; leave
+            everything empty and the DOSE row is omitted.</p>
+          </div>
+          <div id="sprayF" hidden>
+            <div class="dose" style="grid-template-columns:auto 1fr auto">
+              <span>1 spray =</span>
+              <input id="fMcg" type="number" min="0" step="1" inputmode="decimal" value="100">
+              <span>mcg</span>
+            </div>
+            <p class="hint">For the nasal sprays (Adamax, Selank, Semax), which open on this with
+              100&nbsp;mcg. Leave it empty and the DOSE row is omitted.</p>
+          </div>
         </div>
         <div class="f">
           <label for="fNote">Purity mark</label>
@@ -1139,9 +1171,54 @@ const asPair = v => {
   return m ? { clicks: +m[1], mg: +m[2] } : null;
 };
 
+/* Click conversion from the reconstitution: the vial's mg (from QTY) in the
+   BAC water's ml gives ml per mg, and the pen's ml per click turns that into
+   clicks per mg. 10 mg in 3 ml at 0.01 ml/click: 0.3 ml/mg = 30 clicks/mg.
+   Shown as whole clicks: the smallest whole mg (1-10) that takes a whole
+   number of clicks, so 40 mg in 3 ml (7.5 clicks/mg) reads 15 clicks = 2 mg.
+   Failing that, 10 clicks = X mg. The result fills the two fields below,
+   which stay editable. */
+const vialMg = () => {
+  const m = $('fQty').value.replace(',', '.').match(/(\d+(?:\.\d+)?)\s*mg\b/i);
+  return m ? parseFloat(m[1]) : NaN;
+};
+function clickPair(cpm){
+  for (let m = 1; m <= 10; m++){
+    const c = cpm * m;
+    if (Math.abs(c - Math.round(c)) < 1e-6 && Math.round(c) >= 1) return { clicks: Math.round(c), mg: m };
+  }
+  return { clicks: 10, mg: +(10 / cpm).toFixed(2) };
+}
+function calcDose(){
+  const ml = parseFloat($('fMl').value), per = parseFloat($('fMlClick').value), mg = vialMg();
+  if (!(ml > 0)){ $('calc').textContent = ''; return; }
+  if (!(per > 0)){ $('calc').textContent = 'Enter the ml per click.'; return; }
+  if (!(mg > 0)){ $('calc').textContent = 'Put the vial size in QTY (e.g. 10 mg) to work out the clicks.'; return; }
+  const pair = clickPair(ml / mg / per);
+  $('fClicks').value = pair.clicks; $('fMg').value = pair.mg;
+  $('calc').textContent = `${num(mg)} mg in ${num(ml)} ml = ${num(mg / ml)} mg/ml · ${num(per)} ml per click → `
+    + `${pair.clicks} clicks = ${num(pair.mg)} mg`;
+}
+
+/* Nasal sprays read "1 spray = 100 mcg" instead of a click conversion.
+   Adamax, Selank and Semax (and Selank + Semax) are sprays, so selecting one
+   opens on the spray at 100 mcg; any compound can be switched by hand. */
+const SPRAY = /^(adamax|selank|semax)\b/i;
+let device = 'pen';
+function setDevice(dv){
+  device = dv;
+  [...$('dev').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.dev === dv)));
+  $('penF').hidden = dv !== 'pen';
+  $('sprayF').hidden = dv !== 'spray';
+}
+
 /* "10 clicks = 1 mg" — built from the two fields, never from the strength. */
 const num = x => String(+(+x).toFixed(3));
 function doseStr(){
+  if (device === 'spray'){
+    const mcg = parseFloat($('fMcg').value);
+    return mcg > 0 ? `1 spray = ${num(mcg)} mcg` : null;
+  }
   const c = parseFloat($('fClicks').value), m = parseFloat($('fMg').value);
   return (c > 0 && m > 0) ? `${num(c)} clicks = ${num(m)} mg` : null;
 }
@@ -1198,8 +1275,13 @@ function select(d){
   $('fCompound').value = d.compound;
   $('fQty').value      = d.lot;
   const mem = asPair(doseMem[memKey(d)]);
-  $('fClicks').value = mem ? mem.clicks : '';
-  $('fMg').value     = mem ? mem.mg : '';
+  setDevice(mem && mem.device ? mem.device : SPRAY.test(d.compound) ? 'spray' : 'pen');
+  $('fMcg').value    = mem && mem.mcg ? mem.mcg : 100;
+  $('fClicks').value = mem && mem.clicks ? mem.clicks : '';
+  $('fMg').value     = mem && mem.mg ? mem.mg : '';
+  $('fMl').value     = mem && mem.ml ? mem.ml : '';
+  if (mem && mem.perClick) $('fMlClick').value = mem.perClick;
+  calcDose();
   $('add').disabled    = false;
   renderList(); preview();
 }
@@ -1224,8 +1306,17 @@ function preview(){
     ? `${sel.compound} · ${sel.lot} · ${CATALOGUE.categories[sel.cat]}`
     : 'Custom label';
 }
-['fCompound','fQty','fClicks','fMg','fNote'].forEach(id =>
+['fCompound','fQty','fClicks','fMg','fMcg','fNote'].forEach(id =>
   $(id).addEventListener('input', preview));
+$('dev').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (b){ setDevice(b.dataset.dev); preview(); }
+});
+['fQty','fMl','fMlClick'].forEach(id =>
+  $(id).addEventListener('input', () => { calcDose(); preview(); }));
+/* typing a conversion by hand takes over from the water */
+['fClicks','fMg'].forEach(id => $(id).addEventListener('input', () => {
+  if ($('fMl').value){ $('fMl').value = ''; calcDose(); }
+}));
 
 /* ---------- density ---------- */
 $('dens').innerHTML = Object.entries(DENSITIES).map(([k, d]) =>
@@ -1291,7 +1382,10 @@ $('add').addEventListener('click', () => {
   const d = draft();
   const n = Math.max(1, Math.min(500, parseInt($('fCopies').value, 10) || 1));
   const c = parseFloat($('fClicks').value), mg = parseFloat($('fMg').value);
-  if (sel && c > 0 && mg > 0) remember(memKey(sel), { clicks: c, mg });
+  const ml = parseFloat($('fMl').value), perClick = parseFloat($('fMlClick').value);
+  const mcg = parseFloat($('fMcg').value);
+  if (sel && device === 'spray'){ if (mcg > 0) remember(memKey(sel), { device: 'spray', mcg }); }
+  else if (sel && c > 0 && mg > 0) remember(memKey(sel), ml > 0 ? { clicks: c, mg, ml, perClick } : { clicks: c, mg });
   const same = queue.find(r =>
     r.compound === d.compound && r.qty === d.qty && r.dose === d.dose && r.note === d.note);
   if (same) same.copies += n; else queue.push({ ...d, copies: n });
@@ -1791,9 +1885,11 @@ $('dl').addEventListener('click', async () => {
    Open on a real worked example rather than an empty shell: Retatrutide
    30 mg is the SKU whose click conversion we actually have. Clear removes it. */
 select(CATALOGUE.items.find(d => d.compound === 'Retatrutide' && d.lot === '30 mg'));
-const seedMem = asPair(doseMem[memKey(sel)]) || { clicks: 10, mg: 1 };
+const seedMem = asPair(doseMem[memKey(sel)]) || { clicks: 10, mg: 1, ml: 3 };
 $('fClicks').value = seedMem.clicks;
 $('fMg').value     = seedMem.mg;
+$('fMl').value     = seedMem.ml || '';
+calcDose();
 $('fCopies').value = 8;
 renderList(); preview();
 queue = [{ ...draft(), copies: 8 }];
