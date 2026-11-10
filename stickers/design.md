@@ -222,19 +222,13 @@ printed with a guess.
 DOSE line reads `1 spray = 100 mcg`. Selecting one of them puts the Dose field on **Nasal spray**
 at 100 mcg; the amount stays editable, and the choice is remembered per compound and strength.
 
-**Device icons.** In the builder, every dosed label carries an icon at the right of the compound line that says
-how the dose is taken:
-
-- **Pen** (`N clicks = M mg`): an injection pen held at an angle, kept to three shapes: the dose
-  knob, the body and a pointed needle.
-- **Spray** (`1 spray = N mcg`): drawn after the reference the user supplied, a slim pump bottle
-  on a rounded base and a cone of eleven mist dots fanning out to the right, growing as they
-  spread.
-
-A label with **No dose** has no icon. Both icons are filled shapes only, 3.2em tall on the
-compound line (4 mm), and are drawn in the PDFs and the label images too. The finest parts are
-the pen's needle (0.36 mm, 3 dots at 203 dpi) and the spray's smallest dot (0.37 mm). The icon shares the compound line's autofit; a name too long to share the line with it
-(only *VIP (Vasoactive Intestinal Peptide)*) keeps the line to itself and the icon is left off.
+A spray label carries a **spray icon at the right of the compound line**, drawn after the
+reference the user supplied: a slim pump bottle on a rounded base and a cone of eleven mist dots
+fanning out to the right, growing as they spread. It is all filled shapes, 3.2em tall on the
+compound line (4 mm), so the smallest dot is 0.37 mm (3 dots at 203 dpi), and it is drawn in the
+PDFs and the label images too. Pen and **No dose** labels have no icon. It shares the compound
+line's autofit; a name too long to share the line with it (only *VIP (Vasoactive Intestinal
+Peptide)*, were it ever a spray) keeps the line to itself and the icon is left off.
 
 ---
 
