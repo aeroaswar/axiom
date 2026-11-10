@@ -230,10 +230,10 @@ pages_version = digest([ROOT / 'pages' / name for name in sorted(chunks)])
 (ROOT / 'content.js').write_text('window.__PAGES='+js({'home':pages['home']})+';\nwindow.__PAGE_KEYS='+js(list(pages))+';\nwindow.__PAGES_VERSION='+js(pages_version)+';\nwindow.__DATA='+js(showcase.client_data(data))+';\nwindow.__IMG='+js(images)+';\n')
 
 body = source[source.index('<svg width="0"'):source.index('<script src=')]
-nav = '<div class="nav-links" id="site-links"><a href="#/products">Shop</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a href="#/contact">Contact</a></div>'
+nav = '<div class="nav-links" id="site-links"><a href="#/products">Catalogue</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a href="#/contact">Contact</a></div>'
 body = re.sub(r'<div class="nav-links" id="site-links">.*?</div>',nav,body,count=1,flags=re.S)
 # A showcase: no basket or account in the header, and the footer lists only the pages the site still has.
-footer_shop = '<div><h4>Shop</h4><ul><li><a href="#/products">Shop</a></li><li><a href="#/products?kind=device">Devices</a></li><li><a href="#/products?saved=1">Saved</a></li></ul></div>'
+footer_shop = '<div><h4>Catalogue</h4><ul><li><a href="#/products">All products</a></li><li><a href="#/products?kind=device">Devices</a></li><li><a href="#/products?saved=1">Saved</a></li></ul></div>'
 footer_standard = '<div><h4>The standard</h4><ul><li><a href="#/compounds">Compound guide</a></li><li><a href="#/standard">The standard</a></li><li><a href="#/faq">FAQ</a></li></ul></div>'
 footer_contact = '<div><h4>Contact</h4><ul><li><a href="#/contact">Contact</a></li><li><a href="https://wa.me/628128573396">WhatsApp</a></li></ul></div>'
 for pattern, new in [(r'<a class="nav-ic" aria-label="Basket".*?</a>', ''),

@@ -8,6 +8,8 @@ Continue the existing local AXIOM storefront in this folder. The user has approv
 - Every shop product uses its matching stone photograph, including its detail page. Preserve all 68 product mappings.
 - Preserve exact product names, labels, dial artwork, quantities, prices and existing copy unless the user requests a change.
 - Stone imagery must fade smoothly into charcoal. Avoid visible rectangular image edges.
+- The homepage manifesto band ("A higher standard for research") is limestone: `assets/stone-light.webp` on the right, fading through a solid limestone wash into the band colour, with dark text on plain stone.
+- The product listing is the Catalogue, never the Shop: navigation, footer, breadcrumbs and headings. `qa/check-showcase.cjs` fails on visible "shop".
 - Keep the footer compact: one small wordmark, aligned navigation and restrained spacing.
 - The hero contains MOTS-c, Retatrutide and KLOW. Each original photographic pen moves independently with scrolling and cursor input, over a stationary stone background. Preserve the original label pixels.
 - Keep the headline and buttons stationary during interaction. Use eased movement, no scroll locking, smaller mobile movement, reduced-motion support and a complete static fallback.

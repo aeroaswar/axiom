@@ -153,6 +153,8 @@ def strip_commerce(pages, data):
     for key, markup in pages.items():
         markup = re.sub(r'<article\b[^>]*class="pcard[^"]*".*?</article>', lambda m: card(m[0], by_slug), markup, flags=re.S)
         for old, new in SENTENCES: markup = markup.replace(old, new)
+        # AXIOM presents a catalogue, not a shop: breadcrumbs, headings, links and structured data say so.
+        markup = re.sub(r'>Shop(?=<)', '>Catalogue', markup).replace('"name":"Shop"', '"name":"Catalogue"')
         # Structured data that offers a price (the device pages) goes; the showcase quotes no prices.
         markup = re.sub(r'<script type="application/ld\+json">(?:(?!</script>).)*"price".*?</script>', '', markup, flags=re.S)
         if key.startswith('product-') and key[8:] in by_slug:
@@ -171,6 +173,7 @@ def strip_commerce(pages, data):
             markup = must_sub(r'<a class="tlink" href="#/standard">See a sample Certificate of Analysis', '<a class="tlink" href="#/standard">Read the standard', markup, key)
         pages[key] = markup
     pages['products'] = edit_products(pages['products'])
+    pages['compounds'] = must(pages['compounds'], ', so the guide reads as a reference rather than as a shop.', ', so the guide reads as a reference.', 1, 'compounds')
     pages['compounds'] = must_sub(r'<div class="sp-24"></div><a class="tlink" href="#/price-list">Price list.*?</a>', '', pages['compounds'], 'compounds')
     pages['standard'] = edit_standard(pages['standard'])
     pages['contact'] = edit_contact(pages['contact'], whatsapp)

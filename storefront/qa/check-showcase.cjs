@@ -4,7 +4,7 @@
 const {launch,go,routes}=require('./browser.cjs');
 const assert=require('node:assert/strict');
 const URL=process.env.AXIOM_TEST_URL || 'http://127.0.0.1:8765/#/';
-const BANNED=/\bRp\b|\bIDR\b|rupiah|Indones|Bahasa|Jabodetabek|\bWIB\b|basket|certificate|\bCoA\b|\bquotes?\b|account|subscri|\bprices?\b|price list|sign in|checkout|apparel|\bmerch\b/i;
+const BANNED=/\bRp\b|\bIDR\b|rupiah|Indones|Bahasa|Jabodetabek|\bWIB\b|basket|certificate|\bCoA\b|\bquotes?\b|account|subscri|\bprices?\b|price list|sign in|checkout|apparel|\bmerch\b|\bshop\b/i;
 const REMOVED=/^#\/(coas|how-to-read-a-coa|price-list|request|sign-in|account|console|process|terms|privacy|legal|merch)(\/|\?|$)/;
 const message=href=>decodeURIComponent(new URL_(href).searchParams.get('text')||'');
 const URL_=globalThis.URL;

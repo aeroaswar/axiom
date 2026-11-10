@@ -223,3 +223,23 @@
 .site .buy .order-note{margin:16px 0 22px;font-size:13px;color:var(--muted-2)}
 .site .buy .order-help{margin-top:12px}
 .site .buy-foot .btn[data-order] .ic-sv{font-size:16px;margin-right:4px}
+/* Homepage manifesto band: limestone. The photograph fills the right of the band with the blocks to the right; the
+   limestone wash is solid where the photograph begins, so no image edge shows, and the text sits on plain stone colour. */
+.site .stone-manifesto{--ink:#1d1d17;--muted:#4f4b42;--line:#1d1d1733;--accent:#795b3b;--lime:#e4ddd2;color:var(--ink);background:var(--lime);padding:72px 0;min-height:360px;display:flex;align-items:center}
+.site .stone-manifesto>img{z-index:0;left:auto;right:0;width:60%;height:100%;opacity:1;object-fit:cover;object-position:right 64%}
+.site .stone-manifesto:before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,var(--lime) 0%,var(--lime) 42%,rgba(228,221,210,.72) 52%,rgba(228,221,210,.25) 62%,rgba(228,221,210,0) 72%)}
+.site .stone-manifesto .wrap{z-index:2;display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,.72fr) minmax(0,1fr);gap:48px;margin-left:auto;width:calc(100% - var(--pad)*2)}
+.site .stone-manifesto .wrap>span{display:none}
+.site .stone-manifesto h2{color:var(--ink)}
+.site .stone-manifesto .statement{border-left:1px solid var(--line);padding-left:40px;max-width:none}
+.site .stone-manifesto p{color:var(--muted);font-size:13px}
+.site .stone-manifesto .ed-text-link{color:var(--ink);border-color:var(--ink)}
+@media (max-width:1150px){.site .stone-manifesto>img{width:52%}.site .stone-manifesto:before{background:linear-gradient(90deg,var(--lime) 0%,var(--lime) 50%,rgba(228,221,210,.6) 58%,rgba(228,221,210,0) 72%)}.site .stone-manifesto .wrap{grid-template-columns:minmax(0,.55fr) minmax(0,1fr) minmax(0,.75fr);gap:30px}.site .stone-manifesto .statement{padding-left:26px}}
+@media (max-width:700px){
+  .site .stone-manifesto{display:block;padding:40px 0 250px;min-height:0}
+  .site .stone-manifesto>img{top:auto;bottom:0;width:100%;height:300px;object-position:70% 100%}
+  .site .stone-manifesto:before{background:linear-gradient(180deg,var(--lime) 0%,var(--lime) calc(100% - 300px),rgba(228,221,210,.55) calc(100% - 240px),rgba(228,221,210,0) calc(100% - 170px))}
+  .site .stone-manifesto .wrap{display:block}
+  .site .stone-manifesto .statement{border-left:0;padding-left:0;max-width:400px}
+  .site .stone-manifesto p{font-size:12px}
+}
