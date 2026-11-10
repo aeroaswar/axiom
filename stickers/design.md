@@ -189,30 +189,48 @@ repository permitted to carry a price, a name or a dose — lists Retatrutide as
 
 ### The click conversion
 
-In the print sheet every strength carries **`10 clicks = 1 mg`**. That holds only if the whole
-range is reconstituted to the same concentration (10 mg/ml), so the mg delivered per click is
-constant and only the number of doses per pen changes with strength.
+Every pen cartridge is mixed with **3 ml of bacteriostatic water**, and the pen delivers
+**0.01 ml per click** (100 clicks per ml). Only the vial's mg changes, so the conversion follows
+from the strength:
 
-**`dose` is never inferred from `qty` alone.** It depends on how much bacteriostatic water the
-vial is mixed with, which comes from whoever fills the pens. In the print sheet it is set per SKU
-by hand; a SKU whose conversion has not been supplied carries `dose: null`, and band D is dropped
-entirely rather than printed with a guess.
-
-**The builder works it out from the water.** Give it the BAC water the vial is mixed with and it
-takes the vial's mg from QTY:
-
-- ml per mg = water ml ÷ vial mg; clicks per mg = ml per mg ÷ ml per click.
-- The pen delivers **0.01 ml per click** (100 clicks per ml), editable in the builder. So 10 mg in
-  3 ml is 0.3 ml per mg: `30 clicks = 1 mg`.
+- clicks per mg = (3 ml ÷ vial mg) ÷ 0.01 ml = 300 ÷ vial mg. 10 mg in 3 ml is 0.3 ml per mg:
+  `30 clicks = 1 mg`.
 - **Whole clicks.** The label shows the smallest whole number of mg (1–10) that takes a whole
-  number of clicks, so nobody has to dial half a click: 40 mg in 3 ml is 7.5 clicks per mg and
-  reads `15 clicks = 2 mg`. If no whole mg up to 10 works (13 mg in 3 ml), it reads
-  `10 clicks = X mg`, X to two decimals.
-- The result fills the two conversion fields, which stay editable; typing in them by hand clears
-  the water and takes over. The water is remembered per compound and strength in the browser.
+  number of clicks, so nobody has to dial half a click: 40 mg is 7.5 clicks per mg and reads
+  `15 clicks = 2 mg`. If no whole mg up to 10 works (13 mg), it reads `10 clicks = X mg`, X to
+  two decimals. IU vials work the same way: 36 IU reads `25 clicks = 3 IU`.
 
-| Vial, in 3 ml | mg per ml | DOSE |
+| Vial, in 3 ml | per ml | DOSE |
 |---|---|---|
+| 10 mg | 3.33 mg | `30 clicks = 1 mg` |
+| 20 mg | 6.67 mg | `15 clicks = 1 mg` |
+| 30 mg | 10 mg | `10 clicks = 1 mg` |
+| 40 mg | 13.3 mg | `15 clicks = 2 mg` |
+| 60 mg | 20 mg | `5 clicks = 1 mg` |
+
+**In the builder** this is automatic. The Dose field is on **Pen · clicks** by default; the water
+(3 ml) and ml per click (0.01) are pre-filled, and the clicks are worked out from QTY as you pick
+or type it and shown read-only, with the working on the line below. Change the water or the ml
+per click only if a pen is filled differently; that setting is kept for the browser. **No dose**
+leaves the DOSE row off.
+
+**In the print sheet** the Retatrutide range carries the table's values, set per SKU by hand. A
+SKU whose conversion is not known carries `dose: null`, and band D is dropped entirely rather than
+printed with a guess.
+
+**Nasal sprays.** Adamax, Selank and Semax (and Selank + Semax) are nasal sprays, not pens: their
+DOSE line reads `1 spray = 100 mcg`. Selecting one of them puts the Dose field on **Nasal spray**
+at 100 mcg; the amount stays editable, and the choice is remembered per compound and strength.
+
+A spray label carries a **spray icon at the right of the compound line**, drawn after the
+reference the user supplied: a slim pump bottle on a rounded base and a cone of eleven mist dots
+fanning out to the right, growing as they spread. It is all filled shapes, 3.2em tall on the
+compound line (4 mm), so the smallest dot is 0.37 mm (3 dots at 203 dpi), and it is drawn in the
+PDFs and the label images too. It shares the compound line's autofit; a name too long to share
+the line with it (only *VIP (Vasoactive Intestinal Peptide)*, were it ever a spray) keeps the
+line to itself and the icon is left off.
+
+---|---|---|
 | 10 mg | 3.33 | `30 clicks = 1 mg` |
 | 20 mg | 6.67 | `15 clicks = 1 mg` |
 | 30 mg | 10 | `10 clicks = 1 mg` |

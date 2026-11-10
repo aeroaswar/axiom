@@ -142,6 +142,7 @@ button,input,select{font:inherit;color:inherit}
 .mix .f{margin:0}
 .calc{margin:8px 0 0;font-size:11px;color:var(--accent);font-variant-numeric:tabular-nums}
 .calc:empty{display:none}
+.dose input.out{background:transparent;border-color:var(--line);color:var(--ink);cursor:default}
 .f-row{display:grid;grid-template-columns:1fr 92px;gap:10px}
 
 .btn{background:var(--accent);border:0;border-radius:6px;padding:11px 16px;
@@ -365,7 +366,9 @@ button,input,select{font:inherit;color:inherit}
   font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
 }
 .lbl__band--d .lbl__v{font-size:1.8em}
-.lbl__ico{display:inline-block;width:1.63em;height:1.45em;vertical-align:-.3em;margin-right:.3em;overflow:visible}
+/* spray icon: at the right of the compound line, centred on the name's caps */
+.lbl__band--spray{align-items:center}
+.lbl__ico{display:block;width:3.6em;height:3.2em;margin-left:.6em;overflow:visible}
 
 /* --- band E — compliance micro-print ------------------------ */
 .lbl__ruo{
@@ -409,12 +412,13 @@ button,input,select{font:inherit;color:inherit}
           <div class="chips" id="dev" style="margin-bottom:8px">
             <button class="chip" type="button" data-dev="pen" aria-pressed="true">Pen · clicks</button>
             <button class="chip" type="button" data-dev="spray" aria-pressed="false">Nasal spray</button>
+            <button class="chip" type="button" data-dev="none" aria-pressed="false">No dose</button>
           </div>
           <div id="penF">
           <div class="mix">
             <div class="f">
               <label for="fMl">BAC water (ml)</label>
-              <input id="fMl" type="number" min="0" step="0.1" inputmode="decimal" placeholder="3">
+              <input id="fMl" type="number" min="0" step="0.1" inputmode="decimal" value="3">
             </div>
             <div class="f">
               <label for="fMlClick">ml per click</label>
@@ -422,16 +426,16 @@ button,input,select{font:inherit;color:inherit}
             </div>
           </div>
           <div class="dose">
-            <input id="fClicks" type="number" min="1" step="1" inputmode="numeric" placeholder="10">
+            <input id="fClicks" class="out" type="text" readonly tabindex="-1" aria-label="clicks">
             <span>clicks =</span>
-            <input id="fMg" type="number" min="0" step="0.1" inputmode="decimal" placeholder="1">
-            <span>mg</span>
+            <input id="fMg" class="out" type="text" readonly tabindex="-1" aria-label="amount">
+            <span id="fUnit">mg</span>
           </div>
           <p class="calc" id="calc" role="status"></p>
-          <p class="hint">Enter the BAC water the vial is mixed with and the conversion is worked
-            out from the QTY, at 0.01&nbsp;ml per pen click (10&nbsp;mg in 3&nbsp;ml: 1&nbsp;mg is
-            0.3&nbsp;ml, 30 clicks). Leave the water empty to type the conversion by hand; leave
-            everything empty and the DOSE row is omitted.</p>
+          <p class="hint">Worked out from the QTY: every pen cartridge is mixed with 3&nbsp;ml of BAC
+            water and the pen gives 0.01&nbsp;ml per click, so only the vial's mg changes the clicks
+            (10&nbsp;mg: 1&nbsp;mg is 0.3&nbsp;ml, 30 clicks). Change the water or the ml per click
+            only if a pen is filled differently.</p>
           </div>
           <div id="sprayF" hidden>
             <div class="dose" style="grid-template-columns:auto 1fr auto">
@@ -1080,18 +1084,19 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
      D  DOSE  10 clicks = 1 mg
         ------------------------------------------
      E  RESEARCH USE ONLY                          */
-/* Spray icon for a nasal-spray DOSE, after the user's reference: a slim
+/* Spray icon for a nasal-spray label, shown at the right end of the compound
+   line, after the user's reference: a slim
    pump bottle on a rounded base, and a cone of mist dots fanning out to the
    right, growing as they spread (2, 3, 3, 3 dots). All filled shapes on a
    27 x 24 grid that never overlap, so the PDF and the label images draw it
-   like the wordmark. Drawn 1.45em tall at the DOSE size, the smallest dot is
-   0.3 mm across, 2.4 dots on a 203 dpi head. */
+   like the wordmark. Drawn 3.2em tall on the compound line (4 mm), the
+   smallest dot is 0.37 mm across, 3 dots on a 203 dpi head. */
 const SPRAY_ICON = '<svg class="lbl__ico" viewBox="0 0 27 24" xmlns="http://www.w3.org/2000/svg" aria-label="spray">'
   + '<path fill="currentColor" fill-rule="evenodd" d="M4.6 6.8H6V8H4.6Z M2.5 8H8V18.6H2.5Z M2.9 18.6H7.9A2.3 2.3 0 0 1 10.2 20.9V20.9A2.3 2.3 0 0 1 7.9 23.2H2.9A2.3 2.3 0 0 1 0.6 20.9V20.9A2.3 2.3 0 0 1 2.9 18.6Z M11.1 8.4A1.1 1.1 0 1 0 13.3 8.4A1.1 1.1 0 1 0 11.1 8.4Z M11.1 12.6A1.1 1.1 0 1 0 13.3 12.6A1.1 1.1 0 1 0 11.1 12.6Z M14.55 6.4A1.25 1.25 0 1 0 17.05 6.4A1.25 1.25 0 1 0 14.55 6.4Z M14.55 10.5A1.25 1.25 0 1 0 17.05 10.5A1.25 1.25 0 1 0 14.55 10.5Z M14.55 14.6A1.25 1.25 0 1 0 17.05 14.6A1.25 1.25 0 1 0 14.55 14.6Z M18.35 4.6A1.45 1.45 0 1 0 21.25 4.6A1.45 1.45 0 1 0 18.35 4.6Z M18.35 10.5A1.45 1.45 0 1 0 21.25 10.5A1.45 1.45 0 1 0 18.35 10.5Z M18.35 16.4A1.45 1.45 0 1 0 21.25 16.4A1.45 1.45 0 1 0 18.35 16.4Z M22.8 2.2A1.6 1.6 0 1 0 26 2.2A1.6 1.6 0 1 0 22.8 2.2Z M22.8 10.5A1.6 1.6 0 1 0 26 10.5A1.6 1.6 0 1 0 22.8 10.5Z M22.8 18.8A1.6 1.6 0 1 0 26 18.8A1.6 1.6 0 1 0 22.8 18.8Z"/></svg>';
 function labelHTML(d){
   const field = (cls,k,v) =>
-    `<div class="lbl__band lbl__band--${cls}"><span class="lbl__k">${esc(k)}</span><span class="lbl__v">${
-      /spray/i.test(v) ? SPRAY_ICON : ''}${esc(v)}</span></div>`;
+    `<div class="lbl__band lbl__band--${cls}"><span class="lbl__k">${esc(k)}</span><span class="lbl__v">${esc(v)}</span></div>`;
+  const spray = d.dose && /spray/i.test(d.dose);
   return `<div class="lbl">
   <div class="lbl__band lbl__band--a">
     ${look() === 'thermal' ? WORDMARK_THERMAL : WORDMARK}
@@ -1099,7 +1104,8 @@ function labelHTML(d){
     <span class="lbl__note">${esc(d.note || 'HIGH PURITY')}</span>
   </div>
   <div class="lbl__rule lbl__rule--top">${RULE}</div>
-  <div class="lbl__band lbl__band--b"><span class="lbl__compound">${esc(d.compound)}</span></div>
+  <div class="lbl__band lbl__band--b${spray ? ' lbl__band--spray' : ''}"><span class="lbl__compound">${esc(d.compound)}</span>${
+    spray ? '<span class="lbl__spacer"></span>' + SPRAY_ICON : ''}</div>
   ${field('c', 'QTY', d.qty)}
   ${d.dose ? field('d', 'DOSE', d.dose) : ''}
   <div class="lbl__rule lbl__rule--bot">${RULE}</div>
@@ -1113,12 +1119,23 @@ function labelHTML(d){
    to stay inside the die line. */
 function autofit(root){
   const MIN = 0.48;
-  root.querySelectorAll('.lbl__band').forEach(band => {
+  const fit = band => {
     let k = 1;
     band.style.setProperty('--k', k);
     while (band.scrollWidth > band.clientWidth + 0.5 && k > MIN){
       k = Math.round((k - 0.02) * 100) / 100;
       band.style.setProperty('--k', k);
+    }
+  };
+  root.querySelectorAll('.lbl__band').forEach(band => {
+    fit(band);
+    // a name too long to share its line with the spray icon keeps the line
+    // to itself: the icon is dropped rather than the name pushed past the die
+    const ico = band.querySelector('.lbl__ico');
+    if (ico && band.scrollWidth > band.clientWidth + 0.5){
+      ico.previousElementSibling && ico.previousElementSibling.remove();
+      ico.remove();
+      fit(band);
     }
     if (band.scrollWidth > band.clientWidth + 0.5){
       console.warn('AXIOM label: content still overflows at the autofit floor —', band.textContent.trim());
@@ -1188,9 +1205,10 @@ const asPair = v => {
    number of clicks, so 40 mg in 3 ml (7.5 clicks/mg) reads 15 clicks = 2 mg.
    Failing that, 10 clicks = X mg. The result fills the two fields below,
    which stay editable. */
-const vialMg = () => {
-  const m = $('fQty').value.replace(',', '.').match(/(\d+(?:\.\d+)?)\s*mg\b/i);
-  return m ? parseFloat(m[1]) : NaN;
+/* The vial's amount and unit from QTY: "10 mg", "10mg", "2.5 mg", "36 IU". */
+const vialAmt = () => {
+  const m = $('fQty').value.replace(',', '.').match(/(\d+(?:\.\d+)?)\s*(mg|mcg|iu)\b/i);
+  return m ? { n: parseFloat(m[1]), unit: m[2].toLowerCase() === 'iu' ? 'IU' : m[2].toLowerCase() } : null;
 };
 function clickPair(cpm){
   for (let m = 1; m <= 10; m++){
@@ -1200,14 +1218,16 @@ function clickPair(cpm){
   return { clicks: 10, mg: +(10 / cpm).toFixed(2) };
 }
 function calcDose(){
-  const ml = parseFloat($('fMl').value), per = parseFloat($('fMlClick').value), mg = vialMg();
-  if (!(ml > 0)){ $('calc').textContent = ''; return; }
-  if (!(per > 0)){ $('calc').textContent = 'Enter the ml per click.'; return; }
-  if (!(mg > 0)){ $('calc').textContent = 'Put the vial size in QTY (e.g. 10 mg) to work out the clicks.'; return; }
-  const pair = clickPair(ml / mg / per);
-  $('fClicks').value = pair.clicks; $('fMg').value = pair.mg;
-  $('calc').textContent = `${num(mg)} mg in ${num(ml)} ml = ${num(mg / ml)} mg/ml · ${num(per)} ml per click → `
-    + `${pair.clicks} clicks = ${num(pair.mg)} mg`;
+  const ml = parseFloat($('fMl').value), per = parseFloat($('fMlClick').value), v = vialAmt();
+  $('fClicks').value = ''; $('fMg').value = '';
+  $('fUnit').textContent = v ? v.unit : 'mg';
+  if (!(ml > 0)){ $('calc').textContent = 'Enter the BAC water (3 ml for the pen cartridges).'; return; }
+  if (!(per > 0)){ $('calc').textContent = 'Enter the ml per click (0.01 for the pen).'; return; }
+  if (!v || !(v.n > 0)){ $('calc').textContent = 'Put the vial size in QTY (e.g. 10 mg) to work out the clicks.'; return; }
+  const pair = clickPair(ml / v.n / per);
+  $('fClicks').value = pair.clicks; $('fMg').value = num(pair.mg);
+  $('calc').textContent = `${num(v.n)} ${v.unit} in ${num(ml)} ml = ${num(v.n / ml)} ${v.unit}/ml · `
+    + `${num(per)} ml per click → ${pair.clicks} clicks = ${num(pair.mg)} ${v.unit}`;
 }
 
 /* Nasal sprays read "1 spray = 100 mcg" instead of a click conversion.
@@ -1229,8 +1249,9 @@ function doseStr(){
     const mcg = parseFloat($('fMcg').value);
     return mcg > 0 ? `1 spray = ${num(mcg)} mcg` : null;
   }
+  if (device !== 'pen') return null;
   const c = parseFloat($('fClicks').value), m = parseFloat($('fMg').value);
-  return (c > 0 && m > 0) ? `${num(c)} clicks = ${num(m)} mg` : null;
+  return (c > 0 && m > 0) ? `${num(c)} clicks = ${num(m)} ${$('fUnit').textContent}` : null;
 }
 
 const $ = id => document.getElementById(id);
@@ -1287,10 +1308,6 @@ function select(d){
   const mem = asPair(doseMem[memKey(d)]);
   setDevice(mem && mem.device ? mem.device : SPRAY.test(d.compound) ? 'spray' : 'pen');
   $('fMcg').value    = mem && mem.mcg ? mem.mcg : 100;
-  $('fClicks').value = mem && mem.clicks ? mem.clicks : '';
-  $('fMg').value     = mem && mem.mg ? mem.mg : '';
-  $('fMl').value     = mem && mem.ml ? mem.ml : '';
-  if (mem && mem.perClick) $('fMlClick').value = mem.perClick;
   calcDose();
   $('add').disabled    = false;
   renderList(); preview();
@@ -1323,9 +1340,8 @@ $('dev').addEventListener('click', e => {
 });
 ['fQty','fMl','fMlClick'].forEach(id =>
   $(id).addEventListener('input', () => { calcDose(); preview(); }));
-/* typing a conversion by hand takes over from the water */
-['fClicks','fMg'].forEach(id => $(id).addEventListener('input', () => {
-  if ($('fMl').value){ $('fMl').value = ''; calcDose(); }
+['fMl','fMlClick'].forEach(id => $(id).addEventListener('change', () => {
+  try { localStorage.setItem('axiom.pen', JSON.stringify({ ml: parseFloat($('fMl').value), perClick: parseFloat($('fMlClick').value) })); } catch (e) {}
 }));
 
 /* ---------- density ---------- */
@@ -1391,11 +1407,8 @@ const used = () => queue.reduce((n, r) => n + r.copies, 0);
 $('add').addEventListener('click', () => {
   const d = draft();
   const n = Math.max(1, Math.min(500, parseInt($('fCopies').value, 10) || 1));
-  const c = parseFloat($('fClicks').value), mg = parseFloat($('fMg').value);
-  const ml = parseFloat($('fMl').value), perClick = parseFloat($('fMlClick').value);
   const mcg = parseFloat($('fMcg').value);
-  if (sel && device === 'spray'){ if (mcg > 0) remember(memKey(sel), { device: 'spray', mcg }); }
-  else if (sel && c > 0 && mg > 0) remember(memKey(sel), ml > 0 ? { clicks: c, mg, ml, perClick } : { clicks: c, mg });
+  if (sel) remember(memKey(sel), device === 'spray' ? { device, mcg: mcg > 0 ? mcg : 100 } : { device });
   const same = queue.find(r =>
     r.compound === d.compound && r.qty === d.qty && r.dose === d.dose && r.note === d.note);
   if (same) same.copies += n; else queue.push({ ...d, copies: n });
@@ -1894,11 +1907,14 @@ $('dl').addEventListener('click', async () => {
 /* ---------- go ----------
    Open on a real worked example rather than an empty shell: Retatrutide
    30 mg is the SKU whose click conversion we actually have. Clear removes it. */
+/* Water and ml per click are the same for every cartridge (3 ml, 0.01 ml):
+   remembered for the browser, not per compound. */
+try {
+  const w = JSON.parse(localStorage.getItem('axiom.pen') || 'null');
+  if (w && w.ml > 0) $('fMl').value = w.ml;
+  if (w && w.perClick > 0) $('fMlClick').value = w.perClick;
+} catch (e) {}
 select(CATALOGUE.items.find(d => d.compound === 'Retatrutide' && d.lot === '30 mg'));
-const seedMem = asPair(doseMem[memKey(sel)]) || { clicks: 10, mg: 1, ml: 3 };
-$('fClicks').value = seedMem.clicks;
-$('fMg').value     = seedMem.mg;
-$('fMl').value     = seedMem.ml || '';
 calcDose();
 $('fCopies').value = 8;
 renderList(); preview();
