@@ -11,8 +11,7 @@ Continue the existing local AXIOM storefront in this folder. The user has approv
 - The homepage manifesto band ("A higher standard for research") is limestone: `assets/stone-light.webp` on the right, fading through a solid limestone wash into the band colour, with dark text on plain stone.
 - The product listing is the Catalogue, never the Shop: navigation, footer, breadcrumbs and headings. `qa/check-showcase.cjs` fails on visible "shop".
 - Keep the footer compact: one small wordmark, aligned navigation and restrained spacing.
-- The hero contains MOTS-c, Retatrutide and KLOW. Each original photographic pen moves independently with scrolling and cursor input, over a stationary stone background. Preserve the original label pixels.
-- Keep the headline and buttons stationary during interaction. Use eased movement, no scroll locking, smaller mobile movement, reduced-motion support and a complete static fallback.
+- The hero is light limestone (`#e5dcd1`) with dark text. It shows MOTS-c, Retatrutide and KLOW as their original photographic pens, still: no cursor, scroll or entrance motion. Preserve the original label pixels.
 - No text under 11px: `build.py` raises any smaller size in the generated `base.css` and stops the build if `design.css`, `editorial-v2.css` or `stone-v3.css` declares one. Text meets 4.5:1 contrast on its background. On ivory, the secondary grey is `--muted-2: #666259`.
 - The demo notice sits in the top ribbon (`.demo-tag`, placed by `build.py`), never floating over content. On phones, product pages show an order bar with the chosen size and Order on WhatsApp (`design.js`) until the order box is on screen.
 - The storefront is a showcase in English only: the catalogue, product pages and the compound guide, with orders taken on WhatsApp. It has no prices, basket, plans or subscriptions, accounts, certificates (COA), price list, legal pages, Bahasa Indonesia or mention of Indonesia. `showcase.py` enforces this at build time and `qa/check-showcase.cjs` checks every route.
@@ -25,7 +24,7 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 | --- | --- |
 | `home-v2.html` | Editable homepage and SVG pen layers |
 | `stone-v3.css` | Final visual overrides, gradients, responsive styles and hero layers |
-| `design.js` | Custom behavior, route enhancements and hero animation |
+| `design.js` | Custom behavior, route enhancements and the phone order bar |
 | `editorial-v2.css`, `design.css` | Earlier style layers still used by the site |
 | `pages.json` | Source page templates |
 | `data.json` | Source product data |
@@ -41,7 +40,7 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 | `artifact.py` | Stages the built site in `artifact/` for republishing the Claude Artifact |
 | `card_photos.py` | Makes the 640px card photos (`assets/stone-<slug>-640.webp`) from the PNG masters; run after adding or changing a product photograph and commit the output |
 | `serve.py` | Local preview server |
-| `qa/check-hero.cjs` | Browser checks for hero behavior |
+| `qa/check-hero.cjs` | Browser checks: light limestone hero, three still pens, route remount, no overflow |
 | `qa/browser.cjs` | Shared Playwright setup and route helpers for the QA scripts |
 | `qa/check-showcase.cjs` | Browser checks: every route free of price, basket, certificate, account, subscription and Indonesia wording and of links to removed routes; WhatsApp order links name the chosen product and size (product page, phone order bar, compound guide) |
 
@@ -53,7 +52,7 @@ CSS load order: `base.css`, `design.css`, `editorial-v2.css`, `stone-v3.css`.
 
 `package.py` builds the standalone HTML with every page inline and each image or font embedded once (about 22 MB): CSS images become custom properties and template paths resolve through `window.__ASSET`. In `design.js`, reference assets through `asset('assets/...')` so the standalone copy can resolve them.
 
-The hero uses `assets/stone-hero.webp` clipped into three inline SVG layers and `assets/hero-stone-background.webp` as the clean background. The latter was generated; the pens retain their original artwork.
+The hero clips the three pens out of `assets/stone-hero.webp` with inline SVG paths (each with a soft drop shadow) and sets them over `assets/stone-light.webp`, which fades into the limestone colour on its left. `assets/hero-stone-background.webp`, the generated dark plate, is no longer used.
 
 ## Build and verify
 
@@ -89,7 +88,7 @@ The browser checks find Playwright through `qa/browser.cjs`: the project's `@pla
 
 The original PNG masters in `assets/` are stored with Git LFS in the repository; the site itself uses only the WebP/JPG files. Catalogue, homepage and related-product cards offer the 640px photo next to the full-size one through `srcset` (added by `build.py`), so small tiles load a small file; product pages keep the full-size photograph. The standalone HTML drops the `srcset` and embeds each photo once.
 
-Check desktop and mobile rendering, cursor response, distinct scroll transforms, stationary stone, pointer-leave reset, reduced motion, homepage route remount, image-load fallback and horizontal overflow. Inspect the rendered result as well as running checks.
+Check desktop and mobile rendering, the still hero, homepage route remount, image loading and horizontal overflow. Inspect the rendered result as well as running checks.
 
 ## Claude Artifact
 
@@ -97,7 +96,7 @@ The storefront is also published as a private Claude Artifact: https://claude.ai
 
 ## Known preview issue
 
-The preview previously showed a cached static homepage. Before changing animation code, inspect `.hero-motion`, `is-motion-ready`, `is-motion-active`, image readiness and the computed transforms on `.hero-pen`. Check loaded script version queries and refresh with a new URL query. A server listening on a port does not prove it returns the page.
+The preview has shown cached files before. Check loaded script version queries and refresh with a new URL query. A server listening on a port does not prove it returns the page.
 
 ## Current scope
 

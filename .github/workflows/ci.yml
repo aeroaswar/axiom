@@ -57,7 +57,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Browser gates — 6, 7, 10, 14, 15, 16, 18, 19, 20, 21
         run: pnpm exec playwright test
-      - name: Storefront browser checks — hero motion, showcase routes and WhatsApp ordering, standalone package
+      - name: Storefront browser checks — light hero, showcase routes and WhatsApp ordering, standalone package
         working-directory: storefront
         run: |
           python serve.py >/dev/null 2>&1 &

@@ -14,8 +14,7 @@ Visit http://127.0.0.1:8765.
 
 ## Design and content
 
-- The homepage hero has three independently animated photographic pen layers: restrained scroll depth, eased cursor movement and a soft bronze cursor glow. The stone stays fixed. Mobile uses smaller scroll movement without hover effects; reduced motion and image failures keep the original static hero. Animation stops when offscreen and is cleaned up on route changes.
-- Hero labels and dials use the original photograph via SVG clipping. `assets/hero-stone-background.webp` is the clean background plate; edit the layers in `home-v2.html` and motion behavior in `design.js`.
+- The homepage hero is light limestone. The three original pens (MOTS-c, Retatrutide, KLOW) are clipped from their photograph with SVG paths, so labels and dials keep their pixels, and rest still over the limestone photograph with soft shadows. Edit them in `home-v2.html`.
 - All 68 shop products use individual stone photographs: 65 research compounds and three devices. The same photographs appear on their product detail pages and applicable collection pages.
 - Compound labels retain the catalogue names and first-variant quantities. VIP was regenerated to correct its spelling.
 - The stone band fades smoothly into charcoal. The footer is plain charcoal with one small wordmark, aligned links and compact spacing.
@@ -50,7 +49,7 @@ After adding or changing a product photograph, run `python3 card_photos.py` to m
 ## Checks
 
 ```sh
-node qa/check-hero.cjs     # hero motion, stationary stone, reduced motion, fallbacks
+node qa/check-hero.cjs     # light hero, three still pens, route remount, no overflow
 node qa/check-showcase.cjs # every route free of shop wording; WhatsApp links name the chosen size
 ```
 
