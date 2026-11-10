@@ -415,7 +415,7 @@
     var how = form.querySelector('.how') ? form.querySelector('.how').outerHTML : '';
     function draw() {
       var v = p.variants.find(function (x) { return x.sku === st.sku; }) || firstOpen;
-      var h = '<span class="lab" id="size-label">' + (p.kind === 'peptide' ? 'Vial size' : 'Option') + '</span><div class="sizes" role="radiogroup" aria-labelledby="size-label">' +
+      var h = '<span class="lab" id="size-label">' + (p.kind === 'peptide' ? (v.content === 'Nasal spray' ? 'Bottle size' : 'Vial size') : 'Option') + '</span><div class="sizes" role="radiogroup" aria-labelledby="size-label">' +
         p.variants.map(function (x) { return '<button type="button" role="radio" data-sku="' + x.sku + '" aria-checked="' + (x.sku === v.sku) + '" class="size' + (x.sku === v.sku ? ' on' : '') + '"><span class="d">' + esc(x.dose) + '</span></button>'; }).join('') + '</div>';
       h += '<p class="order-note">' + (p.kind === 'peptide' ? esc(v.content || '') + (v.cold ? ' · Cold chain' : '') : '') + '</p>';
       h += '<div class="buy-foot"><a class="btn btn-solid" data-order target="_blank" rel="noopener" href="' + orderLink(p, v) + '">' + icon('wa') + ' Order on WhatsApp</a></div>';

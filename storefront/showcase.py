@@ -47,7 +47,7 @@ def order_link(whatsapp, product, variant):
 def order_box(whatsapp, product):
     """The product page's order box before app.js takes over: the same markup its draw() produces."""
     variants, first = product['variants'], product['variants'][0]
-    label = 'Vial size' if product['kind'] == 'peptide' else 'Option'
+    label = ('Bottle size' if first['content'] == 'Nasal spray' else 'Vial size') if product['kind'] == 'peptide' else 'Option'
     sizes = ''.join(f'<button type="button" role="radio" data-sku="{v["sku"]}" aria-checked="{"true" if v is first else "false"}" '
                     f'class="size{" on" if v is first else ""}"><span class="d">{v["dose"]}</span></button>' for v in variants)
     return (f'<form class="buy-form" aria-label="Order"><span class="lab" id="size-label">{label}</span>'
@@ -60,7 +60,7 @@ def order_box(whatsapp, product):
 # ---------- the app ----------
 APP_DRAW = r'''    function draw() {
       var v = p.variants.find(function (x) { return x.sku === st.sku; }) || firstOpen;
-      var h = '<span class="lab" id="size-label">' + (p.kind === 'peptide' ? 'Vial size' : 'Option') + '</span><div class="sizes" role="radiogroup" aria-labelledby="size-label">' +
+      var h = '<span class="lab" id="size-label">' + (p.kind === 'peptide' ? (v.content === 'Nasal spray' ? 'Bottle size' : 'Vial size') : 'Option') + '</span><div class="sizes" role="radiogroup" aria-labelledby="size-label">' +
         p.variants.map(function (x) { return '<button type="button" role="radio" data-sku="' + x.sku + '" aria-checked="' + (x.sku === v.sku) + '" class="size' + (x.sku === v.sku ? ' on' : '') + '"><span class="d">' + esc(x.dose) + '</span></button>'; }).join('') + '</div>';
       h += '<p class="order-note">' + (p.kind === 'peptide' ? esc(v.content || '') + (v.cold ? ' · Cold chain' : '') : '') + '</p>';
       h += '<div class="buy-foot"><a class="btn btn-solid" data-order target="_blank" rel="noopener" href="' + orderLink(p, v) + '">' + icon('wa') + ' Order on WhatsApp</a></div>';

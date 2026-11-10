@@ -606,7 +606,7 @@
         {
           "sku": "adamax10",
           "dose": "10 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 2800000,
           "cold": true,
           "available": 9
@@ -690,7 +690,7 @@
         {
           "sku": "selank10",
           "dose": "10 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 2100000,
           "cold": true,
           "available": 15
@@ -711,7 +711,7 @@
         {
           "sku": "semax10",
           "dose": "10 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 2100000,
           "cold": true,
           "available": 22
@@ -732,7 +732,7 @@
         {
           "sku": "selsem20",
           "dose": "20 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 3900000,
           "cold": true,
           "available": 7

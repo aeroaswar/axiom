@@ -198,7 +198,7 @@ for key, markup in pages.items():
         ordered = sorted(cards,key=lambda c: next((i for i,slug in enumerate(featured) if 'data-compound="'+slug+'"' in c),100))
         if cards: markup=markup[:markup.index(cards[0])]+''.join(ordered)+markup[markup.index(cards[-1])+len(cards[-1]):]
     if key.startswith('product-') and key[8:] in stone_slugs:
-        markup=markup.replace('<span class="lab">Vial + pen</span>','<span class="lab">AXIOM / Stone collection · '+stone_doses[key[8:]]+' presentation shown</span>')
+        markup=re.sub(r'<span class="lab">(?:Vial \+ pen|Nasal spray)</span>',lambda m:'<span class="lab">AXIOM / Stone collection · '+stone_doses[key[8:]]+' presentation shown</span>',markup)
         markup=markup.replace('class="prod-fig" aria-hidden="true"','class="prod-fig"')
     pages[key]=markup
 
