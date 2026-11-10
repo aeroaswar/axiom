@@ -223,9 +223,11 @@ takes the vial's mg from QTY:
 DOSE line reads `1 spray = 100 mcg`. In the builder the Dose field has a **Pen · clicks / Nasal
 spray** switch; selecting one of those compounds opens on the spray at 100 mcg, the amount stays
 editable, and the choice is remembered per compound and strength like the water. A spray DOSE
-carries a small spray icon before the value (pump head, nozzle, bottle and four mist dots, all
-filled shapes at 1.25em), drawn in the PDF and the label images as well. It raises the tallest
-spray label to 24.5 mm of the 26 mm content box (24.01 mm thermal).
+carries a spray icon before the value, drawn after the reference the user supplied: a slim
+pump bottle on a rounded base and a cone of eleven mist dots fanning out to the right, growing as
+they spread. All filled shapes, 1.45em tall, drawn in the PDF and the label images as well; the
+smallest dot is 0.3 mm across (2.4 dots at 203 dpi). It raises the tallest spray label to
+24.95 mm of the 26 mm content box (24.46 mm thermal).
 
 The print sheet's `10 clicks = 1 mg` on every strength holds only if each strength is mixed to
 10 mg/ml (10 mg in 1 ml, 30 mg in 3 ml, 60 mg in 6 ml). If they are all mixed in 3 ml, only the
