@@ -279,7 +279,7 @@ sheet redraw on the right, then *Save as PDF* (paper A4, background graphics on;
 invoice prints correctly at any margin setting, set margins to None past that).
 
 Line items come from a dropdown of the full price list — 79 lots across the 9 pathways plus
-devices and apparel, 84 entries — generated from `invoice/AXIOM-Price-List-v1.0.pdf`, which
+the three devices, 82 entries — generated from `invoice/AXIOM-Price-List-v1.0.pdf`, which
 is committed beside it. Shipping is Rp 100.000 per 3 units at an address, capped at
 Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to*, route each
 line item to one, and each carries its own amount, calculated by default and overridable.
