@@ -180,6 +180,9 @@ button,input,select{font:inherit;color:inherit}
 
 .plate{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
   padding:30px;overflow-x:auto;display:inline-block;max-width:100%}
+/* the preview's scale follows the width it has (up to 4x), so the whole
+   label shows on a tablet or phone; see fitPreview() */
+@media (max-width:600px){ .plate{padding:14px} }
 .pv{position:relative;overflow:hidden}
 .pv > .lbl{position:absolute;top:0;left:0;transform-origin:top left}
 .cap{font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted-2);margin:13px 0 0}
@@ -197,6 +200,11 @@ button,input,select{font:inherit;color:inherit}
 .qrow .n{font-variant-numeric:tabular-nums;color:var(--muted)}
 .qrow .x{background:transparent;border:0;color:var(--muted-2);cursor:pointer;font-size:15px;line-height:1;padding:2px 6px}
 .qrow .x:hover{color:var(--accent-bright)}
+@media (max-width:600px){
+  .qhead,.qrow{grid-template-columns:minmax(0,1fr) 50px minmax(0,88px) 38px 24px;gap:8px;padding:10px 12px}
+  .qrow{font-size:11px}
+  .qrow .x{padding:2px}
+}
 .qempty{padding:22px 15px;font-size:11.5px;color:var(--muted-2)}
 .qfoot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;
   padding:13px 15px;background:var(--panel-2);border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
@@ -218,6 +226,9 @@ button,input,select{font:inherit;color:inherit}
 .pagebox{--z:.58;position:relative;width:calc(210mm * var(--z));height:calc(297mm * var(--z));
   overflow:hidden;border:1px solid var(--line);border-radius:4px;background:#fff}
 .pagebox > .page{position:absolute;top:0;left:0;transform:scale(var(--z));transform-origin:top left}
+/* smaller pages on a phone so a sheet sits inside the screen */
+@media (max-width:560px){ .pagebox{--z:.4} }
+@media (max-width:380px){ .pagebox{--z:.33} }
 .sheets{display:flex;flex-wrap:wrap;gap:22px}
 .pagelab{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2);margin:9px 0 0}
 
@@ -292,6 +303,7 @@ button,input,select{font:inherit;color:inherit}
 .tbox{--z:1.6;position:relative;width:calc(var(--lw) * var(--z));height:calc(var(--lh) * var(--z));
   border-radius:calc(var(--lr) * var(--z));overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.25)}
 .tbox > .lbl{position:absolute;top:0;left:0;transform:scale(var(--z));transform-origin:top left}
+@media (max-width:380px){ .roll{padding:12px} .tbox{--z:1.3} }
 
 @page{ size:A4 portrait; margin:0; }
 @media print{
@@ -526,7 +538,7 @@ button,input,select{font:inherit;color:inherit}
     </header>
 
     <section>
-      <p class="kick">Preview — 4&times;</p>
+      <p class="kick">Preview — <span id="pvScale">4</span>&times;</p>
       <div class="plate"><div class="pv" id="pv"></div></div>
       <p class="cap" id="pvCap">Select a compound to begin</p>
     </section>
@@ -538,7 +550,7 @@ button,input,select{font:inherit;color:inherit}
         <div id="qrows"></div>
         <div class="qfoot">
           <span id="qcount"></span>
-          <span style="display:flex;gap:10px">
+          <span style="display:flex;flex-wrap:wrap;gap:10px">
             <button class="btn btn--ghost" id="clear">Clear</button>
             <button class="btn btn--ghost" id="print" disabled>Print</button>
             <button class="btn btn--ghost" id="img" disabled hidden>Download images</button>
@@ -1346,13 +1358,25 @@ const draft = () => ({
   note:     $('fNote').value.trim()     || 'HIGH PURITY',
 });
 
-function preview(){
-  const S = 4;
-  $('pv').innerHTML = labelHTML(draft());
-  const l = $('pv').firstElementChild;
+/* Preview scale: 4x where there is room, otherwise as large as fits the
+   width beside (or below) the panel, so the whole label is always in view. */
+const PX_PER_MM = 96 / 25.4;
+function fitPreview(){
+  const pv = $('pv'), l = pv.firstElementChild; if (!l) return;
+  const plate = pv.parentElement, box = plate.parentElement;
+  const cs = getComputedStyle(plate);
+  const chrome = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)
+               + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
+  const room = box.clientWidth - chrome;
+  const S = Math.max(0.5, Math.min(4, Math.floor(room / (LABEL.w * PX_PER_MM) * 20) / 20));
   l.style.transform = `scale(${S})`;
-  $('pv').style.width  = (LABEL.w * S) + 'mm';
-  $('pv').style.height = (LABEL.h * S) + 'mm';
+  pv.style.width  = (LABEL.w * S) + 'mm';
+  pv.style.height = (LABEL.h * S) + 'mm';
+  $('pvScale').textContent = String(+S.toFixed(2));
+}
+function preview(){
+  $('pv').innerHTML = labelHTML(draft());
+  fitPreview();
   autofit($('pv'));
   $('pvCap').textContent = sel
     ? `${sel.compound} · ${sel.lot} · ${CATALOGUE.categories[sel.cat]}`
@@ -1928,6 +1952,11 @@ $('dl').addEventListener('click', async () => {
     $('dl').disabled = !queue.length;
   }
 });
+
+/* re-fit the preview whenever the width it has changes (rotation, resize,
+   the panel stacking above it on narrow screens) */
+if (window.ResizeObserver) new ResizeObserver(fitPreview).observe($('pv').parentElement.parentElement);
+else addEventListener('resize', fitPreview);
 
 /* ---------- collapsible compound picker ---------- */
 function setPick(open){
