@@ -378,7 +378,16 @@ two ways, from the same file:
 - **Locally.** `python3 -m http.server` in `dosage-guide/`, then
   `http://localhost:8000/tracker.html`.
 
-What it does:
+What it does. Five slots along the bottom: Today, Trends, a log button in the middle, Photos and
+History.
+
+- **Log button.** A sheet that opens on a search of the 65 compounds, with the person's recent
+  ones and their last amounts on top (or any name of their own). Then one large amount field,
+  the units, their previous amounts as chips, and a site grid (arm, abdomen, glute, thigh; left
+  and right) showing how many days since each was last used and marking the next in their
+  rotation, plus by mouth, nasal and on the skin. Time and a note, then Save.
+- **Today, at a glance.** A seven-day strip with a dot on each logged day, then one card with
+  the day's doses, weight (and its change since the previous check-in) and photos.
 
 - **Today.** Log a dose (compound, amount, unit, time, site, note), a check-in (weight in kg,
   waist in cm, how the day felt on 1–5, a note) and a photo tagged front, side, back or other.
