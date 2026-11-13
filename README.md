@@ -77,7 +77,7 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
 Print and brand collateral, set by hand and kept in the repository:
 
 ```
-business-proposal/axiom-pricelist-print.html    the A4 price list — 79 lots over 9 pathways, two pages
+business-proposal/axiom-pricelist-print.html    the A4 price list — 80 lots over 9 pathways, two pages
 business-proposal/AXIOM-Price-List.pdf          its render; edit the HTML, never the PDF
 business-proposal/order-form/                   the fillable A4 order form (build.cjs, then add-fields.py)
 business-proposal/axiom-peptide-pricelist.html  the internal sheet — cost basis and margin per lot
