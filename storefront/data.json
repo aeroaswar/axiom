@@ -1,0 +1,1788 @@
+{
+  "products": [
+    {
+      "slug": "aod-9604",
+      "name": "AOD-9604",
+      "kind": "peptide",
+      "cls": "hGH fragment 176-191 analogue",
+      "pathway": "metabolic",
+      "pathway_no": "01",
+      "pathway_name": "Metabolic",
+      "variants": [
+        {
+          "sku": "aod9604",
+          "dose": "5 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 13
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "cagrilintide",
+      "name": "Cagrilintide",
+      "kind": "peptide",
+      "cls": "Long-acting amylin analogue",
+      "pathway": "metabolic",
+      "pathway_no": "01",
+      "pathway_name": "Metabolic",
+      "variants": [
+        {
+          "sku": "cagri10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 20
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "retatrutide",
+      "name": "Retatrutide",
+      "kind": "peptide",
+      "cls": "Triple GIP/GLP-1/glucagon agonist",
+      "pathway": "metabolic",
+      "pathway_no": "01",
+      "pathway_name": "Metabolic",
+      "variants": [
+        {
+          "sku": "reta10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 20
+        },
+        {
+          "sku": "reta20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3600000,
+          "cold": true,
+          "available": 11
+        },
+        {
+          "sku": "reta30",
+          "dose": "30 mg",
+          "content": "Vial + pen",
+          "price_idr": 4900000,
+          "cold": true,
+          "available": 6
+        },
+        {
+          "sku": "reta40",
+          "dose": "40 mg",
+          "content": "Vial + pen",
+          "price_idr": 6400000,
+          "cold": true,
+          "available": 26
+        },
+        {
+          "sku": "reta60",
+          "dose": "60 mg",
+          "content": "Vial + pen",
+          "price_idr": 8500000,
+          "cold": true,
+          "available": 2
+        }
+      ],
+      "synonyms": [],
+      "coa": [
+        "AX-2607-RETA10",
+        "AX-2607-RETA20"
+      ]
+    },
+    {
+      "slug": "tirzepatide",
+      "name": "Tirzepatide",
+      "kind": "peptide",
+      "cls": "Dual GIP/GLP-1 receptor agonist",
+      "pathway": "metabolic",
+      "pathway_no": "01",
+      "pathway_name": "Metabolic",
+      "variants": [
+        {
+          "sku": "tirz10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2200000,
+          "cold": true,
+          "available": 18
+        },
+        {
+          "sku": "tirz30",
+          "dose": "30 mg",
+          "content": "Vial + pen",
+          "price_idr": 3500000,
+          "cold": true,
+          "available": 25
+        },
+        {
+          "sku": "tirz40",
+          "dose": "40 mg",
+          "content": "Vial + pen",
+          "price_idr": 4000000,
+          "cold": true,
+          "available": 5
+        }
+      ],
+      "synonyms": [],
+      "coa": [
+        "AX-2608-TIRZ10"
+      ]
+    },
+    {
+      "slug": "cjc-1295-no-dac-plus-ipamorelin",
+      "name": "CJC-1295 (No DAC) + Ipamorelin",
+      "kind": "peptide",
+      "cls": "GHRH analogue + GH secretagogue",
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "cjc10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 13
+        },
+        {
+          "sku": "cjc20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3800000,
+          "cold": true,
+          "available": 24
+        }
+      ],
+      "synonyms": [
+        "CJC No DAC + Ipamorelin"
+      ],
+      "coa": [
+        "AX-2609-CJC10"
+      ]
+    },
+    {
+      "slug": "cjc-1295-with-dac",
+      "name": "CJC-1295 (With DAC)",
+      "kind": "peptide",
+      "cls": "GHRH analogue with drug-affinity complex",
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "cjcdac5",
+          "dose": "5 mg",
+          "content": "Vial + pen",
+          "price_idr": 2900000,
+          "cold": true,
+          "available": 9
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "hgh-191aa-somatropin",
+      "name": "HGH 191AA (Somatropin)",
+      "kind": "peptide",
+      "cls": "Recombinant somatropin",
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "hgh36",
+          "dose": "36 IU",
+          "content": "Vial + pen",
+          "price_idr": 2800000,
+          "cold": true,
+          "available": 16
+        },
+        {
+          "sku": "hgh40",
+          "dose": "40 IU",
+          "content": "Vial + pen",
+          "price_idr": 3000000,
+          "cold": true,
+          "available": 23
+        }
+      ],
+      "synonyms": [
+        "HGH"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "igf-1-lr3",
+      "name": "IGF-1 LR3",
+      "kind": "peptide",
+      "cls": "IGF-1 analogue",
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "igf1",
+          "dose": "1 mg",
+          "content": "Vial + pen",
+          "price_idr": 3800000,
+          "cold": true,
+          "available": 8
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "ipamorelin",
+      "name": "Ipamorelin",
+      "kind": "peptide",
+      "cls": null,
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "ipa10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2500000,
+          "cold": true,
+          "available": 15
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "ipamorelin-plus-tesamorelin",
+      "name": "Ipamorelin + Tesamorelin",
+      "kind": "peptide",
+      "cls": "GH secretagogue + GHRH analogue blend",
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "ipatesa18",
+          "dose": "18 mg",
+          "content": "Vial + pen",
+          "price_idr": 4500000,
+          "cold": true,
+          "available": 3
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "sermorelin",
+      "name": "Sermorelin",
+      "kind": "peptide",
+      "cls": "GHRH(1-29) analogue",
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "sermo10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 3100000,
+          "cold": true,
+          "available": 7
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "tesamorelin",
+      "name": "Tesamorelin",
+      "kind": "peptide",
+      "cls": "GHRH analogue",
+      "pathway": "growth-factors",
+      "pathway_no": "02",
+      "pathway_name": "Growth Factors",
+      "variants": [
+        {
+          "sku": "tesa10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2300000,
+          "cold": true,
+          "available": 14
+        },
+        {
+          "sku": "tesa20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 21
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "ahk-cu",
+      "name": "AHK-Cu",
+      "kind": "peptide",
+      "cls": "Copper tripeptide",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "ahk100",
+          "dose": "100 mg",
+          "content": "Vial + pen",
+          "price_idr": 2500000,
+          "cold": true,
+          "available": 6
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "ara-290",
+      "name": "ARA-290",
+      "kind": "peptide",
+      "cls": "EPO-derived peptide (Cibinetide)",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "ara10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2800000,
+          "cold": true,
+          "available": 13
+        },
+        {
+          "sku": "ara50",
+          "dose": "50 mg",
+          "content": "Vial + pen",
+          "price_idr": 4100000,
+          "cold": true,
+          "available": 20
+        }
+      ],
+      "synonyms": [
+        "Cibinetide"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "bpc-157",
+      "name": "BPC-157",
+      "kind": "peptide",
+      "cls": "Synthetic pentadecapeptide",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "bpc10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 1600000,
+          "cold": true,
+          "available": 15
+        }
+      ],
+      "synonyms": [],
+      "coa": [
+        "AX-2606-BPC10"
+      ]
+    },
+    {
+      "slug": "bpc-157-plus-tb-500-wolverine",
+      "name": "BPC-157 + TB-500 (Wolverine)",
+      "kind": "peptide",
+      "cls": "Repair research blend",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "wolv20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 2900000,
+          "cold": true,
+          "available": 12
+        }
+      ],
+      "synonyms": [
+        "Wolverine Blend"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "ghk-cu",
+      "name": "GHK-Cu",
+      "kind": "peptide",
+      "cls": "Copper tripeptide",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "ghk50",
+          "dose": "50 mg",
+          "content": "Vial + pen",
+          "price_idr": 2600000,
+          "cold": true,
+          "available": 19
+        },
+        {
+          "sku": "ghk100",
+          "dose": "100 mg",
+          "content": "Vial + pen",
+          "price_idr": 5000000,
+          "cold": true,
+          "available": 19
+        }
+      ],
+      "synonyms": [],
+      "coa": [
+        "AX-2608-GHK100"
+      ]
+    },
+    {
+      "slug": "kpv",
+      "name": "KPV",
+      "kind": "peptide",
+      "cls": "α-MSH tripeptide",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "kpv10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2300000,
+          "cold": true,
+          "available": 10
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "klow-bpc-plus-tb-plus-ghk-plus-kpv",
+      "name": "KLOW (BPC+TB+GHK+KPV)",
+      "kind": "peptide",
+      "cls": "Multi-peptide blend",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "klow80",
+          "dose": "80 mg",
+          "content": "Vial + pen",
+          "price_idr": 5800000,
+          "cold": true,
+          "available": 18
+        }
+      ],
+      "synonyms": [
+        "KLOW Blend"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "ll-37",
+      "name": "LL-37",
+      "kind": "peptide",
+      "cls": "Cathelicidin fragment",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "ll37",
+          "dose": "5 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 25
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "peg-mgf",
+      "name": "Peg MGF",
+      "kind": "peptide",
+      "cls": "PEGylated IGF-1 splice variant",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "pegmgf2",
+          "dose": "2 mg",
+          "content": "Vial + pen",
+          "price_idr": 2800000,
+          "cold": true,
+          "available": 10
+        }
+      ],
+      "synonyms": [
+        "PEG-MGF"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "snap-8",
+      "name": "SNAP-8",
+      "kind": "peptide",
+      "cls": "Acetyl octapeptide-3",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "snap8",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2500000,
+          "cold": true,
+          "available": 17
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "tb-500",
+      "name": "TB-500",
+      "kind": "peptide",
+      "cls": "Thymosin β4 fragment",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "tb500",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 1800000,
+          "cold": true,
+          "available": 0
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "adamax",
+      "name": "Adamax",
+      "kind": "peptide",
+      "cls": "Stabilised Semax analogue",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "adamax10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2800000,
+          "cold": true,
+          "available": 9
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "cerebrolysin",
+      "name": "Cerebrolysin",
+      "kind": "peptide",
+      "cls": "Neuropeptide preparation",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "cere80",
+          "dose": "80 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 16
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "dihexa",
+      "name": "Dihexa",
+      "kind": "peptide",
+      "cls": "HGF-mimetic oligopeptide (N-hexanoic-Tyr-Ile-(6)-aminohexanoic amide)",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "dihexa10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 3500000,
+          "cold": true,
+          "available": 23
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "pinealon",
+      "name": "Pinealon",
+      "kind": "peptide",
+      "cls": "Peptide bioregulator",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "pine20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 8
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "selank",
+      "name": "Selank",
+      "kind": "peptide",
+      "cls": "Tuftsin analogue",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "selank10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2100000,
+          "cold": true,
+          "available": 15
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "semax",
+      "name": "Semax",
+      "kind": "peptide",
+      "cls": "ACTH(4-10) analogue",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "semax10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2100000,
+          "cold": true,
+          "available": 22
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "selank-plus-semax",
+      "name": "Selank + Semax",
+      "kind": "peptide",
+      "cls": "Blend of two heptapeptides",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "selsem20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3900000,
+          "cold": true,
+          "available": 7
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "vip-vasoactive-intestinal-peptide",
+      "name": "VIP (Vasoactive Intestinal Peptide)",
+      "kind": "peptide",
+      "cls": "28-amino-acid neuropeptide",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "vip10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 14
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "5-amino-1mq",
+      "name": "5-Amino-1MQ",
+      "kind": "peptide",
+      "cls": "NNMT inhibitor",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "amino50",
+          "dose": "50 mg",
+          "content": "Vial + pen",
+          "price_idr": 2900000,
+          "cold": true,
+          "available": 21
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "aicar",
+      "name": "AICAR",
+      "kind": "peptide",
+      "cls": "AMP analogue nucleoside (acadesine)",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "aicar50",
+          "dose": "50 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 6
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "l-carnitine-injectable",
+      "name": "L-Carnitine (Injectable)",
+      "kind": "peptide",
+      "cls": "Quaternary ammonium compound (injectable solution)",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "lcar5000",
+          "dose": "5000 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 13
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "lc216-lipo-b-injectable",
+      "name": "LC216 Lipo-B (Injectable)",
+      "kind": "peptide",
+      "cls": "Lipotropic injectable blend, composition per lot CoA",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "lc216",
+          "dose": "10 mL",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 20
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "lc526-fat-blaster-injectable",
+      "name": "LC526 Fat Blaster (Injectable)",
+      "kind": "peptide",
+      "cls": "Lipotropic injectable blend, composition per lot CoA",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "lc526",
+          "dose": "10 mL",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 27
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "mots-c",
+      "name": "MOTS-c",
+      "kind": "peptide",
+      "cls": "Mitochondrial-derived peptide",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "mots10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2200000,
+          "cold": true,
+          "available": 12
+        },
+        {
+          "sku": "mots40",
+          "dose": "40 mg",
+          "content": "Vial + pen",
+          "price_idr": 3800000,
+          "cold": true,
+          "available": 19
+        }
+      ],
+      "synonyms": [],
+      "coa": [
+        "AX-2609-MOTS10"
+      ]
+    },
+    {
+      "slug": "slu-pp-332-injectable",
+      "name": "SLU-PP-332 (Injectable)",
+      "kind": "peptide",
+      "cls": "ERRα agonist",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "slu5",
+          "dose": "5 mg",
+          "content": "Vial + pen",
+          "price_idr": 2400000,
+          "cold": true,
+          "available": 26
+        }
+      ],
+      "synonyms": [
+        "SLU-PP-332"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "thymalin",
+      "name": "Thymalin",
+      "kind": "peptide",
+      "cls": "Thymic peptide preparation",
+      "pathway": "immune",
+      "pathway_no": "06",
+      "pathway_name": "Immune",
+      "variants": [
+        {
+          "sku": "thymalin10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2500000,
+          "cold": true,
+          "available": 11
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "thymosin-alpha-1",
+      "name": "Thymosin Alpha-1",
+      "kind": "peptide",
+      "cls": "Thymic peptide",
+      "pathway": "immune",
+      "pathway_no": "06",
+      "pathway_name": "Immune",
+      "variants": [
+        {
+          "sku": "ta1",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 0
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "hcg",
+      "name": "HCG",
+      "kind": "peptide",
+      "cls": "Gonadotropin",
+      "pathway": "reproductive",
+      "pathway_no": "07",
+      "pathway_name": "Reproductive",
+      "variants": [
+        {
+          "sku": "hcg",
+          "dose": "10000 IU",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 25
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "hmg",
+      "name": "HMG",
+      "kind": "peptide",
+      "cls": "Menopausal gonadotropin",
+      "pathway": "reproductive",
+      "pathway_no": "07",
+      "pathway_name": "Reproductive",
+      "variants": [
+        {
+          "sku": "hmg",
+          "dose": "75 IU",
+          "content": "Vial + pen",
+          "price_idr": 2400000,
+          "cold": true,
+          "available": 10
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "kisspeptin",
+      "name": "Kisspeptin",
+      "kind": "peptide",
+      "cls": "Kisspeptin decapeptide",
+      "pathway": "reproductive",
+      "pathway_no": "07",
+      "pathway_name": "Reproductive",
+      "variants": [
+        {
+          "sku": "kiss10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2900000,
+          "cold": true,
+          "available": 17
+        }
+      ],
+      "synonyms": [
+        "Kisspeptin-10"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "melanotan-ii",
+      "name": "Melanotan II",
+      "kind": "peptide",
+      "cls": "α-MSH analogue",
+      "pathway": "reproductive",
+      "pathway_no": "07",
+      "pathway_name": "Reproductive",
+      "variants": [
+        {
+          "sku": "mt2",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 1900000,
+          "cold": true,
+          "available": 24
+        }
+      ],
+      "synonyms": [
+        "Melanotan 2"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "oxytocin-acetate",
+      "name": "Oxytocin Acetate",
+      "kind": "peptide",
+      "cls": "Nonapeptide hormone",
+      "pathway": "reproductive",
+      "pathway_no": "07",
+      "pathway_name": "Reproductive",
+      "variants": [
+        {
+          "sku": "oxy10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2700000,
+          "cold": true,
+          "available": 9
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "pt-141",
+      "name": "PT-141",
+      "kind": "peptide",
+      "cls": "Melanocortin agonist (Bremelanotide)",
+      "pathway": "reproductive",
+      "pathway_no": "07",
+      "pathway_name": "Reproductive",
+      "variants": [
+        {
+          "sku": "pt141",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2300000,
+          "cold": true,
+          "available": 16
+        }
+      ],
+      "synonyms": [
+        "Bremelanotide"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "dsip",
+      "name": "DSIP",
+      "kind": "peptide",
+      "cls": "Delta Sleep-Inducing Peptide",
+      "pathway": "longevity",
+      "pathway_no": "08",
+      "pathway_name": "Longevity",
+      "variants": [
+        {
+          "sku": "dsip5",
+          "dose": "5 mg",
+          "content": "Vial + pen",
+          "price_idr": 1900000,
+          "cold": true,
+          "available": 23
+        },
+        {
+          "sku": "dsip10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2300000,
+          "cold": true,
+          "available": 8
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "epithalon",
+      "name": "Epithalon",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "longevity",
+      "pathway_no": "08",
+      "pathway_name": "Longevity",
+      "variants": [
+        {
+          "sku": "epi50",
+          "dose": "50 mg",
+          "content": "Vial + pen",
+          "price_idr": 3100000,
+          "cold": true,
+          "available": 0
+        }
+      ],
+      "synonyms": [
+        "Epitalon",
+        "Epitalon",
+        "Epithalone"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "foxo4-dri",
+      "name": "FOXO4-DRI",
+      "kind": "peptide",
+      "cls": "D-retro-inverso FOXO4 peptide",
+      "pathway": "longevity",
+      "pathway_no": "08",
+      "pathway_name": "Longevity",
+      "variants": [
+        {
+          "sku": "foxo10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 4600000,
+          "cold": true,
+          "available": 22
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "glutathione",
+      "name": "Glutathione",
+      "kind": "peptide",
+      "cls": "Tripeptide antioxidant",
+      "pathway": "longevity",
+      "pathway_no": "08",
+      "pathway_name": "Longevity",
+      "variants": [
+        {
+          "sku": "gluta1500",
+          "dose": "1500 mg",
+          "content": "Vial + pen",
+          "price_idr": 2300000,
+          "cold": true,
+          "available": 7
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "humanin",
+      "name": "Humanin",
+      "kind": "peptide",
+      "cls": "Mitochondrial-derived 24-amino-acid peptide",
+      "pathway": "longevity",
+      "pathway_no": "08",
+      "pathway_name": "Longevity",
+      "variants": [
+        {
+          "sku": "huma10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 4000000,
+          "cold": true,
+          "available": 3
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "nad-plus",
+      "name": "NAD+",
+      "kind": "peptide",
+      "cls": "Redox coenzyme",
+      "pathway": "longevity",
+      "pathway_no": "08",
+      "pathway_name": "Longevity",
+      "variants": [
+        {
+          "sku": "nad500",
+          "dose": "500 mg",
+          "content": "Vial + pen",
+          "price_idr": 2300000,
+          "cold": true,
+          "available": 21
+        },
+        {
+          "sku": "nad1000",
+          "dose": "1000 mg",
+          "content": "Vial + pen",
+          "price_idr": 3700000,
+          "cold": true,
+          "available": 6
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "ss-31",
+      "name": "SS-31",
+      "kind": "peptide",
+      "cls": "Tetrapeptide (elamipretide)",
+      "pathway": "longevity",
+      "pathway_no": "08",
+      "pathway_name": "Longevity",
+      "variants": [
+        {
+          "sku": "ss31",
+          "dose": "50 mg",
+          "content": "Vial + pen",
+          "price_idr": 4000000,
+          "cold": true,
+          "available": 13
+        }
+      ],
+      "synonyms": [
+        "Elamipretide"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "bronchogen",
+      "name": "Bronchogen",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide (Ala-Glu-Asp-Leu)",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "broncho20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 20
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "cardiogen",
+      "name": "Cardiogen",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "cardio20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 27
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "cartalax",
+      "name": "Cartalax",
+      "kind": "peptide",
+      "cls": "Peptide bioregulator",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "cartalax20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3500000,
+          "cold": true,
+          "available": 12
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "chonluten",
+      "name": "Chonluten",
+      "kind": "peptide",
+      "cls": "Khavinson tripeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "chonlu20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 19
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "cortagen",
+      "name": "Cortagen",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "cortagen20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 26
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "crystagen",
+      "name": "Crystagen",
+      "kind": "peptide",
+      "cls": "Khavinson tripeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "crysta20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 11
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "livagen",
+      "name": "Livagen",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "livagen20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 18
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "ovagen",
+      "name": "Ovagen",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "ovagen20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 25
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "pancragen",
+      "name": "Pancragen",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "pancra20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 10
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "prostamax",
+      "name": "Prostamax",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "prosta20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 17
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "testagen",
+      "name": "Testagen",
+      "kind": "peptide",
+      "cls": "Khavinson tetrapeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "testagen20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 24
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "vesugen",
+      "name": "Vesugen",
+      "kind": "peptide",
+      "cls": "Khavinson tripeptide",
+      "pathway": "bioregulators",
+      "pathway_no": "09",
+      "pathway_name": "Bioregulators",
+      "variants": [
+        {
+          "sku": "vesugen20",
+          "dose": "20 mg",
+          "content": "Vial + pen",
+          "price_idr": 3300000,
+          "cold": true,
+          "available": 9
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "red-light-therapy-mask",
+      "name": "Red Light Therapy Mask",
+      "kind": "device",
+      "cls": null,
+      "pathway": "therapy",
+      "pathway_no": "10",
+      "pathway_name": "Therapy",
+      "variants": [
+        {
+          "sku": "mask",
+          "dose": "Face - LED array",
+          "content": "Device",
+          "price_idr": 2400000,
+          "cold": false,
+          "available": 3
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "red-light-therapy-mat",
+      "name": "Red Light Therapy Mat",
+      "kind": "device",
+      "cls": null,
+      "pathway": "therapy",
+      "pathway_no": "10",
+      "pathway_name": "Therapy",
+      "variants": [
+        {
+          "sku": "mat",
+          "dose": "Full-body - 660 + 850 nm",
+          "content": "Device",
+          "price_idr": 5900000,
+          "cold": false,
+          "available": 2
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "leg-compression-system",
+      "name": "Leg Compression System",
+      "kind": "device",
+      "cls": null,
+      "pathway": "therapy",
+      "pathway_no": "10",
+      "pathway_name": "Therapy",
+      "variants": [
+        {
+          "sku": "legs",
+          "dose": "660 + 850 nm - Pair",
+          "content": "Device",
+          "price_idr": 6500000,
+          "cold": false,
+          "available": 2
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "performance-tee",
+      "name": "Performance Tee",
+      "kind": "apparel",
+      "cls": null,
+      "pathway": "apparel",
+      "pathway_no": "11",
+      "pathway_name": "Apparel",
+      "variants": [
+        {
+          "sku": "tee",
+          "dose": "Dry-knit - Unisex",
+          "content": "Apparel",
+          "price_idr": 450000,
+          "cold": false,
+          "available": 27
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "training-hoodie",
+      "name": "Training Hoodie",
+      "kind": "apparel",
+      "cls": null,
+      "pathway": "apparel",
+      "pathway_no": "11",
+      "pathway_name": "Apparel",
+      "variants": [
+        {
+          "sku": "hoodie",
+          "dose": "Heavyweight - Unisex",
+          "content": "Apparel",
+          "price_idr": 950000,
+          "cold": false,
+          "available": 38
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "logo-cap",
+      "name": "Logo Cap",
+      "kind": "apparel",
+      "cls": null,
+      "pathway": "apparel",
+      "pathway_no": "11",
+      "pathway_name": "Apparel",
+      "variants": [
+        {
+          "sku": "cap",
+          "dose": "Adjustable",
+          "content": "Accessory",
+          "price_idr": 350000,
+          "cold": false,
+          "available": 45
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "gym-duffel",
+      "name": "Gym Duffel",
+      "kind": "apparel",
+      "cls": null,
+      "pathway": "apparel",
+      "pathway_no": "11",
+      "pathway_name": "Apparel",
+      "variants": [
+        {
+          "sku": "duffel",
+          "dose": "45 L",
+          "content": "Accessory",
+          "price_idr": 850000,
+          "cold": false,
+          "available": 9
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    }
+  ],
+  "pathways": [
+    {
+      "slug": "metabolic",
+      "no": "01",
+      "kind": "peptide",
+      "name": "Metabolic",
+      "summary": "Incretin-pathway and metabolic research compounds.",
+      "sort": 1
+    },
+    {
+      "slug": "growth-factors",
+      "no": "02",
+      "kind": "peptide",
+      "name": "Growth Factors",
+      "summary": "Secretagogues and growth-factor analogues for somatotropic-axis research.",
+      "sort": 2
+    },
+    {
+      "slug": "tissue-repair",
+      "no": "03",
+      "kind": "peptide",
+      "name": "Tissue Repair",
+      "summary": "Cytoprotective and regenerative peptides for tissue-repair research models.",
+      "sort": 3
+    },
+    {
+      "slug": "neuro",
+      "no": "04",
+      "kind": "peptide",
+      "name": "Neuro",
+      "summary": "Neuroactive peptides for cognition and neuroprotection research.",
+      "sort": 4
+    },
+    {
+      "slug": "cellular-energy",
+      "no": "05",
+      "kind": "peptide",
+      "name": "Cellular Energy",
+      "summary": "Mitochondrial and energy-metabolism research compounds.",
+      "sort": 5
+    },
+    {
+      "slug": "immune",
+      "no": "06",
+      "kind": "peptide",
+      "name": "Immune",
+      "summary": "Thymic and immunomodulatory research peptides.",
+      "sort": 6
+    },
+    {
+      "slug": "reproductive",
+      "no": "07",
+      "kind": "peptide",
+      "name": "Reproductive",
+      "summary": "Gonadotropins and hormonal-axis research compounds.",
+      "sort": 7
+    },
+    {
+      "slug": "longevity",
+      "no": "08",
+      "kind": "peptide",
+      "name": "Longevity",
+      "summary": "Cellular-ageing and redox research compounds.",
+      "sort": 8
+    },
+    {
+      "slug": "bioregulators",
+      "no": "09",
+      "kind": "peptide",
+      "name": "Bioregulators",
+      "summary": "Short peptide bioregulators of the Khavinson family.",
+      "sort": 9
+    },
+    {
+      "slug": "therapy",
+      "no": "10",
+      "kind": "device",
+      "name": "Therapy",
+      "summary": "Clinical red-light therapy and recovery hardware.",
+      "sort": 10
+    },
+    {
+      "slug": "apparel",
+      "no": "11",
+      "kind": "apparel",
+      "name": "Apparel",
+      "summary": "Performance wear and everyday carry.",
+      "sort": 11
+    }
+  ],
+  "tiers": [
+    {
+      "days": 30,
+      "pct": 15
+    },
+    {
+      "days": 60,
+      "pct": 12
+    },
+    {
+      "days": 90,
+      "pct": 10
+    }
+  ],
+  "verification": {
+    "method": "HPLC / MS",
+    "purity_threshold_pct": 98
+  },
+  "ppn": 11,
+  "delivery": {
+    "per": 100000,
+    "cap": 300000,
+    "zone": "Jabodetabek",
+    "eta": 2
+  },
+  "sla": "one working day",
+  "cutoff": {
+    "cold": "15.00",
+    "ambient": "17.00"
+  },
+  "whatsapp": "628128573396"
+}

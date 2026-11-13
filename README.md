@@ -1,9 +1,36 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="business-proposal/assets/logo/axiom-wordmark-white.svg">
+    <img src="business-proposal/assets/logo/axiom-wordmark-black.svg" alt="AXIOM" width="360">
+  </picture>
+</p>
+
 # AXIOM — one catalogue, three surfaces
 
 The AXIOM digital property as one Next.js 15 application over one Postgres database: the public
 site (compound guide, price list, request), the client Account and the ops/owner Console. Built
 from `web-app/axiom-platform-master-prompt.md` together with `web-app/axiom-web-app-master-prompt.md`,
 matching `web-app/mockup/index.html`. Decisions and deviations are recorded in `docs/DECISIONS.md`.
+
+Around the app, the same repository holds the brand and everything printed or published under
+it. Two documents apply to all of it:
+
+- **[DESIGN.md](DESIGN.md)**: the design language. Colour tokens, type, space, motion, the logo
+  mark, the wordmark and the rules for using them.
+- **[SOUL.md](SOUL.md)**: who AXIOM is, its voice, its lexicon and the research-use restraint
+  that every surface inherits, plus the open tensions that still need a decision.
+
+| Folder | What it is |
+| --- | --- |
+| `src/`, `supabase/`, `messages/` | The web app: public site, client Account, ops/owner Console |
+| `storefront/` | The stone storefront, a static demo shop with an EN / ID switch |
+| `dosage-guide/` | The compound guide and the package card whose QR opens it, live on Vercel |
+| `business-proposal/` | The A4 price list, the order form, the proposal and the logo files |
+| `invoice/` | A standalone A4 invoice builder, also published as a Claude Artifact |
+| `stickers/` | The 50 × 30 mm vial label: proof, A4 gang sheet and label builder |
+| `brand-book/`, `company-profile/` | The brand book v1.0 and the one-page company profile |
+| `web-app/` | The master prompts and the HTML mockup the app was built from |
+| `docs/` | Decisions, catalogue notes and design specs |
 
 ## One command
 
@@ -27,11 +54,15 @@ drops and re-creates the local database. With Docker, `supabase start` works the
 supabase/migrations/   0001 schema · 0002 functions, triggers, views · 0003 row-level security
                        0004 security fixes · 0005 acknowledgement state · 0006 basket uniqueness
                        0007 site ownership · 0008 workflow logic (linking, refunds, lead pipeline)
+                       0009 lot verification (the public per-lot CoA lookup)
 supabase/seed.sql      THE catalogue — the only file that may carry a price, a name or a dose
 supabase/seed_dev.sql  development fixtures, walked through the real functions
-src/app/[locale]/(public)   the site: /, /compounds, /price-list, /standard, /process, /faq, /request …
-src/app/[locale]/(app)/console   dashboard · orders & quotes · catalogue & stock · pricing · invoices · clients · pipeline · content · settings
-src/app/[locale]/(app)/account   needs you / in progress / earlier · shop · basket · orders · quotes · saved · profile
+src/app/[locale]/(public)   the site: /, /compounds, /products, /price-list, /standard, /process, /verify,
+                            /how-to-read-a-coa, /faq, /request, /contact, /legal, /terms, /privacy, /sign-in
+src/app/[locale]/(app)/console   dashboard · orders & quotes · catalogue & stock · pricing · invoices · clients ·
+                                 leads · flow · content · notifications · search · settings
+src/app/[locale]/(app)/account   needs you / in progress / earlier · shop · basket · orders · quotes · reorder ·
+                                 saved · notifications · search · profile
 src/lib/db.ts          one pool; every request is a transaction that adopts the caller's role and claims (RLS applies)
 src/lib/domain/        next-action, cut-off, dates — one implementation per rule
 src/components/document/  the one A4 document template: invoice, credit note, quote, price list
@@ -40,6 +71,39 @@ scripts/gates/         the gate suite (sql · copy lint · greps · i18n · refe
 tests/e2e/             the browser gates (Playwright)
 messages/{id,en}/      catalogues per surface, merged at request time; Indonesian is the default locale
 ```
+
+## Alongside the app
+
+Print and brand collateral, set by hand and kept in the repository:
+
+```
+business-proposal/axiom-pricelist-print.html    the A4 price list — 79 lots over 9 pathways, two pages
+business-proposal/AXIOM-Price-List.pdf          its render; edit the HTML, never the PDF
+business-proposal/order-form/                   the fillable A4 order form (build.cjs, then add-fields.py)
+business-proposal/axiom-peptide-pricelist.html  the internal sheet — cost basis and margin per lot
+business-proposal/assets/logo/                  the wordmark and logo-mark masters (SVG and PNG)
+brand-book/ · company-profile/                  brand book and the one-page company profile
+stickers/                                       the vial label and its builder (see below)
+docs/                                           DECISIONS.md, catalogue notes, design specs
+```
+
+The price list is edited in its HTML and re-rendered with headless Chromium:
+
+```
+chromium --headless --no-pdf-header-footer \
+  --print-to-pdf=business-proposal/AXIOM-Price-List.pdf \
+  business-proposal/axiom-pricelist-print.html
+```
+
+The header badge reads **For research use only**; the full research-use statement — in-vitro only,
+not for human or veterinary use, no dosing guidance — sits at the foot of both pages. The order form
+draws its fonts and wordmark from the price-list HTML and its compound list from the price-list PDF,
+so rebuild it after the sheet changes.
+
+These sheets carry prices in their own markup, outside the one-catalogue rule below: they are a
+printed snapshot, reconciled by hand against `supabase/seed.sql`, which stays the catalogue of record
+for every surface the app serves. The internal margin sheet still carries the earlier 52-lot, 8-pathway
+list — it needs a cost basis for the 27 lots added since.
 
 ## The rules the code enforces
 
@@ -100,20 +164,71 @@ On the clean sheet, a first sale runs in this order, each step in the Console:
 4. **New quote → send → accept** — acceptance issues the invoice; **mark paid** moves it to
    packing; dispatch and delivery close it.
 
-## The AXIOM wordmark
+## The brand: design language, logo mark and wordmark
+
+The full system is in [DESIGN.md](DESIGN.md) and the voice is in [SOUL.md](SOUL.md). The short
+version:
+
+- **Design language.** Warm near-black onyx `#070605`, bone ink `#F2EDE5` and one accent,
+  bronze `#C88A4E`, held to 8 % of any surface or less. Hairline rules are the texture. Type is
+  Jost for display and Inter for everything else, with tabular figures throughout and sentence-
+  case headlines. Motion uses one ease, `cubic-bezier(.16,1,.3,1)`, with no bounce and a static
+  equivalent under reduced motion. Print reverses to paper `#F2EDE5` with deep bronze `#7C4C24`.
+  The tokens live in `src/app/globals.css`, and components never carry a literal hex. The stone
+  storefront is the one variant, on warm ivory and charcoal.
+- **Voice.** Proof before promise, short declaratives, no exclamation marks and no avoid-list
+  words (miracle, guaranteed, cure, anti-aging, stack, cycle, boost, best / #1). Peptides are
+  Research Use Only, in-vitro, and the disclaimer is stated wherever they appear.
+
+### The wordmark
+
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="business-proposal/assets/logo/axiom-wordmark-white.svg">
+    <img src="business-proposal/assets/logo/axiom-wordmark-black.svg" alt="The AXIOM wordmark" width="480">
+  </picture>
+</p>
 
 One vector path, drawn on a 582 × 70 grid, with every stroke 11.8 units wide: the A's legs,
 the four arms of the notched X, the I, the O all the way round, and the M's stems and
-diagonals. The O keeps its overshoot (0–70 against 2–68). The master file is
-`business-proposal/assets/logo/axiom-wordmark-white.svg` (bone `#F2EDE5`, for dark grounds).
+diagonals. The A has a flat apex, and the O keeps its overshoot (0–70 against 2–68). The X's
+arms run through its centre and end square-cut, leaving a small square opening in the middle.
+It comes in bone `#F2EDE5` for dark grounds and onyx `#070605` for light ones.
 
-The same path is inlined, byte for byte, in `src/components/shell/sprite-svg.ts` (the web app's
-`#wm` symbol), `web-app/mockup/index.html`, `business-proposal/axiom-pricelist-print.html` (which
-`order-form/build.cjs` reads it from), `invoice/axiom-invoice-a4.html`, the three pages in
-`stickers/`, and `dosage-guide/print/card-print.html`; `dosage-guide/assets/` keeps a copy of
-the SVG. Change the path in all of them together. The committed PDFs and the raster lockups
-(`brand-book/logo.png`, the two PNGs in `company-profile/assets/`,
+### The logo mark
+
+<p>
+  <img src="business-proposal/assets/logo/axiom-x-symbol-bronze.svg" alt="The AXIOM logo mark: the notched X in bronze" width="120">
+</p>
+
+The notched-X symbol: the X's four arms on their own, on a 297 × 243 grid, in bronze `#C88A4E`.
+It is for icons, stickers and avatars, and the guide's home-screen and tab icons are drawn from
+it. The lockups with the HUMAN PERFORMANCE tagline exist only as rasters (`brand-book/logo.png`,
+`company-profile/assets/axiom-logo-white.png`). Clear space around either mark equals the cap
+height of the X. Don't stretch the marks, embolden them, add gradients or recolour them.
+
+| File in `business-proposal/assets/logo/` | Mark | Use on |
+| --- | --- | --- |
+| `axiom-wordmark-white.svg` / `.png` | Wordmark, bone | Dark grounds (the master) |
+| `axiom-wordmark-black.svg` / `.png` | Wordmark, onyx | Light grounds |
+| `axiom-x-symbol-bronze.svg` / `.png` | Notched-X logo mark, bronze | Icons, stickers, avatars |
+
+### Changing the wordmark
+
+The master path is inlined, byte for byte, in `src/components/shell/sprite-svg.ts` (the web
+app's `#wm` symbol), `web-app/mockup/index.html`, the four sheets in `business-proposal/`
+(`axiom-pricelist-print.html`, which `order-form/build.cjs` reads it from, plus
+`axiom-peptide-pricelist.html`, `axiom-business-proposal.html` and `axiom-gtm-strategy.html`),
+`invoice/axiom-invoice-a4.html`, the three pages in `stickers/` and
+`dosage-guide/print/card-print.html`. `dosage-guide/assets/` keeps a copy of the SVG. Change the
+path in all of them together. The committed PDFs and raster files (`brand-book/logo.png`, the
+two PNGs in `company-profile/assets/`, the PNGs beside the SVGs and
 `dosage-guide/print/axiom-card-preview.png`) carry the same drawing and need re-exporting too.
+
+Two exceptions. Thermal labels use a heavier copy, `WORDMARK_THERMAL` in `stickers/builder.html`,
+drawn at 12.5 units a stroke for 203 dpi. And the storefront keeps the wordmark drawing from the
+reference storefront it was built from, which is not the master path. A change to the master
+does not reach the storefront until that drawing is replaced.
 
 ## Compound guide and pen card
 
@@ -124,6 +239,36 @@ per lot — with cadence, timing, documented doses, a tap-to-pick pen calculator
 Apple and Google Calendar export, and the evidence tier stated for every dosing figure. It is
 deployed as its own Vercel project with Root Directory `dosage-guide` and no build step; prices
 live only in `dosage-guide/src/`, which is never published. Details in `dosage-guide/README.md`.
+
+## Stone storefront
+
+`storefront/` is a static HTML/CSS/JavaScript shop with hash routing and Python build scripts.
+It needs no Node build. Its pages are warm ivory with charcoal stone sections and bronze accents.
+There are 72 products (65 compounds, three devices and four apparel lines), each with its own stone
+photograph, across 174 page templates. The hero's three pens move independently with scroll and
+the cursor over a still stone background. An EN / ID switch shows every route in Bahasa
+Indonesia, and on phones a buy bar follows each product page. Sign-in, inventory, payment and
+order submission are demo features that connect to nothing.
+
+```
+cd storefront
+python3 build.py && python3 verify_stone.py   # rebuild the generated files, check every photograph
+python3 package.py                            # AXIOM-storefront.html (standalone) and the ZIP
+python3 serve.py                              # http://127.0.0.1:8765
+```
+
+Edit `home-v2.html`, `stone-v3.css`, `design.js`, `pages.json`, `data.json` and `i18n-id.json`,
+never the generated files. The storefront is also a private Claude Artifact, republished with
+`python3 artifact.py`. Its working rules are in `storefront/CLAUDE.md` and the overview is in
+`storefront/README.md`.
+
+## Vial labels
+
+`stickers/` holds the 50 × 30 mm wrap label for pen-format peptides: a design proof
+(`index.html`), a production A4 gang sheet and a builder (`builder.html`). The builder queues any
+compound and strength and outputs an A4 sheet with optional vendor die lines, a thermal roll
+tuned for the NIIMBOT B31 at 203 dpi, a PDF with one label per page, or 400 × 240 px images for
+the NIIMBOT phone app. Every measurement and decision is in `stickers/design.md`.
 
 ## Standalone invoice builder
 
@@ -138,12 +283,40 @@ devices and apparel, 84 entries — generated from `invoice/AXIOM-Price-List-v1.
 is committed beside it. Shipping is Rp 100.000 per 3 units at an address, capped at
 Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to*, route each
 line item to one, and each carries its own amount, calculated by default and overridable.
-`invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to.
+`invoice/AXIOM-Invoice-Template.pdf` is what its default data prints to. The last sheet has the
+storefront's dark stone ridge (`storefront/assets/stone-dark.webp`) in its bottom-left corner.
+It is confined to the space below the payment block, shrinks as that space fills, and is
+replaced by the plain glow when the page is full.
+
+The builder is also published as a private Claude Artifact:
+https://claude.ai/artifact/9ZQdDs9TLJeQRQep5KSFyz. Artifacts can't open the print dialog, so
+there *Download PDF* draws the sheets in the page (html2canvas and jsPDF from cdnjs) and saves
+the file through the Artifact's `downloads` capability. That PDF is an image, so its text can't
+be selected. For a vector PDF, open the HTML file in Chrome and use *Save as PDF*. To republish
+after a change, run `python3 invoice/artifact.py`. It writes the page without its document
+skeleton to `invoice/artifact/index.html` (ignored by git); publish that file to the same URL
+with `downloads` declared.
+
+*Import order form PDF* (or dropping the PDF on the page) fills an invoice from a client's
+filled-in `business-proposal/AXIOM-Order-Form.pdf`. It reads the form's fields, so it handles
+forms filled on an iPhone, in Preview or in Acrobat, but not a printed-and-scanned one. Name,
+phone and address become the client, and each order row is matched to a catalogue lot by name
+and amount. The panel lists anything it had to guess or couldn't place, such as a size that isn't
+sold, an unknown compound or a missing quantity. Those rows go in at Rp 0 to be fixed by hand.
+The file is read in the browser and never uploaded.
 
 This duplicates what `src/components/console/invoices/` and `src/lib/documents/` now do inside
 the app, and its catalogue is a second copy of prices that `supabase/seed.sql` owns, as are its
 delivery rates against the platform's per-consignment function. Treat the database as
 authoritative; retire this file once the Console covers the offline case.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every pull request. It migrates and seeds Postgres 16, then
+runs the typecheck, copy lint, greps, bilingual check, SQL and reference gates, the build and
+the Playwright gates. For the storefront, it fails if a rebuild changes the committed generated
+files, then runs the hero, Indonesian and basket checks against the served site and the
+standalone file.
 
 ## Production
 
