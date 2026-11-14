@@ -4,6 +4,8 @@
     "ipamorelin-plus-tesamorelin": "OCR omitted the name; visual inspection confirmed both names and 18 mg.",
     "cjc-1295-no-dac-plus-ipamorelin": "Existing approved image uses the abbreviated name CJC-1295 + Ipamorelin.",
     "vip-vasoactive-intestinal-peptide": "Regenerated on September 15; visual review confirms Vasoactive Intestinal Peptide, 10 mg and dial 0.",
-    "klow-c-klow-plus-cartalax": "Relabelled locally from the approved KLOW photograph on November 14; visual review confirms KLOW-C (KLOW + Cartalax), 100 mg and dial 0."
+    "klow-c-klow-plus-cartalax": "Relabelled locally from the approved KLOW photograph on November 14; visual review confirms KLOW-C (KLOW + Cartalax), 100 mg and dial 0.",
+    "nad-plus": "QTY relabelled locally from 500 mg to 1000 mg on November 14 (tools/relabel_qty.py), when the 500 mg lot left the catalogue; visual review confirms NAD+, 1000 mg and dial 0.",
+    "cerebrolysin": "QTY relabelled locally from 80 mg to 60 mg on November 14 (tools/relabel_qty.py), to match the supplier sheet; visual review confirms Cerebrolysin, 60 mg and dial 0."
   }
 }

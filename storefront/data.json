@@ -256,7 +256,7 @@
           "sku": "ipa10",
           "dose": "10 mg",
           "content": "Vial + pen",
-          "price_idr": 2500000,
+          "price_idr": 2700000,
           "cold": true,
           "available": 15
         }
@@ -648,8 +648,8 @@
       "pathway_name": "Neuro",
       "variants": [
         {
-          "sku": "cere80",
-          "dose": "80 mg",
+          "sku": "cere60",
+          "dose": "60 mg",
           "content": "Vial + pen",
           "price_idr": 2700000,
           "cold": true,
@@ -1020,7 +1020,7 @@
           "sku": "hmg",
           "dose": "75 IU",
           "content": "Vial + pen",
-          "price_idr": 2400000,
+          "price_idr": 2500000,
           "cold": true,
           "available": 10
         }
@@ -1227,7 +1227,7 @@
           "sku": "huma10",
           "dose": "10 mg",
           "content": "Vial + pen",
-          "price_idr": 4000000,
+          "price_idr": 3500000,
           "cold": true,
           "available": 3
         }
@@ -1244,14 +1244,6 @@
       "pathway_no": "08",
       "pathway_name": "Longevity",
       "variants": [
-        {
-          "sku": "nad500",
-          "dose": "500 mg",
-          "content": "Vial + pen",
-          "price_idr": 2300000,
-          "cold": true,
-          "available": 21
-        },
         {
           "sku": "nad1000",
           "dose": "1000 mg",

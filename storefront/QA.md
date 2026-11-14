@@ -60,3 +60,10 @@
 - Its photograph is the approved KLOW photograph relabelled locally (`tools/relabel_klow_c.py`): only the name and quantity were erased and redrawn; visual review confirms KLOW-C (KLOW + Cartalax), 100 mg and dial 0.
 - No product is sold out: TB-500, Thymosin Alpha-1 and Epithalon now carry stock (12, 8 and 10), and their cards, buy boxes and compound rows use the in-stock markup. No template carries "Sold out", "None available" or a notify form.
 - `verify_stone.py` passes for 73 products; `qa/check-basket.cjs`, `qa/check-i18n.cjs` (172 routes, no English left) and `qa/check-hero.cjs` pass on the served site.
+
+## Supplier sheet update — November 14
+
+- Ipamorelin 10 mg Rp 2.700.000, HMG 75 IU Rp 2.500.000 and Humanin 10 mg Rp 3.500.000 (back on the 48% formula after their supplier costs moved); cards, product pages and price list follow, with plan savings Rp 405.000, Rp 375.000 and Rp 525.000.
+- Cerebrolysin is a 60 mg lot (SKU `cere60`), as on the supplier sheet. NAD+ 500 mg is withdrawn: NAD+ is a single 1000 mg lot at Rp 3.700.000, so its buy box has no size picker, its card no "from", and the guide counts read 66 compounds · 79 lots, Longevity 7 compounds · 8 lots, price list 86 lots.
+- The NAD+ and Cerebrolysin photographs now read 1000 mg and 60 mg: only the QTY figure was redrawn (`tools/relabel_qty.py`), name and pen untouched. Their PNG masters in Git LFS still carry the old figures; the WebP files are the delivery copies.
+- `verify_stone.py`, `qa/check-i18n.cjs` (no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass.

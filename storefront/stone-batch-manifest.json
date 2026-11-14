@@ -134,7 +134,7 @@
   {
     "slug": "cerebrolysin",
     "name": "Cerebrolysin",
-    "dose": "80 mg",
+    "dose": "60 mg",
     "kind": "peptide"
   },
   {
@@ -290,7 +290,7 @@
   {
     "slug": "nad-plus",
     "name": "NAD+",
-    "dose": "500 mg",
+    "dose": "1000 mg",
     "kind": "peptide"
   },
   {

@@ -247,7 +247,7 @@
  {
   "name": "Cerebrolysin",
   "sizes": [
-   "80"
+   "60"
   ],
   "units": [
    "mg"
@@ -492,7 +492,6 @@
  {
   "name": "NAD+",
   "sizes": [
-   "500",
    "1000"
   ],
   "units": [

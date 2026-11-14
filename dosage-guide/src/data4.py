@@ -73,7 +73,7 @@ dict(slug="cerebrolysin", name="Cerebrolysin", cat="Brain & Mood",
             "Approved for stroke recovery and dementia where it's registered.",
             "One of the few things here with decades of clinical use behind it.",
             "Studied for traumatic brain injury too."],
-  sizes=[(80,"mg",2700000)], dose=5, unit="mg",
+  sizes=[(60,"mg",2700000)], dose=5, unit="mg",
   storage=FRIDGE, cautions=["Made from animal brain tissue — allergic reactions are possible.",
     "Not approved in the US or most of Western Europe.","Should be given by someone medically trained."]),
 

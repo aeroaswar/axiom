@@ -149,7 +149,7 @@ begin
   q := axiom.new_quote(pra, jsonb_build_array(jsonb_build_object('sku','cjc20','qty',1), jsonb_build_object('sku','bpc10','qty',3)));
 
   -- Aksara (Bali, rate pending): a request the Console has yet to price
-  perform axiom.request_quote(aks, jsonb_build_array(jsonb_build_object('sku','mots10','qty',2), jsonb_build_object('sku','nad500','qty',1)));
+  perform axiom.request_quote(aks, jsonb_build_array(jsonb_build_object('sku','mots10','qty',2), jsonb_build_object('sku','nad1000','qty',1)));
 
   -- Senopati (lapsed): apparel only, one awaiting payment and one cancelled
   q := axiom.new_quote(sen, jsonb_build_array(jsonb_build_object('sku','tee','qty',3), jsonb_build_object('sku','hoodie','qty',2)));

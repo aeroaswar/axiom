@@ -149,7 +149,7 @@ font-size alone leaves the letter-spacing proportionally too wide and the type f
 `autofit()` walks each band, and while it overflows its measure, steps `--k` down by `0.02` to a
 floor of **`0.48`**, warning to the console if it still does not fit.
 
-Measured in `builder.html` against the longest names in the 81-compound catalogue (the same in
+Measured in `builder.html` against the longest names in the 80-compound catalogue (the same in
 A4 and thermal mode):
 
 | Compound | `--k` |
