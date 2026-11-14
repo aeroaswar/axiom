@@ -128,6 +128,23 @@ dict(slug="adamax", name="Adamax", cat="Brain & Mood",
   storage=FRIDGE_LIGHT, cautions=["Much less studied than Semax, which is itself barely studied outside Russia.",
     "Research use only."]),
 
+
+dict(slug="adamax-1032-da", name="Adamax 1032 Da", cat="Brain & Mood",
+  what="Adamax as the supplier lists its 1032 Da form, sold as its own lot. A modified version of Semax, built to last longer and hit harder. Newer and much less studied than the original.",
+  cls="Modified ACTH(4-10) / Semax analogue", half="Longer than Semax", route="Up the nose or under the skin",
+  cadence="daily", days=[1,1,1,1,1,0,0], perWeek=5,
+  cadNote="Daily, usually as a short course. Longer-lasting than Semax, so fewer doses a day.",
+  when="Morning", food="Either",
+  timeNote="Stimulating, like Semax — morning dosing avoids sleep problems.",
+  ev="preclinical", evNote="Very little published data even compared with Semax. No approved use and no set dose.",
+  protocol=[NOHUMAN, ("Related to","Semax","A modified version built for a longer effect."),
+            ("Status","Not approved", RESEARCH)],
+  benefits=["Longer-acting than Semax, so fewer doses.",
+            "Raises BDNF, like the rest of this family.",
+            "Studied for focus and memory."],
+  sizes=[(10,"mg",3400000)], dose=0.3, unit="mg",
+  storage=FRIDGE_LIGHT, cautions=["Much less studied than Semax, which is itself barely studied outside Russia.",
+    "Research use only."]),
 ]
 
 C5 = [

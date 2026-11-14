@@ -57,25 +57,25 @@ console.log('Gate 2: prices reconcile to the Margin Structure');
 await as(OWNER, async tx => {
   const [t] = await tx`select count(*)::int lots, sum(supplier_cost_idr)::bigint sup, sum(supplier_cost_idr + pen_cost_idr)::bigint base, sum(price_idr)::bigint sell, sum(margin_idr)::bigint margin,
     bool_and(pen_cost_idr = 600000) pen_ok from public.v_pricing where kind = 'peptide'`;
-  ok(t.lots === 80, `80 peptide lots (${t.lots})`);
-  ok(Number(t.sup) === 80_470_000, `supplier Rp 80.470.000 (${t.sup})`);
-  ok(Number(t.base) === 128_470_000, `base Rp 128.470.000 (${t.base})`);
-  ok(Number(t.sell) === 253_200_000, `selling Rp 253.200.000 (${t.sell})`);
-  ok(Number(t.margin) === 124_730_000, `margin Rp 124.730.000 (${t.margin})`);
-  ok((Number(t.margin) / Number(t.sell) * 100).toFixed(1) === '49.3', 'GM 49.3%');
-  ok((Number(t.margin) / Number(t.base) * 100).toFixed(1) === '97.1', 'markup 97.1%');
+  ok(t.lots === 81, `81 peptide lots (${t.lots})`);
+  ok(Number(t.sup) === 82_670_000, `supplier Rp 82.670.000 (${t.sup})`);
+  ok(Number(t.base) === 131_270_000, `base Rp 131.270.000 (${t.base})`);
+  ok(Number(t.sell) === 259_400_000, `selling Rp 259.400.000 (${t.sell})`);
+  ok(Number(t.margin) === 128_130_000, `margin Rp 128.130.000 (${t.margin})`);
+  ok((Number(t.margin) / Number(t.sell) * 100).toFixed(1) === '49.4', 'GM 49.4%');
+  ok((Number(t.margin) / Number(t.base) * 100).toFixed(1) === '97.6', 'markup 97.6%');
   ok(t.pen_ok, 'base − supplier = Rp 600.000 on every peptide lot');
   const [n] = await tx`select count(*)::int n from public.v_pricing where kind <> 'peptide'`;
   ok(n.n === 8, `8 devices and apparel (${n.n})`);
   const counts = await tx`select pathway_no, count(*)::int n from public.v_pricing where kind = 'peptide' group by 1 order by 1`;
-  ok(counts.map(c => c.n).join('/') === '10/11/13/9/8/2/6/9/12', `pathway counts ${counts.map(c => c.n).join('/')}`);
+  ok(counts.map(c => c.n).join('/') === '10/11/14/9/8/2/6/9/12', `pathway counts ${counts.map(c => c.n).join('/')}`);
 });
 
 console.log('Gate 2b: a lot is not a compound');
 {
   const [r] = await sql`select count(distinct p.id)::int compounds, count(v.id)::int lots, bool_and(p.is_published) published
     from public.product_variants v join public.products p on p.id = v.product_id where p.kind = 'peptide'`;
-  ok(r.lots === 80 && r.compounds < 80, `80 lots collapse to ${r.compounds} compound pages`);
+  ok(r.lots === 81 && r.compounds < 81, `81 lots collapse to ${r.compounds} compound pages`);
   ok(r.published, 'every compound page is published');
   const [dup] = await sql`select count(*)::int n from (select product_id, dose from public.product_variants group by 1,2 having count(*) > 1) d`;
   ok(dup.n === 0, 'no duplicate dose row within a compound');
@@ -124,7 +124,7 @@ await as(SENOPATI, async tx => {
   const pv = await tx`select v.price_idr from public.product_variants v join public.products p on p.id = v.product_id where p.kind = 'peptide'`;
   ok(pv.length === 0, 'lapsed account: zero peptide rows from product_variants');
   const cat = await tx`select price_idr, name from public.v_catalogue where kind = 'peptide'`;
-  ok(cat.length === 80 && cat.every(r => r.price_idr === null), `lapsed account: 80 guide rows, zero peptide prices via v_catalogue`);
+  ok(cat.length === 81 && cat.every(r => r.price_idr === null), `lapsed account: 81 guide rows, zero peptide prices via v_catalogue`);
   const app = await tx`select price_idr from public.v_catalogue where kind <> 'peptide'`;
   ok(app.length === 8 && app.every(r => r.price_idr !== null), 'lapsed account: devices and apparel still priced');
   const prod = await tx`select count(*)::int n from public.products where kind = 'peptide' and identity_en is not null`;
@@ -137,13 +137,13 @@ await as(OWNER, async tx => {
 });
 await as(REGENERA_DIRECTOR, async tx => {
   const cat = await tx`select price_idr from public.v_catalogue where kind = 'peptide'`;
-  ok(cat.length === 80 && cat.every(r => r.price_idr !== null), 'current account: 80 peptide prices');
+  ok(cat.length === 81 && cat.every(r => r.price_idr !== null), 'current account: 81 peptide prices');
   const qi = await tx`select count(*)::int n from public.quote_items`;
   ok(qi[0].n > 0, `current account reads its quote lines (${qi[0].n})`);
 });
 await as(null, async tx => {
   const cat = await tx`select price_idr from public.v_catalogue where kind = 'peptide'`;
-  ok(cat.length === 80 && cat.every(r => r.price_idr === null), 'anon (gated): guide rows without prices');
+  ok(cat.length === 81 && cat.every(r => r.price_idr === null), 'anon (gated): guide rows without prices');
   const pv = await tx`select v.id, p.kind from public.product_variants v join public.products p on p.id = v.product_id`;
   ok(pv.length === 8 && pv.every(r => r.kind !== 'peptide'), `anon reads only the 8 non-peptide variant rows directly (${pv.length})`);
 });

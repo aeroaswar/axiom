@@ -182,6 +182,15 @@
   ]
  },
  {
+  "name": "KLOW-C (KLOW + Cartalax)",
+  "sizes": [
+   "100"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
   "name": "LL-37",
   "sizes": [
    "5"
