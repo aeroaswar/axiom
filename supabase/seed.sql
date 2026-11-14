@@ -1,6 +1,6 @@
 -- AXIOM platform — the catalogue seed. THE ONLY FILE IN THE REPOSITORY THAT MAY CARRY A PRICE,
 -- A PRODUCT NAME OR A DOSE LITERAL. Reconciled to the AXIOM Margin Structure: 81 peptide lots
--- (supplier Rp 82.470.000 · base Rp 131.070.000 · selling Rp 259.400.000 · margin Rp 128.330.000)
+-- (supplier Rp 82.470.000 · base Rp 131.070.000 · selling Rp 259.600.000 · margin Rp 128.530.000)
 -- plus eight devices and apparel items whose cost is an assumption until landed cost arrives.
 -- Pathway names are research-neutral (§11). Research text is a migrated draft that never renders
 -- without a resolving reference (gate 8).
@@ -126,7 +126,7 @@ insert into public.product_variants (id, product_id, sku, dose, content, price_i
   (md5('variant:ghk100')::uuid, md5('product:GHK-Cu')::uuid, 'ghk100', '100 mg', 'Vial + pen', 5000000, true, 28),
   (md5('variant:kpv10')::uuid, md5('product:KPV')::uuid, 'kpv10', '10 mg', 'Vial + pen', 2300000, true, 29),
   (md5('variant:klow80')::uuid, md5('product:KLOW (BPC+TB+GHK+KPV)')::uuid, 'klow80', '80 mg', 'Vial + pen', 5800000, true, 30),
-  (md5('variant:klowc100')::uuid, md5('product:KLOW-C (KLOW + Cartalax)')::uuid, 'klowc100', '100 mg', 'Vial + pen', 6200000, true, 30),
+  (md5('variant:klowc100')::uuid, md5('product:KLOW-C (KLOW + Cartalax)')::uuid, 'klowc100', '100 mg', 'Vial + pen', 6400000, true, 30),
   (md5('variant:ll37')::uuid, md5('product:LL-37')::uuid, 'll37', '5 mg', 'Vial + pen', 2700000, true, 31),
   (md5('variant:pegmgf2')::uuid, md5('product:Peg MGF')::uuid, 'pegmgf2', '2 mg', 'Vial + pen', 2800000, true, 32),
   (md5('variant:snap8')::uuid, md5('product:SNAP-8')::uuid, 'snap8', '10 mg', 'Vial + pen', 2500000, true, 33),
