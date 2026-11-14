@@ -75,3 +75,14 @@
 - Hero pens grounded: the limestone (mirrored) and the three pens are one SVG picture, so the pens lean on the tall block with their dial ends on the slab at every width, with contact and cast shadows. Its edges fade into the limestone colour. Reviewed at 1440, 1024 and 390 px; hero and showcase checks pass on the served site and the standalone HTML.
 - Adamax, Selank, Semax and Selank + Semax use the supplied nasal spray photographs (1254 px, limestone set) for their cards and product pages, with new 640px card photos and PNG masters in LFS. Their presentation reads "Nasal spray" (data, product and compound guide pages, order box "Bottle size"). Their handling paragraph still describes a freeze-dried vial and needs the correct spray handling text.
 - Hero: the composited pens still read as floating, so the hero now uses the three real product photographs (Retatrutide large, MOTS-c and KLOW stacked), each linking to its product page; the large photo matches the stacked pair's height. Spray handling text for Adamax, Selank, Semax and Selank + Semax now reads "Supplied as a ready solution in a sealed spray bottle. Store refrigerated (2–8 °C), upright and protected from light; keep the cap on between uses and do not freeze." (approved by the owner). Hero and showcase checks pass on the served site and the standalone HTML (19.2 MB).
+
+## KLOW-C and full stock — November 14
+
+- KLOW-C (KLOW + Cartalax), 100 mg at Rp 6.400.000 (SKU `klowc100`), joins Tissue Repair after KLOW: catalogue card, product page, compound page, pathway list (now 12 compounds · 14 lots), price list (87 lots) and counts (66 compounds · 80 lots, 73 products, 176 templates).
+- Its photograph is the approved KLOW photograph relabelled locally (`tools/relabel_klow_c.py`): only the name and quantity were erased and redrawn; visual review confirms KLOW-C (KLOW + Cartalax), 100 mg and dial 0.
+- No product is sold out: TB-500, Thymosin Alpha-1 and Epithalon now carry stock (12, 8 and 10), and their cards, buy boxes and compound rows use the in-stock markup. No template carries "Sold out", "None available" or a notify form.
+- `verify_stone.py` passes for 73 products; `qa/check-basket.cjs`, `qa/check-i18n.cjs` (172 routes, no English left) and `qa/check-hero.cjs` pass on the served site.
+
+## KLOW-C in the showcase — November 14
+
+- Merged the base branch's KLOW-C (KLOW + Cartalax), 100 mg, into the showcase: it appears without a price in the catalogue, on its product page with Order on WhatsApp ("Hello AXIOM, I would like to order KLOW-C (KLOW + Cartalax) 100 mg.") and in the compound guide. The base's price list, Indonesian entries and basket markup stay out, as `showcase.py` removes them at build time. 148 → 150 templates, 68 → 69 products (66 compounds); the homepage link reads "View all 66 compounds".

@@ -1,0 +1,9 @@
+{
+  "slug": "klow-c-klow-plus-cartalax",
+  "source": "assets/stone-klow-bpc-plus-tb-plus-ghk-plus-kpv.png",
+  "prompt": null,
+  "method": "local relabel of the approved KLOW photograph (tools/relabel_klow_c.py): the name and quantity were erased by inpainting and redrawn in Inter Regular, narrowed to match the label face; pen, stone, light and the rest of the label are the KLOW photograph's own pixels",
+  "name": "KLOW-C (KLOW + Cartalax)",
+  "dose": "100 mg",
+  "note": "No PNG master is committed for this photograph; the WebP is the delivery file. Rerun tools/relabel_klow_c.py on the KLOW master to recreate it."
+}

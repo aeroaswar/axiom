@@ -15,14 +15,14 @@ Visit http://127.0.0.1:8765.
 ## Design and content
 
 - The homepage hero is light limestone with the product photographs of Retatrutide, MOTS-c and KLOW, each pen resting on stone; each photo opens its product page. Edit them in `home-v2.html`.
-- All 68 shop products use individual stone photographs: 65 research compounds and three devices. The same photographs appear on their product detail pages and applicable collection pages.
+- All 69 shop products use individual stone photographs: 66 research compounds and three devices. The same photographs appear on their product detail pages and applicable collection pages.
 - Compound labels retain the catalogue names and first-variant quantities. VIP was regenerated to correct its spelling.
 - The stone band fades smoothly into charcoal. The footer is plain charcoal with one small wordmark, aligned links and compact spacing.
 - No text is smaller than 11px (`build.py` raises smaller sizes in `base.css` and stops the build if a source stylesheet declares one), and text meets 4.5:1 contrast; on ivory the secondary grey is `#666259`.
 - The storefront is a showcase in English: the catalogue, product pages and the compound guide. There are no prices, basket, plans, accounts, certificates, price list or legal pages. Every product page, phone order bar and compound guide lot orders on WhatsApp with the product and size written into the message. `showcase.py` makes these changes at build time.
 - The demo notice sits in the top ribbon, never over content. On phones, product pages show an order bar with the chosen size until the order box is on screen.
 - The wordmark is the drawing from the supplied reference storefront, not the repository's master path in `../business-proposal/assets/logo/`; see `../DESIGN.md`.
-- Product names, labels and 148 templates are preserved.
+- Product names, labels and 150 templates are preserved.
 - Lean first load: the homepage ships in a 170 KB `content.js`; the other templates load from `pages/` when visited. `base.css` keeps only rules the storefront uses (510 KB → 100 KB) with its two variable fonts as separate preloaded files. The standalone HTML embeds each image once (about 19 MB, from 50 MB).
 - Product cards load a 640px photo where that is sharp enough (phones, laptops) and the full photograph on wide high-density screens; tiles show their stone colour while photos load.
 - `verify_stone.py` checks every product and all pen image markup. The build refuses to silently fall back to missing or rejected stone photographs.

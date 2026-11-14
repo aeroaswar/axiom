@@ -509,6 +509,29 @@
       "coa": []
     },
     {
+      "slug": "klow-c-klow-plus-cartalax",
+      "name": "KLOW-C (KLOW + Cartalax)",
+      "kind": "peptide",
+      "cls": "Multi-peptide blend",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "klowc100",
+          "dose": "100 mg",
+          "content": "Vial + pen",
+          "price_idr": 6400000,
+          "cold": true,
+          "available": 12
+        }
+      ],
+      "synonyms": [
+        "KLOW-C Blend"
+      ],
+      "coa": []
+    },
+    {
       "slug": "ll-37",
       "name": "LL-37",
       "kind": "peptide",
@@ -588,7 +611,7 @@
           "content": "Vial + pen",
           "price_idr": 1800000,
           "cold": true,
-          "available": 0
+          "available": 12
         }
       ],
       "synonyms": [],
@@ -957,7 +980,7 @@
           "content": "Vial + pen",
           "price_idr": 3300000,
           "cold": true,
-          "available": 0
+          "available": 8
         }
       ],
       "synonyms": [],
@@ -1139,7 +1162,7 @@
           "content": "Vial + pen",
           "price_idr": 3100000,
           "cold": true,
-          "available": 0
+          "available": 10
         }
       ],
       "synonyms": [

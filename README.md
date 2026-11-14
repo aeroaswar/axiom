@@ -244,8 +244,8 @@ live only in `dosage-guide/src/`, which is never published. Details in `dosage-g
 
 `storefront/` is a static HTML/CSS/JavaScript showcase with hash routing and Python build scripts.
 It needs no Node build. Its pages are warm ivory with charcoal stone sections and bronze accents.
-There are 68 products (65 compounds and three devices), each with its own stone
-photograph, across 148 page templates. The hero shows three product photographs
+There are 69 products (66 compounds and three devices), each with its own stone
+photograph, across 150 page templates. The hero shows three product photographs
 on light limestone. It shows the catalogue and the compound guide in
 English without prices; every order opens WhatsApp with the product and size in the message, and
 on phones an order bar follows each product page.

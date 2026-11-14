@@ -5,7 +5,7 @@ Continue the existing local AXIOM storefront in this folder. The user has approv
 ## Design requirements
 
 - Keep the authentic AXIOM wordmark, charcoal/black, warm ivory, and restrained bronze palette.
-- Every shop product uses its matching stone photograph, including its detail page. Preserve all 68 product mappings.
+- Every shop product uses its matching stone photograph, including its detail page. Preserve all 69 product mappings.
 - Preserve exact product names, labels, dial artwork, quantities, prices and existing copy unless the user requests a change.
 - Stone imagery must fade smoothly into charcoal. Avoid visible rectangular image edges.
 - The homepage manifesto band ("A higher standard for research") is limestone: `assets/stone-light.webp` on the right, fading through a solid limestone wash into the band colour, with dark text on plain stone.
@@ -100,6 +100,6 @@ The preview has shown cached files before. Check loaded script version queries a
 
 ## Current scope
 
-The site contains 148 page templates and 68 products (65 compounds and three devices). In November 2026 it became a showcase: merch, the basket, prices, plans, certificates, accounts, the price list, the Process and legal pages and the Bahasa Indonesia version were removed, and every order goes to WhatsApp (+62 812 857 3396) with the product and size in the message. `data.json` still holds prices and stock for other tools; `showcase.py` strips them from what the browser receives. Certificate data and business claims originate from the supplied reference and have not been independently verified. Public deployment and backend integrations require their own concrete task.
+The site contains 150 page templates and 69 products (66 compounds and three devices). In November 2026 it became a showcase: merch, the basket, prices, plans, certificates, accounts, the price list, the Process and legal pages and the Bahasa Indonesia version were removed, and every order goes to WhatsApp (+62 812 857 3396) with the product and size in the message. `data.json` still holds prices and stock for other tools; `showcase.py` strips them from what the browser receives. Certificate data and business claims originate from the supplied reference and have not been independently verified. Public deployment and backend integrations require their own concrete task.
 
 `AXIOM-storefront.html` is a self-contained viewing artifact. `AXIOM-storefront.zip` is a deployable static package, not a complete source handoff. Work in this full folder for access to the editable sources and build scripts.

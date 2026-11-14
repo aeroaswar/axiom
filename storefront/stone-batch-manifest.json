@@ -96,6 +96,12 @@
     "kind": "peptide"
   },
   {
+    "slug": "klow-c-klow-plus-cartalax",
+    "name": "KLOW-C (KLOW + Cartalax)",
+    "dose": "100 mg",
+    "kind": "peptide"
+  },
+  {
     "slug": "ll-37",
     "name": "LL-37",
     "dose": "5 mg",
