@@ -1,6 +1,6 @@
 -- AXIOM platform — the catalogue seed. THE ONLY FILE IN THE REPOSITORY THAT MAY CARRY A PRICE,
 -- A PRODUCT NAME OR A DOSE LITERAL. Reconciled to the AXIOM Margin Structure: 81 peptide lots
--- (supplier Rp 82.670.000 · base Rp 131.270.000 · selling Rp 259.400.000 · margin Rp 128.130.000)
+-- (supplier Rp 82.470.000 · base Rp 131.070.000 · selling Rp 259.400.000 · margin Rp 128.330.000)
 -- plus eight devices and apparel items whose cost is an assumption until landed cost arrives.
 -- Pathway names are research-neutral (§11). Research text is a migrated draft that never renders
 -- without a resolving reference (gate 8).
@@ -219,7 +219,7 @@ insert into public.variant_costs (variant_id, supplier_cost_idr, pen_cost_idr, c
   (md5('variant:ghk100')::uuid, 500000, 600000, false),
   (md5('variant:kpv10')::uuid, 600000, 600000, false),
   (md5('variant:klow80')::uuid, 1450000, 600000, false),
-  (md5('variant:klowc100')::uuid, 2200000, 600000, false),
+  (md5('variant:klowc100')::uuid, 2000000, 600000, false),
   (md5('variant:ll37')::uuid, 800000, 600000, false),
   (md5('variant:pegmgf2')::uuid, 850000, 600000, false),
   (md5('variant:snap8')::uuid, 700000, 600000, false),

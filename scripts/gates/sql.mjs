@@ -58,12 +58,12 @@ await as(OWNER, async tx => {
   const [t] = await tx`select count(*)::int lots, sum(supplier_cost_idr)::bigint sup, sum(supplier_cost_idr + pen_cost_idr)::bigint base, sum(price_idr)::bigint sell, sum(margin_idr)::bigint margin,
     bool_and(pen_cost_idr = 600000) pen_ok from public.v_pricing where kind = 'peptide'`;
   ok(t.lots === 81, `81 peptide lots (${t.lots})`);
-  ok(Number(t.sup) === 82_670_000, `supplier Rp 82.670.000 (${t.sup})`);
-  ok(Number(t.base) === 131_270_000, `base Rp 131.270.000 (${t.base})`);
+  ok(Number(t.sup) === 82_470_000, `supplier Rp 82.470.000 (${t.sup})`);
+  ok(Number(t.base) === 131_070_000, `base Rp 131.070.000 (${t.base})`);
   ok(Number(t.sell) === 259_400_000, `selling Rp 259.400.000 (${t.sell})`);
-  ok(Number(t.margin) === 128_130_000, `margin Rp 128.130.000 (${t.margin})`);
-  ok((Number(t.margin) / Number(t.sell) * 100).toFixed(1) === '49.4', 'GM 49.4%');
-  ok((Number(t.margin) / Number(t.base) * 100).toFixed(1) === '97.6', 'markup 97.6%');
+  ok(Number(t.margin) === 128_330_000, `margin Rp 128.330.000 (${t.margin})`);
+  ok((Number(t.margin) / Number(t.sell) * 100).toFixed(1) === '49.5', 'GM 49.5%');
+  ok((Number(t.margin) / Number(t.base) * 100).toFixed(1) === '97.9', 'markup 97.9%');
   ok(t.pen_ok, 'base − supplier = Rp 600.000 on every peptide lot');
   const [n] = await tx`select count(*)::int n from public.v_pricing where kind <> 'peptide'`;
   ok(n.n === 8, `8 devices and apparel (${n.n})`);
