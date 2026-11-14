@@ -39,3 +39,7 @@ All 65 research compounds, three devices and four apparel products have stone ph
 The device briefs depict a matte black LED face mask, a partially rolled quilted light therapy mat and paired leg compression boots with a controller, each on natural limestone with the same taupe studio background and AXIOM branding. These are illustrative product mockups.
 
 Method: built-in image_gen for every new photograph; no API/CLI fallback or local image compositing. Exact expansion prompts and generation source paths are in asset-records/*.json. Final files are assets/stone-{product-slug}.png and assets/stone-{product-slug}.webp. The completed queue is recorded in pending-stone-images.json.
+
+## KLOW-C — November 14
+
+KLOW-C (KLOW + Cartalax), 100 mg, is the one exception to built-in image_gen: `tools/relabel_klow_c.py` takes the approved KLOW photograph, erases the label name and quantity by inpainting, and redraws them in Inter Regular narrowed to the label face. Pen, stone, light and the rest of the label are the KLOW photograph's own pixels. Record: asset-records/klow-c-klow-plus-cartalax.json. It has no PNG master in the repository (the WebP is its delivery file); rerun the script on the KLOW master to recreate one.
