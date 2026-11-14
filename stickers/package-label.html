@@ -162,6 +162,18 @@ details.sender .fields{margin-top:12px}
 .note b{color:var(--ink);font-weight:500}
 .note code{font-size:11px;color:var(--accent-bright)}
 .empty-stage{display:grid;gap:18px}
+/* image sheet: where the host blocks downloads, the PNG is shown to press-and-hold or right-click */
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);display:grid;place-items:center;
+  padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.sheet__box{background:var(--panel);border:1px solid var(--line-2);border-radius:12px;padding:18px;
+  width:min(720px,100%);max-height:100%;overflow:auto;display:grid;gap:12px}
+.sheet__head{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.sheet__head b{font-weight:500}
+.sheet__imgs{display:grid;gap:14px}
+.sheet__imgs figure{margin:0;display:grid;gap:6px}
+.sheet__imgs img{display:block;width:100%;height:auto;background:#fff;border-radius:4px}
+[data-artifact] #printWord,[data-artifact] #printOne,[data-artifact] #printAll,[data-artifact] #printNote,[data-artifact] #printHelp{display:none !important}
+.sheet__imgs figcaption{font-size:10.5px;color:var(--muted);word-break:break-all}
 
 /* ---------- label boxes (screen preview + print pages) ----------
    A .tbox is one page of the roll at scale --z. The label itself is always
@@ -495,8 +507,8 @@ details.sender .fields{margin-top:12px}
       <h1>Package label builder</h1>
       <p class="sub">Drop the AXIOM invoice and the label fills itself — recipient, address, phone, the
         invoice number and every line with its lot size, one label per destination when the order ships to
-        several addresses. Check the flags, set the courier, and print 100 × 150 mm on the thermal printer,
-        one label per page.</p>
+        several addresses. Check the flags, set the courier, pick the label size, then save it as an image
+        for the label printer's app<span id="printWord"> or print it, one label per page</span>.</p>
     </header>
 
     <section class="empty-stage" id="emptyStage">
@@ -542,20 +554,32 @@ details.sender .fields{margin-top:12px}
 
     <div class="note">
       <b>NIIMBOT and other app-driven printers.</b> Use <b>Save PNG</b>: it writes the label as a pure
-      black-and-white image at 8 dots per mm (203 dpi), exactly the label's size — 640 × 400 px for 80 × 50.
+      black-and-white image at the printer's resolution (203 or 300 dpi), exactly the label's size.
       In the NIIMBOT app, pick the same label size, insert the image, stretch it to fill the label and print.
-      On a phone, the PNG lands in Downloads or Photos.
+      For a 50 mm-wide printer such as the B21 / B21 Pro, turn on <i>Turn 90°</i> and use 50 × 80 or 50 × 70 labels.
       <br><br>
-      <b>Printers with a computer driver.</b> Use <b>Print</b>: set the same stock, with gap sensing, in the
+      <span id="printHelp"><b>Printers with a computer driver.</b> Use <b>Print</b>: set the same stock, with gap sensing, in the
       driver, then in the print dialog <b>Paper</b> to match · <b>Scale</b> 100% · <b>Margins</b> None. Each
       label is its own page. Direct thermal is fine for a mailer — it only has to survive the trip.
-      <br><br>
+      <br><br></span>
       <b>Before it goes out.</b> Check every amber flag: a missing phone number (the invoice often has none),
       a compound the catalogue didn't recognise, a size that isn't a listed lot, or an order form whose
       research-use box wasn't ticked. Cold-chain invoices turn on <i>Keep cool</i> by themselves. The label
       prints what the fields say, not what the PDF said.
     </div>
   </main>
+</div>
+
+<div class="sheet" id="pngSheet" hidden role="dialog" aria-modal="true" aria-labelledby="pngSheetTitle">
+  <div class="sheet__box">
+    <div class="sheet__head">
+      <b id="pngSheetTitle">Save the label image</b>
+      <button class="x" id="pngSheetClose" aria-label="Close">&times;</button>
+    </div>
+    <p class="hint">On a phone, press and hold the image and choose <b>Save to Photos</b> (or Save image).
+      On a computer, right-click it and choose <b>Save image as…</b>. Then insert it in the label printer's app.</p>
+    <div class="sheet__imgs" id="pngSheetImgs"></div>
+  </div>
 </div>
 
 <script>
@@ -1470,11 +1494,44 @@ function saveBlob(blob, name){
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
+/* Published as a claude.ai artifact, the page may not print or start a download,
+   so the PNG is shown on the page to save by hand instead. */
+const ARTIFACT_MODE = !!document.querySelector('meta[name="axiom:mode"][content="artifact"]');
+const toDataURL = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(blob); });
+async function showPNGs(files){
+  const urls = await Promise.all(files.map(toDataURL));
+  $('pngSheetImgs').innerHTML = files.map((f, i) => `<figure><img src="${urls[i]}" alt="${esc(f.name)}"><figcaption>${esc(f.name)}</figcaption></figure>`).join('');
+  $('pngSheet').hidden = false;
+  $('pngSheetClose').focus();
+}
+$('pngSheetClose').addEventListener('click', () => { $('pngSheet').hidden = true; });
+$('pngSheet').addEventListener('click', e => { if (e.target === $('pngSheet')) $('pngSheet').hidden = true; });
+window.addEventListener('keydown', e => { if (e.key === 'Escape') $('pngSheet').hidden = true; });
+if (ARTIFACT_MODE) document.documentElement.dataset.artifact = '1';
 async function savePNGs(list){
   try {
     setStatus(`Drawing ${list.length} PNG${list.length > 1 ? 's' : ''}…`);
     const files = [];
     for (const o of list) files.push(new File([await labelPNG(o)], pngName(o), { type:'image/png' }));
+    if (ARTIFACT_MODE){
+      /* the viewer's own save (a download, or the share sheet in the iOS app), each confirmed;
+         where that is not offered, show the images to save by hand */
+      const dl = window.claude?.use ? await window.claude.use('downloads').catch(() => null) : null;
+      if (dl){
+        let saved = 0;
+        for (const f of files){
+          try { await dl.save({ filename: f.name, data: f }); saved++; }
+          catch (e) {
+            if (e && e.code === 'declined') break;
+            if (e && e.code === 'rate_limited'){ setStatus('A save is already waiting for your answer — finish it, then try again.', true); return; }
+            await showPNGs(files.slice(saved)); setStatus(''); return;
+          }
+        }
+        setStatus(saved ? `Saved ${saved} PNG${saved > 1 ? 's' : ''}.` : '');
+        return;
+      }
+      await showPNGs(files); setStatus(''); return;
+    }
     /* a phone hands the images to the share sheet (Save to Photos, or straight to an app) */
     if (navigator.canShare && matchMedia('(pointer:coarse)').matches && navigator.canShare({ files })){
       try { await navigator.share({ files }); setStatus(`${files.length} PNG${files.length > 1 ? 's' : ''} shared.`); return; }

@@ -196,6 +196,11 @@ connection); nothing is uploaded. Two outputs:
 - **Print**, for printers with a computer driver: one label per page, black only, at the stock's size
   (Paper to match, Scale 100%, Margins None).
 
+The same file is published as a claude.ai artifact with `<meta name="axiom:mode" content="artifact">`
+added: there the page cannot print, so Print is hidden, and *Save PNG* goes through the artifact
+`downloads` capability (a confirmed save, or the share sheet in the iOS app), falling back to showing
+the image to press-and-hold or right-click where saving is not offered.
+
 ## Standalone invoice builder
 
 `invoice/axiom-invoice-a4.html` is a self-contained, dependency-free A4 invoice builder that
