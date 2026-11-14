@@ -468,7 +468,7 @@
       "slug": "kpv",
       "name": "KPV",
       "kind": "peptide",
-      "cls": "\u03b1-MSH tripeptide",
+      "cls": "α-MSH tripeptide",
       "pathway": "tissue-repair",
       "pathway_no": "03",
       "pathway_name": "Tissue Repair",
@@ -600,7 +600,7 @@
       "slug": "tb-500",
       "name": "TB-500",
       "kind": "peptide",
-      "cls": "Thymosin \u03b24 fragment",
+      "cls": "Thymosin β4 fragment",
       "pathway": "tissue-repair",
       "pathway_no": "03",
       "pathway_name": "Tissue Repair",
@@ -629,7 +629,7 @@
         {
           "sku": "adamax10",
           "dose": "10 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 2800000,
           "cold": true,
           "available": 9
@@ -713,7 +713,7 @@
         {
           "sku": "selank10",
           "dose": "10 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 2100000,
           "cold": true,
           "available": 15
@@ -734,7 +734,7 @@
         {
           "sku": "semax10",
           "dose": "10 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 2100000,
           "cold": true,
           "available": 22
@@ -755,7 +755,7 @@
         {
           "sku": "selsem20",
           "dose": "20 mg",
-          "content": "Vial + pen",
+          "content": "Nasal spray",
           "price_idr": 3900000,
           "cold": true,
           "available": 7
@@ -925,7 +925,7 @@
       "slug": "slu-pp-332-injectable",
       "name": "SLU-PP-332 (Injectable)",
       "kind": "peptide",
-      "cls": "ERR\u03b1 agonist",
+      "cls": "ERRα agonist",
       "pathway": "cellular-energy",
       "pathway_no": "05",
       "pathway_name": "Cellular Energy",
@@ -1055,7 +1055,7 @@
       "slug": "melanotan-ii",
       "name": "Melanotan II",
       "kind": "peptide",
-      "cls": "\u03b1-MSH analogue",
+      "cls": "α-MSH analogue",
       "pathway": "reproductive",
       "pathway_no": "07",
       "pathway_name": "Reproductive",
@@ -1601,90 +1601,6 @@
       ],
       "synonyms": [],
       "coa": []
-    },
-    {
-      "slug": "performance-tee",
-      "name": "Performance Tee",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "tee",
-          "dose": "Dry-knit - Unisex",
-          "content": "Apparel",
-          "price_idr": 450000,
-          "cold": false,
-          "available": 27
-        }
-      ],
-      "synonyms": [],
-      "coa": []
-    },
-    {
-      "slug": "training-hoodie",
-      "name": "Training Hoodie",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "hoodie",
-          "dose": "Heavyweight - Unisex",
-          "content": "Apparel",
-          "price_idr": 950000,
-          "cold": false,
-          "available": 38
-        }
-      ],
-      "synonyms": [],
-      "coa": []
-    },
-    {
-      "slug": "logo-cap",
-      "name": "Logo Cap",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "cap",
-          "dose": "Adjustable",
-          "content": "Accessory",
-          "price_idr": 350000,
-          "cold": false,
-          "available": 45
-        }
-      ],
-      "synonyms": [],
-      "coa": []
-    },
-    {
-      "slug": "gym-duffel",
-      "name": "Gym Duffel",
-      "kind": "apparel",
-      "cls": null,
-      "pathway": "apparel",
-      "pathway_no": "11",
-      "pathway_name": "Apparel",
-      "variants": [
-        {
-          "sku": "duffel",
-          "dose": "45 L",
-          "content": "Accessory",
-          "price_idr": 850000,
-          "cold": false,
-          "available": 9
-        }
-      ],
-      "synonyms": [],
-      "coa": []
     }
   ],
   "pathways": [
@@ -1767,14 +1683,6 @@
       "name": "Therapy",
       "summary": "Clinical red-light therapy and recovery hardware.",
       "sort": 10
-    },
-    {
-      "slug": "apparel",
-      "no": "11",
-      "kind": "apparel",
-      "name": "Apparel",
-      "summary": "Performance wear and everyday carry.",
-      "sort": 11
     }
   ],
   "tiers": [
