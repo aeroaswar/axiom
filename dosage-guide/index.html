@@ -479,6 +479,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     var ev = window.EVIDENCE_META[c.evidence] || window.EVIDENCE_META.preclinical;
     var iso = isoOf(new Date());
     var unit = esc(c.pen.unit);
+    /* Some compounds also come as a nasal spray holding the same amount as the pen. */
+    var sprayable = !!c.spray;
 
     var rows = c.protocol.map(function (r) {
       var none = /not set|not established|^none/i.test(r.v);
@@ -545,15 +547,21 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       /* Four taps, top to bottom: compound, pen, dose, schedule. Nothing is
          pre-picked except a pen that only comes in one size — the customer
          taps what they actually have and what they actually take. */
-      '<section class="pen"><h2>Your pen</h2>' +
+      '<section class="pen"><h2>' + (sprayable ? "Your pen or spray" : "Your pen") + "</h2>" +
         '<div class="pen-in"><div class="calc">' +
           '<div class="step"><div class="step-k"><i>1</i><label for="f-compound">Compound</label></div>' +
             '<select id="f-compound" class="pick-select">' + compoundOptions(c.slug) + "</select></div>" +
 
-          '<div class="step"><div class="step-k"><i>2</i>Which pen do you have?</div>' +
+          '<div class="step"><div class="step-k"><i>2</i>' +
+            (sprayable ? "Pen or nasal spray?" : "Which pen do you have?") + "</div>" +
             '<div class="picks" id="pen-picks">' + c.sizes.map(function (z) {
-              return '<button class="pick" data-qty="' + z.qty + '" type="button">' +
-                fmtNum(z.qty) + " " + unit + "</button>";
+              var label = fmtNum(z.qty) + " " + unit;
+              return sprayable
+                ? '<button class="pick" data-qty="' + z.qty + '" data-form="pen" type="button">' + label +
+                    '<span class="pick-tag">Pen</span></button>' +
+                  '<button class="pick" data-qty="' + z.qty + '" data-form="spray" type="button">' + label +
+                    '<span class="pick-tag">Nasal spray</span></button>'
+                : '<button class="pick" data-qty="' + z.qty + '" type="button">' + label + "</button>";
             }).join("") + "</div>" +
             '<div class="other"><label for="f-qty">Or how much is left</label>' +
               '<input id="f-qty" type="number" inputmode="decimal" step="any" min="0" value="' +
@@ -578,9 +586,14 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
             "</div></div>" +
 
           '<div class="out" id="out"></div>' +
-          '<div class="calc-note">Your pen comes ready to use — the mixing water is already in the quantity ' +
-          "shown, so there is nothing to prepare. This works out how many doses are in your pen and how long " +
-          "it lasts. It does not tell you what your dose should be.</div>" +
+          '<div class="calc-note">' + (sprayable
+            ? "The pen and the nasal spray both come ready to use, with nothing to mix. The spray holds the same " +
+              "amount as the pen, and each pump gives " + fmtNum(c.spray.perPump * 1000) + " mcg (" +
+              fmtNum(c.spray.perPump) + " " + unit + "). This works out how many doses yours holds and how long " +
+              "it lasts. It does not tell you what your dose should be."
+            : "Your pen comes ready to use — the mixing water is already in the quantity " +
+              "shown, so there is nothing to prepare. This works out how many doses are in your pen and how long " +
+              "it lasts. It does not tell you what your dose should be.") + "</div>" +
         "</div>" +
         '<div id="sched-wrap"></div></div>' +
       "</section>" +
@@ -591,7 +604,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
       "<section><h2>Looking after it</h2>" +
         '<p class="body">' + esc(c.storage) + "</p>" +
-        '<p class="body" style="margin-top:14px;color:var(--muted-2);font-size:0.7647rem">' + esc(window.HANDLING) + "</p>" +
+        '<p class="body" style="margin-top:14px;color:var(--muted-2);font-size:0.7647rem">' + esc(window.HANDLING) +
+          (sprayable ? " The nasal spray is ready to use too, and is kept the same way." : "") + "</p>" +
       "</section>" +
 
       '<div class="scope">' +
@@ -607,6 +621,10 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
   /* ---------------- Interaction ---------------- */
   function wire(c) {
+    /* `form` is what the customer holds, pen or nasal spray; the words and the
+       spray count follow it. */
+    var sprayable = !!c.spray, form = "pen";
+    function holder() { return form === "spray" ? "spray" : "pen"; }
     var f = {
       qty: document.getElementById("f-qty"),
       dose: document.getElementById("f-dose"),
@@ -701,6 +719,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       var btn = e.target.closest(".pick");
       if (!btn) return;
       f.qty.value = btn.getAttribute("data-qty");
+      form = btn.getAttribute("data-form") || "pen";
       update();
     });
     document.getElementById("dose-picks").addEventListener("click", function (e) {
@@ -764,7 +783,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       drawBasis(d);
 
       Array.prototype.forEach.call(document.querySelectorAll("#pen-picks .pick"), function (b) {
-        var on = Math.abs(parseFloat(b.getAttribute("data-qty")) - qty) < 1e-9;
+        var on = Math.abs(parseFloat(b.getAttribute("data-qty")) - qty) < 1e-9 &&
+          (!sprayable || b.getAttribute("data-form") === form);
         b.classList.toggle("on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
       });
       Array.prototype.forEach.call(document.querySelectorAll("#dose-picks .pick"), function (b) {
@@ -774,14 +794,15 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
       if (!(qty > 0) || !(d > 0)) {
         out.innerHTML = '<div class="out-empty">' +
-          (!(qty > 0) && !(d > 0) ? "Pick your pen and your dose" : !(qty > 0) ? "Pick your pen" : "Pick your dose") +
+          (!(qty > 0) && !(d > 0) ? "Pick your " + (sprayable ? "pen or spray" : "pen") + " and your dose"
+            : !(qty > 0) ? "Pick your " + (sprayable ? "pen or spray" : "pen") : "Pick your dose") +
           " to see how many doses you have and the dates they fall on.</div>";
         schedWrap.innerHTML = ""; doseDates = [];
         return;
       }
       if (d > qty) {
         out.innerHTML = '<div class="flag">A ' + fmtNum(d, 2) + " " + esc(c.pen.unit) +
-          " dose is bigger than the " + fmtNum(qty, 2) + " " + esc(c.pen.unit) + " in the pen.</div>";
+          " dose is bigger than the " + fmtNum(qty, 2) + " " + esc(c.pen.unit) + " in the " + holder() + ".</div>";
         schedWrap.innerHTML = ""; doseDates = [];
         return;
       }
@@ -805,18 +826,30 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       var lastDose = doseDates.length ? doseDates[doseDates.length - 1] : null;
       var discard = addDays(start, IN_USE_DAYS);
 
-      var flags = "";
+      var flags = "", eachLabel = "Each dose";
+      if (form === "spray") {
+        var per = c.spray.perPump, pumps = d / per;
+        if (Math.abs(pumps - Math.round(pumps)) < 1e-6) {
+          pumps = Math.round(pumps);
+          eachLabel = "Each dose · " + pumps + (pumps === 1 ? " spray" : " sprays");
+        } else {
+          var lo = Math.floor(pumps), hi = lo + 1;
+          flags += '<div class="flag">Each pump gives ' + fmtNum(per) + " " + unit + ", so " + fmtNum(d, 2) + " " + unit +
+            " isn't a whole number of sprays. " + (lo ? lo + (lo === 1 ? " spray gives " : " sprays give ") + fmtNum(lo * per, 2) + " " + unit + " and " : "") +
+            hi + (hi === 1 ? " spray gives " : " sprays give ") + fmtNum(hi * per, 2) + " " + unit + ".</div>";
+        }
+      }
       if (leftover > 0.0001) flags += '<div class="flag">' + fmtNum(leftover, 2) + " " + unit +
         " is left over after " + doses + " full doses — not enough for another one this size.</div>";
 
       out.innerHTML =
         '<div class="out-hero"><div class="out-num tnum">' + doses + "</div>" +
-        '<div class="out-unit">doses in this pen at ' + fmtNum(d, 2) + " " + unit + "</div></div>" +
+        '<div class="out-unit">doses in this ' + holder() + " at " + fmtNum(d, 2) + " " + unit + "</div></div>" +
         '<div class="out-grid">' +
-          '<div class="out-cell"><b class="tnum">' + fmtNum(qty, 2) + " " + unit + "</b><span>In the pen</span></div>" +
-          '<div class="out-cell"><b class="tnum">' + fmtNum(d, 2) + " " + unit + "</b><span>Each dose</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + fmtNum(qty, 2) + " " + unit + "</b><span>In the " + holder() + "</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + fmtNum(d, 2) + " " + unit + "</b><span>" + eachLabel + "</span></div>" +
           '<div class="out-cell"><b class="tnum">' + (perWeek > 0 ? fmtNum(d * perWeek, 2) + " " + unit : "—") + "</b><span>Each week</span></div>" +
-          '<div class="out-cell"><b class="tnum">' + (days ? Math.round(days) + " days" : "—") + "</b><span>Pen lasts</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + (days ? Math.round(days) + " days" : "—") + "</b><span>" + (form === "spray" ? "Spray" : "Pen") + " lasts</span></div>" +
           '<div class="out-cell"><b>' + (lastDose ? fmtDate(lastDose) : fmtDate(discard)) + "</b><span>" +
             (lastDose ? "Last dose" : "Finish by") + "</span></div>" +
         "</div>" + flags;
@@ -853,7 +886,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
           ? '<div class="note" style="margin-top:12px">Showing the first ' + doseDates.length +
             " of " + doses + " doses.</div>"
           : "") +
-        '<div class="note" style="margin-top:14px">Every dose in this pen, from your start date, at ' +
+        '<div class="note" style="margin-top:14px">Every dose in this ' + holder() + ', from your start date, at ' +
         esc(hhmm()) + ". " +
         "Tap a day above to move the whole run — the gaps between doses stay the same.</div>" +
         '<div id="ics-fallback"></div>';
@@ -919,7 +952,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         "DTEND:" + localStamp(first, 30),
         "RRULE:" + recurRule(doses),
         "SUMMARY:" + esc2(eventTitle(c, dose)),
-        "DESCRIPTION:" + esc2(doses + " doses in this pen. " +
+        "DESCRIPTION:" + esc2(doses + " doses in this " + holder() + ". " +
           "When: " + c.timing.when + ". Food: " + c.timing.food + "."),
         /* Google adds the account's default reminder by itself; an imported
            file gets none unless it carries one, so it would never alert. */
@@ -963,7 +996,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         text: eventTitle(c, dose),
         dates: localStamp(first, 0) + "/" + localStamp(first, 30),
         details: "When: " + c.timing.when + ". Food: " + c.timing.food + "." +
-                 "\n" + doses + " doses in this pen.",
+                 "\n" + doses + " doses in this " + holder() + ".",
         recur: "RRULE:" + rule
       };
       return "https://calendar.google.com/calendar/render?" +
