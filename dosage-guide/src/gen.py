@@ -135,6 +135,10 @@ for c in ALL:
     smallest = min(c["sizes"], key=lambda s: s[0])
     assert c["unit"] == smallest[1], (c["slug"], c["unit"], smallest[1])
     assert c["dose"] <= smallest[0], (c["slug"], "dose exceeds smallest pen")
+    # a nasal-spray dose has to be a whole number of pumps
+    if c.get("spray"):
+        n = c["dose"] / c["spray"]
+        assert abs(n - round(n)) < 1e-9, (c["slug"], "default dose is not whole sprays")
 
 def js(o):
     return json.dumps(o, ensure_ascii=False)
@@ -187,6 +191,11 @@ for i, c in enumerate(ALL):
       "sizes": [{"qty": q, "unit": u} for q, u, _ in c["sizes"]],
       "storage": c["storage"], "cautions": c["cautions"],
     }
+    # Also sold as a nasal spray holding the same amount as the pen: perPump is
+    # what one pump delivers, so the page can say how many sprays make a dose.
+    if c.get("spray"):
+        assert c["unit"] == "mg" and c["spray"] > 0, c["slug"]
+        o["spray"] = {"perPump": c["spray"]}
     # Optional alternative schedules. Only emitted where a compound has more
     # than one sensible way to spread the same weekly amount.
     if c.get("regimens"):

@@ -1,0 +1,386 @@
+[
+  {
+    "slug": "aod-9604",
+    "name": "AOD-9604",
+    "dose": "5 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "cagrilintide",
+    "name": "Cagrilintide",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "cjc-1295-with-dac",
+    "name": "CJC-1295 (With DAC)",
+    "dose": "5 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "hgh-191aa-somatropin",
+    "name": "HGH 191AA (Somatropin)",
+    "dose": "36 IU",
+    "kind": "peptide"
+  },
+  {
+    "slug": "igf-1-lr3",
+    "name": "IGF-1 LR3",
+    "dose": "1 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ipamorelin",
+    "name": "Ipamorelin",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ipamorelin-plus-tesamorelin",
+    "name": "Ipamorelin + Tesamorelin",
+    "dose": "18 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "sermorelin",
+    "name": "Sermorelin",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "tesamorelin",
+    "name": "Tesamorelin",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ahk-cu",
+    "name": "AHK-Cu",
+    "dose": "100 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ara-290",
+    "name": "ARA-290",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "bpc-157",
+    "name": "BPC-157",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "bpc-157-plus-tb-500-wolverine",
+    "name": "BPC-157 + TB-500 (Wolverine)",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ghk-cu",
+    "name": "GHK-Cu",
+    "dose": "50 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "kpv",
+    "name": "KPV",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "klow-bpc-plus-tb-plus-ghk-plus-kpv",
+    "name": "KLOW (BPC+TB+GHK+KPV)",
+    "dose": "80 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ll-37",
+    "name": "LL-37",
+    "dose": "5 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "peg-mgf",
+    "name": "Peg MGF",
+    "dose": "2 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "snap-8",
+    "name": "SNAP-8",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "tb-500",
+    "name": "TB-500",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "adamax",
+    "name": "Adamax",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "cerebrolysin",
+    "name": "Cerebrolysin",
+    "dose": "80 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "dihexa",
+    "name": "Dihexa",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "pinealon",
+    "name": "Pinealon",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "selank",
+    "name": "Selank",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "semax",
+    "name": "Semax",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "selank-plus-semax",
+    "name": "Selank + Semax",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "vip-vasoactive-intestinal-peptide",
+    "name": "VIP (Vasoactive Intestinal Peptide)",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "5-amino-1mq",
+    "name": "5-Amino-1MQ",
+    "dose": "50 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "aicar",
+    "name": "AICAR",
+    "dose": "50 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "l-carnitine-injectable",
+    "name": "L-Carnitine (Injectable)",
+    "dose": "5000 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "lc216-lipo-b-injectable",
+    "name": "LC216 Lipo-B (Injectable)",
+    "dose": "10 mL",
+    "kind": "peptide"
+  },
+  {
+    "slug": "lc526-fat-blaster-injectable",
+    "name": "LC526 Fat Blaster (Injectable)",
+    "dose": "10 mL",
+    "kind": "peptide"
+  },
+  {
+    "slug": "slu-pp-332-injectable",
+    "name": "SLU-PP-332 (Injectable)",
+    "dose": "5 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "thymalin",
+    "name": "Thymalin",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "thymosin-alpha-1",
+    "name": "Thymosin Alpha-1",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "hcg",
+    "name": "HCG",
+    "dose": "10000 IU",
+    "kind": "peptide"
+  },
+  {
+    "slug": "hmg",
+    "name": "HMG",
+    "dose": "75 IU",
+    "kind": "peptide"
+  },
+  {
+    "slug": "kisspeptin",
+    "name": "Kisspeptin",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "melanotan-ii",
+    "name": "Melanotan II",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "oxytocin-acetate",
+    "name": "Oxytocin Acetate",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "pt-141",
+    "name": "PT-141",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "dsip",
+    "name": "DSIP",
+    "dose": "5 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "epithalon",
+    "name": "Epithalon",
+    "dose": "50 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "foxo4-dri",
+    "name": "FOXO4-DRI",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "glutathione",
+    "name": "Glutathione",
+    "dose": "1500 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "humanin",
+    "name": "Humanin",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "nad-plus",
+    "name": "NAD+",
+    "dose": "500 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ss-31",
+    "name": "SS-31",
+    "dose": "50 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "bronchogen",
+    "name": "Bronchogen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "cardiogen",
+    "name": "Cardiogen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "cartalax",
+    "name": "Cartalax",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "chonluten",
+    "name": "Chonluten",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "cortagen",
+    "name": "Cortagen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "crystagen",
+    "name": "Crystagen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "livagen",
+    "name": "Livagen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "ovagen",
+    "name": "Ovagen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "pancragen",
+    "name": "Pancragen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "prostamax",
+    "name": "Prostamax",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "testagen",
+    "name": "Testagen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "vesugen",
+    "name": "Vesugen",
+    "dose": "20 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "red-light-therapy-mask",
+    "name": "Red Light Therapy Mask",
+    "dose": "Face - LED array",
+    "kind": "device"
+  },
+  {
+    "slug": "red-light-therapy-mat",
+    "name": "Red Light Therapy Mat",
+    "dose": "Full-body - 660 + 850 nm",
+    "kind": "device"
+  },
+  {
+    "slug": "leg-compression-system",
+    "name": "Leg Compression System",
+    "dose": "660 + 850 nm - Pair",
+    "kind": "device"
+  }
+]

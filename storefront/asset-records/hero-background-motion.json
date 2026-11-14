@@ -1,0 +1,8 @@
+{
+  "purpose": "Clean stationary stone plate for layered hero animation",
+  "source": "assets/stone-hero.webp",
+  "generatedMaster": "/Users/aeroaswar/.codex/generated_images/01a09c00-132e-7de2-bef2-e967a5283123/exec-3506fdb3-fcc6-49bc-80e3-9b1e992f2f4e.png",
+  "webAsset": "assets/hero-stone-background.webp",
+  "method": "Built-in image generation: remove all three pens, preserve the stone ledge and warm charcoal-bronze atmosphere. Original pen pixels preserved separately with inline SVG clip paths.",
+  "date": "2026-09-19"
+}

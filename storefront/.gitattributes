@@ -1,0 +1,2 @@
+# Original PNG masters (about 159 MB); the site itself uses the WebP/JPG files.
+assets/*.png filter=lfs diff=lfs merge=lfs -text
