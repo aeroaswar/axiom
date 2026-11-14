@@ -52,6 +52,14 @@
       "pathway_name": "Metabolic",
       "variants": [
         {
+          "sku": "reta5",
+          "dose": "5 mg",
+          "content": "Vial + pen",
+          "price_idr": 2100000,
+          "cold": true,
+          "available": 14
+        },
+        {
           "sku": "reta10",
           "dose": "10 mg",
           "content": "Vial + pen",
@@ -99,6 +107,43 @@
       ]
     },
     {
+      "slug": "semaglutide",
+      "name": "Semaglutide",
+      "kind": "peptide",
+      "cls": "GLP-1 receptor agonist",
+      "pathway": "metabolic",
+      "pathway_no": "01",
+      "pathway_name": "Metabolic",
+      "variants": [
+        {
+          "sku": "sema10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 2100000,
+          "cold": true,
+          "available": 16
+        },
+        {
+          "sku": "sema30",
+          "dose": "30 mg",
+          "content": "Vial + pen",
+          "price_idr": 3500000,
+          "cold": true,
+          "available": 12
+        },
+        {
+          "sku": "sema40",
+          "dose": "40 mg",
+          "content": "Vial + pen",
+          "price_idr": 4000000,
+          "cold": true,
+          "available": 8
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
       "slug": "tirzepatide",
       "name": "Tirzepatide",
       "kind": "peptide",
@@ -130,6 +175,22 @@
           "price_idr": 4000000,
           "cold": true,
           "available": 5
+        },
+        {
+          "sku": "tirz60",
+          "dose": "60 mg",
+          "content": "Vial + pen",
+          "price_idr": 5200000,
+          "cold": true,
+          "available": 9
+        },
+        {
+          "sku": "tirz80",
+          "dose": "80 mg",
+          "content": "Vial + pen",
+          "price_idr": 6300000,
+          "cold": true,
+          "available": 7
         }
       ],
       "synonyms": [],
@@ -615,6 +676,29 @@
         }
       ],
       "synonyms": [],
+      "coa": []
+    },
+    {
+      "slug": "tri-heal-bpc-plus-tb-plus-kpv",
+      "name": "Tri-Heal (BPC+TB+KPV)",
+      "kind": "peptide",
+      "cls": "Multi-peptide blend",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "triheal30",
+          "dose": "30 mg",
+          "content": "Vial + pen",
+          "price_idr": 3800000,
+          "cold": true,
+          "available": 12
+        }
+      ],
+      "synonyms": [
+        "Tri-Heal Blend"
+      ],
       "coa": []
     },
     {

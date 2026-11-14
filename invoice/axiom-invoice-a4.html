@@ -408,7 +408,7 @@ body.capturing .sheets{transform:none!important}
    AXIOM invoice builder
 
    The catalogue below is generated from invoice/AXIOM-Price-List-v1.0.pdf
-   (80 lots across 9 pathways) plus the device and apparel prices in
+   (87 lots across 9 pathways) plus the device and apparel prices in
    company-profile/index.html. Regenerate it when a new price list lands.
    Do NOT source it from archive/premium-hero/data.js or from
    business-proposal/axiom-pricelist-print.html — both carry superseded,
@@ -418,14 +418,20 @@ const CATALOG=[
 {g:"GLP-1s & Weight Loss",i:[
   {n:"AOD-9604",s:"5 mg",p:2700000},
   {n:"Cagrilintide",s:"10 mg",p:2700000},
+  {n:"Retatrutide",s:"5 mg",p:2100000},
   {n:"Retatrutide",s:"10 mg",p:2700000},
   {n:"Retatrutide",s:"20 mg",p:3600000},
   {n:"Retatrutide",s:"30 mg",p:4900000},
   {n:"Retatrutide",s:"40 mg",p:6400000},
   {n:"Retatrutide",s:"60 mg",p:8500000},
+  {n:"Semaglutide",s:"10 mg",p:2100000},
+  {n:"Semaglutide",s:"30 mg",p:3500000},
+  {n:"Semaglutide",s:"40 mg",p:4000000},
   {n:"Tirzepatide",s:"10 mg",p:2200000},
   {n:"Tirzepatide",s:"30 mg",p:3500000},
-  {n:"Tirzepatide",s:"40 mg",p:4000000}
+  {n:"Tirzepatide",s:"40 mg",p:4000000},
+  {n:"Tirzepatide",s:"60 mg",p:5200000},
+  {n:"Tirzepatide",s:"80 mg",p:6300000}
 ]},
 {g:"GH Secretagogues",i:[
   {n:"CJC-1295 (No DAC) + Ipamorelin",s:"10 mg",p:2700000},
@@ -454,7 +460,8 @@ const CATALOG=[
   {n:"LL-37",s:"5 mg",p:2700000},
   {n:"Peg MGF",s:"2 mg",p:2800000},
   {n:"SNAP-8",s:"10 mg",p:2500000},
-  {n:"TB-500",s:"10 mg",p:1800000}
+  {n:"TB-500",s:"10 mg",p:1800000},
+  {n:"Tri-Heal (BPC+TB+KPV)",s:"30 mg",p:3800000}
 ]},
 {g:"Brain Health & Nootropics",i:[
   {n:"Adamax",s:"10 mg",p:2800000},
@@ -559,8 +566,8 @@ const DEFAULTS = () => ({
   client:{name:"", company:"", addr:"", email:"", phone:""},
   issuer:{entity:"[Legal entity name]", addr:"[Street address]"},
   items:[
-    {sel:"0:2",  n:"Retatrutide",                    s:"10 mg",  p:2700000, q:2, d:0},
-    {sel:"0:8",  n:"Tirzepatide",                    s:"30 mg",  p:3500000, q:1, d:0},
+    {sel:"0:3",  n:"Retatrutide",                    s:"10 mg",  p:2700000, q:2, d:0},
+    {sel:"0:12", n:"Tirzepatide",                    s:"30 mg",  p:3500000, q:1, d:0},
     {sel:"1:0",  n:"CJC-1295 (No DAC) + Ipamorelin", s:"10 mg",  p:2700000, q:1, d:0},
     {sel:"7:6",  n:"NAD+",                           s:"1000 mg", p:3700000, q:2, d:0},
     {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3100000, q:1, d:0}

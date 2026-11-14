@@ -1,14 +1,20 @@
 category_no,category,compound,lot,supplier_cost_idr,pen_cost_idr,base_price_idr,selling_price_idr,margin_idr,margin_pct,markup_pct,pen_share_of_price_pct,pricing
 01,GLP-1s & Weight Loss,AOD-9604,5 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
 01,GLP-1s & Weight Loss,Cagrilintide,10 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
+01,GLP-1s & Weight Loss,Retatrutide,5 mg,500000,600000,1100000,2100000,1000000,47.6,90.9,28.6,formula
 01,GLP-1s & Weight Loss,Retatrutide,10 mg,700000,600000,1300000,2700000,1400000,51.9,107.7,22.2,manual override
 01,GLP-1s & Weight Loss,Retatrutide,20 mg,1200000,600000,1800000,3600000,1800000,50.0,100.0,16.7,manual override
 01,GLP-1s & Weight Loss,Retatrutide,30 mg,1700000,600000,2300000,4900000,2600000,53.1,113.0,12.2,manual override
 01,GLP-1s & Weight Loss,Retatrutide,40 mg,2200000,600000,2800000,6400000,3600000,56.2,128.6,9.4,manual override
 01,GLP-1s & Weight Loss,Retatrutide,60 mg,3100000,600000,3700000,8500000,4800000,56.5,129.7,7.1,manual override
+01,GLP-1s & Weight Loss,Semaglutide,10 mg,500000,600000,1100000,2100000,1000000,47.6,90.9,28.6,formula
+01,GLP-1s & Weight Loss,Semaglutide,30 mg,1200000,600000,1800000,3500000,1700000,48.6,94.4,17.1,formula
+01,GLP-1s & Weight Loss,Semaglutide,40 mg,1500000,600000,2100000,4000000,1900000,47.5,90.5,15.0,formula
 01,GLP-1s & Weight Loss,Tirzepatide,10 mg,550000,600000,1150000,2200000,1050000,47.7,91.3,27.3,formula
 01,GLP-1s & Weight Loss,Tirzepatide,30 mg,1200000,600000,1800000,3500000,1700000,48.6,94.4,17.1,formula
 01,GLP-1s & Weight Loss,Tirzepatide,40 mg,1500000,600000,2100000,4000000,1900000,47.5,90.5,15.0,formula
+01,GLP-1s & Weight Loss,Tirzepatide,60 mg,2100000,600000,2700000,5200000,2500000,48.1,92.6,11.5,formula
+01,GLP-1s & Weight Loss,Tirzepatide,80 mg,2700000,600000,3300000,6300000,3000000,47.6,90.9,9.5,formula
 02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,10 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula
 02,GH Secretagogues,CJC-1295 (No DAC) + Ipamorelin,20 mg,1400000,600000,2000000,3800000,1800000,47.4,90.0,15.8,formula
 02,GH Secretagogues,CJC-1295 (With DAC),5 mg,900000,600000,1500000,2900000,1400000,48.3,93.3,20.7,formula
@@ -34,6 +40,7 @@ category_no,category,compound,lot,supplier_cost_idr,pen_cost_idr,base_price_idr,
 03,Healing & Repair,Peg MGF,2 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
 03,Healing & Repair,SNAP-8,10 mg,700000,600000,1300000,2500000,1200000,48.0,92.3,24.0,formula
 03,Healing & Repair,TB-500,10 mg,750000,600000,1350000,1800000,450000,25.0,33.3,33.3,manual override
+03,Healing & Repair,Tri-Heal (BPC+TB+KPV),30 mg,1400000,600000,2000000,3800000,1800000,47.4,90.0,15.8,formula
 04,Brain Health & Nootropics,Adamax,10 mg,850000,600000,1450000,2800000,1350000,48.2,93.1,21.4,formula
 04,Brain Health & Nootropics,Adamax 1032 Da,10 mg,1150000,600000,1750000,3400000,1650000,48.5,94.3,17.6,formula
 04,Brain Health & Nootropics,Cerebrolysin,60 mg,800000,600000,1400000,2700000,1300000,48.1,92.9,22.2,formula

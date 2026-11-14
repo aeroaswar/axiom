@@ -67,3 +67,12 @@
 - Cerebrolysin is a 60 mg lot (SKU `cere60`), as on the supplier sheet. NAD+ 500 mg is withdrawn: NAD+ is a single 1000 mg lot at Rp 3.700.000, so its buy box has no size picker, its card no "from", and the guide counts read 66 compounds · 79 lots, Longevity 7 compounds · 8 lots, price list 86 lots.
 - The NAD+ and Cerebrolysin photographs now read 1000 mg and 60 mg: only the QTY figure was redrawn (`tools/relabel_qty.py`), name and pen untouched. Their PNG masters in Git LFS still carry the old figures; the WebP files are the delivery copies.
 - `verify_stone.py`, `qa/check-i18n.cjs` (no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass.
+
+## Seven new lots — November 14
+
+- Semaglutide joins Metabolic after Retatrutide: 10 mg Rp 2.100.000, 30 mg Rp 3.500.000, 40 mg Rp 4.000.000 (SKUs `sema10`, `sema30`, `sema40`), class GLP-1 receptor agonist, no published certificate yet. Catalogue card, product page, compound page, pathway lists and related sections.
+- Tri-Heal (BPC+TB+KPV), 30 mg at Rp 3.800.000 (SKU `triheal30`), joins Tissue Repair after TB-500.
+- Retatrutide 5 mg Rp 2.100.000 (SKU `reta5`) is now Retatrutide's first and default lot, so its card reads "from Rp 2.100.000" and `qa/check-basket.cjs` expects `reta5` (the second size is `reta10`). Tirzepatide adds 60 mg Rp 5.200.000 and 80 mg Rp 6.300.000.
+- Counts: 68 compounds · 86 lots, Metabolic 5 compounds · 16 lots, Tissue Repair 13 compounds · 15 lots, 75 products, price list 93 lots, 180 templates. The homepage line had still read 65 compounds; it now reads 68.
+- Photographs: Semaglutide is the approved Tirzepatide photograph and Tri-Heal the approved KLOW photograph, each with name and QTY redrawn by `tools/relabel_label.py`; Retatrutide's QTY now reads 5 mg (`tools/relabel_qty.py`). Visual review confirms the names, quantities and dial 0. No PNG masters are committed for them.
+- `verify_stone.py` passes for 75 products; `qa/check-i18n.cjs` (176 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.

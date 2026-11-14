@@ -12,6 +12,12 @@
     "kind": "peptide"
   },
   {
+    "slug": "semaglutide",
+    "name": "Semaglutide",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
     "slug": "cjc-1295-with-dac",
     "name": "CJC-1295 (With DAC)",
     "dose": "5 mg",
@@ -123,6 +129,12 @@
     "slug": "tb-500",
     "name": "TB-500",
     "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
+    "slug": "tri-heal-bpc-plus-tb-plus-kpv",
+    "name": "Tri-Heal (BPC+TB+KPV)",
+    "dose": "30 mg",
     "kind": "peptide"
   },
   {

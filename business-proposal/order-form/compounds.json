@@ -20,6 +20,7 @@
  {
   "name": "Retatrutide",
   "sizes": [
+   "5",
    "10",
    "20",
    "30",
@@ -31,11 +32,24 @@
   ]
  },
  {
-  "name": "Tirzepatide",
+  "name": "Semaglutide",
   "sizes": [
    "10",
    "30",
    "40"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Tirzepatide",
+  "sizes": [
+   "10",
+   "30",
+   "40",
+   "60",
+   "80"
   ],
   "units": [
    "mg"
@@ -221,6 +235,15 @@
   "name": "TB-500",
   "sizes": [
    "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Tri-Heal (BPC+TB+KPV)",
+  "sizes": [
+   "30"
   ],
   "units": [
    "mg"
