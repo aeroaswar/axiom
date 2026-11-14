@@ -455,7 +455,7 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
         <svg class="fold__chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="fold__body" id="pickBody">
-        <input class="search" id="q" type="search" placeholder="Search 79 compounds…" autocomplete="off">
+        <input class="search" id="q" type="search" placeholder="Search 81 compounds…" autocomplete="off">
         <div class="chips" id="chips" style="margin-top:10px"></div>
         <div class="list" id="list"></div>
       </div>
@@ -511,7 +511,7 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
           <p class="hint">Worked out from the QTY: every pen cartridge is mixed with 3&nbsp;ml of BAC
             water and the pen gives 0.01&nbsp;ml per click, so only the vial's mg changes the clicks
             (10&nbsp;mg: 1&nbsp;mg is 0.3&nbsp;ml, 30 clicks). Type the clicks to dose a different
-            amount and the mg follows (KLOW opens on 12 clicks); clear it to go back to the
+            amount and the mg follows (KLOW-C opens on 12 clicks); clear it to go back to the
             whole-click conversion. Change the water or the ml per click only if a pen is filled
             differently.</p>
           </div>
@@ -645,7 +645,7 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
 <script>
 /* ============================================================
    AXIOM research catalogue — transcribed from AXIOMPriceList_2.pdf
-   (Price List, RESEARCH CATALOGUE · IDR · V1.0). 79 compounds,
+   (Price List, RESEARCH CATALOGUE · IDR · V1.0). 81 compounds,
    9 categories. `lot` is the fill size and prefills QTY.
    ============================================================ */
 const CATALOGUE = {
@@ -770,6 +770,12 @@ const CATALOGUE = {
    "price": 5800000
   },
   {
+   "cat": "03",
+   "compound": "KLOW-C (KLOW + Cartalax)",
+   "lot": "100 mg",
+   "price": 6200000
+  },
+  {
    "cat": "01",
    "compound": "Tirzepatide",
    "lot": "40 mg",
@@ -828,6 +834,12 @@ const CATALOGUE = {
    "compound": "Adamax",
    "lot": "10 mg",
    "price": 2800000
+  },
+  {
+   "cat": "04",
+   "compound": "Adamax 1032 Da",
+   "lot": "10 mg",
+   "price": 3400000
   },
   {
    "cat": "02",
@@ -1303,10 +1315,10 @@ function clickPair(cpm){
   return { clicks: 10, mg: +(10 / cpm).toFixed(2) };
 }
 /* Clicks can be set by hand (or by a compound's default, below): then the
-   amount follows from them, e.g. KLOW 80 mg in 3 ml at 12 clicks is 3.2 mg.
+   amount follows from them, e.g. KLOW-C 100 mg in 3 ml at 12 clicks is 4 mg.
    null means "work out the whole-click conversion". */
 let clicksSet = null;
-const CLICK_DEFAULTS = [ { re: /^KLOW\b/i, clicks: 12 } ];
+const CLICK_DEFAULTS = [ { re: /^KLOW-C\b/i, clicks: 12 } ];
 const clickDefault = name => (CLICK_DEFAULTS.find(x => x.re.test(name)) || {}).clicks ?? null;
 function calcDose(typing){
   const ml = parseFloat($('fMl').value), per = parseFloat($('fMlClick').value), v = vialAmt();
