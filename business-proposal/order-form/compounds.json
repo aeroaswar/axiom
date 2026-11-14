@@ -182,6 +182,15 @@
   ]
  },
  {
+  "name": "KLOW-C (KLOW + Cartalax)",
+  "sizes": [
+   "100"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
   "name": "LL-37",
   "sizes": [
    "5"
@@ -219,6 +228,15 @@
  },
  {
   "name": "Adamax",
+  "sizes": [
+   "10"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
+  "name": "Adamax 1032 Da",
   "sizes": [
    "10"
   ],
