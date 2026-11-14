@@ -123,6 +123,16 @@ fieldset[disabled]{opacity:.35}
 .ln .a,.ln .q{text-align:center;font-variant-numeric:tabular-nums}
 .ln-hint{grid-column:1 / -1;font-size:10px;line-height:1.5;color:var(--muted-2);margin:-3px 0 0}
 .ln-hint.w{color:var(--warn)}
+/* compound picker */
+.pop{position:fixed;z-index:40;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;box-shadow:0 12px 32px rgba(0,0,0,.5);padding:4px}
+.pop__it{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:8px 10px;border-radius:5px;
+  cursor:pointer;font-size:12.5px;color:var(--ink)}
+.pop__it b{font-weight:500;min-width:0}
+.pop__it span{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pop__it:hover,.pop__it.is-on{background:var(--accent-soft)}
+.pop__it.is-on span,.pop__it:hover span{color:var(--accent-bright)}
+.pop__none{padding:10px;font-size:11.5px;color:var(--muted-2)}
 .ln-head{display:grid;grid-template-columns:1fr 58px 62px 46px 26px;gap:6px}
 .ln-head span{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-2)}
 
@@ -450,7 +460,6 @@ details.sender .fields{margin-top:12px}
             <button class="btn btn--ghost btn--sm" id="addLine">+ Line</button>
             <button class="chip" id="discreet" aria-pressed="false" title="Print a generic description instead of compound names">Discreet contents</button>
           </div>
-          <datalist id="cmpList"></datalist>
         </div>
 
         <div>
@@ -1223,7 +1232,7 @@ function renderLines(){
   $('lines').innerHTML = o.lines.map((l, i) => {
     const fl = lineFlag(l);
     return `<div class="ln" data-i="${i}">
-      <input data-l="compound" list="cmpList" value="${esc(l.compound)}" placeholder="Compound" aria-label="Compound">
+      <input data-l="compound" value="${esc(l.compound)}" placeholder="Compound" aria-label="Compound" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="cmpPop" autocomplete="off">
       <input class="a" data-l="amount" value="${esc(l.amount)}" inputmode="decimal" aria-label="Size">
       <select data-l="unit" aria-label="Unit">${['mg', 'IU', 'mL', 'mcg'].map(u => `<option${u === l.unit ? ' selected' : ''}>${u}</option>`).join('')}</select>
       <input class="q" data-l="qty" value="${esc(l.qty)}" inputmode="numeric" aria-label="Quantity">
@@ -1329,7 +1338,77 @@ $('marks').addEventListener('click', e => {
 /* One list entry per lot ("Retatrutide — 30 mg"), so a pick carries the size and unit with it. */
 const LOTS = COMPOUNDS.flatMap(c => c.sizes.map(z => ({ key: `${c.name} — ${z} ${c.units[0]}`, name: c.name, amount: z, unit: c.units[0] })));
 const LOT_BY_KEY = Object.fromEntries(LOTS.map(x => [x.key, x]));
-$('cmpList').innerHTML = LOTS.map(x => `<option value="${esc(x.key)}"></option>`).join('');
+/* The compound picker. A native <datalist> popup cannot be scrolled inside some
+   embedded views (the claude.ai artifact viewer among them), so the list is the
+   page's own: filtered as you type, scrollable, arrow keys and Enter to pick. */
+const pop = document.createElement('div');
+pop.id = 'cmpPop'; pop.className = 'pop'; pop.setAttribute('role', 'listbox'); pop.hidden = true;
+document.body.appendChild(pop);
+let popFor = null, popItems = [], popActive = -1;
+function popFilter(q){
+  const toks = String(q).toLowerCase().split(/[^a-z0-9+]+/).filter(Boolean);
+  if (!toks.length || LOT_BY_KEY[q]) return LOTS;
+  /* the typed text as one piece first ("klow-c" finds KLOW-C, not KLOW), names that start with it on top */
+  const nq = norm(q), whole = LOTS.filter(x => norm(x.key).includes(nq));
+  if (whole.length) return [...whole.filter(x => norm(x.name).startsWith(nq)), ...whole.filter(x => !norm(x.name).startsWith(nq))];
+  const hits = LOTS.filter(x => { const k = x.key.toLowerCase(); return toks.every(t => k.includes(t)); });
+  return hits.length ? hits : LOTS.filter(x => matchCompound(q, '')?.name === x.name);
+}
+function popPlace(){
+  if (!popFor) return;
+  const r = popFor.getBoundingClientRect();
+  const below = innerHeight - r.bottom - 12, above = r.top - 12;
+  const up = below < 220 && above > below;
+  pop.style.left = Math.max(8, Math.min(r.left, innerWidth - Math.max(r.width, 280) - 8)) + 'px';
+  pop.style.width = Math.max(r.width, 280) + 'px';
+  pop.style.maxHeight = Math.max(160, Math.min(340, up ? above : below)) + 'px';
+  pop.style.top = up ? '' : (r.bottom + 4) + 'px';
+  pop.style.bottom = up ? (innerHeight - r.top + 4) + 'px' : '';
+}
+function popRender(){
+  pop.innerHTML = popItems.length
+    ? popItems.map((x, i) => `<div class="pop__it${i === popActive ? ' is-on' : ''}" role="option" id="cmpOpt${i}" aria-selected="${i === popActive}" data-k="${esc(x.key)}"><b>${esc(x.name)}</b><span>${esc(x.amount + ' ' + x.unit)}</span></div>`).join('')
+    : '<div class="pop__none">No match — the name prints as typed.</div>';
+  if (popFor) popFor.setAttribute('aria-activedescendant', popActive >= 0 ? 'cmpOpt' + popActive : '');
+  const on = pop.querySelector('.is-on'); if (on) on.scrollIntoView({ block: 'nearest' });
+}
+function popOpen(input){
+  popFor = input; popItems = popFilter(input.value); popActive = -1;
+  pop.hidden = false; input.setAttribute('aria-expanded', 'true');
+  popPlace(); popRender(); pop.scrollTop = 0;
+}
+function popClose(){
+  if (popFor) popFor.setAttribute('aria-expanded', 'false');
+  pop.hidden = true; popFor = null; popActive = -1;
+}
+function popPick(key){
+  const input = popFor; if (!input) return;
+  input.value = key;
+  input.dispatchEvent(new Event('input', { bubbles: true }));   // the lines handler fills size and unit
+  popClose();
+}
+$('lines').addEventListener('focusin', e => { if (e.target.dataset?.l === 'compound') popOpen(e.target); });
+$('lines').addEventListener('input', e => {
+  if (e.target.dataset?.l !== 'compound' || e.target !== popFor || LOT_BY_KEY[e.target.value]) return;
+  popItems = popFilter(e.target.value); popActive = -1; popRender(); pop.scrollTop = 0;
+});
+$('lines').addEventListener('keydown', e => {
+  if (e.target.dataset?.l !== 'compound') return;
+  if (pop.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')){ popOpen(e.target); e.preventDefault(); return; }
+  if (pop.hidden) return;
+  if (e.key === 'ArrowDown'){ popActive = Math.min(popItems.length - 1, popActive + 1); popRender(); e.preventDefault(); }
+  else if (e.key === 'ArrowUp'){ popActive = Math.max(0, popActive - 1); popRender(); e.preventDefault(); }
+  else if (e.key === 'Enter' && popActive >= 0){ popPick(popItems[popActive].key); e.preventDefault(); }
+  else if (e.key === 'Escape'){ popClose(); e.preventDefault(); }
+  else if (e.key === 'Tab') popClose();
+});
+$('lines').addEventListener('focusout', e => {
+  if (e.target === popFor && !pop.contains(e.relatedTarget)) setTimeout(() => { if (document.activeElement !== popFor) popClose(); }, 0);
+});
+pop.addEventListener('mousedown', e => e.preventDefault());          // keep focus in the input while picking
+pop.addEventListener('click', e => { const it = e.target.closest('.pop__it'); if (it) popPick(it.dataset.k); });
+window.addEventListener('resize', popPlace);
+document.addEventListener('scroll', popPlace, true);
 
 /* sender */
 function renderSender(){
