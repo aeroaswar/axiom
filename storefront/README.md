@@ -14,7 +14,7 @@ Visit http://127.0.0.1:8765.
 
 ## Design and content
 
-- The homepage hero is light limestone. The three original pens (MOTS-c, Retatrutide, KLOW) are clipped from their photograph with SVG paths, so labels and dials keep their pixels, and lean still on the limestone with shadows where they touch it. Edit them in `home-v2.html`.
+- The homepage hero is light limestone with the product photographs of Retatrutide, MOTS-c and KLOW, each pen resting on stone; each photo opens its product page. Edit them in `home-v2.html`.
 - All 68 shop products use individual stone photographs: 65 research compounds and three devices. The same photographs appear on their product detail pages and applicable collection pages.
 - Compound labels retain the catalogue names and first-variant quantities. VIP was regenerated to correct its spelling.
 - The stone band fades smoothly into charcoal. The footer is plain charcoal with one small wordmark, aligned links and compact spacing.
