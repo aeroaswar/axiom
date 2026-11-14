@@ -210,9 +210,15 @@ from the strength:
 
 **In the builder** this is automatic. The Dose field is on **Pen · clicks** by default; the water
 (3 ml) and ml per click (0.01) are pre-filled, and the clicks are worked out from QTY as you pick
-or type it and shown read-only, with the working on the line below. Change the water or the ml
-per click only if a pen is filled differently; that setting is kept for the browser. **No dose**
-leaves the DOSE row off.
+or type it, with the working on the line below. Change the water or the ml per click only if a
+pen is filled differently; that setting is kept for the browser. **No dose** leaves the DOSE row
+off.
+
+**Setting the clicks.** The clicks box is editable: type a number of clicks and the amount follows
+(clicks × 0.01 ml × the vial's mg/ml, to two decimals). Clearing the box goes back to the
+whole-click conversion. **KLOW (BPC+TB+GHK+KPV) opens on 12 clicks**: its 80 mg in 3 ml is
+26.67 mg/ml, so the label reads `12 clicks = 3.2 mg` instead of the conversion's `15 clicks = 4 mg`.
+A set number of clicks is remembered per compound and strength when the label is added.
 
 **In the print sheet** the Retatrutide range carries the table's values, set per SKU by hand. A
 SKU whose conversion is not known carries `dose: null`, and band D is dropped entirely rather than

@@ -502,7 +502,7 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
             </div>
           </div>
           <div class="dose">
-            <input id="fClicks" class="out" type="text" readonly tabindex="-1" aria-label="clicks">
+            <input id="fClicks" type="text" inputmode="decimal" aria-label="clicks">
             <span>clicks =</span>
             <input id="fMg" class="out" type="text" readonly tabindex="-1" aria-label="amount">
             <span id="fUnit">mg</span>
@@ -510,8 +510,10 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
           <p class="calc" id="calc" role="status"></p>
           <p class="hint">Worked out from the QTY: every pen cartridge is mixed with 3&nbsp;ml of BAC
             water and the pen gives 0.01&nbsp;ml per click, so only the vial's mg changes the clicks
-            (10&nbsp;mg: 1&nbsp;mg is 0.3&nbsp;ml, 30 clicks). Change the water or the ml per click
-            only if a pen is filled differently.</p>
+            (10&nbsp;mg: 1&nbsp;mg is 0.3&nbsp;ml, 30 clicks). Type the clicks to dose a different
+            amount and the mg follows (KLOW opens on 12 clicks); clear it to go back to the
+            whole-click conversion. Change the water or the ml per click only if a pen is filled
+            differently.</p>
           </div>
           <div id="sprayF" hidden>
             <div class="dose" style="grid-template-columns:auto 1fr auto">
@@ -1300,17 +1302,32 @@ function clickPair(cpm){
   }
   return { clicks: 10, mg: +(10 / cpm).toFixed(2) };
 }
-function calcDose(){
+/* Clicks can be set by hand (or by a compound's default, below): then the
+   amount follows from them, e.g. KLOW 80 mg in 3 ml at 12 clicks is 3.2 mg.
+   null means "work out the whole-click conversion". */
+let clicksSet = null;
+const CLICK_DEFAULTS = [ { re: /^KLOW\b/i, clicks: 12 } ];
+const clickDefault = name => (CLICK_DEFAULTS.find(x => x.re.test(name)) || {}).clicks ?? null;
+function calcDose(typing){
   const ml = parseFloat($('fMl').value), per = parseFloat($('fMlClick').value), v = vialAmt();
-  $('fClicks').value = ''; $('fMg').value = '';
+  if (!typing) $('fClicks').value = '';
+  $('fMg').value = '';
   $('fUnit').textContent = v ? v.unit : 'mg';
   if (!(ml > 0)){ $('calc').textContent = 'Enter the BAC water (3 ml for the pen cartridges).'; return; }
   if (!(per > 0)){ $('calc').textContent = 'Enter the ml per click (0.01 for the pen).'; return; }
   if (!v || !(v.n > 0)){ $('calc').textContent = 'Put the vial size in QTY (e.g. 10 mg) to work out the clicks.'; return; }
+  const head = `${num(v.n)} ${v.unit} in ${num(ml)} ml = ${num(v.n / ml)} ${v.unit}/ml · ${num(per)} ml per click → `;
+  if (typing && !(clicksSet > 0)){ $('calc').textContent = head + 'type the clicks, or clear the box for the conversion'; return; }
+  if (clicksSet > 0){
+    const amt = +(clicksSet * per * v.n / ml).toFixed(2);
+    if (!typing) $('fClicks').value = num(clicksSet);
+    $('fMg').value = num(amt);
+    $('calc').textContent = head + `${num(clicksSet)} clicks = ${num(amt)} ${v.unit}`;
+    return;
+  }
   const pair = clickPair(ml / v.n / per);
   $('fClicks').value = pair.clicks; $('fMg').value = num(pair.mg);
-  $('calc').textContent = `${num(v.n)} ${v.unit} in ${num(ml)} ml = ${num(v.n / ml)} ${v.unit}/ml · `
-    + `${num(per)} ml per click → ${pair.clicks} clicks = ${num(pair.mg)} ${v.unit}`;
+  $('calc').textContent = head + `${pair.clicks} clicks = ${num(pair.mg)} ${v.unit}`;
 }
 
 /* Nasal sprays read "1 spray = 100 mcg" instead of a click conversion.
@@ -1391,6 +1408,8 @@ function select(d){
   const mem = asPair(doseMem[memKey(d)]);
   setDevice(mem && mem.device ? mem.device : SPRAY.test(d.compound) ? 'spray' : 'pen');
   $('fMcg').value    = mem && mem.mcg ? mem.mcg : 100;
+  // remembered clicks win (0 = the whole-click conversion), then the compound's default
+  clicksSet = mem && 'clicksSet' in mem ? (mem.clicksSet > 0 ? mem.clicksSet : null) : clickDefault(d.compound);
   calcDose();
   $('add').disabled    = false;
   $('pickSel').textContent = `${d.compound} · ${d.lot}`;
@@ -1428,6 +1447,7 @@ function preview(){
   $('pvCap').textContent = sel
     ? `${sel.compound} · ${sel.lot} · ${CATALOGUE.categories[sel.cat]}`
     : 'Custom label';
+  try { foldSums(); } catch (e) {}   // keep a folded Dose heading current
 }
 ['fCompound','fQty','fClicks','fMg','fMcg','fNote'].forEach(id =>
   $(id).addEventListener('input', preview));
@@ -1436,6 +1456,17 @@ $('dev').addEventListener('click', e => {
 });
 ['fQty','fMl','fMlClick'].forEach(id =>
   $(id).addEventListener('input', () => { calcDose(); preview(); }));
+/* typing the clicks sets them; clearing the box (on leaving it) goes back
+   to the whole-click conversion */
+$('fClicks').addEventListener('input', () => {
+  const c = parseFloat($('fClicks').value.replace(',', '.'));
+  clicksSet = c > 0 ? c : null;
+  calcDose(true); preview();
+});
+$('fClicks').addEventListener('change', () => {
+  if (!(clicksSet > 0)){ clicksSet = null; calcDose(); preview(); }
+  else { calcDose(); preview(); }
+});
 ['fMl','fMlClick'].forEach(id => $(id).addEventListener('change', () => {
   try { localStorage.setItem('axiom.pen', JSON.stringify({ ml: parseFloat($('fMl').value), perClick: parseFloat($('fMlClick').value) })); } catch (e) {}
 }));
@@ -1504,7 +1535,8 @@ $('add').addEventListener('click', () => {
   const d = draft();
   const n = Math.max(1, Math.min(500, parseInt($('fCopies').value, 10) || 1));
   const mcg = parseFloat($('fMcg').value);
-  if (sel) remember(memKey(sel), device === 'spray' ? { device, mcg: mcg > 0 ? mcg : 100 } : { device });
+  if (sel) remember(memKey(sel), device === 'spray' ? { device, mcg: mcg > 0 ? mcg : 100 }
+    : device === 'pen' ? { device, clicksSet: clicksSet > 0 ? clicksSet : 0 } : { device });
   const same = queue.find(r =>
     r.compound === d.compound && r.qty === d.qty && r.dose === d.dose && r.note === d.note);
   if (same) same.copies += n; else queue.push({ ...d, copies: n });
