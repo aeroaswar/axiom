@@ -77,7 +77,7 @@ messages/{id,en}/      catalogues per surface, merged at request time; Indonesia
 Print and brand collateral, set by hand and kept in the repository:
 
 ```
-business-proposal/axiom-pricelist-print.html    the A4 price list — 79 lots over 9 pathways, two pages
+business-proposal/axiom-pricelist-print.html    the A4 price list — 81 lots over 9 pathways, two pages
 business-proposal/AXIOM-Price-List.pdf          its render; edit the HTML, never the PDF
 business-proposal/order-form/                   the fillable A4 order form (build.cjs, then add-fields.py)
 business-proposal/axiom-peptide-pricelist.html  the internal sheet — cost basis and margin per lot
@@ -234,7 +234,7 @@ does not reach the storefront until that drawing is replaced.
 
 `dosage-guide/` is a static site, separate from the app: a print-ready 85 × 55 mm card carrying
 the wordmark and a QR, and the mobile-first guide the QR opens. It covers every lot in the price
-list — 79 lots across 65 compounds, a multi-size compound appearing as one page with a size chip
+list — 81 lots across 67 compounds, a multi-size compound appearing as one page with a size chip
 per lot — with cadence, timing, documented doses, a tap-to-pick pen calculator, dose dates with
 Apple and Google Calendar export, and the evidence tier stated for every dosing figure. It is
 deployed as its own Vercel project with Root Directory `dosage-guide` and no build step; prices
@@ -278,8 +278,8 @@ without the app or a database. Open it in a browser, fill the form on the left, 
 sheet redraw on the right, then *Save as PDF* (paper A4, background graphics on; a one-page
 invoice prints correctly at any margin setting, set margins to None past that).
 
-Line items come from a dropdown of the full price list — 79 lots across the 9 pathways plus
-the three devices, 82 entries — generated from `invoice/AXIOM-Price-List-v1.0.pdf`, which
+Line items come from a dropdown of the full price list — 81 lots across the 9 pathways plus
+the three devices, 84 entries — generated from `invoice/AXIOM-Price-List-v1.0.pdf`, which
 is committed beside it. Shipping is Rp 100.000 per 3 units at an address, capped at
 Rp 300.000 there, Jabodetabek, charged per address: add addresses under *Ship to*, route each
 line item to one, and each carries its own amount, calculated by default and overridable.
