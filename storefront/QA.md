@@ -53,3 +53,10 @@
 - Fixed: the Saved icon appeared in the header in Indonesian, because the CSS hid it by its English label. It now matches the link address.
 - Tools: `serve.py` (threaded preview server, also in the ZIP and used by CI). QA screenshots go to `qa/latest/` (ignored). CLAUDE.md corrected on where the dictionary loads and on the CI checks.
 - `qa/check-hero.cjs`, `qa/check-i18n.cjs` and `qa/check-basket.cjs` pass on the served site and the standalone HTML.
+
+## KLOW-C and full stock — November 14
+
+- KLOW-C (KLOW + Cartalax), 100 mg at Rp 6.200.000 (SKU `klowc100`), joins Tissue Repair after KLOW: catalogue card, product page, compound page, pathway list (now 12 compounds · 14 lots), price list (87 lots) and counts (66 compounds · 80 lots, 73 products, 176 templates).
+- Its photograph is the approved KLOW photograph relabelled locally (`tools/relabel_klow_c.py`): only the name and quantity were erased and redrawn; visual review confirms KLOW-C (KLOW + Cartalax), 100 mg and dial 0.
+- No product is sold out: TB-500, Thymosin Alpha-1 and Epithalon now carry stock (12, 8 and 10), and their cards, buy boxes and compound rows use the in-stock markup. No template carries "Sold out", "None available" or a notify form.
+- `verify_stone.py` passes for 73 products; `qa/check-basket.cjs`, `qa/check-i18n.cjs` (172 routes, no English left) and `qa/check-hero.cjs` pass on the served site.

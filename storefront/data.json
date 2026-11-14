@@ -468,7 +468,7 @@
       "slug": "kpv",
       "name": "KPV",
       "kind": "peptide",
-      "cls": "α-MSH tripeptide",
+      "cls": "\u03b1-MSH tripeptide",
       "pathway": "tissue-repair",
       "pathway_no": "03",
       "pathway_name": "Tissue Repair",
@@ -505,6 +505,29 @@
       ],
       "synonyms": [
         "KLOW Blend"
+      ],
+      "coa": []
+    },
+    {
+      "slug": "klow-c-klow-plus-cartalax",
+      "name": "KLOW-C (KLOW + Cartalax)",
+      "kind": "peptide",
+      "cls": "Multi-peptide blend",
+      "pathway": "tissue-repair",
+      "pathway_no": "03",
+      "pathway_name": "Tissue Repair",
+      "variants": [
+        {
+          "sku": "klowc100",
+          "dose": "100 mg",
+          "content": "Vial + pen",
+          "price_idr": 6200000,
+          "cold": true,
+          "available": 12
+        }
+      ],
+      "synonyms": [
+        "KLOW-C Blend"
       ],
       "coa": []
     },
@@ -577,7 +600,7 @@
       "slug": "tb-500",
       "name": "TB-500",
       "kind": "peptide",
-      "cls": "Thymosin β4 fragment",
+      "cls": "Thymosin \u03b24 fragment",
       "pathway": "tissue-repair",
       "pathway_no": "03",
       "pathway_name": "Tissue Repair",
@@ -588,7 +611,7 @@
           "content": "Vial + pen",
           "price_idr": 1800000,
           "cold": true,
-          "available": 0
+          "available": 12
         }
       ],
       "synonyms": [],
@@ -902,7 +925,7 @@
       "slug": "slu-pp-332-injectable",
       "name": "SLU-PP-332 (Injectable)",
       "kind": "peptide",
-      "cls": "ERRα agonist",
+      "cls": "ERR\u03b1 agonist",
       "pathway": "cellular-energy",
       "pathway_no": "05",
       "pathway_name": "Cellular Energy",
@@ -957,7 +980,7 @@
           "content": "Vial + pen",
           "price_idr": 3300000,
           "cold": true,
-          "available": 0
+          "available": 8
         }
       ],
       "synonyms": [],
@@ -1032,7 +1055,7 @@
       "slug": "melanotan-ii",
       "name": "Melanotan II",
       "kind": "peptide",
-      "cls": "α-MSH analogue",
+      "cls": "\u03b1-MSH analogue",
       "pathway": "reproductive",
       "pathway_no": "07",
       "pathway_name": "Reproductive",
@@ -1139,7 +1162,7 @@
           "content": "Vial + pen",
           "price_idr": 3100000,
           "cold": true,
-          "available": 0
+          "available": 10
         }
       ],
       "synonyms": [
