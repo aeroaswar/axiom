@@ -149,13 +149,14 @@ font-size alone leaves the letter-spacing proportionally too wide and the type f
 `autofit()` walks each band, and while it overflows its measure, steps `--k` down by `0.02` to a
 floor of **`0.48`**, warning to the console if it still does not fit.
 
-Measured in `builder.html` against the longest names in the 79-compound catalogue (the same in
+Measured in `builder.html` against the longest names in the 81-compound catalogue (the same in
 A4 and thermal mode):
 
 | Compound | `--k` |
 |---|---|
 | `Retatrutide` | `1` (no shrink) |
 | `Ipamorelin + Tesamorelin` | `0.64` |
+| `KLOW-C (KLOW + Cartalax)` | `0.66` |
 | `BPC-157 + TB-500 (Wolverine)` | `0.60` |
 | `CJC-1295 (No DAC) + Ipamorelin` | `0.54` |
 | `VIP (Vasoactive Intestinal Peptide)` | `0.48` — the longest; cap height 1.64 mm |
