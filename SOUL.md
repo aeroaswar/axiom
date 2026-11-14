@@ -107,6 +107,11 @@ decision from the owner, and none should be resolved silently in code.
   calculator and exports dose dates. That conflicts with "zero medical guidance" in the master
   prompt's §3. The guide labels each figure with its evidence tier and states "No human dose has
   been set" rather than inventing one, but it remains dosing content.
+- **The personal tracker.** `dosage-guide/tracker.html` is a dose log the owner asked for on
+  10 November 2026: a person records what they took, with check-ins and progress photos. It
+  suggests no amount or schedule and keeps every record on the device, but it is still a
+  personal-use surface beside a Research Use Only catalogue. It is kept out of the guide's
+  deployment (`dosage-guide/.vercelignore`) and published only as a private Claude Artifact.
 - **The vial label's DOSE row.** `10 clicks = 1 mg` is a pen calibration, but a regulator may
   read it as a dose. `stickers/design.md` §9 keeps it switchable per SKU (`dose: null`).
 - **The brand book's copy examples.** Its "write this" example states a dose ("250mcg twice

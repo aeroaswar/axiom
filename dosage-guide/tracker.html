@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>AXIOM Tracker</title>
+<meta name="description" content="A private daily log: what you took, a check-in, vials on hand and progress photos you can compare." />
+<meta name="theme-color" content="#F2EDE5" />
+<meta name="color-scheme" content="light" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='117.77 -19.73 109.46 109.46'%3E%3Crect x='117.77' y='-19.73' width='109.46' height='109.46' fill='%23070605'/%3E%3Cpath fill='%23F2EDE5' d='M132 2 148.5 2 170.29 24.3 161.85 32.54ZM213 2 196.5 2 174.71 24.3 183.15 32.54ZM132 68 148.5 68 170.29 45.7 161.85 37.46ZM213 68 196.5 68 174.71 45.7 183.15 37.46Z'/%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="AXIOM" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+/* ------------------------------------------------------------------ *
+ * AXIOM Tracker. Light only: the AXIOM print palette, paper with deep
+ * bronze (DESIGN.md). Paper is the ground; content sits on lighter cards
+ * with a soft lift, so the eye finds the summary first. Jost carries the
+ * figures and titles, the system face everything else.
+ * Layout: one 640 px column, grouped cards, a five-slot tab bar with the
+ * log button in the middle.
+ * ------------------------------------------------------------------ */
+:root{
+  --bg:#F2EDE5; --surface:#FBF8F3; --surface-2:#EFE8DD; --ink:#070605; --muted:#5c544a; --muted-2:#6e665c;
+  --line:rgba(7,6,5,.10); --line-2:rgba(7,6,5,.20); --line-soft:rgba(7,6,5,.06);
+  --accent:#7C4C24; --accent-bright:#7C4C24; --accent-ink:#F7F2EA;
+  --accent-soft:rgba(124,76,36,.09); --accent-line:rgba(124,76,36,.32);
+  --panel:#FBF8F3; --panel-2:#EFE8DD; --bar:rgba(242,237,229,.86); --bar-0:rgba(242,237,229,0);
+  --err:#9a3f27; --ok:#4f6342;
+  --lift:0 1px 2px rgba(7,6,5,.05),0 12px 28px -18px rgba(7,6,5,.30);
+  --r:20px; --r-sm:12px;
+  --brand:"Jost","Century Gothic",system-ui,sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",system-ui,"Segoe UI",Roboto,Arial,sans-serif;
+  --pad:20px; --maxw:640px;
+  --pad-l:max(var(--pad),env(safe-area-inset-left)); --pad-r:max(var(--pad),env(safe-area-inset-right));
+  --ease:cubic-bezier(.16,1,.3,1);
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:17px;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+@supports (font:-apple-system-body) and (-webkit-touch-callout:none){html{font:-apple-system-body}}
+:root{padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;
+  font-feature-settings:"tnum" 1;padding-bottom:104px;min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:25;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+::selection{background:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main:focus{outline:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.muted{color:var(--muted)}
+.hint{font-size:.7647rem;color:var(--muted);margin-top:8px}
+.empty{padding:14px 0;color:var(--muted);font-size:.8824rem}
+
+/* ---------- Top bar ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bar);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.bar-in{display:flex;align-items:center;justify-content:space-between;height:52px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
+.mark{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.mark svg{width:72px;height:8.7px;overflow:visible;display:block}
+.mark span{font-size:.6471rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);padding-left:10px;border-left:1px solid var(--line-2)}
+.icon-btn{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;color:var(--muted);transition:color .22s var(--ease),background .22s var(--ease)}
+.icon-btn:hover{color:var(--ink);background:var(--line-soft)}
+.icon-btn[disabled]{opacity:.3;cursor:default;background:none}
+
+/* ---------- Titles and section labels ---------- */
+.lt{padding:10px 0 4px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.lt h1{font-family:var(--brand);font-weight:300;font-size:2.1rem;line-height:1.05;letter-spacing:-.01em}
+.lt p{font-size:.8235rem;color:var(--muted);margin-top:4px}
+.chip{min-height:36px;padding:0 14px;border:1px solid var(--line-2);border-radius:999px;font-size:.7647rem;font-weight:500;color:var(--ink);background:var(--surface);white-space:nowrap}
+.sec{margin-top:26px}
+.sec > h2,.label{font-size:.7059rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 4px 10px}
+.sec > h2 small,.label small{font-weight:500;letter-spacing:.02em;text-transform:none;font-size:.7647rem}
+.label button{color:var(--accent);font-weight:600;letter-spacing:.02em;text-transform:none;font-size:.7647rem;min-height:32px}
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--lift);border:1px solid var(--line-soft)}
+.card.pad{padding:16px}
+
+/* ---------- Week strip ---------- */
+.week{display:grid;grid-template-columns:32px repeat(7,minmax(0,1fr)) 32px;align-items:center;gap:2px;margin-top:14px}
+.week .icon-btn{min-width:32px}
+.wd{min-height:58px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;
+  transition:background .22s var(--ease),color .22s var(--ease)}
+.wd i{font-style:normal;font-size:.6471rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.wd b{font-family:var(--brand);font-weight:400;font-size:1.0588rem;line-height:1}
+.wd::after{content:"";width:5px;height:5px;border-radius:50%;background:transparent;margin-top:3px}
+.wd.dose::after{background:var(--accent)}
+.wd.today b{color:var(--accent)}
+.wd[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.wd[aria-pressed="true"] i{color:rgba(242,237,229,.7)}
+.wd[aria-pressed="true"] b{color:var(--bg)}
+.wd[aria-pressed="true"].dose::after{background:#E7B173}
+.wd[disabled]{opacity:.3;cursor:default}
+
+/* ---------- Glance ---------- */
+.glance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.glance > div{padding:14px 14px 13px;min-width:0}
+.glance > div + div{border-left:1px solid var(--line-soft)}
+.glance span{display:block;font-size:.6471rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.glance b{display:block;font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1.15;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.glance b small{font-size:.55em;margin-left:.15em}
+.glance em{display:block;font-style:normal;font-size:.7059rem;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.glance em.down{color:var(--ok)}
+
+/* ---------- Log again ---------- */
+.again{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 14px;margin:0 -2px;scroll-snap-type:x proximity;scrollbar-width:none}
+.again::-webkit-scrollbar{display:none}
+.again button{flex:0 0 auto;min-width:148px;max-width:200px;text-align:left;padding:13px 14px;position:relative;scroll-snap-align:start;
+  background:var(--surface);border-radius:16px;box-shadow:var(--lift);border:1px solid var(--line-soft);transition:transform .22s var(--ease)}
+.again button:active{transform:scale(.97)}
+.again b{display:block;font-weight:600;font-size:.8824rem;padding-right:30px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.again strong{display:block;font-family:var(--brand);font-weight:400;font-size:1.2rem;color:var(--accent);margin-top:2px}
+.again span{display:block;font-size:.7059rem;color:var(--muted)}
+.again svg{position:absolute;top:11px;right:11px;width:24px;height:24px}
+.again.done button.flash{box-shadow:0 0 0 2px var(--accent)}
+
+/* ---------- Timeline of doses ---------- */
+.tl{padding:4px 0}
+.tl-row{display:grid;grid-template-columns:3.2rem 14px minmax(0,1fr) 24px;gap:10px;align-items:center;width:100%;text-align:left;padding:10px 14px;min-height:56px;
+  transition:background .22s var(--ease)}
+.tl-row:hover{background:var(--line-soft)}
+.tl-row + .tl-row{border-top:1px solid var(--line-soft)}
+.tl-row .t{font-size:.8235rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tl-row .dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--accent);background:var(--surface)}
+.tl-row b{display:block;font-weight:600;font-size:.9412rem;line-height:1.3;overflow-wrap:anywhere}
+.tl-row b em{font-style:normal;font-weight:500;color:var(--accent)}
+.tl-row span.s{display:block;font-size:.7647rem;color:var(--muted);overflow-wrap:anywhere}
+.tl-row svg{color:var(--muted-2)}
+.tl-empty{padding:18px 16px;font-size:.8824rem;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+/* ---------- Check-in ---------- */
+.ck{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ck > div{min-width:0}
+.ck .lbl{font-size:.7059rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;display:block}
+.stepper{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;align-items:center;background:var(--surface-2);border-radius:14px;padding:3px}
+.stepper button{width:40px;height:44px;border-radius:11px;font-size:1.3rem;line-height:1;color:var(--ink)}
+.stepper button:hover{background:rgba(7,6,5,.05)}
+.stepper label{display:flex;align-items:baseline;justify-content:center;gap:3px;min-width:0}
+.stepper input{width:100%;min-width:0;border:0;background:none;text-align:center;font-family:var(--brand);font-size:1.45rem;font-weight:300;padding:4px 0;color:var(--ink)}
+.stepper input::placeholder{color:var(--muted-2);opacity:.7}
+.stepper input:focus{outline:none}
+.stepper em{font-style:normal;font-size:.7059rem;color:var(--muted)}
+.ck .full{grid-column:1/-1}
+.saved{font-size:.7059rem;color:var(--ok);letter-spacing:.04em;text-transform:none;font-weight:500;opacity:0;transition:opacity .22s var(--ease)}
+.saved.on{opacity:1}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.seg button{min-height:40px;padding:0 14px;border-radius:999px;font-size:.8235rem;color:var(--muted);background:var(--surface-2);transition:background .22s var(--ease),color .22s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg.feel{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:0}
+.seg.feel button{border-radius:12px;min-height:54px;padding:0 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.seg.feel button b{font-family:var(--brand);font-weight:400;font-size:1.0588rem}
+.seg.feel button span{font-size:.6471rem}
+textarea.note{width:100%;min-height:44px;border:0;border-radius:14px;background:var(--surface-2);padding:11px 13px;resize:vertical;font-size:.9412rem}
+textarea.note:focus{outline:2px solid var(--accent-line)}
+
+/* ---------- Vials ---------- */
+.vrow{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 14px;margin:0 -2px;scrollbar-width:none}
+.vrow::-webkit-scrollbar{display:none}
+.vcard{flex:0 0 auto;width:156px;text-align:left;padding:14px;background:var(--surface);border-radius:18px;box-shadow:var(--lift);border:1px solid var(--line-soft);
+  display:flex;flex-direction:column;gap:8px}
+.vcard .ring{position:relative;width:72px;height:72px}
+.vcard .ring svg{width:72px;height:72px;transform:rotate(-90deg)}
+.vcard .ring span{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--brand);font-size:1.05rem;line-height:1}
+.vcard .ring span small{font-family:var(--sans);font-size:.6471rem;color:var(--muted);margin-top:2px}
+.vcard b{font-weight:600;font-size:.8824rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vcard .m{font-size:.7059rem;color:var(--muted);line-height:1.35}
+.vcard .flag{color:var(--err)}
+.vcard.add{align-items:center;justify-content:center;color:var(--accent);box-shadow:none;background:transparent;border:1.5px dashed var(--accent-line);font-weight:600;font-size:.8235rem;min-height:168px}
+.vcard.add svg{width:28px;height:28px}
+
+/* ---------- Photo card ---------- */
+.ph{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:center}
+.ph .frame{width:84px;aspect-ratio:3/4;border-radius:14px;background:var(--surface-2);overflow:hidden;position:relative;border:1.5px dashed var(--line-2)}
+.ph .frame img{width:100%;height:100%;object-fit:cover;opacity:.42;display:block}
+.ph .frame.done{border:0}
+.ph .frame.done img{opacity:1}
+.ph p{font-size:.8235rem;color:var(--muted);margin-top:6px}
+.ph .seg{margin-top:10px}
+
+/* ---------- Buttons ---------- */
+.btn{min-height:48px;padding:0 18px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:.9412rem;
+  background:var(--surface-2);color:var(--ink);transition:filter .22s var(--ease),background .22s var(--ease)}
+.btn:hover{filter:brightness(.98)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.block{width:100%}
+.btn.danger{color:var(--err);background:transparent;box-shadow:inset 0 0 0 1px var(--line-2)}
+.btn.small{min-height:40px;padding:0 14px;font-size:.8235rem}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1px var(--line-2)}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+/* ---------- Fields (sheets) ---------- */
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.fields .full{grid-column:1/-1}
+label.f,div.f{display:flex;flex-direction:column;gap:6px;font-size:.7059rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.inp{background:var(--surface-2);border:0;border-radius:12px;min-height:46px;padding:10px 12px;width:100%;font-size:1rem;color:var(--ink);-webkit-appearance:none;appearance:none;
+  letter-spacing:0;text-transform:none}
+select.inp{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
+.inp:focus{outline:2px solid var(--accent-line)}
+.unit-wrap{position:relative}
+.unit-wrap .inp{padding-right:52px}
+.unit-wrap em{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-style:normal;font-size:.8235rem;color:var(--muted);pointer-events:none;letter-spacing:0;text-transform:none}
+.err{color:var(--err);font-size:.7647rem;min-height:1em}
+
+/* ---------- Log sheet ---------- */
+.search{background:var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%235c544a' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E") no-repeat 12px 50%;
+  padding-left:38px;margin-top:12px}
+.c-list{margin-top:10px;max-height:52vh;overflow-y:auto;overscroll-behavior:contain}
+.c-list h3{font-size:.6471rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:12px 4px 6px;position:sticky;top:0;background:var(--panel)}
+.c-list button{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;min-height:48px;padding:8px 10px;border-radius:12px;font-size:.9412rem}
+.c-list button:hover,.c-list button:focus-visible{background:var(--surface-2)}
+.c-list button span{font-size:.7647rem;color:var(--muted);white-space:nowrap}
+.picked{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 14px;border-radius:14px;background:var(--accent-soft);margin-top:12px;text-align:left}
+.picked b{font-weight:600}
+.picked em{font-style:normal;font-size:.7647rem;color:var(--accent);font-weight:600}
+.amount{display:flex;align-items:baseline;justify-content:center;gap:8px;margin-top:18px}
+.amount input{width:7ch;border:0;background:none;text-align:right;font-family:var(--brand);font-weight:300;font-size:3rem;line-height:1;color:var(--ink);padding:0}
+.amount input:focus{outline:none}
+.amount input::selection{background:var(--accent-soft);color:var(--ink)}
+.amount input::placeholder{color:var(--muted-2);opacity:.45}
+.amount span{font-family:var(--brand);font-size:1.3rem;color:var(--muted);min-width:4ch}
+.amount + .seg,.center{justify-content:center}
+.amts{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.amts button{min-height:36px;padding:0 12px;border-radius:999px;font-size:.7647rem;color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent-line)}
+.f-label{font-size:.7059rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:20px 4px 8px;display:flex;justify-content:space-between}
+.f-label .h{text-transform:none;letter-spacing:0;font-weight:500;color:var(--accent)}
+.sites{display:grid;grid-template-columns:4.6rem 1fr 1fr;gap:6px;align-items:center}
+.sites .rh{font-size:.7647rem;color:var(--muted)}
+.sites .ch{font-size:.6471rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center}
+.sites button{min-height:48px;border-radius:12px;background:var(--surface-2);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;position:relative;
+  transition:background .22s var(--ease),color .22s var(--ease)}
+.sites button b{font-weight:600;font-size:.7647rem}
+.sites button span{font-size:.6471rem;color:var(--muted)}
+.sites button.next::after{content:"";position:absolute;top:7px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.sites button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.sites button[aria-pressed="true"] span{color:rgba(242,237,229,.75)}
+.sheet-foot{position:sticky;bottom:calc(-22px - env(safe-area-inset-bottom));margin:18px calc(-1 * var(--pad-r)) calc(-22px - env(safe-area-inset-bottom)) calc(-1 * var(--pad-l));
+  padding:12px var(--pad-r) calc(14px + env(safe-area-inset-bottom)) var(--pad-l);background:linear-gradient(rgba(251,248,243,0),var(--panel) 30%);display:flex;gap:8px}
+.sheet-foot .btn.primary{flex:1}
+
+/* ---------- Photos ---------- */
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:12px}
+.thumb{position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:var(--surface-2);box-shadow:var(--lift)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .tag{position:absolute;left:6px;bottom:6px;font-size:.6471rem;letter-spacing:.08em;background:rgba(7,6,5,.72);color:#F2EDE5;padding:2px 7px;border-radius:6px}
+.thumb[aria-pressed="true"]{outline:2.5px solid var(--accent);outline-offset:2px}
+.month-h{font-size:.7059rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:24px 4px 0}
+.cmp{margin-top:16px}
+.cmp-side{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cmp-side figure{position:relative;border-radius:16px;overflow:hidden;background:var(--surface-2);aspect-ratio:3/4}
+.cmp-side img{width:100%;height:100%;object-fit:cover;display:block}
+figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;background:linear-gradient(rgba(7,6,5,0),rgba(7,6,5,.78));color:#F2EDE5;font-size:.7059rem;letter-spacing:.04em}
+figcaption b{display:block;font-size:.6471rem;letter-spacing:.24em;text-transform:uppercase;color:#E7B173;font-weight:500}
+.slider{position:relative;border-radius:16px;overflow:hidden;background:var(--surface-2);aspect-ratio:3/4;touch-action:pan-y;user-select:none;-webkit-user-select:none;max-width:100%}
+.slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.slider .top{clip-path:inset(0 0 0 var(--x,50%))}
+.slider.fade .top{clip-path:none;opacity:var(--o,.5)}
+.slider .handle{position:absolute;top:0;bottom:0;left:var(--x,50%);width:2px;margin-left:-1px;background:#F2EDE5;box-shadow:0 0 0 1px rgba(7,6,5,.35);pointer-events:none}
+.slider .handle::after{content:"";position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2px solid #F2EDE5;background:rgba(7,6,5,.45)}
+.slider input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.slider .lab{position:absolute;top:10px;font-size:.6471rem;letter-spacing:.24em;text-transform:uppercase;background:rgba(7,6,5,.68);color:#F2EDE5;padding:3px 8px;border-radius:6px}
+.slider .lab.l{left:10px}.slider .lab.r{right:10px}
+.fade-range{width:100%;min-height:44px;margin-top:8px;accent-color:var(--accent)}
+.strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scroll-snap-type:x proximity}
+.strip .thumb{flex:0 0 72px;scroll-snap-align:start;box-shadow:none}
+.strip .thumb .tag{left:4px;bottom:4px;padding:1px 5px}
+
+/* ---------- Figures and charts ---------- */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--surface);border-radius:var(--r);box-shadow:var(--lift);border:1px solid var(--line-soft);overflow:hidden;margin-top:12px}
+.kpis.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kpi{padding:14px;min-width:0;border-left:1px solid var(--line-soft);border-top:1px solid var(--line-soft);margin:-1px 0 0 -1px}
+.kpi b{display:block;font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1.15;color:var(--ink);white-space:nowrap}
+.kpi b small{font-size:.55em;margin-left:.2em;letter-spacing:0}
+.kpi span{display:block;font-size:.7059rem;color:var(--muted);margin-top:4px;line-height:1.3}
+.cards{display:grid;gap:10px}
+.cards .card{padding:14px 16px}
+.card-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.card-h b{font-weight:600}
+.card-h span{font-size:.7647rem;color:var(--accent);white-space:nowrap}
+.card dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.card dt{font-size:.6471rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.card dd{font-size:.8824rem;margin-top:2px}
+.chart{margin-top:12px;padding:12px 10px 6px;background:var(--surface);border-radius:var(--r);box-shadow:var(--lift);border:1px solid var(--line-soft)}
+.chart svg{width:100%;height:auto;display:block;max-width:100%}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--sans)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.7059rem;color:var(--muted);padding:2px 4px 8px}
+.legend i{display:inline-block;width:14px;height:2px;background:var(--accent);vertical-align:middle;margin-right:6px}
+.legend i.dot{width:7px;height:7px;border-radius:50%;background:none;border:1.5px solid var(--accent);opacity:.6}
+.legend i.tick{width:2px;height:10px;opacity:.8}
+
+/* ---------- Calendar and lists ---------- */
+.calcard{padding:8px 10px 12px}
+.cal-h{display:flex;align-items:center;justify-content:space-between}
+.cal-h b{font-weight:600}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:4px}
+.cal .wd2,.cal > span{font-size:.6471rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+.cal button{min-height:44px;border-radius:12px;font-size:.8235rem;position:relative;color:var(--ink)}
+.cal button.out{visibility:hidden}
+.cal button.future{color:var(--muted-2);opacity:.5}
+.cal button.today{color:var(--accent);font-weight:600}
+.cal button.sel{background:var(--ink);color:var(--bg)}
+.cal button.dose::after{content:"";position:absolute;left:50%;bottom:6px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--accent)}
+.cal button.sel.dose::after{background:#E7B173}
+.cal button.pic::before{content:"";position:absolute;right:7px;top:7px;width:5px;height:5px;border-radius:50%;border:1px solid currentColor;opacity:.6}
+.list{background:var(--surface);border-radius:var(--r);box-shadow:var(--lift);border:1px solid var(--line-soft);overflow:hidden}
+.entry{display:grid;grid-template-columns:3.4rem minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 6px 10px 14px}
+.entry + .entry{border-top:1px solid var(--line-soft)}
+.entry .t{font-size:.7647rem;color:var(--muted)}
+.entry b{display:block;font-weight:600;font-size:.9412rem;line-height:1.3;overflow-wrap:anywhere}
+.entry span{display:block;font-size:.7647rem;color:var(--muted);overflow-wrap:anywhere}
+.entry .amt{color:var(--accent);font-weight:500}
+.entry .acts{display:flex}
+
+/* ---------- Tab bar ---------- */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--bar);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--line-soft);padding-bottom:env(safe-area-inset-bottom)}
+.tabs-in{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;padding:0 var(--pad-r) 0 var(--pad-l)}
+.tabs button{min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:.6471rem;letter-spacing:.04em;transition:color .22s var(--ease)}
+.tabs button[aria-current="page"]{color:var(--accent);font-weight:600}
+.tabs svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.tabs .fab{align-self:center;justify-self:center;width:58px;height:58px;min-height:58px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+  box-shadow:0 10px 22px -8px rgba(124,76,36,.7);transform:translateY(-14px);transition:transform .22s var(--ease)}
+.tabs .fab:active{transform:translateY(-14px) scale(.94)}
+.tabs .fab svg{width:26px;height:26px;stroke-width:2}
+
+/* ---------- Sheets (dialogs) ---------- */
+dialog{border:0;padding:0;background:var(--panel);color:var(--ink);width:100%;max-width:var(--maxw);margin:auto auto 0;border-radius:24px 24px 0 0;max-height:94vh;box-shadow:0 -10px 40px -20px rgba(7,6,5,.35)}
+dialog::backdrop{background:rgba(7,6,5,.42);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+dialog[open]{animation:up .42s var(--ease)}
+@keyframes up{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.sheet{padding:10px var(--pad-r) calc(22px + env(safe-area-inset-bottom)) var(--pad-l);overflow-y:auto;max-height:94vh}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-h h2{font-family:var(--brand);font-weight:400;font-size:1.35rem}
+.grab{width:38px;height:5px;border-radius:3px;background:var(--line-2);margin:0 auto 8px}
+.viewer img{width:100%;max-height:62vh;object-fit:contain;border-radius:14px;background:var(--surface-2);display:block;margin-top:10px}
+.ask-msg{font-size:1rem;line-height:1.5;padding:8px 0 4px}
+.sec-plain{margin-top:18px}
+.sec-plain h3{font-size:.7059rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+@media (min-width:760px){dialog{margin:auto;border-radius:24px}}
+
+/* ---------- Footer, toast ---------- */
+.scope{padding:34px 4px 10px}
+.scope p{font-size:.7059rem;color:var(--muted-2);line-height:1.7}
+.scope p+p{margin-top:10px}
+.scope strong{color:var(--muted);font-weight:500}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,12px);opacity:0;z-index:40;background:var(--ink);color:var(--bg);
+  padding:12px 16px;border-radius:14px;font-size:.8235rem;max-width:calc(100% - 40px);width:max-content;display:flex;align-items:center;gap:14px;
+  transition:opacity .22s var(--ease),transform .22s var(--ease);pointer-events:none;box-shadow:0 12px 30px -12px rgba(7,6,5,.6)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.act.on{pointer-events:auto}
+.toast button{color:#E7B173;font-weight:600;min-height:36px;padding:0 4px;white-space:nowrap}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <div class="mark">
+      <svg viewBox="0 0 582 70" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 68 13.4 68 41 16.69 68.6 68 82 68 46.5 2 35.5 2Z M132 2 148.5 2 170.29 24.3 161.85 32.54ZM213 2 196.5 2 174.71 24.3 183.15 32.54ZM132 68 148.5 68 170.29 45.7 161.85 37.46ZM213 68 196.5 68 174.71 45.7 183.15 37.46Z M279.1 2 290.9 2 290.9 68 279.1 68Z M352.3 35A42.7 35 0 1 1 437.7 35A42.7 35 0 1 1 352.3 35ZM364.1 35A30.9 23.2 0 1 0 425.9 35A30.9 23.2 0 1 0 364.1 35Z M497 2 508.8 2 539.5 41 570.2 2 582 2 582 68 570.2 68 570.2 21.08 539.5 60.08 508.8 21.08 508.8 68 497 68Z"/></svg>
+      <span data-t="brand_sub"></span>
+    </div>
+    <button class="icon-btn" id="open-settings" type="button" data-t-aria="settings">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap" id="main" tabindex="-1"></main>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="tabs-in">
+    <button type="button" data-view="today"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg><span data-t="tab_today"></span></button>
+    <button type="button" data-view="trends"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l5-6 4 3 7-9"/><path d="M4 21h16"/></svg><span data-t="tab_trends"></span></button>
+    <button type="button" class="fab" id="fab" data-t-aria="log_dose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button type="button" data-view="photos"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5.5-5 4 3.5 2.5-2 4 3.5"/></svg><span data-t="tab_photos"></span></button>
+    <button type="button" data-view="history"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span data-t="tab_history"></span></button>
+  </div>
+</nav>
+
+<!-- Log or edit a dose: pick the compound, then the amount, site and time. -->
+<dialog id="dose-dlg" aria-labelledby="dose-title">
+  <form class="sheet" id="dose-form" method="dialog" novalidate>
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="dose-title"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <div id="pick-step">
+      <input class="inp search" id="c-search" type="search" autocomplete="off" />
+      <div class="c-list" id="c-list"></div>
+    </div>
+    <div id="detail-step" hidden>
+      <button type="button" class="picked" id="c-picked"><b id="c-picked-name"></b><em data-t="change"></em></button>
+      <div class="amount"><input id="f-amount" inputmode="decimal" autocomplete="off" placeholder="0" /><span id="f-unit-show"></span></div>
+      <div class="seg center" id="f-units"></div>
+      <div class="amts" id="f-amts"></div>
+      <div class="f-label"><span data-t="site"></span><span class="h" id="f-site-hint"></span></div>
+      <div class="sites" id="f-sites"></div>
+      <div class="seg" id="f-routes"></div>
+      <div class="fields">
+        <label class="f"><span data-t="time"></span><input class="inp" id="f-time" type="time" /></label>
+        <label class="f"><span data-t="note"></span><input class="inp" id="f-note" type="text" maxlength="500" autocomplete="off" /></label>
+      </div>
+      <p class="err" id="f-err" role="alert"></p>
+      <div class="sheet-foot">
+        <button class="btn primary" type="submit" data-t="save"></button>
+        <button class="btn danger" type="button" id="f-delete" hidden data-t="delete"></button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<!-- Add or edit a vial -->
+<dialog id="vial-dlg" aria-labelledby="vial-title">
+  <form class="sheet" id="vial-form" method="dialog" novalidate>
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="vial-title"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <div class="fields">
+      <label class="f full"><span data-t="compound"></span><select class="inp" id="v-compound"></select></label>
+      <label class="f full" id="v-name-wrap" hidden><span data-t="name"></span><input class="inp" id="v-name" type="text" autocomplete="off" maxlength="80" /></label>
+      <label class="f"><span data-t="vial_mg"></span><span class="unit-wrap"><input class="inp" id="v-mg" inputmode="decimal" autocomplete="off" /><em>mg</em></span></label>
+      <label class="f"><span data-t="vial_opened"></span><input class="inp" id="v-opened" type="date" /></label>
+      <label class="f full"><span data-t="vial_within"></span><span class="unit-wrap"><input class="inp" id="v-within" inputmode="numeric" autocomplete="off" /><em data-t="days_unit"></em></span></label>
+      <p class="hint full" data-t="vial_hint"></p>
+      <p class="err full" id="v-err" role="alert"></p>
+    </div>
+    <div class="row-actions">
+      <button class="btn primary" type="submit" style="flex:1" data-t="save"></button>
+      <button class="btn" type="button" id="v-finish" hidden></button>
+      <button class="btn danger" type="button" id="v-delete" hidden data-t="delete"></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Settings -->
+<dialog id="set-dlg" aria-labelledby="set-title">
+  <div class="sheet">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="set-title" data-t="settings"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <div class="sec" style="border:0;margin-top:0;padding-top:14px">
+      <h2 data-t="backup"></h2>
+      <p class="hint" id="set-hint"></p>
+      <p class="hint" id="set-usage"></p>
+      <div class="row-actions">
+        <button class="btn" type="button" id="exp-json" data-t="export_json"></button>
+        <button class="btn" type="button" id="imp-json" data-t="import_json"></button>
+        <button class="btn" type="button" id="exp-csv" data-t="export_csv"></button>
+      </div>
+      <input type="file" id="imp-file" accept="application/json,.json" hidden />
+    </div>
+    <div class="sec">
+      <button class="btn danger block" type="button" id="wipe" data-t="delete_all"></button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Photo viewer -->
+<dialog id="pic-dlg" aria-labelledby="pic-title">
+  <div class="sheet viewer">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-h"><h2 id="pic-title"></h2><button class="icon-btn" type="button" data-close data-t-aria="cancel">✕</button></div>
+    <img id="pic-img" alt="" />
+    <div class="fields">
+      <label class="f"><span data-t="date"></span><input class="inp" id="pic-date" type="date" /></label>
+      <label class="f"><span data-t="pose"></span><select class="inp" id="pic-pose"></select></label>
+    </div>
+    <div class="row-actions">
+      <button class="btn small" type="button" id="pic-before" data-t="set_before"></button>
+      <button class="btn small" type="button" id="pic-after" data-t="set_after"></button>
+      <button class="btn small danger" type="button" id="pic-del" data-t="delete"></button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Confirmation. The Artifact viewer answers window.confirm() with false, so the page asks itself. -->
+<dialog id="ask-dlg" aria-labelledby="ask-msg">
+  <form class="sheet" method="dialog">
+    <p id="ask-msg" class="ask-msg"></p>
+    <div class="row-actions">
+      <button class="btn danger" value="yes" id="ask-yes" style="flex:1"></button>
+      <button class="btn" value="no" style="flex:1" data-t="ask_cancel"></button>
+    </div>
+  </form>
+</dialog>
+
+<input type="file" id="photo-file" accept="image/*" hidden />
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-msg"></span><button type="button" id="toast-act" hidden></button></div>
+
+<script src="compounds.js"></script>
+<script>
+/* ------------------------------------------------------------------ *
+ * AXIOM Tracker
+ *
+ * A private daily log beside the compound guide: what was taken, a short
+ * check-in (weight, waist, how the day felt) and progress photos with a
+ * before / after comparison.
+ *
+ * Storage, two ways.
+ *  - Opened as a Claude Artifact: the person's private subtree of the
+ *    Artifact's database (data/users/<id>, one document per month plus
+ *    "prefs") holds entries, check-ins and photo records; photos go to the
+ *    Artifact's asset store. It follows them across devices. See "Cloud".
+ *  - Opened anywhere else: entries, check-ins and preferences live in
+ *    localStorage under STORE_KEY, photos as Blobs in IndexedDB
+ *    ("axiom-tracker" / "photos"). Nothing leaves the device.
+ * Photos are saved as a 1600 px JPEG with a 480 px thumbnail either way.
+ * Export writes one JSON file, photos included, that Import reads back.
+ *
+ * Restraint. The page records what the person enters. It never proposes
+ * an amount or a schedule: the only default it offers is the person's
+ * own last entry for that compound, and the next site in their own
+ * rotation.
+ * ------------------------------------------------------------------ */
+(function () {
+  "use strict";
+
+  var STORE_KEY = "axiom.tracker.v1";
+  var UNITS = ["mg", "mcg", "IU", "mL", "unit"];
+  var ROTATION = ["abd_l", "abd_r", "thigh_l", "thigh_r", "arm_l", "arm_r", "glute_l", "glute_r"];
+  var SITES = ROTATION.concat(["oral", "nasal", "topical", "other"]);
+  var POSES = ["front", "side", "back", "other"];
+
+  /* ---------- Copy ---------- */
+  var I18N = {
+    en: {
+      brand_sub: "Tracker", tab_today: "Today", tab_history: "History", tab_photos: "Photos", tab_compare: "Compare",
+      today: "Today", yesterday: "Yesterday", prev_day: "Previous day", next_day: "Next day", go_today: "Today",
+      today_title: "Today", history_title: "History", photos_title: "Photos", compare_title: "Compare", trends_title: "Trends", tab_trends: "Trends",
+      doses: "Doses", log_dose: "Log a dose", edit_dose: "Edit entry", no_doses: "Nothing logged on this day.",
+      checkin: "Check-in", weight: "Weight", waist: "Waist", feel: "How the day felt", note: "Note", saved: "Saved",
+      feel_1: "Low", feel_2: "Below par", feel_3: "Steady", feel_4: "Good", feel_5: "Strong",
+      photo: "Photo", add_photo: "Add photo", pose: "Pose", pose_front: "Front", pose_side: "Side", pose_back: "Back", pose_other: "Other", all: "All",
+      photo_hint: "Same light, same distance, same pose each time makes the comparison honest.",
+      compound: "Compound", recent: "Recent", other_compound: "Other (type a name)", name: "Name", amount: "Amount", unit: "Unit", time: "Time", site: "Site",
+      unit_unit: "units", next_site: "Next in your rotation: {s}.", save: "Save", cancel: "Close", delete: "Delete", edit: "Edit",
+      site_abd_l: "Abdomen, left", site_abd_r: "Abdomen, right", site_thigh_l: "Thigh, left", site_thigh_r: "Thigh, right",
+      site_arm_l: "Arm, left", site_arm_r: "Arm, right", site_glute_l: "Glute, left", site_glute_r: "Glute, right",
+      site_oral: "By mouth", site_nasal: "Nasal", site_topical: "On the skin", site_other: "Other",
+      days_logged: "Days logged", streak: "Days in a row", last7: "Entries, last 7 days",
+      by_compound: "By compound", last: "Last", in30: "Last 30 days", total30: "Total, 30 days", entries_n: "{n} entries", entries_n_1: "{n} entry",
+      days_ago: "{n} days ago", rel_today: "today", rel_yesterday: "yesterday",
+      weight_trend: "Weight", waist_trend: "Waist", start: "Start", latest: "Latest", change: "Change",
+      calendar: "Calendar", prev_month: "Previous month", next_month: "Next month", all_entries: "Every entry", show_more: "Show more",
+      history_empty: "Your record fills in as you log. Start on Today.",
+      photos_empty: "No photos yet. Add one here or from Today.", photo_of: "{pose} · {date}",
+      compare_need: "Add at least two photos to compare them.", before: "Before", after: "After", side_by_side: "Side by side", slider: "Slider",
+      days_apart: "Days apart", doses_between: "Doses between", weight_delta: "Weight change", waist_delta: "Waist change", no_data: "—",
+      pick_before: "Choose the before photo", pick_after: "Choose the after photo", set_before: "Use as before", set_after: "Use as after",
+      settings: "Settings", backup: "Backup",
+      export_hint: "Everything stays in this browser on this device and is never uploaded. Clearing site data removes it, so export a backup now and then.",
+      export_hint_cloud: "Saved to your private part of this Artifact, on every device you open it from. Export a backup now and then to keep a copy of your own.",
+      usage_cloud: "{n} photos stored with this Artifact.", ask_cancel: "Cancel", delete_everything: "Delete everything",
+      sync_slow: "Your log has not loaded yet. Anything you add now is kept and saved once it does.",
+      sync_failed: "That change did not save. Check your connection, then make it again.",
+      sync_full: "This Artifact's storage is full. Delete a few photos, then try again.",
+      sync_off: "Your log stopped syncing. Reload the page to reconnect.",
+      save_failed: "The file could not be saved here.",
+      log_again: "Log again in one tap", again_sub: "{amt} · again", logged: "Logged {what}.", undo: "Undo",
+      vials: "Vials on hand", add_vial: "Add a vial", edit_vial: "Edit vial", no_vials: "Record a vial to see how much is left in it as you log.",
+      vial_mg: "Amount in the vial", vial_opened: "Opened", vial_within: "Use within (optional)", days_unit: "days",
+      vial_hint: "Every dose of this compound logged in mg or mcg from the day it was opened comes off this vial. Doses in IU, mL or units are not counted.",
+      vial_left: "{left} of {mg} mg left", vial_used_up: "Used up", vial_days: "about {n} days at your logged pace",
+      vial_opened_ago: "opened {date}, {n} days ago", vial_opened_today: "opened today", vial_past: "past the {n} days you set",
+      mark_finished: "Mark finished", back_on_hand: "Back on hand", confirm_delete_vial: "Delete this vial? Your doses stay as they are.",
+      err_mg: "Enter the amount in the vial, in mg.", err_opened: "Choose the day it was opened.",
+      range_4w: "4 weeks", range_3m: "3 months", range_all: "All", trends: "Over time", daily: "Daily", avg7: "7-day average", dose_marks: "Doses",
+      no_range: "No check-ins in this range yet.", fade: "Fade", fade_label: "After photo opacity",
+      last_pose: "Your last {pose} photo, {date}. Match its framing.", date: "Date", photo_updated: "Photo updated.",
+      week: "Week", prev_week: "Previous week", next_week: "Next week", since: "since", first_weight: "First check-in", last_was: "Last {v} kg",
+      not_logged: "Not logged yet", none_yet: "None yet", photo_taken: "Taken today", not_taken: "Not yet today", last_rel: "Last {rel}",
+      note_ph: "Add a note about today", less: "Less {f}", more: "More {f}", search_ph: "Search compounds", change: "Change",
+      use_name: "Use \u201c{name}\u201d", your_own: "Your own", last_amount: "{amt} last time", d_ago: "{n} d ago", today_s: "Today", never: "Never",
+      next_site_short: "Next: {s}", left: "Left", right: "Right", row_arm: "Arm", row_abd: "Abdomen", row_glute: "Glute", row_thigh: "Thigh",
+      gallery: "Gallery", compare: "Compare", trends_empty: "Add a weight or waist on Today to see your line here.",
+      vial_days_short: "about {n} days left", vial_age: "opened {n} days ago", add_pose_photo: "Add a {pose} photo",
+      export_json: "Export backup", import_json: "Import backup", export_csv: "Export log as CSV", delete_all: "Delete everything",
+      usage: "{n} photos, about {mb} MB on this device.",
+      confirm_delete_all: "Delete every entry, check-in and photo on this device? This cannot be undone.",
+      confirm_delete: "Delete this entry?", confirm_delete_photo: "Delete this photo?",
+      import_done: "Backup restored: {e} entries, {p} photos.", import_bad: "That file is not an AXIOM tracker backup.",
+      exported: "Backup saved.", deleted: "Deleted.", photo_saved: "Photo saved.", saving_photo: "Saving photo",
+      photo_failed: "That image could not be read. Try a JPEG or PNG.",
+      idb_off: "Photos need browser storage, which is off in this window. Entries still save.",
+      err_amount: "Enter an amount greater than zero.", err_name: "Name the compound.",
+      scope_1: "<strong>What this is.</strong> A personal log. It records what you enter and does not suggest an amount or a schedule. It is not medical advice.",
+      scope_2: "<strong>Where it lives.</strong> In this browser, on this device. Nothing is sent anywhere. AXIOM peptides are sold for research use only.",
+      scope_2_cloud: "<strong>Where it lives.</strong> In your own private part of this Artifact on claude.ai, so it follows you across devices. Your entries can be read by you alone. Photos are stored with the Artifact itself, so keep it unshared. AXIOM peptides are sold for research use only."
+    }
+  };
+
+  /* ---------- State ---------- */
+  var S = loadState();
+  var view = "today";
+  var day = todayKey();
+  var calMonth = day.slice(0, 7);
+  var photoPose = "all";
+  var cmp = { pose: null, a: null, b: null, mode: "side", x: 50, o: 50 };
+  var trendRange = "3m", trendMetric = "weight";
+  var historyLimit = 40;
+  var editingId = null;
+  var photos = [];          // metadata + blobs from IndexedDB, oldest first
+  var urls = {};            // object URL cache: id + ":t" / ":f"
+  var idbOk = true;
+  var pendingPose = "front";
+  var viewerId = null;
+  var cloud = null;         // set once the Artifact's database answers; see "Cloud"
+
+  var COMPOUNDS = (window.COMPOUNDS || []).map(function (c) { return { slug: c.slug, name: c.name, category: c.category }; });
+  var BY_SLUG = {};
+  COMPOUNDS.forEach(function (c) { BY_SLUG[c.slug] = c; });
+
+  function loadState() {
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem(STORE_KEY) || "null"); } catch (e) { s = null; }
+    s = s && typeof s === "object" ? s : {};
+    s.entries = Array.isArray(s.entries) ? s.entries : [];
+    s.checkins = s.checkins && typeof s.checkins === "object" ? s.checkins : {};
+    s.prefs = s.prefs && typeof s.prefs === "object" ? s.prefs : {};
+    s.prefs.last = s.prefs.last || {};
+    s.vials = Array.isArray(s.vials) ? s.vials : [];
+    return s;
+  }
+  function save() {
+    if (cloud) { syncCloud(); return; }
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* storage full or blocked: keep running in memory */ }
+  }
+
+  /* ---------- Helpers ---------- */
+  function t(k, vars) {
+    var s = I18N.en[k] || k;
+    if (vars && vars.n === 1 && I18N.en[k + "_1"]) s = I18N.en[k + "_1"];
+    if (vars) Object.keys(vars).forEach(function (v) { s = s.split("{" + v + "}").join(vars[v]); });
+    return s;
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
+  }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  // Local calendar dates, never toISOString(): in Jakarta (UTC+7) that would file an early-morning entry under yesterday.
+  function keyOf(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function todayKey() { return keyOf(new Date()); }
+  function parseKey(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addDays(k, n) { var d = parseKey(k); d.setDate(d.getDate() + n); return keyOf(d); }
+  function diffDays(a, b) { // b - a, in whole days
+    var pa = a.split("-"), pb = b.split("-");
+    return Math.round((Date.UTC(+pb[0], +pb[1] - 1, +pb[2]) - Date.UTC(+pa[0], +pa[1] - 1, +pa[2])) / 864e5);
+  }
+  function loc() { return "en-GB"; }
+  function fmtNum(n, d) { return new Intl.NumberFormat(loc(), { maximumFractionDigits: d == null ? 2 : d }).format(n); }
+  function fmtDate(k, opts) { return new Intl.DateTimeFormat(loc(), opts || { day: "numeric", month: "short", year: "numeric" }).format(parseKey(k)); }
+  function fmtLong(k) { return new Intl.DateTimeFormat(loc(), { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(parseKey(k)); }
+  // Edit fields carry no grouping, so a value read back parses to itself.
+  function fmtIn(n) { return new Intl.NumberFormat(loc(), { maximumFractionDigits: 3, useGrouping: false }).format(n); }
+  function parseNum(v) {
+    if (v == null) return NaN;
+    var s = String(v).trim().replace(/\s/g, "");
+    if (!s) return NaN;
+    // "1,500" is fifteen hundred. Otherwise a lone comma or dot is the decimal mark, so a phone
+    // keypad that offers only a comma still works: "0,25" and "0.25" both read as a quarter.
+    if (/^[1-9]\d{0,2}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g, "");
+    else if (s.indexOf(",") > -1 && s.indexOf(".") > -1) s = s.replace(/[.,](?=.*[.,])/g, "").replace(",", ".");
+    else s = s.replace(",", ".");
+    return /^-?\d*\.?\d+$/.test(s) ? Number(s) : NaN;
+  }
+  function rel(k) {
+    var n = diffDays(k, todayKey());
+    if (n === 0) return t("rel_today");
+    if (n === 1) return t("rel_yesterday");
+    return t("days_ago", { n: fmtNum(n, 0) });
+  }
+  function unitLabel(u) { return u === "unit" ? t("unit_unit") : u; }
+  function siteLabel(s) { return s ? t("site_" + s) : ""; }
+  function poseLabel(p) { return t("pose_" + p); }
+  function entryName(e) { return e.slug && BY_SLUG[e.slug] ? BY_SLUG[e.slug].name : e.name || "—"; }
+  function compoundKey(e) { return e.slug || "name:" + String(e.name || "").trim().toLowerCase(); }
+  function byTime(a, b) { return (a.date + (a.time || "")).localeCompare(b.date + (b.time || "")); }
+  var toastTimer;
+  // `action` adds one button (Undo); such a toast stays six seconds instead of under three.
+  function toast(msg, action) {
+    var el = document.getElementById("toast"), b = document.getElementById("toast-act");
+    document.getElementById("toast-msg").textContent = msg;
+    b.hidden = !action; el.classList.toggle("act", !!action);
+    b.onclick = action ? function () { el.classList.remove("on"); action.fn(); } : null;
+    if (action) b.textContent = action.label;
+    el.classList.add("on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { el.classList.remove("on"); }, action ? 6000 : 2600);
+  }
+
+  /* ---------- IndexedDB for photos ---------- */
+  var dbp = null;
+  function db() {
+    if (dbp) return dbp;
+    dbp = new Promise(function (res, rej) {
+      if (!window.indexedDB) return rej(new Error("no idb"));
+      var r = indexedDB.open("axiom-tracker", 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore("photos", { keyPath: "id" }); };
+      r.onsuccess = function () { res(r.result); };
+      r.onerror = function () { rej(r.error); };
+    });
+    return dbp;
+  }
+  function tx(mode, fn) {
+    return db().then(function (d) {
+      return new Promise(function (res, rej) {
+        var x = d.transaction("photos", mode), st = x.objectStore("photos"), out;
+        var r = fn(st);
+        if (r) r.onsuccess = function () { out = r.result; };
+        x.oncomplete = function () { res(out); };
+        x.onerror = x.onabort = function () { rej(x.error); };
+      });
+    });
+  }
+  function loadPhotos() {
+    return tx("readonly", function (st) { return st.getAll(); }).then(function (all) {
+      photos = (all || []).sort(function (a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); });
+    }).catch(function () { idbOk = false; photos = []; });
+  }
+  function url(p, full) {
+    if (p.full) return "/_blob/" + (full ? p.full : p.thumbId || p.full); // an asset in the Artifact's store
+    var k = p.id + (full ? ":f" : ":t");
+    if (!urls[k]) urls[k] = URL.createObjectURL(full ? p.blob : (p.thumb || p.blob));
+    return urls[k];
+  }
+  function dropUrls(id) {
+    [":t", ":f"].forEach(function (s) { if (urls[id + s]) { URL.revokeObjectURL(urls[id + s]); delete urls[id + s]; } });
+  }
+
+  // Decode, honour EXIF orientation, and re-encode as JPEG no larger than `max` on the long side.
+  function shrink(blob, max, q) {
+    function draw(src, w0, h0) {
+      var s = Math.min(1, max / Math.max(w0, h0));
+      var c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(w0 * s)); c.height = Math.max(1, Math.round(h0 * s));
+      c.getContext("2d").drawImage(src, 0, 0, c.width, c.height);
+      return new Promise(function (res, rej) {
+        c.toBlob(function (b) { b ? res({ blob: b, w: c.width, h: c.height }) : rej(new Error("encode")); }, "image/jpeg", q);
+      });
+    }
+    var viaImg = function () {
+      return new Promise(function (res, rej) {
+        var u = URL.createObjectURL(blob), im = new Image();
+        im.onload = function () { URL.revokeObjectURL(u); res(draw(im, im.naturalWidth, im.naturalHeight)); };
+        im.onerror = function () { URL.revokeObjectURL(u); rej(new Error("decode")); };
+        im.src = u;
+      });
+    };
+    if (window.createImageBitmap) {
+      return createImageBitmap(blob, { imageOrientation: "from-image" })
+        .then(function (bmp) { return draw(bmp, bmp.width, bmp.height); }, viaImg);
+    }
+    return viaImg();
+  }
+  function addPhoto(file, date, pose) {
+    toast(t("saving_photo") + "…");
+    return shrink(file, 1600, 0.86).then(function (full) {
+      return shrink(full.blob, 480, 0.8).then(function (th) {
+        return storePhoto(full, th, { id: uid(), date: date, pose: pose, createdAt: new Date().toISOString() }).then(function () { toast(t("photo_saved")); });
+      });
+    }).catch(function () { toast(t("photo_failed")); });
+  }
+  function byPhoto(a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); }
+  // To the Artifact's asset store when it is there, otherwise to IndexedDB on this device.
+  function storePhoto(full, th, meta) {
+    var assets = cloud && cloud.assets;
+    if (assets) {
+      return assets.upload(full.blob, { type: "image/jpeg" }).then(function (a) {
+        return assets.upload(th.blob, { type: "image/jpeg" }).then(function (b) {
+          photos.push({ id: meta.id, date: meta.date, pose: meta.pose, createdAt: meta.createdAt, w: full.w, h: full.h, full: a.id, thumbId: b.id });
+          photos.sort(byPhoto); save();
+        });
+      });
+    }
+    var p = { id: meta.id, date: meta.date, pose: meta.pose, createdAt: meta.createdAt, w: full.w, h: full.h, blob: full.blob, thumb: th.blob };
+    return tx("readwrite", function (st) { return st.put(p); }).then(function () {
+      photos.push(p); photos.sort(byPhoto);
+      if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
+    });
+  }
+  function deletePhoto(id) {
+    var p = find(id);
+    function gone() {
+      photos = photos.filter(function (x) { return x.id !== id; });
+      dropUrls(id);
+      if (cmp.a === id) cmp.a = null;
+      if (cmp.b === id) cmp.b = null;
+    }
+    if (p && p.full) {
+      gone(); save();
+      var assets = cloud && cloud.assets;
+      if (assets) [p.full, p.thumbId].filter(Boolean).forEach(function (a) { assets.delete(a).catch(function () {}); });
+      return Promise.resolve();
+    }
+    return tx("readwrite", function (st) { return st.delete(id); }).then(gone);
+  }
+
+  /* ---------- Cloud: the Artifact's database and asset store ---------- */
+  // Each month is one document, "m-2026-11", holding that month's entries, check-ins and photo
+  // records (asset ids, never the images); "prefs" holds the last amounts and compound. All of it
+  // sits under data/users/<this person's id>, which nobody else on the Artifact, its owner
+  // included, can read. A change rewrites only the documents whose content changed, one write at a
+  // time per document, and a snapshot never overwrites a document whose own write is on its way.
+  var synced = {};    // doc id -> JSON last written or received
+  var latest = {};    // doc id -> JSON waiting to be written (null deletes)
+  var inflight = {};  // doc id -> writes not yet settled
+  var chain = {};     // doc id -> the promise the next write waits on
+  var deferred = false;
+
+  function bodies() {
+    var out = {};
+    function m(k) { var id = "m-" + k.slice(0, 7); return out[id] = out[id] || { entries: [], checkins: {}, photos: [] }; }
+    S.entries.slice().sort(byTime).forEach(function (e) { m(e.date).entries.push(e); });
+    Object.keys(S.checkins).sort().forEach(function (k) { m(k).checkins[k] = S.checkins[k]; });
+    photos.forEach(function (p) {
+      if (p.full) m(p.date).photos.push({ id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, full: p.full, thumb: p.thumbId });
+    });
+    out.prefs = { prefs: S.prefs };
+    out.vials = { vials: S.vials };
+    return out;
+  }
+  function syncCloud() {
+    var b = bodies();
+    Object.keys(synced).forEach(function (id) { if (!(id in b)) b[id] = null; });
+    Object.keys(b).forEach(function (id) {
+      var json = b[id] === null ? null : JSON.stringify(b[id]);
+      if (json === null ? !(id in synced) : synced[id] === json) return;
+      if (json === null) delete synced[id]; else synced[id] = json;
+      writeDoc(id, json);
+    });
+  }
+  function writeDoc(id, json) {
+    latest[id] = json;
+    inflight[id] = (inflight[id] || 0) + 1;
+    chain[id] = (chain[id] || Promise.resolve()).then(function () {
+      if (!(id in latest)) return; // an earlier turn of this chain already sent the newest body
+      var j = latest[id]; delete latest[id];
+      var ref = cloud.col.doc(id);
+      return j === null ? ref.delete() : ref.set(JSON.parse(j));
+    }).catch(function (e) {
+      delete synced[id]; // the next change writes this document again
+      toast(t(e && e.code === "quota_exceeded" ? "sync_full" : "sync_failed"));
+    }).then(function () { inflight[id]--; });
+  }
+  function stateKey() { return JSON.stringify([S.entries, S.checkins, S.vials, photos.map(function (p) { return p.id + p.date + p.pose; })]); }
+  function applySnapshot(snap, merge) {
+    var docs = {};
+    snap.docs.forEach(function (d) { docs[d.id] = d.data(); });
+    docs = JSON.parse(JSON.stringify(docs)); // snapshot bodies are frozen; entries get edited in place
+    Object.keys(inflight).forEach(function (id) {
+      if (inflight[id] > 0) { if (synced[id]) docs[id] = JSON.parse(synced[id]); else delete docs[id]; }
+    });
+    var entries = [], checkins = {}, cps = [], prefs = null, vials = null;
+    Object.keys(docs).forEach(function (id) {
+      var b = docs[id] || {};
+      if (id === "prefs") { prefs = b.prefs; return; }
+      if (id === "vials") { vials = Array.isArray(b.vials) ? b.vials : []; return; }
+      if (id.indexOf("m-") !== 0) return;
+      (b.entries || []).forEach(function (e) { if (e && e.id && e.date && Number(e.amount) > 0) entries.push(e); });
+      Object.keys(b.checkins || {}).forEach(function (k) { checkins[k] = b.checkins[k]; });
+      (b.photos || []).forEach(function (p) {
+        if (p && p.id && p.full && p.date) cps.push({ id: p.id, date: p.date, pose: POSES.indexOf(p.pose) > -1 ? p.pose : "other", createdAt: p.createdAt || "", w: p.w, h: p.h, full: p.full, thumbId: p.thumb || p.full });
+      });
+    });
+    if (merge) { // what was logged on this device before the database answered goes up with it
+      var have = {};
+      entries.forEach(function (e) { have[e.id] = 1; });
+      S.entries.forEach(function (e) { if (!have[e.id]) entries.push(e); });
+      Object.keys(S.checkins).forEach(function (k) { if (!checkins[k]) checkins[k] = S.checkins[k]; });
+      if (!prefs) prefs = S.prefs;
+      if (!vials) vials = S.vials;
+    }
+    var before = stateKey();
+    S.entries = entries; S.checkins = checkins;
+    if (prefs && typeof prefs === "object") S.prefs = prefs;
+    S.vials = vials || [];
+    S.prefs.last = S.prefs.last || {};
+    photos = cps.concat(photos.filter(function (p) { return !p.full; })).sort(byPhoto);
+    synced = {};
+    var b = bodies();
+    Object.keys(docs).forEach(function (id) { if (b[id]) synced[id] = JSON.stringify(b[id]); });
+    if (merge) syncCloud();
+    if (stateKey() !== before) softRender();
+  }
+  // A snapshot never redraws under someone typing or inside an open sheet; it waits for them.
+  function busy() {
+    var a = document.activeElement;
+    return (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && main.contains(a)) || !!document.querySelector("dialog[open]");
+  }
+  function softRender() { if (busy()) deferred = true; else render(); }
+  function catchUp() { setTimeout(function () { if (deferred && !busy()) { deferred = false; render(); } }, 0); }
+
+  function connectCloud() {
+    var c = window.claude;
+    if (!c || typeof c.use !== "function") return;
+    Promise.all([c.use("db"), c.use("user")]).then(function (r) {
+      var store = r[0], user = r[1];
+      if (!store || !user) return null;
+      return user.id().then(function (id) {
+        if (!id) return;
+        cloud = { col: store.collection("data/users/" + id), assets: null, downloads: null };
+        c.use("assets").then(function (a) { cloud.assets = a; }, function () {});
+        c.use("downloads").then(function (d) { cloud.downloads = d; }, function () {});
+        var first = true, slow = setTimeout(function () { toast(t("sync_slow")); }, 10000);
+        cloud.col.onSnapshot(function (snap) {
+          if (!snap.metadata.fromCache) clearTimeout(slow);
+          var merge = first && (S.entries.length > 0 || Object.keys(S.checkins).length > 0);
+          first = false;
+          applySnapshot(snap, merge);
+          if (merge) { try { localStorage.removeItem(STORE_KEY); } catch (e) { /* nothing to clear */ } }
+        }, function () { clearTimeout(slow); toast(t("sync_off")); });
+        render();
+      });
+    }).catch(function () { /* stays on this device */ });
+  }
+
+  /* ---------- Derived data ---------- */
+  function entriesOn(k) { return S.entries.filter(function (e) { return e.date === k; }).sort(byTime); }
+  function datesWithDoses() { var o = {}; S.entries.forEach(function (e) { o[e.date] = 1; }); return o; }
+  function datesWithPhotos() { var o = {}; photos.forEach(function (p) { o[p.date] = 1; }); return o; }
+  function streak() {
+    var d = datesWithDoses(), k = todayKey(), n = 0;
+    if (!d[k]) k = addDays(k, -1); // a day not yet logged does not break the run
+    while (d[k]) { n++; k = addDays(k, -1); }
+    return n;
+  }
+  function nextSite() {
+    var sorted = S.entries.filter(function (e) { return ROTATION.indexOf(e.site) > -1; }).sort(byTime);
+    if (!sorted.length) return ROTATION[0];
+    var last = sorted[sorted.length - 1].site;
+    return ROTATION[(ROTATION.indexOf(last) + 1) % ROTATION.length];
+  }
+  // mg in a dose, or null for units a vial cannot be counted in.
+  function mgOf(e) { return e.unit === "mg" ? e.amount : e.unit === "mcg" ? e.amount / 1000 : null; }
+  function vialKey(v) { return v.slug || "name:" + String(v.name || "").trim().toLowerCase(); }
+  // Each dose comes off the newest vial of its compound opened on or before that day and not
+  // finished before it. Pace is the person's own: mg logged over the last 28 days.
+  function vialStats() {
+    var out = {}, tk = todayKey();
+    S.vials.forEach(function (v) { out[v.id] = { used: 0 }; });
+    S.entries.forEach(function (e) {
+      var mg = mgOf(e); if (mg == null) return;
+      var key = compoundKey(e), best = null;
+      S.vials.forEach(function (v) {
+        if (vialKey(v) !== key || v.opened > e.date || (v.finishedOn && v.finishedOn < e.date)) return;
+        if (!best || v.opened > best.opened) best = v;
+      });
+      if (best) out[best.id].used += mg;
+    });
+    S.vials.forEach(function (v) {
+      var st = out[v.id], key = vialKey(v), since = addDays(tk, -27);
+      st.left = Math.max(0, v.mg - st.used);
+      var recent = S.entries.filter(function (e) { return compoundKey(e) === key && e.date >= since && e.date <= tk && mgOf(e) != null; });
+      if (recent.length >= 2) {
+        var first = recent.reduce(function (m, e) { return e.date < m ? e.date : m; }, tk);
+        var span = Math.max(7, diffDays(first, tk) + 1);
+        var perDay = recent.reduce(function (s2, e) { return s2 + mgOf(e); }, 0) / span;
+        if (perDay > 0 && st.left > 0) st.days = Math.floor(st.left / perDay);
+      }
+      st.age = diffDays(v.opened, tk);
+      st.past = v.within > 0 && st.age > v.within;
+    });
+    return out;
+  }
+  function recentCompounds() {
+    var seen = {}, out = [];
+    S.entries.slice().sort(byTime).reverse().forEach(function (e) {
+      var k = compoundKey(e);
+      if (!seen[k] && out.length < 6) { seen[k] = 1; out.push(e); }
+    });
+    return out;
+  }
+  function weightOn(k, field) { // the check-in on that date, or the nearest one within 3 days before it
+    for (var i = 0; i <= 3; i++) {
+      var c = S.checkins[addDays(k, -i)];
+      if (c && typeof c[field] === "number") return c[field];
+    }
+    return null;
+  }
+
+  /* ---------- Rendering ---------- */
+  var main = document.getElementById("main");
+  var photoTab = "gallery";
+  var CHEVRON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
+  var PLUS = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="var(--accent)"/><path d="M12 7v10M7 12h10" stroke="#F7F2EA" stroke-width="2" stroke-linecap="round"/></svg>';
+
+  function render() {
+    flushCheckin();
+    document.querySelectorAll("[data-t]").forEach(function (el) { el.textContent = t(el.getAttribute("data-t")); });
+    document.querySelectorAll("[data-t-aria]").forEach(function (el) { el.setAttribute("aria-label", t(el.getAttribute("data-t-aria"))); });
+    document.querySelectorAll(".tabs [data-view]").forEach(function (b) {
+      if (b.getAttribute("data-view") === view) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+    var html = { today: renderToday, trends: renderTrends, photos: renderPhotosTab, history: renderHistory }[view]();
+    main.innerHTML = html + scope();
+    if (view === "photos") wireSlider();
+  }
+  function scope() { return '<div class="scope"><p>' + t("scope_1") + "</p><p>" + t(cloud ? "scope_2_cloud" : "scope_2") + "</p></div>"; }
+  function hero(k, sub) { return '<div class="lt"><div><h1>' + esc(t(k)) + "</h1>" + (sub ? "<p>" + esc(sub) + "</p>" : "") + "</div></div>"; }
+
+  // The most recent check-in value for a field strictly before day k.
+  function lastValue(field, k) {
+    var ks = Object.keys(S.checkins).filter(function (x) { return x < k && typeof S.checkins[x][field] === "number"; }).sort();
+    return ks.length ? { k: ks[ks.length - 1], v: S.checkins[ks[ks.length - 1]][field] } : null;
+  }
+  function weekStart(k) { var d = parseKey(k); d.setDate(d.getDate() - (d.getDay() + 6) % 7); return keyOf(d); }
+  function shortDate(k) { return fmtDate(k, { day: "numeric", month: "short" }); }
+
+  /* Today: where the day stands, then the fastest way to add to it. */
+  function renderToday() {
+    var k = day, tk = todayKey(), isToday = k === tk;
+    var title = isToday ? t("today") : k === addDays(tk, -1) ? t("yesterday") : new Intl.DateTimeFormat(loc(), { weekday: "long" }).format(parseKey(k));
+    var h = '<div class="lt"><div><h1>' + esc(title) + "</h1><p>" + esc(fmtLong(k)) + "</p></div>" +
+      (isToday ? "" : '<button class="chip" type="button" data-act="day-today">' + esc(t("go_today")) + "</button>") + "</div>";
+    h += weekStrip() + glance();
+
+    var recents = recentCompounds();
+    if (recents.length) {
+      h += '<section class="sec"><h2>' + esc(t("log_again")) + '</h2><div class="again">' + recents.map(function (e) {
+        var amt = fmtNum(e.amount, 3) + " " + unitLabel(e.unit);
+        return '<button type="button" data-repeat="' + e.id + '" aria-label="' + esc(t("log_again") + ": " + entryName(e) + " " + amt) + '">' +
+          "<b>" + esc(entryName(e)) + "</b><strong>" + esc(amt) + "</strong><span>" + esc(t("last_rel", { rel: rel(e.date) })) + "</span>" + PLUS + "</button>";
+      }).join("") + "</div></section>";
+    }
+
+    var es = entriesOn(k);
+    h += '<section class="sec"><h2>' + esc(t("doses")) + (es.length ? "<small>" + esc(t("entries_n", { n: es.length })) + "</small>" : "") + '</h2><div class="card">';
+    h += es.length ? '<div class="tl">' + es.map(tlRow).join("") + "</div>"
+      : '<div class="tl-empty"><span>' + esc(t("no_doses")) + '</span><button class="btn small primary" type="button" data-act="new-dose">' + esc(t("log_dose")) + "</button></div>";
+    h += "</div></section>";
+    return h + checkinCard() + vialsRow() + photoCard();
+  }
+
+  function weekStrip() {
+    var ws = weekStart(day), tk = todayKey(), dd = datesWithDoses();
+    var arrow = function (act, label, path, off) {
+      return '<button class="icon-btn" type="button" data-act="' + act + '" aria-label="' + esc(t(label)) + '"' + (off ? " disabled" : "") +
+        '><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + path + '"/></svg></button>';
+    };
+    var h = '<div class="week" role="group" aria-label="' + esc(t("week")) + '">' + arrow("week-prev", "prev_week", "m15 6-6 6 6 6", false);
+    for (var i = 0; i < 7; i++) {
+      var k = addDays(ws, i), dt = parseKey(k);
+      h += '<button type="button" class="wd' + (dd[k] ? " dose" : "") + (k === tk ? " today" : "") + '" data-goto="' + k + '" aria-pressed="' + (k === day) + '"' +
+        (k > tk ? " disabled" : "") + ' aria-label="' + esc(fmtLong(k)) + '"><i>' + esc(new Intl.DateTimeFormat(loc(), { weekday: "narrow" }).format(dt)) + "</i><b>" + dt.getDate() + "</b></button>";
+    }
+    return h + arrow("week-next", "next_week", "m9 6 6 6-6 6", addDays(ws, 7) > tk) + "</div>";
+  }
+
+  function glance() {
+    var es = entriesOn(day), c = S.checkins[day] || {}, prev = lastValue("weight", day);
+    var names = [];
+    es.forEach(function (e) { var n = entryName(e); if (names.indexOf(n) < 0) names.push(n); });
+    var w = typeof c.weight === "number" ? c.weight : null, wb, we;
+    if (w != null) {
+      wb = fmtNum(w, 1) + "<small>kg</small>";
+      if (prev) { var d = w - prev.v; we = (d > 0 ? "+" : d < 0 ? "−" : "±") + fmtNum(Math.abs(d), 1) + " " + t("since") + " " + shortDate(prev.k); }
+      else we = t("first_weight");
+    } else { wb = "—"; we = prev ? t("last_was", { v: fmtNum(prev.v, 1) }) : t("not_logged"); }
+    var pc = photos.filter(function (p) { return p.date === day; }).length;
+    return '<div class="card glance" style="margin-top:14px">' +
+      "<div><span>" + esc(t("doses")) + "</span><b>" + es.length + "</b><em>" + esc(names.length ? names.join(", ") : t("none_yet")) + "</em></div>" +
+      "<div><span>" + esc(t("weight")) + "</span><b>" + wb + "</b><em>" + esc(we) + "</em></div>" +
+      "<div><span>" + esc(t("photo")) + "</span><b>" + pc + "</b><em>" + esc(pc ? t("photo_taken") : t("not_taken")) + "</em></div></div>";
+  }
+
+  function tlRow(e) {
+    var sub = [siteLabel(e.site), e.note].filter(Boolean).map(esc).join(" · ");
+    return '<button type="button" class="tl-row" data-edit="' + e.id + '" aria-label="' + esc(t("edit") + " " + entryName(e)) + '">' +
+      '<span class="t">' + esc(e.time || "") + '</span><span class="dot" aria-hidden="true"></span>' +
+      "<span><b>" + esc(entryName(e)) + " <em>" + esc(fmtNum(e.amount, 3) + " " + unitLabel(e.unit)) + "</em></b>" + (sub ? '<span class="s">' + sub + "</span>" : "") + "</span>" + CHEVRON + "</button>";
+  }
+
+  function checkinCard() {
+    var c = S.checkins[day] || {};
+    function stepper(field, unit) {
+      var last = lastValue(field, day), v = c[field] != null ? fmtIn(c[field]) : "";
+      return '<div><span class="lbl">' + esc(t(field)) + '</span><div class="stepper">' +
+        '<button type="button" data-step="' + field + ':-0.1" aria-label="' + esc(t("less", { f: t(field).toLowerCase() })) + '">−</button>' +
+        '<label><input id="ck-' + field + '" inputmode="decimal" autocomplete="off" value="' + esc(v) + '" placeholder="' + (last ? esc(fmtIn(last.v)) : "0") +
+        '" aria-label="' + esc(t(field) + ", " + unit) + '" /><em>' + unit + "</em></label>" +
+        '<button type="button" data-step="' + field + ':0.1" aria-label="' + esc(t("more", { f: t(field).toLowerCase() })) + '">+</button></div></div>';
+    }
+    return '<section class="sec"><h2>' + esc(t("checkin")) + '<small class="saved" id="ck-saved">' + esc(t("saved")) + '</small></h2><div class="card pad"><div class="ck">' +
+      stepper("weight", "kg") + stepper("waist", "cm") +
+      '<div class="full"><span class="lbl">' + esc(t("feel")) + "</span>" +
+      seg("feel", [1, 2, 3, 4, 5].map(function (n) { return { v: String(n), html: "<b>" + n + "</b><span>" + esc(t("feel_" + n)) + "</span>" }; }), c.feel ? String(c.feel) : "", "feel") + "</div>" +
+      '<div class="full"><textarea class="note" id="ck-note" rows="1" maxlength="1000" placeholder="' + esc(t("note_ph")) + '" aria-label="' + esc(t("note")) + '">' + esc(c.note || "") + "</textarea></div>" +
+      "</div></div></section>";
+  }
+
+  function vialsRow() {
+    var open = S.vials.filter(function (v) { return !v.finishedOn; }).sort(function (a, b) { return a.opened < b.opened ? 1 : -1; });
+    var vs = vialStats(), C = 2 * Math.PI * 30;
+    var h = '<section class="sec"><h2>' + esc(t("vials")) + '</h2><div class="vrow">' + open.map(function (v) {
+      var st = vs[v.id], pct = v.mg > 0 ? Math.max(0, Math.min(100, st.left / v.mg * 100)) : 0;
+      var line2 = st.past ? '<span class="flag">' + esc(t("vial_past", { n: fmtNum(v.within, 0) })) + "</span>"
+        : esc(st.days != null ? t("vial_days_short", { n: fmtNum(st.days, 0) }) : st.age <= 0 ? t("vial_opened_today") : t("vial_age", { n: fmtNum(st.age, 0) }));
+      return '<button type="button" class="vcard" data-vial="' + v.id + '"><span class="ring" aria-hidden="true"><svg viewBox="0 0 72 72">' +
+        '<circle cx="36" cy="36" r="30" fill="none" stroke="var(--surface-2)" stroke-width="7"/>' +
+        (pct > 0 ? '<circle cx="36" cy="36" r="30" fill="none" stroke="' + (st.past ? "var(--err)" : "var(--accent)") + '" stroke-width="7" stroke-linecap="round" stroke-dasharray="' + (C * pct / 100).toFixed(1) + ' 999"/>' : "") +
+        "</svg><span>" + Math.round(pct) + "<small>%</small></span></span>" +
+        "<b>" + esc(v.slug && BY_SLUG[v.slug] ? BY_SLUG[v.slug].name : v.name) + '</b><span class="m">' +
+        esc(st.left <= 0 ? t("vial_used_up") : t("vial_left", { left: fmtNum(st.left, 2), mg: fmtNum(v.mg, 2) })) + "<br>" + line2 + "</span></button>";
+    }).join("") + '<button type="button" class="vcard add" data-act="add-vial">' + PLUS.replace('fill="var(--accent)"', 'fill="none" stroke="var(--accent)" stroke-width="1.5"').replace('stroke="#F7F2EA"', 'stroke="var(--accent)"') + esc(t("add_vial")) + "</button></div>";
+    if (!open.length) h += '<p class="hint" style="margin:-4px 4px 0">' + esc(t("no_vials")) + "</p>";
+    return h + "</section>";
+  }
+
+  function photoCard() {
+    var h = '<section class="sec"><h2>' + esc(t("photo")) + '</h2><div class="card pad">';
+    if (!idbOk) return h + '<p class="empty">' + esc(t("idb_off")) + "</p></div></section>";
+    var dayPhotos = photos.filter(function (p) { return p.date === day; }), last = null;
+    photos.forEach(function (p) { if (p.pose === pendingPose) last = p; });
+    if (dayPhotos.length) h += '<div class="thumbs" style="margin:0 0 14px">' + dayPhotos.map(function (p) { return thumbHtml(p, 'data-view-photo="' + p.id + '"'); }).join("") + "</div>";
+    h += '<div class="ph"><div class="frame">' + (last ? '<img src="' + url(last) + '" alt="" />' : "") + "</div><div>" +
+      '<button class="btn primary block" type="button" data-act="add-photo">' + esc(t("add_photo")) + "</button>" +
+      "<p>" + esc(last ? t("last_pose", { pose: poseLabel(pendingPose).toLowerCase(), date: shortDate(last.date) }) : t("photo_hint")) + "</p></div></div>" +
+      seg("pose-new", POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; }), pendingPose);
+    return h + "</div></section>";
+  }
+
+  // History's list: one card per day, newest first, in the same rows as Today.
+  function groupedRows(list) {
+    var out = "", cur = null;
+    list.forEach(function (e) {
+      if (e.date !== cur) {
+        out += (cur ? "</div>" : "") + '<p class="month-h" style="margin-top:16px">' + esc(new Intl.DateTimeFormat(loc(), { weekday: "short", day: "numeric", month: "short" }).format(parseKey(e.date))) +
+          '</p><div class="card tl" style="margin-top:8px">';
+        cur = e.date;
+      }
+      out += tlRow(e);
+    });
+    return out + (cur ? "</div>" : "");
+  }
+
+  /* Trends: the line first, then each compound. */
+  function renderTrends() {
+    var tr = trends();
+    return hero("trends_title") + (tr || '<p class="empty">' + esc(t("trends_empty")) + "</p>") + byCompound();
+  }
+  function byCompound() {
+    var groups = {};
+    S.entries.forEach(function (e) { var key = compoundKey(e); (groups[key] = groups[key] || []).push(e); });
+    var keys = Object.keys(groups).map(function (key) {
+      var list = groups[key].sort(byTime);
+      return { list: list, last: list[list.length - 1] };
+    }).sort(function (a, b) { return byTime(b.last, a.last); });
+    if (!keys.length) return "";
+    var since30 = addDays(todayKey(), -29);
+    return '<section class="sec"><h2>' + esc(t("by_compound")) + '</h2><div class="cards">' + keys.map(function (g) {
+      var in30 = g.list.filter(function (e) { return e.date >= since30; }), totals = {};
+      in30.forEach(function (e) { totals[e.unit] = (totals[e.unit] || 0) + e.amount; });
+      var tot = Object.keys(totals).map(function (u) { return fmtNum(totals[u], 3) + " " + unitLabel(u); }).join(" + ") || t("no_data");
+      return '<div class="card"><div class="card-h"><b>' + esc(entryName(g.last)) + "</b><span>" + esc(rel(g.last.date)) + "</span></div><dl>" +
+        "<div><dt>" + esc(t("last")) + "</dt><dd>" + esc(fmtNum(g.last.amount, 3) + " " + unitLabel(g.last.unit)) + "</dd></div>" +
+        "<div><dt>" + esc(t("in30")) + "</dt><dd>" + esc(t("entries_n", { n: in30.length })) + "</dd></div>" +
+        "<div><dt>" + esc(t("total30")) + "</dt><dd>" + esc(tot) + "</dd></div></dl></div>";
+    }).join("") + "</div></section>";
+  }
+
+  /* Photos: the gallery, or two of them compared. */
+  function renderPhotosTab() {
+    return hero("photos_title") + seg("photo-tab", [{ v: "gallery", html: esc(t("gallery")) }, { v: "compare", html: esc(t("compare")) }], photoTab) +
+      (photoTab === "compare" ? renderCompare() : renderPhotos());
+  }
+
+  function seg(name, items, current, extraCls) {
+    return '<div class="seg ' + (extraCls || "") + '" role="group">' + items.map(function (it) {
+      return '<button type="button" data-' + name + '="' + esc(it.v) + '" aria-pressed="' + (it.v === current) + '">' + it.html + "</button>";
+    }).join("") + "</div>";
+  }
+  function thumbHtml(p, attrs) {
+    return '<button type="button" class="thumb" ' + (attrs || "") + ' aria-label="' + esc(t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) })) + '">' +
+      '<img src="' + url(p) + '" alt="" loading="lazy" /><span class="tag">' + esc(poseLabel(p.pose)) + "</span></button>";
+  }
+
+  function entryRow(e, withDate) {
+    var sub = [siteLabel(e.site), e.note].filter(Boolean).map(esc).join(" · ");
+    return '<div class="entry"><span class="t">' + esc(withDate ? fmtDate(e.date, { day: "numeric", month: "short" }) : e.time || "") + "</span>" +
+      "<div><b>" + esc(entryName(e)) + ' <span class="amt" style="display:inline">' + esc(fmtNum(e.amount, 3)) + " " + esc(unitLabel(e.unit)) + "</span></b>" +
+      (withDate && e.time ? "<span>" + esc(e.time) + (sub ? " · " + sub : "") + "</span>" : sub ? "<span>" + sub + "</span>" : "") + "</div>" +
+      '<div class="acts"><button class="icon-btn" type="button" data-edit="' + e.id + '" aria-label="' + esc(t("edit") + " " + entryName(e)) + '">' +
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button></div></div>';
+  }
+
+  function renderHistory() {
+    var h = hero("history_title");
+    var dd = datesWithDoses(), dp = datesWithPhotos();
+    var since7 = addDays(todayKey(), -6);
+    var last7 = S.entries.filter(function (e) { return e.date >= since7; }).length;
+    h += '<div class="kpis"><div class="kpi"><b>' + fmtNum(Object.keys(dd).length, 0) + "</b><span>" + esc(t("days_logged")) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(streak(), 0) + "</b><span>" + esc(t("streak")) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(last7, 0) + "</b><span>" + esc(t("last7")) + "</span></div></div>";
+
+    if (!S.entries.length && !Object.keys(S.checkins).length) {
+      h += '<p class="empty" style="margin-top:12px">' + esc(t("history_empty")) + "</p>";
+    }
+
+
+    // Calendar
+    h += '<section class="sec"><h2>' + esc(t("calendar")) + '</h2><div class="card calcard">' + calendar(dd, dp) + "</div></section>";
+
+    // Every entry
+    var all = S.entries.slice().sort(byTime).reverse();
+    if (all.length) {
+      h += '<section class="sec"><h2>' + esc(t("all_entries")) + "<small>" + esc(t("entries_n", { n: all.length })) + '</small></h2><div>' +
+        groupedRows(all.slice(0, historyLimit)) + "</div>" +
+        (all.length > historyLimit ? '<div class="row-actions"><button class="btn block" type="button" data-act="more">' + esc(t("show_more")) + "</button></div>" : "") +
+        "</section>";
+    }
+    return h;
+  }
+
+  // Weight or waist over a chosen range: each check-in as a faint point, the 7-day average as the
+  // line, and below them one row per compound with a mark on every day it was logged, all on one
+  // timeline so a change lines up with what was taken.
+  function trends() {
+    function series(f) {
+      return Object.keys(S.checkins).filter(function (k) { return typeof S.checkins[k][f] === "number"; }).sort()
+        .map(function (k) { return { k: k, v: S.checkins[k][f] }; });
+    }
+    var w = series("weight"), c = series("waist");
+    if (!w.length && !c.length) return "";
+    var metric = trendMetric === "waist" ? (c.length ? "waist" : "weight") : (w.length ? "weight" : "waist");
+    var all = metric === "weight" ? w : c, unit = metric === "weight" ? "kg" : "cm";
+    var tk = todayKey();
+    var from = trendRange === "4w" ? addDays(tk, -27) : trendRange === "3m" ? addDays(tk, -90) : null;
+    var pts = all.filter(function (p) { return !from || p.k >= from; });
+    var avg = pts.map(function (p) {
+      var lo = addDays(p.k, -6), win = all.filter(function (q) { return q.k >= lo && q.k <= p.k; });
+      return { k: p.k, v: win.reduce(function (s2, q) { return s2 + q.v; }, 0) / win.length };
+    });
+    var h = '<section class="sec"><h2>' + esc(t("trends")) + "</h2>";
+    h += seg("trend-range", [{ v: "4w", html: esc(t("range_4w")) }, { v: "3m", html: esc(t("range_3m")) }, { v: "all", html: esc(t("range_all")) }], trendRange);
+    if (w.length && c.length) h += seg("trend-metric", [{ v: "weight", html: esc(t("weight_trend")) }, { v: "waist", html: esc(t("waist_trend")) }], metric);
+    if (!pts.length) return h + '<p class="empty">' + esc(t("no_range")) + "</p></section>";
+    var first = pts[0], last = pts[pts.length - 1], d = last.v - first.v;
+    h += '<div class="kpis"><div class="kpi"><b>' + fmtNum(first.v, 1) + "<small>" + unit + "</small></b><span>" + esc(t("start")) + ", " + esc(fmtDate(first.k, { day: "numeric", month: "short" })) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(last.v, 1) + "<small>" + unit + "</small></b><span>" + esc(t("latest")) + ", " + esc(fmtDate(last.k, { day: "numeric", month: "short" })) + "</span></div>" +
+      '<div class="kpi"><b>' + (d > 0 ? "+" : d < 0 ? "−" : "") + fmtNum(Math.abs(d), 1) + "<small>" + unit + "</small></b><span>" + esc(t("change")) + "</span></div></div>";
+    var x0 = from || pts[0].k;
+    if (!from) S.entries.forEach(function (e) { if (e.date < x0) x0 = e.date; });
+    return h + chart(pts, avg, x0, tk, unit, metric) + "</section>";
+  }
+
+  function chart(pts, avg, x0, x1, unit, metric) {
+    // Drawn at the width of its box, 1:1, so every label stays at 11 px on every screen.
+    var W = Math.max(280, Math.round(main.clientWidth - 2 * 20 - 22)), L = 40, R = 12, T = 12, PH = 140, AX = 30, ROW = 30;
+    var t0 = parseKey(x0).getTime(), t1 = parseKey(x1).getTime();
+    function x(k) { return L + (t1 === t0 ? (W - L - R) / 2 : (parseKey(k).getTime() - t0) / (t1 - t0) * (W - L - R)); }
+    var vs = pts.map(function (p) { return p.v; }).concat(avg.map(function (p) { return p.v; }));
+    var lo = Math.min.apply(null, vs), hi = Math.max.apply(null, vs);
+    var padv = Math.max(hi - lo, 1) * 0.15; lo -= padv; hi += padv;
+    function y(v) { return T + (hi - v) / (hi - lo) * PH; }
+    // Dose rows: the four compounds logged most often in the range.
+    var counts = {}, names = {};
+    S.entries.forEach(function (e) { if (e.date >= x0 && e.date <= x1) { var k = compoundKey(e); counts[k] = (counts[k] || 0) + 1; names[k] = entryName(e); } });
+    var rows = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 4);
+    var H = T + PH + AX + rows.length * ROW + (rows.length ? 4 : 0);
+    var g = "";
+    for (var i = 0; i < 3; i++) {
+      var v = lo + (hi - lo) * (i + 0.5) / 3, yy = y(v).toFixed(1);
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '" stroke="var(--line)" stroke-width="1"/>' +
+        '<text x="' + (L - 6) + '" y="' + yy + '" text-anchor="end" dominant-baseline="middle">' + esc(fmtNum(v, 1)) + "</text>";
+    }
+    var ax = T + PH + 16;
+    g += '<text x="' + L + '" y="' + ax + '">' + esc(fmtDate(x0, { day: "numeric", month: "short" })) + "</text>" +
+      '<text x="' + (W - R) + '" y="' + ax + '" text-anchor="end">' + esc(fmtDate(x1, { day: "numeric", month: "short" })) + "</text>";
+    g += pts.map(function (p) {
+      return '<circle cx="' + x(p.k).toFixed(1) + '" cy="' + y(p.v).toFixed(1) + '" r="2.6" fill="var(--bg)" stroke="var(--accent)" stroke-opacity=".55" stroke-width="1.4"><title>' +
+        esc(fmtDate(p.k) + " · " + fmtNum(p.v, 1) + " " + unit) + "</title></circle>";
+    }).join("");
+    if (avg.length > 1) g += '<path d="' + avg.map(function (p, j) { return (j ? "L" : "M") + x(p.k).toFixed(1) + " " + y(p.v).toFixed(1); }).join(" ") +
+      '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    var last = avg[avg.length - 1];
+    g += '<circle cx="' + x(last.k).toFixed(1) + '" cy="' + y(last.v).toFixed(1) + '" r="3.6" fill="var(--accent)"><title>' +
+      esc(t("avg7") + " · " + fmtNum(last.v, 1) + " " + unit) + "</title></circle>";
+    rows.forEach(function (k, r) {
+      var top = T + PH + AX + 4 + r * ROW;
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (top + 24) + '" y2="' + (top + 24) + '" stroke="var(--line-soft)" stroke-width="1"/>' +
+        '<text x="' + L + '" y="' + (top + 9) + '">' + esc(names[k]) + "</text>";
+      S.entries.forEach(function (e) {
+        if (compoundKey(e) !== k || e.date < x0 || e.date > x1) return;
+        var xx = x(e.date).toFixed(1);
+        g += '<line x1="' + xx + '" x2="' + xx + '" y1="' + (top + 14) + '" y2="' + (top + 24) + '" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><title>' +
+          esc(fmtDate(e.date) + " · " + names[k] + " " + fmtNum(e.amount, 3) + " " + unitLabel(e.unit)) + "</title></line>";
+      });
+    });
+    var legend = '<div class="legend"><span><i class="dot"></i>' + esc(t("daily")) + "</span><span><i></i>" + esc(t("avg7")) + "</span>" +
+      (rows.length ? '<span><i class="tick"></i>' + esc(t("dose_marks")) + "</span>" : "") + "</div>";
+    return '<div class="chart">' + legend + '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(t(metric === "weight" ? "weight_trend" : "waist_trend")) + '">' + g + "</svg></div>";
+  }
+
+  function calendar(dd, dp) {
+    var p = calMonth.split("-"), y = +p[0], m = +p[1] - 1;
+    var first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
+    var lead = (first.getDay() + 6) % 7; // weeks start on Monday
+    var tk = todayKey();
+    var monthName = new Intl.DateTimeFormat(loc(), { month: "long", year: "numeric" }).format(first);
+    var wd = [];
+    for (var i = 0; i < 7; i++) wd.push(new Intl.DateTimeFormat(loc(), { weekday: "short" }).format(new Date(2024, 0, 1 + i)));
+    var h = '<div class="cal-h"><button class="icon-btn" type="button" data-act="cal-prev" aria-label="' + esc(t("prev_month")) + '">‹</button><b>' + esc(monthName) + "</b>" +
+      '<button class="icon-btn" type="button" data-act="cal-next" aria-label="' + esc(t("next_month")) + '"' + (calMonth >= tk.slice(0, 7) ? " disabled style=\"opacity:.35\"" : "") + ">›</button></div>";
+    h += '<div class="cal">' + wd.map(function (w) { return '<span class="wd2">' + esc(w) + "</span>"; }).join("");
+    for (i = 0; i < lead; i++) h += '<button class="out" type="button" tabindex="-1" aria-hidden="true"></button>';
+    for (var d = 1; d <= days; d++) {
+      var k = y + "-" + pad(m + 1) + "-" + pad(d);
+      var cls = [k === tk ? "today" : "", k === day ? "sel" : "", dd[k] ? "dose" : "", dp[k] ? "pic" : "", k > tk ? "future" : ""].filter(Boolean).join(" ");
+      h += '<button type="button" class="' + cls + '" data-goto="' + k + '"' + (k > tk ? " disabled" : "") + ' aria-label="' + esc(fmtLong(k)) + '">' + d + "</button>";
+    }
+    return h + "</div>";
+  }
+
+  function renderPhotos() {
+    var h = "";
+    if (!idbOk) return h + '<p class="empty">' + esc(t("idb_off")) + "</p>";
+    var list = photos.filter(function (p) { return photoPose === "all" || p.pose === photoPose; }).slice().reverse();
+    h += seg("pose-filter", [{ v: "all", html: esc(t("all")) }].concat(POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; })), photoPose);
+    var addPose = photoPose === "all" ? pendingPose : photoPose;
+    h += '<div class="row-actions"><button class="btn primary block" type="button" data-act="add-photo-today">' + esc(t("add_pose_photo", { pose: poseLabel(addPose).toLowerCase() })) + "</button></div>";
+    if (!list.length) return h + '<p class="empty">' + esc(t("photos_empty")) + "</p>";
+    var month = "";
+    h += list.map(function (p) {
+      var m = p.date.slice(0, 7), out = "";
+      if (m !== month) {
+        out += (month ? "</div>" : "") + '<p class="month-h">' + esc(new Intl.DateTimeFormat(loc(), { month: "long", year: "numeric" }).format(parseKey(p.date))) + '</p><div class="thumbs">';
+        month = m;
+      }
+      return out + thumbHtml(p, 'data-view-photo="' + p.id + '"');
+    }).join("") + "</div>";
+    return h;
+  }
+
+  function renderCompare() {
+    var h = "";
+    if (!idbOk) return h + '<p class="empty">' + esc(t("idb_off")) + "</p>";
+    if (photos.length < 2) return h + '<p class="empty">' + esc(t("compare_need")) + "</p>";
+    // Default pose: the one with the most photos.
+    if (!cmp.pose) {
+      var counts = {};
+      photos.forEach(function (p) { counts[p.pose] = (counts[p.pose] || 0) + 1; });
+      cmp.pose = counts.front >= 2 ? "front" : "all";
+      if (cmp.pose === "all") POSES.forEach(function (p) { if (counts[p] >= 2 && cmp.pose === "all") cmp.pose = p; });
+    }
+    var pool = photos.filter(function (p) { return cmp.pose === "all" || p.pose === cmp.pose; });
+    if (pool.length < 2) pool = photos;
+    var ids = pool.map(function (p) { return p.id; });
+    if (ids.indexOf(cmp.a) < 0) cmp.a = pool[0].id;
+    if (ids.indexOf(cmp.b) < 0 || cmp.b === cmp.a) cmp.b = pool[pool.length - 1].id === cmp.a ? pool[0].id : pool[pool.length - 1].id;
+    var A = find(cmp.a), B = find(cmp.b);
+    if (A.date + A.createdAt > B.date + B.createdAt) { var tmp = A; A = B; B = tmp; }
+
+    h += seg("cmp-pose", [{ v: "all", html: esc(t("all")) }].concat(POSES.map(function (p) { return { v: p, html: esc(poseLabel(p)) }; })), cmp.pose);
+    h += seg("cmp-mode", [{ v: "side", html: esc(t("side_by_side")) }, { v: "slider", html: esc(t("slider")) }, { v: "fade", html: esc(t("fade")) }], cmp.mode);
+
+    h += '<div class="cmp">';
+    if (cmp.mode === "side") {
+      h += '<div class="cmp-side">' + fig(A, "before") + fig(B, "after") + "</div>";
+    } else if (cmp.mode === "fade") {
+      // The after photo laid over the before one at the chosen opacity: shows whether the two line up.
+      h += '<div class="slider fade" id="slider" style="--o:' + (cmp.o / 100) + ';aspect-ratio:' + (B.w || 3) + "/" + (B.h || 4) + '">' +
+        '<img src="' + url(A, true) + '" alt="' + esc(t("before") + ", " + fmtDate(A.date)) + '" />' +
+        '<img class="top" src="' + url(B, true) + '" alt="' + esc(t("after") + ", " + fmtDate(B.date)) + '" />' +
+        '<span class="lab l">' + esc(t("before")) + " · " + esc(fmtDate(A.date, { day: "numeric", month: "short" })) + "</span>" +
+        '<span class="lab r">' + esc(t("after")) + " · " + esc(fmtDate(B.date, { day: "numeric", month: "short" })) + "</span></div>" +
+        '<input type="range" class="fade-range" id="fade-o" min="0" max="100" step="1" value="' + cmp.o + '" aria-label="' + esc(t("fade_label")) + '" />';
+    } else {
+      h += '<div class="slider" id="slider" style="--x:' + cmp.x + '%;aspect-ratio:' + (B.w || 3) + "/" + (B.h || 4) + '">' +
+        '<img src="' + url(A, true) + '" alt="' + esc(t("before") + ", " + fmtDate(A.date)) + '" />' +
+        '<img class="top" src="' + url(B, true) + '" alt="' + esc(t("after") + ", " + fmtDate(B.date)) + '" />' +
+        '<span class="handle" aria-hidden="true"></span>' +
+        '<span class="lab l">' + esc(t("before")) + " · " + esc(fmtDate(A.date, { day: "numeric", month: "short" })) + "</span>" +
+        '<span class="lab r">' + esc(t("after")) + " · " + esc(fmtDate(B.date, { day: "numeric", month: "short" })) + "</span>" +
+        '<input type="range" min="0" max="100" step="0.5" value="' + cmp.x + '" id="slider-x" aria-label="' + esc(t("before") + " / " + t("after")) + '" /></div>';
+    }
+    h += "</div>";
+
+    // What changed between the two dates.
+    var gap = diffDays(A.date, B.date);
+    var between = S.entries.filter(function (e) { return e.date >= A.date && e.date <= B.date; }).length;
+    function delta(field, unit) {
+      var a = weightOn(A.date, field), b = weightOn(B.date, field);
+      if (a == null || b == null) return t("no_data");
+      var d = b - a;
+      return (d > 0 ? "+" : d < 0 ? "−" : "") + fmtNum(Math.abs(d), 1) + " " + unit;
+    }
+    h += '<div class="kpis two" style="margin-top:12px">' +
+      '<div class="kpi"><b>' + fmtNum(gap, 0) + "</b><span>" + esc(t("days_apart")) + "</span></div>" +
+      '<div class="kpi"><b>' + fmtNum(between, 0) + "</b><span>" + esc(t("doses_between")) + "</span></div>" +
+      '<div class="kpi"><b>' + esc(delta("weight", "kg")) + "</b><span>" + esc(t("weight_delta")) + "</span></div>" +
+      '<div class="kpi"><b>' + esc(delta("waist", "cm")) + "</b><span>" + esc(t("waist_delta")) + "</span></div></div>";
+
+    h += '<section class="sec"><h2>' + esc(t("pick_before")) + '</h2><div class="strip">' +
+      pool.map(function (p) { return thumbHtml(p, 'data-pick-a="' + p.id + '" aria-pressed="' + (p.id === A.id) + '"'); }).join("") + "</div>" +
+      "<h2 style=\"margin-top:14px\">" + esc(t("pick_after")) + '</h2><div class="strip">' +
+      pool.map(function (p) { return thumbHtml(p, 'data-pick-b="' + p.id + '" aria-pressed="' + (p.id === B.id) + '"'); }).join("") + "</div></section>";
+    return h;
+  }
+  function find(id) { for (var i = 0; i < photos.length; i++) if (photos[i].id === id) return photos[i]; return null; }
+  function fig(p, which) {
+    return '<figure><img src="' + url(p, true) + '" alt="' + esc(t(which) + ", " + fmtDate(p.date)) + '" /><figcaption><b>' + esc(t(which)) + "</b>" + esc(fmtDate(p.date)) + "</figcaption></figure>";
+  }
+  function wireSlider() {
+    var r = document.getElementById("slider-x"), f = document.getElementById("fade-o"), box = document.getElementById("slider");
+    if (r) r.addEventListener("input", function () { cmp.x = +r.value; box.style.setProperty("--x", cmp.x + "%"); });
+    if (f) f.addEventListener("input", function () { cmp.o = +f.value; box.style.setProperty("--o", String(cmp.o / 100)); });
+  }
+
+
+  /* ---------- Log sheet ---------- */
+  var dlg = document.getElementById("dose-dlg"), cSearch = document.getElementById("c-search"), cList = document.getElementById("c-list");
+  var pickStep = document.getElementById("pick-step"), detailStep = document.getElementById("detail-step");
+  var fAmt = document.getElementById("f-amount"), fTime = document.getElementById("f-time"), fNote = document.getElementById("f-note"), fErr = document.getElementById("f-err");
+  var sel = null, fUnit = "mg", fSite = "";
+  var SITE_ROWS = ["arm", "abd", "glute", "thigh"];
+
+  // The compound list for the vial form's select.
+  function compoundOptions() {
+    var recentKeys = [];
+    S.entries.slice().sort(byTime).reverse().forEach(function (e) {
+      if (e.slug && BY_SLUG[e.slug] && recentKeys.indexOf(e.slug) < 0 && recentKeys.length < 5) recentKeys.push(e.slug);
+    });
+    var h = "";
+    if (recentKeys.length) h += '<optgroup label="' + esc(t("recent")) + '">' + recentKeys.map(function (s) { return '<option value="' + s + '">' + esc(BY_SLUG[s].name) + "</option>"; }).join("") + "</optgroup>";
+    categories().forEach(function (cat) {
+      h += '<optgroup label="' + esc(cat) + '">' + byName(COMPOUNDS.filter(function (c) { return c.category === cat; }))
+        .map(function (c) { return '<option value="' + c.slug + '">' + esc(c.name) + "</option>"; }).join("") + "</optgroup>";
+    });
+    return h + '<option value="__other">' + esc(t("other_compound")) + "</option>";
+  }
+  function categories() { var cats = []; COMPOUNDS.forEach(function (c) { if (cats.indexOf(c.category) < 0) cats.push(c.category); }); return cats; }
+  function byName(list) { return list.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }); }
+
+  function pickItem(c) {
+    var last = S.prefs.last[c.slug];
+    return '<button type="button" data-pick-slug="' + c.slug + '">' + esc(c.name) + "<span>" +
+      esc(last ? t("last_amount", { amt: fmtNum(last.amount, 3) + " " + unitLabel(last.unit) }) : c.category) + "</span></button>";
+  }
+  function renderList() {
+    var raw = cSearch.value.trim(), q = raw.toLowerCase(), h = "";
+    var recent = [], customs = [];
+    S.entries.slice().sort(byTime).reverse().forEach(function (e) {
+      if (e.slug && BY_SLUG[e.slug]) { if (recent.indexOf(e.slug) < 0 && recent.length < 5) recent.push(e.slug); }
+      else if (e.name && customs.indexOf(e.name) < 0) customs.push(e.name);
+    });
+    var custom = function (n) { return '<button type="button" data-pick-name="' + esc(n) + '">' + esc(n) + "<span>" + esc(t("your_own")) + "</span></button>"; };
+    if (!q) {
+      if (recent.length || customs.length) h += "<h3>" + esc(t("recent")) + "</h3>" + recent.map(function (s) { return pickItem(BY_SLUG[s]); }).join("") + customs.slice(0, 3).map(custom).join("");
+      categories().forEach(function (cat) {
+        h += "<h3>" + esc(cat) + "</h3>" + byName(COMPOUNDS.filter(function (c) { return c.category === cat; })).map(pickItem).join("");
+      });
+    } else {
+      var hits = byName(COMPOUNDS.filter(function (c) { return c.name.toLowerCase().indexOf(q) > -1 || c.category.toLowerCase().indexOf(q) > -1; }));
+      h += hits.map(pickItem).join("") + customs.filter(function (n) { return n.toLowerCase().indexOf(q) > -1; }).map(custom).join("");
+      var exact = hits.some(function (c) { return c.name.toLowerCase() === q; }) || customs.some(function (n) { return n.toLowerCase() === q; });
+      if (!exact) h += '<button type="button" data-pick-name="' + esc(raw) + '">' + esc(t("use_name", { name: raw })) + "<span>" + esc(t("your_own")) + "</span></button>";
+    }
+    cList.innerHTML = h;
+  }
+  function showPick() {
+    pickStep.hidden = false; detailStep.hidden = true;
+    cSearch.value = ""; cSearch.placeholder = t("search_ph");
+    renderList();
+  }
+  function showDetail() {
+    pickStep.hidden = true; detailStep.hidden = false;
+    document.getElementById("c-picked-name").textContent = sel.name;
+    drawDetail();
+  }
+  // Defaults come only from this person's own entries: their last amount and unit for the
+  // compound, and either the route they used for it or the next site in their rotation.
+  function applyLast() {
+    var key = sel.slug || "name:" + sel.name.trim().toLowerCase(), last = S.prefs.last[key];
+    if (last) { fAmt.value = fmtIn(last.amount); fUnit = last.unit; } else { fAmt.value = ""; }
+    var prev = S.entries.filter(function (e) { return compoundKey(e) === key; }).sort(byTime).pop();
+    fSite = prev && prev.site && ROTATION.indexOf(prev.site) < 0 ? prev.site : nextSite();
+  }
+  function choose(c) { sel = c; if (!editingId) applyLast(); showDetail(); setTimeout(function () { fAmt.focus(); fAmt.select(); }, 60); }
+
+  function drawDetail() {
+    document.getElementById("f-unit-show").textContent = unitLabel(fUnit);
+    document.getElementById("f-units").innerHTML = UNITS.map(function (u) {
+      return '<button type="button" data-unit="' + u + '" aria-pressed="' + (u === fUnit) + '">' + esc(unitLabel(u)) + "</button>";
+    }).join("");
+    var key = sel.slug || "name:" + sel.name.trim().toLowerCase(), seen = {}, amts = [];
+    S.entries.slice().sort(byTime).reverse().forEach(function (e) {
+      if (compoundKey(e) !== key) return;
+      var k = e.amount + e.unit;
+      if (!seen[k] && amts.length < 4) { seen[k] = 1; amts.push(e); }
+    });
+    document.getElementById("f-amts").innerHTML = amts.map(function (e) {
+      return '<button type="button" data-amt="' + e.amount + '" data-amt-unit="' + e.unit + '">' + esc(fmtNum(e.amount, 3) + " " + unitLabel(e.unit)) + "</button>";
+    }).join("");
+    var used = {}, ns = nextSite(), tk = todayKey();
+    S.entries.forEach(function (e) { if (e.site && (!used[e.site] || e.date > used[e.site])) used[e.site] = e.date; });
+    var g = '<span></span><span class="ch">' + esc(t("left")) + '</span><span class="ch">' + esc(t("right")) + "</span>";
+    SITE_ROWS.forEach(function (r) {
+      g += '<span class="rh">' + esc(t("row_" + r)) + "</span>";
+      ["l", "r"].forEach(function (s) {
+        var k = r + "_" + s, d = used[k] ? diffDays(used[k], tk) : null;
+        g += '<button type="button" data-site="' + k + '" class="' + (k === ns ? "next" : "") + '" aria-pressed="' + (fSite === k) + '" aria-label="' + esc(siteLabel(k)) + '">' +
+          "<b>" + esc(d == null ? t("never") : d === 0 ? t("today_s") : t("d_ago", { n: d })) + "</b></button>";
+      });
+    });
+    document.getElementById("f-sites").innerHTML = g;
+    document.getElementById("f-routes").innerHTML = ["oral", "nasal", "topical", "other"].map(function (r) {
+      return '<button type="button" data-route="' + r + '" aria-pressed="' + (fSite === r) + '">' + esc(siteLabel(r)) + "</button>";
+    }).join("");
+    document.getElementById("f-site-hint").textContent = t("next_site_short", { s: siteLabel(ns) });
+  }
+
+  function openDose(id) {
+    editingId = id || null;
+    fErr.textContent = "";
+    var e = id ? S.entries.filter(function (x) { return x.id === id; })[0] : null;
+    document.getElementById("dose-title").textContent = t(e ? "edit_dose" : "log_dose");
+    document.getElementById("f-delete").hidden = !e;
+    if (e) {
+      sel = { slug: e.slug && BY_SLUG[e.slug] ? e.slug : null, name: entryName(e) };
+      fAmt.value = fmtIn(e.amount); fUnit = e.unit; fSite = e.site || ""; fTime.value = e.time || ""; fNote.value = e.note || "";
+      showDetail();
+      dlg.showModal();
+    } else {
+      sel = null; fAmt.value = ""; fUnit = "mg"; fSite = ""; fNote.value = "";
+      var now = new Date();
+      fTime.value = day === todayKey() ? pad(now.getHours()) + ":" + pad(now.getMinutes()) : "08:00";
+      showPick();
+      dlg.showModal();
+      cSearch.focus();
+    }
+  }
+  cSearch.addEventListener("input", renderList);
+  document.getElementById("c-picked").addEventListener("click", function () { showPick(); cSearch.focus(); });
+  dlg.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button");
+    if (!b) return;
+    if (b.hasAttribute("data-pick-slug")) { var c = BY_SLUG[b.getAttribute("data-pick-slug")]; choose({ slug: c.slug, name: c.name }); }
+    else if (b.hasAttribute("data-pick-name")) choose({ slug: null, name: b.getAttribute("data-pick-name") });
+    else if (b.hasAttribute("data-unit")) { fUnit = b.getAttribute("data-unit"); drawDetail(); }
+    else if (b.hasAttribute("data-amt")) { fAmt.value = fmtIn(+b.getAttribute("data-amt")); fUnit = b.getAttribute("data-amt-unit"); drawDetail(); }
+    else if (b.hasAttribute("data-site")) { var s = b.getAttribute("data-site"); fSite = fSite === s ? "" : s; drawDetail(); }
+    else if (b.hasAttribute("data-route")) { var r = b.getAttribute("data-route"); fSite = fSite === r ? "" : r; drawDetail(); }
+  });
+
+  document.getElementById("dose-form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (detailStep.hidden || !sel) { var first = cList.querySelector("button"); if (first) first.click(); return; }
+    var amount = parseNum(fAmt.value);
+    if (!(amount > 0)) { fErr.textContent = t("err_amount"); fAmt.focus(); return; }
+    var rec = { slug: sel.slug, name: sel.name, amount: amount, unit: fUnit, time: fTime.value || "", site: fSite || "", note: fNote.value.trim() };
+    var isNew = !editingId;
+    if (editingId) {
+      S.entries.forEach(function (e) { if (e.id === editingId) Object.keys(rec).forEach(function (k) { e[k] = rec[k]; }); });
+    } else {
+      rec.id = uid(); rec.date = day; rec.createdAt = new Date().toISOString();
+      S.entries.push(rec);
+    }
+    S.prefs.last[compoundKey(rec)] = { amount: amount, unit: rec.unit };
+    save(); dlg.close(); render();
+    if (isNew) { buzz(); toast(t("logged", { what: entryName(rec) + " " + fmtNum(amount, 3) + " " + unitLabel(rec.unit) + (rec.site ? ", " + siteLabel(rec.site) : "") })); }
+  });
+  document.getElementById("f-delete").addEventListener("click", function () {
+    if (!editingId) return;
+    ask(t("confirm_delete"), t("delete")).then(function (yes) {
+      if (!yes) return;
+      S.entries = S.entries.filter(function (e) { return e.id !== editingId; });
+      save(); dlg.close(); render(); toast(t("deleted"));
+    });
+  });
+  // A short tick under the finger where the device allows it.
+  function buzz() { try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) { /* not offered here */ } }
+  document.getElementById("fab").addEventListener("click", function () {
+    if (view !== "today") day = todayKey();
+    openDose();
+  });
+
+  /* ---------- Log again ---------- */
+  // Repeats the person's own entry: same compound, amount and unit, the next site in their
+  // rotation (or the same non-injection route), the current time on today.
+  function repeatEntry(id) {
+    var src = S.entries.filter(function (e) { return e.id === id; })[0];
+    if (!src) return;
+    var now = new Date();
+    var rec = {
+      id: uid(), date: day, createdAt: now.toISOString(),
+      time: day === todayKey() ? pad(now.getHours()) + ":" + pad(now.getMinutes()) : src.time || "08:00",
+      slug: src.slug || null, name: src.name, amount: src.amount, unit: src.unit,
+      site: ROTATION.indexOf(src.site) > -1 ? nextSite() : src.site || "", note: ""
+    };
+    S.entries.push(rec);
+    S.prefs.last[compoundKey(rec)] = { amount: rec.amount, unit: rec.unit };
+    save(); render();
+    var what = entryName(rec) + " " + fmtNum(rec.amount, 3) + " " + unitLabel(rec.unit) + (rec.site ? ", " + siteLabel(rec.site) : "");
+    toast(t("logged", { what: what }), { label: t("undo"), fn: function () {
+      S.entries = S.entries.filter(function (e) { return e.id !== rec.id; });
+      save(); render();
+    } });
+  }
+
+  /* ---------- Vial form ---------- */
+  var vDlg = document.getElementById("vial-dlg"), vC = document.getElementById("v-compound"), vName = document.getElementById("v-name");
+  var vMg = document.getElementById("v-mg"), vOpened = document.getElementById("v-opened"), vWithin = document.getElementById("v-within");
+  var vErr = document.getElementById("v-err"), vFinish = document.getElementById("v-finish"), editingVial = null;
+  function syncVialOther() { document.getElementById("v-name-wrap").hidden = vC.value !== "__other"; }
+  function openVial(id) {
+    var v = id ? S.vials.filter(function (x) { return x.id === id; })[0] : null;
+    editingVial = v ? v.id : null;
+    vC.innerHTML = compoundOptions(); vErr.textContent = "";
+    document.getElementById("vial-title").textContent = t(v ? "edit_vial" : "add_vial");
+    document.getElementById("v-delete").hidden = !v;
+    vFinish.hidden = !v;
+    vOpened.max = todayKey();
+    if (v) {
+      vC.value = v.slug && BY_SLUG[v.slug] ? v.slug : "__other";
+      vName.value = v.slug && BY_SLUG[v.slug] ? "" : v.name || "";
+      vMg.value = fmtIn(v.mg); vOpened.value = v.opened; vWithin.value = v.within ? String(v.within) : "";
+      vFinish.textContent = t(v.finishedOn ? "back_on_hand" : "mark_finished");
+    } else {
+      var r = recentCompounds()[0];
+      vC.value = r && r.slug && BY_SLUG[r.slug] ? r.slug : vC.options[0] ? vC.options[0].value : "__other";
+      vName.value = ""; vMg.value = ""; vOpened.value = todayKey(); vWithin.value = "";
+    }
+    syncVialOther();
+    vDlg.showModal();
+  }
+  vC.addEventListener("change", syncVialOther);
+  document.getElementById("vial-form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var other = vC.value === "__other", mg = parseNum(vMg.value), within = parseInt(vWithin.value, 10);
+    if (other && !vName.value.trim()) { vErr.textContent = t("err_name"); vName.focus(); return; }
+    if (!(mg > 0)) { vErr.textContent = t("err_mg"); vMg.focus(); return; }
+    if (!vOpened.value || vOpened.value > todayKey()) { vErr.textContent = t("err_opened"); vOpened.focus(); return; }
+    var rec = { slug: other ? null : vC.value, name: other ? vName.value.trim() : BY_SLUG[vC.value].name, mg: mg, opened: vOpened.value, within: within > 0 ? within : null };
+    if (editingVial) S.vials.forEach(function (v) { if (v.id === editingVial) Object.keys(rec).forEach(function (k) { v[k] = rec[k]; }); });
+    else { rec.id = uid(); rec.finishedOn = null; S.vials.push(rec); }
+    save(); vDlg.close(); render();
+  });
+  vFinish.addEventListener("click", function () {
+    S.vials.forEach(function (v) { if (v.id === editingVial) v.finishedOn = v.finishedOn ? null : todayKey(); });
+    save(); vDlg.close(); render();
+  });
+  document.getElementById("v-delete").addEventListener("click", function () {
+    ask(t("confirm_delete_vial"), t("delete")).then(function (yes) {
+      if (!yes) return;
+      S.vials = S.vials.filter(function (v) { return v.id !== editingVial; });
+      save(); vDlg.close(); render(); toast(t("deleted"));
+    });
+  });
+
+  /* ---------- Check-in autosave ---------- */
+  var ckTimer;
+  function saveCheckin(patch) {
+    var c = S.checkins[day] || {};
+    Object.keys(patch).forEach(function (k) { if (patch[k] === null || patch[k] === "") delete c[k]; else c[k] = patch[k]; });
+    if (Object.keys(c).length) S.checkins[day] = c; else delete S.checkins[day];
+    save();
+    var s = document.getElementById("ck-saved");
+    if (s) { s.classList.add("on"); clearTimeout(ckTimer); ckTimer = setTimeout(function () { s.classList.remove("on"); }, 1400); }
+  }
+  function numField(v) { var n = parseNum(v); return n > 0 && n < 1000 ? Math.round(n * 10) / 10 : null; }
+  // Typed fields wait 450 ms after the last keystroke, all together, so moving from weight to waist
+  // never drops the first. A blur, a re-render or leaving the page saves at once.
+  var CK = { "ck-weight": "weight", "ck-waist": "waist", "ck-note": "note" };
+  var pending = null, pendingDay = null, inTimer;
+  function flushCheckin() {
+    clearTimeout(inTimer);
+    if (!pending) return;
+    var patch = pending, k = day;
+    pending = null; day = pendingDay;
+    saveCheckin(patch);
+    day = k;
+  }
+  function queueCheckin(el) {
+    var f = CK[el.id];
+    if (!f) return false;
+    if (pending && pendingDay !== day) flushCheckin();
+    pending = pending || {}; pendingDay = day;
+    pending[f] = f === "note" ? el.value.trim() : numField(el.value);
+    return true;
+  }
+  main.addEventListener("input", function (ev) {
+    if (!queueCheckin(ev.target)) return;
+    clearTimeout(inTimer);
+    inTimer = setTimeout(flushCheckin, 450);
+  });
+  window.addEventListener("pagehide", flushCheckin);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") flushCheckin(); });
+  main.addEventListener("change", function (ev) {
+    if (queueCheckin(ev.target)) { flushCheckin(); return; }
+    if (ev.target.id === "day-pick" && ev.target.value) { day = ev.target.value > todayKey() ? todayKey() : ev.target.value; calMonth = day.slice(0, 7); render(); }
+    if (ev.target.id === "ph-pose") pendingPose = ev.target.value;
+  });
+
+
+  /* ---------- Clicks ---------- */
+  var photoInput = document.getElementById("photo-file");
+  var photoDate = day;
+  main.addEventListener("click", function (ev) {
+    if (ev.target.id === "day-pick" && ev.target.showPicker) { try { ev.target.showPicker(); } catch (e) { /* the native control still opens */ } return; }
+    var b = ev.target.closest("button");
+    if (!b) return;
+    var act = b.getAttribute("data-act");
+    if (act === "day-today") { day = todayKey(); render(); }
+    else if (act === "week-prev") { day = addDays(weekStart(day), -1); render(); }
+    else if (act === "week-next") { var nx = addDays(weekStart(day), 7); day = nx > todayKey() ? todayKey() : nx; render(); }
+    else if (act === "new-dose") openDose();
+    else if (act === "add-photo") { photoDate = day; photoInput.value = ""; photoInput.click(); }
+    else if (act === "add-photo-today") { photoDate = todayKey(); if (photoPose !== "all") pendingPose = photoPose; photoInput.value = ""; photoInput.click(); }
+    else if (act === "cal-prev" || act === "cal-next") {
+      var p = calMonth.split("-"), d = new Date(+p[0], +p[1] - 1 + (act === "cal-prev" ? -1 : 1), 1);
+      calMonth = d.getFullYear() + "-" + pad(d.getMonth() + 1); render();
+    }
+    else if (act === "more") { historyLimit += 40; render(); }
+    else if (act === "add-vial") openVial();
+    else if (b.hasAttribute("data-edit")) openDose(b.getAttribute("data-edit"));
+    else if (b.hasAttribute("data-goto")) { day = b.getAttribute("data-goto"); var was = view; view = "today"; render(); if (was !== "today") window.scrollTo(0, 0); }
+    else if (b.hasAttribute("data-step")) {
+      var parts = b.getAttribute("data-step").split(":"), inp = document.getElementById("ck-" + parts[0]);
+      var cur = parseNum(inp.value);
+      if (!(cur > 0)) { var lv = lastValue(parts[0], day); if (!lv) { inp.focus(); return; } cur = lv.v; }
+      else cur += +parts[1];
+      inp.value = fmtIn(Math.round(cur * 10) / 10);
+      queueCheckin(inp); flushCheckin(); buzz();
+    }
+    else if (b.hasAttribute("data-feel")) {
+      var v = +b.getAttribute("data-feel"), cur2 = (S.checkins[day] || {}).feel;
+      saveCheckin({ feel: cur2 === v ? null : v });
+      b.parentNode.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b && cur2 !== v)); });
+    }
+    else if (b.hasAttribute("data-pose-new")) { pendingPose = b.getAttribute("data-pose-new"); render(); }
+    else if (b.hasAttribute("data-repeat")) { buzz(); repeatEntry(b.getAttribute("data-repeat")); }
+    else if (b.hasAttribute("data-vial")) openVial(b.getAttribute("data-vial"));
+    else if (b.hasAttribute("data-trend-range")) { trendRange = b.getAttribute("data-trend-range"); render(); }
+    else if (b.hasAttribute("data-trend-metric")) { trendMetric = b.getAttribute("data-trend-metric"); render(); }
+    else if (b.hasAttribute("data-photo-tab")) { photoTab = b.getAttribute("data-photo-tab"); render(); }
+    else if (b.hasAttribute("data-pose-filter")) { photoPose = b.getAttribute("data-pose-filter"); render(); }
+    else if (b.hasAttribute("data-cmp-pose")) { cmp.pose = b.getAttribute("data-cmp-pose"); cmp.a = cmp.b = null; render(); }
+    else if (b.hasAttribute("data-cmp-mode")) { cmp.mode = b.getAttribute("data-cmp-mode"); render(); }
+    else if (b.hasAttribute("data-pick-a")) { var a = b.getAttribute("data-pick-a"); if (a !== cmp.b) cmp.a = a; render(); }
+    else if (b.hasAttribute("data-pick-b")) { var bb = b.getAttribute("data-pick-b"); if (bb !== cmp.a) cmp.b = bb; render(); }
+    else if (b.hasAttribute("data-view-photo")) openViewer(b.getAttribute("data-view-photo"));
+  });
+  photoInput.addEventListener("change", function () {
+    var f = photoInput.files && photoInput.files[0];
+    if (!f) return;
+    addPhoto(f, photoDate, pendingPose).then(render);
+  });
+
+  document.querySelectorAll(".tabs [data-view]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      view = b.getAttribute("data-view");
+      if (view === "history") calMonth = day.slice(0, 7);
+      render(); window.scrollTo(0, 0); main.focus({ preventScroll: true });
+    });
+  });
+  /* ---------- Photo viewer ---------- */
+  var pic = document.getElementById("pic-dlg");
+  function openViewer(id) {
+    var p = find(id); if (!p) return;
+    viewerId = id;
+    document.getElementById("pic-title").textContent = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
+    var im = document.getElementById("pic-img");
+    im.src = url(p, true); im.alt = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
+    var pd = document.getElementById("pic-date"), pp = document.getElementById("pic-pose");
+    pd.value = p.date; pd.max = todayKey();
+    pp.innerHTML = POSES.map(function (x) { return '<option value="' + x + '"' + (x === p.pose ? " selected" : "") + ">" + esc(poseLabel(x)) + "</option>"; }).join("");
+    pic.showModal();
+  }
+  // A photo's date and pose can be corrected after the fact.
+  function updatePhoto(id, patch) {
+    var p = find(id); if (!p) return;
+    Object.keys(patch).forEach(function (k) { p[k] = patch[k]; });
+    photos.sort(byPhoto);
+    if (p.full) save();
+    else tx("readwrite", function (st) { return st.put(p); }).catch(function () { toast(t("sync_failed")); });
+    document.getElementById("pic-title").textContent = t("photo_of", { pose: poseLabel(p.pose), date: fmtDate(p.date) });
+    toast(t("photo_updated"));
+    render();
+  }
+  document.getElementById("pic-date").addEventListener("change", function (ev) {
+    var v = ev.target.value;
+    if (v && v <= todayKey()) updatePhoto(viewerId, { date: v });
+  });
+  document.getElementById("pic-pose").addEventListener("change", function (ev) { updatePhoto(viewerId, { pose: ev.target.value }); });
+  document.getElementById("pic-before").addEventListener("click", function () { useInCompare("a"); });
+  document.getElementById("pic-after").addEventListener("click", function () { useInCompare("b"); });
+  function useInCompare(which) {
+    var p = find(viewerId); if (!p) return;
+    cmp.pose = p.pose;
+    var pool = photos.filter(function (x) { return x.pose === p.pose; });
+    if (pool.length < 2) cmp.pose = "all";
+    cmp[which] = p.id;
+    var other = which === "a" ? "b" : "a";
+    if (cmp[other] === p.id) cmp[other] = null;
+    pic.close(); view = "photos"; photoTab = "compare"; render(); window.scrollTo(0, 0);
+  }
+  document.getElementById("pic-del").addEventListener("click", function () {
+    if (!viewerId) return;
+    ask(t("confirm_delete_photo"), t("delete")).then(function (yes) {
+      if (yes) deletePhoto(viewerId).then(function () { pic.close(); render(); toast(t("deleted")); });
+    });
+  });
+
+  /* ---------- Confirmation ---------- */
+  var askDlg = document.getElementById("ask-dlg");
+  function ask(msg, yesLabel) {
+    return new Promise(function (res) {
+      document.getElementById("ask-msg").textContent = msg;
+      document.getElementById("ask-yes").textContent = yesLabel;
+      askDlg.returnValue = "";
+      askDlg.addEventListener("close", function () { res(askDlg.returnValue === "yes"); }, { once: true });
+      askDlg.showModal();
+    });
+  }
+
+  /* ---------- Settings, backup ---------- */
+  var setDlg = document.getElementById("set-dlg");
+  function syncSettings() {
+    var local = photos.filter(function (p) { return !p.full; });
+    var bytes = local.reduce(function (s, p) { return s + (p.blob ? p.blob.size : 0) + (p.thumb ? p.thumb.size : 0); }, 0);
+    document.getElementById("set-hint").textContent = t(cloud ? "export_hint_cloud" : "export_hint");
+    document.getElementById("set-usage").textContent = cloud && !local.length ? t("usage_cloud", { n: fmtNum(photos.length, 0) })
+      : t("usage", { n: fmtNum(local.length, 0), mb: fmtNum(bytes / 1048576, 1) });
+  }
+  document.getElementById("open-settings").addEventListener("click", function () { syncSettings(); setDlg.showModal(); });
+
+  // In the Artifact viewer a file is offered through the downloads capability (the viewer confirms it);
+  // a plain download link does nothing there. Resolves true once the file is handed over.
+  function download(name, blob) {
+    var dl = cloud && cloud.downloads;
+    if (dl) {
+      return dl.save({ filename: name, data: blob }).then(function () { return true; }, function (e) {
+        if (!e || e.code !== "declined") toast(t("save_failed"));
+        return false;
+      });
+    }
+    var a = document.createElement("a"), u = URL.createObjectURL(blob);
+    a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+    return Promise.resolve(true);
+  }
+  function photoBlob(p) {
+    if (p.blob) return Promise.resolve(p.blob);
+    return fetch(url(p, true)).then(function (r) { if (!r.ok) throw new Error("photo"); return r.blob(); });
+  }
+  function toDataUrl(blob) {
+    return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = rej; r.readAsDataURL(blob); });
+  }
+  function fromDataUrl(d) { return fetch(d).then(function (r) { return r.blob(); }); }
+
+  document.getElementById("exp-json").addEventListener("click", function () {
+    Promise.all(photos.map(function (p) {
+      return photoBlob(p).then(toDataUrl).then(function (data) { return { id: p.id, date: p.date, pose: p.pose, createdAt: p.createdAt, w: p.w, h: p.h, data: data }; });
+    })).then(function (ph) {
+      var out = { app: "axiom-tracker", version: 1, exportedAt: new Date().toISOString(), entries: S.entries, checkins: S.checkins, vials: S.vials, photos: ph };
+      return download("axiom-tracker-" + todayKey() + ".json", new Blob([JSON.stringify(out)], { type: "application/json" }));
+    }).then(function (ok) { if (ok) toast(t("exported")); }, function () { toast(t("save_failed")); });
+  });
+  document.getElementById("imp-json").addEventListener("click", function () { var f = document.getElementById("imp-file"); f.value = ""; f.click(); });
+  document.getElementById("imp-file").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    f.text().then(function (txt) {
+      var d = JSON.parse(txt);
+      if (!d || d.app !== "axiom-tracker" || !Array.isArray(d.entries)) throw new Error("bad");
+      var ids = {};
+      S.entries.forEach(function (e, i) { ids[e.id] = i; });
+      d.entries.forEach(function (e) {
+        if (!e || !e.id || !e.date || !(Number(e.amount) > 0)) return;
+        e.amount = Number(e.amount);
+        if (e.id in ids) S.entries[ids[e.id]] = e; else S.entries.push(e);
+      });
+      Object.keys(d.checkins || {}).forEach(function (k) { if (/^\d{4}-\d{2}-\d{2}$/.test(k)) S.checkins[k] = d.checkins[k]; });
+      (Array.isArray(d.vials) ? d.vials : []).forEach(function (v) {
+        if (!v || !v.id || !(Number(v.mg) > 0) || !/^\d{4}-\d{2}-\d{2}$/.test(v.opened || "")) return;
+        S.vials = S.vials.filter(function (x) { return x.id !== v.id; }).concat([v]);
+      });
+      save();
+      var list = Array.isArray(d.photos) ? d.photos : [];
+      return list.reduce(function (pr, p) {
+        return pr.then(function () {
+          if (!p || !p.id || !p.data || find(p.id)) return;
+          return fromDataUrl(p.data).then(function (blob) {
+            return shrink(blob, 480, 0.8).then(function (th) {
+              var meta = { id: p.id, date: p.date, pose: POSES.indexOf(p.pose) > -1 ? p.pose : "other", createdAt: p.createdAt || new Date().toISOString() };
+              return storePhoto({ blob: blob, w: p.w, h: p.h }, th, meta);
+            });
+          });
+        });
+      }, Promise.resolve()).then(function () {
+        photos.sort(function (a, b) { return (a.date + a.createdAt).localeCompare(b.date + b.createdAt); });
+        setDlg.close(); render(); toast(t("import_done", { e: d.entries.length, p: list.length }));
+      });
+    }).catch(function () { toast(t("import_bad")); });
+  });
+  document.getElementById("exp-csv").addEventListener("click", function () {
+    function q(v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+    var rows = [["type", "date", "time", "compound", "amount", "unit", "site", "weight_kg", "waist_cm", "feel_1_5", "note"]];
+    S.entries.slice().sort(byTime).forEach(function (e) { rows.push(["dose", e.date, e.time, entryName(e), e.amount, e.unit, e.site, "", "", "", e.note]); });
+    Object.keys(S.checkins).sort().forEach(function (k) { var c = S.checkins[k]; rows.push(["check-in", k, "", "", "", "", "", c.weight, c.waist, c.feel, c.note]); });
+    download("axiom-tracker-" + todayKey() + ".csv", new Blob(["﻿" + rows.map(function (r) { return r.map(q).join(","); }).join("\n")], { type: "text/csv" }));
+  });
+  document.getElementById("wipe").addEventListener("click", function () {
+    ask(t("confirm_delete_all"), t("delete_everything")).then(function (yes) {
+      if (!yes) return;
+      var assets = cloud && cloud.assets;
+      if (assets) photos.forEach(function (p) { [p.full, p.thumbId].filter(Boolean).forEach(function (a) { assets.delete(a).catch(function () {}); }); });
+      S = { entries: [], checkins: {}, prefs: { last: {} }, vials: [] };
+      photos = []; cmp.a = cmp.b = null;
+      save();
+      Object.keys(urls).forEach(function (k) { URL.revokeObjectURL(urls[k]); }); urls = {};
+      tx("readwrite", function (st) { return st.clear(); }).catch(function () {}).then(function () {
+        setDlg.close(); render(); toast(t("deleted"));
+      });
+    });
+  });
+
+  // Close buttons and tapping the backdrop close a sheet.
+  document.querySelectorAll("dialog").forEach(function (d) {
+    d.addEventListener("click", function (ev) { if (ev.target === d || ev.target.closest("[data-close]")) d.close(); });
+    d.addEventListener("close", catchUp);
+  });
+  main.addEventListener("focusout", catchUp);
+
+  // A page left open overnight moves "today" forward.
+  var lastToday = todayKey();
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState !== "visible") return;
+    var tk = todayKey();
+    if (tk !== lastToday) { if (day === lastToday) day = tk; lastToday = tk; render(); }
+  });
+
+  var rz;
+  window.addEventListener("resize", function () { if (view !== "trends") return; clearTimeout(rz); rz = setTimeout(render, 150); });
+
+  render();
+  loadPhotos().then(render);
+  connectCloud();
+})();
+</script>
+</body>
+</html>

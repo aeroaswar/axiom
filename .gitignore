@@ -20,3 +20,6 @@ tsconfig.tsbuildinfo
 .look.mjs
 .keys.mjs
 invoice/artifact/
+
+# staged Artifact build of the tracker
+dosage-guide/artifact/
