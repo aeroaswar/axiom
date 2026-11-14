@@ -5,7 +5,7 @@ A card that carries nothing but the wordmark and a QR, and the guide it opens.
 | File | What it is |
 | --- | --- |
 | `card.html` | Print-ready card — 85 × 55 mm, AXIOM wordmark left, QR right, nothing else. Pick a compound, set the URL, print. |
-| `index.html` | What the QR opens. Mobile-first guide to every lot in the price list — 79 lots across 65 compounds: what it is, how often, when in the day, the documented doses, a pen calculator, a dose schedule with calendar export, storage and cautions. |
+| `index.html` | What the QR opens. Mobile-first guide to every lot in the price list — 81 lots across 67 compounds: what it is, how often, when in the day, the documented doses, a pen calculator, a dose schedule with calendar export, storage and cautions. |
 | `compounds.js` | The data behind both. One entry per compound, carrying every size that compound is sold in. |
 | `qr.js` | Self-contained QR encoder. No CDN, no network — the card generates its own code. |
 | `src/` | The compound tables and the script that generates `compounds.js`. Edit these, then run `python3 src/gen.py`. |
@@ -72,10 +72,10 @@ language — the audience is the person holding the pen, not a pharmacologist.
 Each compound leads with a sentence saying what it actually does; the technical
 class sits underneath in small type.
 
-**Two counts, both correct.** The price list has **79 lots**; the guide has **65
+**Two counts, both correct.** The price list has **81 lots**; the guide has **67
 pages**. A compound sold in more than one size is one page with a size chip per
 lot, and ten compounds are sold in several sizes — 14 lots more than there are
-pages. Retatrutide alone is five of the 79 (10, 20, 30, 40 and 60 mg). The index
+pages. Retatrutide alone is five of the 81 (10, 20, 30, 40 and 60 mg). The index
 states both counts, derived from `compounds.js` rather than hardcoded, so the
 line stays true when the catalogue changes.
 
@@ -129,7 +129,7 @@ unit the compound is sold in: mg, IU or mL.
 
 The customer works top to bottom, mostly by tapping:
 
-1. **Compound** — a list of all 65, grouped as on the index. Changing it opens
+1. **Compound** — a list of all 67, grouped as on the index. Changing it opens
    that compound's page.
 2. **Which pen do you have?** — one button per size AXIOM sells. *Or how much is
    left* takes a part-used pen.
@@ -289,8 +289,8 @@ with a number.
 | **Approved in some countries** | Approved or sold in certain countries only. |
 | **Lab research only** | Lab and animal work only. No human dose has been set, and none is invented. |
 
-Across the 65 compounds: 10 are approved medicines, 9 have real human trial data,
-21 are approved or sold in some countries only, and 25 rest on lab and animal work
+Across the 67 compounds: 10 are approved medicines, 9 have real human trial data,
+21 are approved or sold in some countries only, and 27 rest on lab and animal work
 alone. That last group is where the guide says *no human dose has been set* rather
 than printing a number.
 
@@ -350,10 +350,10 @@ The QR encoder is not a dependency, so it is checked rather than trusted:
 - Mask selection matches independent penalty scoring across all eight masks.
 - 84 payloads across ECC L/M/Q/H decode with `zxing-cpp`, the engine behind most scanner apps.
 - Cards rendered to print PDFs, rasterised at 300 dpi, and decoded back to the exact expected URL, with the wordmark confirmed present in each.
-- All 65 compound pages checked for correct dose counts, schedule length, size chips and layout, with no horizontal overflow at phone width.
+- All 65 compound pages checked for correct dose counts, schedule length, size chips and layout, with no horizontal overflow at phone width. The two pages added since, KLOW-C and Adamax 1032 Da, were checked at 390 px for overflow, script errors and their dose buttons.
 - **The nine documented compounds pinned to their sources**: each page's buttons and its Start button checked against the table above, and AOD-9604 checked to offer quick picks rather than its tablet dose.
 - **Every dose button tapped against every pen button** — 364 combinations across all 65 pages — for the dose count, the highlighted buttons and the line naming the dose's source (documented or quick pick). Also checked: nothing pre-picked except single-size pens, a typed dose clears the buttons, Retatrutide's schedule switch taps its own dose, the compound list opens the chosen page, and a part-used pen of 0.3 mg at 0.1 mg gives 3 doses, not the 2 that floating-point division would.
-- Every lot in the price list PDF matched against `compounds.js` by name *and* size: 79/79, so no lot is missing a page and no size chip is offered that isn't a real lot. Four names differ in presentation only and are mapped deliberately — the price list's `CJC-1295 (No DAC) + Ipamorelin`, `VIP (Vasoactive Intestinal Peptide)`, `SLU-PP-332 (Injectable)` and `PT-141` appear here as `CJC-1295 + Ipamorelin`, `VIP`, `SLU-PP-332` and `PT-141 (Bremelanotide)`.
+- Every lot in the price list PDF matched against `compounds.js` by name *and* size: 81/81, so no lot is missing a page and no size chip is offered that isn't a real lot. Four names differ in presentation only and are mapped deliberately — the price list's `CJC-1295 (No DAC) + Ipamorelin`, `VIP (Vasoactive Intestinal Peptide)`, `SLU-PP-332 (Injectable)` and `PT-141` appear here as `CJC-1295 + Ipamorelin`, `VIP`, `SLU-PP-332` and `PT-141 (Bremelanotide)`.
 - **Calendar export checked on all 62 scheduled compounds** plus Retatrutide twice weekly and a 500-dose run: each Apple file parses with the `icalendar` library as one event with a reminder; its rule, expanded with `dateutil`, gives exactly the doses in the pen on the dates the page shows; and the Google link's rule produces the identical dates. Line length, CRLF and absent `METHOD` checked on every file.
 - The Apple button checked in a sandboxed frame that blocks downloads (nothing gets through, the panel appears, and *Open this page directly* opens an unframed copy), and under iPhone Safari, iPhone Instagram and Android browser identities for the right guidance. Not testable from here: a real iPhone's Calendar hand-off, and the live claude.ai viewer's own frame rules.
 - Printed geometry measured off the PDF: 85.0 × 55.0 mm trim, 91.0 × 60.9 mm with bleed, 10-up sheet at 170 × 275 mm.
