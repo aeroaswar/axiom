@@ -76,3 +76,9 @@
 - Counts: 68 compounds · 86 lots, Metabolic 5 compounds · 16 lots, Tissue Repair 13 compounds · 15 lots, 75 products, price list 93 lots, 180 templates. The homepage line had still read 65 compounds; it now reads 68.
 - Photographs: Semaglutide is the approved Tirzepatide photograph and Tri-Heal the approved KLOW photograph, each with name and QTY redrawn by `tools/relabel_label.py`; Retatrutide's QTY now reads 5 mg (`tools/relabel_qty.py`). Visual review confirms the names, quantities and dial 0. No PNG masters are committed for them.
 - `verify_stone.py` passes for 75 products; `qa/check-i18n.cjs` (176 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.
+
+## SSM (SS-31 + MOTS-C) — November 15
+
+- SSM (SS-31 + MOTS-C), 40 mg (20 mg of each) at Rp 3.500.000 (SKU `ssm40`), joins Cellular Energy after MOTS-c: catalogue card, product page, compound page, pathway list (now 8 compounds · 9 lots), related compound lists, price list (94 lots) and counts (69 compounds · 87 lots, 76 products, 182 templates).
+- Its photograph is the approved KLOW photograph with name and QTY redrawn by `tools/relabel_label.py`; visual review confirms SSM (SS-31 + MOTS-C), 40 mg and dial 0. No PNG master is committed.
+- `verify_stone.py` passes for 76 products; `qa/check-i18n.cjs` (178 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.

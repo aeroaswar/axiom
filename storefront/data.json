@@ -1006,6 +1006,29 @@
       ]
     },
     {
+      "slug": "ssm-ss-31-plus-mots-c",
+      "name": "SSM (SS-31 + MOTS-C)",
+      "kind": "peptide",
+      "cls": "Multi-peptide blend",
+      "pathway": "cellular-energy",
+      "pathway_no": "05",
+      "pathway_name": "Cellular Energy",
+      "variants": [
+        {
+          "sku": "ssm40",
+          "dose": "40 mg",
+          "content": "Vial + pen",
+          "price_idr": 3500000,
+          "cold": true,
+          "available": 10
+        }
+      ],
+      "synonyms": [
+        "SSM Blend"
+      ],
+      "coa": []
+    },
+    {
       "slug": "slu-pp-332-injectable",
       "name": "SLU-PP-332 (Injectable)",
       "kind": "peptide",

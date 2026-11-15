@@ -138,6 +138,12 @@
     "kind": "peptide"
   },
   {
+    "slug": "ssm-ss-31-plus-mots-c",
+    "name": "SSM (SS-31 + MOTS-C)",
+    "dose": "40 mg",
+    "kind": "peptide"
+  },
+  {
     "slug": "adamax",
     "name": "Adamax",
     "dose": "10 mg",
