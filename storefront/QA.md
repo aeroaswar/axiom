@@ -60,3 +60,31 @@
 - Its photograph is the approved KLOW photograph relabelled locally (`tools/relabel_klow_c.py`): only the name and quantity were erased and redrawn; visual review confirms KLOW-C (KLOW + Cartalax), 100 mg and dial 0.
 - No product is sold out: TB-500, Thymosin Alpha-1 and Epithalon now carry stock (12, 8 and 10), and their cards, buy boxes and compound rows use the in-stock markup. No template carries "Sold out", "None available" or a notify form.
 - `verify_stone.py` passes for 73 products; `qa/check-basket.cjs`, `qa/check-i18n.cjs` (172 routes, no English left) and `qa/check-hero.cjs` pass on the served site.
+
+## Supplier sheet update — November 14
+
+- Ipamorelin 10 mg Rp 2.700.000, HMG 75 IU Rp 2.500.000 and Humanin 10 mg Rp 3.500.000 (back on the 48% formula after their supplier costs moved); cards, product pages and price list follow, with plan savings Rp 405.000, Rp 375.000 and Rp 525.000.
+- Cerebrolysin is a 60 mg lot (SKU `cere60`), as on the supplier sheet. NAD+ 500 mg is withdrawn: NAD+ is a single 1000 mg lot at Rp 3.700.000, so its buy box has no size picker, its card no "from", and the guide counts read 66 compounds · 79 lots, Longevity 7 compounds · 8 lots, price list 86 lots.
+- The NAD+ and Cerebrolysin photographs now read 1000 mg and 60 mg: only the QTY figure was redrawn (`tools/relabel_qty.py`), name and pen untouched. Their PNG masters in Git LFS still carry the old figures; the WebP files are the delivery copies.
+- `verify_stone.py`, `qa/check-i18n.cjs` (no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass.
+
+## Seven new lots — November 14
+
+- Semaglutide joins Metabolic after Retatrutide: 10 mg Rp 2.100.000, 30 mg Rp 3.500.000, 40 mg Rp 4.000.000 (SKUs `sema10`, `sema30`, `sema40`), class GLP-1 receptor agonist, no published certificate yet. Catalogue card, product page, compound page, pathway lists and related sections.
+- Tri-Heal (BPC+TB+KPV), 30 mg at Rp 3.800.000 (SKU `triheal30`), joins Tissue Repair after TB-500.
+- Retatrutide 5 mg Rp 2.100.000 (SKU `reta5`) is now Retatrutide's first and default lot, so its card reads "from Rp 2.100.000" and `qa/check-basket.cjs` expects `reta5` (the second size is `reta10`). Tirzepatide adds 60 mg Rp 5.200.000 and 80 mg Rp 6.300.000.
+- Counts: 68 compounds · 86 lots, Metabolic 5 compounds · 16 lots, Tissue Repair 13 compounds · 15 lots, 75 products, price list 93 lots, 180 templates. The homepage line had still read 65 compounds; it now reads 68.
+- Photographs: Semaglutide is the approved Tirzepatide photograph and Tri-Heal the approved KLOW photograph, each with name and QTY redrawn by `tools/relabel_label.py`; Retatrutide's QTY now reads 5 mg (`tools/relabel_qty.py`). Visual review confirms the names, quantities and dial 0. No PNG masters are committed for them.
+- `verify_stone.py` passes for 75 products; `qa/check-i18n.cjs` (176 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.
+
+## SSM (SS-31 + MOTS-C) — November 15
+
+- SSM (SS-31 + MOTS-C), 40 mg (20 mg of each) at Rp 3.500.000 (SKU `ssm40`), joins Cellular Energy after MOTS-c: catalogue card, product page, compound page, pathway list (now 8 compounds · 9 lots), related compound lists, price list (94 lots) and counts (69 compounds · 87 lots, 76 products, 182 templates).
+- Its photograph is the approved KLOW photograph with name and QTY redrawn by `tools/relabel_label.py`; visual review confirms SSM (SS-31 + MOTS-C), 40 mg and dial 0. No PNG master is committed.
+- `verify_stone.py` passes for 76 products; `qa/check-i18n.cjs` (178 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.
+
+## Adamax 1032 Da — November 15
+
+- Adamax 1032 Da, 10 mg at Rp 3.400.000 (SKU `adamax1032-10`), joins Neuro after Adamax. It was already in the price list, margin structure, website catalogue, order form, invoice builder, label builder and compound guide; the storefront was the one surface without it. Catalogue card, product page, compound page, pathway list (now 9 compounds · 9 lots), related lists, price list (95 lots) and counts (70 compounds · 88 lots, 77 products, 184 templates).
+- Its photograph is the approved Adamax pen photograph with the name redrawn by `tools/relabel_label.py`; visual review confirms Adamax 1032 Da, 10 mg and dial 0. No PNG master is committed.
+- `verify_stone.py` passes for 77 products; `qa/check-i18n.cjs` (180 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.

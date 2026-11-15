@@ -52,7 +52,7 @@ dict(slug="ipamorelin", name="Ipamorelin", cat="Growth Hormone",
   benefits=["The cleanest profile in this group — minimal knock-on hormone effects.",
             "Doesn't cause the strong hunger that some older releasers do.",
             "Often paired with a GHRH peptide because the two work differently."],
-  sizes=[(10,"mg",2500000)], dose=0.2, unit="mg",
+  sizes=[(10,"mg",2700000)], dose=0.2, unit="mg",
   storage=FRIDGE_LIGHT,
   cautions=["Failed its human trials for the use it was developed for.","Banned in tested sport."]),
 

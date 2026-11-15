@@ -16,15 +16,15 @@ async function check(name,expected,steps,mobile){
 }
 const submit=p=>p.locator('.buy-foot [type=submit]').click();
 const chooser=async p=>{await p.waitForTimeout(300);await p.locator('.qa-panel [type=submit], .qa-panel button:has-text("Add")').first().click();};
-await check('product, default size','reta10×1',async p=>{await go(p,'/products/retatrutide');await submit(p);});
-await check('product, another size','reta20×1',async p=>{await go(p,'/products/retatrutide');await p.locator('.size').nth(1).click();await submit(p);});
-await check('product, quantity 3','reta10×3',async p=>{await go(p,'/products/retatrutide');for(let i=0;i<2;i++)await p.locator('.buy-foot [data-q="1"]').click();await submit(p);});
-await check('product, subscription','reta10@30×1',async p=>{await go(p,'/products/retatrutide');await p.locator('[data-plan="sub"]').click();await submit(p);});
-await check('product, twice','reta10×2',async p=>{await go(p,'/products/retatrutide');await submit(p);await p.keyboard.press('Escape');await submit(p);});
+await check('product, default size','reta5×1',async p=>{await go(p,'/products/retatrutide');await submit(p);});
+await check('product, another size','reta10×1',async p=>{await go(p,'/products/retatrutide');await p.locator('.size').nth(1).click();await submit(p);});
+await check('product, quantity 3','reta5×3',async p=>{await go(p,'/products/retatrutide');for(let i=0;i<2;i++)await p.locator('.buy-foot [data-q="1"]').click();await submit(p);});
+await check('product, subscription','reta5@30×1',async p=>{await go(p,'/products/retatrutide');await p.locator('[data-plan="sub"]').click();await submit(p);});
+await check('product, twice','reta5×2',async p=>{await go(p,'/products/retatrutide');await submit(p);await p.keyboard.press('Escape');await submit(p);});
 await check('device page','mask×1',async p=>{await go(p,'/products/red-light-therapy-mask');await submit(p);});
-await check('mobile buy bar','reta10×1',async p=>{await go(p,'/products/retatrutide');await p.waitForTimeout(500);await p.locator('.buy-bar .bb-add').click();},true);
-await check('catalogue card','reta10×1',async p=>{await go(p,'/products');await p.locator('.pcard .add button').first().click();await chooser(p);});
-await check('homepage card','reta10×1',async p=>{await p.locator('.ed-products .pcard .add button').first().click();await chooser(p);});
+await check('mobile buy bar','reta5×1',async p=>{await go(p,'/products/retatrutide');await p.waitForTimeout(500);await p.locator('.buy-bar .bb-add').click();},true);
+await check('catalogue card','reta5×1',async p=>{await go(p,'/products');await p.locator('.pcard .add button').first().click();await chooser(p);});
+await check('homepage card','reta5×1',async p=>{await p.locator('.ed-products .pcard .add button').first().click();await chooser(p);});
 assert.deepEqual(errors,[]);
 console.log(JSON.stringify({result:'PASS',results,errors},null,2));
 await browser.close();

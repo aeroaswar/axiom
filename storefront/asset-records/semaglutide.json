@@ -1,0 +1,9 @@
+{
+  "slug": "semaglutide",
+  "source": "assets/stone-tirzepatide.png",
+  "prompt": null,
+  "method": "local relabel of the approved Tirzepatide photograph (tools/relabel_label.py): the name and quantity were erased by inpainting and redrawn in Inter Regular, narrowed to match the label face; pen, stone, light and the rest of the label are the Tirzepatide photograph's own pixels",
+  "name": "Semaglutide",
+  "dose": "10 mg",
+  "note": "No PNG master is committed for this photograph; the WebP is the delivery file. Rerun tools/relabel_label.py on the Tirzepatide master to recreate it."
+}
