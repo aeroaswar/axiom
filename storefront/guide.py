@@ -27,16 +27,21 @@ ALIASES = {
     'slu-pp-332-injectable': 'slu-pp-332',
     'melanotan-ii': 'melanotan-2',
     'oxytocin-acetate': 'oxytocin',
+    'tri-heal-bpc-plus-tb-plus-kpv': 'tri-heal',
+    'ssm-ss-31-plus-mots-c': 'ssm',
 }
 
-# Guide summaries that state how often to inject. The storefront gives no usage guidance, so these read without it.
+# Guide summaries that state how often to inject (Semaglutide, Cagrilintide, Retatrutide, Tirzepatide, CJC-1295 with DAC, Tesamorelin). The storefront gives no usage guidance, so these read without it.
 SUMMARIES = {
     'cagrilintide': "A long-acting copy of amylin, the hormone that tells you you've had enough. It's usually studied alongside a GLP-1 rather than on its own.",
     'retatrutide': "Aimed at three appetite and metabolism switches instead of two. It's the newest of this family and, so far, the strongest in trials.",
     'tirzepatide': 'Copies two gut hormones. It slows how fast your stomach empties and turns down appetite, so you eat less without white-knuckling it.',
     'cjc-1295-dac': 'The long-acting version of CJC-1295. The DAC part makes it stick to a blood protein so it lasts days instead of minutes.',
+    'semaglutide': "Copies one gut hormone, GLP-1. It slows your stomach and turns down appetite. It's the drug that started the current wave of weight-loss medicines.",
     'tesamorelin': "Raises your own growth hormone. It's the one with real approval behind it, specifically for shifting deep belly fat.",
 }
+USAGE = re.compile(r'going up too fast|slow down instead', re.I)
+POINTS_AT_DOSES = re.compile(r'\b(?:doses?|numbers)\b[^.]*\b(?:below|shown)\b', re.I)
 DOSING = re.compile(r'\bweekly\b|\bdaily\b|\bnightly\b|\bonce a\b|\btwice\b|\ba day\b|\bper week\b|\binject it\b', re.I)
 
 
@@ -51,9 +56,16 @@ def load():
     for e in entries:
         what = SUMMARIES.get(e['slug'], e['what'])
         if DOSING.search(what): raise SystemExit(f'guide.py: the {e["slug"]} summary states a dosing interval; add it to SUMMARIES')
+        # The guide's notes can point at its dose table ("The doses below are the label's"); the storefront has none.
+        note = ' '.join(s for s in re.split(r'(?<=\.)\s+', e['evidenceNote']) if not POINTS_AT_DOSES.search(s))
+        # A caution that coaches the dose up ("Going up too fast ... slow down") is usage guidance: that sentence goes.
+        cautions = [' '.join(s for s in re.split(r'(?<=\.)\s+', c) if not USAGE.search(s)) for c in e['cautions']]
+        cautions = [c for c in cautions if c]
+        for text in [note, *cautions]:
+            if POINTS_AT_DOSES.search(text): raise SystemExit(f'guide.py: {e["slug"]} still points at a dose: {text}')
         out[e['slug']] = {'what': what, 'cls': e['cls'], 'half_life': e['halfLife'], 'route': e['route'],
-                          'storage': e['storage'], 'evidence': labels[e['evidence']], 'evidence_note': e['evidenceNote'],
-                          'cautions': e['cautions']}
+                          'storage': e['storage'], 'evidence': labels[e['evidence']], 'evidence_note': note,
+                          'cautions': cautions}
     return out
 
 

@@ -408,7 +408,7 @@ body.capturing .sheets{transform:none!important}
    AXIOM invoice builder
 
    The catalogue below is generated from invoice/AXIOM-Price-List-v1.0.pdf
-   (81 lots across 9 pathways) plus the device prices in
+   (88 lots across 9 pathways) plus the device prices in
    company-profile/index.html. Regenerate it when a new price list lands.
    Do NOT source it from archive/premium-hero/data.js or from
    business-proposal/axiom-pricelist-print.html — both carry superseded,
@@ -418,14 +418,20 @@ const CATALOG=[
 {g:"GLP-1s & Weight Loss",i:[
   {n:"AOD-9604",s:"5 mg",p:2700000},
   {n:"Cagrilintide",s:"10 mg",p:2700000},
+  {n:"Retatrutide",s:"5 mg",p:2100000},
   {n:"Retatrutide",s:"10 mg",p:2700000},
   {n:"Retatrutide",s:"20 mg",p:3600000},
   {n:"Retatrutide",s:"30 mg",p:4900000},
   {n:"Retatrutide",s:"40 mg",p:6400000},
   {n:"Retatrutide",s:"60 mg",p:8500000},
+  {n:"Semaglutide",s:"10 mg",p:2100000},
+  {n:"Semaglutide",s:"30 mg",p:3500000},
+  {n:"Semaglutide",s:"40 mg",p:4000000},
   {n:"Tirzepatide",s:"10 mg",p:2200000},
   {n:"Tirzepatide",s:"30 mg",p:3500000},
-  {n:"Tirzepatide",s:"40 mg",p:4000000}
+  {n:"Tirzepatide",s:"40 mg",p:4000000},
+  {n:"Tirzepatide",s:"60 mg",p:5200000},
+  {n:"Tirzepatide",s:"80 mg",p:6300000}
 ]},
 {g:"GH Secretagogues",i:[
   {n:"CJC-1295 (No DAC) + Ipamorelin",s:"10 mg",p:2700000},
@@ -434,7 +440,7 @@ const CATALOG=[
   {n:"HGH 191AA (Somatropin)",s:"36 IU",p:2800000},
   {n:"HGH 191AA (Somatropin)",s:"40 IU",p:3000000},
   {n:"IGF-1 LR3",s:"1 mg",p:3800000},
-  {n:"Ipamorelin",s:"10 mg",p:2500000},
+  {n:"Ipamorelin",s:"10 mg",p:2700000},
   {n:"Ipamorelin + Tesamorelin",s:"18 mg",p:4500000},
   {n:"Sermorelin",s:"10 mg",p:3100000},
   {n:"Tesamorelin",s:"10 mg",p:2300000},
@@ -454,12 +460,13 @@ const CATALOG=[
   {n:"LL-37",s:"5 mg",p:2700000},
   {n:"Peg MGF",s:"2 mg",p:2800000},
   {n:"SNAP-8",s:"10 mg",p:2500000},
-  {n:"TB-500",s:"10 mg",p:1800000}
+  {n:"TB-500",s:"10 mg",p:1800000},
+  {n:"Tri-Heal (BPC+TB+KPV)",s:"30 mg",p:3800000}
 ]},
 {g:"Brain Health & Nootropics",i:[
   {n:"Adamax",s:"10 mg",p:2800000},
   {n:"Adamax 1032 Da",s:"10 mg",p:3400000},
-  {n:"Cerebrolysin",s:"80 mg",p:2700000},
+  {n:"Cerebrolysin",s:"60 mg",p:2700000},
   {n:"Dihexa",s:"10 mg",p:3500000},
   {n:"Pinealon",s:"20 mg",p:3300000},
   {n:"Selank",s:"10 mg",p:2100000},
@@ -475,6 +482,7 @@ const CATALOG=[
   {n:"LC526 Fat Blaster (Injectable)",s:"10 mL",p:2700000},
   {n:"MOTS-c",s:"10 mg",p:2200000},
   {n:"MOTS-c",s:"40 mg",p:3800000},
+  {n:"SSM (SS-31 + MOTS-C)",s:"40 mg",p:3500000},
   {n:"SLU-PP-332 (Injectable)",s:"5 mg",p:2400000}
 ]},
 {g:"Immunity",i:[
@@ -483,7 +491,7 @@ const CATALOG=[
 ]},
 {g:"Sexual Health",i:[
   {n:"HCG",s:"10000 IU",p:2700000},
-  {n:"HMG",s:"75 IU",p:2400000},
+  {n:"HMG",s:"75 IU",p:2500000},
   {n:"Kisspeptin",s:"10 mg",p:2900000},
   {n:"Melanotan II",s:"10 mg",p:1900000},
   {n:"Oxytocin Acetate",s:"10 mg",p:2700000},
@@ -495,8 +503,7 @@ const CATALOG=[
   {n:"Epithalon",s:"50 mg",p:3100000},
   {n:"FOXO4-DRI",s:"10 mg",p:4600000},
   {n:"Glutathione",s:"1500 mg",p:2300000},
-  {n:"Humanin",s:"10 mg",p:4000000},
-  {n:"NAD+",s:"500 mg",p:2300000},
+  {n:"Humanin",s:"10 mg",p:3500000},
   {n:"NAD+",s:"1000 mg",p:3700000},
   {n:"SS-31",s:"50 mg",p:4000000}
 ]},
@@ -558,10 +565,10 @@ const DEFAULTS = () => ({
   client:{name:"", company:"", addr:"", email:"", phone:""},
   issuer:{entity:"[Legal entity name]", addr:"[Street address]"},
   items:[
-    {sel:"0:2",  n:"Retatrutide",                    s:"10 mg",  p:2700000, q:2, d:0},
-    {sel:"0:8",  n:"Tirzepatide",                    s:"30 mg",  p:3500000, q:1, d:0},
+    {sel:"0:3",  n:"Retatrutide",                    s:"10 mg",  p:2700000, q:2, d:0},
+    {sel:"0:12", n:"Tirzepatide",                    s:"30 mg",  p:3500000, q:1, d:0},
     {sel:"1:0",  n:"CJC-1295 (No DAC) + Ipamorelin", s:"10 mg",  p:2700000, q:1, d:0},
-    {sel:"7:6",  n:"NAD+",                           s:"500 mg", p:2300000, q:2, d:0},
+    {sel:"7:6",  n:"NAD+",                           s:"1000 mg", p:3700000, q:2, d:0},
     {sel:"7:2",  n:"Epithalon",                      s:"50 mg",  p:3100000, q:1, d:0}
   ],
   dests:[{label:"", addr:"", phone:"", ship:""}], discount:0, ppn:0,
