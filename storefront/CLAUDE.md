@@ -12,6 +12,7 @@ Continue the existing local AXIOM storefront in this folder. The user has approv
 - The product listing is the Catalogue, never the Shop: navigation, footer, breadcrumbs and headings. `qa/check-showcase.cjs` fails on visible "shop".
 - Keep the footer compact: one small wordmark, aligned navigation and restrained spacing.
 - The hero is light limestone (`#e5dcd1`) with dark text. It shows the product photographs of Retatrutide (large) with MOTS-c and KLOW stacked beside it, each pen really resting on stone, linking to its product page. Nothing moves except a slight zoom on hover (off under reduced motion). Cut-out pens composited onto limestone were tried and rejected as floating.
+- Compound and product pages carry the dosage guide's facts: summary, class line, half-life, route, storage, evidence status and cautions. `guide.py` reads them from `../dosage-guide/compounds.js` at build time and stops the build if a compound has no guide entry. Doses, cadence, timing and protocols stay in the guide: the storefront gives no usage guidance.
 - No text under 11px: `build.py` raises any smaller size in the generated `base.css` and stops the build if `design.css`, `editorial-v2.css` or `stone-v3.css` declares one. Text meets 4.5:1 contrast on its background. On ivory, the secondary grey is `--muted-2: #666259`.
 - The demo notice sits in the top ribbon (`.demo-tag`, placed by `build.py`), never floating over content. On phones, product pages show an order bar with the chosen size and Order on WhatsApp (`design.js`) until the order box is on screen.
 - The storefront is a showcase in English only: the catalogue, product pages and the compound guide, with orders taken on WhatsApp. It has no prices, basket, plans or subscriptions, accounts, certificates (COA), price list, legal pages, Bahasa Indonesia or mention of Indonesia. `showcase.py` enforces this at build time and `qa/check-showcase.cjs` checks every route.
@@ -31,6 +32,7 @@ This is a static HTML/CSS/JavaScript storefront with hash routing and Python bui
 | `img.json` | Original image data, remapped to stone images during build |
 | `reference.html` | Original supplied storefront; build extracts its application logic and base styles |
 | `build.py` | Generates `index.html`, `content.js`, `app.js`, `base.css`, `pages/` and the font files |
+| `guide.py` | Build step that carries the dosage guide's facts (no doses) onto compound and product pages, cards and class lines; maps storefront slugs to guide slugs |
 | `showcase.py` | Build step that removes the shop from the reference: prices, basket, plans, certificates, accounts, the price list and legal pages; adds WhatsApp ordering; fails the build on any link to a removed route |
 | `pages/*.js` | Generated: one template per file, loaded on first visit (the homepage ships in `content.js`) |
 | `assets/` | Existing photography and brand assets |

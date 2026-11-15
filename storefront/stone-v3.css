@@ -261,3 +261,7 @@
 @media (max-width:700px){.site .hero-grid{margin:18px 0 0;gap:8px}.site .hero-tile span{left:10px;bottom:8px}}
 .site .hero-tile-main img{position:absolute;inset:0;aspect-ratio:auto}
 .site .hero-grid{align-items:stretch}.site .hero-tile-main{align-self:stretch;height:auto;min-height:100%}
+/* Compound guide: the dosage guide's cautions, under its evidence note (guide.py). */
+.site .cp-cautions{display:grid;gap:10px;margin-top:20px;max-width:64ch}
+.site .cp-cautions li{position:relative;padding-left:22px;color:var(--muted);font-size:14.5px;line-height:1.7}
+.site .cp-cautions li:before{content:'';position:absolute;left:0;top:.85em;width:10px;height:1px;background:var(--accent)}

@@ -2,6 +2,7 @@
 from pathlib import Path
 import json, re, base64, hashlib
 import showcase
+import guide
 
 ROOT = Path(__file__).resolve().parent
 source = (ROOT / 'reference.html').read_text()
@@ -141,6 +142,8 @@ home = home.replace('<div class="chead"><h2>', '<div class="chead"><span class="
 home = home.replace('id="standard"><div class="wrap"><div class="shead duo"><span class="no">02', 'id="standard"><div class="wrap"><div class="shead duo"><span class="no">03')
 home = home.replace('id="next"><div class="wrap"><div class="shead"><span class="no">03', 'id="next"><div class="wrap"><div class="shead"><span class="no">04')
 pages['home'] = home
+# Each compound carries the dosage guide's facts, without doses (guide.py).
+client_source = guide.apply(pages, data)
 pages = showcase.strip_commerce(pages, data)
 
 # Original art-directed homepage, retaining the source catalogue's price/option controls.
@@ -227,7 +230,7 @@ for name, text in chunks.items(): write(ROOT / 'pages' / name, text)
 (ROOT / 'i18n-id.js').unlink(missing_ok=True)  # the site is English only
 digest = lambda paths: hashlib.sha256(b''.join(p.read_bytes() for p in paths)).hexdigest()[:10]
 pages_version = digest([ROOT / 'pages' / name for name in sorted(chunks)])
-(ROOT / 'content.js').write_text('window.__PAGES='+js({'home':pages['home']})+';\nwindow.__PAGE_KEYS='+js(list(pages))+';\nwindow.__PAGES_VERSION='+js(pages_version)+';\nwindow.__DATA='+js(showcase.client_data(data))+';\nwindow.__IMG='+js(images)+';\n')
+(ROOT / 'content.js').write_text('window.__PAGES='+js({'home':pages['home']})+';\nwindow.__PAGE_KEYS='+js(list(pages))+';\nwindow.__PAGES_VERSION='+js(pages_version)+';\nwindow.__DATA='+js(showcase.client_data(client_source))+';\nwindow.__IMG='+js(images)+';\n')
 
 body = source[source.index('<svg width="0"'):source.index('<script src=')]
 nav = '<div class="nav-links" id="site-links"><a href="#/products">Catalogue</a><a href="#/standard">The standard</a><a href="#/compounds">Compound guide</a><a href="#/contact">Contact</a></div>'
