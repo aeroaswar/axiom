@@ -723,6 +723,27 @@
       "coa": []
     },
     {
+      "slug": "adamax-1032-da",
+      "name": "Adamax 1032 Da",
+      "kind": "peptide",
+      "cls": "Stabilised Semax analogue",
+      "pathway": "neuro",
+      "pathway_no": "04",
+      "pathway_name": "Neuro",
+      "variants": [
+        {
+          "sku": "adamax1032-10",
+          "dose": "10 mg",
+          "content": "Vial + pen",
+          "price_idr": 3400000,
+          "cold": true,
+          "available": 9
+        }
+      ],
+      "synonyms": [],
+      "coa": []
+    },
+    {
       "slug": "cerebrolysin",
       "name": "Cerebrolysin",
       "kind": "peptide",

@@ -82,3 +82,9 @@
 - SSM (SS-31 + MOTS-C), 40 mg (20 mg of each) at Rp 3.500.000 (SKU `ssm40`), joins Cellular Energy after MOTS-c: catalogue card, product page, compound page, pathway list (now 8 compounds · 9 lots), related compound lists, price list (94 lots) and counts (69 compounds · 87 lots, 76 products, 182 templates).
 - Its photograph is the approved KLOW photograph with name and QTY redrawn by `tools/relabel_label.py`; visual review confirms SSM (SS-31 + MOTS-C), 40 mg and dial 0. No PNG master is committed.
 - `verify_stone.py` passes for 76 products; `qa/check-i18n.cjs` (178 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.
+
+## Adamax 1032 Da — November 15
+
+- Adamax 1032 Da, 10 mg at Rp 3.400.000 (SKU `adamax1032-10`), joins Neuro after Adamax. It was already in the price list, margin structure, website catalogue, order form, invoice builder, label builder and compound guide; the storefront was the one surface without it. Catalogue card, product page, compound page, pathway list (now 9 compounds · 9 lots), related lists, price list (95 lots) and counts (70 compounds · 88 lots, 77 products, 184 templates).
+- Its photograph is the approved Adamax pen photograph with the name redrawn by `tools/relabel_label.py`; visual review confirms Adamax 1032 Da, 10 mg and dial 0. No PNG master is committed.
+- `verify_stone.py` passes for 77 products; `qa/check-i18n.cjs` (180 routes, no English left), `qa/check-basket.cjs` and `qa/check-hero.cjs` pass on the served site.

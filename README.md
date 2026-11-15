@@ -244,8 +244,8 @@ live only in `dosage-guide/src/`, which is never published. Details in `dosage-g
 
 `storefront/` is a static HTML/CSS/JavaScript shop with hash routing and Python build scripts.
 It needs no Node build. Its pages are warm ivory with charcoal stone sections and bronze accents.
-There are 76 products (69 compounds, three devices and four apparel lines), each with its own stone
-photograph, across 182 page templates. The hero's three pens move independently with scroll and
+There are 77 products (70 compounds, three devices and four apparel lines), each with its own stone
+photograph, across 184 page templates. The hero's three pens move independently with scroll and
 the cursor over a still stone background. An EN / ID switch shows every route in Bahasa
 Indonesia, and on phones a buy bar follows each product page. Sign-in, inventory, payment and
 order submission are demo features that connect to nothing.

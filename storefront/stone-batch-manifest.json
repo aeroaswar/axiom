@@ -150,6 +150,12 @@
     "kind": "peptide"
   },
   {
+    "slug": "adamax-1032-da",
+    "name": "Adamax 1032 Da",
+    "dose": "10 mg",
+    "kind": "peptide"
+  },
+  {
     "slug": "cerebrolysin",
     "name": "Cerebrolysin",
     "dose": "60 mg",

@@ -10,6 +10,7 @@
     "semaglutide": "Relabelled locally from the approved Tirzepatide photograph on November 14 (tools/relabel_label.py); visual review confirms Semaglutide, 10 mg and dial 0.",
     "tri-heal-bpc-plus-tb-plus-kpv": "Relabelled locally from the approved KLOW photograph on November 14 (tools/relabel_label.py); visual review confirms Tri-Heal (BPC+TB+KPV), 30 mg and dial 0.",
     "retatrutide": "QTY relabelled locally from 10 mg to 5 mg on November 14 (tools/relabel_qty.py), when the 5 mg lot became the first Retatrutide lot; visual review confirms Retatrutide, 5 mg and dial 0.",
-    "ssm-ss-31-plus-mots-c": "Relabelled locally from the approved KLOW photograph on November 15 (tools/relabel_label.py); visual review confirms SSM (SS-31 + MOTS-C), 40 mg and dial 0."
+    "ssm-ss-31-plus-mots-c": "Relabelled locally from the approved KLOW photograph on November 15 (tools/relabel_label.py); visual review confirms SSM (SS-31 + MOTS-C), 40 mg and dial 0.",
+    "adamax-1032-da": "Relabelled locally from the approved Adamax photograph on November 15 (tools/relabel_label.py); visual review confirms Adamax 1032 Da, 10 mg and dial 0."
   }
 }
