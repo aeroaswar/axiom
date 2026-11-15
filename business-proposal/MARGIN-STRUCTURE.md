@@ -16,15 +16,15 @@ selling price − base price = margin
 Presented in the AXIOM house design at `axiom-margin-structure.html`.
 Per-lot data: `data/axiom-margin-structure.csv`.
 
-## Catalogue totals — one of each of the 81 lots
+## Catalogue totals — one of each of the 82 lots
 
 | Line | Amount | Share of selling price |
 |---|---:|---:|
-| Supplier cost (vials) | 82.470.000 | 31.8% |
-| Pen (81 × Rp 600.000) | 48.600.000 | 18.7% |
-| **= Base price** | **131.070.000** | **50.5%** |
-| **Margin** | **128.530.000** | **49.5%** |
-| **= Selling price** | **259.600.000** | 100.0% |
+| Supplier cost (vials) | 83.670.000 | 31.8% |
+| Pen (82 × Rp 600.000) | 49.200.000 | 18.7% |
+| **= Base price** | **132.870.000** | **50.5%** |
+| **Margin** | **130.230.000** | **49.5%** |
+| **= Selling price** | **263.100.000** | 100.0% |
 
 Markup on base price: 98.1%.
 
@@ -36,15 +36,15 @@ Markup on base price: 98.1%.
 | 02 GH Secretagogues | 11 | 12.600.000 | 19.200.000 | 34.700.000 | 15.500.000 | 44.7% |
 | 03 Healing & Repair | 14 | 13.020.000 | 21.420.000 | 45.800.000 | 24.380.000 | 53.2% |
 | 04 Brain Health & Nootropics | 9 | 8.100.000 | 13.500.000 | 27.100.000 | 13.600.000 | 50.2% |
-| 05 Energy & Endurance | 8 | 6.700.000 | 11.500.000 | 22.100.000 | 10.600.000 | 48.0% |
+| 05 Energy & Endurance | 9 | 7.900.000 | 13.300.000 | 25.600.000 | 12.300.000 | 48.0% |
 | 06 Immunity | 2 | 1.800.000 | 3.000.000 | 5.800.000 | 2.800.000 | 48.3% |
 | 07 Sexual Health | 6 | 4.500.000 | 8.100.000 | 14.900.000 | 6.800.000 | 45.6% |
 | 08 Longevity & Cellular Repair | 9 | 8.800.000 | 14.200.000 | 28.200.000 | 14.000.000 | 49.6% |
 | 09 Peptide Bioregulators | 12 | 13.300.000 | 20.500.000 | 39.800.000 | 19.300.000 | 48.5% |
-| **All** | **81** | **82.470.000** | **131.070.000** | **259.600.000** | **128.530.000** | **49.5%** |
+| **All** | **82** | **83.670.000** | **132.870.000** | **263.100.000** | **130.230.000** | **49.5%** |
 
 ## What this does not measure
 
 Net margin. Operating cost — premises, staff, marketing, payment fees, wastage, tax
-— appears in neither the price list nor the supplier sheet. **128.530.000 of gross
-margin on 259.600.000 of revenue** is the envelope all of it has to come out of.
+— appears in neither the price list nor the supplier sheet. **130.230.000 of gross
+margin on 263.100.000 of revenue** is the envelope all of it has to come out of.

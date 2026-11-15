@@ -60,3 +60,8 @@
 - Its photograph is the approved KLOW photograph relabelled locally (`tools/relabel_klow_c.py`): only the name and quantity were erased and redrawn; visual review confirms KLOW-C (KLOW + Cartalax), 100 mg and dial 0.
 - No product is sold out: TB-500, Thymosin Alpha-1 and Epithalon now carry stock (12, 8 and 10), and their cards, buy boxes and compound rows use the in-stock markup. No template carries "Sold out", "None available" or a notify form.
 - `verify_stone.py` passes for 73 products; `qa/check-basket.cjs`, `qa/check-i18n.cjs` (172 routes, no English left) and `qa/check-hero.cjs` pass on the served site.
+
+## SSM (SS-31 + MOTS-C) — November 15
+
+- SSM (SS-31 + MOTS-C), 40 mg (20 mg of each) at Rp 3.500.000 (SKU `ssm40`), joins Cellular Energy after MOTS-c: catalogue card, product page, compound page, pathway list (now 8 compounds · 9 lots), related compound lists, price list (88 lots) and counts (67 compounds · 81 lots, 74 products, 178 templates). Ported on its own from the 88-lot catalogue branch (#59), without that branch's other new lots or supplier-sheet price changes.
+- Its photograph is the approved KLOW photograph with name and QTY redrawn by `tools/relabel_label.py`, taken from that branch; visual review there confirms SSM (SS-31 + MOTS-C), 40 mg and dial 0. No PNG master is committed.

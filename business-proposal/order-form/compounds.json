@@ -363,6 +363,15 @@
   ]
  },
  {
+  "name": "SSM (SS-31 + MOTS-C)",
+  "sizes": [
+   "40"
+  ],
+  "units": [
+   "mg"
+  ]
+ },
+ {
   "name": "SLU-PP-332 (Injectable)",
   "sizes": [
    "5"
