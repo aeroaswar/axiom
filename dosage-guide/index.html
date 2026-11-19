@@ -178,7 +178,6 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .out-grid .out-cell:last-child:nth-child(odd){grid-column:1/-1}
 .out-cell{border-top:1px solid var(--line-soft);padding-top:10px}
 /* Five results in two columns would strand the last one; give it the row. */
-.out-cell:last-child{grid-column:1/-1}
 .out-cell b{display:block;font-family:var(--display);font-size:0.9412rem;font-weight:400;font-variant-numeric:tabular-nums;line-height:1.3}
 .out-cell span{display:block;font-size:0.7647rem;color:var(--muted-2);margin-top:3px;font-weight:500}
 .calc-note{font-size:0.7059rem;color:var(--muted-2);margin-top:16px;line-height:1.6}
@@ -274,9 +273,9 @@ ul.warn li::before{border-color:var(--muted-2);border-radius:0}
 .ruo::before{content:"\00b7";margin:0 10px;color:var(--muted-2);font-weight:700}
 .ruo-note{font-size:0.7647rem;color:var(--muted);line-height:1.55;margin:-6px 0 18px;max-width:60ch}
 .ruo-note b{color:var(--ink);font-weight:600}
-ul.ben{gap:20px}
+ul.ben{gap:28px}
 ul.ben li{color:var(--muted)}
-.ben-b{display:block;color:var(--ink);font-weight:600;font-size:0.9412rem;line-height:1.45}
+.ben-b{display:block;color:#e6e0d8;font-weight:500;font-size:0.9412rem;line-height:1.45}
 .ben-how{display:block;margin-top:5px;font-size:0.8235rem;line-height:1.6}
 .ben-how i{display:block;font-style:normal;font-size:0.7059rem;font-weight:600;letter-spacing:.02em;color:var(--accent-bright);margin-bottom:3px}
 p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
@@ -395,7 +394,10 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .totop{display:block;margin:28px auto 0;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);
   background:none;color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer}
 @media (max-width:819px){
-  .how3{display:none}
+  .how3{gap:6px;margin-top:10px}
+  .how3 li span{display:none}
+  .how3 li{grid-template-columns:30px 1fr}
+  .how3 li::before{grid-row:auto;font-size:1rem}
   .idx-hero{padding-top:30px}
   .idx-side{margin-top:4px}
   .idx-side .pen-art{max-width:100%}
@@ -433,6 +435,20 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .chip-dot{width:8px;height:8px;border-radius:50%;background:var(--band);flex:none}
 .day i+i{margin-top:3px}
 .day-k{font-size:0.7059rem;color:var(--muted);margin:-2px 0 8px}
+.pa-day{fill:var(--panel-2);stroke:var(--line);stroke-width:1}
+.pa-day.on{fill:url(#liq);stroke:none;transform-box:fill-box;transform-origin:bottom}
+.pa-dl{font-family:var(--sans);font-size:11px;font-weight:700;fill:var(--muted)}
+.pa-dl.on{fill:#1a1008}
+.date-say{color:var(--accent-bright);font-weight:600;margin-left:4px}
+.arrow{width:16px;height:16px;color:var(--muted)}
+@media (max-width:479px){
+  .pager{grid-template-columns:1fr}
+  .pg.next{text-align:left}
+  .row-top{flex-direction:column;align-items:flex-start;gap:2px}
+  .row-v{text-align:left}
+}
+.pg b{hyphens:none;-webkit-hyphens:none}
+.catbar>i{height:10px}
 /* Numbered steps down the compound page. */
 .sh .sn{font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1;color:var(--accent-bright);
   letter-spacing:.02em;font-variant-numeric:tabular-nums;min-width:1.6em}
@@ -505,20 +521,30 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   /* Hero: the name and blurb on the left, the at-a-glance strip and evidence on the right. */
   .page-compound>.hero{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .hero-side>.glance{margin-top:0;grid-template-columns:repeat(2,1fr)}
-  /* Your pen: the calculator on one half, the dose dates and calendar buttons on the other. */
-  .pen-in{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
+  /* Your pen: the form in two columns (what you have | what you take), then the
+     result and every dose date full width underneath, so nothing sits beside empty space. */
+  .pen .calc{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;padding:8px 28px 24px}
+  .pen .calc>.step:nth-child(1){grid-column:1;grid-row:1}
+  .pen .calc>.step:nth-child(2){grid-column:1;grid-row:2}
+  .pen .calc>.step:nth-child(4){grid-column:1;grid-row:3}
+  .pen .calc>.step:nth-child(3){grid-column:2;grid-row:1/4}
+  .pen .calc>.out,.pen .calc>.calc-note{grid-column:1/-1}
+  .pen .calc>.step:nth-child(3){border-top:0}
+  .pen .out-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important}
+  .pen .out-cell:last-child{grid-column:auto!important}
+  .gauge .pen-art{max-width:560px}
+  #sched-wrap{margin-top:34px}
   #sched-wrap>.sched-h:first-child{margin-top:0}
-  #sched-wrap:has(.sched-empty){position:sticky;top:calc(56px + 76px + env(safe-area-inset-top))}
+  .sched-empty .sched-pre{grid-template-columns:repeat(8,minmax(0,1fr))}
   .page-index .cats{flex-wrap:wrap}
   .page-index .catbar::before,.page-index .catbar::after{display:none}
-  .out:has(.out-empty){display:none}
+
   .sched-empty{display:block;border:1px solid var(--line-soft);background:var(--panel);border-radius:14px;padding:26px 24px;
     font-size:0.8235rem;line-height:1.6;color:var(--muted)}
   .sched-empty b{display:block;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:6px}
   .pen .fields{grid-template-columns:1fr 1fr}
   .pen .field.wide{grid-column:span 2}
-  .pen .out-grid{grid-template-columns:repeat(2,1fr)}
-  .pen .out-cell:last-child{grid-column:1/-1}
+
   .page-compound .scope{column-count:2;column-gap:var(--gut)}
   .page-compound .scope p{break-inside:avoid}
   /* Index: the categories in two columns. */
@@ -529,7 +555,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .howto .mid{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .howto .col>.sub:first-child{border-top:0;margin-top:0;padding-top:0}
   .warn-sec ul.bul{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut)}
-  .warn-sec ul.bul.few{grid-template-columns:1fr;max-width:720px}
+
   .page-index .grp h2,.page-index .grp-note{break-after:avoid}
   .page-index .item{break-inside:avoid}
 }
@@ -542,9 +568,11 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .enter>*:nth-child(3){animation-delay:.1s}
   .enter>*:nth-child(4){animation-delay:.15s}
   .enter>*:nth-child(n+5){animation-delay:.2s}
+  .enter .hero-txt>:not(h1),.enter .hero-side{animation:rise .5s var(--ease) .3s both}
   .pa-liq{animation:fill 1.6s var(--ease) .25s both}
   .pa-glint{animation:glint 6s ease-in-out 2s infinite}
   .pa-mark{animation:seg .5s var(--ease) both;animation-delay:calc(var(--i) * 16ms)}
+  .pa-day.on{animation:seg .5s var(--ease) both;animation-delay:calc(.3s + var(--i) * 50ms)}
   .out-num{animation:pop .45s var(--ease) both}
   .chip,.pick,.reg,.day,.btn-cal{transition:transform .25s var(--ease),border-color .2s,background .2s,color .2s}
   .pick:active,.chip:active,.day:active,.btn-cal:active{transform:scale(.96)}
@@ -686,14 +714,21 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
      opts.marks  the window holds one mark per dose (or per few doses), the
                  dose count for what you picked; opts.rest adds a stub for a
                  part-dose left over, opts.stepOf tints marks by step
+     opts.week   the window shows the week: seven slots, lit on dose days
      opts.spray  drawn as the nasal spray bottle instead
      Neither fill nor marks: an empty pen, waiting for a dose. */
   function penArt(name, sub, opts) {
     opts = opts || {};
-    var marks = opts.marks || 0, wx = marks ? 236 : 310, wEnd = 420, inner = "";
+    var marks = opts.marks || 0, wx = marks ? 236 : opts.week ? 300 : 310, wEnd = 420, inner = "";
     var labelW = wx - 158;
     var fs = Math.min(18, Math.floor(labelW / Math.max(5, name.length * 0.56)));
-    if (marks) {
+    if (opts.week) {
+      var slot = (wEnd - wx - 6 - 6 * 2) / 7;
+      for (var d = 0; d < 7; d++) {
+        var x0 = wx + 3 + d * (slot + 2);
+        inner += '<rect class="pa-day' + (opts.week[d] ? " on" : "") + '" style="--i:' + d + '" x="' + x0.toFixed(1) + '" y="45" width="' + slot.toFixed(1) + '" height="20" rx="2"/>';
+      }
+    } else if (marks) {
       var per = Math.max(1, Math.ceil(marks / 40)), m = Math.ceil(marks / per), slots = m + (opts.rest ? 0.4 : 0);
       var W = wEnd - wx - 6, gap = m > 30 ? 1.5 : 2, sw = (W - gap * (m + (opts.rest ? 1 : 0) - 1)) / slots, x = wx + 3;
       for (var k = 0; k < m; k++) {
@@ -972,11 +1007,11 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           "<p>" + esc(c.evidenceNote) + "</p>" +
         "</div>" +
         '</div><div class="hero-side">' +
-        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), { full: true, band: band(c.category) }) + "</div>" +
+        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), { week: c.days, band: band(c.category) }) + "</div>" +
         '<div class="glance">' +
           "<div><span>How often</span><b>" + esc(CAD_WORD[c.cadence] || c.cadence) + "</b></div>" +
           "<div><span>When</span><b>" + esc(c.timing.when) + "</b></div>" +
-          "<div><span>How</span><b>" + esc(c.route.split(" / ")[0]) + "</b></div>" +
+          "<div><span>How</span><b>" + esc(c.route.split(" / ")[0].replace("Pen under the skin or nasal spray", "Pen or nasal spray")) + "</b></div>" +
           "<div><span>Lasts in body</span><b>" + esc(c.halfLife.replace(/ \(.*\)/, "")) + "</b></div>" +
         "</div>" +
       "</div></div>" +
@@ -1031,7 +1066,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
             '<div class="week-k">Days within a course</div>'
           : "") +
         (/ and (evening|night|afternoon)|twice|split/i.test(c.timing.when + " " + c.cadenceNote) && c.cadence !== "as-needed"
-          ? '<div class="day-k">Two dots: two doses that day (' + esc(c.timing.when.toLowerCase()) + ")</div>" : "") +
+          ? '<div class="day-k">Two dots: the day\'s amount is often split, ' + esc(c.timing.when.toLowerCase()) + ". The calculator counts each day\'s total as one dose.</div>" : "") +
         '<div class="week" id="week"></div>' +
         '<div class="note" id="week-note"></div>' +
         '<div class="note" style="margin-top:10px">' + esc(c.cadenceNote) + "</div>" +
@@ -1097,7 +1132,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
               (c.cadence === "cycle" ? '<div class="field"><label for="f-course">Course length, days</label><input id="f-course" type="number" inputmode="numeric" step="1" min="1" max="120" value="20"></div>' : "") +
               '<div class="field"><label for="f-week">Doses per week</label><input id="f-week" type="number" inputmode="numeric" step="1" min="0" max="21" value="' + c.perWeek + '"></div>' +
               '<div class="field"><label for="f-time">Time of day</label><input id="f-time" type="time" value="' + esc(c.timing.time) + '"></div>' +
-              '<div class="field wide"><label for="f-date">First dose on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
+              '<div class="field wide"><label for="f-date">First dose on <span class="date-say" id="date-say"></span></label><input id="f-date" type="date" value="' + iso + '"></div>' +
             "</div></div>" +
 
           '<div class="out" id="out"></div>' +
@@ -1298,6 +1333,9 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     });
 
     var doseDates = [];
+    var dateSay = document.getElementById("date-say");
+    function sayDate() { var d0 = parseIso(f.date.value); dateSay.textContent = d0 ? "· " + DAY_FULL[weekdayIdx(d0)] + " " + fmtDate(d0) : ""; }
+    f.date.addEventListener("input", sayDate); sayDate();
 
     /* Say where the starting dose came from. Where the page documents a dose,
        name it; where it documents none, call the figure what it is — a
