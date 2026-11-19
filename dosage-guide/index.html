@@ -790,6 +790,14 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
         "</span><b>" + esc(nx.name) + " \u2192</b></a>" : "") + "</nav>";
   }
 
+  /* Only daily schedules split into more than one dose a day; a weekly total
+     "split across the week" is not two doses in a day. */
+  function twoADay(c) {
+    return (c.cadence === "daily" || c.cadence === "cycle") &&
+      /morning and (early )?(evening|afternoon|night)|twice (a|per) day|twice daily|split (morning|across the day|through the day)/i
+        .test(c.timing.when + " " + c.cadenceNote);
+  }
+
   function renderIndex() {
     back.hidden = true;
     document.querySelector(".mark").removeAttribute("tabindex");
@@ -1072,7 +1080,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           ? '<div class="course" aria-hidden="true"><i class="on">Course</i><i>Break</i><i class="on">Course</i><i>Break</i></div>' +
             '<div class="week-k">Days within a course</div>'
           : "") +
-        (/ and (evening|night|afternoon)|twice|split/i.test(c.timing.when + " " + c.cadenceNote) && c.cadence !== "as-needed"
+        (twoADay(c)
           ? '<div class="day-k">Two dots: the day\'s amount is often split, ' + esc(c.timing.when.toLowerCase()) + ". The calculator counts each day\'s total as one dose.</div>" : "") +
         '<div class="week" id="week"></div>' +
         '<div class="note" id="week-note"></div>' +
@@ -1280,7 +1288,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     }
 
     /* Two doses a day (morning and evening) show as two dots on each day. */
-    var perDay = / and (evening|night|afternoon)|twice|split/i.test(c.timing.when + " " + c.cadenceNote) ? 2 : 1;
+    var perDay = twoADay(c) ? 2 : 1;
     var dots = perDay === 2 ? "<i></i><i></i>" : "<i></i>";
     function drawWeek() {
       weekEl.innerHTML = pattern.map(function (on, i) {
