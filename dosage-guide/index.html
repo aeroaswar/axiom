@@ -24,6 +24,7 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <!-- The brand font is served with the page (one 26 KB file, both weights), so no other host holds up the first paint. -->
 <link rel="preload" href="assets/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="compounds.js" as="script" />
 <script>
   /* A direct link to a compound hides the static home intro until the page draws. */
   if (location.hash.length > 1 || /[?&]c=/.test(location.search) || /^\/[a-z0-9-]+\/?$/.test(location.pathname) && location.pathname !== "/index.html")
@@ -67,7 +68,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- Top bar ---------- */
 .bar{
-  position:sticky;top:0;z-index:20;background:rgba(7,6,5,.86);
+  position:sticky;top:0;z-index:20;background:var(--bg);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   padding-top:env(safe-area-inset-top);
 }
@@ -75,7 +76,8 @@ a{color:inherit;text-decoration:none}
 .bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;pointer-events:none;
   background:linear-gradient(rgba(7,6,5,.86),rgba(7,6,5,0))}
 .bar-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;height:56px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
-.mark{grid-column:2;display:flex;align-items:center;min-height:44px}
+.mark{grid-column:2;display:flex;align-items:center;min-height:44px;padding:0 8px;border-radius:8px}
+.mark:focus-visible{outline-offset:2px}
 .mark img{width:96px;height:auto;display:block}
 .bar .back{grid-column:1;justify-self:start;font-size:0.8824rem;color:var(--accent-bright);margin-left:-8px;padding:0 8px;gap:2px;min-height:44px;display:inline-flex;align-items:center;transition:.2s}
 .bar .back:hover{color:var(--ink)}
@@ -88,7 +90,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- Hero ---------- */
 .hero{padding:34px 0 26px;border-bottom:1px solid var(--line-soft)}
-.cat{display:inline-block;font-size:0.7647rem;color:var(--accent);margin-bottom:16px;font-weight:600}
+.cat{display:inline-flex;align-items:center;min-height:26px;vertical-align:middle;font-size:0.7647rem;color:var(--accent);margin-bottom:14px;font-weight:600}
 h1{font-family:var(--brand);font-weight:300;font-size:clamp(1.88rem,8.5vw,2.7rem);line-height:1.08;letter-spacing:-.015em}
 .what{color:#d8d1c6;font-size:0.9412rem;line-height:1.6;margin-top:14px;max-width:52ch}
 .cls{color:var(--muted-2);font-size:0.7647rem;margin-top:12px}
@@ -185,7 +187,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .step-k{display:flex;align-items:center;gap:10px;font-size:0.8824rem;color:var(--ink);margin-bottom:13px;font-weight:600}
 .step-k i{font-style:normal;flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--accent-line);
   color:var(--accent-bright);display:inline-flex;align-items:center;justify-content:center;font-size:0.7059rem;letter-spacing:0}
-.picks{display:flex;flex-wrap:wrap;gap:8px}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
 .pick{
   min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);
   padding:10px 15px;cursor:pointer;font-family:var(--display);font-size:0.8824rem;
@@ -263,7 +265,7 @@ ul.bul li{position:relative;padding-left:22px;font-size:0.8529rem;color:#d8d1c6;
 ul.bul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
 ul.warn li::before{border-color:var(--muted-2);border-radius:0}
 /* "Research use only" — on every page, under the category and above the benefits. */
-.ruo{display:inline-flex;align-items:center;margin:0 0 14px 12px;padding:3px 10px;border:1px solid var(--line-2);
+.ruo{display:inline-flex;align-items:center;min-height:26px;box-sizing:border-box;vertical-align:middle;margin:0 0 14px 12px;padding:3px 10px;border:1px solid var(--line-2);
   border-radius:999px;font-size:0.6471rem;font-weight:600;color:var(--ink);vertical-align:middle}
 .ruo-note{font-size:0.7647rem;color:var(--muted);line-height:1.55;margin:-6px 0 18px;max-width:60ch}
 .ruo-note b{color:var(--ink);font-weight:600}
@@ -299,7 +301,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 /* A dose that changes over time. */
 .calc [hidden]{display:none!important}
 .tg{display:flex;align-items:center;gap:12px;margin-top:16px;min-height:44px;font-size:0.8235rem;color:var(--ink);cursor:pointer}
-.tg input{position:absolute;opacity:0;width:1px;height:1px}
+.tg{position:relative}
+.tg input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
 .tg-ui{flex:none;width:44px;height:26px;border-radius:999px;background:var(--line-2);position:relative;transition:background .25s}
 .tg-ui::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--ink);transition:transform .3s var(--ease,ease)}
 .tg input:checked+.tg-ui{background:var(--accent)}
@@ -347,7 +350,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 .item-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .item{margin:0 -12px;padding-left:12px;padding-right:12px}
 @media (hover:hover){
-  .item:hover{background:var(--panel);border-radius:12px}
+  .item:hover{background:var(--panel-2);border-radius:12px;box-shadow:inset 0 0 0 1px var(--line)}
   .item:hover .item-name{color:var(--accent-bright)}
   .item:hover .arrow{transform:translateX(4px);color:var(--accent-bright)}
 }
@@ -369,6 +372,23 @@ main:focus{outline:none}
 .skip:focus{top:calc(env(safe-area-inset-top) + 8px)}
 mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;padding:0 1px}
 .deep .idx-hero{visibility:hidden}
+/* Pen drawings: the label carries the compound's name. */
+.pa-brand{font-family:var(--brand);font-size:10px;letter-spacing:3px;fill:var(--muted-2)}
+.pa-name{font-family:var(--brand);font-weight:400;fill:var(--ink)}
+.pa-sub{font-family:var(--sans);font-size:10.5px;fill:var(--muted)}
+.pa-ticks.dim{stroke:var(--line-2);opacity:1}
+.hero-pen{margin:22px 0 4px}
+.hero-pen .pen-art{max-width:520px;margin:0 0 0 -4px}
+.sched-empty .pen-art{max-width:360px;margin:0 0 18px}
+.seen .pa-liq,.seen .pa-glint{animation:none!important}
+.grp-note{font-size:0.7647rem;color:var(--muted);line-height:1.55;margin:-4px 0 6px;max-width:60ch}
+.totop{display:block;margin:28px auto 0;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);
+  background:none;color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer}
+@media (max-width:819px){
+  /* Phones: one benefit per row and a three-line description keep the long list scannable. */
+  .item-ben li:nth-child(n+2){display:none}
+  .item-sub{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+}
 /* Numbered steps down the compound page. */
 .sh .sn{font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1;color:var(--accent-bright);
   letter-spacing:.02em;font-variant-numeric:tabular-nums;min-width:1.6em}
@@ -388,7 +408,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 /* Category chips under the search: sticky below the bar, scroll sideways. */
 .cats{position:sticky;top:calc(56px + env(safe-area-inset-top));z-index:15;display:flex;gap:8px;overflow-x:auto;
   margin:18px calc(-1 * var(--pad-r)) 0 calc(-1 * var(--pad-l));padding:10px var(--pad-r) 10px var(--pad-l);
-  background:rgba(7,6,5,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);scrollbar-width:none}
+  background:var(--bg);scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 36px),transparent)}
 .cats::-webkit-scrollbar{display:none}
 .chip{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;
   border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer;transition:border-color .2s,background .2s}
@@ -437,6 +458,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   /* Your pen: the calculator on one half, the dose dates and calendar buttons on the other. */
   .pen-in{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   #sched-wrap>.sched-h:first-child{margin-top:0}
+  #sched-wrap:has(.sched-empty){position:sticky;top:calc(56px + 76px + env(safe-area-inset-top))}
+  .page-index .cats{flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
   .sched-empty{display:block;border:1px dashed var(--line);border-radius:14px;padding:28px 24px;
     font-size:0.8235rem;line-height:1.6;color:var(--muted)}
   .sched-empty b{display:block;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:6px}
@@ -474,6 +497,14 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .item .arrow{transition:transform .3s var(--ease),color .2s}
 }
 @keyframes rise{from{opacity:0;transform:translateY(12px)}}
+/* Page changes: the header stays put, the page slides up into place, and the
+   compound's name travels from its row into the title. */
+.bar{view-transition-name:bar}
+::view-transition-group(ctitle){animation-duration:.55s;animation-timing-function:var(--ease)}
+::view-transition-old(root){animation:.2s ease-out both vt-out}
+::view-transition-new(root){animation:.5s var(--ease) both vt-in}
+@keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(18px)}}
 @keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(.72)}}
 @keyframes glint{0%,60%{transform:translateX(0);opacity:0}65%{opacity:.9}90%{transform:translateX(120px);opacity:0}100%{opacity:0}}
 @keyframes seg{from{transform:scaleY(0);opacity:0}}
@@ -490,12 +521,27 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   </nav>
 </header>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="liq" x1="0" x2="1"><stop offset="0" stop-color="#7C4C24"/><stop offset=".7" stop-color="#C88A4E"/><stop offset="1" stop-color="#E7B173"/></linearGradient></defs></svg>
 <main id="app" class="wrap page-index" tabindex="-1"><div class="idx-hero"><div class="idx-head">
   <div class="cat">Compound guide</div><div class="ruo">Sold for research use only</div>
   <h1>What it is,<br>and how to use it.</h1>
   <p>What each compound actually does, how often and when to take it, what the evidence really says, and how many doses are in your pen.</p>
 </div></div></main>
 
+<script>
+/*HERO-DATA*/window.HEROES={"aod-9604":["AOD-9604","Weight Loss &amp; GLP-1","A small fragment of growth hormone, kept only for the part linked to fat breakdown. The idea was fat loss without the growth-hormone side effects.","Growth hormone fragment (hGH 176-191)"],"cagrilintide":["Cagrilintide","Weight Loss &amp; GLP-1","A weekly shot that copies amylin, the hormone that tells you you&#x27;ve had enough. It&#x27;s usually studied alongside a GLP-1 rather than on its own.","Long-acting amylin analogue"],"retatrutide":["Retatrutide","Weight Loss &amp; GLP-1","A weekly shot aimed at three appetite and metabolism switches instead of two. It&#x27;s the newest of this family and, so far, the strongest in trials.","Triple GIP / GLP-1 / glucagon receptor agonist"],"semaglutide":["Semaglutide","Weight Loss &amp; GLP-1","A weekly shot that copies one gut hormone, GLP-1. It slows your stomach and turns down appetite. It&#x27;s the drug that started the current wave of weight-loss medicines.","GLP-1 receptor agonist"],"tirzepatide":["Tirzepatide","Weight Loss &amp; GLP-1","A weekly shot that copies two gut hormones. It slows how fast your stomach empties and turns down appetite, so you eat less without white-knuckling it.","Dual GIP / GLP-1 receptor agonist"],"cjc-1295-dac":["CJC-1295 (With DAC)","Growth Hormone","The long-acting version of CJC-1295. The DAC part makes it stick to a blood protein so it lasts days instead of minutes — so you inject it weekly, not nightly.","GHRH analogue with drug affinity complex"],"cjc-ipamorelin":["CJC-1295 + Ipamorelin","Growth Hormone","Two peptides that nudge your own body to release more growth hormone, from two different angles. It&#x27;s the most common pairing in this category.","GHRH analogue + selective ghrelin receptor agonist"],"hgh-191aa":["HGH 191AA (Somatropin)","Growth Hormone","Growth hormone itself, made to match the human sequence exactly. Not a trigger for your own supply — this is the hormone.","Recombinant human growth hormone"],"igf-1-lr3":["IGF-1 LR3","Growth Hormone","A modified version of the growth factor that growth hormone actually works through. The changes make it last far longer than the natural one.","Long-acting insulin-like growth factor 1 analogue"],"ipamorelin":["Ipamorelin","Growth Hormone","The gentlest of the growth hormone releasers. It triggers a clean pulse without dragging cortisol, prolactin or hunger up with it.","Selective ghrelin receptor agonist"],"ipamorelin-tesamorelin":["Ipamorelin + Tesamorelin","Growth Hormone","Tesamorelin&#x27;s approved belly-fat effect paired with Ipamorelin&#x27;s clean pulse, in one pen. Two different triggers on the same system.","GHRH analogue + selective ghrelin receptor agonist"],"sermorelin":["Sermorelin","Growth Hormone","The original growth-hormone releaser. It was an approved medicine for years, used to test whether a child&#x27;s pituitary was working.","GHRH (1-29) analogue"],"tesamorelin":["Tesamorelin","Growth Hormone","A daily shot that raises your own growth hormone. It&#x27;s the one with real approval behind it, specifically for shifting deep belly fat.","Stabilised GHRH analogue"],"ahk-cu":["AHK-Cu","Healing &amp; Repair","GHK-Cu&#x27;s cousin, studied mainly for hair rather than skin. Same copper-carrying idea, different peptide.","Copper-binding tripeptide"],"ara-290":["ARA-290","Healing &amp; Repair","A small peptide built from part of the EPO hormone, but with the blood-building part removed. It&#x27;s studied for nerve pain rather than blood.","Erythropoietin-derived peptide (non-haematopoietic)"],"bpc-157":["BPC-157","Healing &amp; Repair","A short peptide copied from a protein found in stomach juice. It&#x27;s the best-known repair peptide, studied mostly for tendons, ligaments and gut lining.","Synthetic pentadecapeptide"],"wolverine":["BPC-157 + TB-500 (Wolverine)","Healing &amp; Repair","The two best-known repair peptides in one pen. They&#x27;re almost always used together, so this saves doing two injections.","Combination repair peptide blend"],"ghk-cu":["GHK-Cu","Healing &amp; Repair","A copper-carrying peptide that your body makes less of as you age. It&#x27;s the workhorse of serious skincare, and the human evidence is for putting it on your skin.","Copper-binding tripeptide"],"klow":["KLOW (BPC + TB + GHK + KPV)","Healing &amp; Repair","A four-way repair blend: the two tendon peptides, plus a copper peptide for skin and collagen, plus an anti-inflammatory one.","Four-peptide repair and anti-inflammatory blend"],"klow-c":["KLOW-C (KLOW + Cartalax)","Healing &amp; Repair","KLOW&#x27;s four-way repair blend with Cartalax added: the two tendon peptides, a copper peptide for skin and collagen, an anti-inflammatory one, and a bioregulator aimed at cartilage and joints.","Five-peptide repair blend (KLOW plus Cartalax)"],"kpv":["KPV","Healing &amp; Repair","The last three amino acids of a natural hormone, and the part that calms inflammation. Small, simple, and studied mostly for the gut and skin.","Alpha-MSH C-terminal tripeptide"],"ll-37":["LL-37","Healing &amp; Repair","Your body&#x27;s own antibiotic peptide, part of the immune system&#x27;s first line of defence against bacteria.","Human cathelicidin antimicrobial peptide"],"peg-mgf":["Peg MGF","Healing &amp; Repair","A muscle growth factor that your body releases when muscle is damaged. The PEG part makes it last longer than the natural version.","Pegylated mechano growth factor (IGF-1Ec splice variant)"],"snap-8":["SNAP-8","Healing &amp; Repair","A peptide used in anti-wrinkle creams. It softens the muscle contractions that cause expression lines — the same idea as Botox, far gentler and applied to the skin.","Acetyl octapeptide-3"],"tb-500":["TB-500","Healing &amp; Repair","A fragment of a protein your body already makes that helps cells move to where damage is. Usually paired with BPC-157.","Thymosin beta-4 fragment"],"tri-heal":["Tri-Heal (BPC + TB + KPV)","Healing &amp; Repair","A three-way repair blend: the two tendon and tissue peptides, BPC-157 and TB-500, plus KPV for inflammation. 10 mg of each in one vial.","Three-peptide repair and anti-inflammatory blend"],"vip":["VIP","Healing &amp; Repair","A hormone your body makes that widens blood vessels and calms inflammation, especially in the lungs and gut.","Vasoactive intestinal peptide"],"adamax":["Adamax","Brain &amp; Mood","A modified version of Semax, built to last longer and hit harder. Newer and much less studied than the original.","Modified ACTH(4-10) / Semax analogue"],"adamax-1032-da":["Adamax 1032 Da","Brain &amp; Mood","A different blend from plain Adamax, named by its molecular weight: 1032 Da. Same family, a modified Semax built to last longer. The research below is for the Adamax family, not this blend on its own.","Modified ACTH(4-10) / Semax analogue"],"cerebrolysin":["Cerebrolysin","Brain &amp; Mood","A mix of small peptides made from pig brain protein. It&#x27;s an old medicine, used in parts of Europe and Asia after strokes and in dementia.","Porcine brain-derived peptide preparation"],"dihexa":["Dihexa","Brain &amp; Mood","A small molecule built to boost a growth factor in the brain, aimed at building new connections between brain cells. Very early-stage.","Angiotensin IV analogue / HGF potentiator"],"pinealon":["Pinealon","Brain &amp; Mood","A three amino acid peptide from the Russian bioregulator family, aimed at brain cells. Meant to be used in short courses, not continuously.","Short peptide bioregulator (Glu-Asp-Arg)"],"selank":["Selank","Brain &amp; Mood","Semax&#x27;s calmer sibling, also Russian and also used there as a nasal spray. Built for anxiety rather than focus, without sedation or dependence.","Tuftsin analogue"],"selank-semax":["Selank + Semax","Brain &amp; Mood","Both Russian nootropic peptides in one pen or nasal spray — one for calm, one for focus. They&#x27;re usually run together.","Tuftsin analogue + ACTH(4-10) analogue"],"semax":["Semax","Brain &amp; Mood","A peptide developed in Russia, where it is used as a nasal spray after strokes. It raises the brain&#x27;s own growth factors.","ACTH(4-10) analogue"],"5-amino-1mq":["5-Amino-1MQ","Energy &amp; Endurance","A small molecule that blocks an enzyme fat cells use to slow their own metabolism. Blocking it lets fat cells burn more.","NNMT inhibitor"],"aicar":["AICAR","Energy &amp; Endurance","A compound that switches on the same cellular energy sensor exercise does. It got famous as &#x27;exercise in a pill&#x27; — which oversells it.","AMPK activator"],"l-carnitine":["L-Carnitine (Injectable)","Energy &amp; Endurance","A nutrient that ferries fat into the mitochondria to be burned. Your body makes it and you get it from red meat; the injectable form is a real medicine for people who are deficient.","Levocarnitine"],"lipo-b":["LC216 Lipo-B (Injectable)","Energy &amp; Endurance","A &#x27;lipotropic&#x27; blend — B vitamins plus amino acids that help the liver process fat. Common in weight-loss clinics.","Lipotropic injection (methionine, inositol, choline, B vitamins)"],"fat-blaster":["LC526 Fat Blaster (Injectable)","Energy &amp; Endurance","Another lipotropic clinic blend, along the same lines as Lipo-B with a slightly different mix.","Lipotropic injection blend"],"mots-c":["MOTS-c","Energy &amp; Endurance","A peptide your mitochondria make — the parts of your cells that produce energy. It acts like a signal that you&#x27;ve been exercising.","Mitochondrial-derived peptide"],"slu-pp-332":["SLU-PP-332","Energy &amp; Endurance","A newer compound that mimics some effects of endurance training by switching on a gene regulator in muscle.","ERR-alpha agonist"],"ssm":["SSM (SS-31 + MOTS-C)","Energy &amp; Endurance","A mitochondria blend: SS-31, which protects the membrane where cells make energy, plus MOTS-c, the peptide that signals like exercise. 20 mg of each in one vial.","Two-peptide mitochondrial blend"],"thymalin":["Thymalin","Immunity","An older Russian thymus extract used to support immune function in the elderly. A mix of peptides rather than one defined molecule.","Thymus peptide extract"],"thymosin-alpha-1":["Thymosin Alpha-1","Immunity","A peptide your thymus makes to train immune cells. It&#x27;s a real approved medicine in a number of countries, mostly for hepatitis B.","Immune-modulating peptide"],"hcg":["HCG","Sexual Health","A hormone that tells the testicles or ovaries to get to work. In men it acts like the body&#x27;s own signal to make testosterone.","Human chorionic gonadotropin"],"hmg":["HMG","Sexual Health","A fertility hormone preparation containing both FSH and LH. In men it&#x27;s used alongside HCG when sperm production needs restarting.","Human menopausal gonadotropin (menotropins)"],"kisspeptin":["Kisspeptin","Sexual Health","The hormone that starts the whole reproductive chain — it sits above the others and tells the brain to begin the cascade. It&#x27;s also being studied for desire.","Kisspeptin-10"],"melanotan-2":["Melanotan II","Sexual Health","A peptide that darkens skin by triggering pigment cells, and also raises libido as a side effect. Widely sold, and the most safety-flagged item in this catalogue.","Melanocortin receptor agonist"],"oxytocin":["Oxytocin Acetate","Sexual Health","The bonding hormone — released during touch, closeness and childbirth. The injectable form is an approved hospital medicine.","Oxytocin"],"pt-141":["PT-141 (Bremelanotide)","Sexual Health","A shot for low sexual desire that works in the brain rather than on blood flow — a different route entirely from Viagra-type drugs.","Melanocortin receptor agonist"],"dsip":["DSIP","Longevity","A peptide named for its effect on deep sleep in early animal work. The name promises more than the evidence delivers.","Delta sleep-inducing peptide"],"epithalon":["Epithalon","Longevity","A four amino acid peptide from Russian ageing research, best known for claims about telomeres — the caps on your chromosomes that shorten as you age.","Synthetic tetrapeptide (pineal-derived)"],"foxo4-dri":["FOXO4-DRI","Longevity","A peptide designed to kill senescent cells — worn-out cells that stop dividing but won&#x27;t die, and leak inflammation into the tissue around them.","FOXO4-p53 interaction inhibitor (senolytic)"],"glutathione":["Glutathione","Longevity","Your body&#x27;s main built-in antioxidant. The injectable form is used mostly for skin brightening, which is not an approved use anywhere.","Tripeptide antioxidant (glutamate-cysteine-glycine)"],"humanin":["Humanin","Longevity","Another peptide made by mitochondria, this one protecting cells from dying under stress. Levels drop with age.","Mitochondrial-derived peptide"],"nad-plus":["NAD+","Longevity","A molecule every cell needs to make energy and repair DNA. Levels drop steeply with age, which is why it&#x27;s the centrepiece of a lot of longevity work.","Nicotinamide adenine dinucleotide"],"ss-31":["SS-31","Longevity","A peptide that targets the inner membrane of mitochondria to protect how cells make energy. In 2025 it became an approved medicine, for one rare disease.","Elamipretide / mitochondria-targeted peptide"],"bronchogen":["Bronchogen","Bioregulators","A short Russian peptide, aimed at the lungs and airways. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"cardiogen":["Cardiogen","Bioregulators","A short Russian peptide, aimed at the heart muscle. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"cartalax":["Cartalax","Bioregulators","A short Russian peptide, aimed at cartilage and joints. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"chonluten":["Chonluten","Bioregulators","A short Russian peptide, aimed at the lung lining. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"cortagen":["Cortagen","Bioregulators","A short Russian peptide, aimed at the brain cortex. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"crystagen":["Crystagen","Bioregulators","A short Russian peptide, aimed at the immune system. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"livagen":["Livagen","Bioregulators","A short Russian peptide, aimed at the liver. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"ovagen":["Ovagen","Bioregulators","A short Russian peptide, aimed at the liver and gut. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"pancragen":["Pancragen","Bioregulators","A short Russian peptide, aimed at the pancreas. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"prostamax":["Prostamax","Bioregulators","A short Russian peptide, aimed at the prostate. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"testagen":["Testagen","Bioregulators","A short Russian peptide, aimed at the testicles. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"vesugen":["Vesugen","Bioregulators","A short Russian peptide, aimed at blood vessel walls. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"]};/*END-HERO-DATA*/
+/* A link straight to a compound draws its heading now; the rest follows with the data. */
+(function () {
+  var m = location.pathname.match(/^\/([a-z0-9-]+)\/?$/), slug = (m && m[1]) || decodeURIComponent(location.hash.slice(1));
+  var x = slug && window.HEROES[slug];
+  if (!x) return;
+  var app = document.getElementById("app");
+  app.className = "wrap page-compound";
+  app.innerHTML = '<div class="hero"><div class="hero-txt"><div class="cat">' + x[1] + '</div><div class="ruo">Sold for research use only</div>' +
+    "<h1>" + x[0] + '</h1><div class="what">' + x[2] + '</div><div class="cls">' + x[3] + "</div></div></div>";
+  document.documentElement.classList.remove("deep");
+})();
+</script>
 <script src="compounds.js"></script>
 <script>
 (function () {
@@ -505,6 +551,16 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   document.addEventListener("touchstart", function () {}, { passive: true });
   var app = document.getElementById("app");
   var back = document.getElementById("back");
+  /* On the hosted site each compound has its own address (/semax). Inside a
+     preview frame or a local file, the same pages run on #semax instead. */
+  var PATHS = /^https?:$/.test(location.protocol) && window.self === window.top;
+  var ORIGIN = "https://axiom-guide-weld.vercel.app";
+  function hrefFor(slug) { return (PATHS ? "/" : "#") + encodeURIComponent(slug); }
+  function go(url) {
+    if (PATHS) { history.pushState(null, "", url); route(); }
+    else location.hash = url.replace(/^[#\/]+/, "");
+  }
+  if (PATHS) { back.setAttribute("href", "/"); document.querySelector(".mark").setAttribute("href", "/"); }
 
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
@@ -559,12 +615,40 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 
   /* Home, right half on wide screens: the pen, and the three steps the guide follows. */
   var SIDE_HTML = '<div class="idx-side">' +
-        '<svg class="pen-art" viewBox="0 0 520 110" aria-hidden="true" focusable="false"><defs><linearGradient id="liq" x1="0" x2="1"><stop offset="0" stop-color="#7C4C24"/><stop offset=".7" stop-color="#C88A4E"/><stop offset="1" stop-color="#E7B173"/></linearGradient></defs><rect class="pa-body" x="6" y="31" width="118" height="48" rx="13"/><line class="pa-line" x1="104" y1="31" x2="104" y2="79"/><rect class="pa-body" x="130" y="27" width="300" height="56" rx="10"/><rect class="pa-liq" x="172" y="43" width="196" height="24" rx="4" fill="url(#liq)"/><clipPath id="pa-clip"><rect x="172" y="43" width="141" height="24" rx="4"/></clipPath><rect class="pa-glint" x="172" y="43" width="22" height="24" fill="#F2EDE5" opacity="0" clip-path="url(#pa-clip)"/><rect class="pa-win" x="170" y="41" width="200" height="28" rx="5"/><g class="pa-ticks"><line x1="182" y1="44" x2="182" y2="58"/><line x1="191" y1="44" x2="191" y2="52"/><line x1="200" y1="44" x2="200" y2="52"/><line x1="209" y1="44" x2="209" y2="52"/><line x1="218" y1="44" x2="218" y2="52"/><line x1="227" y1="44" x2="227" y2="58"/><line x1="236" y1="44" x2="236" y2="52"/><line x1="245" y1="44" x2="245" y2="52"/><line x1="254" y1="44" x2="254" y2="52"/><line x1="263" y1="44" x2="263" y2="52"/><line x1="272" y1="44" x2="272" y2="58"/><line x1="281" y1="44" x2="281" y2="52"/><line x1="290" y1="44" x2="290" y2="52"/><line x1="299" y1="44" x2="299" y2="52"/><line x1="308" y1="44" x2="308" y2="52"/><line x1="317" y1="44" x2="317" y2="58"/><line x1="326" y1="44" x2="326" y2="52"/><line x1="335" y1="44" x2="335" y2="52"/><line x1="344" y1="44" x2="344" y2="52"/><line x1="353" y1="44" x2="353" y2="52"/><line x1="362" y1="44" x2="362" y2="58"/></g><rect class="pa-body" x="436" y="33" width="56" height="44" rx="8"/><g class="pa-line"><line x1="448" y1="38" x2="448" y2="72"/><line x1="458" y1="38" x2="458" y2="72"/><line x1="468" y1="38" x2="468" y2="72"/><line x1="478" y1="38" x2="478" y2="72"/></g><rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/></svg>' +
+        '<svg class="pen-art" viewBox="0 0 520 110" aria-hidden="true" focusable="false"><rect class="pa-body" x="6" y="31" width="118" height="48" rx="13"/><line class="pa-line" x1="104" y1="31" x2="104" y2="79"/><rect class="pa-body" x="130" y="27" width="300" height="56" rx="10"/><rect class="pa-liq" x="172" y="43" width="196" height="24" rx="4" fill="url(#liq)"/><clipPath id="pa-clip"><rect x="172" y="43" width="141" height="24" rx="4"/></clipPath><rect class="pa-glint" x="172" y="43" width="22" height="24" fill="#F2EDE5" opacity="0" clip-path="url(#pa-clip)"/><rect class="pa-win" x="170" y="41" width="200" height="28" rx="5"/><g class="pa-ticks"><line x1="182" y1="44" x2="182" y2="58"/><line x1="191" y1="44" x2="191" y2="52"/><line x1="200" y1="44" x2="200" y2="52"/><line x1="209" y1="44" x2="209" y2="52"/><line x1="218" y1="44" x2="218" y2="52"/><line x1="227" y1="44" x2="227" y2="58"/><line x1="236" y1="44" x2="236" y2="52"/><line x1="245" y1="44" x2="245" y2="52"/><line x1="254" y1="44" x2="254" y2="52"/><line x1="263" y1="44" x2="263" y2="52"/><line x1="272" y1="44" x2="272" y2="58"/><line x1="281" y1="44" x2="281" y2="52"/><line x1="290" y1="44" x2="290" y2="52"/><line x1="299" y1="44" x2="299" y2="52"/><line x1="308" y1="44" x2="308" y2="52"/><line x1="317" y1="44" x2="317" y2="58"/><line x1="326" y1="44" x2="326" y2="52"/><line x1="335" y1="44" x2="335" y2="52"/><line x1="344" y1="44" x2="344" y2="52"/><line x1="353" y1="44" x2="353" y2="52"/><line x1="362" y1="44" x2="362" y2="58"/></g><rect class="pa-body" x="436" y="33" width="56" height="44" rx="8"/><g class="pa-line"><line x1="448" y1="38" x2="448" y2="72"/><line x1="458" y1="38" x2="458" y2="72"/><line x1="468" y1="38" x2="468" y2="72"/><line x1="478" y1="38" x2="478" y2="72"/></g><rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/></svg>' +
         '<ol class="how3">' +
           "<li><b>Find your compound</b><span>Scan the card on your pen, or search by name or by what it is for.</span></li>" +
           "<li><b>Read before you start</b><span>What it does, what to watch for, how strong the evidence is.</span></li>" +
           "<li><b>Count your pen</b><span>Pick your dose to see every dose date, and add them to your calendar.</span></li>" +
         "</ol>" + "</div>";
+
+  /* The pen, drawn as line art: the compound's name on the label, a window that
+     fills. `empty` draws it unfilled, waiting for a dose. */
+  function sizeLabel(c) {
+    return c.sizes.map(function (z) { return fmtNum(z.qty) + " " + z.unit; }).join(" · ");
+  }
+  function penArt(name, sub, empty) {
+    var fs = Math.min(18, Math.floor(158 / Math.max(6, name.length * 0.56)));
+    var ticks = "";
+    for (var i = 0; i < 12; i++) {
+      var x = 316 + i * 9;
+      ticks += '<line x1="' + x + '" y1="44" x2="' + x + '" y2="' + (i % 4 ? 51 : 57) + '"/>';
+    }
+    return '<svg class="pen-art pen-c" viewBox="0 0 520 110" aria-hidden="true" focusable="false">' +
+      '<rect class="pa-body" x="6" y="31" width="118" height="48" rx="13"/>' +
+      '<line class="pa-line" x1="104" y1="31" x2="104" y2="79"/>' +
+      '<text class="pa-brand" x="24" y="59">AXIOM</text>' +
+      '<rect class="pa-body" x="130" y="27" width="300" height="56" rx="10"/>' +
+      '<text class="pa-name" x="146" y="56" style="font-size:' + fs + 'px">' + esc(name) + "</text>" +
+      '<text class="pa-sub" x="146" y="72">' + esc(sub) + "</text>" +
+      (empty ? "" : '<rect class="pa-liq" x="312" y="43" width="106" height="24" rx="4" fill="url(#liq)"/>') +
+      '<rect class="pa-win" x="310" y="41" width="110" height="28" rx="5"/>' +
+      '<g class="pa-ticks' + (empty ? " dim" : "") + '">' + ticks + "</g>" +
+      '<rect class="pa-body" x="436" y="33" width="56" height="44" rx="8"/>' +
+      '<g class="pa-line"><line x1="448" y1="38" x2="448" y2="72"/><line x1="458" y1="38" x2="458" y2="72"/>' +
+      '<line x1="468" y1="38" x2="468" y2="72"/><line x1="478" y1="38" x2="478" y2="72"/></g>' +
+      '<rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/></svg>';
+  }
 
   function renderIndex() {
     back.hidden = true;
@@ -573,6 +657,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     /* On the first load the intro is already on screen as static HTML; it stays
        put and the rest is added around it, so nothing above it repaints. */
     var staticHead = firstPaint && app.querySelector(".idx-hero > .idx-head");
+    if (!firstPaint) app.classList.add("seen");
     var html =
       '<div class="idx-hero"><div class="idx-head">' +
         '<div class="cat">Compound guide</div>' +
@@ -588,6 +673,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       "</div>" + SIDE_HTML + "</div>" +
       '<nav class="cats" id="cats" aria-label="Categories"></nav>' +
       '<div id="list"></div>' +
+      '<button type="button" class="totop" id="totop">Back to top</button>' +
       '<footer class="scope"><p><strong>What this is.</strong> Reference material for compounds sold for research use. ' +
       "It is not medical advice, not a prescription, and not a recommendation to give anything to a person. " +
       "Where a compound is an approved medicine, the official doses are reproduced and named as such. Where it " +
@@ -630,13 +716,14 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           '<span class="chip-n">' + groups[cat].length + "</span></button>";
       }).join("");
       list.innerHTML = order.map(function (cat) {
-        return '<section class="grp" id="' + catId(cat) + '"><h2>' + esc(cat) + "</h2>" + groups[cat].map(function (c) {
+        return '<section class="grp" id="' + catId(cat) + '"><h2>' + esc(cat) + "</h2>" +
+          (CAT_NOTE[cat] ? '<p class="grp-note">' + CAT_NOTE[cat].note + "</p>" : "") + groups[cat].map(function (c) {
           /* What it does, in the page's own plain words, then its two main benefits —
              not its pharmacology class, which most readers cannot parse. */
-          return '<a class="item" href="#' + encodeURIComponent(c.slug) + '">' +
+          return '<a class="item" data-slug="' + esc(c.slug) + '" href="' + hrefFor(c.slug) + '">' +
             '<div class="item-main"><div class="item-top"><div class="item-name">' + hl(c.name, term) + "</div>" +
             '<div class="item-cad">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div></div>" +
-            '<div class="item-sub">' + hl(c.what, term) + "</div>" +
+            '<div class="item-sub">' + hl(CAT_NOTE[cat] ? c.what.replace(CAT_NOTE[cat].cut, "") : c.what, term) + "</div>" +
             '<ul class="item-ben">' + c.benefits.slice(0, 2).map(function (x) {
               return "<li>" + hl(x.b, term) + "</li>";
             }).join("") + "</ul></div>" +
@@ -646,6 +733,9 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       }).join("");
     }
     q.addEventListener("input", draw);
+    document.getElementById("totop").addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion() ? "auto" : "smooth" });
+    });
     document.getElementById("cats").addEventListener("click", function (e) {
       var b = e.target.closest(".chip");
       if (!b) return;
@@ -655,6 +745,14 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     });
     draw();
   }
+
+  /* A sentence every row in a category would repeat is said once, under its heading. */
+  var CAT_NOTE = {
+    "Bioregulators": {
+      cut: " It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.",
+      note: "Short Russian peptides, each aimed at one organ. The idea is that each one signals its target tissue to repair itself. All are used in courses."
+    }
+  };
 
   /* Search matches shown in amber, so you can see why each row came up. */
   function hl(t, term) {
@@ -687,6 +785,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   /* ---------------- Compound ---------------- */
   function renderCompound(c) {
     back.hidden = false;
+    app.classList.remove("seen");
     app.className = "wrap page-compound";
     document.title = "AXIOM — " + c.name;
     var ev = window.EVIDENCE_META[c.evidence] || window.EVIDENCE_META.preclinical;
@@ -707,10 +806,11 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       '<div class="hero"><div class="hero-txt">' +
         '<div class="cat">' + esc(c.category) + "</div>" +
         '<div class="ruo">Sold for research use only</div>' +
-        "<h1>" + esc(c.name) + "</h1>" +
+        '<h1 style="view-transition-name:ctitle">' + esc(c.name) + "</h1>" +
         '<div class="what">' + esc(c.what) + "</div>" +
         '<div class="cls">' + esc(c.cls) + "</div>" +
         '</div><div class="hero-side">' +
+        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), false) + "</div>" +
         '<div class="glance">' +
           "<div><span>How often</span><b>" + esc(CAD_WORD[c.cadence] || c.cadence) + "</b></div>" +
           "<div><span>When</span><b>" + esc(c.timing.when) + "</b></div>" +
@@ -887,7 +987,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           var on = ch.getAttribute("data-to") === en.target.id;
           ch.setAttribute("aria-current", on ? "true" : "false");
           if (on && ch.scrollIntoView && toc.scrollWidth > toc.clientWidth) {
-            toc.scrollTo({ left: ch.offsetLeft - 20, behavior: "auto" });
+            toc.scrollTo({ left: ch.offsetLeft - (toc.clientWidth - ch.offsetWidth) / 2, behavior: "auto" });
           }
         });
       });
@@ -912,8 +1012,9 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     var schedWrap = document.getElementById("sched-wrap");
     /* Wide screens only: holds the right half until there are dates to show. */
     function schedEmpty() {
-      return '<div class="sched-empty" aria-hidden="true"><b>Your dose dates</b>' +
-        "Every dose through to the end of the " + holder() + " lands here, with buttons to add them to your calendar.</div>";
+      return '<div class="sched-empty"><div aria-hidden="true">' + penArt(c.name, sizeLabel(c), true) + "</div><b>Your dose dates</b>" +
+        "Pick your " + holder() + " and your dose. Every dose through to the end of the " + holder() +
+        " lands here, with buttons to add them to your calendar.</div>";
     }
     var weekEl = document.getElementById("week");
     var weekNote = document.getElementById("week-note");
@@ -967,7 +1068,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           '" aria-label="Move the schedule to start on ' + DAY_FULL[i] + '">' +
           "<span>" + DAYS[i] + "</span><i></i></button>";
       }).join("");
-      weekNote.textContent = hasPattern
+      weekNote.textContent = pattern.every(function (x) { return x; }) ? "Every day of the week."
+        : hasPattern
         ? "Tap a day to move the whole schedule — the spacing stays the same."
         : "Taken when needed, so there is no weekly pattern.";
     }
@@ -992,7 +1094,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       var slug = this.value;
       if (param("c")) location.search = "?c=" + encodeURIComponent(slug);
       else if (pathSlug() && !location.hash) location.href = encodeURIComponent(slug);   /* sibling path */
-      else location.hash = encodeURIComponent(slug);
+      else go(hrefFor(slug));
     });
 
     /* Steps 2 and 3: a tap fills the field, and the field stays editable. */
@@ -1547,35 +1649,75 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 
   var DEFAULT_DESC = (document.querySelector('meta[name="description"]') || {}).content || "";
   /* Coming back to the list puts you where you were, with your search still in place. */
-  var listY = 0, listQ = "", firstPaint = true, cameFromList = false;
+  var listY = 0, listQ = "", firstPaint = true, cameFromList = false, lastSlug = null;
+  function setMeta(sel, attr, val) { var m = document.querySelector(sel); if (m) m.setAttribute(attr, val); }
+  function reduceMotion() { return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches; }
   function route() {
-    var slug = param("c") || decodeURIComponent(location.hash.replace(/^#/, "")) || pathSlug();
+    var hashSlug = decodeURIComponent(location.hash.replace(/^#/, ""));
+    var slug = param("c") || hashSlug || pathSlug();
     var found = slug && window.COMPOUNDS.filter(function (x) { return x.slug === slug; })[0];
+    /* An old #slug link on the hosted site moves to the slug's own address. */
+    if (PATHS && found && hashSlug) history.replaceState(null, "", "/" + found.slug);
     var fromList = /page-index/.test(app.className) && !firstPaint;
-    document.documentElement.classList.remove("deep");
     if (fromList) {
       listY = window.scrollY;
       var qEl = document.getElementById("q"); listQ = qEl ? qEl.value : "";
     }
     cameFromList = !!found && fromList;
-    if (found) renderCompound(found);
-    else {
-      renderIndex();
-      if (listQ) { var q2 = document.getElementById("q"); q2.value = listQ; q2.dispatchEvent(new Event("input")); }
+
+    /* The tapped compound's name travels up into the page title, and back down
+       into its row on the way back (where the browser can animate it). */
+    var useVT = !firstPaint && document.startViewTransition && !reduceMotion();
+    if (useVT && found) {
+      var src = document.querySelector('.item[data-slug="' + found.slug + '"] .item-name');
+      if (src) src.style.viewTransitionName = "ctitle";
     }
-    var md = document.querySelector('meta[name="description"]');
-    if (md) md.setAttribute("content", found ? found.name + ": " + found.what : DEFAULT_DESC);
-    window.scrollTo(0, !found && !fromList ? listY : 0);
-    /* Each page arrives with a short rise, top block first. Skipped on the very first paint. */
-    app.classList.remove("enter");
-    if (!firstPaint) { void app.offsetWidth; app.classList.add("enter"); }
-    firstPaint = false;
+    function draw() {
+      document.documentElement.classList.remove("deep");
+      if (found) renderCompound(found);
+      else {
+        renderIndex();
+        if (listQ) { var q2 = document.getElementById("q"); q2.value = listQ; q2.dispatchEvent(new Event("input")); }
+        var row = lastSlug && document.querySelector('.item[data-slug="' + lastSlug + '"] .item-name');
+        if (useVT && row) row.style.viewTransitionName = "ctitle";
+      }
+      var desc = found ? found.name + ": " + found.what : DEFAULT_DESC;
+      var url = ORIGIN + "/" + (found ? found.slug : "");
+      setMeta('meta[name="description"]', "content", desc);
+      setMeta('meta[property="og:description"]', "content", desc);
+      setMeta('meta[property="og:title"]', "content", found ? "AXIOM — " + found.name : "AXIOM Compound Guide");
+      setMeta('meta[property="og:url"]', "content", url);
+      setMeta('link[rel="canonical"]', "href", url);
+      window.scrollTo(0, !found && !fromList ? listY : 0);
+      if (!useVT) {
+        /* Without view transitions, each page arrives with a short rise instead. */
+        app.classList.remove("enter");
+        if (!firstPaint) { void app.offsetWidth; app.classList.add("enter"); }
+      }
+      lastSlug = found ? found.slug : null;
+      firstPaint = false;
+    }
+    if (useVT) {
+      var t = document.startViewTransition(draw);
+      t.finished.then(function () {
+        [].forEach.call(document.querySelectorAll(".item-name, h1"), function (e) { e.style.viewTransitionName = ""; });
+      });
+    } else draw();
+  }
+  /* On the hosted site, links inside the guide change the address without reloading. */
+  if (PATHS) {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a.item, a.mark");
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault(); go(a.getAttribute("href"));
+    });
+    window.addEventListener("popstate", route);
   }
   /* Back goes back in history when you came from the list, so your place and search are kept. */
   back.addEventListener("click", function (e) {
-    if (cameFromList) {
-      e.preventDefault(); history.back();
-    } else if (location.hash) { e.preventDefault(); location.hash = ""; }
+    if (cameFromList) { e.preventDefault(); history.back(); }
+    else if (PATHS) { e.preventDefault(); go("/"); }
+    else if (location.hash) { e.preventDefault(); location.hash = ""; }
   });
   /* The skip link moves focus to the content without touching the hash, which routes pages. */
   document.querySelector(".skip").addEventListener("click", function (e) {

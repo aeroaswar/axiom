@@ -236,6 +236,18 @@ window.EVIDENCE_META = {
 
 open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'compounds.js'), 'w').write(out.getvalue())
 
+# The top of each compound page (name, category, what it is) goes inline in
+# index.html, so a link straight to a compound draws its heading before the
+# full data file arrives. Text only; no prices or doses.
+import html as _html
+_hero = {c["slug"]: [_html.escape(c["name"]), _html.escape(c["cat"]), _html.escape(c["what"]), _html.escape(c["cls"])] for c in ALL}
+_ix = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'index.html')
+_page = open(_ix, encoding="utf-8").read()
+_m = re.search(r"/\*HERO-DATA\*/.*?/\*END-HERO-DATA\*/", _page, re.S)
+assert _m, "HERO-DATA markers missing from index.html"
+_page = _page[:_m.start()] + "/*HERO-DATA*/window.HEROES=" + json.dumps(_hero, ensure_ascii=False, separators=(",", ":")) + ";/*END-HERO-DATA*/" + _page[_m.end():]
+open(_ix, "w", encoding="utf-8").write(_page)
+
 from collections import Counter
 print("compounds:", len(ALL))
 for cat, n in Counter(c["cat"] for c in ALL).most_common():
