@@ -94,11 +94,11 @@ window.COMPOUNDS = [
 ];
 
 /* Shared handling note — the pens arrive ready to use. */
-window.HANDLING = "Your pen arrives ready to use — the mixing water is already in it, so there is nothing to prepare. Keep it in the fridge, out of the light, and don't freeze it. Let it come to room temperature before you use it, and finish it within 28 days of the first dose.";
+window.HANDLING = "Your pen arrives ready to use — the mixing water is already in it, so there is nothing to prepare. Let it come to room temperature before you use it, and finish it within 28 days of the first dose.";
 
 window.EVIDENCE_META = {
   label:       { label: "Approved medicine",        tone: "solid", blurb: "This is an approved medicine. The doses shown are the official ones." },
   trial:       { label: "Studied in people",        tone: "mid",   blurb: "Not approved, but tested in real human trials. The doses shown are what those trials used — not an official regimen." },
-  regional:    { label: "Approved in some countries", tone: "mid", blurb: "Approved or sold in certain countries only. Check the position where you are." },
+  regional:    { label: "Approved or sold in some countries", tone: "mid", blurb: "Approved or sold in certain countries only. Check the position where you are." },
   preclinical: { label: "Lab research only",        tone: "open",  blurb: "Only lab and animal studies exist. No human dose has been established, and this guide will not invent one." }
 };
