@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>AXIOM — Compound Guide</title>
-<meta name="description" content="AXIOM compound guide — administration cadence, when to apply, documented protocol, a dose and supply calculator, and studied benefits, with the evidence tier stated for every figure." />
+<meta name="description" content="What each AXIOM compound does, how often and when to take it, how strong the evidence is, and how many doses are in your pen." />
 <meta name="theme-color" content="#070605" />
 <meta name="color-scheme" content="dark" />
 <meta name="robots" content="noindex" />
@@ -172,7 +172,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .out{margin-top:20px;padding-top:20px;border-top:1px solid var(--line-soft)}
 .out-hero{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .out-num{font-family:var(--brand);font-weight:300;font-size:2.7059rem;line-height:1;color:var(--accent-bright);font-variant-numeric:tabular-nums}
-.out-unit{font-size:0.8824rem;color:var(--muted)}
+.out-unit{font-size:0.8824rem;color:var(--muted);text-wrap:balance}
 .out-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 16px;margin-top:20px}
 .out-cell{border-top:1px solid var(--line-soft);padding-top:10px}
 /* Five results in two columns would strand the last one; give it the row. */
@@ -279,9 +279,9 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
 /* ---------- Scope ---------- */
 .scope{padding:30px 0 10px}
-.scope p{font-size:0.7059rem;color:var(--muted-2);line-height:1.7}
+.scope p{font-size:0.8235rem;color:var(--muted);line-height:1.65}
 .scope p + p{margin-top:11px}
-.scope strong{color:var(--muted);font-weight:500}
+.scope strong{color:var(--ink);font-weight:500}
 
 /* ---------- Index ---------- */
 .idx-hero{padding:44px 0 26px}
@@ -389,6 +389,12 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .totop{display:block;margin:28px auto 0;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);
   background:none;color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer}
 @media (max-width:819px){
+  .how3{display:none}
+  .idx-hero{padding-top:30px}
+  .idx-side{margin-top:4px}
+  .idx-side .pen-art{max-width:300px}
+}
+@media (max-width:819px){
   /* Phones: the first sentence and one benefit per row keep the long list scannable. */
   .item-ben li:nth-child(n+2){display:none}
   .item-more{display:none}
@@ -402,17 +408,21 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .row-v{text-wrap:balance}
 .other{color:var(--muted)}
 .sched-ghost{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}
-.sched-ghost i{height:46px;border:1px dashed var(--line);border-radius:10px}
+.sched-ghost i{height:46px;border:1px dashed var(--line);border-radius:10px;opacity:.5}
+.g-steps{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-soft)}
+.g-steps b{display:block;font-size:0.8824rem;font-weight:600;color:var(--ink)}
+.g-steps span{display:block;font-size:0.7647rem;color:var(--muted);margin-top:2px}
+.g-steps .cal-row{margin-top:10px}
 /* Numbered steps down the compound page. */
 .sh .sn{font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1;color:var(--accent-bright);
   letter-spacing:.02em;font-variant-numeric:tabular-nums;min-width:1.6em}
-.sec{scroll-margin-top:calc(56px + 66px + env(safe-area-inset-top))}
+.sec{scroll-margin-top:calc(56px + 84px + env(safe-area-inset-top))}
 .sub h3{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:14px}
 .sub+.sub,.col+.col>.sub:first-child{border-top:1px solid var(--line-soft);margin-top:28px;padding-top:28px}
 .sched-h{font-size:1.0588rem;font-weight:600;color:var(--ink);margin:34px 0 14px}
 .toc{margin-top:0}
-.toc .chip[aria-current="true"]{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
-.toc .chip[aria-current="true"] .chip-n{color:var(--accent-bright)}
+.cats .chip[aria-current="true"]{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
+.cats .chip[aria-current="true"] .chip-n{color:var(--accent-bright)}
 /* Courses: a course, a break, a course, a break. */
 .course{display:grid;grid-template-columns:1fr 2fr 1fr 2fr;gap:4px;margin:4px 0 16px}
 .course i{font-style:normal;font-size:0.7059rem;font-weight:600;color:var(--muted);padding:7px 8px;border-radius:6px;
@@ -423,12 +433,13 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 /* The chip bar is solid; its scrolling edges fade into the page by overlays, so
    nothing underneath ever shows through. */
 .catbar{position:sticky;top:calc(56px + env(safe-area-inset-top));z-index:15;background:var(--bg);
-  margin:18px calc(-1 * var(--pad-r)) 0 calc(-1 * var(--pad-l));box-shadow:0 10px 14px -6px var(--bg)}
-.catbar::before,.catbar::after{content:"";position:absolute;top:0;bottom:0;width:28px;z-index:1;pointer-events:none}
+  margin:18px calc(-1 * var(--pad-r)) 0 calc(-1 * var(--pad-l))}
+.catbar>i{position:absolute;left:0;right:0;top:100%;height:18px;background:linear-gradient(var(--bg),transparent);pointer-events:none}
+.catbar::before,.catbar::after{content:"";position:absolute;top:0;bottom:0;width:40px;z-index:1;pointer-events:none}
 .catbar::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
 .catbar::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
 .toc-bar{margin-top:0}
-.cats{display:flex;gap:8px;overflow-x:auto;padding:10px var(--pad-r) 10px var(--pad-l);scrollbar-width:none}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:10px var(--pad-r) 10px var(--pad-l);scrollbar-width:none;scroll-padding-inline:var(--pad-l)}
 .cats::-webkit-scrollbar{display:none}
 .chip{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;
   border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer;transition:border-color .2s,background .2s}
@@ -490,7 +501,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .page-compound .scope{column-count:2;column-gap:var(--gut)}
   .page-compound .scope p{break-inside:avoid}
   /* Index: the categories in two columns. */
-  .page-index #list{column-count:2;column-gap:var(--gut)}
+  .page-index #list{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .idx-hero{display:grid;grid-template-columns:1.1fr .9fr;grid-template-areas:"head side" "find side";column-gap:var(--gut);align-items:start}
   .idx-head{grid-area:head}.idx-find{grid-area:find}.idx-side{grid-area:side;margin-top:8px;align-self:center}
   /* How to take it: schedule and timing on the left, the doses on the right. */
@@ -521,9 +532,9 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 /* Page changes: the header stays put, the page slides up into place, and the
    compound's name travels from its row into the title. */
 .bar{view-transition-name:bar}
-::view-transition-group(ctitle){animation-duration:.55s;animation-timing-function:var(--ease)}
+::view-transition-group(ctitle){animation-duration:.4s;animation-timing-function:var(--ease)}
 ::view-transition-old(root){animation:.09s ease-out both vt-out}
-::view-transition-new(root){animation:.44s var(--ease) .06s both vt-in}
+::view-transition-new(root){animation:.42s var(--ease) .18s both vt-in}
 ::view-transition-old(ctitle){display:none}
 ::view-transition-new(ctitle){animation:none}
 @keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
@@ -605,8 +616,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var CAD_WORD = { daily: "Daily", weekly: "Weekly", cycle: "In courses", "as-needed": "When needed" };
   var CAD_SUB = {
-    daily: "Every day", weekly: "Same day each week",
-    cycle: "A course, then a break", "as-needed": "No fixed schedule"
+    daily: "", weekly: "Same day each week",
+    cycle: "", "as-needed": "No fixed schedule"
   };
   /* A pen kept in the fridge is conventionally finished within 28 days of
      the first dose. */
@@ -637,13 +648,13 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   }
 
   /* Home, right half on wide screens: the pen, and the three steps the guide follows. */
-  var SIDE_HTML = '<div class="idx-side">' +
-        '<svg class="pen-art" viewBox="0 0 520 110" aria-hidden="true" focusable="false"><rect class="pa-body" x="6" y="31" width="118" height="48" rx="13"/><line class="pa-line" x1="104" y1="31" x2="104" y2="79"/><rect class="pa-body" x="130" y="27" width="300" height="56" rx="10"/><rect class="pa-liq" x="172" y="43" width="196" height="24" rx="4" fill="url(#liq)"/><clipPath id="pa-clip"><rect x="172" y="43" width="141" height="24" rx="4"/></clipPath><rect class="pa-glint" x="172" y="43" width="22" height="24" fill="#F2EDE5" opacity="0" clip-path="url(#pa-clip)"/><rect class="pa-win" x="170" y="41" width="200" height="28" rx="5"/><g class="pa-ticks"><line x1="182" y1="44" x2="182" y2="58"/><line x1="191" y1="44" x2="191" y2="52"/><line x1="200" y1="44" x2="200" y2="52"/><line x1="209" y1="44" x2="209" y2="52"/><line x1="218" y1="44" x2="218" y2="52"/><line x1="227" y1="44" x2="227" y2="58"/><line x1="236" y1="44" x2="236" y2="52"/><line x1="245" y1="44" x2="245" y2="52"/><line x1="254" y1="44" x2="254" y2="52"/><line x1="263" y1="44" x2="263" y2="52"/><line x1="272" y1="44" x2="272" y2="58"/><line x1="281" y1="44" x2="281" y2="52"/><line x1="290" y1="44" x2="290" y2="52"/><line x1="299" y1="44" x2="299" y2="52"/><line x1="308" y1="44" x2="308" y2="52"/><line x1="317" y1="44" x2="317" y2="58"/><line x1="326" y1="44" x2="326" y2="52"/><line x1="335" y1="44" x2="335" y2="52"/><line x1="344" y1="44" x2="344" y2="52"/><line x1="353" y1="44" x2="353" y2="52"/><line x1="362" y1="44" x2="362" y2="58"/></g><rect class="pa-body" x="436" y="33" width="56" height="44" rx="8"/><g class="pa-line"><line x1="448" y1="38" x2="448" y2="72"/><line x1="458" y1="38" x2="458" y2="72"/><line x1="468" y1="38" x2="468" y2="72"/><line x1="478" y1="38" x2="478" y2="72"/></g><rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/></svg>' +
+  function sideHtml() { return '<div class="idx-side">' +
+        penArt("Your pen", "Scan its card to open its page", { full: true }) +
         '<ol class="how3">' +
           "<li><b>Find your compound</b><span>Scan the card on your pen, or search by name or by what it is for.</span></li>" +
           "<li><b>Read before you start</b><span>What it does, what to watch for, how strong the evidence is.</span></li>" +
           "<li><b>Count your pen</b><span>Pick your dose to see every dose date, and add them to your calendar.</span></li>" +
-        "</ol>" + "</div>";
+        "</ol>" + "</div>"; }
 
   /* The pen, drawn as line art: the compound's name on the label, a window that
      fills. `empty` draws it unfilled, waiting for a dose. */
@@ -719,12 +730,12 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
         "<p>What each compound actually does, how often and when to take it, what the evidence " +
         "really says, and how many doses are in your pen.</p>" +
       "</div>" + '<div class="idx-find">' +
-        '<p class="coverage">Every AXIOM lot: <b>' + lotCount() + "</b> lots across <b>" +
-        COMPOUNDS.length + "</b> compounds, in nine categories.</p>" +
+        '<p class="coverage">Every AXIOM product: <b>' + COMPOUNDS.length + "</b> compounds in <b>" +
+        lotCount() + "</b> sizes, in nine categories.</p>" +
         '<div class="search"><input id="q" type="search" aria-label="Search compounds" placeholder="Search a compound, or what it is for" autocomplete="off" /></div>' +
         '<p class="hits" id="hits" aria-live="polite"></p>' +
-      "</div>" + SIDE_HTML + "</div>" +
-      '<div class="catbar"><nav class="cats" id="cats" aria-label="Categories"></nav></div>' +
+      "</div>" + sideHtml() + "</div>" +
+      '<div class="catbar"><nav class="cats" id="cats" aria-label="Categories"></nav><i aria-hidden="true"></i></div>' +
       '<div id="list"></div>' +
       '<button type="button" class="totop" id="totop">Back to top</button>' +
       '<footer class="scope"><p><strong>What this is.</strong> Reference material for compounds sold for research use. ' +
@@ -768,7 +779,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
         return '<button type="button" class="chip" data-cat="' + catId(cat) + '">' + esc(cat) +
           '<span class="chip-n">' + groups[cat].length + "</span></button>";
       }).join("");
-      list.innerHTML = order.map(function (cat) {
+      var html = order.map(function (cat) {
         return '<section class="grp" id="' + catId(cat) + '"><h2>' + esc(cat) + "</h2>" +
           (CAT_NOTE[cat] ? '<p class="grp-note">' + CAT_NOTE[cat].note + "</p>" : "") + groups[cat].map(function (c) {
           /* What it does, in the page's own plain words, then its two main benefits —
@@ -784,7 +795,36 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
             '<svg class="arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
             "</a>";
         }).join("") + "</section>";
-      }).join("");
+      });
+      /* Two columns on wide screens, each category kept whole, split where the
+         row counts come out most even. On phones the two simply stack. */
+      var total = hits.length, run = 0, cut = order.length;
+      for (var g = 0; g < order.length; g++) {
+        var n = groups[order[g]].length;
+        if (run + n / 2 > total / 2) { cut = g; break; }
+        run += n;
+      }
+      if (cut === 0) cut = 1;
+      list.innerHTML = '<div class="lcol">' + html.slice(0, cut).join("") + '</div><div class="lcol">' + html.slice(cut).join("") + "</div>";
+      spyCats();
+    }
+    /* The category you are reading is marked in the bar above. */
+    var spy = null;
+    function spyCats() {
+      if (spy) spy.disconnect();
+      if (!("IntersectionObserver" in window)) return;
+      var bar = document.getElementById("cats");
+      spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          [].forEach.call(bar.querySelectorAll(".chip"), function (ch) {
+            var on = ch.getAttribute("data-cat") === en.target.id;
+            ch.setAttribute("aria-current", on ? "true" : "false");
+            if (on && bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: Math.max(0, ch.offsetLeft - 20), behavior: "auto" });
+          });
+        });
+      }, { rootMargin: "-140px 0px -65% 0px" });
+      [].forEach.call(list.querySelectorAll(".grp"), function (g) { spy.observe(g); });
     }
     q.addEventListener("input", draw);
     document.getElementById("totop").addEventListener("click", function () {
@@ -907,7 +947,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
          ["s-pen", sprayable ? "Your pen or spray" : "Your pen"], ["s-care", "Storage"]].map(function (t, i) {
           return '<button type="button" class="chip" data-to="' + t[0] + '"><span class="chip-n">' + (i + 1) + "</span>" + t[1] + "</button>";
         }).join("") +
-      "</nav></div>" +
+      '</nav><i aria-hidden="true"></i></div>' +
 
       '<section class="sec benefits" id="s-does"><h2 class="sh"><span class="sn" aria-hidden="true">01</span>What it does</h2>' +
         '<p class="ruo-note">These are findings from research, not medical claims. ' +
@@ -974,10 +1014,10 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
             '<div class="picks" id="pen-picks">' + c.sizes.map(function (z) {
               var label = fmtNum(z.qty) + " " + unit;
               return sprayable
-                ? '<button class="pick" data-qty="' + z.qty + '" data-form="pen" type="button">' + label +
-                    '<span class="pick-tag">Pen</span></button>' +
-                  '<button class="pick" data-qty="' + z.qty + '" data-form="spray" type="button">' + label +
-                    '<span class="pick-tag">Nasal spray</span></button>'
+                ? '<button class="pick" data-qty="' + z.qty + '" data-form="pen" type="button">Pen' +
+                    '<span class="pick-tag">' + label + "</span></button>" +
+                  '<button class="pick" data-qty="' + z.qty + '" data-form="spray" type="button">Nasal spray' +
+                    '<span class="pick-tag">' + label + "</span></button>"
                 : '<button class="pick" data-qty="' + z.qty + '" type="button">' + label + "</button>";
             }).join("") + "</div>" +
             '<div class="other"><label for="f-qty">Or how much is left</label>' +
@@ -1062,7 +1102,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           var on = ch.getAttribute("data-to") === en.target.id;
           ch.setAttribute("aria-current", on ? "true" : "false");
           if (on && ch.scrollIntoView && toc.scrollWidth > toc.clientWidth) {
-            toc.scrollTo({ left: ch.offsetLeft - (toc.clientWidth - ch.offsetWidth) / 2, behavior: "auto" });
+            toc.scrollTo({ left: Math.max(0, ch.offsetLeft - 20 - (ch.previousElementSibling ? 0 : 0)), behavior: "auto" });
           }
         });
       });
@@ -1090,7 +1130,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       return '<div class="sched-empty"><div aria-hidden="true">' + penArt(c.name, sizeLabel(c), { spray: form === "spray" }) + "</div><b>Your dose dates</b>" +
         "Pick your " + holder() + " and your dose. Every dose through to the end of the " + holder() +
         " lands here, with buttons to add them to your calendar." +
-        '<div class="sched-ghost" aria-hidden="true">' + new Array(16).join("<i></i>") + "</div></div>";
+        '<div class="sched-ghost" aria-hidden="true">' + new Array(6).join("<i></i>") + "</div></div>";
     }
     var weekEl = document.getElementById("week");
     var weekNote = document.getElementById("week-note");
@@ -1144,7 +1184,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           '" aria-label="Move the schedule to start on ' + DAY_FULL[i] + '">' +
           "<span>" + DAYS[i] + "</span><i></i></button>";
       }).join("");
-      weekNote.textContent = pattern.every(function (x) { return x; }) ? "Every day of the week."
+      weekNote.textContent = pattern.every(function (x) { return x; }) ? ""
         : hasPattern
         ? "Tap a day to move the whole schedule — the spacing stays the same."
         : "Taken when needed, so there is no weekly pattern.";
@@ -1351,7 +1391,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           '<div class="out-cell"><b class="tnum">' + fmtNum(total, 2) + " " + unit + "</b><span>Whole plan</span></div>" +
           '<div class="out-cell"><b class="tnum">' + pen + "</b><span>" + (form === "spray" ? "Sprays" : "Pens") + " for the plan</span></div>" +
           '<div class="out-cell"><b>' + (mine.length ? fmtDate(mine[mine.length - 1].day) : "—") + "</b><span>Last dose from this " + holder() + "</span></div>" +
-          '<div class="out-cell"><b>' + (next ? fmtDate(next.day) : "Not needed") + "</b><span>New " + holder() + "</span></div>" +
+
         "</div>" + flags;
 
       drawStepSchedule(plan);
@@ -1382,15 +1422,16 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
         (shown.length < plan.length ? '<div class="note" style="margin-top:12px">Showing the first ' + shown.length +
           " of " + plan.length + " doses.</div>" : "") +
         '<div class="cal-row">' +
-          '<button class="btn-cal" id="cal-apple" type="button">Apple Calendar</button>' +
-          runs.map(function (r, i) {
-            var g = googleUrl(c, r);
-            return g ? '<a class="btn-cal ghost" href="' + esc(g) + '" target="_blank" rel="noopener">Google · step ' + (i + 1) + "</a>" : "";
-          }).join("") +
+          '<button class="btn-cal" id="cal-apple" type="button">Apple Calendar · whole plan</button>' +
         "</div>" +
-        '<div class="cal-note">Apple Calendar adds the whole plan, one repeating event per step, each titled with its dose, ' +
-          "at " + esc(hhmm()) + " with a reminder. Google takes one step per button. The Apple Calendar file also opens " +
-          "in Outlook and most other calendar apps.</div>" +
+        '<div class="cal-note">Adds every step as its own repeating event, titled with its dose, at ' + esc(hhmm()) +
+          " with a reminder. The file also opens in Outlook and most other calendar apps.</div>" +
+        '<div class="g-steps"><b>Google Calendar</b><span>Google adds one repeating event per link, so tap each step:</span>' +
+          '<div class="cal-row">' + runs.map(function (r, i) {
+            var g = googleUrl(c, r);
+            return g ? '<a class="btn-cal ghost" href="' + esc(g) + '" target="_blank" rel="noopener">Step ' + (i + 1) + " · " +
+              fmtNum(r.dose) + " " + unit + "</a>" : "";
+          }).join("") + "</div></div>" +
         '<div id="ics-fallback"></div>';
       document.getElementById("cal-apple").addEventListener("click", function () { addToApple(c, runs); });
     }
