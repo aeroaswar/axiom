@@ -140,6 +140,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 
 /* ---------- Protocol rows ---------- */
 .rows{border-top:1px solid var(--line-soft)}
+.rows .row:last-child{border-bottom:0}
 .row{padding:15px 0;border-bottom:1px solid var(--line-soft)}
 .row-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
 .row-k{font-size:0.8824rem;color:var(--muted-2);flex:none}
@@ -174,6 +175,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .out-num{font-family:var(--brand);font-weight:300;font-size:2.7059rem;line-height:1;color:var(--accent-bright);font-variant-numeric:tabular-nums}
 .out-unit{font-size:0.8824rem;color:var(--muted);text-wrap:balance}
 .out-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 16px;margin-top:20px}
+.out-grid .out-cell:last-child:nth-child(odd){grid-column:1/-1}
 .out-cell{border-top:1px solid var(--line-soft);padding-top:10px}
 /* Five results in two columns would strand the last one; give it the row. */
 .out-cell:last-child{grid-column:1/-1}
@@ -351,7 +353,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 .grp h2{display:block;letter-spacing:0;font-size:0.7647rem;color:var(--accent);margin-bottom:12px;font-weight:600}
 .item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);transition:.18s}
 .item:last-child{border-bottom:none}
-.item-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.item-top .item-cad{margin-top:2px}
 .item{margin:0 -12px;padding-left:12px;padding-right:12px}
 @media (hover:hover){
   .item:hover{background:var(--panel-2);border-radius:12px;box-shadow:inset 0 0 0 1px var(--line)}
@@ -392,11 +395,11 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .how3{display:none}
   .idx-hero{padding-top:30px}
   .idx-side{margin-top:4px}
-  .idx-side .pen-art{max-width:300px}
+  .idx-side .pen-art{max-width:100%}
 }
 @media (max-width:819px){
   /* Phones: the first sentence and one benefit per row keep the long list scannable. */
-  .item-ben li:nth-child(n+2){display:none}
+  .item-ben{display:none}
   .item-more{display:none}
 }
 .pa-mark{fill:url(#liq);transform-box:fill-box;transform-origin:bottom}
@@ -407,12 +410,22 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .item-hit span{color:var(--muted-2);font-weight:600}
 .row-v{text-wrap:balance}
 .other{color:var(--muted)}
-.sched-ghost{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}
-.sched-ghost i{height:46px;border:1px dashed var(--line);border-radius:10px;opacity:.5}
+.sched-pre{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:16px}
+.sched-pre .sd b{white-space:nowrap}
+.sched-pre .sd{min-width:0}
+.sched-pre .sd b{color:var(--muted)}
 .g-steps{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-soft)}
 .g-steps b{display:block;font-size:0.8824rem;font-weight:600;color:var(--ink)}
 .g-steps span{display:block;font-size:0.7647rem;color:var(--muted);margin-top:2px}
 .g-steps .cal-row{margin-top:10px}
+.pa-band{opacity:.95}
+.hero .cat::before,.grp h2::before{content:"";display:inline-block;width:14px;height:4px;border-radius:2px;background:var(--band,var(--accent));margin-right:9px;vertical-align:middle;position:relative;top:-1px}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:26px 0 6px;border-bottom:1px solid var(--line-soft)}
+.pg{display:flex;flex-direction:column;justify-content:center;min-height:64px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.pg span{font-size:0.7059rem;color:var(--muted);font-weight:500}
+.pg b{font-weight:600;font-size:0.8824rem;color:var(--ink);margin-top:2px}
+.pg.next{text-align:right}
+@media (hover:hover){.pg:hover{border-color:var(--accent-line);background:var(--panel-2)}}
 /* Numbered steps down the compound page. */
 .sh .sn{font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1;color:var(--accent-bright);
   letter-spacing:.02em;font-variant-numeric:tabular-nums;min-width:1.6em}
@@ -491,7 +504,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   #sched-wrap:has(.sched-empty){position:sticky;top:calc(56px + 76px + env(safe-area-inset-top))}
   .page-index .cats{flex-wrap:wrap}
   .page-index .catbar::before,.page-index .catbar::after{display:none}
-  .sched-empty{display:block;border:1px dashed var(--line);border-radius:14px;padding:28px 24px;
+  .sched-empty{display:block;border:1px solid var(--line-soft);background:var(--panel);border-radius:14px;padding:26px 24px;
     font-size:0.8235rem;line-height:1.6;color:var(--muted)}
   .sched-empty b{display:block;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:6px}
   .pen .fields{grid-template-columns:1fr 1fr}
@@ -501,7 +514,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .page-compound .scope{column-count:2;column-gap:var(--gut)}
   .page-compound .scope p{break-inside:avoid}
   /* Index: the categories in two columns. */
-  .page-index #list{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
+  .grp-items{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut)}
   .idx-hero{display:grid;grid-template-columns:1.1fr .9fr;grid-template-areas:"head side" "find side";column-gap:var(--gut);align-items:start}
   .idx-head{grid-area:head}.idx-find{grid-area:find}.idx-side{grid-area:side;margin-top:8px;align-self:center}
   /* How to take it: schedule and timing on the left, the doses on the right. */
@@ -534,7 +547,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .bar{view-transition-name:bar}
 ::view-transition-group(ctitle){animation-duration:.4s;animation-timing-function:var(--ease)}
 ::view-transition-old(root){animation:.09s ease-out both vt-out}
-::view-transition-new(root){animation:.42s var(--ease) .18s both vt-in}
+::view-transition-new(root){animation:.3s ease .12s both vt-fade}
+@keyframes vt-fade{from{opacity:0}}
 ::view-transition-old(ctitle){display:none}
 ::view-transition-new(ctitle){animation:none}
 @keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
@@ -649,7 +663,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 
   /* Home, right half on wide screens: the pen, and the three steps the guide follows. */
   function sideHtml() { return '<div class="idx-side">' +
-        penArt("Your pen", "Scan its card to open its page", { full: true }) +
+        penArt("Your pen", "Scan its card", { full: true }) +
         '<ol class="how3">' +
           "<li><b>Find your compound</b><span>Scan the card on your pen, or search by name or by what it is for.</span></li>" +
           "<li><b>Read before you start</b><span>What it does, what to watch for, how strong the evidence is.</span></li>" +
@@ -668,7 +682,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   function penArt(name, sub, opts) {
     opts = opts || {};
     var marks = opts.marks || 0, wx = marks ? 236 : 310, wEnd = 420, inner = "";
-    var labelW = wx - 152;
+    var labelW = wx - 158;
     var fs = Math.min(18, Math.floor(labelW / Math.max(5, name.length * 0.56)));
     if (marks) {
       var per = Math.max(1, Math.ceil(marks / 40)), m = Math.ceil(marks / per), slots = m + (opts.rest ? 0.4 : 0);
@@ -703,8 +717,9 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
         '<rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/>';
     return '<svg class="pen-art pen-c' + (opts.spray ? " is-spray" : "") + '" viewBox="0 0 520 110" aria-hidden="true" focusable="false">' +
       head + '<rect class="pa-body" x="' + (opts.spray ? 122 : 130) + '" y="27" width="' + (opts.spray ? 308 : 300) + '" height="56" rx="10"/>' +
-      '<text class="pa-name" x="146" y="56" style="font-size:' + fs + 'px">' + esc(name) + "</text>" +
-      '<text class="pa-sub" x="146" y="73">' + esc(sub) + "</text>" +
+      (opts.band ? '<rect class="pa-band" x="' + (opts.spray ? 128 : 136) + '" y="27" width="7" height="56" style="fill:' + opts.band + '"/>' : "") +
+      '<text class="pa-name" x="152" y="56" style="font-size:' + fs + 'px">' + esc(name) + "</text>" +
+      '<text class="pa-sub" x="152" y="73">' + esc(sub) + "</text>" +
       inner + '<rect class="pa-win" x="' + wx + '" y="41" width="' + (wEnd - wx) + '" height="28" rx="5"/>' + tail + "</svg>";
   }
   /* Short enough to sit on the pen's label: "10 mg", "10 mg · 20 mg", or "5 sizes · 10–80 mg". */
@@ -714,8 +729,19 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     return q.length + " sizes · " + fmtNum(Math.min.apply(null, q)) + "–" + fmtNum(Math.max.apply(null, q)) + " " + u;
   }
 
+  /* The end of a compound page: back to everything, or on to the next in its category. */
+  function nextNav(c) {
+    var same = window.COMPOUNDS.filter(function (x) { return x.category === c.category; });
+    var i = same.indexOf(c), nx = same[(i + 1) % same.length];
+    return '<nav class="pager" aria-label="More compounds">' +
+      '<a class="pg" href="' + (PATHS ? "/" : "#") + '"><span>All compounds</span><b>\u2190 Back to the list</b></a>' +
+      (nx && nx !== c ? '<a class="pg next" data-slug="' + esc(nx.slug) + '" href="' + hrefFor(nx.slug) + '"><span>Next in ' + esc(c.category) +
+        "</span><b>" + esc(nx.name) + " \u2192</b></a>" : "") + "</nav>";
+  }
+
   function renderIndex() {
     back.hidden = true;
+    document.querySelector(".mark").removeAttribute("tabindex");
     app.className = "wrap page-index";
     document.title = "AXIOM — Compound Guide";
     /* On the first load the intro is already on screen as static HTML; it stays
@@ -780,8 +806,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           '<span class="chip-n">' + groups[cat].length + "</span></button>";
       }).join("");
       var html = order.map(function (cat) {
-        return '<section class="grp" id="' + catId(cat) + '"><h2>' + esc(cat) + "</h2>" +
-          (CAT_NOTE[cat] ? '<p class="grp-note">' + CAT_NOTE[cat].note + "</p>" : "") + groups[cat].map(function (c) {
+        return '<section class="grp" id="' + catId(cat) + '" style="--band:' + band(cat) + '"><h2>' + esc(cat) + "</h2>" +
+          (CAT_NOTE[cat] ? '<p class="grp-note">' + CAT_NOTE[cat].note + "</p>" : "") + '<div class="grp-items">' + groups[cat].map(function (c) {
           /* What it does, in the page's own plain words, then its two main benefits —
              not its pharmacology class, which most readers cannot parse. */
           return '<a class="item" data-slug="' + esc(c.slug) + '" href="' + hrefFor(c.slug) + '">' +
@@ -794,18 +820,9 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
             }).join("") + "</ul></div>" +
             '<svg class="arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
             "</a>";
-        }).join("") + "</section>";
+        }).join("") + "</div></section>";
       });
-      /* Two columns on wide screens, each category kept whole, split where the
-         row counts come out most even. On phones the two simply stack. */
-      var total = hits.length, run = 0, cut = order.length;
-      for (var g = 0; g < order.length; g++) {
-        var n = groups[order[g]].length;
-        if (run + n / 2 > total / 2) { cut = g; break; }
-        run += n;
-      }
-      if (cut === 0) cut = 1;
-      list.innerHTML = '<div class="lcol">' + html.slice(0, cut).join("") + '</div><div class="lcol">' + html.slice(cut).join("") + "</div>";
+      list.innerHTML = html.join("");
       spyCats();
     }
     /* The category you are reading is marked in the bar above. */
@@ -856,11 +873,24 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       var t = pool[i], at = t.toLowerCase().indexOf(term);
       if (at < 0) continue;
       var from = Math.max(0, t.lastIndexOf(" ", Math.max(0, at - 40)));
-      var snip = (from > 0 ? "\u2026" : "") + t.slice(from, at + term.length + 50).trim() + "\u2026";
+      var tail = t.slice(at + term.length, at + term.length + 50), sp = tail.lastIndexOf(" ");
+      if (sp > 10 && at + term.length + 50 < t.length) tail = tail.slice(0, sp);
+      var snip = (from > 0 ? "\u2026" : "") + (t.slice(from, at + term.length) + tail).trim().replace(/[.,;:]+$/, "") +
+        (at + term.length + 50 < t.length ? "\u2026" : ".");
       return '<div class="item-hit"><span>Matched in the details:</span> ' + hl(snip, term) + "</div>";
     }
     return "";
   }
+
+  /* Each category's pens carry a colour band, the way insulin pens are colour-coded
+     so one is never mistaken for another. The band shows on the pen drawing, the
+     category label and the list headings. */
+  var BAND = {
+    "Weight Loss & GLP-1": "#C88A4E", "Growth Hormone": "#C9B26E", "Healing & Repair": "#7FA87F",
+    "Brain & Mood": "#8C9BC4", "Energy & Endurance": "#D07A5E", "Immunity": "#6FA6A0",
+    "Sexual Health": "#C47C93", "Longevity": "#A58CC2", "Bioregulators": "#A89F92"
+  };
+  function band(cat) { return BAND[cat] || "#C88A4E"; }
 
   /* A sentence every row in a category would repeat is said once, under its heading. */
   var CAT_NOTE = {
@@ -902,6 +932,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   function renderCompound(c) {
     back.hidden = false;
     app.classList.remove("seen");
+    document.querySelector(".mark").setAttribute("tabindex", "-1");
     app.className = "wrap page-compound";
     document.title = "AXIOM — " + c.name;
     var ev = window.EVIDENCE_META[c.evidence] || window.EVIDENCE_META.preclinical;
@@ -919,7 +950,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     }).join("");
 
     app.innerHTML =
-      '<div class="hero"><div class="hero-txt">' +
+      '<div class="hero" style="--band:' + band(c.category) + '"><div class="hero-txt">' +
         '<div class="cat">' + esc(c.category) + "</div>" +
         '<div class="ruo">Research use only</div>' +
         '<h1 style="view-transition-name:ctitle">' + esc(c.name) + "</h1>" +
@@ -930,7 +961,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           "<p>" + esc(c.evidenceNote) + "</p>" +
         "</div>" +
         '</div><div class="hero-side">' +
-        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), { full: true }) + "</div>" +
+        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), { full: true, band: band(c.category) }) + "</div>" +
         '<div class="glance">' +
           "<div><span>How often</span><b>" + esc(CAD_WORD[c.cadence] || c.cadence) + "</b></div>" +
           "<div><span>When</span><b>" + esc(c.timing.when) + "</b></div>" +
@@ -1047,6 +1078,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 
           '<div class="step"><div class="step-k"><i>4</i>How often, and from when</div>' +
             '<div class="fields">' +
+              (c.cadence === "cycle" ? '<div class="field"><label for="f-course">Course length, days</label><input id="f-course" type="number" inputmode="numeric" step="1" min="1" max="120" value="20"></div>' : "") +
               '<div class="field"><label for="f-week">Doses per week</label><input id="f-week" type="number" inputmode="numeric" step="1" min="0" max="21" value="' + c.perWeek + '"></div>' +
               '<div class="field"><label for="f-time">Time of day</label><input id="f-time" type="time" value="' + esc(c.timing.time) + '"></div>' +
               '<div class="field wide"><label for="f-date">First dose on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
@@ -1070,6 +1102,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           (sprayable ? " The nasal spray is ready to use too, and is kept the same way." : "") + "</p>" +
       "</section>" +
 
+      nextNav(c) +
       '<footer class="scope">' +
         "<p><strong>What this is.</strong> Reference material for a compound sold for research use. Not medical " +
         "advice, not a prescription, and not a recommendation to give anything to a person.</p>" +
@@ -1123,14 +1156,25 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       date: document.getElementById("f-date"),
       time: document.getElementById("f-time")
     };
+    if (document.getElementById("f-course")) f.course = document.getElementById("f-course");
     var out = document.getElementById("out");
     var schedWrap = document.getElementById("sched-wrap");
     /* Wide screens only: holds the right half until there are dates to show. */
     function schedEmpty() {
-      return '<div class="sched-empty"><div aria-hidden="true">' + penArt(c.name, sizeLabel(c), { spray: form === "spray" }) + "</div><b>Your dose dates</b>" +
-        "Pick your " + holder() + " and your dose. Every dose through to the end of the " + holder() +
-        " lands here, with buttons to add them to your calendar." +
-        '<div class="sched-ghost" aria-hidden="true">' + new Array(6).join("<i></i>") + "</div></div>";
+      var start = parseIso(f.date.value) || new Date(), first = [];
+      if (hasPattern) for (var i = 0; i < 60 && first.length < 8; i++) {
+        var day = addDays(start, i);
+        if (pattern[weekdayIdx(day)]) first.push(day);
+      }
+      return '<div class="sched-empty"><div aria-hidden="true">' + penArt(c.name, sizeLabel(c), { spray: form === "spray", band: band(c.category) }) + "</div>" +
+        "<b>Your first dose days</b>" +
+        (first.length
+          ? "From your start date, on this schedule. Pick your " + holder() + " and your dose to see how far it goes, then add every date to your calendar." +
+            '<div class="sched-pre">' + first.map(function (day) {
+              return '<div class="sd"><b>' + fmtDate(day) + "</b><span>" + DAY_FULL[weekdayIdx(day)] + "</span></div>";
+            }).join("") + "</div>"
+          : "Taken when needed, so there are no set days. Pick your " + holder() + " and your dose to see how many doses it holds.") +
+        "</div>";
     }
     var weekEl = document.getElementById("week");
     var weekNote = document.getElementById("week-note");
@@ -1378,7 +1422,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 
       out.innerHTML =
         '<div class="out-hero"><div class="out-num tnum">' + mine.length + "</div>" +
-        '<div class="out-unit">doses from this ' + holder() + ", of " + plan.length + " in your " + wk0 + "-week plan</div></div>" +
+        '<div class="out-unit">doses from this ' + holder() + " · " + plan.length + " in your " + wk0 + "-week plan</div></div>" +
         gauge(mine.length, qty - used > 1e-9, mine.map(function (x) { return x.step; })) +
         '<ol class="step-sum">' + steps.map(function (x, si) {
           var mineN = plan.filter(function (y) { return y.step === si; });
@@ -1472,15 +1516,23 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       var unit = esc(c.pen.unit);
 
       var start = parseIso(f.date.value) || new Date();
+      var courseDays = f.course ? Math.max(0, parseInt(f.course.value, 10) || 0) : 0;
       doseDates = [];
       if (hasPattern) {
         /* Cap the projection so an unusual dose cannot render hundreds of
            chips; the count above still reports the true number of doses. */
         var cap = Math.min(doses, 120);
         for (var i = 0; i < 900 && doseDates.length < cap; i++) {
+          if (courseDays && i >= courseDays) break;
           var day = addDays(start, i);
           if (pattern[weekdayIdx(day)]) doseDates.push(day);
         }
+      }
+      /* A course: count its doses, and say if the pen runs out before it ends. */
+      var courseN = 0, courseEnd = null;
+      if (courseDays) {
+        for (var k = 0; k < courseDays; k++) if (pattern[weekdayIdx(addDays(start, k))]) courseN++;
+        courseEnd = addDays(start, courseDays - 1);
       }
       var lastDose = doseDates.length ? doseDates[doseDates.length - 1] : null;
       var discard = addDays(start, IN_USE_DAYS);
@@ -1500,6 +1552,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       }
       if (leftover > 0.0001) flags += '<div class="flag">' + fmtNum(leftover, 2) + " " + unit +
         " is left over after " + doses + " full doses — not enough for another one this size.</div>";
+      if (courseDays && courseN > doses) flags += '<div class="flag">This ' + holder() + " covers " + doses + " of the course's " +
+        courseN + " doses, so it runs out on " + fmtDate(doseDates[doseDates.length - 1]) + ", before the course ends on " + fmtDate(courseEnd) + ".</div>";
 
       out.innerHTML =
         '<div class="out-hero"><div class="out-num tnum">' + doses + "</div>" +
@@ -1510,11 +1564,14 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           '<div class="out-cell"><b class="tnum">' + fmtNum(d, 2) + " " + unit + "</b><span>" + eachLabel + "</span></div>" +
           '<div class="out-cell"><b class="tnum">' + (perWeek > 0 ? fmtNum(d * perWeek, 2) + " " + unit : "—") + "</b><span>Each week</span></div>" +
           '<div class="out-cell"><b class="tnum">' + (days ? Math.round(days) + " days" : "—") + "</b><span>" + (form === "spray" ? "Spray" : "Pen") + " lasts</span></div>" +
-          '<div class="out-cell"><b>' + (lastDose ? fmtDate(lastDose) : fmtDate(discard)) + "</b><span>" +
-            (lastDose ? "Last dose" : "Finish by") + "</span></div>" +
+          (courseDays
+            ? '<div class="out-cell"><b class="tnum">' + Math.min(courseN, doses) + " doses · ends " + fmtDate(courseEnd) + "</b><span>This course, " +
+              fmtNum(Math.min(courseN, doses) * d, 2) + " " + unit + "</span></div>"
+            : '<div class="out-cell"><b>' + (lastDose ? fmtDate(lastDose) : fmtDate(discard)) + "</b><span>" +
+              (lastDose ? "Last dose" : "Finish by") + "</span></div>") +
         "</div>" + flags;
 
-      drawSchedule(c, doses, d);
+      drawSchedule(c, courseDays ? doseDates.length : doses, d);
     }
 
     /* The pen, drawn: one mark per dose (or per few doses in a big pen), plus a
@@ -1522,7 +1579,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     function gauge(n, rest, stepOf) {
       var per = Math.max(1, Math.ceil(n / 40)), q = parseFloat(f.qty.value);
       return '<div class="gauge" role="img" aria-label="' + n + " doses in this " + holder() + '">' +
-        penArt(c.name, fmtNum(q) + " " + c.pen.unit + " " + holder(), { marks: n, rest: rest, stepOf: stepOf, spray: form === "spray" }) +
+        penArt(c.name, fmtNum(q) + " " + c.pen.unit + " " + holder(), { marks: n, rest: rest, stepOf: stepOf, spray: form === "spray", band: band(c.category) }) +
         "</div>" + (per > 1 ? '<div class="g-key">Each mark is ' + per + " doses</div>" : "");
     }
 
@@ -1797,6 +1854,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
         if (useVT && row) row.style.viewTransitionName = "ctitle";
       }
       var desc = found ? found.name + ": " + found.what : DEFAULT_DESC;
+      /* Search results show about 155 characters; cut at a word, not mid-word. */
+      if (desc.length > 155) desc = desc.slice(0, 154).replace(/\s+\S*$/, "").replace(/[,;:.]$/, "") + "\u2026";
       var url = ORIGIN + "/" + (found ? found.slug : "");
       setMeta('meta[name="description"]', "content", desc);
       setMeta('meta[property="og:description"]', "content", desc);
@@ -1804,11 +1863,9 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       setMeta('meta[property="og:url"]', "content", url);
       setMeta('link[rel="canonical"]', "href", url);
       window.scrollTo(0, !found && !fromList ? listY : 0);
-      if (!useVT) {
-        /* Without view transitions, each page arrives with a short rise instead. */
-        app.classList.remove("enter");
-        if (!firstPaint) { void app.offsetWidth; app.classList.add("enter"); }
-      }
+      /* Each page's blocks rise in, top first (inside the title transition too). */
+      app.classList.remove("enter");
+      if (!firstPaint) { void app.offsetWidth; app.classList.add("enter"); }
       lastSlug = found ? found.slug : null;
       firstPaint = false;
     }
@@ -1822,7 +1879,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   /* On the hosted site, links inside the guide change the address without reloading. */
   if (PATHS) {
     document.addEventListener("click", function (e) {
-      var a = e.target.closest && e.target.closest("a.item, a.mark");
+      var a = e.target.closest && e.target.closest("a.item, a.mark, a.pg");
       if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       e.preventDefault(); go(a.getAttribute("href"));
     });

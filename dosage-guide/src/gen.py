@@ -228,7 +228,7 @@ window.HANDLING = "Your pen arrives ready to use — the mixing water is already
 window.EVIDENCE_META = {
   label:       { label: "Approved as a brand-name medicine", tone: "solid", blurb: "The brand-name version is an approved medicine, and the doses shown are its official ones. This pen is sold for research use, not as that medicine." },
   trial:       { label: "Studied in people",        tone: "mid",   blurb: "Not approved, but tested in real human trials. The doses shown are what those trials used — not an official regimen." },
-  regional:    { label: "A medicine in some countries", tone: "mid", blurb: "Registered as a medicine in certain countries only. Check the position where you are." },
+  regional:    { label: "A medicine in some countries", tone: "mid", blurb: "Registered as a medicine in certain countries only. Check whether it is approved where you live." },
   sold:        { label: "Supplement or cosmetic, not a medicine", tone: "mid", blurb: "Sold as a supplement or cosmetic in some countries. Not approved as a medicine anywhere." },
   preclinical: { label: "Lab research only",        tone: "open",  blurb: "Only lab and animal studies exist. No human dose has been established, and this guide will not invent one." }
 };
