@@ -240,6 +240,11 @@ ul.bul{list-style:none;display:flex;flex-direction:column;gap:13px}
 ul.bul li{position:relative;padding-left:22px;font-size:0.8529rem;color:#d8d1c6;line-height:1.62}
 ul.bul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
 ul.warn li::before{border-color:var(--muted-2);border-radius:0}
+/* "Research use only" — on every page, under the category and above the benefits. */
+.ruo{display:inline-flex;align-items:center;margin:0 0 14px 12px;padding:3px 10px;border:1px solid var(--line-2);
+  border-radius:999px;font-size:0.6471rem;font-weight:600;color:var(--ink);vertical-align:middle}
+.ruo-note{font-size:0.7647rem;color:var(--muted);line-height:1.55;margin:-6px 0 18px;max-width:60ch}
+.ruo-note b{color:var(--ink);font-weight:600}
 ul.ben{gap:20px}
 ul.ben li{color:var(--muted)}
 .ben-b{display:block;color:var(--ink);font-weight:600;font-size:0.9412rem;line-height:1.45}
@@ -411,6 +416,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     app.innerHTML =
       '<div class="idx-hero">' +
         '<div class="cat">Compound guide</div>' +
+        '<div class="ruo">Research use only</div>' +
         "<h1>What it is,<br>and how to use it.</h1>" +
         "<p>Scan the card on any AXIOM pen to land here: what the compound actually does, " +
         "how often to take it, when in the day, what the evidence really says, and how many " +
@@ -501,6 +507,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     app.innerHTML =
       '<div class="hero"><div class="hero-txt">' +
         '<div class="cat">' + esc(c.category) + "</div>" +
+        '<div class="ruo">Research use only</div>' +
         "<h1>" + esc(c.name) + "</h1>" +
         '<div class="what">' + esc(c.what) + "</div>" +
         '<div class="cls">' + esc(c.cls) + "</div>" +
@@ -519,7 +526,10 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
       /* What it does is the line under the name; what it does for you comes next,
          before the schedule and the calculator. */
-      '<section class="benefits"><h2>Benefits</h2><ul class="bul ben">' +
+      '<section class="benefits"><h2>Benefits</h2>' +
+        '<p class="ruo-note"><b>Research use only.</b> These are findings from research, not medical claims. ' +
+        "Nothing here is a recommendation to use this compound.</p>" +
+        '<ul class="bul ben">' +
         c.benefits.map(function (x) {
           return '<li><b class="ben-b">' + esc(x.b) + "</b>" +
             (x.how ? '<span class="ben-how"><i>How it works</i>' + esc(x.how) + "</span>" : "") + "</li>";
