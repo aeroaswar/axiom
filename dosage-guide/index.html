@@ -240,6 +240,11 @@ ul.bul{list-style:none;display:flex;flex-direction:column;gap:13px}
 ul.bul li{position:relative;padding-left:22px;font-size:0.8529rem;color:#d8d1c6;line-height:1.62}
 ul.bul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
 ul.warn li::before{border-color:var(--muted-2);border-radius:0}
+ul.ben{gap:20px}
+ul.ben li{color:var(--muted)}
+.ben-b{display:block;color:var(--ink);font-weight:600;font-size:0.9412rem;line-height:1.45}
+.ben-how{display:block;margin-top:5px;font-size:0.8235rem;line-height:1.6}
+.ben-how i{display:block;font-style:normal;font-size:0.6471rem;font-weight:600;color:var(--accent);margin-bottom:2px}
 p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
 /* ---------- Scope ---------- */
@@ -308,7 +313,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
   .page-compound{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .page-compound>.hero,.page-compound>.pen,.page-compound>.scope,
   .page-compound>.benefits,.page-compound>.care{grid-column:1/-1}
-  .benefits ul.bul{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut)}
+  .benefits ul.bul{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);row-gap:24px}
   /* Hero: the name and blurb on the left, the at-a-glance strip and evidence on the right. */
   .page-compound>.hero{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .hero-side>.glance{margin-top:0;grid-template-columns:repeat(2,1fr)}
@@ -427,7 +432,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       var term = q.value.trim().toLowerCase();
       var hits = window.COMPOUNDS.filter(function (c) {
         if (!term) return true;
-        return (c.name + " " + c.cls + " " + c.category + " " + c.what + " " + c.benefits.join(" ") + " " + c.cadence)
+        return (c.name + " " + c.cls + " " + c.category + " " + c.what + " " + c.benefits.map(function (x) { return x.b + " " + x.how; }).join(" ") + " " + c.cadence)
           .toLowerCase().indexOf(term) >= 0;
       });
       if (!hits.length) {
@@ -446,8 +451,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
           return '<a class="item" href="#' + encodeURIComponent(c.slug) + '">' +
             '<div class="item-main"><div class="item-name">' + esc(c.name) + "</div>" +
             '<div class="item-sub">' + esc(c.what) + "</div>" +
-            '<ul class="item-ben">' + c.benefits.slice(0, 2).map(function (b) {
-              return "<li>" + esc(b) + "</li>";
+            '<ul class="item-ben">' + c.benefits.slice(0, 2).map(function (x) {
+              return "<li>" + esc(x.b) + "</li>";
             }).join("") + "</ul></div>" +
             '<div class="item-cad">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div>" +
             '<svg class="arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
@@ -514,8 +519,11 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
       /* What it does is the line under the name; what it does for you comes next,
          before the schedule and the calculator. */
-      '<section class="benefits"><h2>Benefits</h2><ul class="bul">' +
-        c.benefits.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") +
+      '<section class="benefits"><h2>Benefits</h2><ul class="bul ben">' +
+        c.benefits.map(function (x) {
+          return '<li><b class="ben-b">' + esc(x.b) + "</b>" +
+            (x.how ? '<span class="ben-how"><i>How it works</i>' + esc(x.how) + "</span>" : "") + "</li>";
+        }).join("") +
       "</ul></section>" +
 
       "<section><h2>How often</h2>" +

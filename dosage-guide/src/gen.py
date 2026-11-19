@@ -131,6 +131,11 @@ for c in ALL:
     assert c["ev"] in ("label","trial","regional","preclinical"), c["slug"]
     assert c["sizes"], c["slug"]
     assert c["dose"] > 0, c["slug"]
+    # a benefit is a plain headline, or a (headline, how it works) pair
+    assert 2 <= len(c["benefits"]) <= 4, (c["slug"], "benefits")
+    for bn in c["benefits"]:
+        parts = bn if isinstance(bn, tuple) else (bn,)
+        assert len(parts) in (1, 2) and all(isinstance(x, str) and x.strip() for x in parts), (c["slug"], bn)
     # the default pen is the smallest size offered
     smallest = min(c["sizes"], key=lambda s: s[0])
     assert c["unit"] == smallest[1], (c["slug"], c["unit"], smallest[1])
@@ -181,7 +186,9 @@ for i, c in enumerate(ALL):
       "perWeek": c["perWeek"],
       "evidence": c["ev"], "evidenceNote": c["evNote"],
       "protocol": [{"k": k, "v": v, "n": n} for k, v, n in c["protocol"]],
-      "benefits": c["benefits"],
+      # Each benefit is a headline and, where it has been written, how it works.
+      "benefits": [{"b": bn[0], "how": bn[1]} if isinstance(bn, tuple) else {"b": bn, "how": ""}
+                   for bn in c["benefits"]],
       "pen": {"qty": smallest[0], "unit": c["unit"]},
       # One-tap dose buttons. Nothing is pre-selected on the page: the
       # customer taps the dose they actually take.
