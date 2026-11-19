@@ -84,8 +84,7 @@ a{color:inherit;text-decoration:none}
 .bar .back svg{flex:none}
 .bar .back[hidden]{display:none}
 @media (max-width:479px){
-  .bar .back{min-width:44px;justify-content:center;margin-left:-12px}
-  .back-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .bar .back{font-size:0.8235rem}
 }
 
 /* ---------- Hero ---------- */
@@ -265,8 +264,10 @@ ul.bul li{position:relative;padding-left:22px;font-size:0.8529rem;color:#d8d1c6;
 ul.bul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
 ul.warn li::before{border-color:var(--muted-2);border-radius:0}
 /* "Research use only" — on every page, under the category and above the benefits. */
-.ruo{display:inline-flex;align-items:center;min-height:26px;box-sizing:border-box;vertical-align:middle;margin:0 0 14px 12px;padding:3px 10px;border:1px solid var(--line-2);
-  border-radius:999px;font-size:0.6471rem;font-weight:600;color:var(--ink);vertical-align:middle}
+/* "Research use only" rides on the category line, after a dot: no box, a quieter grey. */
+.ruo{display:inline-flex;align-items:center;min-height:26px;vertical-align:middle;margin:0 0 14px;
+  font-size:0.7647rem;font-weight:500;color:var(--muted)}
+.ruo::before{content:"\00b7";margin:0 10px;color:var(--muted-2);font-weight:700}
 .ruo-note{font-size:0.7647rem;color:var(--muted);line-height:1.55;margin:-6px 0 18px;max-width:60ch}
 .ruo-note b{color:var(--ink);font-weight:600}
 ul.ben{gap:20px}
@@ -291,7 +292,10 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 .pa-line{stroke:var(--line-2);stroke-width:1.2}
 .pa-win{fill:none;stroke:var(--accent-line);stroke-width:1.2}
 .pa-ticks{stroke:var(--bg);stroke-width:1.4;opacity:.8}
-.pa-liq{transform-box:fill-box;transform-origin:left center;transform:scaleX(.72)}
+.pa-liq{transform-box:fill-box;transform-origin:left center}
+.idx-side .pa-liq{transform:scaleX(.72)}
+.idx-side .pa-liq{animation-name:fill72!important}
+@keyframes fill72{from{transform:scaleX(0)}to{transform:scaleX(.72)}}
 .pa-glint{transform-box:fill-box}
 .how3{list-style:none;counter-reset:h;display:grid;gap:14px;margin-top:18px}
 .how3 li{counter-increment:h;display:grid;grid-template-columns:34px 1fr;column-gap:10px;font-size:0.8235rem;line-height:1.5}
@@ -373,9 +377,9 @@ main:focus{outline:none}
 mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;padding:0 1px}
 .deep .idx-hero{visibility:hidden}
 /* Pen drawings: the label carries the compound's name. */
-.pa-brand{font-family:var(--brand);font-size:10px;letter-spacing:3px;fill:var(--muted-2)}
+.pa-brand{font-family:var(--brand);font-size:11px;letter-spacing:3px;fill:var(--muted)}
 .pa-name{font-family:var(--brand);font-weight:400;fill:var(--ink)}
-.pa-sub{font-family:var(--sans);font-size:10.5px;fill:var(--muted)}
+.pa-sub{font-family:var(--sans);font-size:11.5px;fill:var(--muted)}
 .pa-ticks.dim{stroke:var(--line-2);opacity:1}
 .hero-pen{margin:22px 0 4px}
 .hero-pen .pen-art{max-width:520px;margin:0 0 0 -4px}
@@ -385,10 +389,20 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .totop{display:block;margin:28px auto 0;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);
   background:none;color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer}
 @media (max-width:819px){
-  /* Phones: one benefit per row and a three-line description keep the long list scannable. */
+  /* Phones: the first sentence and one benefit per row keep the long list scannable. */
   .item-ben li:nth-child(n+2){display:none}
-  .item-sub{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .item-more{display:none}
 }
+.pa-mark{fill:url(#liq);transform-box:fill-box;transform-origin:bottom}
+.pa-mark.rest{fill:var(--line-2)}
+.pa-mark[class*="st-"]{fill:var(--stc)}
+.gauge .pen-art{max-width:100%;margin:14px 0 0}
+.item-hit{font-size:0.7353rem;color:var(--muted);margin-top:6px;line-height:1.45}
+.item-hit span{color:var(--muted-2);font-weight:600}
+.row-v{text-wrap:balance}
+.other{color:var(--muted)}
+.sched-ghost{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}
+.sched-ghost i{height:46px;border:1px dashed var(--line);border-radius:10px}
 /* Numbered steps down the compound page. */
 .sh .sn{font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1;color:var(--accent-bright);
   letter-spacing:.02em;font-variant-numeric:tabular-nums;min-width:1.6em}
@@ -406,10 +420,15 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 .course i.on{border:1px solid var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
 .week-k{font-size:0.7647rem;color:var(--muted);margin-bottom:8px;font-weight:600}
 /* Category chips under the search: sticky below the bar, scroll sideways. */
-.cats{position:sticky;top:calc(56px + env(safe-area-inset-top));z-index:15;display:flex;gap:8px;overflow-x:auto;
-  margin:18px calc(-1 * var(--pad-r)) 0 calc(-1 * var(--pad-l));padding:10px var(--pad-r) 10px var(--pad-l);
-  background:var(--bg);scrollbar-width:none;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 36px),transparent)}
+/* The chip bar is solid; its scrolling edges fade into the page by overlays, so
+   nothing underneath ever shows through. */
+.catbar{position:sticky;top:calc(56px + env(safe-area-inset-top));z-index:15;background:var(--bg);
+  margin:18px calc(-1 * var(--pad-r)) 0 calc(-1 * var(--pad-l));box-shadow:0 10px 14px -6px var(--bg)}
+.catbar::before,.catbar::after{content:"";position:absolute;top:0;bottom:0;width:28px;z-index:1;pointer-events:none}
+.catbar::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.catbar::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.toc-bar{margin-top:0}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:10px var(--pad-r) 10px var(--pad-l);scrollbar-width:none}
 .cats::-webkit-scrollbar{display:none}
 .chip{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;
   border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer;transition:border-color .2s,background .2s}
@@ -459,7 +478,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .pen-in{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   #sched-wrap>.sched-h:first-child{margin-top:0}
   #sched-wrap:has(.sched-empty){position:sticky;top:calc(56px + 76px + env(safe-area-inset-top))}
-  .page-index .cats{flex-wrap:wrap;-webkit-mask-image:none;mask-image:none}
+  .page-index .cats{flex-wrap:wrap}
+  .page-index .catbar::before,.page-index .catbar::after{display:none}
   .sched-empty{display:block;border:1px dashed var(--line);border-radius:14px;padding:28px 24px;
     font-size:0.8235rem;line-height:1.6;color:var(--muted)}
   .sched-empty b{display:block;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:6px}
@@ -477,7 +497,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .howto .mid{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .howto .col>.sub:first-child{border-top:0;margin-top:0;padding-top:0}
   .warn-sec ul.bul{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut)}
-  .page-index .grp{break-inside:avoid}
+  .page-index .grp h2,.page-index .grp-note{break-after:avoid}
+  .page-index .item{break-inside:avoid}
 }
 /* Motion: one ease, short and physical. Pages rise into place, the pen fills, the dose
    marks stack up. All of it stops under Reduce Motion. */
@@ -490,7 +511,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   .enter>*:nth-child(n+5){animation-delay:.2s}
   .pa-liq{animation:fill 1.6s var(--ease) .25s both}
   .pa-glint{animation:glint 6s ease-in-out 2s infinite}
-  .g-bar i{animation:seg .5s var(--ease) both;animation-delay:calc(var(--i) * 16ms)}
+  .pa-mark{animation:seg .5s var(--ease) both;animation-delay:calc(var(--i) * 16ms)}
   .out-num{animation:pop .45s var(--ease) both}
   .chip,.pick,.reg,.day,.btn-cal{transition:transform .25s var(--ease),border-color .2s,background .2s,color .2s}
   .pick:active,.chip:active,.day:active,.btn-cal:active{transform:scale(.96)}
@@ -501,11 +522,13 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
    compound's name travels from its row into the title. */
 .bar{view-transition-name:bar}
 ::view-transition-group(ctitle){animation-duration:.55s;animation-timing-function:var(--ease)}
-::view-transition-old(root){animation:.2s ease-out both vt-out}
-::view-transition-new(root){animation:.5s var(--ease) both vt-in}
+::view-transition-old(root){animation:.09s ease-out both vt-out}
+::view-transition-new(root){animation:.44s var(--ease) .06s both vt-in}
+::view-transition-old(ctitle){display:none}
+::view-transition-new(ctitle){animation:none}
 @keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
 @keyframes vt-in{from{opacity:0;transform:translateY(18px)}}
-@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(.72)}}
+@keyframes fill{from{transform:scaleX(0)}}
 @keyframes glint{0%,60%{transform:translateX(0);opacity:0}65%{opacity:.9}90%{transform:translateX(120px);opacity:0}100%{opacity:0}}
 @keyframes seg{from{transform:scaleY(0);opacity:0}}
 @keyframes pop{from{opacity:0;transform:translateY(6px)}}
@@ -523,7 +546,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="liq" x1="0" x2="1"><stop offset="0" stop-color="#7C4C24"/><stop offset=".7" stop-color="#C88A4E"/><stop offset="1" stop-color="#E7B173"/></linearGradient></defs></svg>
 <main id="app" class="wrap page-index" tabindex="-1"><div class="idx-hero"><div class="idx-head">
-  <div class="cat">Compound guide</div><div class="ruo">Sold for research use only</div>
+  <div class="cat">Compound guide</div><div class="ruo">Research use only</div>
   <h1>What it is,<br>and how to use it.</h1>
   <p>What each compound actually does, how often and when to take it, what the evidence really says, and how many doses are in your pen.</p>
 </div></div></main>
@@ -537,7 +560,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
   if (!x) return;
   var app = document.getElementById("app");
   app.className = "wrap page-compound";
-  app.innerHTML = '<div class="hero"><div class="hero-txt"><div class="cat">' + x[1] + '</div><div class="ruo">Sold for research use only</div>' +
+  app.innerHTML = '<div class="hero"><div class="hero-txt"><div class="cat">' + x[1] + '</div><div class="ruo">Research use only</div>' +
     "<h1>" + x[0] + '</h1><div class="what">' + x[2] + '</div><div class="cls">' + x[3] + "</div></div></div>";
   document.documentElement.classList.remove("deep");
 })();
@@ -624,30 +647,60 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
 
   /* The pen, drawn as line art: the compound's name on the label, a window that
      fills. `empty` draws it unfilled, waiting for a dose. */
-  function sizeLabel(c) {
-    return c.sizes.map(function (z) { return fmtNum(z.qty) + " " + z.unit; }).join(" · ");
-  }
-  function penArt(name, sub, empty) {
-    var fs = Math.min(18, Math.floor(158 / Math.max(6, name.length * 0.56)));
-    var ticks = "";
-    for (var i = 0; i < 12; i++) {
-      var x = 316 + i * 9;
-      ticks += '<line x1="' + x + '" y1="44" x2="' + x + '" y2="' + (i % 4 ? 51 : 57) + '"/>';
+  /* The pen, drawn as line art, with the compound's name on its label.
+     opts.full   the window filled, as a fresh pen
+     opts.marks  the window holds one mark per dose (or per few doses), the
+                 dose count for what you picked; opts.rest adds a stub for a
+                 part-dose left over, opts.stepOf tints marks by step
+     opts.spray  drawn as the nasal spray bottle instead
+     Neither fill nor marks: an empty pen, waiting for a dose. */
+  function penArt(name, sub, opts) {
+    opts = opts || {};
+    var marks = opts.marks || 0, wx = marks ? 236 : 310, wEnd = 420, inner = "";
+    var labelW = wx - 152;
+    var fs = Math.min(18, Math.floor(labelW / Math.max(5, name.length * 0.56)));
+    if (marks) {
+      var per = Math.max(1, Math.ceil(marks / 40)), m = Math.ceil(marks / per), slots = m + (opts.rest ? 0.4 : 0);
+      var W = wEnd - wx - 6, gap = m > 30 ? 1.5 : 2, sw = (W - gap * (m + (opts.rest ? 1 : 0) - 1)) / slots, x = wx + 3;
+      for (var k = 0; k < m; k++) {
+        var st = opts.stepOf ? ' st-' + (opts.stepOf[k * per] % 4) : "";
+        inner += '<rect class="pa-mark' + st + '" style="--i:' + k + '" x="' + x.toFixed(1) + '" y="45" width="' + sw.toFixed(1) + '" height="20" rx="1.5"/>';
+        x += sw + gap;
+      }
+      if (opts.rest) inner += '<rect class="pa-mark rest" style="--i:' + m + '" x="' + x.toFixed(1) + '" y="45" width="' + (sw * 0.4).toFixed(1) + '" height="20" rx="1.5"/>';
+    } else {
+      if (opts.full) inner += '<rect class="pa-liq" x="' + (wx + 2) + '" y="43" width="' + (wEnd - wx - 4) + '" height="24" rx="4" fill="url(#liq)"/>';
+      var t = "";
+      for (var q = 0; q < 12; q++) {
+        var tx = wx + 6 + q * 9;
+        t += '<line x1="' + tx + '" y1="44" x2="' + tx + '" y2="' + (q % 4 ? 51 : 57) + '"/>';
+      }
+      inner += '<g class="pa-ticks' + (opts.full ? "" : " dim") + '">' + t + "</g>";
     }
-    return '<svg class="pen-art pen-c" viewBox="0 0 520 110" aria-hidden="true" focusable="false">' +
-      '<rect class="pa-body" x="6" y="31" width="118" height="48" rx="13"/>' +
-      '<line class="pa-line" x1="104" y1="31" x2="104" y2="79"/>' +
-      '<text class="pa-brand" x="24" y="59">AXIOM</text>' +
-      '<rect class="pa-body" x="130" y="27" width="300" height="56" rx="10"/>' +
+    var head = opts.spray
+      ? '<rect class="pa-body" x="8" y="45" width="34" height="20" rx="6"/>' +
+        '<rect class="pa-body" x="46" y="35" width="70" height="40" rx="6"/>' +
+        '<g class="pa-line"><line x1="62" y1="35" x2="62" y2="75"/><line x1="78" y1="35" x2="78" y2="75"/><line x1="94" y1="35" x2="94" y2="75"/></g>'
+      : '<rect class="pa-body" x="6" y="31" width="118" height="48" rx="13"/>' +
+        '<line class="pa-line" x1="104" y1="31" x2="104" y2="79"/>' +
+        '<text class="pa-brand" x="24" y="59">AXIOM</text>';
+    var tail = opts.spray
+      ? '<rect class="pa-body" x="436" y="27" width="70" height="56" rx="18"/>'
+      : '<rect class="pa-body" x="436" y="33" width="56" height="44" rx="8"/>' +
+        '<g class="pa-line"><line x1="448" y1="38" x2="448" y2="72"/><line x1="458" y1="38" x2="458" y2="72"/>' +
+        '<line x1="468" y1="38" x2="468" y2="72"/><line x1="478" y1="38" x2="478" y2="72"/></g>' +
+        '<rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/>';
+    return '<svg class="pen-art pen-c' + (opts.spray ? " is-spray" : "") + '" viewBox="0 0 520 110" aria-hidden="true" focusable="false">' +
+      head + '<rect class="pa-body" x="' + (opts.spray ? 122 : 130) + '" y="27" width="' + (opts.spray ? 308 : 300) + '" height="56" rx="10"/>' +
       '<text class="pa-name" x="146" y="56" style="font-size:' + fs + 'px">' + esc(name) + "</text>" +
-      '<text class="pa-sub" x="146" y="72">' + esc(sub) + "</text>" +
-      (empty ? "" : '<rect class="pa-liq" x="312" y="43" width="106" height="24" rx="4" fill="url(#liq)"/>') +
-      '<rect class="pa-win" x="310" y="41" width="110" height="28" rx="5"/>' +
-      '<g class="pa-ticks' + (empty ? " dim" : "") + '">' + ticks + "</g>" +
-      '<rect class="pa-body" x="436" y="33" width="56" height="44" rx="8"/>' +
-      '<g class="pa-line"><line x1="448" y1="38" x2="448" y2="72"/><line x1="458" y1="38" x2="458" y2="72"/>' +
-      '<line x1="468" y1="38" x2="468" y2="72"/><line x1="478" y1="38" x2="478" y2="72"/></g>' +
-      '<rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/></svg>';
+      '<text class="pa-sub" x="146" y="73">' + esc(sub) + "</text>" +
+      inner + '<rect class="pa-win" x="' + wx + '" y="41" width="' + (wEnd - wx) + '" height="28" rx="5"/>' + tail + "</svg>";
+  }
+  /* Short enough to sit on the pen's label: "10 mg", "10 mg · 20 mg", or "5 sizes · 10–80 mg". */
+  function sizeLabel(c) {
+    var q = c.sizes.map(function (z) { return z.qty; }), u = c.sizes[0].unit;
+    if (q.length <= 2) return q.map(function (x) { return fmtNum(x) + " " + u; }).join(" · ");
+    return q.length + " sizes · " + fmtNum(Math.min.apply(null, q)) + "–" + fmtNum(Math.max.apply(null, q)) + " " + u;
   }
 
   function renderIndex() {
@@ -661,7 +714,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     var html =
       '<div class="idx-hero"><div class="idx-head">' +
         '<div class="cat">Compound guide</div>' +
-        '<div class="ruo">Sold for research use only</div>' +
+        '<div class="ruo">Research use only</div>' +
         "<h1>What it is,<br>and how to use it.</h1>" +
         "<p>What each compound actually does, how often and when to take it, what the evidence " +
         "really says, and how many doses are in your pen.</p>" +
@@ -671,7 +724,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
         '<div class="search"><input id="q" type="search" aria-label="Search compounds" placeholder="Search a compound, or what it is for" autocomplete="off" /></div>' +
         '<p class="hits" id="hits" aria-live="polite"></p>' +
       "</div>" + SIDE_HTML + "</div>" +
-      '<nav class="cats" id="cats" aria-label="Categories"></nav>' +
+      '<div class="catbar"><nav class="cats" id="cats" aria-label="Categories"></nav></div>' +
       '<div id="list"></div>' +
       '<button type="button" class="totop" id="totop">Back to top</button>' +
       '<footer class="scope"><p><strong>What this is.</strong> Reference material for compounds sold for research use. ' +
@@ -723,7 +776,8 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
           return '<a class="item" data-slug="' + esc(c.slug) + '" href="' + hrefFor(c.slug) + '">' +
             '<div class="item-main"><div class="item-top"><div class="item-name">' + hl(c.name, term) + "</div>" +
             '<div class="item-cad">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div></div>" +
-            '<div class="item-sub">' + hl(CAT_NOTE[cat] ? c.what.replace(CAT_NOTE[cat].cut, "") : c.what, term) + "</div>" +
+            itemSub(CAT_NOTE[cat] ? c.what.replace(CAT_NOTE[cat].cut, "") : c.what, term) +
+            hitLine(c, term) +
             '<ul class="item-ben">' + c.benefits.slice(0, 2).map(function (x) {
               return "<li>" + hl(x.b, term) + "</li>";
             }).join("") + "</ul></div>" +
@@ -744,6 +798,28 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
       if (target) target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     });
     draw();
+  }
+
+  /* A row's description: the first sentence always, the rest from tablet width up. */
+  function itemSub(what, term) {
+    var m = /^(.+?[.!?])(\s+.+)?$/.exec(what);
+    var first = m ? m[1] : what, rest = m && m[2] ? m[2] : "";
+    return '<div class="item-sub">' + hl(first, term) + (rest ? '<span class="item-more">' + hl(rest, term) + "</span>" : "") + "</div>";
+  }
+  /* When a search matches text the row doesn't show, say where it matched. */
+  function hitLine(c, term) {
+    if (!term) return "";
+    var shown = (c.name + " " + c.what + " " + (c.benefits[0] ? c.benefits[0].b : "")).toLowerCase();
+    if (shown.indexOf(term) >= 0) return "";
+    var pool = c.benefits.map(function (x) { return x.b + " " + x.how; }).concat([c.cls]);
+    for (var i = 0; i < pool.length; i++) {
+      var t = pool[i], at = t.toLowerCase().indexOf(term);
+      if (at < 0) continue;
+      var from = Math.max(0, t.lastIndexOf(" ", Math.max(0, at - 40)));
+      var snip = (from > 0 ? "\u2026" : "") + t.slice(from, at + term.length + 50).trim() + "\u2026";
+      return '<div class="item-hit"><span>Matched in the details:</span> ' + hl(snip, term) + "</div>";
+    }
+    return "";
   }
 
   /* A sentence every row in a category would repeat is said once, under its heading. */
@@ -805,33 +881,33 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     app.innerHTML =
       '<div class="hero"><div class="hero-txt">' +
         '<div class="cat">' + esc(c.category) + "</div>" +
-        '<div class="ruo">Sold for research use only</div>' +
+        '<div class="ruo">Research use only</div>' +
         '<h1 style="view-transition-name:ctitle">' + esc(c.name) + "</h1>" +
         '<div class="what">' + esc(c.what) + "</div>" +
         '<div class="cls">' + esc(c.cls) + "</div>" +
+        '<div class="ev tone-' + ev.tone + '">' +
+          '<div class="ev-top"><i class="ev-dot"></i><div class="ev-label">' + esc(ev.label) + "</div></div>" +
+          "<p>" + esc(c.evidenceNote) + "</p>" +
+        "</div>" +
         '</div><div class="hero-side">' +
-        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), false) + "</div>" +
+        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), { full: true }) + "</div>" +
         '<div class="glance">' +
           "<div><span>How often</span><b>" + esc(CAD_WORD[c.cadence] || c.cadence) + "</b></div>" +
           "<div><span>When</span><b>" + esc(c.timing.when) + "</b></div>" +
           "<div><span>How</span><b>" + esc(c.route.split(" / ")[0]) + "</b></div>" +
           "<div><span>Lasts in body</span><b>" + esc(c.halfLife.replace(/ \(.*\)/, "")) + "</b></div>" +
         "</div>" +
-        '<div class="ev tone-' + ev.tone + '">' +
-          '<div class="ev-top"><i class="ev-dot"></i><div class="ev-label">' + esc(ev.label) + "</div></div>" +
-          "<p>" + esc(c.evidenceNote) + "</p>" +
-        "</div>" +
       "</div></div>" +
 
       /* The page reads in the order you need it: what it does, what to know
          before starting, how to take it, your pen, then storage. The bar under
          the hero jumps to each step. */
-      '<nav class="cats toc" id="toc" aria-label="On this page">' +
+      '<div class="catbar toc-bar"><nav class="cats toc" id="toc" aria-label="On this page">' +
         [["s-does", "What it does"], ["s-safe", "Before you start"], ["s-how", "How to take it"],
          ["s-pen", sprayable ? "Your pen or spray" : "Your pen"], ["s-care", "Storage"]].map(function (t, i) {
           return '<button type="button" class="chip" data-to="' + t[0] + '"><span class="chip-n">' + (i + 1) + "</span>" + t[1] + "</button>";
         }).join("") +
-      "</nav>" +
+      "</nav></div>" +
 
       '<section class="sec benefits" id="s-does"><h2 class="sh"><span class="sn" aria-hidden="true">01</span>What it does</h2>' +
         '<p class="ruo-note">These are findings from research, not medical claims. ' +
@@ -942,8 +1018,7 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
               "amount as the pen, and each pump gives " + fmtNum(c.spray.perPump * 1000) + " mcg (" +
               fmtNum(c.spray.perPump) + " " + unit + "). This works out how many doses yours holds and how long " +
               "it lasts. It does not tell you what your dose should be."
-            : "Your pen comes ready to use — the mixing water is already in the quantity " +
-              "shown, so there is nothing to prepare. This works out how many doses are in your pen and how long " +
+            : "This works out how many doses are in your pen and how long " +
               "it lasts. It does not tell you what your dose should be.") + "</div>" +
         "</div>" +
         '<div id="sched-wrap"></div></div>' +
@@ -1012,9 +1087,10 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     var schedWrap = document.getElementById("sched-wrap");
     /* Wide screens only: holds the right half until there are dates to show. */
     function schedEmpty() {
-      return '<div class="sched-empty"><div aria-hidden="true">' + penArt(c.name, sizeLabel(c), true) + "</div><b>Your dose dates</b>" +
+      return '<div class="sched-empty"><div aria-hidden="true">' + penArt(c.name, sizeLabel(c), { spray: form === "spray" }) + "</div><b>Your dose dates</b>" +
         "Pick your " + holder() + " and your dose. Every dose through to the end of the " + holder() +
-        " lands here, with buttons to add them to your calendar.</div>";
+        " lands here, with buttons to add them to your calendar." +
+        '<div class="sched-ghost" aria-hidden="true">' + new Array(16).join("<i></i>") + "</div></div>";
     }
     var weekEl = document.getElementById("week");
     var weekNote = document.getElementById("week-note");
@@ -1403,12 +1479,10 @@ mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;
     /* The pen, drawn: one mark per dose (or per few doses in a big pen), plus a
        faint stub for anything left over that is less than a full dose. */
     function gauge(n, rest, stepOf) {
-      var per = Math.max(1, Math.ceil(n / 40)), marks = Math.ceil(n / per), segs = "";
-      for (var i = 0; i < marks; i++) segs += '<i' + (stepOf ? ' class="st-' + (stepOf[i * per] % 4) + '"' : "") + ' style="--i:' + i + '"></i>';
-      if (rest) segs += '<i class="rest" style="--i:' + marks + '"></i>';
+      var per = Math.max(1, Math.ceil(n / 40)), q = parseFloat(f.qty.value);
       return '<div class="gauge" role="img" aria-label="' + n + " doses in this " + holder() + '">' +
-        '<span class="g-cap"></span><span class="g-bar">' + segs + '</span><span class="g-dial"></span></div>' +
-        (per > 1 ? '<div class="g-key">Each mark is ' + per + " doses</div>" : "");
+        penArt(c.name, fmtNum(q) + " " + c.pen.unit + " " + holder(), { marks: n, rest: rest, stepOf: stepOf, spray: form === "spray" }) +
+        "</div>" + (per > 1 ? '<div class="g-key">Each mark is ' + per + " doses</div>" : "");
     }
 
     /* Every dose date, through to the end of the pen. */
