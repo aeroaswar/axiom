@@ -130,7 +130,7 @@ dict(slug="adamax", name="Adamax", cat="Brain & Mood",
 
 
 dict(slug="adamax-1032-da", name="Adamax 1032 Da", cat="Brain & Mood",
-  what="Adamax as the supplier lists its 1032 Da form, sold as its own lot. A modified version of Semax, built to last longer and hit harder. Newer and much less studied than the original.",
+  what="A different blend from plain Adamax, named by its molecular weight: 1032 Da. Same family, a modified Semax built to last longer. The research below is for the Adamax family, not this blend on its own.",
   cls="Modified ACTH(4-10) / Semax analogue", half="Longer than Semax", route="Pen under the skin or nasal spray",
   cadence="daily", days=[1,1,1,1,1,0,0], perWeek=5,
   cadNote="Daily, usually as a short course. Longer-lasting than Semax, so fewer doses a day.",

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """Emit dosage-guide/compounds.js from the category tables."""
 import json, io, os, re, sys
+
+# "regional" compounds that are a registered medicine somewhere. The rest are sold
+# only as supplements or cosmetics, and get their own label so it never reads "approved".
+APPROVED_SOMEWHERE = {"cerebrolysin", "selank", "selank-semax", "semax", "thymalin", "thymosin-alpha-1"}
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from data1 import C1
 from data2 import C2
@@ -184,7 +188,8 @@ for i, c in enumerate(ALL):
       "timing": {"when": c["when"], "food": c["food"], "note": c["timeNote"],
                  "time": c.get("time") or default_time(c["when"])},
       "perWeek": c["perWeek"],
-      "evidence": c["ev"], "evidenceNote": c["evNote"],
+      "evidence": ("sold" if c["ev"] == "regional" and c["slug"] not in APPROVED_SOMEWHERE else c["ev"]),
+      "evidenceNote": c["evNote"],
       "protocol": [{"k": k, "v": v, "n": n} for k, v, n in c["protocol"]],
       # Each benefit is a headline and, where it has been written, how it works.
       "benefits": [{"b": bn[0], "how": bn[1]} if isinstance(bn, tuple) else {"b": bn, "how": ""}
@@ -221,9 +226,10 @@ out.write("""];
 window.HANDLING = "Your pen arrives ready to use — the mixing water is already in it, so there is nothing to prepare. Let it come to room temperature before you use it, and finish it within 28 days of the first dose.";
 
 window.EVIDENCE_META = {
-  label:       { label: "Approved medicine",        tone: "solid", blurb: "This is an approved medicine. The doses shown are the official ones." },
+  label:       { label: "Approved as a brand-name medicine", tone: "solid", blurb: "The brand-name version is an approved medicine, and the doses shown are its official ones. This pen is sold for research use, not as that medicine." },
   trial:       { label: "Studied in people",        tone: "mid",   blurb: "Not approved, but tested in real human trials. The doses shown are what those trials used — not an official regimen." },
-  regional:    { label: "Approved or sold in some countries", tone: "mid", blurb: "Approved or sold in certain countries only. Check the position where you are." },
+  regional:    { label: "A medicine in some countries", tone: "mid", blurb: "Registered as a medicine in certain countries only. Check the position where you are." },
+  sold:        { label: "Supplement or cosmetic, not a medicine", tone: "mid", blurb: "Sold as a supplement or cosmetic in some countries. Not approved as a medicine anywhere." },
   preclinical: { label: "Lab research only",        tone: "open",  blurb: "Only lab and animal studies exist. No human dose has been established, and this guide will not invent one." }
 };
 """)
