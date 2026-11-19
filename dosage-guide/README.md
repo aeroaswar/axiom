@@ -83,19 +83,22 @@ Per compound, in order:
 
 1. **At a glance** — how often, when, how it goes in, how long it lasts in the body.
 2. **How sure are we** — which evidence tier the doses below come from.
-3. **How often** — with a seven-day strip you can shift (see below).
-4. **When to take it** — time of day, food, and why that timing rather than another.
-5. **Doses** — the documented rows, each with its provenance.
-6. **Watch out for** — placed before the calculator, so the cautions are read
-   before the first dose rather than after the benefits and the storage notes.
-7. **Your pen** — four taps: compound, pen, dose, schedule.
-8. **Your dose dates** — every dose in the pen on real dates, with calendar export.
-9. **What it is used for**, **Looking after it**, and scope.
+3. **Benefits** — what it does for you, straight under the name and the evidence
+   tier, so every benefit is read alongside how well it is supported.
+4. **How often** — with a seven-day strip you can shift (see below).
+5. **When to take it** — time of day, food, and why that timing rather than another.
+6. **Doses** — the documented rows, each with its provenance.
+7. **Watch out for** — placed before the calculator, so the cautions are read
+   before the first dose rather than after the storage notes.
+8. **Your pen** — four taps: compound, pen, dose, schedule.
+9. **Your dose dates** — every dose in the pen on real dates, with calendar export.
+10. **Looking after it**, and scope.
 
-The index lists everything by category. Each row leads with the compound's own
-plain-language first sentence — *"A weekly shot that copies two gut hormones"* —
-rather than its pharmacology class, which most readers cannot parse. The class
-is still searchable: the search covers name, class, category and description.
+The index lists everything by category. Each row leads with what the compound
+does, in its own plain words — *"A weekly shot that copies two gut hormones…"* —
+then its two main benefits, rather than its pharmacology class, which most
+readers cannot parse. The class is still searchable: the search covers name,
+class, category, description and benefits.
 
 ### More than one schedule
 

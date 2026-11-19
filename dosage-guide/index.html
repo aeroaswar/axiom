@@ -240,6 +240,11 @@ ul.bul{list-style:none;display:flex;flex-direction:column;gap:13px}
 ul.bul li{position:relative;padding-left:22px;font-size:0.8529rem;color:#d8d1c6;line-height:1.62}
 ul.bul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
 ul.warn li::before{border-color:var(--muted-2);border-radius:0}
+ul.ben{gap:20px}
+ul.ben li{color:var(--muted)}
+.ben-b{display:block;color:var(--ink);font-weight:600;font-size:0.9412rem;line-height:1.45}
+.ben-how{display:block;margin-top:5px;font-size:0.8235rem;line-height:1.6}
+.ben-how i{display:block;font-style:normal;font-size:0.6471rem;font-weight:600;color:var(--accent);margin-bottom:2px}
 p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
 /* ---------- Scope ---------- */
@@ -263,14 +268,17 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 .search input::placeholder{color:var(--muted-2)}
 .grp{padding:24px 0;border-bottom:1px solid var(--line-soft)}
 .grp h3{font-size:0.7647rem;color:var(--accent);margin-bottom:12px;font-weight:600}
-.item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);transition:.18s}
+.item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);transition:.18s}
 .item:last-child{border-bottom:none}
 @media (hover:hover){.item:hover{padding-left:6px}}
 .item-main{flex:1;min-width:0}
 .item-name{font-family:var(--display);font-size:1.0588rem;font-weight:400}
-.item-sub{font-size:0.7353rem;color:var(--muted);margin-top:4px;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
-.item-cad{font-size:0.7059rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 10px;flex:none;font-weight:500}
-.arrow{color:var(--muted-2);flex:none}
+.item-sub{font-size:0.7647rem;color:var(--muted);margin-top:4px;line-height:1.45}
+.item-ben{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.item-ben li{position:relative;padding-left:14px;font-size:0.7353rem;color:#d8d1c6;line-height:1.45}
+.item-ben li::before{content:"";position:absolute;left:1px;top:.5em;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
+.item-cad{margin-top:2px;font-size:0.7059rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 10px;flex:none;font-weight:500}
+.arrow{color:var(--muted-2);flex:none;margin-top:8px}
 .empty{padding:34px 0;color:var(--muted-2);font-size:0.8235rem}
 
 /* Touch feedback, and the system motion setting. */
@@ -303,7 +311,9 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 @media (min-width:820px){
   :root{--maxw:1120px;--gut:56px}
   .page-compound{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
-  .page-compound>.hero,.page-compound>.pen,.page-compound>.scope{grid-column:1/-1}
+  .page-compound>.hero,.page-compound>.pen,.page-compound>.scope,
+  .page-compound>.benefits,.page-compound>.care{grid-column:1/-1}
+  .benefits ul.bul{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);row-gap:24px}
   /* Hero: the name and blurb on the left, the at-a-glance strip and evidence on the right. */
   .page-compound>.hero{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .hero-side>.glance{margin-top:0;grid-template-columns:repeat(2,1fr)}
@@ -394,13 +404,6 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     return n;
   }
 
-  /* The list leads with what a compound does, in the page's own plain words —
-     not its pharmacology class, which most readers cannot parse. */
-  function firstSentence(t) {
-    var m = /^(.+?[.!?])(\s|$)/.exec(String(t));
-    return m ? m[1] : String(t);
-  }
-
   function renderIndex() {
     back.hidden = true;
     app.className = "wrap page-index";
@@ -429,7 +432,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       var term = q.value.trim().toLowerCase();
       var hits = window.COMPOUNDS.filter(function (c) {
         if (!term) return true;
-        return (c.name + " " + c.cls + " " + c.category + " " + c.what + " " + c.cadence)
+        return (c.name + " " + c.cls + " " + c.category + " " + c.what + " " + c.benefits.map(function (x) { return x.b + " " + x.how; }).join(" ") + " " + c.cadence)
           .toLowerCase().indexOf(term) >= 0;
       });
       if (!hits.length) {
@@ -443,9 +446,14 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       });
       list.innerHTML = order.map(function (cat) {
         return '<div class="grp"><h3>' + esc(cat) + "</h3>" + groups[cat].map(function (c) {
+          /* What it does, in the page's own plain words, then its two main benefits —
+             not its pharmacology class, which most readers cannot parse. */
           return '<a class="item" href="#' + encodeURIComponent(c.slug) + '">' +
             '<div class="item-main"><div class="item-name">' + esc(c.name) + "</div>" +
-            '<div class="item-sub">' + esc(firstSentence(c.what)) + "</div></div>" +
+            '<div class="item-sub">' + esc(c.what) + "</div>" +
+            '<ul class="item-ben">' + c.benefits.slice(0, 2).map(function (x) {
+              return "<li>" + esc(x.b) + "</li>";
+            }).join("") + "</ul></div>" +
             '<div class="item-cad">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div>" +
             '<svg class="arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
             "</a>";
@@ -508,6 +516,15 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
           "<p>" + esc(c.evidenceNote) + "</p>" +
         "</div>" +
       "</div></div>" +
+
+      /* What it does is the line under the name; what it does for you comes next,
+         before the schedule and the calculator. */
+      '<section class="benefits"><h2>Benefits</h2><ul class="bul ben">' +
+        c.benefits.map(function (x) {
+          return '<li><b class="ben-b">' + esc(x.b) + "</b>" +
+            (x.how ? '<span class="ben-how"><i>How it works</i>' + esc(x.how) + "</span>" : "") + "</li>";
+        }).join("") +
+      "</ul></section>" +
 
       "<section><h2>How often</h2>" +
         '<div class="cad-head"><div class="cad-word" id="cad-word">' +
@@ -598,11 +615,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         '<div id="sched-wrap"></div></div>' +
       "</section>" +
 
-      "<section><h2>What it is used for</h2><ul class=\"bul\">" +
-        c.benefits.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") +
-      "</ul></section>" +
-
-      "<section><h2>Looking after it</h2>" +
+      '<section class="care"><h2>Looking after it</h2>' +
         '<p class="body">' + esc(c.storage) + "</p>" +
         '<p class="body" style="margin-top:14px;color:var(--muted-2);font-size:0.7647rem">' + esc(window.HANDLING) +
           (sprayable ? " The nasal spray is ready to use too, and is kept the same way." : "") + "</p>" +
