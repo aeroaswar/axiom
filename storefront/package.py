@@ -21,8 +21,6 @@ for name in ['base.css','design.css','editorial-v2.css','stone-v3.css']:
     css=re.sub(r'url\(([\'"]?)('+ASSET+r')\1\)',lambda m:'var('+css_assets.setdefault(m[2],'--asset-'+str(len(css_assets)))+')',css)
     html=re.sub(r'<link rel="stylesheet" href="'+re.escape(name)+r'(?:\?v=[a-z0-9]+)?">',lambda m:'<style>'+css+'</style>',html)
 html=html.replace('</head>','<style>:root{'+';'.join(f'{v}:url({data_uri(p)})' for p,v in css_assets.items())+'}</style></head>',1)
-# The dictionary is present before the early language check, so nothing is fetched.
-html=html.replace('<script>try{',inline((root/'i18n-id.js').read_text())+'<script>try{',1)
 # The standalone copy embeds each photo once at full size, so cards drop their 640px srcset.
 nosrcset=lambda text: re.sub(r' (?:srcset|sizes)=\\"[^"\\]*\\"','',text)
 pages=nosrcset(''.join(c.read_text() for c in chunks))
@@ -37,7 +35,7 @@ for name,code in scripts.items():
 (root/'AXIOM-storefront.html').write_text(html)
 
 # Deployable static package: the served files, page chunks and every asset they reference.
-files=['index.html','base.css','design.css','editorial-v2.css','stone-v3.css','content.js','app.js','design.js','i18n-id.js','README.md','serve.py']+['pages/'+c.name for c in chunks]
+files=['index.html','base.css','design.css','editorial-v2.css','stone-v3.css','content.js','app.js','design.js','README.md','serve.py']+['pages/'+c.name for c in chunks]
 with zipfile.ZipFile(root/'AXIOM-storefront.zip','w',zipfile.ZIP_DEFLATED) as z:
     for file in files: z.write(root/file,'axiom-storefront/'+file)
     for asset in sorted({a for f in files for a in re.findall(ASSET,(root/f).read_text())}):
