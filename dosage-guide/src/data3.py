@@ -14,7 +14,7 @@ dict(slug="bpc-157", name="BPC-157", cat="Healing & Repair",
   when="Morning and evening", food="Either",
   timeNote="Split dosing shows up in animal studies because it doesn't last long. Some protocols inject near the injured area, though the evidence for that is thin.",
   ev="preclinical", evNote="No completed human trials. There is no established human dose, and any figure quoted as one isn't supported by published evidence.",
-  protocol=[NOHUMAN, ("Animal studies","Micrograms per kg","Animal work shows effects across a wide range. Those numbers don't translate straight to people."),
+  protocol=[NOHUMAN, ("Animal studies","Dosed by body weight","Animal work gives it per kilogram, across a wide range. Those numbers don't translate straight to people."),
             ("Legal status","Not approved","On the FDA's excluded-substances list. " + RESEARCH)],
   benefits=[
     ("Faster tendon, ligament and muscle healing — the most repeated finding in animal work.",

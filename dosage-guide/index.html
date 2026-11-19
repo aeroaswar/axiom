@@ -4,10 +4,17 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>AXIOM — Compound Guide</title>
-<meta name="description" content="AXIOM compound guide — administration cadence, when to apply, documented protocol, a dose and supply calculator, and studied benefits, with the evidence tier stated for every figure." />
+<meta name="description" content="What each AXIOM compound does, how often and when to take it, how strong the evidence is, and how many doses are in your pen." />
 <meta name="theme-color" content="#070605" />
 <meta name="color-scheme" content="dark" />
 <meta name="robots" content="noindex" />
+<link rel="canonical" href="https://axiom-guide-weld.vercel.app/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="AXIOM" />
+<meta property="og:title" content="AXIOM Compound Guide" />
+<meta property="og:description" content="What each AXIOM compound is, how often and when to take it, how strong the evidence is, and how many doses are in your pen." />
+<meta property="og:url" content="https://axiom-guide-weld.vercel.app/" />
+<meta property="og:image" content="https://axiom-guide-weld.vercel.app/icons/icon-512.png" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='117.77 -19.73 109.46 109.46'%3E%3Crect x='117.77' y='-19.73' width='109.46' height='109.46' fill='%23070605'/%3E%3Cpath fill='%23F2EDE5' d='M132 2 148.5 2 170.29 24.3 161.85 32.54ZM213 2 196.5 2 174.71 24.3 183.15 32.54ZM132 68 148.5 68 170.29 45.7 161.85 37.46ZM213 68 196.5 68 174.71 45.7 183.15 37.46Z'/%3E%3C/svg%3E" />
 <!-- Home screen: the AXIOM X on onyx, and the short name "AXIOM" under it. -->
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -15,10 +22,21 @@
 <meta name="apple-mobile-web-app-title" content="AXIOM" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="mobile-web-app-capable" content="yes" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+<!-- The brand font is served with the page (one 26 KB file, both weights), so no other host holds up the first paint. -->
+<link rel="preload" href="assets/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="compounds.js" as="script" />
+<script>
+  /* A direct link to a compound hides the static home intro until the page draws. */
+  if (location.hash.length > 1 || /[?&]c=/.test(location.search) || /^\/[a-z0-9-]+\/?$/.test(location.pathname) && location.pathname !== "/index.html")
+    document.documentElement.classList.add("deep");
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"AXIOM Compound Guide","url":"https://axiom-guide-weld.vercel.app/",
+ "description":"What each AXIOM compound is, how often and when to take it, how strong the evidence is, and how many doses are in your pen.",
+ "publisher":{"@type":"Organization","name":"AXIOM","logo":"https://axiom-guide-weld.vercel.app/icons/icon-512.png"}}
+</script>
 <style>
+@font-face{font-family:"Jost";font-style:normal;font-weight:300 400;font-display:swap;src:url(assets/jost-latin.woff2) format("woff2")}
 :root{
   --bg:#070605; --ink:#F2EDE5; --muted:#9c9488; --muted-2:#8a8276;
   --line:rgba(242,237,229,.12); --line-2:rgba(242,237,229,.22); --line-soft:rgba(242,237,229,.06);
@@ -41,7 +59,7 @@ html{font-size:17px}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
 body{
   background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
-  -webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1;padding-bottom:calc(70px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing:antialiased;padding-bottom:calc(70px + env(safe-area-inset-bottom));
 }
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--accent);color:#0a0704}
@@ -50,7 +68,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- Top bar ---------- */
 .bar{
-  position:sticky;top:0;z-index:20;background:rgba(7,6,5,.86);
+  position:sticky;top:0;z-index:20;background:var(--bg);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   padding-top:env(safe-area-inset-top);
 }
@@ -58,16 +76,20 @@ a{color:inherit;text-decoration:none}
 .bar::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;pointer-events:none;
   background:linear-gradient(rgba(7,6,5,.86),rgba(7,6,5,0))}
 .bar-in{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;height:56px;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad-r) 0 var(--pad-l)}
-.mark{grid-column:2;display:flex;align-items:center;min-height:44px}
+.mark{grid-column:2;display:flex;align-items:center;min-height:44px;padding:0 8px;border-radius:8px}
+.mark:focus-visible{outline-offset:2px}
 .mark img{width:96px;height:auto;display:block}
-.bar .back{grid-column:1;justify-self:start;font-size:1rem;color:var(--accent-bright);margin-left:-8px;padding:0 8px;gap:2px;min-height:44px;display:inline-flex;align-items:center;transition:.2s}
+.bar .back{grid-column:1;justify-self:start;font-size:0.8824rem;color:var(--accent-bright);margin-left:-8px;padding:0 8px;gap:2px;min-height:44px;display:inline-flex;align-items:center;transition:.2s}
 .bar .back:hover{color:var(--ink)}
 .bar .back svg{flex:none}
 .bar .back[hidden]{display:none}
+@media (max-width:479px){
+  .bar .back{font-size:0.8235rem}
+}
 
 /* ---------- Hero ---------- */
 .hero{padding:34px 0 26px;border-bottom:1px solid var(--line-soft)}
-.cat{display:inline-block;font-size:0.7647rem;color:var(--accent);margin-bottom:16px;font-weight:600}
+.cat{display:inline-flex;align-items:center;min-height:26px;vertical-align:middle;font-size:0.7647rem;color:var(--accent);margin-bottom:14px;font-weight:600}
 h1{font-family:var(--brand);font-weight:300;font-size:clamp(1.88rem,8.5vw,2.7rem);line-height:1.08;letter-spacing:-.015em}
 .what{color:#d8d1c6;font-size:0.9412rem;line-height:1.6;margin-top:14px;max-width:52ch}
 .cls{color:var(--muted-2);font-size:0.7647rem;margin-top:12px}
@@ -103,7 +125,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
   font-family:inherit;padding:0;cursor:pointer;transition:.16s}
 .day:hover{border-color:var(--line-2)}
 .day:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.day span{font-size:0.6471rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+.day span{font-size:0.7647rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
 .day i{width:5px;height:5px;border-radius:50%;background:var(--line-2);font-style:normal}
 .day.on{border-color:var(--accent-line);background:var(--accent-soft)}
 .day.on span{color:var(--accent-bright)}
@@ -118,6 +140,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 
 /* ---------- Protocol rows ---------- */
 .rows{border-top:1px solid var(--line-soft)}
+.rows .row:last-child{border-bottom:0}
 .row{padding:15px 0;border-bottom:1px solid var(--line-soft)}
 .row-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
 .row-k{font-size:0.8824rem;color:var(--muted-2);flex:none}
@@ -150,11 +173,11 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .out{margin-top:20px;padding-top:20px;border-top:1px solid var(--line-soft)}
 .out-hero{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .out-num{font-family:var(--brand);font-weight:300;font-size:2.7059rem;line-height:1;color:var(--accent-bright);font-variant-numeric:tabular-nums}
-.out-unit{font-size:0.8824rem;color:var(--muted)}
+.out-unit{font-size:0.8824rem;color:var(--muted);text-wrap:balance}
 .out-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 16px;margin-top:20px}
+.out-grid .out-cell:last-child:nth-child(odd){grid-column:1/-1}
 .out-cell{border-top:1px solid var(--line-soft);padding-top:10px}
 /* Five results in two columns would strand the last one; give it the row. */
-.out-cell:last-child{grid-column:1/-1}
 .out-cell b{display:block;font-family:var(--display);font-size:0.9412rem;font-weight:400;font-variant-numeric:tabular-nums;line-height:1.3}
 .out-cell span{display:block;font-size:0.7647rem;color:var(--muted-2);margin-top:3px;font-weight:500}
 .calc-note{font-size:0.7059rem;color:var(--muted-2);margin-top:16px;line-height:1.6}
@@ -164,7 +187,9 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
 .step-k{display:flex;align-items:center;gap:10px;font-size:0.8824rem;color:var(--ink);margin-bottom:13px;font-weight:600}
 .step-k i{font-style:normal;flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--accent-line);
   color:var(--accent-bright);display:inline-flex;align-items:center;justify-content:center;font-size:0.7059rem;letter-spacing:0}
-.picks{display:flex;flex-wrap:wrap;gap:8px}
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.picks.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.picks .pick{white-space:nowrap}
 .pick{
   min-height:44px;min-width:64px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);
   padding:10px 15px;cursor:pointer;font-family:var(--display);font-size:0.8824rem;
@@ -189,6 +214,7 @@ h2{font-family:var(--sans);font-weight:600;font-size:1.2941rem;letter-spacing:-.
   padding:12px 40px 12px 13px;-webkit-appearance:none;appearance:none;cursor:pointer;
 }
 .pick-select:focus{outline:none;border-color:var(--accent-line)}
+.sched-empty{display:none}
 .out-empty{font-size:0.7941rem;color:var(--muted);line-height:1.6}
 .regimens{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
 .reg{
@@ -240,23 +266,82 @@ ul.bul{list-style:none;display:flex;flex-direction:column;gap:13px}
 ul.bul li{position:relative;padding-left:22px;font-size:0.8529rem;color:#d8d1c6;line-height:1.62}
 ul.bul li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
 ul.warn li::before{border-color:var(--muted-2);border-radius:0}
-ul.ben{gap:20px}
+/* "Research use only" — on every page, under the category and above the benefits. */
+/* "Research use only" rides on the category line, after a dot: no box, a quieter grey. */
+.ruo{display:inline-flex;align-items:center;min-height:26px;vertical-align:middle;margin:0 0 14px;
+  font-size:0.7647rem;font-weight:500;color:var(--muted)}
+.ruo::before{content:"\00b7";margin:0 10px;color:var(--muted-2);font-weight:700}
+.ruo-note{font-size:0.7647rem;color:var(--muted);line-height:1.55;margin:-6px 0 18px;max-width:60ch}
+.ruo-note b{color:var(--ink);font-weight:600}
+ul.ben{gap:28px}
 ul.ben li{color:var(--muted)}
-.ben-b{display:block;color:var(--ink);font-weight:600;font-size:0.9412rem;line-height:1.45}
+.ben-b{display:block;color:#e6e0d8;font-weight:500;font-size:0.9412rem;line-height:1.45}
 .ben-how{display:block;margin-top:5px;font-size:0.8235rem;line-height:1.6}
-.ben-how i{display:block;font-style:normal;font-size:0.6471rem;font-weight:600;color:var(--accent);margin-bottom:2px}
+.ben-how i{display:block;font-style:normal;font-size:0.7059rem;font-weight:600;letter-spacing:.02em;color:var(--accent-bright);margin-bottom:3px}
 p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
 /* ---------- Scope ---------- */
 .scope{padding:30px 0 10px}
-.scope p{font-size:0.7059rem;color:var(--muted-2);line-height:1.7}
+.scope p{font-size:0.8235rem;color:var(--muted);line-height:1.65}
 .scope p + p{margin-top:11px}
-.scope strong{color:var(--muted);font-weight:500}
+.scope strong{color:var(--ink);font-weight:500}
 
 /* ---------- Index ---------- */
 .idx-hero{padding:44px 0 26px}
+.idx-side{margin-top:14px}
+@media (max-width:819px){.searching .idx-side{display:none}}
+.pen-art{display:block;width:100%;max-width:520px;height:auto;margin:0 0 8px -4px}
+.pa-body{fill:var(--panel);stroke:var(--line-2);stroke-width:1.2}
+.pa-line{stroke:var(--line-2);stroke-width:1.2}
+.pa-win{fill:none;stroke:var(--accent-line);stroke-width:1.2}
+.pa-ticks{stroke:var(--bg);stroke-width:1.4;opacity:.8}
+.pa-liq{transform-box:fill-box;transform-origin:left center}
+.idx-side .pa-liq{transform:scaleX(.72)}
+.idx-side .pa-liq{animation-name:fill72!important}
+@keyframes fill72{from{transform:scaleX(0)}to{transform:scaleX(.72)}}
+.pa-glint{transform-box:fill-box}
+.how3{list-style:none;counter-reset:h;display:grid;gap:14px;margin-top:18px}
+.how3 li{counter-increment:h;display:grid;grid-template-columns:34px 1fr;column-gap:10px;font-size:0.8235rem;line-height:1.5}
+.how3 li::before{content:counter(h,decimal-leading-zero);grid-row:span 2;font-family:var(--brand);font-weight:300;font-size:1.25rem;line-height:1.1;color:var(--accent-bright)}
+.how3 b{font-weight:600;color:var(--ink)}
+.how3 span{color:var(--muted)}
+/* A dose that changes over time. */
+.calc [hidden]{display:none!important}
+.tg{display:flex;align-items:center;gap:12px;margin-top:16px;min-height:44px;font-size:0.8235rem;color:var(--ink);cursor:pointer}
+.tg{position:relative}
+.tg input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.tg-ui{flex:none;width:44px;height:26px;border-radius:999px;background:var(--line-2);position:relative;transition:background .25s}
+.tg-ui::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--ink);transition:transform .3s var(--ease,ease)}
+.tg input:checked+.tg-ui{background:var(--accent)}
+.tg input:checked+.tg-ui::after{transform:translateX(18px)}
+.tg input:focus-visible+.tg-ui{outline:2px solid var(--accent-bright);outline-offset:3px}
+.steps{margin-top:6px}
+.steps-note{font-size:0.7353rem;color:var(--muted);line-height:1.55;margin-bottom:10px}
+.srow{display:grid;grid-template-columns:22px minmax(0,1fr) auto minmax(0,.8fr) auto 44px;align-items:center;gap:8px;margin-bottom:8px;
+  font-size:0.7353rem;color:var(--muted)}
+.srow-n{font-family:var(--brand);font-size:1.05rem;color:var(--accent-bright);text-align:center}
+.srow input{width:100%;min-width:0;min-height:44px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel-2);
+  color:var(--ink);font:inherit;font-size:0.9412rem;font-variant-numeric:tabular-nums}
+.s-del{min-height:44px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--muted);font-size:1.1rem;cursor:pointer}
+.btn-add{min-height:44px;padding:0 16px;border-radius:999px;border:1px dashed var(--accent-line);background:none;color:var(--accent-bright);font:inherit;font-size:0.8235rem;cursor:pointer;margin-top:2px}
+.step-sum{list-style:none;display:grid;gap:6px;margin-top:14px}
+.step-sum li{display:flex;align-items:baseline;gap:10px;font-size:0.7647rem;color:var(--muted);padding-left:12px;border-left:3px solid var(--stc)}
+.step-sum b{color:var(--ink);font-weight:600;font-size:0.8824rem}
+.st-0{--stc:#E7B173}.st-1{--stc:#C88A4E}.st-2{--stc:#9c6a3c}.st-3{--stc:#F2D3A8}
+.g-bar i[class^="st-"]{background:var(--stc)}
+.sd[class*="st-"]{border-top:2px solid var(--stc)}
+.sd.newpen{outline:1px dashed var(--accent-bright);outline-offset:2px}
+/* The dose gauge under the result: the same pen, one mark per dose. */
+.gauge{display:flex;align-items:center;margin-top:16px;height:34px}
+.g-cap{width:30px;height:24px;border:1px solid var(--line-2);border-radius:7px 3px 3px 7px;background:var(--panel)}
+.g-bar{flex:1;display:flex;gap:2px;height:30px;padding:4px;margin-left:3px;border:1px solid var(--line-2);border-radius:6px;background:var(--panel)}
+.g-bar i{flex:1;border-radius:2px;background:linear-gradient(180deg,var(--accent-bright),var(--accent));transform-origin:bottom}
+.g-bar i.rest{flex:.35;background:var(--line-2)}
+.g-dial{width:16px;height:20px;margin-left:3px;border:1px solid var(--line-2);border-radius:3px 6px 6px 3px;background:var(--panel)}
+.g-key{font-size:0.7059rem;color:var(--muted);margin-top:6px}
 .idx-hero h1{font-size:clamp(1.76rem,7.5vw,2.47rem)}
-.idx-hero p{color:var(--muted);font-size:0.8824rem;margin-top:14px;max-width:46ch}
+@media (min-width:820px){.idx-hero h1{font-size:clamp(3rem,4.6vw,4.25rem);line-height:1.02;letter-spacing:-.02em}}
+.idx-hero p{color:var(--muted);font-size:0.8824rem;margin-top:14px;max-width:62ch}
 .coverage{font-size:0.7353rem;color:var(--muted-2);margin-top:18px;letter-spacing:.02em}
 .coverage b{color:var(--accent);font-weight:500}
 .search{margin-top:24px;position:relative}
@@ -267,19 +352,143 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 .search input:focus{outline:none;border-color:var(--accent-line)}
 .search input::placeholder{color:var(--muted-2)}
 .grp{padding:24px 0;border-bottom:1px solid var(--line-soft)}
-.grp h3{font-size:0.7647rem;color:var(--accent);margin-bottom:12px;font-weight:600}
+.grp h2{display:block;letter-spacing:0;font-size:0.7647rem;color:var(--accent);margin-bottom:12px;font-weight:600}
 .item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--line-soft);transition:.18s}
 .item:last-child{border-bottom:none}
-@media (hover:hover){.item:hover{padding-left:6px}}
+.item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.item-top .item-cad{margin-top:2px}
+.item{margin:0 -12px;padding-left:12px;padding-right:12px}
+@media (hover:hover){
+  .item:hover{background:var(--panel-2);border-radius:12px;box-shadow:inset 0 0 0 1px var(--line)}
+  .item:hover .item-name{color:var(--accent-bright)}
+  .item:hover .arrow{transform:translateX(4px);color:var(--accent-bright)}
+}
+.arrow{transition:transform .2s cubic-bezier(.2,.8,.2,1),color .2s}
 .item-main{flex:1;min-width:0}
 .item-name{font-family:var(--display);font-size:1.0588rem;font-weight:400}
 .item-sub{font-size:0.7647rem;color:var(--muted);margin-top:4px;line-height:1.45}
 .item-ben{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:4px}
 .item-ben li{position:relative;padding-left:14px;font-size:0.7353rem;color:#d8d1c6;line-height:1.45}
 .item-ben li::before{content:"";position:absolute;left:1px;top:.5em;width:5px;height:5px;border:1px solid var(--accent);border-radius:50%}
-.item-cad{margin-top:2px;font-size:0.7059rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 10px;flex:none;font-weight:500}
+.item-cad{font-size:0.7059rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 10px;flex:none;font-weight:500}
 .arrow{color:var(--muted-2);flex:none;margin-top:8px}
 .empty{padding:34px 0;color:var(--muted-2);font-size:0.8235rem}
+
+/* Keyboard focus: one visible ring everywhere. */
+:focus-visible{outline:2px solid var(--accent-bright);outline-offset:3px;border-radius:6px}
+main:focus{outline:none}
+.skip{position:absolute;left:12px;top:-60px;z-index:60;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600}
+.skip:focus{top:calc(env(safe-area-inset-top) + 8px)}
+mark{background:var(--accent-soft);color:var(--accent-bright);border-radius:3px;padding:0 1px}
+.deep .idx-hero{visibility:hidden}
+/* Pen drawings: the label carries the compound's name. */
+.pa-brand{font-family:var(--brand);font-size:11px;letter-spacing:3px;fill:var(--muted)}
+.pa-name{font-family:var(--brand);font-weight:400;fill:var(--ink)}
+.pa-sub{font-family:var(--sans);font-size:11.5px;fill:var(--muted)}
+.pa-ticks.dim{stroke:var(--line-2);opacity:1}
+.hero-pen{margin:22px 0 4px}
+.hero-pen .pen-art{max-width:520px;margin:0 0 0 -4px}
+.sched-empty .pen-art{max-width:360px;margin:0 0 18px}
+.seen .pa-liq,.seen .pa-glint{animation:none!important}
+.grp-note{font-size:0.7647rem;color:var(--muted);line-height:1.55;margin:-4px 0 6px;max-width:60ch}
+.totop{display:block;margin:28px auto 0;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);
+  background:none;color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer}
+@media (max-width:819px){
+  .how3{gap:6px;margin-top:10px}
+  .how3 li span{display:none}
+  .how3 li{grid-template-columns:30px 1fr}
+  .how3 li::before{grid-row:auto;font-size:1rem}
+  .idx-hero{padding-top:30px}
+  .idx-side{margin-top:4px}
+  .idx-side .pen-art{max-width:100%}
+}
+@media (max-width:819px){
+  /* Phones: the first sentence and one benefit per row keep the long list scannable. */
+  .item-ben{display:none}
+  .item-more{display:none}
+}
+.pa-mark{fill:url(#liq);transform-box:fill-box;transform-origin:bottom}
+.pa-mark.rest{fill:var(--line-2)}
+.pa-mark[class*="st-"]{fill:var(--stc)}
+.gauge .pen-art{max-width:100%;margin:14px 0 0}
+.item-hit{font-size:0.7353rem;color:var(--muted);margin-top:6px;line-height:1.45}
+.item-hit span{color:var(--muted-2);font-weight:600}
+.row-v{text-wrap:balance}
+.other{color:var(--muted)}
+.sched-pre{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:16px}
+.sched-pre .sd b{white-space:nowrap}
+.sched-pre .sd{min-width:0}
+.sched-pre .sd b{color:var(--muted)}
+.g-steps{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-soft)}
+.g-steps b{display:block;font-size:0.8824rem;font-weight:600;color:var(--ink)}
+.g-steps span{display:block;font-size:0.7647rem;color:var(--muted);margin-top:2px}
+.g-steps .cal-row{margin-top:10px}
+.pa-band{opacity:.95}
+.hero .cat::before,.grp h2::before{content:"";display:inline-block;width:14px;height:4px;border-radius:2px;background:var(--band,var(--accent));margin-right:9px;vertical-align:middle;position:relative;top:-1px}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:26px 0 6px;border-bottom:1px solid var(--line-soft)}
+.pg{display:flex;flex-direction:column;justify-content:center;min-height:64px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.pg span{font-size:0.7059rem;color:var(--muted);font-weight:500}
+.pg b{font-weight:600;font-size:0.8824rem;color:var(--ink);margin-top:2px}
+.pg.next{text-align:right}
+@media (hover:hover){.pg:hover{border-color:var(--accent-line);background:var(--panel-2)}}
+.warn-sec ul.warn{background:var(--panel);border:1px solid var(--line-soft);border-left:2px solid var(--accent-line);border-radius:12px;padding:16px 20px}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:var(--band);flex:none}
+.day i+i{margin-top:3px}
+.day-k{font-size:0.7059rem;color:var(--muted);margin:-2px 0 8px}
+.pa-day{fill:var(--panel-2);stroke:var(--line);stroke-width:1}
+.pa-day.on{fill:url(#liq);stroke:none;transform-box:fill-box;transform-origin:bottom}
+.pa-dl{font-family:var(--sans);font-size:11px;font-weight:700;fill:var(--muted)}
+.pa-dl.on{fill:#1a1008}
+.date-say{color:var(--accent-bright);font-weight:600;margin-left:4px}
+.arrow{width:16px;height:16px;color:var(--muted)}
+@media (max-width:479px){
+  .pager{grid-template-columns:1fr}
+  .pg.next{text-align:left}
+  .row-top{flex-direction:column;align-items:flex-start;gap:2px}
+  .row-v{text-align:left}
+}
+.pg b{hyphens:none;-webkit-hyphens:none}
+.hero .cat,.grp h2{color:var(--band,var(--accent))}
+.out-hero{flex-wrap:nowrap}
+.out-unit{flex:1;min-width:0}
+.pager{border-bottom:0;padding-bottom:20px}
+/* Numbered steps down the compound page. */
+.sh .sn{font-family:var(--brand);font-weight:300;font-size:1.65rem;line-height:1;color:var(--accent-bright);
+  letter-spacing:.02em;font-variant-numeric:tabular-nums;min-width:1.6em}
+.sec{scroll-margin-top:calc(56px + 84px + env(safe-area-inset-top))}
+.sub h3{font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:14px}
+.sub+.sub,.col+.col>.sub:first-child{border-top:1px solid var(--line-soft);margin-top:28px;padding-top:28px}
+.sched-h{font-size:1.0588rem;font-weight:600;color:var(--ink);margin:34px 0 14px}
+.toc{margin-top:0}
+.cats .chip[aria-current="true"]{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
+.cats .chip[aria-current="true"] .chip-n{color:var(--accent-bright)}
+/* Courses: a course, a break, a course, a break. */
+.course{display:grid;grid-template-columns:1fr 2fr 1fr 2fr;gap:4px;margin:4px 0 16px}
+.course i{font-style:normal;font-size:0.7059rem;font-weight:600;color:var(--muted);padding:7px 8px;border-radius:6px;
+  border:1px dashed var(--line);text-align:center}
+.course i.on{border:1px solid var(--accent-line);background:var(--accent-soft);color:var(--accent-bright)}
+.week-k{font-size:0.7647rem;color:var(--muted);margin-bottom:8px;font-weight:600}
+/* Category chips under the search: sticky below the bar, scroll sideways. */
+/* The chip bar is solid; its scrolling edges fade into the page by overlays, so
+   nothing underneath ever shows through. */
+.catbar{position:sticky;top:calc(56px + env(safe-area-inset-top));z-index:15;background:var(--bg);
+  margin:18px calc(-1 * var(--pad-r)) 0 calc(-1 * var(--pad-l))}
+.catbar{border-bottom:1px solid var(--line-soft)}
+.catbar>i{display:none}
+.catbar::before,.catbar::after{content:"";position:absolute;top:0;bottom:0;width:40px;z-index:1;pointer-events:none}
+.catbar::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.catbar::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.toc-bar{margin-top:0}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:10px var(--pad-r) 10px var(--pad-l);scrollbar-width:none;scroll-padding-inline:var(--pad-l)}
+.cats::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:0.8235rem;cursor:pointer;transition:border-color .2s,background .2s}
+.chip-n{font-size:0.7059rem;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (hover:hover){.chip:hover{border-color:var(--accent-line);background:var(--accent-soft)}}
+.chip:active{opacity:.6;transition-duration:0s}
+.hits{font-size:0.7647rem;color:var(--muted);margin-top:10px;min-height:1.2em}
+.grp{scroll-margin-top:calc(56px + 66px + env(safe-area-inset-top))}
+@media (prefers-reduced-transparency:reduce){.cats{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}}
 
 /* Touch feedback, and the system motion setting. */
 .pick:active,.reg:active,.day:active,.item:active,.btn-cal:active,.bar .back:active,.mark:active{opacity:.6;transition-duration:0s}
@@ -311,38 +520,119 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 @media (min-width:820px){
   :root{--maxw:1120px;--gut:56px}
   .page-compound{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
-  .page-compound>.hero,.page-compound>.pen,.page-compound>.scope,
-  .page-compound>.benefits,.page-compound>.care{grid-column:1/-1}
+  .page-compound>*{grid-column:1/-1}
   .benefits ul.bul{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);row-gap:24px}
   /* Hero: the name and blurb on the left, the at-a-glance strip and evidence on the right. */
   .page-compound>.hero{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
   .hero-side>.glance{margin-top:0;grid-template-columns:repeat(2,1fr)}
-  /* Your pen: the calculator on one half, the dose dates and calendar buttons on the other. */
-  .pen-in{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
-  #sched-wrap>h2:first-child{margin-top:0!important}
+  /* Your pen: the form in two columns (what you have | what you take), then the
+     result and every dose date full width underneath, so nothing sits beside empty space. */
+  .pen .calc{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto;column-gap:40px;padding:8px 28px 24px;align-items:start}
+  .pen .calc>.step:nth-child(1){grid-column:1;grid-row:1}
+  .pen .calc>.step:nth-child(2){grid-column:1;grid-row:2}
+  .pen .calc>.step:nth-child(4){grid-column:1/-1;grid-row:3}
+  .pen .calc>.step:nth-child(3){grid-column:2;grid-row:1/3}
+  .pen .calc>.step:nth-child(4) .fields{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+  .pen .calc>.step:nth-child(4) .field.wide{grid-column:auto}
+  .pen .calc>.out,.pen .calc>.calc-note{grid-column:1/-1}
+  .pen .calc>.step:nth-child(3){border-top:0}
+  .pen .out-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important}
+  .pen .out-cell:last-child{grid-column:auto!important}
+  .gauge .pen-art{max-width:560px}
+  #sched-wrap{margin-top:34px}
+  #sched-wrap>.sched-h:first-child{margin-top:0}
+  .sched-empty .sched-pre{grid-template-columns:repeat(8,minmax(0,1fr))}
+  .page-index .cats{flex-wrap:wrap}
+  .page-index .catbar::before,.page-index .catbar::after{display:none}
+
+  .sched-empty{display:block;border:1px solid var(--line-soft);background:var(--panel);border-radius:14px;padding:26px 24px;
+    font-size:0.8235rem;line-height:1.6;color:var(--muted)}
+  .sched-empty b{display:block;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:6px}
   .pen .fields{grid-template-columns:1fr 1fr}
   .pen .field.wide{grid-column:span 2}
-  .pen .out-grid{grid-template-columns:repeat(2,1fr)}
-  .pen .out-cell:last-child{grid-column:1/-1}
+
   .page-compound .scope{column-count:2;column-gap:var(--gut)}
   .page-compound .scope p{break-inside:avoid}
   /* Index: the categories in two columns. */
-  .page-index #list{column-count:2;column-gap:var(--gut)}
-  .page-index .grp{break-inside:avoid}
+  .grp-items{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut)}
+  .idx-hero{display:grid;grid-template-columns:1.1fr .9fr;grid-template-areas:"head side" "find side";column-gap:var(--gut);align-items:start}
+  .idx-head{grid-area:head}.idx-find{grid-area:find}.idx-side{grid-area:side;margin-top:8px;align-self:center}
+  /* How to take it: schedule and timing on the left, the doses on the right. */
+  .howto .mid{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut);align-items:start}
+  .howto .col>.sub:first-child{border-top:0;margin-top:0;padding-top:0}
+  .warn-sec ul.bul{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--gut)}
+
+  .page-index .grp h2,.page-index .grp-note{break-after:avoid}
+  .page-index .item{break-inside:avoid}
 }
+/* Motion: one ease, short and physical. Pages rise into place, the pen fills, the dose
+   marks stack up. All of it stops under Reduce Motion. */
+:root{--ease:cubic-bezier(.22,1,.36,1)}
+@media (prefers-reduced-motion:no-preference){
+  .enter>*{animation:rise .52s var(--ease) both}
+  .enter>*:nth-child(2){animation-delay:.05s}
+  .enter>*:nth-child(3){animation-delay:.1s}
+  .enter>*:nth-child(4){animation-delay:.15s}
+  .enter>*:nth-child(n+5){animation-delay:.2s}
+  .enter .hero-txt>:not(h1),.enter .hero-side{animation:rise .5s var(--ease) .3s both}
+  .pa-liq{animation:fill 1.6s var(--ease) .25s both}
+  .pa-glint{animation:glint 6s ease-in-out 2s infinite}
+  .pa-mark{animation:seg .5s var(--ease) both;animation-delay:calc(var(--i) * 16ms)}
+  .pa-day.on{animation:seg .5s var(--ease) both;animation-delay:calc(.3s + var(--i) * 50ms)}
+  .out-num{animation:pop .45s var(--ease) both}
+  .chip,.pick,.reg,.day,.btn-cal{transition:transform .25s var(--ease),border-color .2s,background .2s,color .2s}
+  .pick:active,.chip:active,.day:active,.btn-cal:active{transform:scale(.96)}
+  .item .arrow{transition:transform .3s var(--ease),color .2s}
+}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+/* Page changes: the header stays put, the page slides up into place, and the
+   compound's name travels from its row into the title. */
+.bar{view-transition-name:bar}
+::view-transition-group(ctitle){animation-duration:.4s;animation-timing-function:var(--ease)}
+::view-transition-old(root){animation:.09s ease-out both vt-out}
+::view-transition-new(root){animation:.34s ease .04s both vt-fade}
+@keyframes vt-fade{from{opacity:0}}
+::view-transition-old(ctitle){display:none}
+::view-transition-new(ctitle){animation:none}
+@keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(18px)}}
+@keyframes fill{from{transform:scaleX(0)}}
+@keyframes glint{0%,60%{transform:translateX(0);opacity:0}65%{opacity:.9}90%{transform:translateX(120px);opacity:0}100%{opacity:0}}
+@keyframes seg{from{transform:scaleY(0);opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
 </style>
 </head>
 <body>
 
-<div class="bar">
-  <div class="bar-in">
-    <a class="back" id="back" href="index.html" hidden><svg aria-hidden="true" width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2 2 10l8 8"/></svg>Compounds</a>
+<a class="skip" href="#app">Skip to content</a>
+<header class="bar">
+  <nav class="bar-in" aria-label="Guide">
+    <a class="back" id="back" href="index.html" hidden><svg aria-hidden="true" width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2 2 10l8 8"/></svg><span class="back-t">Compounds</span></a>
     <a class="mark" href="index.html" aria-label="AXIOM — compound guide"><img src="assets/axiom-wordmark-white.svg" alt="AXIOM" /></a>
-  </div>
-</div>
+  </nav>
+</header>
 
-<main id="app" class="wrap"></main>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="liq" x1="0" x2="1"><stop offset="0" stop-color="#7C4C24"/><stop offset=".7" stop-color="#C88A4E"/><stop offset="1" stop-color="#E7B173"/></linearGradient></defs></svg>
+<main id="app" class="wrap page-index" tabindex="-1"><div class="idx-hero"><div class="idx-head">
+  <div class="cat">Compound guide</div><div class="ruo">Research use only</div>
+  <h1>What it is,<br>and how to use it.</h1>
+  <p>What each compound actually does, how often and when to take it, what the evidence really says, and how many doses are in your pen.</p>
+</div></div></main>
 
+<script>
+/*HERO-DATA*/window.HEROES={"aod-9604":["AOD-9604","Weight Loss &amp; GLP-1","A small fragment of growth hormone, kept only for the part linked to fat breakdown. The idea was fat loss without the growth-hormone side effects.","Growth hormone fragment (hGH 176-191)"],"cagrilintide":["Cagrilintide","Weight Loss &amp; GLP-1","A weekly shot that copies amylin, the hormone that tells you you&#x27;ve had enough. It&#x27;s usually studied alongside a GLP-1 rather than on its own.","Long-acting amylin analogue"],"retatrutide":["Retatrutide","Weight Loss &amp; GLP-1","A weekly shot aimed at three appetite and metabolism switches instead of two. It&#x27;s the newest of this family and, so far, the strongest in trials.","Triple GIP / GLP-1 / glucagon receptor agonist"],"semaglutide":["Semaglutide","Weight Loss &amp; GLP-1","A weekly shot that copies one gut hormone, GLP-1. It slows your stomach and turns down appetite. It&#x27;s the drug that started the current wave of weight-loss medicines.","GLP-1 receptor agonist"],"tirzepatide":["Tirzepatide","Weight Loss &amp; GLP-1","A weekly shot that copies two gut hormones. It slows how fast your stomach empties and turns down appetite, so you eat less without white-knuckling it.","Dual GIP / GLP-1 receptor agonist"],"cjc-1295-dac":["CJC-1295 (With DAC)","Growth Hormone","The long-acting version of CJC-1295. The DAC part makes it stick to a blood protein so it lasts days instead of minutes — so you inject it weekly, not nightly.","GHRH analogue with drug affinity complex"],"cjc-ipamorelin":["CJC-1295 + Ipamorelin","Growth Hormone","Two peptides that nudge your own body to release more growth hormone, from two different angles. It&#x27;s the most common pairing in this category.","GHRH analogue + selective ghrelin receptor agonist"],"hgh-191aa":["HGH 191AA (Somatropin)","Growth Hormone","Growth hormone itself, made to match the human sequence exactly. Not a trigger for your own supply — this is the hormone.","Recombinant human growth hormone"],"igf-1-lr3":["IGF-1 LR3","Growth Hormone","A modified version of the growth factor that growth hormone actually works through. The changes make it last far longer than the natural one.","Long-acting insulin-like growth factor 1 analogue"],"ipamorelin":["Ipamorelin","Growth Hormone","The gentlest of the growth hormone releasers. It triggers a clean pulse without dragging cortisol, prolactin or hunger up with it.","Selective ghrelin receptor agonist"],"ipamorelin-tesamorelin":["Ipamorelin + Tesamorelin","Growth Hormone","Tesamorelin&#x27;s approved belly-fat effect paired with Ipamorelin&#x27;s clean pulse, in one pen. Two different triggers on the same system.","GHRH analogue + selective ghrelin receptor agonist"],"sermorelin":["Sermorelin","Growth Hormone","The original growth-hormone releaser. It was an approved medicine for years, used to test whether a child&#x27;s pituitary was working.","GHRH (1-29) analogue"],"tesamorelin":["Tesamorelin","Growth Hormone","A daily shot that raises your own growth hormone. It&#x27;s the one with real approval behind it, specifically for shifting deep belly fat.","Stabilised GHRH analogue"],"ahk-cu":["AHK-Cu","Healing &amp; Repair","GHK-Cu&#x27;s cousin, studied mainly for hair rather than skin. Same copper-carrying idea, different peptide.","Copper-binding tripeptide"],"ara-290":["ARA-290","Healing &amp; Repair","A small peptide built from part of the EPO hormone, but with the blood-building part removed. It&#x27;s studied for nerve pain rather than blood.","Erythropoietin-derived peptide (non-haematopoietic)"],"bpc-157":["BPC-157","Healing &amp; Repair","A short peptide copied from a protein found in stomach juice. It&#x27;s the best-known repair peptide, studied mostly for tendons, ligaments and gut lining.","Synthetic pentadecapeptide"],"wolverine":["BPC-157 + TB-500 (Wolverine)","Healing &amp; Repair","The two best-known repair peptides in one pen. They&#x27;re almost always used together, so this saves doing two injections.","Combination repair peptide blend"],"ghk-cu":["GHK-Cu","Healing &amp; Repair","A copper-carrying peptide that your body makes less of as you age. It&#x27;s the workhorse of serious skincare, and the human evidence is for putting it on your skin.","Copper-binding tripeptide"],"klow":["KLOW (BPC + TB + GHK + KPV)","Healing &amp; Repair","A four-way repair blend: the two tendon peptides, plus a copper peptide for skin and collagen, plus an anti-inflammatory one.","Four-peptide repair and anti-inflammatory blend"],"klow-c":["KLOW-C (KLOW + Cartalax)","Healing &amp; Repair","KLOW&#x27;s four-way repair blend with Cartalax added: the two tendon peptides, a copper peptide for skin and collagen, an anti-inflammatory one, and a bioregulator aimed at cartilage and joints.","Five-peptide repair blend (KLOW plus Cartalax)"],"kpv":["KPV","Healing &amp; Repair","The last three amino acids of a natural hormone, and the part that calms inflammation. Small, simple, and studied mostly for the gut and skin.","Alpha-MSH C-terminal tripeptide"],"ll-37":["LL-37","Healing &amp; Repair","Your body&#x27;s own antibiotic peptide, part of the immune system&#x27;s first line of defence against bacteria.","Human cathelicidin antimicrobial peptide"],"peg-mgf":["Peg MGF","Healing &amp; Repair","A muscle growth factor that your body releases when muscle is damaged. The PEG part makes it last longer than the natural version.","Pegylated mechano growth factor (IGF-1Ec splice variant)"],"snap-8":["SNAP-8","Healing &amp; Repair","A peptide used in anti-wrinkle creams. It softens the muscle contractions that cause expression lines — the same idea as Botox, far gentler and applied to the skin.","Acetyl octapeptide-3"],"tb-500":["TB-500","Healing &amp; Repair","A fragment of a protein your body already makes that helps cells move to where damage is. Usually paired with BPC-157.","Thymosin beta-4 fragment"],"tri-heal":["Tri-Heal (BPC + TB + KPV)","Healing &amp; Repair","A three-way repair blend: the two tendon and tissue peptides, BPC-157 and TB-500, plus KPV for inflammation. 10 mg of each in one vial.","Three-peptide repair and anti-inflammatory blend"],"vip":["VIP","Healing &amp; Repair","A hormone your body makes that widens blood vessels and calms inflammation, especially in the lungs and gut.","Vasoactive intestinal peptide"],"adamax":["Adamax","Brain &amp; Mood","A modified version of Semax, built to last longer and hit harder. Newer and much less studied than the original.","Modified ACTH(4-10) / Semax analogue"],"adamax-1032-da":["Adamax 1032 Da","Brain &amp; Mood","A different blend from plain Adamax, named by its molecular weight: 1032 Da. Same family, a modified Semax built to last longer. The research below is for the Adamax family, not this blend on its own.","Modified ACTH(4-10) / Semax analogue"],"cerebrolysin":["Cerebrolysin","Brain &amp; Mood","A mix of small peptides made from pig brain protein. It&#x27;s an old medicine, used in parts of Europe and Asia after strokes and in dementia.","Porcine brain-derived peptide preparation"],"dihexa":["Dihexa","Brain &amp; Mood","A small molecule built to boost a growth factor in the brain, aimed at building new connections between brain cells. Very early-stage.","Angiotensin IV analogue / HGF potentiator"],"pinealon":["Pinealon","Brain &amp; Mood","A three amino acid peptide from the Russian bioregulator family, aimed at brain cells. Meant to be used in short courses, not continuously.","Short peptide bioregulator (Glu-Asp-Arg)"],"selank":["Selank","Brain &amp; Mood","Semax&#x27;s calmer sibling, also Russian and also used there as a nasal spray. Built for anxiety rather than focus, without sedation or dependence.","Tuftsin analogue"],"selank-semax":["Selank + Semax","Brain &amp; Mood","Both Russian nootropic peptides in one pen or nasal spray — one for calm, one for focus. They&#x27;re usually run together.","Tuftsin analogue + ACTH(4-10) analogue"],"semax":["Semax","Brain &amp; Mood","A peptide developed in Russia, where it is used as a nasal spray after strokes. It raises the brain&#x27;s own growth factors.","ACTH(4-10) analogue"],"5-amino-1mq":["5-Amino-1MQ","Energy &amp; Endurance","A small molecule that blocks an enzyme fat cells use to slow their own metabolism. Blocking it lets fat cells burn more.","NNMT inhibitor"],"aicar":["AICAR","Energy &amp; Endurance","A compound that switches on the same cellular energy sensor exercise does. It got famous as &#x27;exercise in a pill&#x27; — which oversells it.","AMPK activator"],"l-carnitine":["L-Carnitine (Injectable)","Energy &amp; Endurance","A nutrient that ferries fat into the mitochondria to be burned. Your body makes it and you get it from red meat; the injectable form is a real medicine for people who are deficient.","Levocarnitine"],"lipo-b":["LC216 Lipo-B (Injectable)","Energy &amp; Endurance","A &#x27;lipotropic&#x27; blend — B vitamins plus amino acids that help the liver process fat. Common in weight-loss clinics.","Lipotropic injection (methionine, inositol, choline, B vitamins)"],"fat-blaster":["LC526 Fat Blaster (Injectable)","Energy &amp; Endurance","Another lipotropic clinic blend, along the same lines as Lipo-B with a slightly different mix.","Lipotropic injection blend"],"mots-c":["MOTS-c","Energy &amp; Endurance","A peptide your mitochondria make — the parts of your cells that produce energy. It acts like a signal that you&#x27;ve been exercising.","Mitochondrial-derived peptide"],"slu-pp-332":["SLU-PP-332","Energy &amp; Endurance","A newer compound that mimics some effects of endurance training by switching on a gene regulator in muscle.","ERR-alpha agonist"],"ssm":["SSM (SS-31 + MOTS-C)","Energy &amp; Endurance","A mitochondria blend: SS-31, which protects the membrane where cells make energy, plus MOTS-c, the peptide that signals like exercise. 20 mg of each in one vial.","Two-peptide mitochondrial blend"],"thymalin":["Thymalin","Immunity","An older Russian thymus extract used to support immune function in the elderly. A mix of peptides rather than one defined molecule.","Thymus peptide extract"],"thymosin-alpha-1":["Thymosin Alpha-1","Immunity","A peptide your thymus makes to train immune cells. It&#x27;s a real approved medicine in a number of countries, mostly for hepatitis B.","Immune-modulating peptide"],"hcg":["HCG","Sexual Health","A hormone that tells the testicles or ovaries to get to work. In men it acts like the body&#x27;s own signal to make testosterone.","Human chorionic gonadotropin"],"hmg":["HMG","Sexual Health","A fertility hormone preparation containing both FSH and LH. In men it&#x27;s used alongside HCG when sperm production needs restarting.","Human menopausal gonadotropin (menotropins)"],"kisspeptin":["Kisspeptin","Sexual Health","The hormone that starts the whole reproductive chain — it sits above the others and tells the brain to begin the cascade. It&#x27;s also being studied for desire.","Kisspeptin-10"],"melanotan-2":["Melanotan II","Sexual Health","A peptide that darkens skin by triggering pigment cells, and also raises libido as a side effect. Widely sold, and the most safety-flagged item in this catalogue.","Melanocortin receptor agonist"],"oxytocin":["Oxytocin Acetate","Sexual Health","The bonding hormone — released during touch, closeness and childbirth. The injectable form is an approved hospital medicine.","Oxytocin"],"pt-141":["PT-141 (Bremelanotide)","Sexual Health","A shot for low sexual desire that works in the brain rather than on blood flow — a different route entirely from Viagra-type drugs.","Melanocortin receptor agonist"],"dsip":["DSIP","Longevity","A peptide named for its effect on deep sleep in early animal work. The name promises more than the evidence delivers.","Delta sleep-inducing peptide"],"epithalon":["Epithalon","Longevity","A four amino acid peptide from Russian ageing research, best known for claims about telomeres — the caps on your chromosomes that shorten as you age.","Synthetic tetrapeptide (pineal-derived)"],"foxo4-dri":["FOXO4-DRI","Longevity","A peptide designed to kill senescent cells — worn-out cells that stop dividing but won&#x27;t die, and leak inflammation into the tissue around them.","FOXO4-p53 interaction inhibitor (senolytic)"],"glutathione":["Glutathione","Longevity","Your body&#x27;s main built-in antioxidant. The injectable form is used mostly for skin brightening, which is not an approved use anywhere.","Tripeptide antioxidant (glutamate-cysteine-glycine)"],"humanin":["Humanin","Longevity","Another peptide made by mitochondria, this one protecting cells from dying under stress. Levels drop with age.","Mitochondrial-derived peptide"],"nad-plus":["NAD+","Longevity","A molecule every cell needs to make energy and repair DNA. Levels drop steeply with age, which is why it&#x27;s the centrepiece of a lot of longevity work.","Nicotinamide adenine dinucleotide"],"ss-31":["SS-31","Longevity","A peptide that targets the inner membrane of mitochondria to protect how cells make energy. In 2025 it became an approved medicine, for one rare disease.","Elamipretide / mitochondria-targeted peptide"],"bronchogen":["Bronchogen","Bioregulators","A short Russian peptide, aimed at the lungs and airways. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"cardiogen":["Cardiogen","Bioregulators","A short Russian peptide, aimed at the heart muscle. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"cartalax":["Cartalax","Bioregulators","A short Russian peptide, aimed at cartilage and joints. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"chonluten":["Chonluten","Bioregulators","A short Russian peptide, aimed at the lung lining. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"cortagen":["Cortagen","Bioregulators","A short Russian peptide, aimed at the brain cortex. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"crystagen":["Crystagen","Bioregulators","A short Russian peptide, aimed at the immune system. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"livagen":["Livagen","Bioregulators","A short Russian peptide, aimed at the liver. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"ovagen":["Ovagen","Bioregulators","A short Russian peptide, aimed at the liver and gut. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"pancragen":["Pancragen","Bioregulators","A short Russian peptide, aimed at the pancreas. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"prostamax":["Prostamax","Bioregulators","A short Russian peptide, aimed at the prostate. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"testagen":["Testagen","Bioregulators","A short Russian peptide, aimed at the testicles. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"],"vesugen":["Vesugen","Bioregulators","A short Russian peptide, aimed at blood vessel walls. It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.","Short peptide bioregulator (Khavinson peptide)"]};/*END-HERO-DATA*/
+/* A link straight to a compound draws its heading now; the rest follows with the data. */
+(function () {
+  var m = location.pathname.match(/^\/([a-z0-9-]+)\/?$/), slug = (m && m[1]) || decodeURIComponent(location.hash.slice(1));
+  var x = slug && window.HEROES[slug];
+  if (!x) return;
+  var app = document.getElementById("app");
+  app.className = "wrap page-compound";
+  app.innerHTML = '<div class="hero"><div class="hero-txt"><div class="cat">' + x[1] + '</div><div class="ruo">Research use only</div>' +
+    "<h1>" + x[0] + '</h1><div class="what">' + x[2] + '</div><div class="cls">' + x[3] + "</div></div></div>";
+  document.documentElement.classList.remove("deep");
+})();
+</script>
 <script src="compounds.js"></script>
 <script>
 (function () {
@@ -352,6 +642,16 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
   document.addEventListener("touchstart", function () {}, { passive: true });
   var app = document.getElementById("app");
   var back = document.getElementById("back");
+  /* On the hosted site each compound has its own address (/semax). Inside a
+     preview frame or a local file, the same pages run on #semax instead. */
+  var PATHS = /^https?:$/.test(location.protocol) && window.self === window.top;
+  var ORIGIN = "https://axiom-guide-weld.vercel.app";
+  function hrefFor(slug) { return (PATHS ? "/" : "#") + encodeURIComponent(slug); }
+  function go(url) {
+    if (PATHS) { history.pushState(null, "", url); route(); }
+    else location.hash = url.replace(/^[#\/]+/, "");
+  }
+  if (PATHS) { back.setAttribute("href", "/"); document.querySelector(".mark").setAttribute("href", "/"); }
 
   function esc(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
@@ -373,8 +673,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
   var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var CAD_WORD = { daily: "Daily", weekly: "Weekly", cycle: "In courses", "as-needed": "When needed" };
   var CAD_SUB = {
-    daily: "Every day", weekly: "Same day each week",
-    cycle: "A course, then a break", "as-needed": "No fixed schedule"
+    daily: "", weekly: "Same day each week",
+    cycle: "", "as-needed": "No fixed schedule"
   };
   /* A pen kept in the fridge is conventionally finished within 28 days of
      the first dose. */
@@ -404,26 +704,128 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     return n;
   }
 
+  /* Home, right half on wide screens: the pen, and the three steps the guide follows. */
+  function sideHtml() { return '<div class="idx-side">' +
+        penArt("Your pen", "Scan its card", { full: true }) +
+        '<ol class="how3">' +
+          "<li><b>Find your compound</b><span>Scan the card on your pen, or search by name or by what it is for.</span></li>" +
+          "<li><b>Read before you start</b><span>What it does, what to watch for, how strong the evidence is.</span></li>" +
+          "<li><b>Count your pen</b><span>Pick your dose to see every dose date, and add them to your calendar.</span></li>" +
+        "</ol>" + "</div>"; }
+
+  /* The pen, drawn as line art: the compound's name on the label, a window that
+     fills. `empty` draws it unfilled, waiting for a dose. */
+  /* The pen, drawn as line art, with the compound's name on its label.
+     opts.full   the window filled, as a fresh pen
+     opts.marks  the window holds one mark per dose (or per few doses), the
+                 dose count for what you picked; opts.rest adds a stub for a
+                 part-dose left over, opts.stepOf tints marks by step
+     opts.week   the window shows the week: seven slots, lit on dose days
+     opts.spray  drawn as the nasal spray bottle instead
+     Neither fill nor marks: an empty pen, waiting for a dose. */
+  function penArt(name, sub, opts) {
+    opts = opts || {};
+    var marks = opts.marks || 0, wx = marks ? 236 : opts.week ? 300 : 310, wEnd = 420, inner = "";
+    var labelW = wx - 158;
+    var fs = Math.min(18, Math.floor(labelW / Math.max(5, name.length * 0.56)));
+    if (opts.week) {
+      var slot = (wEnd - wx - 6 - 6 * 2) / 7;
+      for (var d = 0; d < 7; d++) {
+        var x0 = wx + 3 + d * (slot + 2);
+        inner += '<rect class="pa-day' + (opts.week[d] ? " on" : "") + '" style="--i:' + d + '" x="' + x0.toFixed(1) + '" y="45" width="' + slot.toFixed(1) + '" height="20" rx="2"/>';
+      }
+    } else if (marks) {
+      var per = Math.max(1, Math.ceil(marks / 40)), m = Math.ceil(marks / per), slots = m + (opts.rest ? 0.4 : 0);
+      var W = wEnd - wx - 6, gap = m > 30 ? 1.5 : 2, sw = (W - gap * (m + (opts.rest ? 1 : 0) - 1)) / slots, x = wx + 3;
+      for (var k = 0; k < m; k++) {
+        var st = opts.stepOf ? ' st-' + (opts.stepOf[k * per] % 4) : "";
+        inner += '<rect class="pa-mark' + st + '" style="--i:' + k + '" x="' + x.toFixed(1) + '" y="45" width="' + sw.toFixed(1) + '" height="20" rx="1.5"/>';
+        x += sw + gap;
+      }
+      if (opts.rest) inner += '<rect class="pa-mark rest" style="--i:' + m + '" x="' + x.toFixed(1) + '" y="45" width="' + (sw * 0.4).toFixed(1) + '" height="20" rx="1.5"/>';
+    } else {
+      if (opts.full) inner += '<rect class="pa-liq" x="' + (wx + 2) + '" y="43" width="' + (wEnd - wx - 4) + '" height="24" rx="4" fill="url(#liq)"/>';
+      var t = "";
+      for (var q = 0; q < 12; q++) {
+        var tx = wx + 6 + q * 9;
+        t += '<line x1="' + tx + '" y1="44" x2="' + tx + '" y2="' + (q % 4 ? 51 : 57) + '"/>';
+      }
+      inner += '<g class="pa-ticks' + (opts.full ? "" : " dim") + '">' + t + "</g>";
+    }
+    var head = opts.spray
+      ? '<rect class="pa-body" x="8" y="45" width="34" height="20" rx="6"/>' +
+        '<rect class="pa-body" x="46" y="35" width="70" height="40" rx="6"/>' +
+        '<g class="pa-line"><line x1="62" y1="35" x2="62" y2="75"/><line x1="78" y1="35" x2="78" y2="75"/><line x1="94" y1="35" x2="94" y2="75"/></g>'
+      : '<rect class="pa-body" x="6" y="31" width="118" height="48" rx="13"/>' +
+        '<line class="pa-line" x1="104" y1="31" x2="104" y2="79"/>' +
+        '<text class="pa-brand" x="24" y="59">AXIOM</text>';
+    var tail = opts.spray
+      ? ""
+      : '<rect class="pa-body" x="436" y="33" width="56" height="44" rx="8"/>' +
+        '<g class="pa-line"><line x1="448" y1="38" x2="448" y2="72"/><line x1="458" y1="38" x2="458" y2="72"/>' +
+        '<line x1="468" y1="38" x2="468" y2="72"/><line x1="478" y1="38" x2="478" y2="72"/></g>' +
+        '<rect class="pa-body" x="496" y="43" width="16" height="24" rx="4"/>';
+    return '<svg class="pen-art pen-c' + (opts.spray ? " is-spray" : "") + '" viewBox="0 0 520 110" aria-hidden="true" focusable="false">' +
+      head + '<rect class="pa-body" x="' + (opts.spray ? 122 : 130) + '" y="' + (opts.spray ? 22 : 27) + '" width="' + (opts.spray ? 388 : 300) + '" height="' + (opts.spray ? 66 : 56) + '" rx="' + (opts.spray ? 16 : 10) + '"/>' +
+      (opts.band ? '<rect class="pa-band" x="' + (opts.spray ? 128 : 136) + '" y="27" width="7" height="56" style="fill:' + opts.band + '"/>' : "") +
+      '<text class="pa-name" x="152" y="56" style="font-size:' + fs + 'px">' + esc(name) + "</text>" +
+      '<text class="pa-sub" x="152" y="73">' + esc(sub) + "</text>" +
+      inner + '<rect class="pa-win" x="' + wx + '" y="41" width="' + (wEnd - wx) + '" height="28" rx="5"/>' + tail + "</svg>";
+  }
+  /* Short enough to sit on the pen's label: "10 mg", "10 mg · 20 mg", or "5 sizes · 10–80 mg". */
+  function sizeLabel(c) {
+    var q = c.sizes.map(function (z) { return z.qty; }), u = c.sizes[0].unit;
+    if (q.length <= 2) return q.map(function (x) { return fmtNum(x) + " " + u; }).join(" · ");
+    return q.length + " sizes · " + fmtNum(Math.min.apply(null, q)) + "–" + fmtNum(Math.max.apply(null, q)) + " " + u;
+  }
+
+  /* The end of a compound page: back to everything, or on to the next in its category. */
+  function nextNav(c) {
+    var same = window.COMPOUNDS.filter(function (x) { return x.category === c.category; });
+    var i = same.indexOf(c), nx = same[(i + 1) % same.length];
+    return '<nav class="pager" aria-label="More compounds">' +
+      '<a class="pg" href="' + (PATHS ? "/" : "#") + '"><span>All compounds</span><b>\u2190 Back to the list</b></a>' +
+      (nx && nx !== c ? '<a class="pg next" data-slug="' + esc(nx.slug) + '" href="' + hrefFor(nx.slug) + '"><span>' +
+        (i === same.length - 1 ? "Back to the first in " : "Next in ") + esc(c.category) +
+        "</span><b>" + esc(nx.name) + " \u2192</b></a>" : "") + "</nav>";
+  }
+
   function renderIndex() {
     back.hidden = true;
+    document.querySelector(".mark").removeAttribute("tabindex");
     app.className = "wrap page-index";
     document.title = "AXIOM — Compound Guide";
-    app.innerHTML =
-      '<div class="idx-hero">' +
+    /* On the first load the intro is already on screen as static HTML; it stays
+       put and the rest is added around it, so nothing above it repaints. */
+    var staticHead = firstPaint && app.querySelector(".idx-hero > .idx-head");
+    if (!firstPaint) app.classList.add("seen");
+    var html =
+      '<div class="idx-hero"><div class="idx-head">' +
         '<div class="cat">Compound guide</div>' +
+        '<div class="ruo">Research use only</div>' +
         "<h1>What it is,<br>and how to use it.</h1>" +
-        "<p>Scan the card on any AXIOM pen to land here: what the compound actually does, " +
-        "how often to take it, when in the day, what the evidence really says, and how many " +
-        "doses are in your pen.</p>" +
-        '<p class="coverage">Every lot in the price list — <b>' + lotCount() + "</b> lots across <b>" +
-        COMPOUNDS.length + "</b> compounds, in nine categories.</p>" +
-        '<div class="search"><input id="q" type="search" placeholder="Search a compound, or what it is for" autocomplete="off" /></div>' +
-      "</div>" +
+        "<p>What each compound actually does, how often and when to take it, what the evidence " +
+        "really says, and how many doses are in your pen.</p>" +
+      "</div>" + '<div class="idx-find">' +
+        '<p class="coverage">Every AXIOM product: <b>' + COMPOUNDS.length + "</b> compounds in <b>" +
+        lotCount() + "</b> sizes, in nine categories.</p>" +
+        '<div class="search"><input id="q" type="search" aria-label="Search compounds" placeholder="Search a compound, or what it is for" autocomplete="off" /></div>' +
+        '<p class="hits" id="hits" aria-live="polite"></p>' +
+      "</div>" + sideHtml() + "</div>" +
+      '<div class="catbar"><nav class="cats" id="cats" aria-label="Categories"></nav><i aria-hidden="true"></i></div>' +
       '<div id="list"></div>' +
-      '<div class="scope"><p><strong>What this is.</strong> Reference material for compounds sold for research use. ' +
+      '<button type="button" class="totop" id="totop">Back to top</button>' +
+      '<footer class="scope"><p><strong>What this is.</strong> Reference material for compounds sold for research use. ' +
       "It is not medical advice, not a prescription, and not a recommendation to give anything to a person. " +
       "Where a compound is an approved medicine, the official doses are reproduced and named as such. Where it " +
-      "is not, no dose is invented.</p></div>";
+      "is not, no dose is invented.</p></footer>";
+    if (staticHead) {
+      var tmp = document.createElement("div"); tmp.innerHTML = html;
+      var hero = tmp.firstChild; hero.removeChild(hero.querySelector(".idx-head"));
+      while (hero.firstChild) staticHead.parentNode.appendChild(hero.firstChild);
+      tmp.removeChild(hero);
+      while (tmp.firstChild) app.appendChild(tmp.firstChild);
+    } else app.innerHTML = html;
 
     var q = document.getElementById("q");
     var list = document.getElementById("list");
@@ -435,8 +837,13 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         return (c.name + " " + c.cls + " " + c.category + " " + c.what + " " + c.benefits.map(function (x) { return x.b + " " + x.how; }).join(" ") + " " + c.cadence)
           .toLowerCase().indexOf(term) >= 0;
       });
+      var hitsEl = document.getElementById("hits");
+      document.querySelector(".idx-hero").classList.toggle("searching", !!term);
+      hitsEl.textContent = term ? hits.length + (hits.length === 1 ? " compound matches" : " compounds match") +
+        " \u201c" + q.value.trim() + "\u201d" : "";
       if (!hits.length) {
-        list.innerHTML = '<div class="empty">Nothing matches “' + esc(q.value) + "”.</div>";
+        list.innerHTML = '<div class="empty">Nothing matches \u201c' + esc(q.value) + "\u201d. Try a compound name, or a word like sleep, skin or joints.</div>";
+        document.getElementById("cats").innerHTML = "";
         return;
       }
       var groups = {}, order = [];
@@ -444,27 +851,122 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         if (!groups[c.category]) { groups[c.category] = []; order.push(c.category); }
         groups[c.category].push(c);
       });
-      list.innerHTML = order.map(function (cat) {
-        return '<div class="grp"><h3>' + esc(cat) + "</h3>" + groups[cat].map(function (c) {
+      /* One chip per category on screen; a tap scrolls to it. */
+      document.getElementById("cats").innerHTML = order.map(function (cat) {
+        return '<button type="button" class="chip" style="--band:' + band(cat) + '" data-cat="' + catId(cat) + '"><i class="chip-dot" aria-hidden="true"></i>' + esc(cat) +
+          '<span class="chip-n">' + groups[cat].length + "</span></button>";
+      }).join("");
+      var html = order.map(function (cat) {
+        return '<section class="grp" id="' + catId(cat) + '" style="--band:' + band(cat) + '"><h2>' + esc(cat) + "</h2>" +
+          (CAT_NOTE[cat] ? '<p class="grp-note">' + CAT_NOTE[cat].note + "</p>" : "") + '<div class="grp-items">' + groups[cat].map(function (c) {
           /* What it does, in the page's own plain words, then its two main benefits —
              not its pharmacology class, which most readers cannot parse. */
-          return '<a class="item" href="#' + encodeURIComponent(c.slug) + '">' +
-            '<div class="item-main"><div class="item-name">' + esc(c.name) + "</div>" +
-            '<div class="item-sub">' + esc(c.what) + "</div>" +
-            '<ul class="item-ben">' + c.benefits.slice(0, 2).map(function (x) {
-              return "<li>" + esc(x.b) + "</li>";
+          return '<a class="item" data-slug="' + esc(c.slug) + '" href="' + hrefFor(c.slug) + '">' +
+            '<div class="item-main"><div class="item-top"><div class="item-name">' + hl(c.name, term) + "</div>" +
+            '<div class="item-cad">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div></div>" +
+            itemSub(CAT_NOTE[cat] ? c.what.replace(CAT_NOTE[cat].cut, "").replace(CAT_NOTE[cat].lead[0], CAT_NOTE[cat].lead[1]) : c.what, term) +
+            hitLine(c, term) +
+            '<ul class="item-ben">' + c.benefits.slice(CAT_NOTE[cat] && CAT_NOTE[cat].skipFirstBenefit ? 1 : 0).slice(0, 2).map(function (x) {
+              return "<li>" + hl(x.b, term) + "</li>";
             }).join("") + "</ul></div>" +
-            '<div class="item-cad">' + esc(CAD_WORD[c.cadence] || c.cadence) + "</div>" +
             '<svg class="arrow" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
             "</a>";
-        }).join("") + "</div>";
-      }).join("");
+        }).join("") + "</div></section>";
+      });
+      list.innerHTML = html.join("");
+      spyCats();
+    }
+    /* The category you are reading is marked in the bar above. */
+    var spy = null;
+    function spyCats() {
+      if (spy) spy.disconnect();
+      if (!("IntersectionObserver" in window)) return;
+      var bar = document.getElementById("cats");
+      spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          [].forEach.call(bar.querySelectorAll(".chip"), function (ch) {
+            var on = ch.getAttribute("data-cat") === en.target.id;
+            ch.setAttribute("aria-current", on ? "true" : "false");
+            if (on && bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: Math.max(0, ch.offsetLeft - 20), behavior: "auto" });
+          });
+        });
+      }, { rootMargin: "-140px 0px -65% 0px" });
+      [].forEach.call(list.querySelectorAll(".grp"), function (g) { spy.observe(g); });
     }
     q.addEventListener("input", draw);
+    document.getElementById("totop").addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: reduceMotion() ? "auto" : "smooth" });
+    });
+    document.getElementById("cats").addEventListener("click", function (e) {
+      var b = e.target.closest(".chip");
+      if (!b) return;
+      var target = document.getElementById(b.getAttribute("data-cat"));
+      var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (target) target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
     draw();
   }
 
+  /* A row's description: the first sentence always, the rest from tablet width up. */
+  function itemSub(what, term) {
+    var m = /^(.+?[.!?])(\s+.+)?$/.exec(what);
+    var first = m ? m[1] : what, rest = m && m[2] ? m[2] : "";
+    return '<div class="item-sub">' + hl(first, term) + (rest ? '<span class="item-more">' + hl(rest, term) + "</span>" : "") + "</div>";
+  }
+  /* When a search matches text the row doesn't show, say where it matched. */
+  function hitLine(c, term) {
+    if (!term) return "";
+    var shown = (c.name + " " + c.what + " " + (c.benefits[0] ? c.benefits[0].b : "")).toLowerCase();
+    if (shown.indexOf(term) >= 0) return "";
+    var pool = c.benefits.map(function (x) { return x.b + " " + x.how; }).concat([c.cls]);
+    for (var i = 0; i < pool.length; i++) {
+      var t = pool[i], at = t.toLowerCase().indexOf(term);
+      if (at < 0) continue;
+      var from = Math.max(0, t.lastIndexOf(" ", Math.max(0, at - 40)));
+      var tail = t.slice(at + term.length, at + term.length + 50), sp = tail.lastIndexOf(" ");
+      if (sp > 10 && at + term.length + 50 < t.length) tail = tail.slice(0, sp);
+      var snip = (from > 0 ? "\u2026" : "") + (t.slice(from, at + term.length) + tail).trim().replace(/[.,;:]+$/, "") +
+        (at + term.length + 50 < t.length ? "\u2026" : ".");
+      return '<div class="item-hit"><span>Matched in the details:</span> ' + hl(snip, term) + "</div>";
+    }
+    return "";
+  }
+
+  /* Each category's pens carry a colour band, the way insulin pens are colour-coded
+     so one is never mistaken for another. The band shows on the pen drawing, the
+     category label and the list headings. */
+  var BAND = {
+    "Weight Loss & GLP-1": "#C88A4E", "Growth Hormone": "#C9B26E", "Healing & Repair": "#7FA87F",
+    "Brain & Mood": "#8C9BC4", "Energy & Endurance": "#D07A5E", "Immunity": "#6FA6A0",
+    "Sexual Health": "#C47C93", "Longevity": "#A58CC2", "Bioregulators": "#A89F92"
+  };
+  function band(cat) { return BAND[cat] || "#C88A4E"; }
+
+  /* A sentence every row in a category would repeat is said once, under its heading. */
+  var CAT_NOTE = {
+    "Bioregulators": {
+      cut: " It belongs to the bioregulator family — the idea is that each one signals its target tissue to repair itself.",
+      lead: [/^A short Russian peptide, aimed at /, "Aimed at "],
+      skipFirstBenefit: true,
+      note: "Short Russian peptides, each aimed at one organ. The idea is that each one signals its target tissue to repair itself. All are used in courses."
+    }
+  };
+
+  /* Search matches shown in amber, so you can see why each row came up. */
+  function hl(t, term) {
+    if (!term) return esc(t);
+    var lo = t.toLowerCase(), out = "", i = 0, j;
+    while ((j = lo.indexOf(term, i)) >= 0) {
+      out += esc(t.slice(i, j)) + "<mark>" + esc(t.slice(j, j + term.length)) + "</mark>";
+      i = j + term.length;
+    }
+    return out + esc(t.slice(i));
+  }
+
   /* Every compound, grouped as on the index, for step 1 of the calculator. */
+  function catId(cat) { return "cat-" + String(cat).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
   function compoundOptions(current) {
     var groups = {}, order = [];
     window.COMPOUNDS.forEach(function (x) {
@@ -482,6 +984,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
   /* ---------------- Compound ---------------- */
   function renderCompound(c) {
     back.hidden = false;
+    app.classList.remove("seen");
+    document.querySelector(".mark").setAttribute("tabindex", "-1");
     app.className = "wrap page-compound";
     document.title = "AXIOM — " + c.name;
     var ev = window.EVIDENCE_META[c.evidence] || window.EVIDENCE_META.preclinical;
@@ -499,34 +1003,58 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     }).join("");
 
     app.innerHTML =
-      '<div class="hero"><div class="hero-txt">' +
+      '<div class="hero" style="--band:' + band(c.category) + '"><div class="hero-txt">' +
         '<div class="cat">' + esc(c.category) + "</div>" +
-        "<h1>" + esc(c.name) + "</h1>" +
+        '<div class="ruo">Research use only</div>' +
+        '<h1 style="view-transition-name:ctitle">' + esc(c.name) + "</h1>" +
         '<div class="what">' + esc(c.what) + "</div>" +
         '<div class="cls">' + esc(c.cls) + "</div>" +
-        '</div><div class="hero-side">' +
-        '<div class="glance">' +
-          "<div><span>How often</span><b>" + esc(CAD_WORD[c.cadence] || c.cadence) + "</b></div>" +
-          "<div><span>When</span><b>" + esc(c.timing.when) + "</b></div>" +
-          "<div><span>How</span><b>" + esc(c.route.split(" / ")[0]) + "</b></div>" +
-          "<div><span>Lasts in body</span><b>" + esc(c.halfLife.replace(/ \(.*\)/, "")) + "</b></div>" +
-        "</div>" +
         '<div class="ev tone-' + ev.tone + '">' +
           '<div class="ev-top"><i class="ev-dot"></i><div class="ev-label">' + esc(ev.label) + "</div></div>" +
           "<p>" + esc(c.evidenceNote) + "</p>" +
         "</div>" +
+        '</div><div class="hero-side">' +
+        '<div class="hero-pen">' + penArt(c.name, sizeLabel(c) + (c.spray ? " · pen or spray" : " pen"), { week: c.days, band: band(c.category) }) + "</div>" +
+        '<div class="glance">' +
+          "<div><span>How often</span><b>" + esc(CAD_WORD[c.cadence] || c.cadence) + "</b></div>" +
+          "<div><span>When</span><b>" + esc(c.timing.when) + "</b></div>" +
+          "<div><span>How</span><b>" + esc(c.route.split(" / ")[0].replace("Pen under the skin or nasal spray", "Pen or nasal spray")) + "</b></div>" +
+          "<div><span>Lasts in body</span><b>" + esc(c.halfLife.replace(/ \(.*\)/, "")) + "</b></div>" +
+        "</div>" +
       "</div></div>" +
 
-      /* What it does is the line under the name; what it does for you comes next,
-         before the schedule and the calculator. */
-      '<section class="benefits"><h2>Benefits</h2><ul class="bul ben">' +
+      /* The page reads in the order you need it: what it does, what to know
+         before starting, how to take it, your pen, then storage. The bar under
+         the hero jumps to each step. */
+      '<div class="catbar toc-bar"><nav class="cats toc" id="toc" aria-label="On this page">' +
+        [["s-does", "What it does"], ["s-safe", "Before you start"], ["s-how", "How to take it"],
+         ["s-pen", sprayable ? "Your pen or spray" : "Your pen"], ["s-care", "Storage"]].map(function (t, i) {
+          return '<button type="button" class="chip" data-to="' + t[0] + '"><span class="chip-n">' + (i + 1) + "</span>" + t[1] + "</button>";
+        }).join("") +
+      '</nav><i aria-hidden="true"></i></div>' +
+
+      '<section class="sec benefits" id="s-does"><h2 class="sh"><span class="sn" aria-hidden="true">01</span>What it does</h2>' +
+        '<p class="ruo-note">These are findings from research, not medical claims. ' +
+        "Nothing here is a recommendation to use this compound.</p>" +
+        '<ul class="bul ben">' +
         c.benefits.map(function (x) {
           return '<li><b class="ben-b">' + esc(x.b) + "</b>" +
             (x.how ? '<span class="ben-how"><i>How it works</i>' + esc(x.how) + "</span>" : "") + "</li>";
         }).join("") +
       "</ul></section>" +
 
-      "<section><h2>How often</h2>" +
+      /* Cautions come before the schedule and the calculator: read before the first dose. */
+      '<section class="sec warn-sec" id="s-safe"><h2 class="sh"><span class="sn" aria-hidden="true">02</span>Before you start</h2>' +
+        (function () {
+          var list = c.cautions.filter(function (b) { return !/^research use only/i.test(b); });
+          return '<ul class="bul warn' + (list.length <= 3 ? " few" : "") + '">' +
+            list.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") + "</ul>";
+        })() +
+      "</section>" +
+
+      '<section class="sec howto" id="s-how"><h2 class="sh"><span class="sn" aria-hidden="true">03</span>How to take it</h2>' +
+      '<div class="mid"><div class="col">' +
+      '<div class="sub"><h3>How often</h3>' +
         '<div class="cad-head"><div class="cad-word" id="cad-word">' +
           esc(c.regimens ? c.regimens[0].label : (CAD_WORD[c.cadence] || c.cadence)) + "</div>" +
         '<div class="cad-sub" id="cad-sub">' +
@@ -540,44 +1068,45 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
             }).join("") + "</div>" +
             '<div class="note" id="reg-note" style="margin-bottom:18px">' + esc(c.regimens[0].note) + "</div>"
           : "") +
+        (c.cadence === "cycle"
+          ? '<div class="course" aria-hidden="true"><i class="on">Course</i><i>Break</i><i class="on">Course</i><i>Break</i></div>' +
+            '<div class="week-k">Days within a course</div>'
+          : "") +
+        (/ and (evening|night|afternoon)|twice|split/i.test(c.timing.when + " " + c.cadenceNote) && c.cadence !== "as-needed"
+          ? '<div class="day-k">Two dots: the day\'s amount is often split, ' + esc(c.timing.when.toLowerCase()) + ". The calculator counts each day\'s total as one dose.</div>" : "") +
         '<div class="week" id="week"></div>' +
         '<div class="note" id="week-note"></div>' +
         '<div class="note" style="margin-top:10px">' + esc(c.cadenceNote) + "</div>" +
-      "</section>" +
+      "</div>" +
 
-      "<section><h2>When to take it</h2>" +
+        '<div class="sub"><h3>When in the day</h3>' +
         '<div class="timing">' +
           '<div class="tcard"><span>Time of day</span><b>' + esc(c.timing.when) + "</b></div>" +
           '<div class="tcard plain"><span>Food</span><b>' + esc(c.timing.food) + "</b></div>" +
         "</div>" +
         '<div class="note">' + esc(c.timing.note) + "</div>" +
-      "</section>" +
+      "</div></div>" +
 
-      "<section><h2>Doses</h2><div class=\"rows\">" + rows + "</div></section>" +
-
-      /* Cautions come before the calculator — read before the first dose,
-         not after the benefits and the storage notes. */
-      "<section><h2>Watch out for</h2><ul class=\"bul warn\">" +
-        c.cautions.map(function (b) { return "<li>" + esc(b) + "</li>"; }).join("") +
-      "</ul></section>" +
+      '<div class="col"><div class="sub"><h3>Doses</h3><div class="rows">' + rows + "</div></div></div>" +
+      "</div></section>" +
 
       /* Four taps, top to bottom: compound, pen, dose, schedule. Nothing is
          pre-picked except a pen that only comes in one size — the customer
          taps what they actually have and what they actually take. */
-      '<section class="pen"><h2>' + (sprayable ? "Your pen or spray" : "Your pen") + "</h2>" +
+      '<section class="sec pen" id="s-pen"><h2 class="sh"><span class="sn" aria-hidden="true">04</span>' + (sprayable ? "Your pen or spray" : "Your pen") + "</h2>" +
         '<div class="pen-in"><div class="calc">' +
           '<div class="step"><div class="step-k"><i>1</i><label for="f-compound">Compound</label></div>' +
             '<select id="f-compound" class="pick-select">' + compoundOptions(c.slug) + "</select></div>" +
 
           '<div class="step"><div class="step-k"><i>2</i>' +
             (sprayable ? "Pen or nasal spray?" : "Which pen do you have?") + "</div>" +
-            '<div class="picks" id="pen-picks">' + c.sizes.map(function (z) {
+            '<div class="picks' + (sprayable ? " two" : "") + '" id="pen-picks">' + c.sizes.map(function (z) {
               var label = fmtNum(z.qty) + " " + unit;
               return sprayable
-                ? '<button class="pick" data-qty="' + z.qty + '" data-form="pen" type="button">' + label +
-                    '<span class="pick-tag">Pen</span></button>' +
-                  '<button class="pick" data-qty="' + z.qty + '" data-form="spray" type="button">' + label +
-                    '<span class="pick-tag">Nasal spray</span></button>'
+                ? '<button class="pick" data-qty="' + z.qty + '" data-form="pen" type="button">Pen' +
+                    '<span class="pick-tag">' + label + "</span></button>" +
+                  '<button class="pick" data-qty="' + z.qty + '" data-form="spray" type="button">Nasal spray' +
+                    '<span class="pick-tag">' + label + "</span></button>"
                 : '<button class="pick" data-qty="' + z.qty + '" type="button">' + label + "</button>";
             }).join("") + "</div>" +
             '<div class="other"><label for="f-qty">Or how much is left</label>' +
@@ -593,13 +1122,24 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
             '<div class="other"><label for="f-dose">Or another amount</label>' +
               '<input id="f-dose" type="number" inputmode="decimal" step="any" min="0" value="">' +
               "<span>" + unit + "</span></div>" +
-            '<div class="basis" id="basis"></div></div>' +
+            '<div class="basis" id="basis"></div>' +
+            /* Going up in steps, or tapering down: the reader enters their own
+               steps. Nothing is filled in for them. */
+            '<label class="tg"><input type="checkbox" id="f-steps"><span class="tg-ui" aria-hidden="true"></span>' +
+              "The dose changes over time</label>" +
+            '<div class="steps" id="steps" hidden>' +
+              '<p class="steps-note">Going up or tapering down: enter each dose and how many weeks you stay on it. ' +
+              "These are your steps; the guide does not suggest them.</p>" +
+              '<div id="steps-list"></div>' +
+              '<button type="button" class="btn-add" id="step-add">Add a step</button>' +
+            "</div></div>" +
 
           '<div class="step"><div class="step-k"><i>4</i>How often, and from when</div>' +
             '<div class="fields">' +
+              (c.cadence === "cycle" ? '<div class="field"><label for="f-course">Course length, days</label><input id="f-course" type="number" inputmode="numeric" step="1" min="1" max="120" value="20"></div>' : "") +
               '<div class="field"><label for="f-week">Doses per week</label><input id="f-week" type="number" inputmode="numeric" step="1" min="0" max="21" value="' + c.perWeek + '"></div>' +
               '<div class="field"><label for="f-time">Time of day</label><input id="f-time" type="time" value="' + esc(c.timing.time) + '"></div>' +
-              '<div class="field wide"><label for="f-date">First dose on</label><input id="f-date" type="date" value="' + iso + '"></div>' +
+              '<div class="field wide"><label for="f-date">First dose on <span class="date-say" id="date-say"></span></label><input id="f-date" type="date" value="' + iso + '"></div>' +
             "</div></div>" +
 
           '<div class="out" id="out"></div>' +
@@ -608,28 +1148,57 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
               "amount as the pen, and each pump gives " + fmtNum(c.spray.perPump * 1000) + " mcg (" +
               fmtNum(c.spray.perPump) + " " + unit + "). This works out how many doses yours holds and how long " +
               "it lasts. It does not tell you what your dose should be."
-            : "Your pen comes ready to use — the mixing water is already in the quantity " +
-              "shown, so there is nothing to prepare. This works out how many doses are in your pen and how long " +
+            : "This works out how many doses are in your pen and how long " +
               "it lasts. It does not tell you what your dose should be.") + "</div>" +
         "</div>" +
         '<div id="sched-wrap"></div></div>' +
       "</section>" +
 
-      '<section class="care"><h2>Looking after it</h2>' +
+      '<section class="sec care" id="s-care"><h2 class="sh"><span class="sn" aria-hidden="true">05</span>Storage</h2>' +
         '<p class="body">' + esc(c.storage) + "</p>" +
-        '<p class="body" style="margin-top:14px;color:var(--muted-2);font-size:0.7647rem">' + esc(window.HANDLING) +
-          (sprayable ? " The nasal spray is ready to use too, and is kept the same way." : "") + "</p>" +
+        '<p class="body" style="margin-top:14px;color:var(--muted);font-size:0.8235rem">' +
+          esc(sprayable ? window.HANDLING.replace(/^Your pen arrives/, "Your pen or spray arrives").replace("already in it", "already in each") + " Both are kept the same way." : window.HANDLING) + "</p>" +
       "</section>" +
 
-      '<div class="scope">' +
+      nextNav(c) +
+      '<footer class="scope">' +
         "<p><strong>What this is.</strong> Reference material for a compound sold for research use. Not medical " +
         "advice, not a prescription, and not a recommendation to give anything to a person.</p>" +
         "<p><strong>About the doses above.</strong> " + esc(ev.blurb) + "</p>" +
         "<p>If you are thinking about using any of this, do it with a doctor who can weigh it against your own " +
         "history, your medication and what needs monitoring.</p>" +
-      "</div>";
+      "</footer>";
 
     wire(c);
+    wireToc();
+  }
+
+  /* The step bar: a tap scrolls to the step, and the step on screen is marked. */
+  function wireToc() {
+    var toc = document.getElementById("toc");
+    if (!toc) return;
+    var chips = [].slice.call(toc.querySelectorAll(".chip"));
+    toc.addEventListener("click", function (e) {
+      var b = e.target.closest(".chip");
+      if (!b) return;
+      var t = document.getElementById(b.getAttribute("data-to"));
+      var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (t) t.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    });
+    if (!("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        chips.forEach(function (ch) {
+          var on = ch.getAttribute("data-to") === en.target.id;
+          ch.setAttribute("aria-current", on ? "true" : "false");
+          if (on && ch.scrollIntoView && toc.scrollWidth > toc.clientWidth) {
+            toc.scrollTo({ left: Math.max(0, ch.offsetLeft - 20 - (ch.previousElementSibling ? 0 : 0)), behavior: "auto" });
+          }
+        });
+      });
+    }, { rootMargin: "-130px 0px -60% 0px" });
+    chips.forEach(function (ch) { var t = document.getElementById(ch.getAttribute("data-to")); if (t) io.observe(t); });
   }
 
   /* ---------------- Interaction ---------------- */
@@ -645,8 +1214,26 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       date: document.getElementById("f-date"),
       time: document.getElementById("f-time")
     };
+    if (document.getElementById("f-course")) f.course = document.getElementById("f-course");
     var out = document.getElementById("out");
     var schedWrap = document.getElementById("sched-wrap");
+    /* Wide screens only: holds the right half until there are dates to show. */
+    function schedEmpty() {
+      var start = parseIso(f.date.value) || new Date(), first = [];
+      if (hasPattern) for (var i = 0; i < 60 && first.length < 8; i++) {
+        var day = addDays(start, i);
+        if (pattern[weekdayIdx(day)]) first.push(day);
+      }
+      return '<div class="sched-empty"><div aria-hidden="true">' + penArt(c.name, sizeLabel(c), { spray: form === "spray", band: band(c.category) }) + "</div>" +
+        "<b>Your first dose days</b>" +
+        (first.length
+          ? "From your start date, on this schedule. Pick your " + holder() + " and your dose to see how far it goes, then add every date to your calendar." +
+            '<div class="sched-pre">' + first.map(function (day) {
+              return '<div class="sd"><b>' + fmtDate(day) + "</b><span>" + DAY_FULL[weekdayIdx(day)] + "</span></div>";
+            }).join("") + "</div>"
+          : "Taken when needed, so there are no set days. Pick your " + holder() + " and your dose to see how many doses it holds.") +
+        "</div>";
+    }
     var weekEl = document.getElementById("week");
     var weekNote = document.getElementById("week-note");
 
@@ -692,14 +1279,18 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       pattern = next;
     }
 
+    /* Two doses a day (morning and evening) show as two dots on each day. */
+    var perDay = / and (evening|night|afternoon)|twice|split/i.test(c.timing.when + " " + c.cadenceNote) ? 2 : 1;
+    var dots = perDay === 2 ? "<i></i><i></i>" : "<i></i>";
     function drawWeek() {
       weekEl.innerHTML = pattern.map(function (on, i) {
         return '<button type="button" class="day' + (on ? " on" : "") +
           '" data-day="' + i + '" aria-pressed="' + (on ? "true" : "false") +
           '" aria-label="Move the schedule to start on ' + DAY_FULL[i] + '">' +
-          "<span>" + DAYS[i] + "</span><i></i></button>";
+          "<span>" + DAYS[i] + "</span>" + (on ? dots : "<i></i>") + "</button>";
       }).join("");
-      weekNote.textContent = hasPattern
+      weekNote.textContent = pattern.every(function (x) { return x; }) ? ""
+        : hasPattern
         ? "Tap a day to move the whole schedule — the spacing stays the same."
         : "Taken when needed, so there is no weekly pattern.";
     }
@@ -724,7 +1315,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       var slug = this.value;
       if (param("c")) location.search = "?c=" + encodeURIComponent(slug);
       else if (pathSlug() && !location.hash) location.href = encodeURIComponent(slug);   /* sibling path */
-      else location.hash = encodeURIComponent(slug);
+      else go(hrefFor(slug));
     });
 
     /* Steps 2 and 3: a tap fills the field, and the field stays editable. */
@@ -749,6 +1340,9 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     });
 
     var doseDates = [];
+    var dateSay = document.getElementById("date-say");
+    function sayDate() { var d0 = parseIso(f.date.value); dateSay.textContent = d0 ? "· " + DAY_FULL[weekdayIdx(d0)] + " " + fmtDate(d0) : ""; }
+    f.date.addEventListener("input", sayDate); sayDate();
 
     /* Say where the starting dose came from. Where the page documents a dose,
        name it; where it documents none, call the figure what it is — a
@@ -791,6 +1385,166 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       basisEl.innerHTML = text;
     }
 
+    /* ---- A dose that changes over time ---- */
+    var stepMode = false;
+    var stepsEl = document.getElementById("steps"), stepsList = document.getElementById("steps-list");
+    var singleEls = [document.getElementById("dose-picks"), f.dose.closest(".other"), basisEl];
+    function stepRow(i, dose, wk) {
+      var n = i + 1;
+      return '<div class="srow"><span class="srow-n">' + n + "</span>" +
+        '<input class="s-dose" type="number" inputmode="decimal" step="any" min="0" value="' + (dose > 0 ? dose : "") +
+          '" aria-label="Step ' + n + " dose, " + esc(c.pen.unit) + '">' +
+        '<span class="srow-u">' + esc(c.pen.unit) + ' for</span>' +
+        '<input class="s-wk" type="number" inputmode="numeric" step="1" min="1" value="' + (wk > 0 ? wk : "") +
+          '" aria-label="Step ' + n + ' length, weeks">' +
+        '<span class="srow-u">weeks</span>' +
+        '<button type="button" class="s-del" aria-label="Remove step ' + n + '">\u00d7</button></div>';
+    }
+    function readSteps() {
+      return [].map.call(stepsList.querySelectorAll(".srow"), function (row) {
+        return { dose: parseFloat(row.querySelector(".s-dose").value), wk: parseInt(row.querySelector(".s-wk").value, 10) };
+      });
+    }
+    function drawSteps(list) {
+      stepsList.innerHTML = list.map(function (x, i) { return stepRow(i, x.dose, x.wk); }).join("");
+    }
+    document.getElementById("f-steps").addEventListener("change", function () {
+      stepMode = this.checked;
+      stepsEl.hidden = !stepMode;
+      singleEls.forEach(function (el) { el.hidden = stepMode; });
+      if (stepMode && !stepsList.children.length) {
+        var d0 = parseFloat(f.dose.value);
+        drawSteps([{ dose: d0 > 0 ? d0 : 0, wk: 4 }, { dose: 0, wk: 4 }]);
+      }
+      update();
+    });
+    document.getElementById("step-add").addEventListener("click", function () {
+      var list = readSteps(); list.push({ dose: 0, wk: 4 }); drawSteps(list);
+      var rows = stepsList.querySelectorAll(".s-dose"); rows[rows.length - 1].focus();
+      update();
+    });
+    stepsList.addEventListener("click", function (e) {
+      var del = e.target.closest(".s-del");
+      if (!del) return;
+      var rows = [].slice.call(stepsList.querySelectorAll(".srow")), at = rows.indexOf(del.closest(".srow"));
+      var list = readSteps();
+      if (list.length > 1) { list.splice(at, 1); drawSteps(list); update(); }
+    });
+    stepsList.addEventListener("input", update);
+
+    function updateSteps(qty) {
+      var unit = esc(c.pen.unit), steps = readSteps().filter(function (x) { return x.dose > 0 && x.wk > 0; });
+      if (!(qty > 0) || !steps.length) {
+        out.innerHTML = '<div class="out-empty">' +
+          (!(qty > 0) ? "Pick your " + (sprayable ? "pen or spray" : "pen") : "Enter each dose and how many weeks you stay on it") +
+          " to see how far this " + holder() + " goes and the dates each dose falls on.</div>";
+        schedWrap.innerHTML = schedEmpty(); doseDates = [];
+        return;
+      }
+      var big = steps.filter(function (x) { return x.dose > qty; })[0];
+      if (big) {
+        out.innerHTML = '<div class="flag">A ' + fmtNum(big.dose, 2) + " " + unit + " dose is bigger than the " +
+          fmtNum(qty, 2) + " " + unit + " in the " + holder() + ".</div>";
+        schedWrap.innerHTML = schedEmpty(); doseDates = [];
+        return;
+      }
+      if (!hasPattern) {
+        out.innerHTML = '<div class="out-empty">Taken when needed, so there is no week-by-week plan to count.</div>';
+        schedWrap.innerHTML = ""; doseDates = [];
+        return;
+      }
+      /* Every dose of the plan, in order, with the pen it comes out of. */
+      var start = parseIso(f.date.value) || new Date(), plan = [], total = 0, wk0 = 0;
+      steps.forEach(function (x, si) {
+        for (var dd = wk0 * 7; dd < (wk0 + x.wk) * 7; dd++) {
+          var day = addDays(start, dd);
+          if (pattern[weekdayIdx(day)]) { plan.push({ day: day, dose: x.dose, step: si }); total += x.dose; }
+        }
+        wk0 += x.wk;
+      });
+      var left = qty, pen = 1;
+      plan.forEach(function (x) {
+        if (x.dose > left + 1e-9) { pen++; left = qty; x.newPen = true; }
+        x.pen = pen; left -= x.dose;
+      });
+      var mine = plan.filter(function (x) { return x.pen === 1; });
+      var next = plan.filter(function (x) { return x.pen === 2; })[0];
+      var used = mine.reduce(function (a, x) { return a + x.dose; }, 0);
+      doseDates = plan.map(function (x) { return x.day; });
+
+      var flags = "";
+      if (form === "spray") {
+        var per = c.spray.perPump;
+        steps.forEach(function (x, si) {
+          var pumps = x.dose / per;
+          if (Math.abs(pumps - Math.round(pumps)) > 1e-6) flags += '<div class="flag">Step ' + (si + 1) + ": each pump gives " +
+            fmtNum(per) + " " + unit + ", so " + fmtNum(x.dose, 2) + " " + unit + " isn't a whole number of sprays.</div>";
+        });
+      }
+      if (next) flags += '<div class="flag">Start a new ' + holder() + " on " + fmtDate(next.day) + ", at step " + (next.step + 1) + "." +
+        (qty - used > 0.0001 ? " The " + fmtNum(qty - used, 2) + " " + unit + " left in this one is less than that dose." : "") + "</div>";
+
+      out.innerHTML =
+        '<div class="out-hero"><div class="out-num tnum">' + mine.length + "</div>" +
+        '<div class="out-unit">doses in this ' + holder() + "<br>" + plan.length + " doses across your " + wk0 + "-week plan (" + pen +
+          (pen === 1 ? " " + holder() : " " + holder() + "s") + ")</div></div>" +
+        gauge(mine.length, qty - used > 1e-9, mine.map(function (x) { return x.step; })) +
+        '<ol class="step-sum">' + steps.map(function (x, si) {
+          var mineN = plan.filter(function (y) { return y.step === si; });
+          return '<li class="st-' + (si % 4) + '"><b class="tnum">' + fmtNum(x.dose, 2) + " " + unit + "</b>" +
+            "<span>" + x.wk + (x.wk === 1 ? " week" : " weeks") + (mineN.length ? " from " + fmtDate(mineN[0].day) : "") +
+            " · " + mineN.length + (mineN.length === 1 ? " dose" : " doses") + "</span></li>";
+        }).join("") + "</ol>" +
+        '<div class="out-grid">' +
+          '<div class="out-cell"><b class="tnum">' + fmtNum(qty, 2) + " " + unit + "</b><span>In the " + holder() + "</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + fmtNum(total, 2) + " " + unit + "</b><span>Whole plan</span></div>" +
+          '<div class="out-cell"><b class="tnum">' + pen + "</b><span>" + (form === "spray" ? "Sprays" : "Pens") + " for the plan</span></div>" +
+          '<div class="out-cell"><b>' + (mine.length ? fmtDate(mine[mine.length - 1].day) : "—") + "</b><span>Last dose from this " + holder() + "</span></div>" +
+
+        "</div>" + flags;
+
+      drawStepSchedule(plan);
+    }
+
+    /* The plan's dates, each with its amount; a new pen is marked where it starts.
+       The calendar gets one repeating event per step. */
+    function drawStepSchedule(plan) {
+      var unit = esc(c.pen.unit), runs = [];
+      plan.forEach(function (x) {
+        var r = runs[runs.length - 1];
+        if (!r || r.step !== x.step) runs.push({ step: x.step, dose: x.dose, first: x.day, count: 1 });
+        else r.count++;
+      });
+      runs.forEach(function (r) {
+        r.note = "Step " + (r.step + 1) + " of " + runs.length + ": " + r.count + (r.count === 1 ? " dose" : " doses") +
+          " of " + fmtNum(r.dose) + " " + c.pen.unit + ".";
+      });
+      var shown = plan.slice(0, 200);
+      var cells = shown.map(function (x, i) {
+        return '<div class="sd st-' + (x.step % 4) + (i === 0 ? " first" : "") + (i === plan.length - 1 ? " last" : "") +
+          (x.newPen ? " newpen" : "") + '">' + "<b>" + fmtDate(x.day) + "</b><span>" +
+          (x.newPen ? "New " + holder() + " · " : "") + fmtNum(x.dose, 2) + " " + unit + "</span></div>";
+      }).join("");
+      schedWrap.innerHTML =
+        '<h3 class="sched-h">Your dose dates</h3>' +
+        '<div class="sched">' + cells + "</div>" +
+        (shown.length < plan.length ? '<div class="note" style="margin-top:12px">Showing the first ' + shown.length +
+          " of " + plan.length + " doses.</div>" : "") +
+        '<div class="cal-row">' +
+          '<button class="btn-cal" id="cal-apple" type="button">Apple Calendar · whole plan</button>' +
+        "</div>" +
+        '<div class="cal-note">Adds every step as its own repeating event, titled with its dose, at ' + esc(hhmm()) +
+          " with a reminder. The file also opens in Outlook and most other calendar apps.</div>" +
+        '<div class="g-steps"><b>Google Calendar</b><span>Google adds one repeating event per link, so tap each step:</span>' +
+          '<div class="cal-row">' + runs.map(function (r, i) {
+            var g = googleUrl(c, r);
+            return g ? '<a class="btn-cal ghost" href="' + esc(g) + '" target="_blank" rel="noopener">Step ' + (i + 1) + " · " +
+              fmtNum(r.dose) + " " + unit + "</a>" : "";
+          }).join("") + "</div></div>" +
+        '<div id="ics-fallback"></div>';
+      document.getElementById("cal-apple").addEventListener("click", function () { addToApple(c, runs); });
+    }
+
     function update() {
       var qty = parseFloat(f.qty.value), d = parseFloat(f.dose.value), perWeek = parseFloat(f.week.value);
       drawBasis(d);
@@ -804,19 +1558,20 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         var on = Math.abs(parseFloat(b.getAttribute("data-dose")) - d) < 1e-9;
         b.classList.toggle("on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
       });
+      if (stepMode) return updateSteps(qty);
 
       if (!(qty > 0) || !(d > 0)) {
         out.innerHTML = '<div class="out-empty">' +
           (!(qty > 0) && !(d > 0) ? "Pick your " + (sprayable ? "pen or spray" : "pen") + " and your dose"
             : !(qty > 0) ? "Pick your " + (sprayable ? "pen or spray" : "pen") : "Pick your dose") +
           " to see how many doses you have and the dates they fall on.</div>";
-        schedWrap.innerHTML = ""; doseDates = [];
+        schedWrap.innerHTML = schedEmpty(); doseDates = [];
         return;
       }
       if (d > qty) {
         out.innerHTML = '<div class="flag">A ' + fmtNum(d, 2) + " " + esc(c.pen.unit) +
           " dose is bigger than the " + fmtNum(qty, 2) + " " + esc(c.pen.unit) + " in the " + holder() + ".</div>";
-        schedWrap.innerHTML = ""; doseDates = [];
+        schedWrap.innerHTML = schedEmpty(); doseDates = [];
         return;
       }
 
@@ -826,15 +1581,23 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       var unit = esc(c.pen.unit);
 
       var start = parseIso(f.date.value) || new Date();
+      var courseDays = f.course ? Math.max(0, parseInt(f.course.value, 10) || 0) : 0;
       doseDates = [];
       if (hasPattern) {
         /* Cap the projection so an unusual dose cannot render hundreds of
            chips; the count above still reports the true number of doses. */
         var cap = Math.min(doses, 120);
         for (var i = 0; i < 900 && doseDates.length < cap; i++) {
+          if (courseDays && i >= courseDays) break;
           var day = addDays(start, i);
           if (pattern[weekdayIdx(day)]) doseDates.push(day);
         }
+      }
+      /* A course: count its doses, and say if the pen runs out before it ends. */
+      var courseN = 0, courseEnd = null;
+      if (courseDays) {
+        for (var k = 0; k < courseDays; k++) if (pattern[weekdayIdx(addDays(start, k))]) courseN++;
+        courseEnd = addDays(start, courseDays - 1);
       }
       var lastDose = doseDates.length ? doseDates[doseDates.length - 1] : null;
       var discard = addDays(start, IN_USE_DAYS);
@@ -854,20 +1617,35 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       }
       if (leftover > 0.0001) flags += '<div class="flag">' + fmtNum(leftover, 2) + " " + unit +
         " is left over after " + doses + " full doses — not enough for another one this size.</div>";
+      if (courseDays && courseN > doses) flags += '<div class="flag">This ' + holder() + " covers " + doses + " of the course's " +
+        courseN + " doses, so it runs out on " + fmtDate(doseDates[doseDates.length - 1]) + ", before the course ends on " + fmtDate(courseEnd) + ".</div>";
 
       out.innerHTML =
         '<div class="out-hero"><div class="out-num tnum">' + doses + "</div>" +
         '<div class="out-unit">doses in this ' + holder() + " at " + fmtNum(d, 2) + " " + unit + "</div></div>" +
+        gauge(doses, qty - doses * d > 1e-9) +
         '<div class="out-grid">' +
           '<div class="out-cell"><b class="tnum">' + fmtNum(qty, 2) + " " + unit + "</b><span>In the " + holder() + "</span></div>" +
           '<div class="out-cell"><b class="tnum">' + fmtNum(d, 2) + " " + unit + "</b><span>" + eachLabel + "</span></div>" +
           '<div class="out-cell"><b class="tnum">' + (perWeek > 0 ? fmtNum(d * perWeek, 2) + " " + unit : "—") + "</b><span>Each week</span></div>" +
           '<div class="out-cell"><b class="tnum">' + (days ? Math.round(days) + " days" : "—") + "</b><span>" + (form === "spray" ? "Spray" : "Pen") + " lasts</span></div>" +
-          '<div class="out-cell"><b>' + (lastDose ? fmtDate(lastDose) : fmtDate(discard)) + "</b><span>" +
-            (lastDose ? "Last dose" : "Finish by") + "</span></div>" +
+          (courseDays
+            ? '<div class="out-cell"><b class="tnum">' + Math.min(courseN, doses) + " doses · ends " + fmtDate(courseEnd) + "</b><span>This course, " +
+              fmtNum(Math.min(courseN, doses) * d, 2) + " " + unit + "</span></div>"
+            : '<div class="out-cell"><b>' + (lastDose ? fmtDate(lastDose) : fmtDate(discard)) + "</b><span>" +
+              (lastDose ? "Last dose" : "Finish by") + "</span></div>") +
         "</div>" + flags;
 
-      drawSchedule(c, doses, d);
+      drawSchedule(c, courseDays ? doseDates.length : doses, d);
+    }
+
+    /* The pen, drawn: one mark per dose (or per few doses in a big pen), plus a
+       faint stub for anything left over that is less than a full dose. */
+    function gauge(n, rest, stepOf) {
+      var per = Math.max(1, Math.ceil(n / 40)), q = parseFloat(f.qty.value);
+      return '<div class="gauge" role="img" aria-label="' + n + " doses in this " + holder() + '">' +
+        penArt(c.name, fmtNum(q) + " " + c.pen.unit + " " + holder(), { marks: n, rest: rest, stepOf: stepOf, spray: form === "spray", band: band(c.category) }) +
+        "</div>" + (per > 1 ? '<div class="g-key">Each mark is ' + per + " doses</div>" : "");
     }
 
     /* Every dose date, through to the end of the pen. */
@@ -877,7 +1655,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
           "Taken when needed, so there are no dates to plan.</div>";
         return;
       }
-      var gcal = googleUrl(c, dose, doses);
+      var run = { dose: dose, first: doseDates[0], count: doses, note: doses + " doses in this " + holder() + "." };
+      var gcal = googleUrl(c, run);
       var cells = doseDates.map(function (day, i) {
         var last = i === doseDates.length - 1;
         return '<div class="sd' + (i === 0 ? " first" : "") + (last ? " last" : "") + '">' +
@@ -886,7 +1665,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
       }).join("");
 
       schedWrap.innerHTML =
-        '<h2 style="margin-top:34px">Your dose dates</h2>' +
+        '<h3 class="sched-h">Your dose dates</h3>' +
         '<div class="sched">' + cells + "</div>" +
         '<div class="cal-row">' +
           '<button class="btn-cal" id="cal-apple" type="button">Apple Calendar</button>' +
@@ -905,7 +1684,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
         '<div id="ics-fallback"></div>';
 
       document.getElementById("cal-apple").addEventListener("click", function () {
-        addToApple(c, dose, doses);
+        addToApple(c, [run]);
       });
     }
 
@@ -940,7 +1719,7 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     }
     function eventTitle(c, dose) { return c.name + " " + fmtNum(dose) + " " + c.pen.unit; }
 
-    function icsText(c, dose, doses) {
+    function icsText(c, runs) {
       function esc2(t) { return String(t).replace(/([,;\\])/g, "\\$1").replace(/\n/g, "\\n"); }
       function stamp(d) {
         return d.getUTCFullYear() + String(d.getUTCMonth() + 1).padStart(2, "0") +
@@ -957,21 +1736,25 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
          the pen (the chips on the page stop at 120), and deleting it removes the
          whole run. The UID is stable for the same compound, start and time, so
          adding the same run twice updates it instead of duplicating it. */
-      var first = doseDates[0];
-      lines.push("BEGIN:VEVENT",
-        "UID:axiom-" + c.slug + "-" + localStamp(first, 0) + "@axiom",
-        "DTSTAMP:" + now,
-        "DTSTART:" + localStamp(first, 0),
-        "DTEND:" + localStamp(first, 30),
-        "RRULE:" + recurRule(doses),
-        "SUMMARY:" + esc2(eventTitle(c, dose)),
-        "DESCRIPTION:" + esc2(doses + " doses in this " + holder() + ". " +
-          "When: " + c.timing.when + ". Food: " + c.timing.food + "."),
-        /* Google adds the account's default reminder by itself; an imported
-           file gets none unless it carries one, so it would never alert. */
-        "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + esc2(eventTitle(c, dose)),
-        "TRIGGER:PT0M", "END:VALARM",
-        "END:VEVENT", "END:VCALENDAR");
+      /* A dose that changes over time is one repeating event per step, each
+         titled with its own amount. */
+      runs.forEach(function (run) {
+        var first = run.first;
+        lines.push("BEGIN:VEVENT",
+          "UID:axiom-" + c.slug + "-" + localStamp(first, 0) + "-" + String(run.dose).replace(".", "p") + "@axiom",
+          "DTSTAMP:" + now,
+          "DTSTART:" + localStamp(first, 0),
+          "DTEND:" + localStamp(first, 30),
+          "RRULE:" + recurRule(run.count),
+          "SUMMARY:" + esc2(eventTitle(c, run.dose)),
+          "DESCRIPTION:" + esc2(run.note + " When: " + c.timing.when + ". Food: " + c.timing.food + "."),
+          /* Google adds the account's default reminder by itself; an imported
+             file gets none unless it carries one, so it would never alert. */
+          "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + esc2(eventTitle(c, run.dose)),
+          "TRIGGER:PT0M", "END:VALARM",
+          "END:VEVENT");
+      });
+      lines.push("END:VCALENDAR");
       return lines.map(foldLine).join("\r\n") + "\r\n";
     }
 
@@ -1000,16 +1783,15 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
 
     /* A single repeating event, as a plain link. Needs no file at all, which
        is the one route that works everywhere — phones and sandboxes included. */
-    function googleUrl(c, dose, doses) {
-      var rule = recurRule(doses);
-      if (!doseDates.length || !rule) return null;
-      var first = doseDates[0];
+    function googleUrl(c, run) {
+      var rule = recurRule(run.count);
+      if (!run.first || !rule) return null;
+      var first = run.first;
       var p = {
         action: "TEMPLATE",
-        text: eventTitle(c, dose),
+        text: eventTitle(c, run.dose),
         dates: localStamp(first, 0) + "/" + localStamp(first, 30),
-        details: "When: " + c.timing.when + ". Food: " + c.timing.food + "." +
-                 "\n" + doses + " doses in this " + holder() + ".",
+        details: "When: " + c.timing.when + ". Food: " + c.timing.food + "." + "\n" + run.note,
         recur: "RRULE:" + rule
       };
       return "https://calendar.google.com/calendar/render?" +
@@ -1020,8 +1802,8 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
        offers to add a downloaded calendar file straight to Calendar; Outlook and
        most other calendar apps open the same file. Two places cannot hand the
        file over, and each gets a way forward instead of a dead button. */
-    function addToApple(c, dose, doses) {
-      var text = icsText(c, dose, doses);
+    function addToApple(c, runs) {
+      var text = icsText(c, runs);
       var help = document.getElementById("ics-fallback");
       try {
         var blob = new Blob([text], { type: "text/calendar;charset=utf-8" });
@@ -1102,13 +1884,82 @@ p.body{font-size:0.8529rem;color:#d8d1c6;line-height:1.7}
     return window.COMPOUNDS.some(function (x) { return x.slug === seg; }) ? seg : null;
   }
 
+  var DEFAULT_DESC = (document.querySelector('meta[name="description"]') || {}).content || "";
+  /* Coming back to the list puts you where you were, with your search still in place. */
+  var listY = 0, listQ = "", firstPaint = true, cameFromList = false, lastSlug = null;
+  function setMeta(sel, attr, val) { var m = document.querySelector(sel); if (m) m.setAttribute(attr, val); }
+  function reduceMotion() { return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches; }
   function route() {
-    var slug = param("c") || decodeURIComponent(location.hash.replace(/^#/, "")) || pathSlug();
+    var hashSlug = decodeURIComponent(location.hash.replace(/^#/, ""));
+    var slug = param("c") || hashSlug || pathSlug();
     var found = slug && window.COMPOUNDS.filter(function (x) { return x.slug === slug; })[0];
-    if (found) renderCompound(found);
-    else renderIndex();
-    window.scrollTo(0, 0);
+    /* An old #slug link on the hosted site moves to the slug's own address. */
+    if (PATHS && found && hashSlug) history.replaceState(null, "", "/" + found.slug);
+    var fromList = /page-index/.test(app.className) && !firstPaint;
+    if (fromList) {
+      listY = window.scrollY;
+      var qEl = document.getElementById("q"); listQ = qEl ? qEl.value : "";
+    }
+    cameFromList = !!found && fromList;
+
+    /* The tapped compound's name travels up into the page title, and back down
+       into its row on the way back (where the browser can animate it). */
+    var useVT = !firstPaint && document.startViewTransition && !reduceMotion();
+    if (useVT && found) {
+      var src = document.querySelector('.item[data-slug="' + found.slug + '"] .item-name');
+      if (src) src.style.viewTransitionName = "ctitle";
+    }
+    function draw() {
+      document.documentElement.classList.remove("deep");
+      if (found) renderCompound(found);
+      else {
+        renderIndex();
+        if (listQ) { var q2 = document.getElementById("q"); q2.value = listQ; q2.dispatchEvent(new Event("input")); }
+        var row = lastSlug && document.querySelector('.item[data-slug="' + lastSlug + '"] .item-name');
+        if (useVT && row) row.style.viewTransitionName = "ctitle";
+      }
+      var desc = found ? found.name + ": " + found.what : DEFAULT_DESC;
+      /* Search results show about 155 characters; cut at a word, not mid-word. */
+      if (desc.length > 155) desc = desc.slice(0, 154).replace(/\s+\S*$/, "").replace(/[,;:.]$/, "") + "\u2026";
+      var url = ORIGIN + "/" + (found ? found.slug : "");
+      setMeta('meta[name="description"]', "content", desc);
+      setMeta('meta[property="og:description"]', "content", desc);
+      setMeta('meta[property="og:title"]', "content", found ? "AXIOM — " + found.name : "AXIOM Compound Guide");
+      setMeta('meta[property="og:url"]', "content", url);
+      setMeta('link[rel="canonical"]', "href", url);
+      window.scrollTo(0, !found && !fromList ? listY : 0);
+      /* Each page's blocks rise in, top first (inside the title transition too). */
+      app.classList.remove("enter");
+      if (!firstPaint) { void app.offsetWidth; app.classList.add("enter"); }
+      lastSlug = found ? found.slug : null;
+      firstPaint = false;
+    }
+    if (useVT) {
+      var t = document.startViewTransition(draw);
+      t.finished.then(function () {
+        [].forEach.call(document.querySelectorAll(".item-name, h1"), function (e) { e.style.viewTransitionName = ""; });
+      });
+    } else draw();
   }
+  /* On the hosted site, links inside the guide change the address without reloading. */
+  if (PATHS) {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a.item, a.mark, a.pg");
+      if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault(); go(a.getAttribute("href"));
+    });
+    window.addEventListener("popstate", route);
+  }
+  /* Back goes back in history when you came from the list, so your place and search are kept. */
+  back.addEventListener("click", function (e) {
+    if (cameFromList) { e.preventDefault(); history.back(); }
+    else if (PATHS) { e.preventDefault(); go("/"); }
+    else if (location.hash) { e.preventDefault(); location.hash = ""; }
+  });
+  /* The skip link moves focus to the content without touching the hash, which routes pages. */
+  document.querySelector(".skip").addEventListener("click", function (e) {
+    e.preventDefault(); app.focus(); app.scrollIntoView();
+  });
   window.addEventListener("hashchange", route);
   route();
 })();
