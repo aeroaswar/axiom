@@ -83,7 +83,7 @@ business-proposal/order-form/                   the fillable A4 order form (buil
 business-proposal/axiom-peptide-pricelist.html  the internal sheet — cost basis and margin per lot
 business-proposal/assets/logo/                  the wordmark and logo-mark masters (SVG and PNG)
 brand-book/ · company-profile/                  brand book and the one-page company profile
-stickers/                                       the vial label and its builder (see below)
+stickers/                                       the vial label and its builder, and the package label builder (see below)
 docs/                                           DECISIONS.md, catalogue notes, design specs
 ```
 
@@ -269,6 +269,48 @@ never the generated files. The storefront is also a private Claude Artifact, rep
 compound and strength and outputs an A4 sheet with optional vendor die lines, a thermal roll
 tuned for the NIIMBOT B31 at 203 dpi, a PDF with one label per page, or 400 × 240 px images for
 the NIIMBOT phone app. Every measurement and decision is in `stickers/design.md`.
+
+## Package label builder
+
+`stickers/package-label.html` makes the thermal shipping label for the mailer from the invoice. Drop the PDF saved from the invoice builder and each destination becomes a label: the
+recipient, address and phone from *Billed to* (or the *Ship to* row when the order goes to several
+addresses), the invoice number, and every line with its lot size, across as many pages as the
+table runs. A cold-chain invoice turns on *Keep cool*. The invoice is read by layout, anchored on
+its headings in English or Indonesian, so the Console's invoices use the same reader.
+
+Invoices often carry no phone number. Drop the client's order form (`AXIOM-Order-Form.pdf`) with
+the invoice and its phone, notes and research-use tick fill the invoice's label, matched on first
+name; an order form on its own still makes a label, with each typed line matched against
+`business-proposal/order-form/compounds.json`. Amber flags mark what needs a look before it ships:
+no phone, a compound the catalogue doesn't know, a size that isn't a listed lot, an unticked
+research-use box. Long orders go to two columns; anything that still doesn't fit is counted on the
+label ("+ 4 more lines — see AX-INV-…"), never dropped silently. Courier, service, resi, handling
+marks and a discreet-contents option are set in the builder; the sender is remembered per browser.
+
+Four stocks: **80 × 50 mm** and **70 × 50 mm**, a compact layout for a small label printer such as the NIIMBOT
+B31 with the large label's outlined recipient box (courier and service beside the name) and ruled
+contents table, and the sender (resi, handling marks and the note stay on the large label),
+and the full **100 × 150 mm** label, or the same turned 90° on **150 × 100 mm**.
+
+For a printer that takes labels only 50 mm wide, such as the NIIMBOT B21 / B21 Pro (300 dpi),
+*Turn 90°* prints the compact label along the feed on **50 × 80** or **50 × 70 mm** stock: the
+page and the PNG come out turned (600 × 960 / 600 × 840 px at 300 dpi), the preview stays upright.
+
+PDFs are read in the browser with pdf.js (loaded from cdnjs on first use, so it needs a
+connection); nothing is uploaded. Two outputs:
+
+- **Save PNG**, for app-driven printers such as NIIMBOT: the label as a pure black-and-white image
+  at the printer's dot pitch, 203 dpi (8 dots/mm, 560 × 400 px for 70 × 50) or 300 dpi (12 dots/mm).
+  It is drawn at four times that with html2canvas (from cdnjs), shrunk smoothly, then snapped to
+  black and white, so small text keeps its shape.  In the printer's app, choose the same label size, insert the image
+  and fill the label with it. On a phone the share sheet offers *Save Image*.
+- **Print**, for printers with a computer driver: one label per page, black only, at the stock's size
+  (Paper to match, Scale 100%, Margins None).
+
+The same file is published as a claude.ai artifact with `<meta name="axiom:mode" content="artifact">`
+added: there the page cannot print, so Print is hidden, and *Save PNG* goes through the artifact
+`downloads` capability (a confirmed save, or the share sheet in the iOS app), falling back to showing
+the image to press-and-hold or right-click where saving is not offered.
 
 ## Standalone invoice builder
 
