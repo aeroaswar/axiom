@@ -7,6 +7,10 @@ This is a working document, not a published surface. Statuses are **as stated in
 not been independently re-verified against WADA primary documents. The List is revised annually, so
 re-check every entry each January before it informs anything a buyer sees.
 
+Every row was read from the source card directly. An earlier pass built this table by pattern-matching
+the text and was wrong on seven of the 34 rows, mostly by recording a compound as *not named* where
+the source had deliberately left the question open.
+
 `Basis` matters commercially: **named** means the 2026 List names the compound, which is a fact you can
 print. **Inferred** means the source applied the S0 catch-all for non-approved substances, and said so.
 
@@ -15,20 +19,18 @@ print. **Inferred** means the source applied the S0 catch-all for non-approved s
 | Compound | AXIOM listing | Status | Class | Basis | Evidence |
 |---|---|---|---|---|---|
 | AOD-9604 | AOD-9604 | Prohibited | S2.2.3 | named | C |
-| ARA-290 | ARA-290 | Prohibited | S2.1.5 | named | B |
+| ARA-290 | ARA-290 | Prohibited | S2.1.5 | inferred | B |
 | BPC-157 | BPC-157 | Prohibited | S0 | named | C |
 | CJC-1295 | CJC-1295 (With DAC) | Prohibited | S2.2.4 | named | B |
 | Cagrilintide | Cagrilintide | Prohibited | S0 | inferred | A |
 | Dihexa | Dihexa | Prohibited | S0 (S2.3 also relevant) | inferred | C |
 | Epitalon | Epithalon | Prohibited | S0 | inferred | C |
-| IGF-1 LR3 | IGF-1 LR3 | Prohibited | S2.3 | named | C |
+| IGF-1 LR3 | IGF-1 LR3 | Prohibited | S2.3 | inferred | C |
 | Ipamorelin | Ipamorelin | Prohibited | S2.2.4 | named | C |
 | Kisspeptin-10 | Kisspeptin | Prohibited (males) | S2.2.1 | named | C |
-| LL-37 | LL-37 | Prohibited | S0 | inferred | A |
 | MOTS-c | MOTS-c | Prohibited | S4.4.1 | named | C |
 | Melanotan II | Melanotan II | Prohibited | S0 | named | B |
 | PEG-MGF | Peg MGF | Prohibited | S2.3 | inferred | D |
-| Retatrutide | Retatrutide | Prohibited | S0 | inferred | A |
 | Sermorelin | Sermorelin | Prohibited | S2.2.4 | named | B |
 | TB-500 | TB-500 | Prohibited | S2.3 | named | C |
 | Tesamorelin | Tesamorelin | Prohibited | S2.2.4 | named | A |
@@ -37,16 +39,18 @@ print. **Inferred** means the source applied the S0 catch-all for non-approved s
 | GHK-Cu | GHK-Cu | Prohibited (inferred) | S0 | inferred | C |
 | Humanin | Humanin | Prohibited (inferred) | S0 | inferred | C |
 | KPV | KPV | Prohibited (inferred) | S0 | inferred | C |
-| Thymalin | Thymalin | Prohibited (inferred) | S0 | inferred | A |
+| LL-37 | LL-37 | Prohibited (inferred) | S0 | inferred | A |
 | Cerebrolysin | Cerebrolysin | Unresolved | — | unresolved | C |
+| Retatrutide | Retatrutide | Unresolved | S0 (potentially applicable) | unresolved | A |
 | Selank | Selank | Unresolved | — | unresolved | A |
 | Semax | Semax | Unresolved | — | unresolved | A |
+| Thymalin | Thymalin | Unresolved | — | unresolved | A |
+| Thymosin Alpha-1 | Thymosin Alpha-1 | Unresolved | — | unresolved | A |
 | NAD+ | NAD+ | Not named | — | — | C |
 | Oxytocin | Oxytocin Acetate | Not prohibited | — | — | C |
 | PT-141 | PT-141 (Bremelanotide) | Not named | — | — | A |
 | SS-31 | SS-31 | Not named | — | — | A |
 | Semaglutide | Semaglutide | Not prohibited | — | named | A |
-| Thymosin Alpha-1 | Thymosin Alpha-1 | Not named | — | — | A |
 | Tirzepatide | Tirzepatide | Not prohibited | — | named | A |
 
 ## Blends — status inherited from components
@@ -110,12 +114,12 @@ reviewed in 2026) is the only Khavinson compound with a card and is the closest 
 
 ## Not named is not permitted
 
-Three AXIOM SKUs — **Semax**, **Selank** and **Cerebrolysin** — are absent from the 2026 List by name
-while a category plausibly reaches them, and the source declines to call the question. Semax is the
-sharpest: S2 prohibits corticotrophins **and substances of similar chemical structure or biological
-effect**, and Semax is an ACTH(4-10) analogue. It reaches the catalogue three ways — Semax, Selank +
-Semax, and Adamax. Treat all three as open questions, not as clearance. (Argireline is the fourth
-unresolved compound in the source and is not an AXIOM SKU.)
+Six AXIOM SKUs — **Retatrutide, Thymosin Alpha-1, Thymalin, Semax, Selank** and **Cerebrolysin** — are absent from the 2026 List by
+name while a category plausibly reaches them, and the source declines to call the question. Semax is
+the sharpest: S2 prohibits corticotrophins **and substances of similar chemical structure or
+biological effect**, and Semax is an ACTH(4-10) analogue. It reaches the catalogue three ways —
+Semax, Selank + Semax, and Adamax. Treat all six as open questions, not as clearance. (Liraglutide
+and Argireline are unresolved in the source too; neither is an AXIOM SKU.)
 
 Two entries carry a **method** restriction independent of the molecule: NAD+ and Cerebrolysin. M2.2
 limits intravenous infusion by total volume per 12 hours, counting the diluent.
@@ -124,8 +128,8 @@ limits intravenous infusion by total volume per 12 hours, counting the diluent.
 
 1. **Kisspeptin is prohibited in males only** (S2.2.1, testosterone-stimulating peptides in males).
    A blanket label is wrong in one direction or the other.
-2. **Thymosin alpha-1 is not TB-500.** Alpha-1 is not named on the 2026 List as reviewed 5 September
-   2026. Thymosin beta-4 and its derivatives, TB-500 included, are prohibited at all times under S2.
+2. **Thymosin alpha-1 is not TB-500.** Alpha-1 is unresolved — not named, but not cleared either.
+   Thymosin beta-4 and its derivatives, TB-500 included, are prohibited at all times under S2.
    AXIOM sells both, and the names invite the conflation.
 3. **Tirzepatide and semaglutide are not prohibited** but sit in section 6 of the 2026 Monitoring
    Programme, in and out of competition. NAD+ is not named, but an infusion can itself involve a
@@ -134,7 +138,7 @@ limits intravenous infusion by total volume per 12 hours, counting the diluent.
 ## Counts
 
 - Source compounds: 41. Also in the AXIOM guide: 34.
-- Prohibited at all times: 24 of 34 — 12 named in the List, 12 inferred via S0.
-- Unresolved: 3 (Semax, Selank, Cerebrolysin).
-- Not named or not prohibited: 7. Two of those — tirzepatide and semaglutide — are named as not prohibited and sit in the Monitoring Programme.
+- Prohibited at all times: 22 of 34 — 10 named in the List, 12 reached by a category rule.
+- Unresolved: 6 (Retatrutide, Thymosin Alpha-1, Thymalin, Semax, Selank, Cerebrolysin).
+- Not named or not prohibited: 6. Tirzepatide and semaglutide are named as not prohibited and sit in the Monitoring Programme.
 - AXIOM guide entries with no card: 36.
