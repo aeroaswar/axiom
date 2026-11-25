@@ -69,15 +69,15 @@ Sizes are given in mm (what the CSS declares) and pt (what a printer will ask fo
 | `HIGH PURITY` | 1.9 mm · 5.3 pt | Inter 500, `--accent` | `.14em` |
 | Hairlines | 0.25 mm · 0.71 pt | solid `--accent` | — |
 | `RETATRUTIDE` | 4.9 mm · 13.8 pt | Jost 400, `--ink` | `.05em` |
-| `QTY` / `DOSE` keys | 1.9 mm · 5.3 pt | Inter 400, `--muted` | `.14em` |
+| `QTY` / `LOT` keys | 1.9 mm · 5.3 pt | Inter 400, `--muted` | `.14em` |
 | QTY value | 2.5 mm · 7.1 pt | Inter 500, `--ink` | `.01em` |
-| DOSE value | 2.25 mm · 6.4 pt | Inter 500, `--ink` | `.01em` |
+| LOT value | 2.25 mm · 6.4 pt | Inter 500, `--ink` | `.01em` |
 | `RESEARCH USE ONLY` | 1.75 mm · 5.0 pt | Inter 400, `--muted` | `.10em` |
 
 Two details that are easy to lose in a rebuild:
 
 - The keys carry **`min-width: 3.4em`**. That is what puts `30 mg` and `10 clicks = 1 mg` on a
-  shared left edge instead of ragging off the ends of `QTY` and `DOSE`.
+  shared left edge instead of ragging off the ends of `QTY` and `LOT`.
 - Every numeral runs `font-variant-numeric: tabular-nums; font-feature-settings:"tnum" 1`, per
   the brand rule that all figures are tabular.
 
@@ -100,7 +100,7 @@ Five bands stacked inside the 46 × 26 mm safe area, split by two hairlines:
 │   ──────────────────────────────────   │      bronze hairline
 │   RETATRUTIDE                          │  B — hero
 │   QTY    30 mg                         │  C
-│   DOSE   10 clicks = 1 mg              │  D — omitted when dose is null
+│   LOT    « lot »                       │  D — omitted when lot is null
 │   ──────────────────────────────────   │      bronze hairline
 │   RESEARCH USE ONLY                    │  E — compliance
 │                                        │
@@ -117,7 +117,7 @@ whether or not band D is present. Vertical rhythm, as shipped:
 | `.lbl__band--d` margin-top | `0.8 mm` |
 | `.lbl__rule--bot` margin | `2.1 mm` above / `1.6 mm` below (thermal 1.8 / 1.4) |
 
-The tallest label (Retatrutide with DOSE) stacks to 23.94 mm of the 26 mm content box.
+The tallest label (Retatrutide with LOT) stacks to 23.94 mm of the 26 mm content box.
 
 Band A is `align-items: center` (wordmark against cap-height text); the rest are
 `align-items: baseline` so keys and values sit on a shared baseline.
@@ -174,7 +174,7 @@ Both files share one `LABELS` array:
 ```js
 { compound: "Retatrutide",        // hero line, uppercased by CSS
   qty:      "30 mg",              // QTY value — units spaced
-  dose:     "10 clicks = 1 mg",   // DOSE value, or null
+  lot:      "« lot »",            // LOT value, or null
   note:     "HIGH PURITY",        // bronze mark, top right
   copies:   9 }                   // how many to place on the sheet
 ```
@@ -185,59 +185,21 @@ strength on whole rows, so a cut sheet stays sorted. Set one SKU to `copies: 24`
 single-strength page; more copies add pages.
 
 All five strengths are real SKUs. The catalogue — `../supabase/seed.sql`, the only file in the
-repository permitted to carry a price, a name or a dose — lists Retatrutide as `reta10`, `reta20`,
+repository permitted to carry a price, a name or a dose literal — lists Retatrutide as `reta10`, `reta20`,
 `reta30`, `reta40` and `reta60`, so the sheet matches it exactly.
 
-### The click conversion
+### The lot
 
-Every pen cartridge is mixed with **3 ml of bacteriostatic water**, and the pen delivers
-**0.01 ml per click** (100 clicks per ml). Only the vial's mg changes, so the conversion follows
-from the strength:
+`lot` is the batch identifier for the vials in a run. It is the one field that changes between
+production runs, so both the print sheet and the builder ship it as the placeholder `« lot »`,
+in the same guillemet convention `supabase/seed.sql` uses for the legal entity and bank details.
+A production run replaces it with the real batch number before the sheet goes to the printer.
 
-- clicks per mg = (3 ml ÷ vial mg) ÷ 0.01 ml = 300 ÷ vial mg. 10 mg in 3 ml is 0.3 ml per mg:
-  `30 clicks = 1 mg`.
-- **Whole clicks.** The label shows the smallest whole number of mg (1–10) that takes a whole
-  number of clicks, so nobody has to dial half a click: 40 mg is 7.5 clicks per mg and reads
-  `15 clicks = 2 mg`. If no whole mg up to 10 works (13 mg), it reads `10 clicks = X mg`, X to
-  two decimals. IU vials work the same way: 36 IU reads `25 clicks = 3 IU`.
+A lot is never inferred. An SKU without one carries `lot: null`, and band D is dropped entirely
+rather than printed empty — the stack is `justify-content: center`, so a label without it stays
+optically centred.
 
-| Vial, in 3 ml | per ml | DOSE |
-|---|---|---|
-| 10 mg | 3.33 mg | `30 clicks = 1 mg` |
-| 20 mg | 6.67 mg | `15 clicks = 1 mg` |
-| 30 mg | 10 mg | `10 clicks = 1 mg` |
-| 40 mg | 13.3 mg | `15 clicks = 2 mg` |
-| 60 mg | 20 mg | `5 clicks = 1 mg` |
-
-**In the builder** this is automatic. The Dose field is on **Pen · clicks** by default; the water
-(3 ml) and ml per click (0.01) are pre-filled, and the clicks are worked out from QTY as you pick
-or type it, with the working on the line below. Change the water or the ml per click only if a
-pen is filled differently; that setting is kept for the browser. **No dose** leaves the DOSE row
-off.
-
-**Setting the clicks.** The clicks box is editable: type a number of clicks and the amount follows
-(clicks × 0.01 ml × the vial's mg/ml, to two decimals). Clearing the box goes back to the
-whole-click conversion. **KLOW-C (KLOW + Cartalax) opens on 12 clicks**: its 100 mg in 3 ml is
-33.33 mg/ml, so the label reads `12 clicks = 4 mg` instead of the conversion's `3 clicks = 1 mg`.
-A set number of clicks is remembered per compound and strength when the label is added.
-
-**In the print sheet** the Retatrutide range carries the table's values, set per SKU by hand. A
-SKU whose conversion is not known carries `dose: null`, and band D is dropped entirely rather than
-printed with a guess.
-
-**Nasal sprays.** Adamax, Selank and Semax (and Selank + Semax) are nasal sprays, not pens: their
-DOSE line reads `1 spray = 100 mcg`. Selecting one of them puts the Dose field on **Nasal spray**
-at 100 mcg; the amount stays editable, and the choice is remembered per compound and strength.
-
-A spray label carries a **spray icon at the right of the compound line**, drawn after the
-reference the user supplied: a slim pump bottle on a rounded base and a cone of eleven mist dots
-fanning out to the right, growing as they spread. It is all filled shapes, 3.2em tall on the
-compound line (4 mm), so the smallest dot is 0.37 mm (3 dots at 203 dpi), and it is drawn in the
-PDFs and the label images too. Pen and **No dose** labels have no icon. It shares the compound
-line's autofit; a name too long to share the line with it (only *VIP (Vasoactive Intestinal
-Peptide)*, were it ever a spray) keeps the line to itself and the icon is left off.
-
----
+In the builder the **Lot** field sits under Copies. Leave it empty and the LOT row is omitted.
 
 ## 7. Print sheet
 
@@ -325,7 +287,7 @@ grey would print as a dither pattern. The hierarchy the greys carried moves to w
 
 | Element | A4 | Thermal |
 |---|---|---|
-| `QTY` / `DOSE` keys | Inter 400, `--muted` | Inter 500, black |
+| `QTY` / `LOT` keys | Inter 400, `--muted` | Inter 500, black |
 | Values, `HIGH PURITY` | Inter 500 | Inter 600 |
 | Compound | Jost 400 | Jost 400 — at 500 the longest name no longer fits at the autofit floor |
 
@@ -344,7 +306,7 @@ These are the 50 × 30 mm sizes. The mark was first tuned on the 40 × 20 label,
 master wordmark is 9 mm wide and its strokes (11.8 of 582 units) are 0.18 mm: 1.5 dots at 203 dpi,
 and they print broken. The thermal mark is wider and also drawn slightly heavier (below); at
 17.5 mm its strokes are 0.38 mm, 3 dots. The tighter rule spacing pays for the larger
-micro-print, so the tallest label (Retatrutide with DOSE) stacks to 23.45 mm, inside the 26 mm
+micro-print, so the tallest label (Retatrutide with LOT) stacks to 23.45 mm, inside the 26 mm
 content box (23.94 mm on A4).
 
 Stroke weights, in units of the 582 × 70 grid:
@@ -374,7 +336,7 @@ the box short and clipped the O flat at the other letters' cap line.
 whole CSS pixel (0.2646 mm = 3.125 dots) and snaps their position too, so one rule landed on 3 dot
 rows and the other on 4. SVG geometry is not snapped. The rect is also nudged down 0.005 mm so
 neither edge sits exactly on a dot centre, where the driver's rounding would decide. Measured
-from the PDF across every catalogue name with and without the DOSE row (158 labels, 316 rules):
+from the PDF across every catalogue name with and without the LOT row (158 labels, 316 rules):
 every rule covers **2 rows at 203 dpi** and 3 at 300 dpi. The rules print with *Background
 graphics* off.
 
@@ -418,7 +380,7 @@ button:
   same wordmark path and the same 2-dot hairlines, in the page's own web fonts. Against the
   thermal PDF rendered at 203 dpi it differs by 1–2 % of pixels, all at glyph edges; the hairlines
   land on the same two rows.
-- Named `axiom-<compound>-<qty>.png` (`-no-dose` when the DOSE row is off). In claude.ai each
+- Named `axiom-<compound>-<qty>.png` (`-no-lot` when the LOT row is off). In claude.ai each
   image is offered with its own save prompt; on iOS that is the share sheet, so **Save Image** puts
   it in Photos for the app to pick up.
 
@@ -472,7 +434,7 @@ Three things to settle before a run:
 
 ---
 
-## 9. Open decision — label copy
+## 9. Settled — label copy
 
 `../business-proposal/axiom-business-master-prompt.md:101-103` states:
 
@@ -480,11 +442,20 @@ Three things to settle before a run:
 > RUO micro-disclaimer + tamper-evident seal; ***may not* imply human dose, route, frequency,
 > cycle, therapeutic benefit**, or use "cure/treatment/anti-aging/guaranteed."
 
-`DOSE 10 clicks = 1 mg` is a pen-device calibration rather than a human dose, and it is carried
-here as specified alongside the RUO line. It will nonetheless read as dosing to a regulator.
+Band D used to carry `DOSE 10 clicks = 1 mg`. That was a pen-device calibration rather than a
+human dose, but it read as dosing, and it was the only one of the label's four data fields that
+the rule above does not permit — while four of the five it does permit, the lot included, never
+reached the label at all. The sheet printed the one forbidden thing and omitted the identifiers.
 
-It lives in the data layer precisely so this stays a one-line decision: set `dose: null` on a
-SKU and the row disappears. **This needs a human call before a production run.**
+**Band D now carries `LOT`.** The DOSE row and the pen-click calculator behind it are gone from
+both the print sheet and the builder, decided 25 November 2026. A buyer's vial now names the
+batch it came from, which is what makes a Certificate of Analysis mean anything: a CoA without a
+lot to tie it to is a document about nothing in particular.
+
+HPLC purity, molecular mass and storage temperature remain permitted and are still absent. Band A
+carries `HIGH PURITY` as a mark rather than a figure. Adding any of them needs layout work — the
+tallest label already stacks to 23.94 mm of the 26 mm content box — so it is a separate decision,
+not an oversight being carried silently.
 
 ---
 
@@ -500,7 +471,7 @@ Geometry is measured, not eyeballed. Rendered through the pre-installed Chromium
 | Corner radius | 9.449 px = 2.5 mm |
 | Sheet | 194 × 281 mm a page; pitch 54 × 33 mm |
 | Label count | 45 placed — 9 each of 10 / 20 / 30 / 40 / 60 mg, 24 on page 1 and 21 on page 2, in order |
-| DOSE row | present on all 45 |
+| LOT row | present on all 45 |
 | Overflowing bands | 0 at `--k: 1` for the shipped SKUs; tallest stack 23.94 mm of 26 |
 | Hairlines | both `rgb(200, 138, 78)`, identical width and height |
 | Guides | under the labels (`z-index: 1`), visible only in the gutters |
