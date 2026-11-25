@@ -931,3 +931,49 @@ insert into public.product_references (product_id, claim_key, citation, pubmed_i
   ((select id from public.products where slug = 'tri-heal-bpc-plus-tb-plus-kpv'), 'tb-500 · ref-01', 'Esposito S et al. Synthesis and characterization of the N-terminal acetylated 17-23 fragment of thymosin beta 4 identified in TB-500, a product suspected to possess doping potential. Drug Test Anal. 2012.', '22962027', '10.1002/dta.1402'),
   ((select id from public.products where slug = 'tri-heal-bpc-plus-tb-plus-kpv'), 'tb-500 · ref-02', 'Malinda KM et al. Thymosin beta 4 stimulates directional migration of human umbilical vein endothelial cells. FASEB J. 1997.', '9194528', '10.1096/fasebj.11.6.9194528'),
   ((select id from public.products where slug = 'tri-heal-bpc-plus-tb-plus-kpv'), 'tb-500 · ref-03', 'Hannappel E et al. beta-Thymosins. Ann N Y Acad Sci. 2007.', '17468232', '10.1196/annals.1415.018');
+
+-- References for seven compounds the Prime Peptides source does not cover, found by searching
+-- PubMed directly and verified in one esummary call: all 29 resolve. Only rows that address the
+-- product's own research statement are here. Rows that address the underlying chemistry rather
+-- than the branded preparation, or that are background, stay in
+-- docs/catalogue/uncovered-references.csv for a human to judge — attaching a paper that merely
+-- mentions a compound is worse than leaving the product unreferenced.
+--
+-- Three compounds get nothing and keep their research text held back, which is the honest
+-- outcome rather than a forced citation:
+--   5-Amino-1MQ  nothing under that name; three papers under 5-amino-1-methylquinolinium, none
+--                naming the compound in an adipocyte context
+--   Adamax       PubMed's 41 "adamax" records are all the AdaMax machine-learning optimiser
+--   Cartalax     six records, all Khavinson short-peptide papers naming it among others; none
+--                studies cartilage, which half its research text claims
+
+insert into public.product_references (product_id, claim_key, citation, pubmed_id, doi) values
+  ((select id from public.products where slug = 'ahk-cu'), 'ref-01', 'Pyo HK et al. The effect of tripeptide-copper complex on human hair growth in vitro. Arch Pharm Res. 2007.', '17703734', '10.1007/BF02978833'),
+  ((select id from public.products where slug = 'glutathione'), 'ref-01', 'Forman HJ et al. Glutathione: overview of its protective roles, measurement, and biosynthesis. Mol Aspects Med. 2009.', '18796312', '10.1016/j.mam.2008.08.006'),
+  ((select id from public.products where slug = 'glutathione'), 'ref-02', 'Lu SC. Glutathione synthesis. Biochim Biophys Acta. 2013.', '22995213', '10.1016/j.bbagen.2012.09.008'),
+  ((select id from public.products where slug = 'glutathione'), 'ref-03', 'Lu SC. Regulation of glutathione synthesis. Mol Aspects Med. 2009.', '18601945', '10.1016/j.mam.2008.05.005'),
+  ((select id from public.products where slug = 'glutathione'), 'ref-04', 'Hayes JD, McLellan LI. Glutathione and glutathione-dependent enzymes represent a co-ordinately regulated defence against oxidative stress. Free Radic Res. 1999.', '10517533', '10.1080/10715769900300851'),
+  ((select id from public.products where slug = 'hcg'), 'ref-01', 'Troppmann B et al. Structural and functional plasticity of the luteinizing hormone/choriogonadotrophin receptor. Hum Reprod Update. 2013.', '23686864', '10.1093/humupd/dmt023'),
+  ((select id from public.products where slug = 'hcg'), 'ref-02', 'Choi J, Smitz J. Luteinizing hormone and human chorionic gonadotropin: origins of difference. Mol Cell Endocrinol. 2014.', '24365330', '10.1016/j.mce.2013.12.009'),
+  ((select id from public.products where slug = 'hcg'), 'ref-03', 'Puett D et al. hCG-receptor binding and transmembrane signaling. Mol Cell Endocrinol. 1996.', '9027343', '10.1016/s0303-7207(96)03954-8'),
+  ((select id from public.products where slug = 'hcg'), 'ref-04', 'Fournier T. Human chorionic gonadotropin: Different glycoforms and biological activity depending on its source of production. Ann Endocrinol (Paris). 2016.', '27177499', '10.1016/j.ando.2016.04.012'),
+  ((select id from public.products where slug = 'hcg'), 'ref-05', 'Perri C et al. LHCGR phamacodynamic effects during follicular maturation. Front Endocrinol (Lausanne). 2026.', '42657199', '10.3389/fendo.2026.1917693'),
+  ((select id from public.products where slug = 'hgh-191aa-somatropin'), 'ref-01', 'Bayol A et al. Somatropin and its variants: structural characterization and methods of analysis. Pharmeuropa Bio. 2004.', '15659284', null),
+  ((select id from public.products where slug = 'hgh-191aa-somatropin'), 'ref-02', 'Dehkhoda F et al. The Growth Hormone Receptor: Mechanism of Receptor Activation, Cell Signaling, and Physiological Aspects. Front Endocrinol (Lausanne). 2018.', '29487568', '10.3389/fendo.2018.00035'),
+  ((select id from public.products where slug = 'hgh-191aa-somatropin'), 'ref-03', 'Brooks AJ et al. Growth hormone receptor; mechanism of action. Int J Biochem Cell Biol. 2008.', '17888716', '10.1016/j.biocel.2007.07.008'),
+  ((select id from public.products where slug = 'hgh-191aa-somatropin'), 'ref-04', 'Bartke A et al. The somatotropic axis and aging: Benefits of endocrine defects. Growth Horm IGF Res. 2016.', '26925766', '10.1016/j.ghir.2016.02.002'),
+  ((select id from public.products where slug = 'hgh-191aa-somatropin'), 'ref-05', 'Olarescu NC et al. Normal Physiology of Growth Hormone in Normal Adults. Endotext. 2025.', '25905284', null),
+  ((select id from public.products where slug = 'hgh-191aa-somatropin'), 'ref-06', 'Moller N et al. Growth hormone and protein metabolism. Clin Nutr. 2009.', '19773097', '10.1016/j.clnu.2009.08.015'),
+  ((select id from public.products where slug = 'hmg'), 'ref-01', 'Deeks ED. Highly Purified Human Menopausal Gonadotropin (Menopur(R)): A Profile of Its Use in Infertility. Clin Drug Investig. 2018.', '30264288', '10.1007/s40261-018-0703-8'),
+  ((select id from public.products where slug = 'hmg'), 'ref-02', 'Al-Inany HG et al. Efficacy and safety of human menopausal gonadotrophins versus recombinant FSH: a meta-analysis. Reprod Biomed Online. 2008.', '18252052', '10.1016/s1472-6483(10)60559-7'),
+  ((select id from public.products where slug = 'hmg'), 'ref-03', 'Bordewijk EM et al. Required amount of rFSH, HP-hMG and HP-FSH to reach a live birth: a systematic review and meta-analysis. Hum Reprod Open. 2019.', '31206036', '10.1093/hropen/hoz008'),
+  ((select id from public.products where slug = 'hmg'), 'ref-04', 'Afnan M. Identifying real differences in live birth rates between HMG and rFSH in IVF. Reprod Biomed Online. 2009.', '19406028', '10.1016/s1472-6483(10)60445-2'),
+  ((select id from public.products where slug = 'pinealon'), 'ref-01', 'Khavinson V et al. Pinealon increases cell viability by suppression of free radical levels and activating proliferative processes. Rejuvenation Res. 2011.', '21978084', '10.1089/rej.2011.1172'),
+  ((select id from public.products where slug = 'pinealon'), 'ref-02', 'Arutjunyan A et al. Pinealon protects the rat offspring from prenatal hyperhomocysteinemia. Int J Clin Exp Med. 2012.', '22567179', null),
+  ((select id from public.products where slug = 'pinealon'), 'ref-03', 'Khavinson V et al. EDR Peptide: Possible Mechanism of Gene Expression and Protein Synthesis Regulation Involved in the Pathogenesis of Alzheimer''s Disease. Molecules. 2020.', '33396470', '10.3390/molecules26010159'),
+  ((select id from public.products where slug = 'pinealon'), 'ref-04', 'Mendzheritskii AM et al. Regulation of content of cytokines in blood serum and of caspase-3 activity in brains of old rats in model of sharp hypoxic hypoxia with Cortexin and Pinealon. Adv Gerontol. 2014.', '25051764', null),
+  ((select id from public.products where slug = 'slu-pp-332-injectable'), 'ref-01', 'Billon C et al. Synthetic ERRalpha/beta/gamma Agonist Induces an ERRalpha-Dependent Acute Aerobic Exercise Response and Enhances Exercise Capacity. ACS Chem Biol. 2023.', '36988910', '10.1021/acschembio.2c00720'),
+  ((select id from public.products where slug = 'slu-pp-332-injectable'), 'ref-02', 'Billon C et al. A Synthetic ERR Agonist Alleviates Metabolic Syndrome. J Pharmacol Exp Ther. 2024.', '37739806', '10.1124/jpet.123.001733'),
+  ((select id from public.products where slug = 'slu-pp-332-injectable'), 'ref-03', 'Okda HE et al. Chemical optimization of the exercise mimetic SLU-PP-332 enables insight into estrogen-related receptor signaling. Int J Biol Macromol. 2026.', '41850449', '10.1016/j.ijbiomac.2026.151450'),
+  ((select id from public.products where slug = 'slu-pp-332-injectable'), 'ref-04', 'Wang XX et al. Estrogen-Related Receptor Agonism Reverses Mitochondrial Dysfunction and Inflammation in the Aging Kidney. Am J Pathol. 2023.', '37717940', '10.1016/j.ajpath.2023.07.008'),
+  ((select id from public.products where slug = 'slu-pp-332-injectable'), 'ref-05', 'Xu W et al. Novel Pan-ERR Agonists Ameliorate Heart Failure Through Enhancing Cardiac Fatty Acid Metabolism and Mitochondrial Function. Circulation. 2024.', '37961903', '10.1161/CIRCULATIONAHA.123.066542');
