@@ -292,10 +292,18 @@ with a number.
 | **Approved in some countries** | Approved or sold in certain countries only. |
 | **Lab research only** | Lab and animal work only. No human dose has been set, and none is invented. |
 
-Across the 70 compounds: 11 are approved medicines, 9 have real human trial data,
-21 are approved or sold in some countries only, and 29 rest on lab and animal work
+Across the 70 compounds: 11 are approved medicines, 10 have real human trial data,
+21 are approved or sold in some countries only, and 28 rest on lab and animal work
 alone. That last group is where the guide says *no human dose has been set* rather
 than printing a number.
+
+Two notes on how the tiers map to the data. The table above has four rows but
+`compounds.js` carries five values, because **Approved in some countries** splits
+into `regional` (a registered medicine in some jurisdictions — 6 compounds) and
+`sold` (on sale as a supplement or cosmetic, never registered as a medicine — 15).
+And `preclinical` does double duty: genuine lab-only compounds, and compounded
+clinic blends that have no trial behind their claim. Both belong in **Lab research
+only** for dosing purposes, but they are not the same kind of gap.
 
 ## Adding a compound
 

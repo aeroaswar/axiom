@@ -11,6 +11,10 @@ Every row was read from the source card directly. An earlier pass built this tab
 the text and was wrong on seven of the 34 rows, mostly by recording a compound as *not named* where
 the source had deliberately left the question open.
 
+`AXIOM listing` is the product name exactly as the catalogue carries it, so this table joins to
+`products.name` on a string match. Four rows previously spelled it differently — PT-141, KLOW,
+Tri-Heal and CJC-1295 + Ipamorelin — which silently dropped them from any automated join.
+
 `Basis` matters commercially: **named** means the 2026 List names the compound, which is a fact you can
 print. **Inferred** means the source applied the S0 catch-all for non-approved substances, and said so.
 
@@ -48,7 +52,7 @@ print. **Inferred** means the source applied the S0 catch-all for non-approved s
 | Thymosin Alpha-1 | Thymosin Alpha-1 | Unresolved | — | unresolved | A |
 | NAD+ | NAD+ | Not named | — | — | C |
 | Oxytocin | Oxytocin Acetate | Not prohibited | — | — | C |
-| PT-141 | PT-141 (Bremelanotide) | Not named | — | — | A |
+| PT-141 | PT-141 | Not named | — | — | A |
 | SS-31 | SS-31 | Not named | — | — | A |
 | Semaglutide | Semaglutide | Not prohibited | — | named | A |
 | Tirzepatide | Tirzepatide | Not prohibited | — | named | A |
@@ -60,11 +64,11 @@ among its components, so these rows are derived, not quoted.
 
 | Blend | Components and classes | Inherited status |
 |---|---|---|
-| KLOW (BPC + TB + GHK + KPV) | BPC-157 S0 · TB-500 S2.3 · GHK-Cu S0 · KPV S0 | Prohibited at all times |
+| KLOW (BPC+TB+GHK+KPV) | BPC-157 S0 · TB-500 S2.3 · GHK-Cu S0 · KPV S0 | Prohibited at all times |
 | KLOW-C (KLOW + Cartalax) | BPC-157 S0 · TB-500 S2.3 · GHK-Cu S0 · KPV S0 | Prohibited at all times |
-| Tri-Heal (BPC + TB + KPV) | BPC-157 S0 · TB-500 S2.3 · KPV S0 | Prohibited at all times |
+| Tri-Heal (BPC+TB+KPV) | BPC-157 S0 · TB-500 S2.3 · KPV S0 | Prohibited at all times |
 | BPC-157 + TB-500 (Wolverine) | BPC-157 S0 · TB-500 S2.3 | Prohibited at all times |
-| CJC-1295 + Ipamorelin | both named under S2.2.4 | Prohibited at all times |
+| CJC-1295 (No DAC) + Ipamorelin | both named under S2.2.4 | Prohibited at all times |
 | Ipamorelin + Tesamorelin | both named under S2.2.4 | Prohibited at all times |
 | SSM (SS-31 + MOTS-C) | MOTS-c S4.4.1 (named) · SS-31 not named | Prohibited at all times |
 | Selank + Semax | neither named; Semax unresolved under S2 | Unresolved |
@@ -75,15 +79,15 @@ No card exists for these AXIOM items, so they carry **no sport status here**. Th
 bioregulators are the largest block; Epitalon (grade C, no approved product in any jurisdiction FDA
 reviewed in 2026) is the only Khavinson compound with a card and is the closest available proxy.
 
-- CJC-1295 + Ipamorelin — Growth Hormone
+- CJC-1295 (No DAC) + Ipamorelin — Growth Hormone
 - HGH 191AA (Somatropin) — Growth Hormone
 - Ipamorelin + Tesamorelin — Growth Hormone
 - AHK-Cu — Healing & Repair
 - BPC-157 + TB-500 (Wolverine) — Healing & Repair
-- KLOW (BPC + TB + GHK + KPV) — Healing & Repair
+- KLOW (BPC+TB+GHK+KPV) — Healing & Repair
 - KLOW-C (KLOW + Cartalax) — Healing & Repair
 - SNAP-8 — Healing & Repair
-- Tri-Heal (BPC + TB + KPV) — Healing & Repair
+- Tri-Heal (BPC+TB+KPV) — Healing & Repair
 - VIP — Healing & Repair
 - Adamax — Brain & Mood
 - Adamax 1032 Da — Brain & Mood
