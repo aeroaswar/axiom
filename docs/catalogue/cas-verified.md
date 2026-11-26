@@ -1,23 +1,68 @@
-# CAS verification against PubChem — 25 November 2026
+# CAS verification against PubChem — 25–26 November 2026
 
-All 24 candidates have now been checked against **PubChem on 25 November 2026**. The run is complete; nothing is left `unchecked`.
+Identity checks for the AXIOM catalogue, run against **PubChem**. The first pass covered 24 candidate
+CAS numbers the catalogue already held. The second went after the compounds that had no candidate at
+all, looking them up by name and, where the name failed, by peptide sequence. **46 compounds are now
+on record.**
 
-Three things to read before using this file:
+Four things to read before using this file:
 
-1. A PubChem cross-reference is a **registry identifier recorded by PubChem's depositors** (ChemIDplus, DrugBank, EPA DSSTox, FDA GSRS), **not a CAS Registry subscription lookup**. It is good corroborating evidence, not an authoritative CAS record. The exception is **CAS Common Chemistry**, which is CAS's own public register: four rows carry it, and those are confirmations from CAS itself.
-2. The one `mismatch` row (**HCG**) must be confirmed against the supplier's CoA, and no structure may be taken from PubChem for it. Read its row before using any HCG figure.
-3. Evidence comes in three grades, recorded per row in the CSV. `cross_reference` — the compound record carries a CAS cross-reference section (strongest). `substance cross_reference` — no compound record exists, but a registry depositor indexes a substance record under this very number (strong for the number, silent on structure). `synonym only` — the number appears among the record's synonyms with no cross-reference (weakest positive evidence).
+1. A PubChem cross-reference is a **registry identifier recorded by PubChem's depositors** (ChemIDplus,
+   DrugBank, EPA DSSTox, FDA GSRS), **not a CAS Registry subscription lookup**. The exception is
+   **CAS Common Chemistry**, which is CAS's own public register: seven rows carry it, and those are
+   confirmations from CAS itself.
+2. **Two rows are `mismatch` — HCG and Cardiogen.** Both are commercial name collisions in PubChem's
+   index. Read their rows before using any figure for those compounds, and take nothing but the CoA.
+3. **`AHK-Cu` carries the free tripeptide's number, not the copper complex's.** The weight on that row
+   must not reach an AHK-Cu label.
+4. Evidence comes in four grades, recorded per row. `cross_reference` — the compound record carries a
+   CAS cross-reference section (strongest). `substance cross_reference` — no compound record, but a
+   registry depositor indexes a substance under this very number. `synonym only` — the number appears
+   among synonyms with no cross-reference. `structure only` — a titled record with a confirmed
+   structure but no CAS anywhere.
 
 ## Status summary
 
-| Status | Count | Compounds |
+| Status | Count | Meaning |
 |---|---|---|
-| verified | 23 | all but HCG |
-| mismatch | 1 | HCG |
-| not_found | 0 | — |
-| unchecked | 0 | — |
+| verified | 38 | A registry depositor ties this number to this compound |
+| structure only | 6 | Structure confirmed, no CAS number found anywhere |
+| mismatch | 2 | The name resolves to a different compound — HCG, Cardiogen |
+| not_found / unchecked | 0 | — |
 
-Verified this run: **12** — Semax, Melanotan II, PT-141, AOD-9604, NAD+, Glutathione, L-Carnitine, AICAR, Thymosin alpha-1, LL-37 at compound level, plus Somatropin and Retatrutide at substance level. **No number checked in either run proved wrong.** One, HCG, proved unverifiable here.
+Verified across both runs: **38**. **No number checked in either run proved wrong.** Two names proved
+unusable, and six compounds have a confirmed structure but no registry number.
+
+### Structures confirmed by computation, not by trusting the title
+
+Six peptides were checked by computing the formula from the sequence the catalogue states and comparing
+it with PubChem's. All six match exactly, so those identifications do not rest on a name:
+
+| Compound | Sequence | Formula |
+|---|---|---|
+| Bronchogen | Ala-Glu-Asp-Leu | C18H30N4O9 |
+| Cortagen | Ala-Glu-Asp-Pro | C17H26N4O9 |
+| Livagen | Lys-Glu-Asp-Ala | C18H31N5O9 |
+| Prostamax | Lys-Glu-Asp-Pro | C20H33N5O9 |
+| Pinealon | Glu-Asp-Arg | C15H26N6O8 |
+| TB-500 | Ac-Leu-Lys-Lys-Thr-Glu-Thr-Gln | C38H68N10O14 |
+
+The same method settled **Cartalax**. Its record is the tripeptide **Ala-Glu-Asp** (C12H19N3O8); the
+Ala-Glu-Asp-Pro the product text claimed computes to C17H26N4O9, which is **Cortagen**. The two had been
+conflated. The product text has been corrected.
+
+## Cardiogen — the second name collision
+
+Searching PubChem for `cardiogen` returns **CID 10917, (−)-carnitine**, CAS 541-15-1 — a commercial name
+collision, not the Khavinson tetrapeptide. Searching the sequence Ala-Glu-Asp-Arg returns no record at
+all. So no CAS is recorded for this product and **the sequence itself is unconfirmed**. This is the same
+failure mode as HCG: PubChem's name index is unreliable wherever a trade name is shared with an
+unrelated substance.
+
+Four other bioregulators — Chonluten, Crystagen, Ovagen, Pancragen, Testagen, Vesugen — were searched by
+sequence. Records exist for some of those sequences, but **none carries the trade name among its
+synonyms**, so nothing was recorded for them. A sequence record that does not name the product is not
+evidence about the product.
 
 ## What the second run changed
 
@@ -26,7 +71,7 @@ Verified this run: **12** — Semax, Melanotan II, PT-141, AOD-9604, NAD+, Gluta
 - **Somatropin** resolves the same way as retatrutide: no compound record, as predicted for a 191-residue biologic, but ChemIDplus indexes SID 135274454 under `0012629015`. Note that `9002-72-6` also circulates on somatropin records for growth hormone generically; `12629-01-5` is the number tied to the recombinant 191-residue form AXIOM lists.
 - The prediction that LL-37, thymosin alpha-1 and AOD-9604 "may have no single small-molecule record" was **wrong**. All three have full compound records with structures.
 
-## HCG — the one compound PubChem cannot verify
+## HCG — a name PubChem cannot verify
 
 `9002-61-3` resolves to **CID 4369448**, whose structure is the ACV tripeptide, δ-(L-α-aminoadipoyl)-L-cysteinyl-glycine (C11H19N3O6S, MW 321.35). That is not a glycoprotein hormone.
 
@@ -48,7 +93,7 @@ Searching by name is worse, not better: `chorionic gonadotropin` returns **CID 1
 
 ## Salt and form ambiguities to settle with the supplier
 
-Five compounds have more than one number or more than one form on record, and the difference is a different substance in the vial:
+Eight compounds have more than one number or more than one form on record, and the difference is a different substance in the vial:
 
 | Compound | Second number or form |
 |---|---|
@@ -57,9 +102,14 @@ Five compounds have more than one number or more than one form on record, and th
 | Thymosin alpha-1 | 69521-94-4 — primacy unresolved |
 | Epithalon | 64082-79-7 |
 | DSIP | 69431-45-4 |
+| AHK-Cu | 126828-32-8 is the **free tripeptide**; the copper complex is a different substance |
+| 5-Amino-1MQ | the record is the **cation**; the shipped salt carries its own number and weight |
+| CJC-1295 | 446262-90-4 is the **DAC** form; the no-DAC SKU is a different substance |
 
 ## Method
 
 Queried `pubchem.ncbi.nlm.nih.gov/rest/pug` and `/rest/pug_view` directly over HTTPS. The first run's blocker — the egress proxy refusing `pubchem.ncbi.nlm.nih.gov`, which forced the lookups through a metered provider that ran out of credits — no longer applies: the host is reachable and the REST API needs no key, so re-running this costs nothing.
 
-For each candidate: resolve the CAS to a CID via the name index, read `Title`/`MolecularFormula`/`MolecularWeight`/`InChIKey`, then read the record's `CAS` section through PUG-View and resolve each `ReferenceNumber` to its depositor to grade the evidence. Where the compound endpoint 404s, query the **substance** index and read the depositor and source id of each SID — that step is what recovered retatrutide and somatropin, and omitting it is what produced the first run's false negative.
+Second run, for compounds with no candidate number: resolve the **name** to a CID; where that failed, resolve the **peptide sequence**, and accept the hit only when the record carries the product's trade name among its synonyms — that rule is what rejected Chonluten, Crystagen and Vesugen, whose sequence records exist but name no product. Where a structure came back, the formula was **recomputed from the sequence** and compared, so six identifications rest on chemistry rather than on a title.
+
+First run, for each candidate already held: resolve the CAS to a CID via the name index, read `Title`/`MolecularFormula`/`MolecularWeight`/`InChIKey`, then read the record's `CAS` section through PUG-View and resolve each `ReferenceNumber` to its depositor to grade the evidence. Where the compound endpoint 404s, query the **substance** index and read the depositor and source id of each SID — that step is what recovered retatrutide and somatropin, and omitting it is what produced the first run's false negative.
