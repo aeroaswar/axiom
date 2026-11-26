@@ -305,6 +305,22 @@ And `preclinical` does double duty: genuine lab-only compounds, and compounded
 clinic blends that have no trial behind their claim. Both belong in **Lab research
 only** for dosing purposes, but they are not the same kind of gap.
 
+## Slugs
+
+Every compound's slug is the catalogue's `products.slug`, so the guide, the shop and the
+reference data all name a compound the same way. Seventeen guide slugs were renamed to match on
+26 November 2026.
+
+Compound cards carry `{base}/{slug}` in their QR code, and cards already printed carry the old
+slugs. `SLUG_ALIASES` in `src/gen.py` maps each old slug to its current one; the page resolves
+an alias in every form a link can take (`/slug`, `#slug`, `?c=slug`) and moves the address bar
+to the current slug. **Never remove an alias** — a printed card outlives any rename. When a slug
+changes, add the old one to the table. The generator refuses an alias that shadows a live slug
+or points at no compound.
+
+Edit `src/data*.py`, never `compounds.js`: the generator rewrites `compounds.js` and the
+hero data in `index.html` on every run, and a hand edit there is lost the next time it runs.
+
 ## Adding a compound
 
 `compounds.js` is generated. The source tables live alongside the build script;

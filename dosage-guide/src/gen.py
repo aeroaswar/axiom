@@ -4,7 +4,13 @@ import json, io, os, re, sys
 
 # "regional" compounds that are a registered medicine somewhere. The rest are sold
 # only as supplements or cosmetics, and get their own label so it never reads "approved".
-APPROVED_SOMEWHERE = {"cerebrolysin", "selank", "selank-semax", "semax", "thymalin", "thymosin-alpha-1"}
+# Slugs the guide used before they were aligned with the catalogue (products.slug).
+# Compound cards already printed carry the OLD slug in their QR code, so every old
+# slug must keep resolving, forever: the page maps it to the current slug and moves
+# the address bar there. Never remove an entry; add one whenever a slug changes.
+SLUG_ALIASES = {'wolverine': 'bpc-157-plus-tb-500-wolverine', 'cjc-ipamorelin': 'cjc-1295-no-dac-plus-ipamorelin', 'cjc-1295-dac': 'cjc-1295-with-dac', 'hgh-191aa': 'hgh-191aa-somatropin', 'ipamorelin-tesamorelin': 'ipamorelin-plus-tesamorelin', 'klow': 'klow-bpc-plus-tb-plus-ghk-plus-kpv', 'klow-c': 'klow-c-klow-plus-cartalax', 'l-carnitine': 'l-carnitine-injectable', 'lipo-b': 'lc216-lipo-b-injectable', 'fat-blaster': 'lc526-fat-blaster-injectable', 'melanotan-2': 'melanotan-ii', 'oxytocin': 'oxytocin-acetate', 'selank-semax': 'selank-plus-semax', 'slu-pp-332': 'slu-pp-332-injectable', 'ssm': 'ssm-ss-31-plus-mots-c', 'tri-heal': 'tri-heal-bpc-plus-tb-plus-kpv', 'vip': 'vip-vasoactive-intestinal-peptide'}
+
+APPROVED_SOMEWHERE = {"cerebrolysin", "selank", "selank-plus-semax", "semax", "thymalin", "thymosin-alpha-1"}
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from data1 import C1
 from data2 import C2
@@ -127,6 +133,8 @@ ORDER = ["Weight Loss & GLP-1","Growth Hormone","Healing & Repair","Brain & Mood
 ALL.sort(key=lambda c: (ORDER.index(c["cat"]), c["name"].lower()))
 
 slugs = [c["slug"] for c in ALL]
+assert not set(SLUG_ALIASES) & set(slugs), "an alias shadows a live slug"
+assert set(SLUG_ALIASES.values()) <= set(slugs), "an alias points at no compound"
 assert len(slugs) == len(set(slugs)), "duplicate slug"
 for c in ALL:
     basis(c, c["dose"])   # fails the build if the anchor dose contradicts the page
@@ -245,7 +253,7 @@ _ix = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'index.html
 _page = open(_ix, encoding="utf-8").read()
 _m = re.search(r"/\*HERO-DATA\*/.*?/\*END-HERO-DATA\*/", _page, re.S)
 assert _m, "HERO-DATA markers missing from index.html"
-_page = _page[:_m.start()] + "/*HERO-DATA*/window.HEROES=" + json.dumps(_hero, ensure_ascii=False, separators=(",", ":")) + ";/*END-HERO-DATA*/" + _page[_m.end():]
+_page = _page[:_m.start()] + "/*HERO-DATA*/window.HEROES=" + json.dumps(_hero, ensure_ascii=False, separators=(",", ":")) + ";window.SLUG_ALIASES=" + json.dumps(SLUG_ALIASES, separators=(",", ":")) + ";/*END-HERO-DATA*/" + _page[_m.end():]
 open(_ix, "w", encoding="utf-8").write(_page)
 
 from collections import Counter
