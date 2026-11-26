@@ -183,17 +183,6 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
 .f input:focus{border-color:var(--accent-line)}
 .f input::placeholder{color:var(--muted-2)}
 .f .hint,.panel .hint{font-size:10px;color:var(--muted-2);line-height:1.6}
-.dose{display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:8px}
-.dose span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);white-space:nowrap}
-.dose input{text-align:center;font-variant-numeric:tabular-nums}
-.dose input::-webkit-outer-spin-button,.dose input::-webkit-inner-spin-button{
-  -webkit-appearance:none;margin:0}
-.dose input[type=number]{-moz-appearance:textfield;appearance:textfield}
-.mix{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.mix .f{margin:0}
-.calc{margin:8px 0 0;font-size:11px;color:var(--accent);font-variant-numeric:tabular-nums}
-.calc:empty{display:none}
-.dose input.out{background:transparent;border-color:var(--line);color:var(--ink);cursor:default}
 .f-row{display:grid;grid-template-columns:1fr 92px;gap:10px}
 
 .btn{background:var(--accent-grad);border:0;border-radius:6px;padding:11px 16px;
@@ -433,8 +422,6 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
 }
 .lbl__band--d .lbl__v{font-size:1.8em}
 /* spray icon: at the right of the compound line, centred */
-.lbl__band--ico{align-items:center}
-.lbl__ico{display:block;width:3.6em;height:3.2em;margin-left:.6em;overflow:visible}
 
 /* --- band E — compliance micro-print ------------------------ */
 .lbl__ruo{
@@ -478,53 +465,11 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
             <input id="fCopies" type="number" min="1" max="500" step="1" value="8">
           </div>
         </div>
-        <div class="f fold" id="doseFold">
-          <button class="fold__head" type="button" aria-expanded="true" aria-controls="doseBody">
-            <span class="flab">Dose</span>
-            <span class="fold__sum" id="doseSum"></span>
-            <svg class="fold__chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="fold__body" id="doseBody">
-          <div class="chips" id="dev" style="margin-bottom:8px">
-            <button class="chip" type="button" data-dev="pen" aria-pressed="true">Pen · clicks</button>
-            <button class="chip" type="button" data-dev="spray" aria-pressed="false">Nasal spray</button>
-            <button class="chip" type="button" data-dev="none" aria-pressed="false">No dose</button>
-          </div>
-          <div id="penF">
-          <div class="mix">
-            <div class="f">
-              <label for="fMl">BAC water (ml)</label>
-              <input id="fMl" type="number" min="0" step="0.1" inputmode="decimal" value="3">
-            </div>
-            <div class="f">
-              <label for="fMlClick">ml per click</label>
-              <input id="fMlClick" type="number" min="0" step="0.001" inputmode="decimal" value="0.01">
-            </div>
-          </div>
-          <div class="dose">
-            <input id="fClicks" type="text" inputmode="decimal" aria-label="clicks">
-            <span>clicks =</span>
-            <input id="fMg" class="out" type="text" readonly tabindex="-1" aria-label="amount">
-            <span id="fUnit">mg</span>
-          </div>
-          <p class="calc" id="calc" role="status"></p>
-          <p class="hint">Worked out from the QTY: every pen cartridge is mixed with 3&nbsp;ml of BAC
-            water and the pen gives 0.01&nbsp;ml per click, so only the vial's mg changes the clicks
-            (10&nbsp;mg: 1&nbsp;mg is 0.3&nbsp;ml, 30 clicks). Type the clicks to dose a different
-            amount and the mg follows (KLOW-C opens on 12 clicks); clear it to go back to the
-            whole-click conversion. Change the water or the ml per click only if a pen is filled
-            differently.</p>
-          </div>
-          <div id="sprayF" hidden>
-            <div class="dose" style="grid-template-columns:auto 1fr auto">
-              <span>1 spray =</span>
-              <input id="fMcg" type="number" min="0" step="1" inputmode="decimal" value="100">
-              <span>mcg</span>
-            </div>
-            <p class="hint">For the nasal sprays (Adamax, Selank, Semax), which open on this with
-              100&nbsp;mcg. Leave it empty and the DOSE row is omitted.</p>
-          </div>
-          </div>
+        <div class="f">
+          <label for="fLot">Lot</label>
+          <input id="fLot" placeholder="« lot »">
+          <p class="hint">The batch identifier for the vials in this run. Leave it empty and the
+            LOT row is omitted rather than printed as a guess.</p>
         </div>
         <div class="f">
           <label for="fNote">Purity mark</label>
@@ -595,7 +540,7 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
     <section>
       <p class="kick">Queue</p>
       <div class="queue">
-        <div class="qhead"><span>Compound</span><span>QTY</span><span>Dose</span><span>Copies</span><span></span></div>
+        <div class="qhead"><span>Compound</span><span>QTY</span><span>Lot</span><span>Copies</span><span></span></div>
         <div id="qrows"></div>
         <div class="qfoot">
           <span id="qcount"></span>
@@ -629,15 +574,15 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
       edge and set the number of copies. Print one label first and check <i>Research use only</i>,
       the smallest line. If it breaks up, raise the print density a step in the app. Keep labelled vials out of heat and direct sun: direct-thermal print darkens or fades
       under both. The thermal version drops the bronze and the onyx ground: it is the working
-      label, not the brand-book stock. A label may not imply human dose or frequency; the DOSE row is a
-      pen-device calibration and is yours to leave off.
+      label, not the brand-book stock. A label may not imply human dose, route or frequency. The LOT
+      row carries the batch identifier, which is one of the fields a label is permitted to state.
     </div>
     <div class="note" id="noteA4">
       <b>Before a run.</b> The sheet prints a solid ink flood so it proofs on white paper; the brand
       book specifies cold-foil bone-white on matte black polypropylene, so send the PDF to the vendor
       for real stock. <i>Research use only</i> sets at 4.0&nbsp;pt — check it on a physical proof.
-      A label may not imply human dose or frequency; the DOSE row is a pen-device calibration and is
-      yours to leave off.
+      A label may not imply human dose, route or frequency. The LOT row carries the batch
+      identifier, which is one of the fields a label is permitted to state.
     </div>
   </main>
 </div>
@@ -646,7 +591,7 @@ body{background:var(--glow),var(--bg);background-attachment:fixed;min-height:100
 /* ============================================================
    AXIOM research catalogue — transcribed from AXIOMPriceList_2.pdf
    (Price List, RESEARCH CATALOGUE · IDR · V1.0). 88 compounds,
-   9 categories. `lot` is the fill size and prefills QTY.
+   9 categories. `fill` is the fill size and prefills QTY.
    ============================================================ */
 const CATALOGUE = {
  "categories": {
@@ -664,529 +609,529 @@ const CATALOGUE = {
   {
    "cat": "01",
    "compound": "AOD-9604",
-   "lot": "5 mg",
+   "fill": "5 mg",
    "price": 2700000
   },
   {
    "cat": "03",
    "compound": "AHK-Cu",
-   "lot": "100 mg",
+   "fill": "100 mg",
    "price": 2500000
   },
   {
    "cat": "01",
    "compound": "Cagrilintide",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2700000
   },
   {
    "cat": "03",
    "compound": "ARA-290",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2800000
   },
   {
    "cat": "01",
    "compound": "Retatrutide",
-   "lot": "5 mg",
+   "fill": "5 mg",
    "price": 2100000
   },
   {
    "cat": "01",
    "compound": "Retatrutide",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2700000
   },
   {
    "cat": "03",
    "compound": "ARA-290",
-   "lot": "50 mg",
+   "fill": "50 mg",
    "price": 4100000
   },
   {
    "cat": "01",
    "compound": "Retatrutide",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3600000
   },
   {
    "cat": "03",
    "compound": "BPC-157",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 1600000
   },
   {
    "cat": "01",
    "compound": "Retatrutide",
-   "lot": "30 mg",
+   "fill": "30 mg",
    "price": 4900000
   },
   {
    "cat": "03",
    "compound": "BPC-157 + TB-500 (Wolverine)",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 2900000
   },
   {
    "cat": "01",
    "compound": "Retatrutide",
-   "lot": "40 mg",
+   "fill": "40 mg",
    "price": 6400000
   },
   {
    "cat": "03",
    "compound": "GHK-Cu",
-   "lot": "50 mg",
+   "fill": "50 mg",
    "price": 2600000
   },
   {
    "cat": "01",
    "compound": "Retatrutide",
-   "lot": "60 mg",
+   "fill": "60 mg",
    "price": 8500000
   },
   {
    "cat": "01",
    "compound": "Semaglutide",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2100000
   },
   {
    "cat": "01",
    "compound": "Semaglutide",
-   "lot": "30 mg",
+   "fill": "30 mg",
    "price": 3500000
   },
   {
    "cat": "01",
    "compound": "Semaglutide",
-   "lot": "40 mg",
+   "fill": "40 mg",
    "price": 4000000
   },
   {
    "cat": "03",
    "compound": "GHK-Cu",
-   "lot": "100 mg",
+   "fill": "100 mg",
    "price": 5000000
   },
   {
    "cat": "01",
    "compound": "Tirzepatide",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2200000
   },
   {
    "cat": "03",
    "compound": "KPV",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2300000
   },
   {
    "cat": "01",
    "compound": "Tirzepatide",
-   "lot": "30 mg",
+   "fill": "30 mg",
    "price": 3500000
   },
   {
    "cat": "03",
    "compound": "KLOW (BPC+TB+GHK+KPV)",
-   "lot": "80 mg",
+   "fill": "80 mg",
    "price": 5800000
   },
   {
    "cat": "03",
    "compound": "KLOW-C (KLOW + Cartalax)",
-   "lot": "100 mg",
+   "fill": "100 mg",
    "price": 6400000
   },
   {
    "cat": "01",
    "compound": "Tirzepatide",
-   "lot": "40 mg",
+   "fill": "40 mg",
    "price": 4000000
   },
   {
    "cat": "01",
    "compound": "Tirzepatide",
-   "lot": "60 mg",
+   "fill": "60 mg",
    "price": 5200000
   },
   {
    "cat": "01",
    "compound": "Tirzepatide",
-   "lot": "80 mg",
+   "fill": "80 mg",
    "price": 6300000
   },
   {
    "cat": "03",
    "compound": "LL-37",
-   "lot": "5 mg",
+   "fill": "5 mg",
    "price": 2700000
   },
   {
    "cat": "03",
    "compound": "Peg MGF",
-   "lot": "2 mg",
+   "fill": "2 mg",
    "price": 2800000
   },
   {
    "cat": "03",
    "compound": "SNAP-8",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2500000
   },
   {
    "cat": "03",
    "compound": "TB-500",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 1800000
   },
   {
    "cat": "03",
    "compound": "Tri-Heal (BPC+TB+KPV)",
-   "lot": "30 mg",
+   "fill": "30 mg",
    "price": 3800000
   },
   {
    "cat": "02",
    "compound": "CJC-1295 (No DAC) + Ipamorelin",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2700000
   },
   {
    "cat": "02",
    "compound": "CJC-1295 (No DAC) + Ipamorelin",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3800000
   },
   {
    "cat": "02",
    "compound": "CJC-1295 (With DAC)",
-   "lot": "5 mg",
+   "fill": "5 mg",
    "price": 2900000
   },
   {
    "cat": "02",
    "compound": "HGH 191AA (Somatropin)",
-   "lot": "36 IU",
+   "fill": "36 IU",
    "price": 2800000
   },
   {
    "cat": "04",
    "compound": "Adamax",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2800000
   },
   {
    "cat": "04",
    "compound": "Adamax 1032 Da",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 3400000
   },
   {
    "cat": "02",
    "compound": "HGH 191AA (Somatropin)",
-   "lot": "40 IU",
+   "fill": "40 IU",
    "price": 3000000
   },
   {
    "cat": "04",
    "compound": "Cerebrolysin",
-   "lot": "60 mg",
+   "fill": "60 mg",
    "price": 2700000
   },
   {
    "cat": "02",
    "compound": "IGF-1 LR3",
-   "lot": "1 mg",
+   "fill": "1 mg",
    "price": 3800000
   },
   {
    "cat": "04",
    "compound": "Dihexa",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 3500000
   },
   {
    "cat": "02",
    "compound": "Ipamorelin",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2700000
   },
   {
    "cat": "04",
    "compound": "Pinealon",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "02",
    "compound": "Ipamorelin + Tesamorelin",
-   "lot": "18 mg",
+   "fill": "18 mg",
    "price": 4500000
   },
   {
    "cat": "04",
    "compound": "Selank",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2100000
   },
   {
    "cat": "02",
    "compound": "Sermorelin",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 3100000
   },
   {
    "cat": "04",
    "compound": "Semax",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2100000
   },
   {
    "cat": "02",
    "compound": "Tesamorelin",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2300000
   },
   {
    "cat": "04",
    "compound": "Selank + Semax",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3900000
   },
   {
    "cat": "02",
    "compound": "Tesamorelin",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "04",
    "compound": "VIP (Vasoactive Intestinal Peptide)",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 3300000
   },
   {
    "cat": "05",
    "compound": "5-Amino-1MQ",
-   "lot": "50 mg",
+   "fill": "50 mg",
    "price": 2900000
   },
   {
    "cat": "08",
    "compound": "DSIP",
-   "lot": "5 mg",
+   "fill": "5 mg",
    "price": 1900000
   },
   {
    "cat": "05",
    "compound": "AICAR",
-   "lot": "50 mg",
+   "fill": "50 mg",
    "price": 2700000
   },
   {
    "cat": "08",
    "compound": "DSIP",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2300000
   },
   {
    "cat": "05",
    "compound": "L-Carnitine (Injectable)",
-   "lot": "5000 mg",
+   "fill": "5000 mg",
    "price": 2700000
   },
   {
    "cat": "08",
    "compound": "Epithalon",
-   "lot": "50 mg",
+   "fill": "50 mg",
    "price": 3100000
   },
   {
    "cat": "05",
    "compound": "LC216 Lipo-B (Injectable)",
-   "lot": "10 mL",
+   "fill": "10 mL",
    "price": 2700000
   },
   {
    "cat": "08",
    "compound": "FOXO4-DRI",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 4600000
   },
   {
    "cat": "05",
    "compound": "LC526 Fat Blaster (Injectable)",
-   "lot": "10 mL",
+   "fill": "10 mL",
    "price": 2700000
   },
   {
    "cat": "08",
    "compound": "Glutathione",
-   "lot": "1500 mg",
+   "fill": "1500 mg",
    "price": 2300000
   },
   {
    "cat": "05",
    "compound": "MOTS-c",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2200000
   },
   {
    "cat": "08",
    "compound": "Humanin",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 3500000
   },
   {
    "cat": "05",
    "compound": "MOTS-c",
-   "lot": "40 mg",
+   "fill": "40 mg",
    "price": 3800000
   },
   {
    "cat": "05",
    "compound": "SSM (SS-31 + MOTS-C)",
-   "lot": "40 mg",
+   "fill": "40 mg",
    "price": 3500000
   },
   {
    "cat": "05",
    "compound": "SLU-PP-332 (Injectable)",
-   "lot": "5 mg",
+   "fill": "5 mg",
    "price": 2400000
   },
   {
    "cat": "08",
    "compound": "NAD+",
-   "lot": "1000 mg",
+   "fill": "1000 mg",
    "price": 3700000
   },
   {
    "cat": "08",
    "compound": "SS-31",
-   "lot": "50 mg",
+   "fill": "50 mg",
    "price": 4000000
   },
   {
    "cat": "06",
    "compound": "Thymalin",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2500000
   },
   {
    "cat": "06",
    "compound": "Thymosin Alpha-1",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 3300000
   },
   {
    "cat": "09",
    "compound": "Bronchogen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "09",
    "compound": "Cardiogen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "09",
    "compound": "Cartalax",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3500000
   },
   {
    "cat": "09",
    "compound": "Chonluten",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "07",
    "compound": "HCG",
-   "lot": "10000 IU",
+   "fill": "10000 IU",
    "price": 2700000
   },
   {
    "cat": "09",
    "compound": "Cortagen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "07",
    "compound": "HMG",
-   "lot": "75 IU",
+   "fill": "75 IU",
    "price": 2500000
   },
   {
    "cat": "09",
    "compound": "Crystagen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "07",
    "compound": "Kisspeptin",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2900000
   },
   {
    "cat": "09",
    "compound": "Livagen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "07",
    "compound": "Melanotan II",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 1900000
   },
   {
    "cat": "09",
    "compound": "Ovagen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "07",
    "compound": "Oxytocin Acetate",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2700000
   },
   {
    "cat": "09",
    "compound": "Pancragen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "07",
    "compound": "PT-141",
-   "lot": "10 mg",
+   "fill": "10 mg",
    "price": 2300000
   },
   {
    "cat": "09",
    "compound": "Prostamax",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "09",
    "compound": "Testagen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   },
   {
    "cat": "09",
    "compound": "Vesugen",
-   "lot": "20 mg",
+   "fill": "20 mg",
    "price": 3300000
   }
  ]
@@ -1223,19 +1168,9 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
      D  DOSE  10 clicks = 1 mg
         ------------------------------------------
      E  RESEARCH USE ONLY                          */
-/* Spray icon for a nasal-spray label, shown at the right end of the compound
-   line, after the user's reference: a slim
-   pump bottle on a rounded base, and a cone of mist dots fanning out to the
-   right, growing as they spread (2, 3, 3, 3 dots). All filled shapes on a
-   27 x 24 grid that never overlap, so the PDF and the label images draw it
-   like the wordmark. Drawn 3.2em tall on the compound line (4 mm), the
-   smallest dot is 0.37 mm across, 3 dots on a 203 dpi head. */
-const SPRAY_ICON = '<svg class="lbl__ico" viewBox="0 0 27 24" xmlns="http://www.w3.org/2000/svg" aria-label="spray">'
-  + '<path fill="currentColor" fill-rule="evenodd" d="M4.6 6.8H6V8H4.6Z M2.5 8H8V18.6H2.5Z M2.9 18.6H7.9A2.3 2.3 0 0 1 10.2 20.9V20.9A2.3 2.3 0 0 1 7.9 23.2H2.9A2.3 2.3 0 0 1 0.6 20.9V20.9A2.3 2.3 0 0 1 2.9 18.6Z M11.1 8.4A1.1 1.1 0 1 0 13.3 8.4A1.1 1.1 0 1 0 11.1 8.4Z M11.1 12.6A1.1 1.1 0 1 0 13.3 12.6A1.1 1.1 0 1 0 11.1 12.6Z M14.55 6.4A1.25 1.25 0 1 0 17.05 6.4A1.25 1.25 0 1 0 14.55 6.4Z M14.55 10.5A1.25 1.25 0 1 0 17.05 10.5A1.25 1.25 0 1 0 14.55 10.5Z M14.55 14.6A1.25 1.25 0 1 0 17.05 14.6A1.25 1.25 0 1 0 14.55 14.6Z M18.35 4.6A1.45 1.45 0 1 0 21.25 4.6A1.45 1.45 0 1 0 18.35 4.6Z M18.35 10.5A1.45 1.45 0 1 0 21.25 10.5A1.45 1.45 0 1 0 18.35 10.5Z M18.35 16.4A1.45 1.45 0 1 0 21.25 16.4A1.45 1.45 0 1 0 18.35 16.4Z M22.8 2.2A1.6 1.6 0 1 0 26 2.2A1.6 1.6 0 1 0 22.8 2.2Z M22.8 10.5A1.6 1.6 0 1 0 26 10.5A1.6 1.6 0 1 0 22.8 10.5Z M22.8 18.8A1.6 1.6 0 1 0 26 18.8A1.6 1.6 0 1 0 22.8 18.8Z"/></svg>';
 function labelHTML(d){
   const field = (cls,k,v) =>
     `<div class="lbl__band lbl__band--${cls}"><span class="lbl__k">${esc(k)}</span><span class="lbl__v">${esc(v)}</span></div>`;
-  const icon = d.dose && /spray/i.test(d.dose) ? SPRAY_ICON : '';
   return `<div class="lbl">
   <div class="lbl__band lbl__band--a">
     ${look() === 'thermal' ? WORDMARK_THERMAL : WORDMARK}
@@ -1243,10 +1178,9 @@ function labelHTML(d){
     <span class="lbl__note">${esc(d.note || 'HIGH PURITY')}</span>
   </div>
   <div class="lbl__rule lbl__rule--top">${RULE}</div>
-  <div class="lbl__band lbl__band--b${icon ? ' lbl__band--ico' : ''}"><span class="lbl__compound">${esc(d.compound)}</span>${
-    icon ? '<span class="lbl__spacer"></span>' + icon : ''}</div>
+  <div class="lbl__band lbl__band--b"><span class="lbl__compound">${esc(d.compound)}</span></div>
   ${field('c', 'QTY', d.qty)}
-  ${d.dose ? field('d', 'DOSE', d.dose) : ''}
+  ${d.lot ? field('d', 'LOT', d.lot) : ''}
   <div class="lbl__rule lbl__rule--bot">${RULE}</div>
   <div class="lbl__band lbl__band--e"><span class="lbl__ruo">Research use only</span></div>
 </div>`;
@@ -1268,14 +1202,6 @@ function autofit(root){
   };
   root.querySelectorAll('.lbl__band').forEach(band => {
     fit(band);
-    // a name too long to share its line with the spray icon keeps the line
-    // to itself: the icon is dropped rather than the name pushed past the die
-    const ico = band.querySelector('.lbl__ico');
-    if (ico && band.scrollWidth > band.clientWidth + 0.5){
-      ico.previousElementSibling && ico.previousElementSibling.remove();
-      ico.remove();
-      fit(band);
-    }
     if (band.scrollWidth > band.clientWidth + 0.5){
       console.warn('AXIOM label: content still overflows at the autofit floor —', band.textContent.trim());
     }
@@ -1320,94 +1246,6 @@ const perPage = () => dens().cols * dens().rows;
 
 let sel = null, filterCat = null, queue = [];
 
-/* Dose conversions are per pen device, so once you supply one for a
-   compound+lot it is remembered for next time. Per-browser only. */
-const memKey = d => d.compound + '|' + d.lot;
-let doseMem = {};
-try { doseMem = JSON.parse(localStorage.getItem('axiom.dose') || '{}'); } catch (e) {}
-const remember = (k, v) => {
-  doseMem[k] = v;
-  try { localStorage.setItem('axiom.dose', JSON.stringify(doseMem)); } catch (e) {}
-};
-/* Earlier builds stored the conversion as free text; read those back. */
-const asPair = v => {
-  if (!v) return null;
-  if (typeof v === 'object') return v;
-  const m = String(v).match(/([\d.]+)\s*clicks?\s*=\s*([\d.]+)/i);
-  return m ? { clicks: +m[1], mg: +m[2] } : null;
-};
-
-/* Click conversion from the reconstitution: the vial's mg (from QTY) in the
-   BAC water's ml gives ml per mg, and the pen's ml per click turns that into
-   clicks per mg. 10 mg in 3 ml at 0.01 ml/click: 0.3 ml/mg = 30 clicks/mg.
-   Shown as whole clicks: the smallest whole mg (1-10) that takes a whole
-   number of clicks, so 40 mg in 3 ml (7.5 clicks/mg) reads 15 clicks = 2 mg.
-   Failing that, 10 clicks = X mg. The result fills the two fields below,
-   which stay editable. */
-/* The vial's amount and unit from QTY: "10 mg", "10mg", "2.5 mg", "36 IU". */
-const vialAmt = () => {
-  const m = $('fQty').value.replace(',', '.').match(/(\d+(?:\.\d+)?)\s*(mg|mcg|iu)\b/i);
-  return m ? { n: parseFloat(m[1]), unit: m[2].toLowerCase() === 'iu' ? 'IU' : m[2].toLowerCase() } : null;
-};
-function clickPair(cpm){
-  for (let m = 1; m <= 10; m++){
-    const c = cpm * m;
-    if (Math.abs(c - Math.round(c)) < 1e-6 && Math.round(c) >= 1) return { clicks: Math.round(c), mg: m };
-  }
-  return { clicks: 10, mg: +(10 / cpm).toFixed(2) };
-}
-/* Clicks can be set by hand (or by a compound's default, below): then the
-   amount follows from them, e.g. KLOW-C 100 mg in 3 ml at 12 clicks is 4 mg.
-   null means "work out the whole-click conversion". */
-let clicksSet = null;
-const CLICK_DEFAULTS = [ { re: /^KLOW-C\b/i, clicks: 12 } ];
-const clickDefault = name => (CLICK_DEFAULTS.find(x => x.re.test(name)) || {}).clicks ?? null;
-function calcDose(typing){
-  const ml = parseFloat($('fMl').value), per = parseFloat($('fMlClick').value), v = vialAmt();
-  if (!typing) $('fClicks').value = '';
-  $('fMg').value = '';
-  $('fUnit').textContent = v ? v.unit : 'mg';
-  if (!(ml > 0)){ $('calc').textContent = 'Enter the BAC water (3 ml for the pen cartridges).'; return; }
-  if (!(per > 0)){ $('calc').textContent = 'Enter the ml per click (0.01 for the pen).'; return; }
-  if (!v || !(v.n > 0)){ $('calc').textContent = 'Put the vial size in QTY (e.g. 10 mg) to work out the clicks.'; return; }
-  const head = `${num(v.n)} ${v.unit} in ${num(ml)} ml = ${num(v.n / ml)} ${v.unit}/ml · ${num(per)} ml per click → `;
-  if (typing && !(clicksSet > 0)){ $('calc').textContent = head + 'type the clicks, or clear the box for the conversion'; return; }
-  if (clicksSet > 0){
-    const amt = +(clicksSet * per * v.n / ml).toFixed(2);
-    if (!typing) $('fClicks').value = num(clicksSet);
-    $('fMg').value = num(amt);
-    $('calc').textContent = head + `${num(clicksSet)} clicks = ${num(amt)} ${v.unit}`;
-    return;
-  }
-  const pair = clickPair(ml / v.n / per);
-  $('fClicks').value = pair.clicks; $('fMg').value = num(pair.mg);
-  $('calc').textContent = head + `${pair.clicks} clicks = ${num(pair.mg)} ${v.unit}`;
-}
-
-/* Nasal sprays read "1 spray = 100 mcg" instead of a click conversion.
-   Adamax, Selank and Semax (and Selank + Semax) are sprays, so selecting one
-   opens on the spray at 100 mcg; any compound can be switched by hand. */
-const SPRAY = /^(adamax|selank|semax)\b/i;
-let device = 'pen';
-function setDevice(dv){
-  device = dv;
-  [...$('dev').children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.dev === dv)));
-  $('penF').hidden = dv !== 'pen';
-  $('sprayF').hidden = dv !== 'spray';
-}
-
-/* "10 clicks = 1 mg" — built from the two fields, never from the strength. */
-const num = x => String(+(+x).toFixed(3));
-function doseStr(){
-  if (device === 'spray'){
-    const mcg = parseFloat($('fMcg').value);
-    return mcg > 0 ? `1 spray = ${num(mcg)} mcg` : null;
-  }
-  if (device !== 'pen') return null;
-  const c = parseFloat($('fClicks').value), m = parseFloat($('fMg').value);
-  return (c > 0 && m > 0) ? `${num(c)} clicks = ${num(m)} ${$('fUnit').textContent}` : null;
-}
-
 const $ = id => document.getElementById(id);
 document.getElementById('wm').innerHTML = WORDMARK.replace('class="lbl__wm"', '');
 
@@ -1427,12 +1265,12 @@ function renderList(){
   const q = $('q').value.trim().toLowerCase();
   const hits = CATALOGUE.items.filter(d =>
     (!filterCat || d.cat === filterCat) &&
-    (!q || (d.compound + ' ' + d.lot).toLowerCase().includes(q)))
+    (!q || (d.compound + ' ' + d.fill).toLowerCase().includes(q)))
     // the PDF interleaves two columns, so group by category and sort
     // by compound, then by fill size ascending within a compound
     .sort((a, b) => a.cat.localeCompare(b.cat)
       || a.compound.localeCompare(b.compound)
-      || parseFloat(a.lot) - parseFloat(b.lot));
+      || parseFloat(a.fill) - parseFloat(b.fill));
 
   if (!hits.length){ $('list').innerHTML = '<p class="empty">Nothing matches that.</p>'; return; }
 
@@ -1445,7 +1283,7 @@ function renderList(){
     const i = CATALOGUE.items.indexOf(d);
     const on = sel === d;
     html += `<button class="row" data-i="${i}" aria-selected="${on}">
-      <span class="nm">${esc(d.compound)}</span><span class="lt">${esc(d.lot)}</span></button>`;
+      <span class="nm">${esc(d.compound)}</span><span class="lt">${esc(d.fill)}</span></button>`;
   }
   $('list').innerHTML = html;
 }
@@ -1458,15 +1296,9 @@ $('list').addEventListener('click', e => {
 function select(d){
   sel = d;
   $('fCompound').value = d.compound;
-  $('fQty').value      = d.lot;
-  const mem = asPair(doseMem[memKey(d)]);
-  setDevice(mem && mem.device ? mem.device : SPRAY.test(d.compound) ? 'spray' : 'pen');
-  $('fMcg').value    = mem && mem.mcg ? mem.mcg : 100;
-  // remembered clicks win (0 = the whole-click conversion), then the compound's default
-  clicksSet = mem && 'clicksSet' in mem ? (mem.clicksSet > 0 ? mem.clicksSet : null) : clickDefault(d.compound);
-  calcDose();
+  $('fQty').value      = d.fill;
   $('add').disabled    = false;
-  $('pickSel').textContent = `${d.compound} · ${d.lot}`;
+  $('pickSel').textContent = `${d.compound} · ${d.fill}`;
   renderList(); preview();
 }
 
@@ -1474,7 +1306,7 @@ function select(d){
 const draft = () => ({
   compound: $('fCompound').value.trim() || 'Compound',
   qty:      $('fQty').value.trim()      || '— mg',
-  dose:     doseStr(),
+  lot:      $('fLot').value.trim(),
   note:     $('fNote').value.trim()     || 'HIGH PURITY',
 });
 
@@ -1499,31 +1331,12 @@ function preview(){
   fitPreview();
   autofit($('pv'));
   $('pvCap').textContent = sel
-    ? `${sel.compound} · ${sel.lot} · ${CATALOGUE.categories[sel.cat]}`
+    ? `${sel.compound} · ${sel.fill} · ${CATALOGUE.categories[sel.cat]}`
     : 'Custom label';
-  try { foldSums(); } catch (e) {}   // keep a folded Dose heading current
+  try { foldSums(); } catch (e) {}
 }
-['fCompound','fQty','fClicks','fMg','fMcg','fNote'].forEach(id =>
+['fCompound','fQty','fLot','fNote'].forEach(id =>
   $(id).addEventListener('input', preview));
-$('dev').addEventListener('click', e => {
-  const b = e.target.closest('.chip'); if (b){ setDevice(b.dataset.dev); preview(); }
-});
-['fQty','fMl','fMlClick'].forEach(id =>
-  $(id).addEventListener('input', () => { calcDose(); preview(); }));
-/* typing the clicks sets them; clearing the box (on leaving it) goes back
-   to the whole-click conversion */
-$('fClicks').addEventListener('input', () => {
-  const c = parseFloat($('fClicks').value.replace(',', '.'));
-  clicksSet = c > 0 ? c : null;
-  calcDose(true); preview();
-});
-$('fClicks').addEventListener('change', () => {
-  if (!(clicksSet > 0)){ clicksSet = null; calcDose(); preview(); }
-  else { calcDose(); preview(); }
-});
-['fMl','fMlClick'].forEach(id => $(id).addEventListener('change', () => {
-  try { localStorage.setItem('axiom.pen', JSON.stringify({ ml: parseFloat($('fMl').value), perClick: parseFloat($('fMlClick').value) })); } catch (e) {}
-}));
 
 /* ---------- density ---------- */
 $('dens').innerHTML = Object.entries(DENSITIES).map(([k, d]) =>
@@ -1588,11 +1401,8 @@ const used = () => queue.reduce((n, r) => n + r.copies, 0);
 $('add').addEventListener('click', () => {
   const d = draft();
   const n = Math.max(1, Math.min(500, parseInt($('fCopies').value, 10) || 1));
-  const mcg = parseFloat($('fMcg').value);
-  if (sel) remember(memKey(sel), device === 'spray' ? { device, mcg: mcg > 0 ? mcg : 100 }
-    : device === 'pen' ? { device, clicksSet: clicksSet > 0 ? clicksSet : 0 } : { device });
   const same = queue.find(r =>
-    r.compound === d.compound && r.qty === d.qty && r.dose === d.dose && r.note === d.note);
+    r.compound === d.compound && r.qty === d.qty && r.lot === d.lot && r.note === d.note);
   if (same) same.copies += n; else queue.push({ ...d, copies: n });
   renderQueue();
 });
@@ -1608,7 +1418,7 @@ function renderQueue(){
     ? queue.map((r, i) => `<div class="qrow">
         <span class="c">${esc(r.compound)}</span>
         <span class="d">${esc(r.qty)}</span>
-        <span class="d">${r.dose ? esc(r.dose) : '—'}</span>
+        <span class="d">${r.lot ? esc(r.lot) : '—'}</span>
         <span class="n">${r.copies}</span>
         <button class="x" data-i="${i}" title="Remove">&times;</button>
       </div>`).join('')
@@ -2019,7 +1829,7 @@ $('img').addEventListener('click', async () => {
     for (const row of queue){
       const box = boxes[at]; at += row.copies;
       if (!box) continue;
-      let name = `axiom-${slug(row.compound)}-${slug(row.qty)}${row.dose ? '' : '-no-dose'}`;
+      let name = `axiom-${slug(row.compound)}-${slug(row.qty)}${row.lot ? '' : '-no-lot'}`;
       for (let i = 2; seen.has(name); i++) name = name.replace(/(-\d+)?$/, '-' + i);
       seen.add(name);
       files.push({ filename: name + '.png', data: await labelImage(box) });
@@ -2123,12 +1933,9 @@ function fold(id, key, onOpen){
   try { if (localStorage.getItem(key) === '1') set(false); } catch (e) {}
 }
 fold('pick', 'axiom.pickClosed', () => $('q').focus({ preventScroll: true }));
-fold('doseFold', 'axiom.doseClosed');
 fold('outFold', 'axiom.outClosed');
 /* what a folded heading shows: the current choice */
 function foldSums(){
-  $('doseSum').textContent = device === 'none' ? 'No dose'
-    : doseStr() || (device === 'spray' ? 'Nasal spray' : 'Pen · clicks');
   const d = dens();
   $('outSum').textContent = out === 'a4'
       ? `A4 sheet · ${d.name} ${d.cols * d.rows}/page${die ? ' · die lines' : ''}`
@@ -2140,16 +1947,10 @@ for (const ev of ['click', 'input', 'change'])
 
 /* ---------- go ----------
    Open on a real worked example rather than an empty shell: Retatrutide
-   30 mg is the SKU whose click conversion we actually have. Clear removes it. */
-/* Water and ml per click are the same for every cartridge (3 ml, 0.01 ml):
-   remembered for the browser, not per compound. */
-try {
-  const w = JSON.parse(localStorage.getItem('axiom.pen') || 'null');
-  if (w && w.ml > 0) $('fMl').value = w.ml;
-  if (w && w.perClick > 0) $('fMlClick').value = w.perClick;
-} catch (e) {}
-select(CATALOGUE.items.find(d => d.compound === 'Retatrutide' && d.lot === '30 mg'));
-calcDose();
+   30 mg. Clear removes it. The lot is left as the placeholder until a
+   production run supplies the real batch identifier. */
+select(CATALOGUE.items.find(d => d.compound === 'Retatrutide' && d.fill === '30 mg'));
+$('fLot').value = '« lot »';
 $('fCopies').value = 8;
 renderList(); preview();
 queue = [{ ...draft(), copies: 8 }];

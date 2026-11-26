@@ -292,10 +292,41 @@ with a number.
 | **Approved in some countries** | Approved or sold in certain countries only. |
 | **Lab research only** | Lab and animal work only. No human dose has been set, and none is invented. |
 
-Across the 70 compounds: 11 are approved medicines, 9 have real human trial data,
-21 are approved or sold in some countries only, and 29 rest on lab and animal work
+Across the 70 compounds: 11 are approved medicines, 15 have real human trial data,
+21 are approved or sold in some countries only, and 23 rest on lab and animal work
 alone. That last group is where the guide says *no human dose has been set* rather
 than printing a number.
+
+**A tier is checked against the references.** Gate 8c fails the build when a compound tagged
+`preclinical` cites a paper PubMed classes as a clinical trial of that compound. Five entries
+once carried the wrong tier with their own trials already cited: ipamorelin, DSIP, Epithalon,
+Melanotan II and LL-37. A blend's inherited references are skipped, since the combination is
+untested; a cited trial of something else (TB-500 cites trials of the full thymosin β4 protein)
+is acknowledged by PMID, with the reason, in `scripts/gates/references.mjs`.
+
+Two notes on how the tiers map to the data. The table above has four rows but
+`compounds.js` carries five values, because **Approved in some countries** splits
+into `regional` (a registered medicine in some jurisdictions — 6 compounds) and
+`sold` (on sale as a supplement or cosmetic, never registered as a medicine — 15).
+And `preclinical` does double duty: genuine lab-only compounds, and compounded
+clinic blends that have no trial behind their claim. Both belong in **Lab research
+only** for dosing purposes, but they are not the same kind of gap.
+
+## Slugs
+
+Every compound's slug is the catalogue's `products.slug`, so the guide, the shop and the
+reference data all name a compound the same way. Seventeen guide slugs were renamed to match on
+26 November 2026.
+
+Compound cards carry `{base}/{slug}` in their QR code, and cards already printed carry the old
+slugs. `SLUG_ALIASES` in `src/gen.py` maps each old slug to its current one; the page resolves
+an alias in every form a link can take (`/slug`, `#slug`, `?c=slug`) and moves the address bar
+to the current slug. **Never remove an alias** — a printed card outlives any rename. When a slug
+changes, add the old one to the table. The generator refuses an alias that shadows a live slug
+or points at no compound.
+
+Edit `src/data*.py`, never `compounds.js`: the generator rewrites `compounds.js` and the
+hero data in `index.html` on every run, and a hand edit there is lost the next time it runs.
 
 ## Adding a compound
 

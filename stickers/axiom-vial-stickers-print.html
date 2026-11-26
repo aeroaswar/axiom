@@ -166,13 +166,13 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
   color:var(--ink);
 }
 
-/* --- bands C / D — quantity and dose ------------------------ */
+/* --- bands C / D — quantity and lot ------------------------- */
 .lbl__band--c{margin-top:1.6mm}
 .lbl__band--d{margin-top:.8mm}
 .lbl__k{
   font-weight:400; font-size:1.5em; letter-spacing:.14em;
   text-transform:uppercase; color:var(--muted);
-  min-width:3.4em;   /* aligns the value column across QTY and DOSE */
+  min-width:3.4em;   /* aligns the value column across QTY and LOT */
 }
 .lbl__v{
   font-weight:500; font-size:2em; letter-spacing:.01em; color:var(--ink);
@@ -240,20 +240,18 @@ html,body{margin:0;padding:0;background:#15130f;font-family:var(--sans)}
    stays sorted. 9 each = 3 rows per strength, 45 labels over two
    pages (8 rows + 7 rows), 3 slots spare.
 
-   `dose` is the pen-device click conversion. Every cartridge is
-   mixed with 3 ml of BAC water and the pen gives 0.01 ml per
-   click, so clicks per mg = 300 / vial mg, shown in whole clicks
-   (40 mg: 7.5 per mg, so 15 clicks = 2 mg). The builder works
-   these out from the QTY; if a strength is ever filled with a
-   different volume, change its dose here to match.
-   A null dose drops the DOSE row rather than printing a guess.
+   `lot` is the batch identifier for the vials in the run. It is
+   the one field that changes between production runs, so it is
+   written as the placeholder « lot » here and replaced with the
+   real batch number before a sheet is sent to the printer.
+   A null lot drops the LOT row rather than printing a guess.
    ============================================================ */
 const LABELS = [
-  { compound:"Retatrutide", qty:"10 mg", dose:"30 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
-  { compound:"Retatrutide", qty:"20 mg", dose:"15 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
-  { compound:"Retatrutide", qty:"30 mg", dose:"10 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
-  { compound:"Retatrutide", qty:"40 mg", dose:"15 clicks = 2 mg", note:"HIGH PURITY", copies:9 },
-  { compound:"Retatrutide", qty:"60 mg", dose:"5 clicks = 1 mg", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"10 mg", lot:"« lot »", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"20 mg", lot:"« lot »", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"30 mg", lot:"« lot »", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"40 mg", lot:"« lot »", note:"HIGH PURITY", copies:9 },
+  { compound:"Retatrutide", qty:"60 mg", lot:"« lot »", note:"HIGH PURITY", copies:9 },
 ];
 
 /* Inline AXIOM wordmark — vector, from business-proposal/assets/logo/axiom-wordmark-white.svg */
@@ -261,16 +259,16 @@ const WORDMARK = '<svg class="lbl__wm" viewBox="0 0 582 70" xmlns="http://www.w3
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-/* Build one label. `dose` may be null — the DOSE band is then omitted
-   entirely rather than printed empty. Click conversions are device-specific
-   and are never inferred for a strength that was not supplied.
+/* Build one label. `lot` may be null — the LOT band is then omitted
+   entirely rather than printed empty. A lot is never invented: « lot » is a
+   placeholder that a production run replaces with the real batch identifier.
 
    Stacked inside 46 x 26 mm:
      A  AXIOM wordmark ................ HIGH PURITY
         ------------------------------------------
      B  RETATRUTIDE
      C  QTY   30 mg
-     D  DOSE  10 clicks = 1 mg
+     D  LOT   « lot »
         ------------------------------------------
      E  RESEARCH USE ONLY                          */
 function labelHTML(d){
@@ -285,7 +283,7 @@ function labelHTML(d){
   <div class="lbl__rule lbl__rule--top"></div>
   <div class="lbl__band lbl__band--b"><span class="lbl__compound">${esc(d.compound)}</span></div>
   ${field('c', 'QTY', d.qty)}
-  ${d.dose ? field('d', 'DOSE', d.dose) : ''}
+  ${d.lot ? field('d', 'LOT', d.lot) : ''}
   <div class="lbl__rule lbl__rule--bot"></div>
   <div class="lbl__band lbl__band--e"><span class="lbl__ruo">Research use only</span></div>
 </div>`;
