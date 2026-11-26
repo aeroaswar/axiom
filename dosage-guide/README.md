@@ -292,8 +292,8 @@ with a number.
 | **Approved in some countries** | Approved or sold in certain countries only. |
 | **Lab research only** | Lab and animal work only. No human dose has been set, and none is invented. |
 
-Across the 70 compounds: 11 are approved medicines, 11 have real human trial data,
-21 are approved or sold in some countries only, and 27 rest on lab and animal work
+Across the 70 compounds: 11 are approved medicines, 14 have real human trial data,
+21 are approved or sold in some countries only, and 24 rest on lab and animal work
 alone. That last group is where the guide says *no human dose has been set* rather
 than printing a number.
 
