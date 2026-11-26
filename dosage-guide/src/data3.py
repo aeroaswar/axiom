@@ -239,7 +239,7 @@ dict(slug="ll-37", name="LL-37", cat="Healing & Repair",
   cadNote="Daily in study protocols, as a short course rather than ongoing.",
   when="Any time of day", food="Either",
   timeNote="Used in short bursts in the literature rather than continuously.",
-  ev="preclinical", evNote="Lab and animal data. No approved use and no set human dose.",
+  ev="trial", evNote="Not approved, but it has been studied in people, applied to the skin of chronic wounds rather than injected. In a first placebo-controlled trial in 34 people with leg ulcers, the two lower strengths healed faster than placebo (Grönberg et al., Wound Repair Regen 2014, PMID 25041740). A larger Phase IIb trial in 148 patients found no significant difference from placebo across the whole group (Mahlapuu et al., Wound Repair Regen 2021, PMID 34687253). None of the trials indexed in PubMed gave it by injection, and there is no approved use or set human dose.",
   protocol=[NOHUMAN, ("Studied for","Bacterial biofilms","It's studied against bacteria that resist normal antibiotics."),
             ("Status","Not approved", RESEARCH)],
   benefits=[

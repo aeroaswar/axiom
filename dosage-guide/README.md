@@ -292,10 +292,17 @@ with a number.
 | **Approved in some countries** | Approved or sold in certain countries only. |
 | **Lab research only** | Lab and animal work only. No human dose has been set, and none is invented. |
 
-Across the 70 compounds: 11 are approved medicines, 14 have real human trial data,
-21 are approved or sold in some countries only, and 24 rest on lab and animal work
+Across the 70 compounds: 11 are approved medicines, 15 have real human trial data,
+21 are approved or sold in some countries only, and 23 rest on lab and animal work
 alone. That last group is where the guide says *no human dose has been set* rather
 than printing a number.
+
+**A tier is checked against the references.** Gate 8c fails the build when a compound tagged
+`preclinical` cites a paper PubMed classes as a clinical trial of that compound. Five entries
+once carried the wrong tier with their own trials already cited: ipamorelin, DSIP, Epithalon,
+Melanotan II and LL-37. A blend's inherited references are skipped, since the combination is
+untested; a cited trial of something else (TB-500 cites trials of the full thymosin β4 protein)
+is acknowledged by PMID, with the reason, in `scripts/gates/references.mjs`.
 
 Two notes on how the tiers map to the data. The table above has four rows but
 `compounds.js` carries five values, because **Approved in some countries** splits
